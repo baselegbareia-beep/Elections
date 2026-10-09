@@ -20,6 +20,9 @@ on:
         description: 'Rehearsal: replay 2022 from the official file and mark the page as a drill'
         type: boolean
         default: false
+      runner:
+        description: 'Where to run: ubuntu-latest (GitHub) or self-hosted (a computer in Israel registered as a runner)'
+        default: 'ubuntu-latest'
 
 permissions:
   contents: write
@@ -30,7 +33,8 @@ concurrency:
 
 jobs:
   feed:
-    runs-on: ubuntu-latest
+    # the CEC's 2026 CDN may refuse GitHub's cloud addresses; a self-hosted runner in Israel avoids that
+    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
     timeout-minutes: 355
     steps:
       - uses: actions/checkout@v4

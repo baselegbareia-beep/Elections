@@ -58,17 +58,20 @@ BASE_MAP = {
 }
 AGREEMENTS = {
     "K25": [("מחל", "ט"), ("פה", "כן"), ("שס", "ג"), ("ל", "עם"), ("אמת", "מרצ"), ("ום", "ד")],
-    "K24": [("מחל", "ט"), ("פה", "ל"), ("כן", "ת"), ("שס", "ג"), ("אמת", "מרצ"), ("ב", "עם")],
+    # 2021: Likud–RZP, Yesh Atid–YB, Shas–UTJ, Labor–Meretz, Yamina–New Hope; reproduces the official seats
+    "K24": [("מחל", "ט"), ("פה", "ל"), ("שס", "ג"), ("אמת", "מרצ"), ("ב", "ת")],
 }
 OWN_MIN = 0.2
 K_LEVEL = {"N": 30000, "G": 15000, "S": 6000}   # pseudo-votes of the parent level (shrinkage)
 PRIOR_SD = 0.15        # relative error of the pre-election prior per list
 STRATUM_SD = 0.10      # stratum random effect, scaled by how much the stratum leans on its parent
-SYS_SD = 0.06          # shared shift of the Netanyahu camp in the uncounted vote (log scale, at 0% counted)
+SYS_SD = 0.07          # shared shift of the Netanyahu camp in the uncounted vote (log scale, at 0% counted)
 SYS_SD_ARAB = 0.12     # shared shift of the Arab lists in the uncounted vote
-THIN_WIDEN = 1.5       # extra shared error when the uncounted vote sits in strata with almost nothing counted
-LIST_SD = 0.08         # independent error of each list in the uncounted vote (log scale, at 0% counted)
+THIN_WIDEN = 2.0       # extra shared error when the uncounted vote sits in strata with almost nothing counted
+LIST_SD = 0.12         # independent error of each list in the uncounted vote (log scale, at 0% counted)
 LIST_NEW = 1.8         # multiplier for lists without a clean predecessor
+ENV_DONE = 0.97        # counted envelopes at this share of the expected total are taken as complete
+ENV_SIZE_SD = 0.15     # relative uncertainty of the envelope total before it is announced or counted
 ARAB_GROUP = {"negev": "arab_negev", "north_bedouin": "arab_north", "galilee": "arab_north",
               "nazareth": "arab_north", "christian": "arab_north", "wadi_ara": "arab_triangle",
               "triangle_south": "arab_triangle", "mixed_town": "arab_north", "jerusalem": "arab_other",
@@ -142,6 +145,7 @@ class Projector:
         prior_t: expected turnout relative to the baseline (1.0 = same as last time);
         camp: {list: 'coal'|'opp'|'arab'} for the shared error of the uncounted vote."""
         self.camp = dict(camp or {})
+        self.env_override = None      # expected envelope votes announced by the CEC, if any
         self.B, self.lists, self.g, self.agreements = base, list(cur_lists) + [OTHER], g, agreements
         self.prior, self.prior_t = dict(prior or {}), prior_t
         self.base_vv = sum(L["valid"] for L in base.loc.values()) / max(1, sum(L["voters"] for L in base.loc.values()))
@@ -243,12 +247,24 @@ class Projector:
         st = self.stats(counted, codes)
         N, strata = self.levels(st, rng)
         boxes = collections.Counter()
+        # Uncounted voters per locality, scaled so that together they equal the register minus
+        # everything counted: once every box is in, nothing is left to project.
+        rems = {}
         for c, L in B.loc.items():
-            E = L["elig"] * self.g
             C = counted.get(c)
-            rem = E - (C["elig"] if C else 0)
-            if rem <= 0 or not L["elig"] or not L["valid"]:
+            r_ = L["elig"] * self.g - (C["elig"] if C else 0)
+            if r_ > 0 and L["elig"] and L["valid"]:
+                rems[c] = r_
+        counted_elig = sum(C["elig"] for C in counted.values())
+        register = sum(L["elig"] for L in B.loc.values()) * self.g
+        tot_rem = sum(rems.values())
+        scale = max(0.0, register - counted_elig) / tot_rem if tot_rem > 0 else 0.0
+        for c, L in B.loc.items():
+            if c not in rems:
                 continue
+            C = counted.get(c)
+            E = L["elig"] * self.g
+            rem = rems[c] * scale
             if C and C["elig"] >= OWN_MIN * E and C["valid"]:
                 k = rem / C["elig"]
                 for j in self.lists:
@@ -260,16 +276,25 @@ class Projector:
             s = sum(sh.values()) or 1
             for j in self.lists:
                 boxes[j] += valid_r * sh[j] / s
+        # double envelopes still to come: expected total from the baseline, minus what is counted.
+        # Their mix follows the counted envelopes once there are enough, else the baseline mix.
         env = collections.Counter()
-        if env_counted and env_counted.get("valid"):
-            for j in self.lists:
-                env[j] = env_counted["votes"].get(j, 0)
-        elif B.env["valid"]:
-            total = B.env["valid"] * self.g * N["t"]
-            sh = {j: N["r"][j] * self.benv[j] if self.preds[j] is not None else N["r"][j] for j in self.lists}
-            s = sum(sh.values()) or 1
-            for j in self.lists:
-                env[j] = total * sh[j] / s
+        have = env_counted["valid"] if env_counted else 0
+        if B.env["valid"]:
+            expected = self.env_override or B.env["valid"] * self.g * N["t"]
+            if rng is None:
+                self.env_expected = expected
+            rem = max(0.0, expected - have)
+            if have >= ENV_DONE * expected:
+                rem = 0.0            # counted envelopes already reach the expected size
+            if rem > 0:
+                if have >= 20000:
+                    sh = {j: env_counted["votes"].get(j, 0) for j in self.lists}
+                else:
+                    sh = {j: N["r"][j] * self.benv[j] if self.preds[j] is not None else N["r"][j] for j in self.lists}
+                s = sum(sh.values()) or 1
+                for j in self.lists:
+                    env[j] = rem * sh[j] / s
         return boxes, env
 
     def seats(self, votes):
@@ -293,6 +318,9 @@ class Projector:
     def run(self, counted, env_counted=None, n_boot=100, seed=7):
         codes = [c for c in counted if c in self.B.loc]
         have = self.counted_votes(counted)
+        if env_counted:
+            for j in self.lists:
+                have[j] += env_counted["votes"].get(j, 0)
         boxes, env = self.estimate(counted, codes, env_counted)
         point = {j: have[j] + boxes[j] + env[j] for j in self.lists}
         rng = random.Random(seed)
@@ -307,7 +335,7 @@ class Projector:
         for c, L in self.B.loc.items():
             C = counted.get(c)
             r_ = max(0.0, L["elig"] * self.g - (C["elig"] if C else 0))
-            rem_s[self.B.stratum[c]] += r_
+            rem_s[self.B.stratum[c]] += r_          # only the distribution across strata matters here
         tot_rem = sum(rem_s.values()) or 1.0
         for k, v in rem_s.items():
             if st[k]["valid"] < K_LEVEL["S"]:
@@ -319,8 +347,10 @@ class Projector:
             sample = [rng.choice(v) for v in by_s.values() for _ in v]
             b, e = self.estimate(counted, sample, env_counted, rng)
             b = self.shock(b, rng, scale)
-            if not env_counted:
-                e = self.shock({j: v * max(0.0, rng.gauss(1, 0.08)) for j, v in e.items()}, rng, 0.5)
+            if sum(e.values()) > 0:
+                # envelope size is uncertain until counted (5.5%–9.7% of voters in 2019–2022)
+                f_ = max(0.0, rng.gauss(1, 0.05 if self.env_override else ENV_SIZE_SD))
+                e = self.shock({j: v * f_ for j, v in e.items()}, rng, 0.5)
             sims.append({j: have[j] + b[j] + e[j] for j in self.lists})
         return point, sims
 
@@ -514,7 +544,10 @@ def make_frame(proj, counted, env_counted, meta, n_boot=200, seed=7, final=None)
         "counted": {"share": round(min(1.0, tot["elig"] / expected), 4) if expected else 0, "boxes": tot["boxes"],
                     "elig": tot["elig"], "voters": tot["voters"], "valid": tot["valid"],
                     "turnout": round(tot["voters"] / tot["elig"], 4) if tot["elig"] else None,
-                    "envelopes": bool(env_counted)},
+                    "envelopes": bool(env_counted),
+                    "env_valid": env_counted["valid"] if env_counted else 0,
+                    "valid_proj": round(sum(point.values())),
+                    "env_expected": round(getattr(proj, "env_expected", 0))},
         "lists": [{"id": j, "name": meta.get(j, {}).get("name", j), "letters": meta.get(j, {}).get("letters", ""),
                    "color": meta.get(j, {}).get("color", "#94a3b8"), "dark": meta.get(j, {}).get("dark", "#64748b"),
                    "bloc": blocs.get(j, "opp"),

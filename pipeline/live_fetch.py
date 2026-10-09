@@ -95,6 +95,7 @@ class Election2026:
     """2026 lists, the 2022 baseline and the projector, built once."""
 
     def __init__(self, cfg, as_election=None):
+        self.cfg = cfg
         core = json.load(open(os.path.join(ROOT, "site", "data", "core.json"), encoding="utf-8"))
         src = os.path.join(ROOT, "data", "raw", "mirror")
         self.dry = as_election            # replay a past election through the same code (testing)
@@ -139,12 +140,21 @@ class Election2026:
         locsec = {l["code"]: l["sector"] for l in core["localities"]}
         self.station_sector = {}
         self.sector_final = collections.defaultdict(lambda: [0, 0])
+        # 2022 per station: final voters and votes by bloc, for turnout pace and the lean-weighted signal
+        el25 = next(e for e in core["elections"] if e["id"] == "K25")
+        bloc25 = {p["id"]: ("coal" if p["bloc"] == "nb" else "arab" if p["bloc"] == "arab" else "opp") for p in el25["parties"]}
+        cols = b25["cols"]
+        self.station22 = {}
         for row in b25["rows"]:
             code, kalpi, sc, elig, voters = row[0], str(row[1]), row[2], row[3], row[4]
             sec = station_sector(locsec.get(code, "jewish"), sc)
             self.station_sector[(code, kalpi)] = sec
             self.sector_final[sec][0] += elig
             self.sector_final[sec][1] += voters
+            bv = collections.Counter()
+            for c, v in zip(cols, row[6:]):
+                bv[bloc25.get(c, "opp")] += v
+            self.station22[(code, kalpi)] = (voters, dict(bv), sec)
 
 
 def station_sector(loc_sector, code):
@@ -187,6 +197,15 @@ def results_pass(E, data, out, source_url, history):
         cols, rows = read_expb(path)
     finally:
         os.unlink(path)
+    # The CEC file was briefly empty during the 2020 and 2021 counts. Rows only ever get added,
+    # so an empty or shrunken file is rejected and the last good results stay published.
+    state_p = os.path.join(out, ".state.json")
+    state = json.load(open(state_p)) if os.path.exists(state_p) else {}
+    n_counted = sum(1 for r in rows if r["voters"])
+    if n_counted == 0 and state.get("rows", 0) > 0:
+        raise IOError("empty results file; keeping the last good snapshot")
+    if n_counted < 0.98 * state.get("rows", 0):
+        raise IOError(f"results file shrank from {state['rows']} to {n_counted} counted stations; keeping the last good snapshot")
     keep = set(E.lists)
     counted, env, dropped = {}, None, 0
     for r in rows:
@@ -201,7 +220,25 @@ def results_pass(E, data, out, source_url, history):
         else:
             LM.add_row(counted.setdefault(r["code"], LM.new_unit()), r, keep)
     unknown = [c for c in cols if c not in keep]
+    E.proj.env_override = E.cfg.get("envelopes_expected") or None
     frame = LM.make_frame(E.proj, counted, env if (env and env["valid"]) else None, E.meta, n_boot=200)
+    if E.cfg.get("projection_paused"):
+        frame["paused"] = E.cfg.get("pause_reason") or "התחזית הושהתה על ידי המפעיל."
+    # what came in since the last accepted file: stations by sector and their vote by camp
+    stations = {(r["code"], r["kalpi"]) for r in rows if r["voters"] and not r["env"] and r["code"] is not None}
+    prev = set(map(tuple, state.get("stations", [])))
+    new = stations - prev if prev else set()
+    if new:
+        by_sec, camp_v = collections.Counter(), collections.Counter()
+        for r in rows:
+            k = (r["code"], r["kalpi"])
+            if k in new:
+                by_sec[E.station_sector.get(k) or E.station_sector.get((r["code"], r["kalpi"].split(".")[0]), "jewish")] += 1
+                for j, v in r["votes"].items():
+                    camp_v[E.meta.get(j, {}).get("bloc", "opp")] += v
+        tv = sum(camp_v.values()) or 1
+        frame["batch"] = {"stations": len(new), "by_sector": dict(by_sec),
+                          "blocs": {b: round(v / tv, 3) for b, v in camp_v.items()}}
     t = now_il()
     history.append({"t": t.strftime("%H:%M"), "counted": frame["counted"]["share"],
                     "coal": frame["blocs"]["coal"]["seats"], "coal_lo": frame["blocs"]["coal"]["lo"],
@@ -214,6 +251,9 @@ def results_pass(E, data, out, source_url, history):
                    "sha256": hashlib.sha256(data).hexdigest()},
     })
     write_json(out, "history.json", history[-240:])
+    with open(state_p, "w") as f:
+        json.dump({"rows": n_counted, "sha256": hashlib.sha256(data).hexdigest(), "at": t.isoformat(),
+                   "stations": sorted([list(k) for k in stations], key=str)}, f)
     return frame
 
 
@@ -235,10 +275,12 @@ def turnout_pass(E, cfg, out):
     if url:
         try:
             data = fetch(url)
-            sectors, when, cov = station_turnout(E, data)
-            if sectors:
-                doc.update({"sectors": sectors, "sectors_time": when or manual.get("sectors_time", ""),
-                            "sectors_sha256": hashlib.sha256(data).hexdigest(), "sectors_coverage": cov})
+            st = station_turnout(E, data)
+            if st["sectors"]:
+                doc.update({"sectors": st["sectors"], "lean": st["lean"], "stations_national": st["national"],
+                            "sectors_time": manual.get("sectors_time", "") or now_il().strftime("%H:%M"),
+                            "sectors_coverage": st["coverage"], "sectors_excluded": st["excluded"],
+                            "sectors_sha256": hashlib.sha256(data).hexdigest()})
         except Exception as exc:
             doc["station_error"] = f"{exc.__class__.__name__}: {exc}"[:200]
     write_json(out, "turnout.json", doc)
@@ -246,9 +288,21 @@ def turnout_pass(E, cfg, out):
 
 
 def station_turnout(E, data):
-    """Per-station turnout file -> turnout by sector. The CEC format is not known in advance, so the
-    columns are found by their Hebrew names (as in expb.csv: סמל ישוב, קלפי, בזב, מצביעים)."""
-    text = data.decode("utf-8-sig") if data.startswith(b"\xef\xbb\xbf") else data.decode("cp1255", "replace")
+    """Per-station turnout release -> turnout by sector and by 2022 vote.
+
+    The CEC format is not known in advance, so columns are found by their Hebrew names (as in
+    expb.csv: סמל ישוב, קלפי, בזב, מצביעים). For every sector:
+      turnout  = voters so far / eligible, over the stations in the release;
+      ratio    = that turnout / the national turnout of the same release;
+      pace     = voters so far / the same stations' final voters in 2022.
+    The lean-weighted signal weights each station's pace by its 2022 votes for each bloc: are the
+    stations that voted for the Netanyahu bloc, the Jewish opposition or the Arab lists in 2022
+    turning out faster or slower than then? Stations that cannot be matched to 2022 or whose pace
+    is implausible (>2.0, usually a renumbered station) are left out of pace and counted."""
+    try:
+        text = data.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = data.decode("cp1255", "replace")
     rd = csv.reader(io.StringIO(text))
     header = [h.strip() for h in next(rd)]
 
@@ -258,36 +312,86 @@ def station_turnout(E, data):
     ie, iv = col("בזב", "בעלי זכות בחירה"), col("מצביעים", "הצביעו")
     if None in (ic, ik, iv):
         raise ValueError(f"unknown columns: {header[:12]}")
-    agg = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "stations": 0})
+    agg = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "stations": 0, "now": 0, "then": 0})
+    lean = collections.defaultdict(lambda: [0.0, 0.0])           # bloc -> [Σ pace×votes22, Σ votes22]
     nat = {"elig": 0, "voters": 0}
+    excluded = collections.Counter()
     for rec in rd:
         try:
             code, kalpi, voters = int(rec[ic]), rec[ik].strip(), int(float(rec[iv] or 0))
         except (ValueError, IndexError):
+            excluded["unreadable"] += 1
             continue
         elig = int(float(rec[ie] or 0)) if ie is not None else 0
-        sec = E.station_sector.get((code, kalpi)) or E.station_sector.get((code, kalpi.split(".")[0]), "jewish")
-        if not elig:
+        if elig and voters > elig * 1.02:
+            excluded["more voters than eligible"] += 1
             continue
-        if voters > elig * 1.02:
-            continue
+        key = (code, kalpi) if (code, kalpi) in E.station22 else (code, kalpi.split(".")[0])
+        sec = E.station_sector.get(key, "jewish")
         a = agg[sec]
-        a["elig"] += elig
-        a["voters"] += voters
+        if elig:
+            a["elig"] += elig
+            a["voters"] += voters
+            nat["elig"] += elig
+            nat["voters"] += voters
         a["stations"] += 1
-        nat["elig"] += elig
-        nat["voters"] += voters
-    if not nat["elig"]:
-        return None, None, 0
-    nt = nat["voters"] / nat["elig"]
+        s22 = E.station22.get(key)
+        if not s22 or not s22[0]:
+            excluded["no 2022 match"] += 1
+            continue
+        pace = voters / s22[0]
+        if pace > 2.0:
+            excluded["implausible pace"] += 1
+            continue
+        a["now"] += voters
+        a["then"] += s22[0]
+        for b, v in s22[1].items():
+            lean[b][0] += pace * v
+            lean[b][1] += v
+    nt = nat["voters"] / nat["elig"] if nat["elig"] else None
     out = {}
     for k, a in agg.items():
-        t = a["voters"] / a["elig"]
         fe, fv = E.sector_final[k]
-        out[k] = {"turnout": round(t, 4), "ratio": round(t / nt, 3) if nt else None,
-                  "coverage": round(a["elig"] / fe, 3) if fe else None,
+        t = a["voters"] / a["elig"] if a["elig"] else None
+        out[k] = {"turnout": round(t, 4) if t is not None else None,
+                  "ratio": round(t / nt, 3) if (t is not None and nt) else None,
+                  "pace": round(a["now"] / a["then"], 3) if a["then"] else None,
+                  "coverage": round(a["then"] / fv, 3) if fv else None,
                   "final_2022": round(fv / fe, 4) if fe else None, "stations": a["stations"]}
-    return out, None, round(nat["elig"] / sum(v[0] for v in E.sector_final.values()), 3)
+    signal = {b: round(x / w, 3) for b, (x, w) in lean.items() if w}
+    total22 = sum(v[1] for v in E.sector_final.values())
+    return {"sectors": out, "lean": signal, "national": round(nt, 4) if nt else None,
+            "coverage": round(sum(a["then"] for a in agg.values()) / total22, 3) if total22 else 0,
+            "excluded": dict(excluded)}
+
+
+# ------------------------------------------------------------------ publishing from a laptop
+def publish(out):
+    """Copy live/*.json into a gh-pages worktree (.live-pages) and push it: the laptop fallback
+    when GitHub's runners cannot reach the CEC. Needs push rights to the repository."""
+    import shutil
+    import subprocess
+    wt = os.path.join(ROOT, ".live-pages")
+    git = lambda *a, cwd=ROOT: subprocess.run(["git", *a], cwd=cwd, capture_output=True, text=True)
+    if not os.path.exists(wt):
+        git("fetch", "-q", "origin", "gh-pages")
+        r = git("worktree", "add", "-B", "gh-pages-live", wt, "origin/gh-pages")
+        if r.returncode:
+            raise RuntimeError(r.stderr.strip()[:200])
+    os.makedirs(os.path.join(wt, "live"), exist_ok=True)
+    for name in os.listdir(out):
+        if name.endswith(".json"):
+            shutil.copy(os.path.join(out, name), os.path.join(wt, "live", name))
+    git("add", "live", cwd=wt)
+    if not git("status", "--porcelain", cwd=wt).stdout.strip():
+        return "unchanged"
+    git("commit", "-q", "-m", f"live {now_il().strftime('%H:%M')} (laptop)", cwd=wt)
+    for _ in range(3):
+        git("pull", "-q", "--rebase", "origin", "gh-pages", cwd=wt)
+        if git("push", "-q", "origin", "HEAD:gh-pages", cwd=wt).returncode == 0:
+            return "pushed"
+        time.sleep(5)
+    return "push failed"
 
 
 # ------------------------------------------------------------------ exit polls
@@ -311,6 +415,7 @@ def main():
     ap.add_argument("--results-file", default="", help="read results from a local file (testing)")
     ap.add_argument("--as", dest="as_election", default=None, help="treat the file as this past election")
     ap.add_argument("--drill", action="store_true", help="mark every output as a rehearsal (shown as such on the page)")
+    ap.add_argument("--publish", action="store_true", help="push live/*.json to the gh-pages branch after every pass (laptop mode)")
     a = ap.parse_args()
     cfg = json.load(open(a.config, encoding="utf-8"))
     global DRILL
@@ -321,8 +426,13 @@ def main():
     history = json.load(open(hist_path, encoding="utf-8")) if os.path.exists(hist_path) else []
     last_hash, start = None, time.time()
     while True:
+        try:
+            E.cfg = json.load(open(a.config, encoding="utf-8"))
+        except Exception:
+            pass
+        has_res = os.path.exists(os.path.join(a.out, "results.json"))
         status = {"updated_at": now_il().isoformat(), "updated_he": he_time(now_il()), "errors": [],
-                  "phase": "day", "has_results": os.path.exists(os.path.join(a.out, "results.json")), "has_turnout": False}
+                  "phase": "night" if has_res else "day", "has_results": has_res, "has_turnout": False}
         try:
             td = turnout_pass(E, cfg, a.out)
             status["has_turnout"] = bool(td.get("national") or td.get("sectors"))
@@ -346,6 +456,11 @@ def main():
         except Exception as exc:
             status["errors"].append(f"exit polls: {exc}"[:200])
         write_json(a.out, "status.json", status)
+        if a.publish:
+            try:
+                status["published"] = publish(a.out)
+            except Exception as exc:
+                status["errors"].append(f"publish: {exc}"[:200])
         print(json.dumps(status, ensure_ascii=False), flush=True)
         if a.once or (time.time() - start) / 60 > a.minutes:
             break

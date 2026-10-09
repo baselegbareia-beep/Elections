@@ -69,3 +69,15 @@ jobs:
           done
           echo '## cdn-votes26'
           curl -sS -o /dev/null -m 25 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' https://cdn-votes26.bechirot.gov.il/ || true
+          echo '## is media26 refusing GitHub runners, or just empty? (DNS, then header variants)'
+          getent hosts media26.bechirot.gov.il media25.bechirot.gov.il || true
+          for v in "curl/8" "$UA" ; do
+            for extra in "" "-H Referer:https://votes26.bechirot.gov.il/ -H Accept-Language:he-IL,he;q=0.9" "--http1.1"; do
+              printf 'UA=%s %s -> ' "${v:0:20}" "$extra"
+              curl -sS -o /tmp/p.bin -m 20 -A "$v" $extra -w 'http=%{http_code} bytes=%{size_download} type=%{content_type}' https://media26.bechirot.gov.il/files/expc.csv || true
+              printf ' x-cache=%s\n' "$(curl -sS -I -m 20 -A "$v" https://media26.bechirot.gov.il/files/expc.csv 2>/dev/null | grep -i '^x-cache' | tr -d '\r')"
+            done
+          done
+          for path in files/ files/expc.csv files/expb.csv index.html robots.txt; do
+            printf '%s -> ' "$path"; curl -sS -o /dev/null -m 20 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' "https://media26.bechirot.gov.il/$path" || true
+          done

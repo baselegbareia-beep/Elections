@@ -89,14 +89,18 @@ def read_expb(path):
     media2X.bechirot.gov.il/files/expb.csv: cp1255 for K21–K24, UTF-8 with BOM
     from K25. Returns the same structure as read_ballots()."""
     raw = open(path, "rb").read()
-    text = raw.decode("utf-8-sig") if raw.startswith(b"\xef\xbb\xbf") else raw.decode("cp1255")
+    # UTF-8 with BOM from 2022; windows-1255 before; some archived snapshots are plain UTF-8
+    try:
+        text = raw.decode("utf-8-sig")
+    except UnicodeDecodeError:
+        text = raw.decode("cp1255")
     rd = csv.reader(text.splitlines())
     header = [h.strip() for h in next(rd)]
     party_cols = [h for h in header if h not in OFFICIAL_META]
     kalpi_col = "קלפי" if "קלפי" in header else "מספר קלפי"
     rows = []
     for rec in rd:
-        if not rec or len(rec) < len(party_cols):
+        if not rec or len(rec) < len(header) - 1:      # blank or cut-off line (live files can be mid-write)
             continue
         d = dict(zip(header, rec))
         votes = {p: int(float(d[p] or 0)) for p in party_cols}

@@ -310,3 +310,11 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 .lv-h2 { font: 700 24px/1.2 var(--font-display); margin: 22px 0 10px; }
 .lv-list { margin: 8px 0; padding-inline-start: 18px; display: grid; gap: 6px; font-size: var(--t-sm); }
 .lv-note { margin-top: 10px; padding: 10px 12px; border-inline-start: 3px solid var(--arab); background: var(--surface-2); border-radius: 6px; font-size: var(--t-sm); }
+.lv-when { min-width: 92px; font-size: var(--t-sm); }
+.lv-lean { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; margin: 8px 0; }
+.lv-lean div { display: flex; justify-content: space-between; align-items: center; gap: 8px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface-2); font-size: var(--t-sm); }
+.lv-lean b { font: 700 22px/1 var(--font-display); }
+.lv-lean .swatch { width: 10px; height: 10px; border-radius: 2px; display: inline-block; margin-inline-end: 6px; }
+.lv-batch { margin-top: 10px; font-size: var(--t-sm); color: var(--ink-2); }
+.lv-paused { display: flex; gap: 6px; align-items: flex-start; margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: color-mix(in srgb, var(--crit) 12%, transparent); font-size: var(--t-sm); }
+.lv-paused svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }

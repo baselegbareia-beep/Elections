@@ -30,6 +30,7 @@ MIRROR_FILES = ["manifest.csv", "metadata/parties.csv", "metadata/elections.csv"
 MANDATES = "https://raw.githubusercontent.com/Yoavfried/israel-election-map/main/data/manual/election_mandates.csv"
 POLLS_2026 = "https://raw.githubusercontent.com/amitlev/israel-polls-2026/main/docs/polls-data.js"
 SES = "https://raw.githubusercontent.com/harelc/elections-vote-transfer/master/site/data/socioeconomic_clusters.json"
+SNAPSHOTS_K24 = "https://github.com/sapir/israel-votes24-data"
 
 
 # The CEC hosts sit behind a WAF that rejects unknown clients; a browser-like UA is accepted.
@@ -82,6 +83,14 @@ def main(out):
     save(os.path.join(out, "election_mandates.csv"), get(MANDATES), MANDATES, log)
     save(os.path.join(out, "polls-data.js"), get(POLLS_2026), POLLS_2026, log)
     save(os.path.join(out, "socioeconomic_clusters.json"), get(SES), SES, log)
+
+    # Snapshots of the official 2021 ballot file taken during election night (git history, one
+    # commit per change). The final snapshot is identical to the official file row for row.
+    snap = os.path.join(out, "snapshots", "votes24")
+    if not os.path.exists(snap):
+        import subprocess
+        subprocess.run(["git", "clone", "-q", SNAPSHOTS_K24, snap], check=False)
+    log.append({"url": SNAPSHOTS_K24, "path": os.path.relpath(snap, ROOT), "bytes": None, "sha256": None})
 
     with open(os.path.join(out, "fetch_log.json"), "w", encoding="utf-8") as f:
         json.dump(log, f, ensure_ascii=False, indent=1)
