@@ -1,0 +1,61 @@
+# Can GitHub's runners reach the elections committee? The election-night feed (live.yml) depends on it.
+# Runs daily 20–27.10 and on demand; the summary table is in the run's summary page. On 9.10.2026
+# media26 (CloudFront) answered 404 to GitHub runners while serving other networks, so if the 2026
+# files stay unreachable from here, the feed moves to a self-hosted runner in Israel (docs/ELECTION_DAY.md).
+name: Check access to the elections committee
+
+on:
+  schedule:
+    - cron: '17 5 20-27 10 *'   # 07:17 Israel time (UTC+2 from 25.10), daily 20–27.10
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  net-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Probe official hosts
+        run: |
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36'
+          {
+            echo "## Elections committee reachability, $(date -u '+%d.%m %H:%M') UTC"
+            echo
+            echo '| URL | HTTP | bytes | IP | time |'
+            echo '|---|---|---|---|---|'
+          } >> "$GITHUB_STEP_SUMMARY"
+          for u in https://votes25.bechirot.gov.il/ https://media25.bechirot.gov.il/files/expb.csv \
+                   https://votes26.bechirot.gov.il/ https://media26.bechirot.gov.il/ \
+                   https://media26.bechirot.gov.il/files/expb.csv https://media26.bechirot.gov.il/files/expc.csv \
+                   https://bechirot.gov.il/ https://www.gov.il/he https://www.cbs.gov.il/he/Pages/default.aspx; do
+            printf '%s  ' "$u"
+            line=$(curl -sS -o /dev/null -m 25 -r 0-4095 -A "$UA" \
+                     -w '%{http_code}|%{size_download}|%{remote_ip}|%{time_total}s' "$u" 2>/dev/null || echo 'FAILED|0||')
+            echo "$line"
+            echo "| $u | $(echo "$line" | cut -d'|' -f1) | $(echo "$line" | cut -d'|' -f2) | $(echo "$line" | cut -d'|' -f3) | $(echo "$line" | cut -d'|' -f4) |" >> "$GITHUB_STEP_SUMMARY"
+          done
+          echo '--- 2026 results files (test content before election day)'
+          for f in expb.csv expc.csv; do
+            echo "## media26 $f"
+            curl -sS -m 25 -A "$UA" -D - -o "/tmp/$f" "https://media26.bechirot.gov.il/files/$f" \
+              | grep -iE '^(HTTP|content-type|content-length|last-modified|cache-control|age|etag|x-cache|access-control)' || true
+            head -c 1200 "/tmp/$f" | iconv -f cp1255 -t utf-8 2>/dev/null || head -c 1200 "/tmp/$f"
+            echo; echo "lines: $(wc -l < "/tmp/$f")"
+            echo "- media26 $f: $(wc -l < "/tmp/$f") lines, header: $(head -c 300 "/tmp/$f" | head -n 1 | cut -c1-120)" >> "$GITHUB_STEP_SUMMARY"
+          done
+          echo '## cdn-votes26'
+          curl -sS -o /dev/null -m 25 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' https://cdn-votes26.bechirot.gov.il/ || true
+          echo '## is media26 refusing GitHub runners, or just empty? (DNS, then header variants)'
+          getent hosts media26.bechirot.gov.il media25.bechirot.gov.il || true
+          for v in "curl/8" "$UA" ; do
+            for extra in "" "-H Referer:https://votes26.bechirot.gov.il/ -H Accept-Language:he-IL,he;q=0.9" "--http1.1"; do
+              printf 'UA=%s %s -> ' "${v:0:20}" "$extra"
+              # shellcheck disable=SC2086
+              curl -sS -o /tmp/p.bin -m 20 -A "$v" $extra -w 'http=%{http_code} bytes=%{size_download} type=%{content_type}' https://media26.bechirot.gov.il/files/expc.csv || true
+              printf ' x-cache=%s\n' "$(curl -sS -I -m 20 -A "$v" https://media26.bechirot.gov.il/files/expc.csv 2>/dev/null | grep -i '^x-cache' | tr -d '\r')"
+            done
+          done
+          for path in files/ files/expc.csv files/expb.csv index.html robots.txt; do
+            printf '%s -> ' "$path"; curl -sS -o /dev/null -m 20 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' "https://media26.bechirot.gov.il/$path" || true
+          done

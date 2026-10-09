@@ -1,6 +1,12 @@
 data/raw/
+/data/raw
 __pycache__/
 *.pyc
 .DS_Store
 /live/
+/_live/
+/_probe/
+/_site/
+/ld/
+.live-data/
 .live-pages/

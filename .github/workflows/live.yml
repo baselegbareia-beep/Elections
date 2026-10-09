@@ -1,31 +1,43 @@
-# Election day & night feed: runs pipeline/live_fetch.py every minute and publishes live/*.json
-# next to the page on the gh-pages branch.
+# Election day & night feed: runs pipeline/live_fetch.py in a loop (one pass a minute), commits the
+# published live/*.json to the live-data branch and asks "Publish site" (pages.yml) to redeploy the
+# page. The branch has one writer at a time: this workflow or the laptop fallback (live_fetch.py
+# --publish); both use the same reset cycle (fetch, reset --hard to the remote tip, copy, commit,
+# push; never rebase), so a rejected push is simply repeated and nothing can wedge.
 #
-# Scheduled runs only fire from the default branch (main), so this file must be merged to main
-# before 27.10.2026. GitHub may delay scheduled runs at busy times: on election morning, start a
-# run by hand (Actions → "Election day live feed" → Run workflow) as a backup.
-# Israel is on UTC+2 from 25.10.2026: polls open 07:00 = 05:00 UTC and close 22:00 = 20:00 UTC.
+# Scheduled runs fire only from the default branch (main). GitHub may delay runs queued on the hour,
+# so the crons sit off the hour; on election morning also start a run by hand as a backup.
+# Israel is UTC+2 from 25.10.2026: polls open 07:00 = 05:00 UTC, close 22:00 = 20:00 UTC.
+# Switches: repository variable LIVE_RUNNER=self-hosted moves every run (scheduled ones too) to the
+# runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
+# "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
 name: Election day live feed
 
 on:
   schedule:
-    - cron: '*/20 4-23 27 10 *'     # 27.10, 06:00–01:40 Israel time
-    - cron: '*/20 0-6 28 10 *'      # 28.10, 02:00–08:40 Israel time (the count runs through the night)
+    - cron: '7,27,47 4-23 27 10 *'   # 27.10, 06:07–01:47 Israel time, every 20 min (345-minute runs chain)
+    - cron: '7,27,47 0-23 28 10 *'   # 28.10: the regular count ends, the double envelopes begin
+    - cron: '7 * 29,30 10 *'         # 29–30.10: hourly short runs for the envelopes and the final file
   workflow_dispatch:
     inputs:
       minutes:
-        description: 'How long this run keeps polling (max ~345)'
-        default: '345'
+        description: 'How long this run keeps polling (hosted jobs stop at 6 h; default 345 on 27–28.10, 20 later)'
+        default: ''
       drill:
-        description: 'Rehearsal: replay 2022 from the official file and mark the page as a drill'
+        description: 'Rehearsal: the 2022 file (media25, else data/official) counted progressively; the page says "תרגול"; cleaned up at the end'
+        type: boolean
+        default: false
+      reset:
+        description: 'Wipe live-data back to the placeholder and redeploy (nothing else runs)'
         type: boolean
         default: false
       runner:
-        description: 'Where to run: ubuntu-latest (GitHub) or self-hosted (a computer in Israel registered as a runner)'
-        default: 'ubuntu-latest'
+        description: 'ubuntu-latest (GitHub) or self-hosted (a Linux/macOS computer in Israel); empty = the LIVE_RUNNER variable'
+        default: ''
 
 permissions:
-  contents: write
+  contents: write    # push to live-data
+  actions: write     # dispatch pages.yml with GITHUB_TOKEN (workflow_dispatch is the documented exception)
+  pages: read        # which Pages source is configured
 
 concurrency:
   group: live-feed
@@ -33,44 +45,135 @@ concurrency:
 
 jobs:
   feed:
+    if: github.event_name == 'workflow_dispatch' || vars.LIVE_FEED_OFF != 'true'
     # the CEC's 2026 CDN may refuse GitHub's cloud addresses; a self-hosted runner in Israel avoids that
-    runs-on: ${{ github.event.inputs.runner || 'ubuntu-latest' }}
+    runs-on: ${{ inputs.runner || vars.LIVE_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 355
+    env:
+      DRILL: ${{ inputs.drill == true }}
+      RESET: ${{ inputs.reset == true }}
+      MINUTES: ${{ inputs.minutes }}
+      DEFAULT_BRANCH: ${{ github.event.repository.default_branch }}
+      GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
       - run: pip install numpy
-      - name: Check out gh-pages next to the code
+      - name: Minutes for this run, and the Pages source
+        run: |
+          if [ -z "$MINUTES" ]; then
+            case "$(TZ=Asia/Jerusalem date +%d.%m)" in 27.10|28.10) MINUTES=345 ;; *) MINUTES=20 ;; esac
+          fi
+          echo "MINUTES=$MINUTES" >> "$GITHUB_ENV"
+          # "workflow" = Source: GitHub Actions (live data reaches the page); "legacy" = branch mode (it does not)
+          src=$(curl -sS -m 30 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" \
+                | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("build_type") or "")' 2>/dev/null || true)
+          echo "PAGES_SOURCE=${src:-unknown}" >> "$GITHUB_ENV"
+          echo "minutes=$MINUTES pages_source=${src:-unknown} drill=$DRILL reset=$RESET runner=$RUNNER_NAME ($RUNNER_OS)"
+          if [ "$src" != "workflow" ]; then
+            {
+              echo "## :warning: Pages Source is not GitHub Actions (build_type: ${src:-unknown})"
+              echo
+              echo "Live data is pushed to the live-data branch but **cannot reach the page** until Settings → Pages →"
+              echo "Build and deployment → Source is switched to **GitHub Actions** (docs/ELECTION_DAY.md)."
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - name: Prepare the live-data worktree
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git fetch origin gh-pages
-          git worktree add pages origin/gh-pages -B gh-pages
-          mkdir -p pages/live _live
-          cp -r pages/live/. _live/ 2>/dev/null || true    # keep the night's history across runs
-      - name: Poll the elections committee and publish
-        env:
-          MINUTES: ${{ github.event.inputs.minutes || '345' }}
+          rm -rf ld _live; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
+          if git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data 2>/dev/null; then
+            git worktree add -q --detach ld origin/live-data
+          else
+            # first use: an orphan branch holding only live/ (the placeholder status)
+            git worktree add -q --detach ld
+            git -C ld checkout -q --orphan "live-data-$(date +%s)"
+            git -C ld rm -rfq --cached .
+            find ld -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+            mkdir -p ld/live && cp site/live/status.json ld/live/status.json
+            git -C ld add -A && git -C ld commit -q -m 'live-data: placeholder'
+            git -C ld push -q origin HEAD:live-data || {   # someone created it first: take theirs
+              git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data
+              git -C ld reset -q --hard origin/live-data; }
+            git -C ld checkout -q --detach
+          fi
+          mkdir -p _live ld/live
+          # seed this run from the branch (history, last good files), except a rehearsal's files (OPS-3)
+          if [ "$DRILL" != true ] && grep -q '"drill":true' ld/live/status.json 2>/dev/null; then
+            echo 'the branch holds drill data: starting clean'
+          else
+            cp ld/live/*.json _live/ 2>/dev/null || true
+          fi
+          ls -la _live
+      - name: Smoke test and 2026 probe (drill only)
+        if: env.DRILL == 'true'
         run: |
+          python3 pipeline/test_live.py
+          echo '--- one unpublished 2026 pass: does this runner reach media26? (results_probe below)'
+          python3 pipeline/live_fetch.py --out _probe --once | tail -n 1 | cut -c1-600
+      - name: Poll the elections committee and publish
+        run: |
+          publish_live() {   # feed-owned branch: fetch + reset --hard + copy + commit + push; never rebase (OPS-1)
+            local i
+            for i in 1 2 3 4 5; do
+              if git -C ld fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data; then
+                git -C ld reset -q --hard origin/live-data
+              fi
+              rm -f ld/live/*.json; mkdir -p ld/live; cp _live/*.json ld/live/
+              [ -z "$(git -C ld status --porcelain)" ] && return 0
+              if git -C ld add -A live && git -C ld commit -q -m "live $(date -u +%H:%M)" \
+                 && git -C ld push -q origin HEAD:live-data; then
+                echo "pushed $(git -C ld rev-parse --short HEAD) $(date -u +%H:%M:%S)"; return 0
+              fi
+              sleep 5
+            done
+            echo '::warning::could not push to live-data'; return 1
+          }
+          dispatch_pages() {   # ask "Publish site" to redeploy (curl: works on self-hosted runners too)
+            curl -sS -o /dev/null -m 30 -w 'dispatch pages.yml: http=%{http_code}\n' -X POST \
+              -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+              "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/pages.yml/dispatches" \
+              -d "{\"ref\":\"$DEFAULT_BRANCH\"}" || true
+            last_dispatch=$(date +%s); pending=0
+          }
+          reset_live() {   # live-data back to the placeholder, history dropped (after a drill, or to start over)
+            git -C ld checkout -q --orphan "reset-$(date +%s)"
+            git -C ld rm -rfq --cached .
+            find ld -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
+            mkdir -p ld/live && cp site/live/status.json ld/live/status.json
+            git -C ld add -A && git -C ld commit -q -m "live-data: reset $(date -u +%H:%M)" \
+              && git -C ld push -q -f origin HEAD:live-data && echo 'live-data reset to the placeholder'
+            git -C ld checkout -q --detach
+            rm -f _live/*.json; cp site/live/status.json _live/
+          }
+          last_dispatch=0; pending=0
+          if [ "$RESET" = true ]; then reset_live; dispatch_pages; exit 0; fi
           end=$(( $(date +%s) + MINUTES * 60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
-            # pick up manual inputs (turnout figures, exit polls) and config edits made on GitHub
-            git fetch -q origin "$GITHUB_REF_NAME" && git checkout -q "origin/$GITHUB_REF_NAME" -- live_input pipeline/live_config.json || true
-            if [ "${{ github.event.inputs.drill }}" = "true" ]; then
-              python3 pipeline/live_fetch.py --out _live --once --drill --results-file data/official/k25_expb.csv --as K25 || echo 'pass failed'
+            # manual inputs and config edits made on GitHub; --no-overlay also removes a deleted file (OPS-14)
+            git fetch -q origin "+refs/heads/$GITHUB_REF_NAME:refs/remotes/origin/$GITHUB_REF_NAME" \
+              && git checkout -q --no-overlay "origin/$GITHUB_REF_NAME" -- live_input pipeline/live_config.json || true
+            if python3 -c 'import json,sys; sys.exit(0 if json.load(open("pipeline/live_config.json")).get("github_feed", True) is False else 1)' 2>/dev/null; then
+              echo 'live_config.json: "github_feed": false, stopping (the laptop takes over)'; break
+            fi
+            if [ "$DRILL" = true ]; then
+              out=$(python3 pipeline/live_fetch.py --out _live --once --drill --minutes "$MINUTES" 2>&1) || true
             else
-              python3 pipeline/live_fetch.py --out _live --once || echo 'pass failed'
+              out=$(python3 pipeline/live_fetch.py --out _live --once 2>&1) || true
             fi
-            cp _live/*.json pages/live/
-            if [ -n "$(git -C pages status --porcelain)" ]; then
-              git -C pages add live
-              git -C pages commit -q -m "live $(date -u +%H:%M)"
-              for i in 1 2 3; do
-                git -C pages pull -q --rebase origin gh-pages && git -C pages push -q origin gh-pages && break
-                sleep 5
-              done
-            fi
+            printf '%s\n' "$out" | tail -n 4 | cut -c1-700
+            changed=$(printf '%s\n' "$out" | tail -n 1 | python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("changed", [])))' 2>/dev/null || echo 0)
+            if [ "${changed:-0}" -gt 0 ] && publish_live; then pending=1; fi
+            # redeploy at most once per 50 s, and only after a change (the GITHUB_TOKEN REST budget is shared)
+            if [ "$pending" = 1 ] && [ $(( $(date +%s) - last_dispatch )) -ge 50 ]; then dispatch_pages; fi
             sleep 45
           done
+          flush() {   # a deferred redeploy, after the 50-second gap
+            gap=$(( $(date +%s) - last_dispatch )); [ "$gap" -lt 50 ] && sleep $(( 50 - gap )); dispatch_pages
+          }
+          if [ "$pending" = 1 ]; then flush; fi
+          if [ "$DRILL" = true ]; then reset_live; pending=1; flush; fi   # the page returns to its pre-election state

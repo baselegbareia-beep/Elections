@@ -2,16 +2,22 @@
   "election_day": "2026-10-27",
   "results_url": "https://media26.bechirot.gov.il/files/expb.csv",
   "results_url_localities": "https://media26.bechirot.gov.il/files/expc.csv",
+  "drill_url": "https://media25.bechirot.gov.il/files/expb.csv",
   "station_turnout_url": null,
   "eligible": 7340000,
-  "notes": {
-    "eligible": "Replace with the official register size published by the CEC (בעלי זכות בחירה). 7,340,000 is the approximate figure reported before the election.",
-    "results_url": "Same path as 2019–2022 (media2X.bechirot.gov.il/files/expb.csv). Returned 404 on 9.10.2026; the CEC fills it on election night.",
-    "station_turnout_url": "Set to the CEC per-station turnout file once its address is known (ruling of 16.8.2026: published at least four times on election day).",
-    "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page.",
-    "envelopes_expected": "Valid votes expected in double envelopes, if the CEC announces it; otherwise estimated from 2022."
-  },
+  "github_feed": true,
+  "lean_during_voting": false,
   "projection_paused": false,
   "pause_reason": "",
-  "envelopes_expected": null
+  "envelopes_expected": null,
+  "notes": {
+    "eligible": "Replace with the official register size published by the CEC (בעלי זכות בחירה) before 25.10. 7,340,000 is an approximate pre-election figure; reports range up to ~7.56M.",
+    "results_url": "Same path as 2019–2022 (media2X.bechirot.gov.il/files/expb.csv). On 9.10.2026 it answered 404 to GitHub's runners while a third party saw a placeholder file from other networks (5.10): the files may not be up yet, or GitHub's cloud addresses may be blocked. Nothing is fetched from it before 27.10 22:00 Israel time; until then it is only probed (status.results_probe).",
+    "drill_url": "The 2022 file used by a rehearsal (falls back to data/official/k25_expb.csv).",
+    "station_turnout_url": "Set to the CEC per-station turnout file once its address is known. Status: chair's decision of 16.8.2026 (at least four publications per regular polling station); the High Court (בג״ץ 60697-08-26, 17.9.2026) vacated the plenum's 6.9 decision and left the ban on identified reporting; per Walla, JNS and Channel 12 (every four hours) the aggregate per-station publication stands. As of 9.10 no times, URL or format were published.",
+    "github_feed": "Set to false to stop the GitHub Actions loop (it re-reads this file every pass) so a laptop or self-hosted run can take over without touching repository settings.",
+    "lean_during_voting": "The 2022-vote-weighted turnout pace by bloc is published during voting hours only when true (pending the CEC legal adviser); after 22:00 always.",
+    "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page.",
+    "envelopes_expected": "Valid votes expected in double envelopes. Set ONLY from an official CEC statement (acting DG Dean Livne reportedly expects 600–700k envelopes; 2022 had 462,807 voters, 458,714 valid); otherwise it is estimated from 2022 and the count is never marked complete."
+  }
 }
