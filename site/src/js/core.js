@@ -98,9 +98,11 @@ function onSeg(root, id, cb) {
 const ICON_OK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8.5l3 3 7-7" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
 const ICON_NO = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M12 4l-8 8" fill="none" stroke="currentColor" stroke-width="2"/></svg>';
 
-function svgEl(container, w, h) {
+function svgEl(container, w, h, name) {
+  // name: the accessible name of the chart (role=img without one is announced as an unnamed image)
   container.innerHTML = '';
-  return d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
+  const svg = d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
+  return name ? svg.attr('aria-label', name) : svg;
 }
 // text colour for a label on a filled mark: whichever of ink and white has the higher WCAG contrast,
 // with the fill blended over the surface when the mark is translucent

@@ -319,3 +319,8 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 .lv-paused { display: flex; gap: 6px; align-items: flex-start; margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: color-mix(in srgb, var(--crit) 12%, transparent); font-size: var(--t-sm); }
 .lv-paused svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
 .ban-note { margin: 0 0 14px; padding: 10px 14px; border: 2px solid var(--crit); border-radius: 8px; background: color-mix(in srgb, var(--crit) 8%, var(--surface)); font-weight: 600; font-size: var(--t-sm); }
+.lv-notes { margin: -8px 0 14px; font-size: var(--t-xs); color: var(--muted); line-height: 1.5; overflow-wrap: anywhere; }
+.lv-notes .lv-warn { color: var(--ink); font-weight: 600; }
+.lv-table { margin-top: 8px; }
+.lv-table summary { cursor: pointer; font-size: var(--t-xs); color: var(--ink-2); }
+.lv-table table { margin-top: 8px; }
