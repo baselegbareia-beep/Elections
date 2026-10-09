@@ -2306,7 +2306,8 @@ function renderMethod() {
     <div class="card c12">
       <h3>מקורות הנתונים</h3>
       <div class="tbl-wrap"><table class="t"><thead><tr><th>נתון</th><th>מקור</th><th>רמת פירוט</th><th>סטטוס בדמו</th></tr></thead><tbody>
-        <tr><td><b>תוצאות הבחירות 2019–2022</b></td><td>ועדת הבחירות המרכזית: קובצי ״תוצאות לפי קלפיות״ <code>media21–25.bechirot.gov.il/files/expb.csv</code> ודפי התוצאות הארציות <code>votes21–25.bechirot.gov.il</code></td><td>קלפי (10,765–12,926 שורות לכל מערכת), כולל שורת המעטפות הכפולות</td><td><span class="badge off">רשמי</span> נטען מעותק ציבורי של הקבצים הרשמיים (מאגר public-data של israel-election-map) עם טביעות SHA-256 שנבדקו. סביבת הבנייה של הדמו חסומה לאתרי ממשלה. העותק הושווה לעותק עצמאי שני (זהה לגמרי ב-2019 א׳, 2020, 2021), והסכומים זהים לטבלאות הארציות הרשמיות. בגרסת הייצור ההורדה ישירה מהוועדה.</td></tr>
+        <tr><td><b>תוצאות הבחירות 2019–2022</b></td><td>ועדת הבחירות המרכזית: קובצי ״תוצאות לפי קלפיות״ <code>media21–25.bechirot.gov.il/files/expb.csv</code> ודפי התוצאות הארציות <code>votes21–25.bechirot.gov.il</code></td><td>קלפי (10,765–12,926 שורות לכל מערכת), כולל שורת המעטפות הכפולות</td><td><span class="badge off">רשמי</span> 2019 ב׳–2022: הקבצים הרשמיים עצמם, שהורדו מאתר הוועדה על ידי תהליך אוטומטי ב-GitHub ונשמרו במאגר עם טביעת SHA-256 (<code>data/official</code>). 2019 א׳: עותק ציבורי של הקובץ הרשמי (מאגר israel-election-map), כי הקובץ אינו זמין עוד בכתובת המקורית. בנייה מחדש מהקבצים הרשמיים נותנת סכומים זהים לעותק, והסכומים זהים לטבלאות הארציות הרשמיות. ההבדל היחיד: הוועדה רושמת את שערי תקווה ועץ אפרים ב-2022 כיישוב אחד, שער שומרון (קוד 3826).</td></tr>
+        <tr><td><b>יום הבחירות 2026</b></td><td>ועדת הבחירות: שיעור ההצבעה הארצי המצטבר (10:00–22:00), שיעור ההצבעה לפי קלפי (אם יפורסם כפי שהוחלט ב-16.8.2026) וקובץ התוצאות לפי קלפי בליל הבחירות (<code>media26.bechirot.gov.il/files/expb.csv</code>)</td><td>ארצי לפי שעה; קלפי</td><td><span class="badge off">רשמי</span> הסדרות של 2013–2022 נאספו מדפי הוועדה. נתונים ממפלגות או ממכוני מחקר מוצגים בנפרד, כלא רשמיים.</td></tr>
         <tr><td><b>סקרי 2026</b></td><td>סקרים שפורסמו בכלי התקשורת מאז סגירת הרשימות; ${pollsWithFiling} מהם מקושרים לקובץ הדיווח הרשמי שמפרסמת ועדת הבחירות לפי חוק הבחירות (דרכי תעמולה) באתר gov.il</td><td>סקר: מנדטים לרשימה, ולעיתים גם אחוזים גולמיים, מדגם וטעות דגימה</td><td><span class="badge">פורסם</span> ${S.polls.polls.length} סקרים ייחודיים; כפילויות של אותו סקר תחת שני שמות הוסרו. בייצור: קליטה ישירה של קובצי הדיווח הרשמיים.</td></tr>
         <tr><td><b>סקרים אחרונים 2019–2022</b></td><td>הסקרים האחרונים שפורסמו לפני כל מערכת, כפי שרוכזו בטבלאות הסקרים של ויקיפדיה; שתי סריקות עצמאיות זהות, כותרות מרכזיות אומתו מול דיווחי חדשות</td><td>סקר</td><td><span class="badge">פורסם</span> 54 סקרים (סקר כפול אחד הוסר). בייצור: השלמה מארכיוני כלי התקשורת וממאגרי הדיווח של ועדת הבחירות.</td></tr>
         <tr><td><b>רשימות 2026 ואותיות הפתק</b></td><td>38 הרשימות שאישרה ועדת הבחירות (סוף ספטמבר 2026), כפי שפורסמו בכלי התקשורת</td><td>רשימה</td><td><span class="badge">פורסם</span> האותיות יאומתו מול הפרסום הרשמי של הוועדה; אותיות הרשימה המשותפת (ודם) טרם אומתו.</td></tr>
@@ -2337,6 +2338,8 @@ function renderMethod() {
       <p>הסקרים מדווחים מנדטים. רשימה שלפחות סקר אחד בחלון נתן לה אפס מוערכת סקר אחר סקר: האחוז הגולמי מקובץ הדיווח הרשמי כשהוא קיים, אחרת השיעור שנגזר מהמנדטים, ובסקר שנתן אפס בלי קובץ דיווח, האחוז הממוצע של אותה רשימה בקובצי הדיווח שבהם קיבלה אפס (בלי קובץ כזה: 2.2% לרשימה שעברה בסקר כלשהו, 1% לרשימה שלא עברה באף סקר). ההערכה סקר אחר סקר משתמשת במנדטים הגולמיים, בלי תיקון הטיית הסוקרים. ל"אחרות" שלא נשאלות בסקרים מוקצים 0.8%. שאר הרשימות מתחלקות ביתרה ביחס ל-<code>s+0.5</code> (אמצע מרווח המנדטים), כך שסך הקולות הוא 100%. המנדטים מחושבים מחדש בשיטת בדר-עופר, עם אחוז חסימה של 3.25% והסכמי העודפים שדווחו.</p>
       <h4>הסימולציה</h4>
       <p>${fmt(SIM.n)} הגרלות. בכל הגרלה: תזוזה בין המחנה של גוש נתניהו למחנה האופוזיציה היהודית (סטיית תקן ${fmt1(100 * SIM.blocSd)} נק׳ מכלל הקולות), זעזוע משותף לרשימות הערביות (${Math.round(100 * SIM.arabSd)}%), ורעש לכל רשימה (${Math.round(100 * SIM.partySd)}% יחסי) שמעביר קולות בתוך המחנה בלבד. המחנות קבועים לפי הנתונים ואינם משתנים כשמזיזים רשימה בעורך הגושים. כיול: בשבוע האחרון ב-2019–2022 טעה הממוצע בגוש נתניהו ב-2.4 מנדטים וברשימות הערביות ב-1.55 (שורש ממוצע הריבועים). הפיזור הורחב בחצי לזמן שנותר, ליעד של ${SIM_TARGET.coal} ו-${SIM_TARGET.arab} מנדטים. ההרחבה היא הנחה מפורשת, לא כיול: אין בנתונים ממוצעי סקרים משבועיים וחצי לפני כל מערכת. מודל הדגמה, לא תחזית.</p>
+      <h4>תחזית ליל הבחירות</h4>
+      <p>כל יישוב שנספר מושווה לתוצאה שלו ב-2022. היישובים מחולקים לשכבות: יישובים ערביים לפי אזור, דרוזיים, ערים מעורבות, חרדיים, ושאר היישובים לפי ההצבעה לגוש נתניהו ולפי גודל. לכל שכבה מחושבים היחס בין שיעור ההצבעה עכשיו לשיעור ב-2022, והיחס בין חלקה של כל רשימה לחלקן של הרשימות שקדמו לה. היחסים מוחלים על היישובים שעוד לא נספרו באותה שכבה. כשבשכבה נספר מעט, היחס נשען על השכבה הרחבה יותר, ובחברה הערבית על ממוצע הסקרים, ולא על יישובים יהודיים. המעטפות הכפולות מוערכות לפי 2022. אי-הוודאות: דגימה חוזרת של היישובים שנספרו, טעות משותפת לכל מה שעוד לא נספר, וטעות לכל רשימה (גדולה יותר לרשימות חדשות). המודל נבדק לאחור על 2022 ועל 2021 בסדרי ספירה מדומים; התוצאות מוצגות בלשונית "יום הבחירות".</p>
       <h4>מעברי קולות</h4>
       <p>רגרסיה מאולצת ברמת הקלפי: לכל זוג מערכות מוצאת מטריצה שבה כל שורה היא חלוקה של מצביעי רשימה בבחירות הקודמות. מבוססת רק על קלפיות שאפשר להתאים בין המערכות. זה אומדן אקולוגי, ולא מעקב אחר מצביעים בודדים.</p>
     </div>
@@ -2349,6 +2352,7 @@ function renderMethod() {
         <li>שבטי הנגב הם יחידות רישום ולא מקומות. הם מוצגים במפה כעיגול אחד.</li>
         <li>המיקום של כל יישוב הוא מרכז הפוליגון, לא מיקום הקלפיות. בייצור יתווסף מיפוי קלפי לאזור סטטיסטי של הלמ״ס.</li>
         <li>הסקרים מדווחים במנדטים ומעוגלים. ההמרה לקולות נשענת על קובצי הדיווח רק לרשימות הקטנות; לשאר הרשימות היא אומדן.</li>
+        <li>תחזית ליל הבחירות מניחה שהיישובים שלא נספרו דומים ליישובים שנספרו באותה שכבה. אם יישובים מסוג מסוים נספרים ראשונים, התחזית המוקדמת מוטה; הבדיקה לאחור מראה שב-2021, עם רשימות חדשות ופיצולים, הטעות המוקדמת הייתה כפולה בערך מזו של 2022.</li>
       </ul>
     </div>
   </div>`;
@@ -2480,12 +2484,14 @@ async function fetchLive(name) {
 async function loadLive() {
   // status.json always exists (a placeholder before election day), so only real feeds are requested
   const st = await fetchLive('status.json');
-  const [res, turnout, history] = await Promise.all([
+  const [res, turnout, history, exits] = await Promise.all([
     st && st.has_results ? fetchLive('results.json') : null,
     st && st.has_turnout ? fetchLive('turnout.json') : null,
-    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json')]);
+    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json'),
+    st && st.exit_polls ? fetchLive('exit_polls.json') : null]);
   S.turnoutHistory = history;
   S.liveTurnout = turnout;   // null outside election day
+  S.liveExit = exits;        // published by the fetcher only after 22:00
   if (res && res.frame) return { mode: 'live', ...res };
   return { mode: 'demo', ...(await fetchJSON('data/replay_night.json')) };
 }
@@ -2523,6 +2529,11 @@ async function renderLive() {
       <h3 style="margin-top:18px">אחוז החסימה</h3>
       <p class="sub">רשימות שעשויות להיות בצד הלא נכון של 3.25%.</p>
       <div id="lv-thr" class="tbl-wrap"></div>
+    </div>
+    <div class="card c12" id="lv-exit-card" hidden>
+      <h3>המדגמים מול הספירה</h3>
+      <p class="sub">המדגמים של ערוצי הטלוויזיה (פורסמו ב-22:00) לעומת התחזית לסיום הספירה. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה.</p>
+      <div id="lv-exit" class="tbl-wrap"></div>
     </div>
     <div class="card c6">
       <h3>השתתפות בקלפיות שנספרו</h3>
@@ -2571,6 +2582,20 @@ function drawLiveFrame() {
   drawLiveThreshold($('#lv-thr'), F);
   drawLiveTurnout($('#lv-turnout'), F);
   drawLiveAccuracy($('#lv-acc'), F);
+  drawExitPolls(F);
+}
+
+function drawExitPolls(F) {
+  const card = $('#lv-exit-card'), el = $('#lv-exit');
+  const E = (S.live.mode === 'demo' ? S.live.exit_polls : S.liveExit) || null;
+  if (!card || !E || !(E.polls || []).length) { if (card) card.hidden = true; return; }
+  card.hidden = false;
+  const lists = F.lists.filter(l => l.seats > 0 || E.polls.some(p => (p.seats[l.id] || p.seats[l.letters] || 0) > 0));
+  const seatOf = (p, l) => p.seats[l.id] ?? p.seats[l.letters] ?? 0;
+  const final = F.final || E.final || null;
+  el.innerHTML = `<table class="t sticky1"><thead><tr><th>רשימה</th>${E.polls.map(p => `<th class="n">${esc(p.outlet)}</th>`).join('')}<th class="n">תחזית עכשיו</th>${final ? '<th class="n">תוצאה</th>' : ''}</tr></thead><tbody>${
+    lists.map(l => `<tr><td>${slip(l.letters, l.name, liveColor(l))}</td>${E.polls.map(p => `<td class="n">${seatOf(p, l)}</td>`).join('')}<td class="n"><b>${l.seats}</b></td>${final ? `<td class="n">${final[l.id] ?? 0}</td>` : ''}</tr>`).join('')}</tbody></table>
+    ${E.note ? `<p class="foot">${esc(E.note)}</p>` : ''}`;
 }
 
 function drawLiveProgress(el, F) {

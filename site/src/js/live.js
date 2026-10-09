@@ -19,12 +19,14 @@ async function fetchLive(name) {
 async function loadLive() {
   // status.json always exists (a placeholder before election day), so only real feeds are requested
   const st = await fetchLive('status.json');
-  const [res, turnout, history] = await Promise.all([
+  const [res, turnout, history, exits] = await Promise.all([
     st && st.has_results ? fetchLive('results.json') : null,
     st && st.has_turnout ? fetchLive('turnout.json') : null,
-    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json')]);
+    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json'),
+    st && st.exit_polls ? fetchLive('exit_polls.json') : null]);
   S.turnoutHistory = history;
   S.liveTurnout = turnout;   // null outside election day
+  S.liveExit = exits;        // published by the fetcher only after 22:00
   if (res && res.frame) return { mode: 'live', ...res };
   return { mode: 'demo', ...(await fetchJSON('data/replay_night.json')) };
 }
@@ -62,6 +64,11 @@ async function renderLive() {
       <h3 style="margin-top:18px">אחוז החסימה</h3>
       <p class="sub">רשימות שעשויות להיות בצד הלא נכון של 3.25%.</p>
       <div id="lv-thr" class="tbl-wrap"></div>
+    </div>
+    <div class="card c12" id="lv-exit-card" hidden>
+      <h3>המדגמים מול הספירה</h3>
+      <p class="sub">המדגמים של ערוצי הטלוויזיה (פורסמו ב-22:00) לעומת התחזית לסיום הספירה. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה.</p>
+      <div id="lv-exit" class="tbl-wrap"></div>
     </div>
     <div class="card c6">
       <h3>השתתפות בקלפיות שנספרו</h3>
@@ -110,6 +117,20 @@ function drawLiveFrame() {
   drawLiveThreshold($('#lv-thr'), F);
   drawLiveTurnout($('#lv-turnout'), F);
   drawLiveAccuracy($('#lv-acc'), F);
+  drawExitPolls(F);
+}
+
+function drawExitPolls(F) {
+  const card = $('#lv-exit-card'), el = $('#lv-exit');
+  const E = (S.live.mode === 'demo' ? S.live.exit_polls : S.liveExit) || null;
+  if (!card || !E || !(E.polls || []).length) { if (card) card.hidden = true; return; }
+  card.hidden = false;
+  const lists = F.lists.filter(l => l.seats > 0 || E.polls.some(p => (p.seats[l.id] || p.seats[l.letters] || 0) > 0));
+  const seatOf = (p, l) => p.seats[l.id] ?? p.seats[l.letters] ?? 0;
+  const final = F.final || E.final || null;
+  el.innerHTML = `<table class="t sticky1"><thead><tr><th>רשימה</th>${E.polls.map(p => `<th class="n">${esc(p.outlet)}</th>`).join('')}<th class="n">תחזית עכשיו</th>${final ? '<th class="n">תוצאה</th>' : ''}</tr></thead><tbody>${
+    lists.map(l => `<tr><td>${slip(l.letters, l.name, liveColor(l))}</td>${E.polls.map(p => `<td class="n">${seatOf(p, l)}</td>`).join('')}<td class="n"><b>${l.seats}</b></td>${final ? `<td class="n">${final[l.id] ?? 0}</td>` : ''}</tr>`).join('')}</tbody></table>
+    ${E.note ? `<p class="foot">${esc(E.note)}</p>` : ''}`;
 }
 
 function drawLiveProgress(el, F) {
