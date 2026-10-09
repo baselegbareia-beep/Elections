@@ -55,5 +55,13 @@ jobs:
             curl -sS -o /dev/null -m 25 -r 0-4095 -A 'Mozilla/5.0 (kalpi26 net-check)' \
               -w 'http=%{http_code} bytes=%{size_download} ip=%{remote_ip} t=%{time_total}s\n' "$u" || echo 'FAILED'
           done
-          echo '--- headers of media25 expb.csv'
-          curl -sS -I -m 25 https://media25.bechirot.gov.il/files/expb.csv | head -20 || true
+          echo '--- 2026 results files (test content before election day)'
+          UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36'
+          for f in expb.csv expc.csv; do
+            echo "## media26 $f"
+            curl -sS -m 25 -A "$UA" -D - -o /tmp/$f "https://media26.bechirot.gov.il/files/$f" | grep -iE '^(HTTP|content-type|content-length|last-modified|cache-control|etag|access-control)' || true
+            head -c 1200 /tmp/$f | iconv -f cp1255 -t utf-8 2>/dev/null || head -c 1200 /tmp/$f
+            echo; echo "lines: $(wc -l < /tmp/$f)"
+          done
+          echo '## cdn-votes26'
+          curl -sS -o /dev/null -m 25 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' https://cdn-votes26.bechirot.gov.il/ || true
