@@ -23,11 +23,18 @@ def main():
         assert abs(v[-1] - d["final"]) < 1.5, f"{e}: 22:00 figure far from the final"
         if "voters" in d:
             assert all(a < b for a, b in zip(d["voters"], d["voters"][1:])), e
+        # 2022: the series keeps the election-night 22:00 announcement (71.3%); the gov.il table's
+        # 22:00 row equals the final count and is carried beside it so the page can caption both.
+        if "official_22" in d:
+            assert abs(d["official_22"]["value"] - d["final"]) < 0.1, f"{e}: official_22 must equal the final"
+            assert abs(d["official_22"]["value"] - v[-1]) < 1.0, f"{e}: official_22 far from the announced 22:00 figure"
+        assert d.get("source", "").startswith("https://"), f"{e}: every series needs its source page"
         d["ratio"] = [round(d["final"] / x, 4) for x in v]
+    assert ref.get("verified") is True, "turnout_hourly.json must stay verified (see 'verification')"
     out = os.path.join(ROOT, "site", "data", "turnout_history.json")
     with open(out, "w", encoding="utf-8") as f:
         json.dump(ref, f, ensure_ascii=False, separators=(",", ":"))
-    print(f"wrote {out}: {len(ref['elections'])} elections")
+    print(f"wrote {out}: {len(ref['elections'])} elections, verified={ref['verified']}")
 
 
 if __name__ == "__main__":
