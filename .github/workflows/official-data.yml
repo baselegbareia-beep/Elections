@@ -1,0 +1,47 @@
+# Rebuilds every data file from the official CEC ballot files (media2X.bechirot.gov.il),
+# which GitHub's runners can reach, and checks the result against the committed site/data.
+name: Official data check
+
+on:
+  push:
+    branches: [main, ccr-ecfe3046-hicnu4]
+    paths: ['pipeline/**', '.github/workflows/official-data.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rebuild:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy
+      - name: Fetch sources (official CEC files first)
+        run: python3 pipeline/fetch_sources.py --out data/raw
+      - name: Rebuild the data
+        run: |
+          python3 pipeline/build_data.py --src data/raw/mirror \
+            --polygons data/raw/mirror/geographies/localities_2022.zip \
+            --ses data/raw/socioeconomic_clusters.json | tee build_report.txt
+          python3 pipeline/build_polls.py --src data/raw/polls-data.js
+          python3 pipeline/build_final_polls.py --src pipeline/reference/final_polls_k21_k25.json
+      - name: Compare with the committed data
+        run: |
+          echo '### official files used'
+          python3 -c "import json; [print(r['url'], r['bytes'], r['sha256']) for r in json.load(open('data/raw/fetch_log.json')) if 'bechirot' in r['url']]"
+          echo '### site/data compared with the commit'
+          sha256sum site/data/*.json
+          if git diff --quiet -- site/data; then echo 'RESULT: rebuilt from official files, identical to the committed data'; \
+          else echo 'RESULT: differences found'; git diff --stat -- site/data; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-cec-files
+          path: |
+            data/raw/official/
+            data/raw/fetch_log.json
+            build_report.txt
+          retention-days: 30

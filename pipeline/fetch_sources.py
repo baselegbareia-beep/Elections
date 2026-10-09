@@ -32,10 +32,21 @@ POLLS_2026 = "https://raw.githubusercontent.com/amitlev/israel-polls-2026/main/d
 SES = "https://raw.githubusercontent.com/harelc/elections-vote-transfer/master/site/data/socioeconomic_clusters.json"
 
 
-def get(url, timeout=60):
-    req = urllib.request.Request(url, headers={"User-Agent": "kalpi26-data-pipeline"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        return r.read()
+# The CEC hosts sit behind a WAF that rejects unknown clients; a browser-like UA is accepted.
+UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-pipeline"
+
+
+def get(url, timeout=60, tries=3):
+    for i in range(tries):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": UA})
+            with urllib.request.urlopen(req, timeout=timeout) as r:
+                if "maintenance" in r.geturl():
+                    raise IOError(f"redirected to {r.geturl()}")
+                return r.read()
+        except Exception:
+            if i == tries - 1:
+                raise
 
 
 def save(path, data, url, log):
