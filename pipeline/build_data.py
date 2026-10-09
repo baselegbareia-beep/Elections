@@ -28,6 +28,8 @@ import registry as R  # noqa: E402
 from bader_ofer import allocate  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# Localities that the CEC lists under a new merged code (2022 polygons predate the merger).
+CODE_MERGED = {3826: [3720, 3778]}   # שער שומרון = שערי תקווה + עץ אפרים
 SES_MIN_ELIG = 5000
 # Large localities that are not local authorities: the SES file gives them their
 # regional council's cluster (Hof HaCarmel, Mateh Yehuda, Mateh Binyamin), not their own.
@@ -61,6 +63,20 @@ def read_ballots(src, e):
                 "votes": votes,
             })
     return party_cols, rows
+
+
+def official_path(src, e):
+    """Path of the official CEC ballot file for election e, if stored (data/official) or downloaded."""
+    return next((p for p in (os.path.join(ROOT, "data", "official", f"{e.lower()}_expb.csv"),
+                             os.path.join(src, "official", f"{e.lower()}_expb.csv"),
+                             os.path.join(src, "..", "official", f"{e.lower()}_expb.csv"))
+                 if os.path.exists(p)), "")
+
+
+def load_election(src, e):
+    """Ballot rows of election e from the official CEC file when available, else from the mirror."""
+    p = official_path(src, e)
+    return (read_expb(p), "official") if p else (read_ballots(src, e), "mirror")
 
 
 OFFICIAL_META = {"סמל ועדה", "ברזל", "שם ישוב", "סמל ישוב", "קלפי", "מספר קלפי", "ריכוז", "שופט",
@@ -169,12 +185,30 @@ def build(src, polygons, ses_path, out_dir):
         for r in json.load(open(ses_path, encoding="utf-8")):
             ses[norm_name(r["name"])] = r["cluster"]
 
-    data = {}
+    # Official CEC ballot files (data/official, fetched from media2X.bechirot.gov.il by the
+    # "Official data check" workflow) are used whenever present; the mirror otherwise.
+    # The official files drop punctuation from locality names (קדימהצורן), so display names
+    # come from the mirror, which carries the CBS spelling, wherever the code matches.
+    data, source_of = {}, {}
+    mirror_names = {}
     for e in R.ELECTIONS:
-        official = next((p for p in (os.path.join(src, "official", f"{e.lower()}_expb.csv"),
-                                     os.path.join(src, "..", "official", f"{e.lower()}_expb.csv"))
-                         if os.path.exists(p)), "")
-        data[e] = read_expb(official) if os.path.exists(official) else read_ballots(src, e)
+        official = official_path(src, e)
+        if os.path.exists(os.path.join(src, "ballots", f"{e.lower()}.csv")):
+            mirror = read_ballots(src, e)
+            for r in mirror[1]:
+                if r["code"] and r["name"]:
+                    mirror_names[r["code"]] = r["name"]
+        else:
+            mirror = None
+        if official:
+            data[e], source_of[e] = read_expb(official), "official"
+        else:
+            data[e], source_of[e] = mirror or read_ballots(src, e), "mirror"
+    for e in R.ELECTIONS:
+        if source_of[e] == "official":
+            for r in data[e][1]:
+                if r["code"] in mirror_names:
+                    r["name"] = mirror_names[r["code"]]
 
     # ---- 1. Locality classification -------------------------------------
     segments = read_segments()
@@ -366,6 +400,10 @@ def build(src, polygons, ses_path, out_dir):
     localities = []
     for code, L in sorted(loc_out.items()):
         lat, lng = centroids.get(code, (None, None))
+        if lat is None and code in CODE_MERGED:     # merged locality: mean of its parts' centroids
+            parts = [centroids[c] for c in CODE_MERGED[code] if c in centroids]
+            if parts:
+                lat, lng = sum(p[0] for p in parts) / len(parts), sum(p[1] for p in parts) / len(parts)
         tribe = "שבט" in L["name"] and lat is None
         if tribe:
             lat, lng = tribal_point
@@ -412,6 +450,8 @@ def build(src, polygons, ses_path, out_dir):
             "sources": {
                 "results": "ועדת הבחירות המרכזית — קובצי תוצאות לפי קלפיות (expb) לכנסות 21–25",
                 "results_urls": {e: m["official_url"] for e, m in R.ELECTIONS.items()},
+                # which ballot file each election was built from: the official CEC file or the mirror
+                "ballot_files": source_of,
                 "coordinates": "הלמ״ס — גבולות יישובים 2022 (מרכז הפוליגון)",
                 "ses": "הלמ״ס — מדד חברתי-כלכלי 2021, אשכול 1–10",
             },

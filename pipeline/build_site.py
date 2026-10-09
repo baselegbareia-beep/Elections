@@ -9,7 +9,7 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "site", "src")
 JS_ORDER = ["core.js", "overview.js", "polls.js", "coalition.js", "arab.js", "results.js",
-            "sectors.js", "accuracy.js", "method.js", "plan.js", "main.js"]
+            "sectors.js", "accuracy.js", "method.js", "plan.js", "live.js", "main.js"]
 
 
 def read(*p):

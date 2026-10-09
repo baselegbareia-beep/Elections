@@ -1,6 +1,6 @@
 /* ===================== boot ===================== */
 const RENDER = {
-  overview: () => renderOverview(), polls: () => renderPolls(), coalition: () => renderCoalition(),
+  overview: () => renderOverview(), live: () => renderLive(), polls: () => renderPolls(), coalition: () => renderCoalition(),
   arab: () => renderArab(), results: () => renderResults(), sectors: () => renderSectors(),
   accuracy: () => renderAccuracy(), method: () => renderMethod(), plan: () => renderPlan(),
 };

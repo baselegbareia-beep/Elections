@@ -1,0 +1,72 @@
+# Election day & night feed: runs pipeline/live_fetch.py every minute and publishes live/*.json
+# next to the page on the gh-pages branch.
+#
+# Scheduled runs only fire from the default branch (main), so this file must be merged to main
+# before 27.10.2026. GitHub may delay scheduled runs at busy times: on election morning, start a
+# run by hand (Actions → "Election day live feed" → Run workflow) as a backup.
+# Israel is on UTC+2 from 25.10.2026: polls open 07:00 = 05:00 UTC and close 22:00 = 20:00 UTC.
+name: Election day live feed
+
+on:
+  schedule:
+    - cron: '*/20 4-23 27 10 *'     # 27.10, 06:00–01:40 Israel time
+    - cron: '*/20 0-6 28 10 *'      # 28.10, 02:00–08:40 Israel time (the count runs through the night)
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: 'How long this run keeps polling (max ~345)'
+        default: '345'
+      drill:
+        description: 'Rehearsal: replay 2022 from the official file and mark the page as a drill'
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: live-feed
+  cancel-in-progress: false    # a new run waits for the current one, so coverage is continuous
+
+jobs:
+  feed:
+    runs-on: ubuntu-latest
+    timeout-minutes: 355
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install numpy
+      - name: Check out gh-pages next to the code
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git fetch origin gh-pages
+          git worktree add pages origin/gh-pages -B gh-pages
+          mkdir -p pages/live _live
+          cp -r pages/live/. _live/ 2>/dev/null || true    # keep the night's history across runs
+      - name: Poll the elections committee and publish
+        env:
+          MINUTES: ${{ github.event.inputs.minutes || '345' }}
+        run: |
+          end=$(( $(date +%s) + MINUTES * 60 ))
+          while [ "$(date +%s)" -lt "$end" ]; do
+            # pick up manual inputs (turnout figures, exit polls) and config edits made on GitHub
+            git fetch -q origin "$GITHUB_REF_NAME" && git checkout -q "origin/$GITHUB_REF_NAME" -- live_input pipeline/live_config.json || true
+            if [ "${{ github.event.inputs.drill }}" = "true" ]; then
+              python3 pipeline/live_fetch.py --out _live --once --drill --results-file data/official/k25_expb.csv --as K25 || echo 'pass failed'
+            else
+              python3 pipeline/live_fetch.py --out _live --once || echo 'pass failed'
+            fi
+            cp _live/*.json pages/live/
+            if [ -n "$(git -C pages status --porcelain)" ]; then
+              git -C pages add live
+              git -C pages commit -q -m "live $(date -u +%H:%M)"
+              for i in 1 2 3; do
+                git -C pages pull -q --rebase origin gh-pages && git -C pages push -q origin gh-pages && break
+                sleep 5
+              done
+            fi
+            sleep 45
+          done

@@ -31,6 +31,10 @@ jobs:
           mkdir -p _site
           cp site/index.html _site/index.html
           cp -r site/data _site/data
+          # placeholder until the election-day feed writes live/ (keep_files leaves a real feed in place)
+          mkdir -p _site/live
+          [ -n "$(git ls-remote --heads origin gh-pages)" ] && git fetch -q origin gh-pages && \
+            git cat-file -e origin/gh-pages:live/results.json 2>/dev/null || cp site/live/status.json _site/live/status.json
           touch _site/.nojekyll
       - name: Push to gh-pages
         uses: peaceiris/actions-gh-pages@v4
