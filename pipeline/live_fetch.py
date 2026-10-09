@@ -221,7 +221,7 @@ class Election2026:
             to_letter = {p["id"]: p["letters"] for p in polls["parties"]}
             mapping = {to_letter[k]: v for k, v in LM.BASE_MAP["K26"].items() if k in to_letter}
             agreements = [(to_letter[a], to_letter[b]) for a, b in AGREEMENTS_2026]
-            prior = {to_letter[k]: v for k, v in poll_prior(polls).items()}
+            prior = {to_letter.get(k, k): v for k, v in poll_prior(polls).items()}   # '_other' stays as OTHER
         (_, base_rows), self.base_source = load_election(src, base_e)
         self.B = LM.Baseline(base_e, base_rows, core)
         # the ballot file's eligible voters per station add up to the whole register (envelope voters
@@ -458,11 +458,16 @@ def maybe_probe(url, state, status):
 
 # ------------------------------------------------------------------ turnout
 def turnout_pass(E, cfg, out, state, status, inputs):
+    # Third-party turnout estimates may be survey-based, i.e. election polls under §16ה(ח):
+    # they are published only after the polls close, and not even cached in the published state before.
+    election_day = dt.date.fromisoformat(E.cfg.get("election_day", DEFAULT_CFG["election_day"]))
+    closed = now_il() >= closing(election_day)
     try:
         manual = read_input(inputs, "turnout.json")
         if manual is not None and not isinstance(manual, dict):
             raise ValueError("turnout.json must be a JSON object")
-        manual = state["turnout_input"] = manual or {}
+        manual = manual or {}
+        state["turnout_input"] = manual if closed else {k: v for k, v in manual.items() if k != "claims"}
     except Exception as exc:                      # OPS-10: a typo keeps the last valid figures on the page
         status["errors"].append(f"turnout: {exc.__class__.__name__}: {exc}"[:200])
         manual = state.get("turnout_input")
@@ -473,10 +478,6 @@ def turnout_pass(E, cfg, out, state, status, inputs):
     for h, v in (manual.get("national") or {}).items():       # "10:00".."22:00", and "19:00" in 2022
         if HOUR_RE.match(str(h)) and isinstance(v, (int, float)) and 0 <= v <= 100:
             national[h] = v
-    # Third-party turnout estimates may be survey-based, i.e. election polls under §16ה(ח):
-    # they are published only after the polls close.
-    election_day = dt.date.fromisoformat(E.cfg.get("election_day", DEFAULT_CFG["election_day"]))
-    closed = now_il() >= closing(election_day)
     doc = {"updated_at": now_il().isoformat(), "updated_he": he_time(now_il()), "national": national,
            "eligible": E.eligible, "claims": manual.get("claims", []) if closed else [],
            "source": str(manual.get("source", "") or "")}
@@ -587,7 +588,7 @@ def exit_polls_pass(out, election_day, state, status, inputs):
     closed = now_il() >= closing(election_day)
     try:
         ep = read_input(inputs, "exit_polls.json")
-        state["exit_input"] = ep
+        state["exit_input"] = ep if closed else None    # live/state.json is public: nothing before 22:00
     except Exception as exc:
         status["errors"].append(f"exit polls: {exc.__class__.__name__}: {exc}"[:200])
         ep = state.get("exit_input")              # OPS-10: the last valid copy

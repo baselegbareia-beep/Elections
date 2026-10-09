@@ -30,7 +30,8 @@ def main():
             assert abs(d["official_22"]["value"] - v[-1]) < 1.0, f"{e}: official_22 far from the announced 22:00 figure"
         assert d.get("source", "").startswith("https://"), f"{e}: every series needs its source page"
         d["ratio"] = [round(d["final"] / x, 4) for x in v]
-    assert ref.get("verified") is True, "turnout_hourly.json must stay verified (see 'verification')"
+    if ref.get("verified") is not True:   # a data flag, not a build stop: warn and carry it to the page
+        print("warning: turnout_hourly.json is marked unverified (see 'verification')")
     out = os.path.join(ROOT, "site", "data", "turnout_history.json")
     with open(out, "w", encoding="utf-8") as f:
         json.dump(ref, f, ensure_ascii=False, separators=(",", ":"))

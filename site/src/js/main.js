@@ -18,7 +18,12 @@ function showTab(tab, { push = true } = {}) {
   }
   const ban = $('#ban-note');
   // every tab that shows polls, including the past exit polls and the poll-average starting point on the live tab
-  if (ban) { const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy', 'live'].includes(tab); ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE; }
+  // (on election day the live tab shows no polls before 22:00, so it gets no notice then)
+  if (ban) {
+    const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy', 'live'].includes(tab)
+      && !(tab === 'live' && inElectionWindow());
+    ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE;
+  }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   tt.hide();

@@ -63,6 +63,8 @@ jobs:
           python3 - <<'PY'
           import json
           log = [r for r in json.load(open('data/raw/fetch_log.json')) if 'bechirot' in r['url']]
+          for r in log:   # the stored copies live in data/official/
+              r['path'] = r['path'].replace('data/raw/official/', 'data/official/')
           json.dump(log, open('data/official/fetch_log.json', 'w'), indent=1)
           PY
           git checkout -- site/data   # drop the rebuilt copies; only the official inputs are stored

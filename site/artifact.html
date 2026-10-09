@@ -2517,9 +2517,10 @@ async function fetchLive(name) {
   // query gets past the Pages CDN cache (max-age 600) without a fresh origin hit on every tick.
   try {
     const r = await fetch(`live/${name}?v=${Math.floor(Date.now() / 30000)}`, { cache: 'no-store' });
-    if (r.ok) return { ok: true, data: await r.json() };
-    return { ok: false, status: r.status };
-  } catch (e) { return { ok: false, status: 0 }; }   // network error, or a body that is not JSON
+    if (!r.ok) return { ok: false, status: r.status };
+    // a host that answers a missing file with an HTML page means there is no feed, not a lost connection
+    try { return { ok: true, data: await r.json() }; } catch (e) { return { ok: false, status: 404 }; }
+  } catch (e) { return { ok: false, status: 0 }; }   // network error
 }
 async function replayDoc() {
   if (!S.replayDoc) {
@@ -2532,9 +2533,9 @@ async function replayDoc() {
   }
   return S.replayDoc;
 }
-// Nothing from the CEC file may be shown before the polls close: a results.json for 2026 that is not a drill
-// is ignored until 27.10 22:00 whatever the feed says (client side of OPS-2).
-const earlyResults = R => R && R.election === 'K26' && !R.drill && !pollsClosed();
+// Nothing from the CEC file may be shown before the polls close: a results.json that is not a drill is
+// ignored until 27.10 22:00 whatever the feed says or which election it names (client side of OPS-2).
+const earlyResults = R => R && !R.drill && !pollsClosed();
 // 2026 exit polls are shown only after the polls close (the feed withholds them too), except in a drill.
 const exitHidden = () => !pollsClosed() && !((S.liveStatus || {}).drill || (S.live || {}).drill);
 
@@ -2561,9 +2562,8 @@ async function loadLive() {
   let R = res && res.ok ? res.data : null;
   if (res && !res.ok && S.live && S.live.mode === 'live') R = S.live;
   if (R && R.frame && !earlyResults(R)) {
-    if (!R.accuracy || !R.accuracy_real) {   // a feed without the backtest series: take them from the replay file
-      try { const d = await replayDoc(); R = { ...R, accuracy: R.accuracy || d.accuracy, accuracy_real: R.accuracy_real || d.accuracy_real }; } catch (e) { /* no backtest card */ }
-    }
+    // the replay file also carries the real 2021 track used for the coverage note (cached after the first load)
+    try { const d = await replayDoc(); R = { ...R, accuracy: R.accuracy || d.accuracy, accuracy_real: R.accuracy_real || d.accuracy_real }; } catch (e) { /* no backtest card */ }
     return { ...R, mode: 'live' };
   }
   const doc = await replayDoc();
@@ -2595,7 +2595,7 @@ async function renderLive() {
   <p class="lv-notes" id="lv-notes" hidden></p>
   ${dayMarkup()}
   <h2 class="lv-h2">ליל הבחירות: ספירת הקולות</h2>
-  ${waiting ? `<div class="card c12 lv-wait"><h3>${votingHours() ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
+  ${waiting ? `<div class="card c12 lv-wait"><h3>${!pollsClosed() ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
     <p class="sub">ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. מדגמי הטלוויזיה מתפרסמים ב-22:00. ב-2021 הגרסה הראשונה של קובץ הקלפיות הרשמי שהכילה נתונים הופיעה ב-01:01, כשלוש שעות אחרי סגירת הקלפיות (הגרסה שלפניה, מ-23:37, הייתה ריקה); כמחצית הקולות נספרו עד 04:00–05:00 וכ-97% עד שעות הבוקר המאוחרות. המעטפות הכפולות נספרות מהלילה שאחרי, והתוצאה הסופית מתפרסמת ביום חמישי.</p></div>
     ${exit26 ? `<div class="card c12" id="lv-exit26"><h3>המדגמים של 22:00</h3>
     <p class="sub">המדגמים של ערוצי הטלוויזיה כפי שפורסמו. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה: ב-2021 וב-2022 הזיזו המדגמים 5–8 מנדטים בין רשימות וטעו בגוש ב-1–3 מנדטים. התחזית מהספירה תופיע כשיגיע הקובץ הראשון של ועדת הבחירות.</p>
@@ -2700,8 +2700,9 @@ function feedNotes() {
   // quiet notes above the day bar: a lost connection, a feed that stopped, and the fetcher's own errors (for the operator)
   const st = S.liveStatus || {}, out = [];
   const age = st.updated_at ? Math.round((Date.now() - Date.parse(st.updated_at)) / 60000) : null;
-  if (S.liveConn) out.push(`<span class="lv-warn">אין חיבור לעדכונים מאז ${hhmm(S.liveConn.since)}; מוצגים הנתונים האחרונים שהתקבלו.</span>`);
-  else if (inElectionWindow() && age != null && age > 5) out.push(`<span class="lv-warn">העדכון האחרון מהמערכת התקבל ב-${esc(st.updated_he || '')} (לפני ${fmt(age)} דקות).</span>`);
+  const ago = m => m > 2880 ? `${fmt(Math.round(m / 1440))} ימים` : m > 120 ? `${fmt(Math.round(m / 60))} שעות` : `${fmt(m)} דקות`;
+  if (S.liveConn) out.push(`<span class="lv-warn">אין חיבור לעדכונים מאז ${hhmm(S.liveConn.since)}${S.liveStatus ? '; מוצגים הנתונים האחרונים שהתקבלו' : ''}.</span>`);
+  else if (inElectionWindow() && age != null && age > 5) out.push(`<span class="lv-warn">העדכון האחרון מהמערכת התקבל ב-${esc(st.updated_he || '')} (לפני ${ago(age)}).</span>`);
   if (st.results_probe && st.results_probe.http != null) out.push(`<span class="lv-ops">בדיקת קובץ התוצאות באתר הוועדה: HTTP ${esc(st.results_probe.http)} ב-${esc(st.results_probe.at_he || '')}.</span>`);
   if (st.pages_source === 'legacy') out.push('<span class="lv-ops">האתר מוגש מהענף main; נתוני הלייב לא יגיעו לדף עד שמקור ה-Pages יועבר ל-GitHub Actions.</span>');
   if ((st.errors || []).length) out.push(`<span class="lv-ops">${st.errors.map(e => `<bdi>${esc(String(e).slice(0, 160))}</bdi>`).join(' · ')}</span>`);
@@ -2767,8 +2768,11 @@ function realBlocCover() {
 // Chances come from 200 bootstrap draws: the extremes are capped and, early in the count, rounded to 5%.
 function pPass(p, share) {
   if (p == null) return '—';
-  const step = share < 0.5 ? 5 : 1, v = Math.round(100 * p / step) * step;
-  return v >= 100 || p >= 0.995 ? '>99%' : v <= 0 || p <= 0.005 ? '<1%' : pct(v, 0);
+  if (p >= 0.995) return '>99%';
+  if (p <= 0.005) return '<1%';
+  // cap on the raw chance first, then keep the rounded value inside the step (0.976 early is 95%, not >99%)
+  const step = share < 0.5 ? 5 : 1;
+  return pct(Math.min(100 - step, Math.max(step, Math.round(100 * p / step) * step)), 0);
 }
 
 function exitTable(E, F) {
@@ -3104,7 +3108,7 @@ function drawDaySectors(el, H0) {
     const proj = h => ach && ach.points[h] != null ? Math.round(ach.points[h] * K25.final / hourValue(K25, h)) : null;
     el.innerHTML = `<h3>שיעור ההצבעה לפי מגזר</h3>
       <p class="sub">לפי החלטת יו״ר ועדת הבחירות (16.8.2026), הוועדה תפרסם לראשונה את שיעור ההצבעה בכל קלפי רגילה, לפחות ארבע פעמים במהלך היום. בג״ץ (17.9.2026) ביטל את ההיתר לדיווח מזוהה על מצביעים, והפרסום המצרפי לפי קלפי נותר על כנו (לפי חדשות 12: כל ארבע שעות); השעות, הכתובת והפורמט טרם פורסמו. אם הנתונים יפורסמו, הדף יחבר כל קלפי למגזר שלה (יישובים ערביים, דרוזיים, קלפיות חרדיות, קלפיות ערביות בערים מעורבות וביישובים יהודיים, ושאר הקלפיות) ויציג לכל מגזר את שיעור ההצבעה ואת היחס לשיעור הארצי באותה שעה.</p>
-      <div class="lv-note"><b>למה היחס ולא המספר עצמו:</b> בחברה הערבית מצביעים מאוחר יותר ביום. ב-2022 דיווח טיימס אוף ישראל על אומדני מרכז אקורד (האוניברסיטה העברית) לשיעור ההצבעה בחברה הערבית${ach ? `: ${ach.points['14:00']}% ב-14:00, ${ach.points['18:00']}% ב-18:00 ו-${ach.points['20:00']}% ב-20:00` : ''}, והתוצאה הסופית ביישובים הערביים והדרוזיים הייתה ${ach ? pct(ach.final) : '53.2%'}. מי שהיה מקרין את הסוף מהנתון של 18:00 לפי העקומה הארצית היה מגיע לכ-${proj('18:00') ?? 37}%${proj('20:00') ? ` (ומהנתון של 20:00 לכ-${proj('20:00')}%)` : ''}.</div>
+      <div class="lv-note"><b>למה היחס ולא המספר עצמו:</b> בחברה הערבית מצביעים מאוחר יותר ביום. ב-2022 דיווח טיימס אוף ישראל על אומדני מרכז אקורד (האוניברסיטה העברית) לשיעור ההצבעה בחברה הערבית${ach ? `: ${ach.points['14:00']}% ב-14:00, ${ach.points['16:00']}% ב-16:00 ו-${ach.points['20:00']}% ב-20:00 (נתון של ${ach.points['18:00']}% ב-18:00 יוחס שם למכון מחקר שלא נקב בשמו)` : ''}, והתוצאה הסופית ביישובים הערביים והדרוזיים הייתה ${ach ? pct(ach.final) : '53.2%'}. מי שהיה מקרין את הסוף לפי העקומה הארצית היה מגיע מהנתון של 20:00 לכ-${proj('20:00') ?? 47}%${proj('18:00') ? `, ומהנתון של 18:00 לכ-${proj('18:00')}%` : ''}.</div>
       <p class="foot">נתונים ממפלגות או מגופים אחרים יוצגו בנפרד ויסומנו כלא רשמיים. ${noSeats}</p>`;
     return;
   }
@@ -3145,7 +3149,12 @@ function showTab(tab, { push = true } = {}) {
   }
   const ban = $('#ban-note');
   // every tab that shows polls, including the past exit polls and the poll-average starting point on the live tab
-  if (ban) { const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy', 'live'].includes(tab); ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE; }
+  // (on election day the live tab shows no polls before 22:00, so it gets no notice then)
+  if (ban) {
+    const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy', 'live'].includes(tab)
+      && !(tab === 'live' && inElectionWindow());
+    ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE;
+  }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   tt.hide();

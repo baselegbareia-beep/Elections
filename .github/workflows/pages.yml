@@ -73,6 +73,7 @@ jobs:
           echo "Pages build_type: ${type:-unknown}"
           if [ "$type" = "workflow" ]; then
             echo "deploy=true" >> "$GITHUB_OUTPUT"
+            echo "Pages build_type: workflow (Source: GitHub Actions); deploying" >> "$GITHUB_STEP_SUMMARY"
           else
             echo "deploy=false" >> "$GITHUB_OUTPUT"
             {

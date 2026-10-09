@@ -297,7 +297,7 @@ class Projector:
         # New lists (no predecessor) are assumed to draw far less in Arab localities (ARAB_NEW).
         prior_arab = {**prior, "r": {j: v * ARAB_NEW if self.preds[j] is None else v for j, v in prior["r"].items()}}
         groups = {g: level(st.get("G:" + g), prior_arab if g == "arab" else prior if g == "druze" else N,
-                           K_LEVEL["G"], STRATUM_SD) for g in set(B.group.values())}
+                           K_LEVEL["G"], STRATUM_SD) for g in sorted(set(B.group.values()))}
         strata = {}
         for c in B.loc:
             s_ = B.stratum[c]
@@ -528,7 +528,8 @@ def final_poll_prior(e, path=os.path.join(ROOT, "site", "data", "final_polls.jso
     if not el:
         return {}
     polls = sorted(el["polls"], key=lambda p: p["date"])
-    lists = sorted({j for p in polls for j in p["seats"]})
+    # lists polled but not on that election's ballot fold into OTHER
+    lists = sorted({j for p in polls for j in p["seats"]} & set(R.PARTIES[e]))
     return poll_shares({"parties": [{"id": j} for j in lists], "polls": polls})
 
 
@@ -627,7 +628,8 @@ def backtest(base_e, cur_e, src, core, schemes, n_orders, n_boot, checkpoints, s
 
 
 SCHEMES = ["random", "locality", "small_first", "arab_haredi_late", "spread"]
-CALIBRATED_ON = "K25"     # the backtest the noise constants were tuned on; the others are hold-out
+CALIBRATED_ON = ("K25", "K24")   # the noise constants came from a sweep over both simulated backtests;
+                                 # the real 2021 counting order (build_replay accuracy_real) is the hold-out
 
 
 def main():
@@ -655,7 +657,7 @@ def main():
     agg = collections.defaultdict(list)
     for r in res:
         agg[(r["scheme"], r["counted"])].append(r)
-    role = "calibration" if a.cur == CALIBRATED_ON else "hold-out"
+    role = "calibration" if a.cur in CALIBRATED_ON else "hold-out"
     print(f"backtest {a.base} -> {a.cur} ({role}): mean |seat error| summed over lists, bloc error, 80% band coverage")
     for (sc, cp), rs in sorted(agg.items()):
         n = len(rs)

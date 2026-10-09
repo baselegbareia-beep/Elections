@@ -44,7 +44,7 @@ IL = dt.timezone(dt.timedelta(hours=2))      # March 2021, before DST (26.3.2021
 # (Kan, Channel 12, Channel 13) and the Wikipedia table (Channel 14); Channel 12 later revised to
 # YB 5, Hadash-Ta'al 5, Labor 5, Meretz 4.
 EXIT_POLLS = {
-    "K24": {"note": "המדגמים כפי שפורסמו ב-22:00 ב-23.3.2021 (לפי הדיווחים החיים של טיימס אוף ישראל ו-Jewish Press; הערוצים עדכנו אותם במהלך הלילה). כל שלושת הערוצים נתנו לרע״ם 0; היא קיבלה 4.",
+    "K24": {"note": "המדגמים כפי שפורסמו ב-22:00 ב-23.3.2021 (לפי הדיווחים החיים של טיימס אוף ישראל ו-ג׳ואיש פרס; הערוצים עדכנו אותם במהלך הלילה). כל שלושת הערוצים נתנו לרע״ם 0; היא קיבלה 4.",
             "polls": [
                 {"outlet": "כאן 11", "seats": {"מחל": 31, "פה": 18, "שס": 9, "כן": 7, "ב": 7, "אמת": 7, "ג": 7, "ל": 7, "ט": 7, "ודעם": 8, "ת": 6, "מרצ": 6, "עם": 0}},
                 {"outlet": "חדשות 12", "seats": {"מחל": 31, "פה": 18, "שס": 9, "כן": 7, "ב": 8, "אמת": 7, "ג": 6, "ל": 6, "ט": 7, "ודעם": 9, "ת": 6, "מרצ": 6, "עם": 0}},
@@ -106,7 +106,9 @@ def replay_simulated(core, src, n_boot):
     for r in cur_rows:
         if r["env"] or r["code"] is None:
             LM.add_row(env, r, keep)
+    proj.env_override = env["valid"]          # the official envelope total is known in a replay
     frames.append(LM.make_frame(proj, counted, env, meta, n_boot=n_boot, seed=99, final=official))
+    proj.env_override = None
     frames[-1]["label"] = "כולל המעטפות הכפולות"
     print(f"2022 simulated: {len(frames)} frames")
     return {"election": "K25", "baseline": "K24", "simulated_order": True,
@@ -142,7 +144,9 @@ def replay_real(core, src, n_boot):
             os.unlink(path)
         counted, env = accumulate(rows, keep)
         last = h == commits[-1][0]
+        proj.env_override = env["valid"] if last else None     # the final file's envelope total is official
         f = LM.make_frame(proj, counted, env, meta, n_boot=n_boot, seed=len(frames), final=official if last else None)
+        proj.env_override = None
         t = dt.datetime.fromisoformat(when)            # local Israel time as recorded (DST began 26.3.2021)
         f["label"] = t.strftime("%d.%m %H:%M")
         f["time"] = t.isoformat()
@@ -166,11 +170,11 @@ def replay_real(core, src, n_boot):
             track)
 
 
-# The projection's noise constants are tuned on the 2022 backtest; the 2021 backtest and the real 2021
-# counting order (accuracy_real) are hold-out, and the page labels them so.
-ACCURACY_ROLES = {e: ("calibration" if e == LM.CALIBRATED_ON else "holdout") for e in ("K25", "K24")}
-ACCURACY_NOTE = ("קבועי אי-הוודאות של המודל כוילו על השחזור המדומה של 2022; השחזור המדומה של 2021 וסדר הספירה "
-                 "האמיתי של 2021 לא שימשו לכיול.")
+# The projection's noise constants were set on the two simulated backtests (2021 and 2022); the real
+# 2021 counting order (accuracy_real) was never used to tune them, so it is the clean hold-out.
+ACCURACY_ROLES = {e: ("calibration" if e in LM.CALIBRATED_ON else "holdout") for e in ("K25", "K24")}
+ACCURACY_NOTE = ("קבועי אי-הוודאות של המודל נקבעו על השחזורים המדומים של 2021 ו-2022; ליל 2021 בסדר הספירה "
+                 "האמיתי לא שימש לכיול, ולכן הוא המבחן הנקי.")
 
 
 def backtest_accuracy(core, src, orders):
