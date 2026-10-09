@@ -1,0 +1,59 @@
+# Publishes the dashboard (site/index.html + site/data) to the gh-pages branch.
+# One-time setup in the repository: Settings → Pages → Build and deployment →
+# Source: "Deploy from a branch", Branch: gh-pages, folder: / (root).
+name: Publish site
+
+on:
+  push:
+    branches: [main, ccr-ecfe3046-hicnu4]
+    paths: ['site/**', 'pipeline/build_site.py', '.github/workflows/pages.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Build the page from site/src
+        run: python3 pipeline/build_site.py
+      - name: Assemble the static site
+        run: |
+          mkdir -p _site
+          cp site/index.html _site/index.html
+          cp -r site/data _site/data
+          touch _site/.nojekyll
+      - name: Push to gh-pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
+          publish_branch: gh-pages
+          # keep files written by the election-day / election-night fetcher (live/)
+          keep_files: true
+          commit_message: 'Publish site from ${{ github.sha }}'
+
+  # Can GitHub's runners reach the elections committee? (the election-night fetcher depends on it)
+  net-check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Probe official hosts
+        run: |
+          for u in https://votes25.bechirot.gov.il/ https://media25.bechirot.gov.il/files/expb.csv \
+                   https://votes26.bechirot.gov.il/ https://media26.bechirot.gov.il/ \
+                   https://bechirot.gov.il/ https://www.gov.il/he https://www.cbs.gov.il/he/Pages/default.aspx; do
+            printf '%s  ' "$u"
+            curl -sS -o /dev/null -m 25 -r 0-4095 -A 'Mozilla/5.0 (kalpi26 net-check)' \
+              -w 'http=%{http_code} bytes=%{size_download} ip=%{remote_ip} t=%{time_total}s\n' "$u" || echo 'FAILED'
+          done
+          echo '--- headers of media25 expb.csv'
+          curl -sS -I -m 25 https://media25.bechirot.gov.il/files/expb.csv | head -20 || true
