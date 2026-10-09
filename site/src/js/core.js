@@ -159,7 +159,10 @@ function houseEffects(polls, parties) {
 function pollAverage(asOf, { adjust = S.adjustHouse, halfLife = S.halfLife } = {}) {
   const { polls, parties } = S.polls;
   const w = pollWeights(polls, asOf, halfLife);
-  const he = adjust ? houseEffects(polls, parties) : null;
+  // house effects use only polls published by asOf, so the trend line has no look-ahead
+  const known = polls.filter(p => toDate(p.date) <= asOf);
+  const heKnown = adjust && known.length ? houseEffects(known, parties) : null;
+  const he = heKnown && Object.fromEntries(polls.map(p => [p.pollster, heKnown[p.pollster] || Object.fromEntries(parties.map(pt => [pt.id, 0]))]));
   const tw = sum(w);
   const avg = {}, lo = {}, hi = {};
   parties.forEach(pt => {

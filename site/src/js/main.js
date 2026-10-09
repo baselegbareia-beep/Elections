@@ -51,6 +51,11 @@ async function boot() {
   }
   $('#loading').remove();
   $$('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  // in-page links between sections
+  document.addEventListener('click', e => {
+    const a = e.target.closest('[data-goto]'); if (!a) return;
+    e.preventDefault(); showTab(a.dataset.goto); window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
   const h = (location.hash || '').replace('#', '');
   showTab(RENDER[h] ? h : 'overview', { push: false });
   // redraw charts on theme or width change
