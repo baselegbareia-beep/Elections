@@ -84,10 +84,19 @@ OFFICIAL_META = {"סמל ועדה", "ברזל", "שם ישוב", "סמל ישו�
 ENVELOPE_CODES = {"9999", "99999"}
 
 
-def read_expb(path):
+REQUIRED_COLS = {"סמל ישוב", "שם ישוב", "בזב", "מצביעים", "פסולים", "כשרים"}
+
+
+def read_expb(path, strict=True, checks=None):
     """Read an official CEC ballot file (expb.csv) as published at
     media2X.bechirot.gov.il/files/expb.csv: cp1255 for K21–K24, UTF-8 with BOM
-    from K25. Returns the same structure as read_ballots()."""
+    from K25. Returns the same structure as read_ballots().
+
+    strict=False is for the live feed: a row whose party votes do not add up to כשרים or that
+    cannot be parsed is skipped and counted instead of rejecting the whole file, a non-numeric
+    column (e.g. an update time added in 2026) is treated as metadata, and the file is rejected
+    only when more than max(5, 1%) of its rows are bad. `checks` (a dict) receives bad_rows and
+    ignored_columns."""
     raw = open(path, "rb").read()
     # UTF-8 with BOM from 2022; windows-1255 before; some archived snapshots are plain UTF-8
     try:
@@ -95,27 +104,53 @@ def read_expb(path):
     except UnicodeDecodeError:
         text = raw.decode("cp1255")
     rd = csv.reader(text.splitlines())
-    header = [h.strip() for h in next(rd)]
-    party_cols = [h for h in header if h not in OFFICIAL_META]
+    header = [h.strip() for h in next(rd, [])]
     kalpi_col = "קלפי" if "קלפי" in header else "מספר קלפי"
-    rows = []
-    for rec in rd:
-        if not rec or len(rec) < len(header) - 1:      # blank or cut-off line (live files can be mid-write)
-            continue
+    missing = sorted((REQUIRED_COLS | {kalpi_col}) - set(header))
+    if missing:
+        raise ValueError(f"{path}: not a ballot file, missing columns {missing}")
+    party_cols = [h for h in header if h not in OFFICIAL_META]
+    recs = [rec for rec in rd if rec and len(rec) >= len(header) - 1]   # skip blank or cut-off lines (live files can be mid-write)
+    ignored = []
+    if not strict and recs:
+        # a column that is not a number in the first row is metadata, whatever its name
+        first = dict(zip(header, recs[0]))
+        ignored = [p for p in party_cols if not _is_num(first.get(p))]
+        party_cols = [p for p in party_cols if p not in ignored]
+    rows, bad = [], 0
+    for rec in recs:
         d = dict(zip(header, rec))
-        votes = {p: int(float(d[p] or 0)) for p in party_cols}
-        valid = int(float(d["כשרים"] or 0))
-        if sum(votes.values()) != valid:
-            raise ValueError(f"{path}: row {rec[:5]} party votes do not sum to valid votes")
-        code = d["סמל ישוב"].strip()
-        voters = int(float(d["מצביעים"] or 0))
-        rows.append({
-            "env": code in ENVELOPE_CODES, "code": None if code in ENVELOPE_CODES else int(code),
-            "name": d["שם ישוב"].strip(), "kalpi": d[kalpi_col].strip(),
-            "elig": int(float(d["בזב"] or 0)), "voters": voters, "valid": valid,
-            "invalid": int(float(d["פסולים"] or 0)), "votes": votes,
-        })
+        try:
+            votes = {p: int(float(d[p] or 0)) for p in party_cols}
+            valid = int(float(d["כשרים"] or 0))
+            if sum(votes.values()) != valid:
+                raise ValueError(f"{path}: row {rec[:5]} party votes do not sum to valid votes")
+            code = d["סמל ישוב"].strip()
+            row = {
+                "env": code in ENVELOPE_CODES, "code": None if code in ENVELOPE_CODES else int(code),
+                "name": d["שם ישוב"].strip(), "kalpi": d[kalpi_col].strip(),
+                "elig": int(float(d["בזב"] or 0)), "voters": int(float(d["מצביעים"] or 0)), "valid": valid,
+                "invalid": int(float(d["פסולים"] or 0)), "votes": votes,
+            }
+        except ValueError:
+            if strict:
+                raise
+            bad += 1
+            continue
+        rows.append(row)
+    if bad > max(5, 0.01 * len(recs)):
+        raise ValueError(f"{path}: {bad} of {len(recs)} rows unreadable or inconsistent")
+    if checks is not None:
+        checks.update({"bad_rows": bad, "ignored_columns": ignored})
     return party_cols, rows
+
+
+def _is_num(s):
+    try:
+        float(s or 0)
+        return True
+    except (TypeError, ValueError):
+        return False
 
 
 def read_official(src):

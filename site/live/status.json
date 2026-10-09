@@ -1,1 +1,1 @@
-{"phase":"pre","has_results":false,"has_turnout":false,"note":"Placeholder until election day; pipeline/live_fetch.py replaces it."}
+{"phase":"pre","has_results":false,"has_turnout":false,"exit_polls":false,"results_state":"before-22","errors":[],"note":"Placeholder until election day; pipeline/live_fetch.py replaces it on the live-data branch."}
