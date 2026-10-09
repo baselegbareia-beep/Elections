@@ -16,6 +16,8 @@ function showTab(tab, { push = true } = {}) {
     rendered.add(tab);
     try { const r = RENDER[tab](); if (r && r.catch) r.catch(fail); } catch (err) { fail(err); }
   }
+  const ban = $('#ban-note');
+  if (ban) { const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy'].includes(tab); ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE; }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   tt.hide();

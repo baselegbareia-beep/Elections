@@ -71,7 +71,8 @@ THIN_WIDEN = 2.0       # extra shared error when the uncounted vote sits in stra
 LIST_SD = 0.12         # independent error of each list in the uncounted vote (log scale, at 0% counted)
 LIST_NEW = 1.8         # multiplier for lists without a clean predecessor
 ENV_DONE = 0.97        # counted envelopes at this share of the expected total are taken as complete
-ENV_SIZE_SD = 0.15     # relative uncertainty of the envelope total before it is announced or counted
+ENV_SIZE_SD = 0.25     # relative uncertainty of the envelope total before it is announced or counted
+ENV_SHOCK = 1.0        # scale of the camp and list errors applied to the envelope mix
 ARAB_GROUP = {"negev": "arab_negev", "north_bedouin": "arab_north", "galilee": "arab_north",
               "nazareth": "arab_north", "christian": "arab_north", "wadi_ara": "arab_triangle",
               "triangle_south": "arab_triangle", "mixed_town": "arab_north", "jerusalem": "arab_other",
@@ -350,7 +351,7 @@ class Projector:
             if sum(e.values()) > 0:
                 # envelope size is uncertain until counted (5.5%–9.7% of voters in 2019–2022)
                 f_ = max(0.0, rng.gauss(1, 0.05 if self.env_override else ENV_SIZE_SD))
-                e = self.shock({j: v * f_ for j, v in e.items()}, rng, 0.5)
+                e = self.shock({j: v * f_ for j, v in e.items()}, rng, ENV_SHOCK)
             sims.append({j: have[j] + b[j] + e[j] for j in self.lists})
         return point, sims
 

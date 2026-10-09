@@ -25,7 +25,13 @@ function ilNow() {
   return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, min: +p.minute };
 }
 const ilStamp = t => t.y * 1e8 + t.m * 1e6 + t.d * 1e4 + t.h * 100 + t.min;   // sortable yyyymmddhhmm
-const POLL_BAN = 202610240000;       // from the end of Friday 23.10 until polls close
+const POLL_BAN = 202610240000;       // Propaganda Methods Law §16ה(ח): from the end of Friday 23.10 ...
+const POLLS_CLOSE = 202610272200;    // ... until the polls close on election day
+const inPollBan = () => { const t = ilStamp(ilNow()); return t >= POLL_BAN && t < POLLS_CLOSE; };
+const inElectionWindow = () => { const t = ilStamp(ilNow()); return t >= ELECTION_DAY[0] && t < ELECTION_DAY[1]; };
+const votingHours = () => { const t = ilStamp(ilNow()); return t >= 202610270700 && t < POLLS_CLOSE; };
+// Polls published before the blackout may be shown during it only with this notice (statutory wording).
+const BAN_NOTICE = 'הסקרים בדף זה פורסמו לפני תחילת התקופה שבה אסור לפרסם סקרי בחירות (מסוף יום שישי, 23.10, עד סגירת הקלפיות). הסקרים אינם עדכניים, ואין ללמוד מהם על דפוסי הצבעה או עמדות של הציבור ביום הפרסום.';
 const ELECTION_DAY = [202610270600, 202610281200];   // the site opens on the election-day tab
 
 function isDark() {

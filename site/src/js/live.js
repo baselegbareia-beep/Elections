@@ -29,6 +29,10 @@ async function loadLive() {
   S.liveExit = exits;        // published by the fetcher only after 22:00
   if (res && res.frame) return { mode: 'live', ...res };
   const doc = await fetchJSON('data/replay_night.json');
+  if (!doc.replays) {   // older single-replay format
+    doc.replays = { [doc.election || 'K25']: { ...doc, simulated_order: doc.simulated_order !== false } };
+    doc.default = doc.election || 'K25';
+  }
   if (!S.replayKey || !doc.replays[S.replayKey]) S.replayKey = doc.default;
   return { mode: 'demo', ...doc };
 }
@@ -47,6 +51,9 @@ async function renderLive() {
   </div></div>
   ${dayMarkup()}
   <h2 class="lv-h2">ליל הבחירות: ספירת הקולות</h2>
+  ${demo && inElectionWindow() ? `<div class="card c12 lv-wait"><h3>${votingHours() ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
+    <p class="sub">ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. ב-2021 הנתונים הרשמיים הראשונים הגיעו ב-01:01, כשעתיים ורבע אחרי סגירת הקלפיות, ומחצית הקולות נספרו עד כ-05:00. המעטפות הכפולות נספרות יום עד שלושה ימים אחרי הבחירות.</p></div>` : ''}
+  <div ${demo && inElectionWindow() ? 'hidden' : ''}>
   <div class="live-bar ${demo ? 'demo' : 'on'}">
     ${demo ? `<span class="live-chip demo">הדגמה</span><span class="live-text">${R0.simulated_order
         ? 'ליל הבחירות 2022, משוחזר מתוצאות הקלפיות הרשמיות <b>בסדר ספירה מדומה</b>.'
@@ -87,6 +94,7 @@ async function renderLive() {
       <p class="sub">בדיקה לאחור: אותו מודל הורץ על ליל הבחירות 2021 בסדר הספירה האמיתי, ועל 2022 ו-2021 בארבעה סדרי ספירה מדומים (כולל סדר שבו היישובים הערביים והחרדיים נספרים אחרונים).</p>
       <div class="chart" id="lv-acc"></div>
     </div>
+  </div>
   </div>
   <p class="foot">${demo ? esc(R0.note || '') + ' ' : ''}השיטה: אמידה יחסית לפי שכבות (מגזר, אזור והצבעה קודמת), עם נקודת מוצא מממוצע הסקרים, וחלוקת מנדטים בבדר-עופר עם הסכמי העודפים. פירוט בלשונית "שיטה ומקורות".</p>`;
   drawDay();
@@ -428,6 +436,6 @@ function drawDaySectors(el, H0) {
       <p class="sub">הקצב בכל קלפי, משוקלל לפי מספר הקולות שקיבל כל גוש באותה קלפי ב-2022. מספר גבוה יותר: הקלפיות שבהן הגוש היה חזק מגיעות מהר יותר לרמת ההצבעה של 2022. זה אומדן אקולוגי, לא מדידה של מצביעים, ואינו מתורגם למנדטים.</p>
       <div class="lv-lean">${['coal', 'opp', 'arab'].filter(b => L[b] != null).map(b => `<div><span><i class="swatch" style="background:var(${blocVar(b)})"></i>${b === 'coal' ? 'קלפיות של גוש נתניהו' : b === 'opp' ? 'קלפיות של האופוזיציה היהודית' : 'קלפיות של הרשימות הערביות'}</span><b class="num">${pct(100 * L[b], 0)}</b></div>`).join('')}</div>` : ''}
     ${exc.length ? `<p class="foot">לא נכללו בחישוב הקצב: ${exc.map(([k, n]) => `${fmt(n)} (${esc({ 'no 2022 match': 'אין קלפי מקבילה ב-2022', 'implausible pace': 'קצב לא סביר', 'more voters than eligible': 'יותר מצביעים מבעלי זכות', unreadable: 'שורה לא קריאה' }[k] || k)})`).join(', ')}.</p>` : ''}
-    ${(T.claims || []).length ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
+    ${(T.claims || []).length && !votingHours() ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
     <p class="foot">עד 22:00 הדף אינו מתרגם שיעורי הצבעה למנדטים.</p>`;
 }

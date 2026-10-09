@@ -329,6 +329,7 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 .lv-batch { margin-top: 10px; font-size: var(--t-sm); color: var(--ink-2); }
 .lv-paused { display: flex; gap: 6px; align-items: flex-start; margin-top: 10px; padding: 8px 10px; border-radius: 6px; background: color-mix(in srgb, var(--crit) 12%, transparent); font-size: var(--t-sm); }
 .lv-paused svg { width: 16px; height: 16px; flex: none; margin-top: 2px; }
+.ban-note { margin: 0 0 14px; padding: 10px 14px; border: 2px solid var(--crit); border-radius: 8px; background: color-mix(in srgb, var(--crit) 8%, var(--surface)); font-weight: 600; font-size: var(--t-sm); }
 
 </style>
 </head>
@@ -361,6 +362,7 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
   </div>
 </nav>
 <main class="wrap" id="main">
+  <div class="ban-note" id="ban-note" hidden></div>
   <div class="loading" id="loading">טוען נתונים רשמיים…</div>
   <section id="tab-overview" data-panel="overview" hidden></section>
   <section id="tab-live" data-panel="live" hidden></section>
@@ -405,7 +407,13 @@ function ilNow() {
   return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, min: +p.minute };
 }
 const ilStamp = t => t.y * 1e8 + t.m * 1e6 + t.d * 1e4 + t.h * 100 + t.min;   // sortable yyyymmddhhmm
-const POLL_BAN = 202610240000;       // from the end of Friday 23.10 until polls close
+const POLL_BAN = 202610240000;       // Propaganda Methods Law §16ה(ח): from the end of Friday 23.10 ...
+const POLLS_CLOSE = 202610272200;    // ... until the polls close on election day
+const inPollBan = () => { const t = ilStamp(ilNow()); return t >= POLL_BAN && t < POLLS_CLOSE; };
+const inElectionWindow = () => { const t = ilStamp(ilNow()); return t >= ELECTION_DAY[0] && t < ELECTION_DAY[1]; };
+const votingHours = () => { const t = ilStamp(ilNow()); return t >= 202610270700 && t < POLLS_CLOSE; };
+// Polls published before the blackout may be shown during it only with this notice (statutory wording).
+const BAN_NOTICE = 'הסקרים בדף זה פורסמו לפני תחילת התקופה שבה אסור לפרסם סקרי בחירות (מסוף יום שישי, 23.10, עד סגירת הקלפיות). הסקרים אינם עדכניים, ואין ללמוד מהם על דפוסי הצבעה או עמדות של הציבור ביום הפרסום.';
 const ELECTION_DAY = [202610270600, 202610281200];   // the site opens on the election-day tab
 
 function isDark() {
@@ -2518,6 +2526,10 @@ async function loadLive() {
   S.liveExit = exits;        // published by the fetcher only after 22:00
   if (res && res.frame) return { mode: 'live', ...res };
   const doc = await fetchJSON('data/replay_night.json');
+  if (!doc.replays) {   // older single-replay format
+    doc.replays = { [doc.election || 'K25']: { ...doc, simulated_order: doc.simulated_order !== false } };
+    doc.default = doc.election || 'K25';
+  }
   if (!S.replayKey || !doc.replays[S.replayKey]) S.replayKey = doc.default;
   return { mode: 'demo', ...doc };
 }
@@ -2536,6 +2548,9 @@ async function renderLive() {
   </div></div>
   ${dayMarkup()}
   <h2 class="lv-h2">ליל הבחירות: ספירת הקולות</h2>
+  ${demo && inElectionWindow() ? `<div class="card c12 lv-wait"><h3>${votingHours() ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
+    <p class="sub">ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. ב-2021 הנתונים הרשמיים הראשונים הגיעו ב-01:01, כשעתיים ורבע אחרי סגירת הקלפיות, ומחצית הקולות נספרו עד כ-05:00. המעטפות הכפולות נספרות יום עד שלושה ימים אחרי הבחירות.</p></div>` : ''}
+  <div ${demo && inElectionWindow() ? 'hidden' : ''}>
   <div class="live-bar ${demo ? 'demo' : 'on'}">
     ${demo ? `<span class="live-chip demo">הדגמה</span><span class="live-text">${R0.simulated_order
         ? 'ליל הבחירות 2022, משוחזר מתוצאות הקלפיות הרשמיות <b>בסדר ספירה מדומה</b>.'
@@ -2576,6 +2591,7 @@ async function renderLive() {
       <p class="sub">בדיקה לאחור: אותו מודל הורץ על ליל הבחירות 2021 בסדר הספירה האמיתי, ועל 2022 ו-2021 בארבעה סדרי ספירה מדומים (כולל סדר שבו היישובים הערביים והחרדיים נספרים אחרונים).</p>
       <div class="chart" id="lv-acc"></div>
     </div>
+  </div>
   </div>
   <p class="foot">${demo ? esc(R0.note || '') + ' ' : ''}השיטה: אמידה יחסית לפי שכבות (מגזר, אזור והצבעה קודמת), עם נקודת מוצא מממוצע הסקרים, וחלוקת מנדטים בבדר-עופר עם הסכמי העודפים. פירוט בלשונית "שיטה ומקורות".</p>`;
   drawDay();
@@ -2720,7 +2736,7 @@ function drawLiveThreshold(el, F) {
     const gap = thr && l.votes_proj != null ? l.votes_proj - thr : null;
     return `<tr><td>${slip(l.letters, l.name, liveColor(l))}</td><td class="n">${pct(l.pct, 2)}</td>${paused ? '' : `<td class="n">${l.pct_proj != null ? pct(l.pct_proj, 2) : '—'}</td><td class="n hide-sm" style="direction:ltr">${gap == null ? '—' : (gap >= 0 ? '+' : '−') + fmt(Math.abs(gap))}</td><td class="n"><span class="status ${st[1]}">${st[1] === 'ok' ? ICON_OK : ICON_NO}${pct(100 * p, 0)}</span></td>`}</tr>`;
   }).join('')}</tbody></table>
-  <p class="foot">ברשימות הערביות חלקן במעטפות הכפולות נמוך בהרבה מבקלפיות (ב-2022 פחות ממחצית), ולכן הסף "האמיתי" שלהן בספירת הלילה גבוה מעט מ-3.25%.</p>`;
+  <p class="foot">ברשימות הערביות חלקן במעטפות הכפולות נמוך בהרבה מבקלפיות (ב-2022 כמחצית או פחות), ולכן הסף "האמיתי" שלהן בספירת הלילה גבוה מעט מ-3.25%.</p>`;
 }
 
 function drawLiveTurnout(el, F) {
@@ -2917,7 +2933,7 @@ function drawDaySectors(el, H0) {
       <p class="sub">הקצב בכל קלפי, משוקלל לפי מספר הקולות שקיבל כל גוש באותה קלפי ב-2022. מספר גבוה יותר: הקלפיות שבהן הגוש היה חזק מגיעות מהר יותר לרמת ההצבעה של 2022. זה אומדן אקולוגי, לא מדידה של מצביעים, ואינו מתורגם למנדטים.</p>
       <div class="lv-lean">${['coal', 'opp', 'arab'].filter(b => L[b] != null).map(b => `<div><span><i class="swatch" style="background:var(${blocVar(b)})"></i>${b === 'coal' ? 'קלפיות של גוש נתניהו' : b === 'opp' ? 'קלפיות של האופוזיציה היהודית' : 'קלפיות של הרשימות הערביות'}</span><b class="num">${pct(100 * L[b], 0)}</b></div>`).join('')}</div>` : ''}
     ${exc.length ? `<p class="foot">לא נכללו בחישוב הקצב: ${exc.map(([k, n]) => `${fmt(n)} (${esc({ 'no 2022 match': 'אין קלפי מקבילה ב-2022', 'implausible pace': 'קצב לא סביר', 'more voters than eligible': 'יותר מצביעים מבעלי זכות', unreadable: 'שורה לא קריאה' }[k] || k)})`).join(', ')}.</p>` : ''}
-    ${(T.claims || []).length ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
+    ${(T.claims || []).length && !votingHours() ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
     <p class="foot">עד 22:00 הדף אינו מתרגם שיעורי הצבעה למנדטים.</p>`;
 }
 
@@ -2939,6 +2955,8 @@ function showTab(tab, { push = true } = {}) {
     rendered.add(tab);
     try { const r = RENDER[tab](); if (r && r.catch) r.catch(fail); } catch (err) { fail(err); }
   }
+  const ban = $('#ban-note');
+  if (ban) { const on = inPollBan() && ['overview', 'polls', 'coalition', 'arab', 'accuracy'].includes(tab); ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE; }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   tt.hide();

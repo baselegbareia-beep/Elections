@@ -269,8 +269,11 @@ def replay_accuracy():
 def turnout_pass(E, cfg, out):
     manual = read_input("turnout.json") or {}
     national = dict(manual.get("national", {}))
+    # Third-party turnout estimates may be survey-based, i.e. election polls under §16ה(ח):
+    # they are published only after the polls close.
+    closed = now_il() >= dt.datetime.combine(dt.date.fromisoformat(E.cfg.get("election_day", "2026-10-27")), dt.time(22, 0), IL)
     doc = {"updated_at": now_il().isoformat(), "updated_he": he_time(now_il()), "national": national,
-           "eligible": E.eligible, "claims": manual.get("claims", []), "source": manual.get("source", "")}
+           "eligible": E.eligible, "claims": manual.get("claims", []) if closed else [], "source": manual.get("source", "")}
     url = cfg.get("station_turnout_url")
     if url:
         try:
