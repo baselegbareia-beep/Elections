@@ -9,7 +9,9 @@
 2. 2022, simulated counting order: the official 2022 ballot results in a
    simulated order (smaller localities somewhat earlier); labelled as such.
 3. Accuracy: projection error by share counted, from backtests over several
-   simulated orders (2022 and 2021) and along the real 2021 order.
+   simulated orders (2022 and 2021) and along the real 2021 order. The model's
+   noise constants are tuned on the 2022 backtest; 2021 (simulated and real) is
+   hold-out, and the output says which is which (accuracy_roles).
 
 Run: python3 pipeline/build_replay.py [--out site/data/replay_night.json]
 """
@@ -33,15 +35,21 @@ STEPS = [0.01, 0.03, 0.06, 0.1, 0.15, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.
 SNAP_DIR = os.path.join(ROOT, "data", "raw", "snapshots", "votes24")
 IL = dt.timezone(dt.timedelta(hours=2))      # March 2021, before DST (26.3.2021)
 
-# Exit polls aired at 22:00 (seats). Source: Wikipedia election-day poll rows, as collected in
-# idoherling/2026_Election_Model data/processed/polls.csv; checked against two scrapes.
+# Exit polls as aired at 22:00 (seats), each summing to 120.
+# 2021: the 22:00 versions per the Times of Israel live blog (22:03 entry) and the Jewish Press live
+# blog of 23.3.2021; the Wikipedia-derived scrape (idoherling/2026_Election_Model polls.csv) held the
+# later-night updates for Kan and Channel 13 and a Channel 12 row summing to 121 (PROV-3). Updates:
+# Channel 13 ~23:03 Likud 32 / RZ 7; Channel 12 B&W 8, Shas 8, Meretz 7.
+# 2022: Wikipedia election-day rows, confirmed against the Times of Israel live blog of 1.11.2022
+# (Kan, Channel 12, Channel 13) and the Wikipedia table (Channel 14); Channel 12 later revised to
+# YB 5, Hadash-Ta'al 5, Labor 5, Meretz 4.
 EXIT_POLLS = {
-    "K24": {"note": "המדגמים של 22:00 ב-23.3.2021 (מקור: טבלאות הסקרים בוויקיפדיה). כל שלושת הערוצים נתנו לרע״ם 0; היא קיבלה 4.",
+    "K24": {"note": "המדגמים כפי שפורסמו ב-22:00 ב-23.3.2021 (לפי הדיווחים החיים של טיימס אוף ישראל ו-Jewish Press; הערוצים עדכנו אותם במהלך הלילה). כל שלושת הערוצים נתנו לרע״ם 0; היא קיבלה 4.",
             "polls": [
-                {"outlet": "כאן 11", "seats": {"מחל": 30, "פה": 18, "שס": 9, "כן": 8, "ב": 7, "אמת": 7, "ג": 7, "ל": 7, "ט": 7, "ודעם": 8, "ת": 6, "מרצ": 6, "עם": 0}},
-                {"outlet": "חדשות 12", "seats": {"מחל": 30, "פה": 18, "שס": 9, "כן": 7, "ב": 7, "אמת": 8, "ג": 6, "ל": 7, "ט": 7, "ודעם": 9, "ת": 6, "מרצ": 7, "עם": 0}},
-                {"outlet": "חדשות 13", "seats": {"מחל": 32, "פה": 16, "שס": 8, "כן": 8, "ב": 7, "אמת": 7, "ג": 7, "ל": 8, "ט": 7, "ודעם": 8, "ת": 5, "מרצ": 7, "עם": 0}}]},
-    "K25": {"note": "המדגמים של 22:00 ב-1.11.2022 (מקור: טבלאות הסקרים בוויקיפדיה). כולם נתנו למרצ 4–5 מנדטים; היא לא עברה את אחוז החסימה.",
+                {"outlet": "כאן 11", "seats": {"מחל": 31, "פה": 18, "שס": 9, "כן": 7, "ב": 7, "אמת": 7, "ג": 7, "ל": 7, "ט": 7, "ודעם": 8, "ת": 6, "מרצ": 6, "עם": 0}},
+                {"outlet": "חדשות 12", "seats": {"מחל": 31, "פה": 18, "שס": 9, "כן": 7, "ב": 8, "אמת": 7, "ג": 6, "ל": 6, "ט": 7, "ודעם": 9, "ת": 6, "מרצ": 6, "עם": 0}},
+                {"outlet": "חדשות 13", "seats": {"מחל": 33, "פה": 16, "שס": 8, "כן": 8, "ב": 7, "אמת": 7, "ג": 7, "ל": 8, "ט": 6, "ודעם": 8, "ת": 5, "מרצ": 7, "עם": 0}}]},
+    "K25": {"note": "המדגמים כפי שפורסמו ב-22:00 ב-1.11.2022 (טבלאות הסקרים בוויקיפדיה, אומתו מול הדיווח החי של טיימס אוף ישראל; חדשות 12 עדכנו בהמשך הלילה). כולם נתנו למרצ 4–5 מנדטים; היא לא עברה את אחוז החסימה.",
             "polls": [
                 {"outlet": "כאן 11", "seats": {"מחל": 30, "פה": 22, "ט": 15, "כן": 13, "שס": 10, "ג": 7, "ל": 5, "עם": 5, "ום": 4, "אמת": 5, "מרצ": 4, "ד": 0, "ב": 0}},
                 {"outlet": "חדשות 12", "seats": {"מחל": 30, "פה": 24, "ט": 14, "כן": 11, "שס": 10, "ג": 7, "ל": 4, "עם": 5, "ום": 4, "אמת": 6, "מרצ": 5, "ד": 0, "ב": 0}},
@@ -158,11 +166,17 @@ def replay_real(core, src, n_boot):
             track)
 
 
+# The projection's noise constants are tuned on the 2022 backtest; the 2021 backtest and the real 2021
+# counting order (accuracy_real) are hold-out, and the page labels them so.
+ACCURACY_ROLES = {e: ("calibration" if e == LM.CALIBRATED_ON else "holdout") for e in ("K25", "K24")}
+ACCURACY_NOTE = ("קבועי אי-הוודאות של המודל כוילו על השחזור המדומה של 2022; השחזור המדומה של 2021 וסדר הספירה "
+                 "האמיתי של 2021 לא שימשו לכיול.")
+
+
 def backtest_accuracy(core, src, orders):
     accuracy = {}
     for be, ce in (("K24", "K25"), ("K23", "K24")):
-        res = LM.backtest(be, ce, src, core, ["random", "locality", "small_first", "arab_haredi_late"],
-                          orders, 30, [0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 0.9, 1.0])
+        res = LM.backtest(be, ce, src, core, LM.SCHEMES, orders, 30, [0.05, 0.1, 0.2, 0.35, 0.5, 0.75, 0.9, 1.0])
         acc = collections.defaultdict(list)
         for r in res:
             acc[r["counted"]].append(r)
@@ -183,7 +197,8 @@ def main(out, n_boot, orders):
     if real:
         replays = {"K24": real, "K25": sim}
     doc = {"replays": replays, "default": "K24" if real else "K25",
-           "accuracy": backtest_accuracy(core, src, orders), "accuracy_real": track}
+           "accuracy": backtest_accuracy(core, src, orders), "accuracy_roles": ACCURACY_ROLES,
+           "accuracy_note": ACCURACY_NOTE, "accuracy_real": track}
     with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, separators=(",", ":"))
     print(f"wrote {out}")

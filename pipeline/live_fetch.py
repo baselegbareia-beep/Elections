@@ -270,23 +270,10 @@ def station_sector(loc_sector, code):
     return "jewish"
 
 
-def poll_prior(polls, half_life=10.0, window=28):
-    """Recency-weighted average of the 2026 polls (seats) -> national vote shares."""
-    dates = [dt.date.fromisoformat(p["date"]) for p in polls["polls"]]
-    last = max(dates)
-    acc, wsum = collections.Counter(), 0.0
-    for p, d in zip(polls["polls"], dates):
-        age = (last - d).days
-        if age > window:
-            continue
-        w = 0.5 ** (age / half_life)
-        wsum += w
-        for k, v in p["seats"].items():
-            acc[k] += w * v
-    avg = {k: v / wsum for k, v in acc.items()}
-    for p in polls["parties"]:
-        avg.setdefault(p["id"], 0.0)
-    return LM.seats_to_shares(avg)
+def poll_prior(polls):
+    """The 2026 prior: national vote shares exactly as the page's own estimate (core.js
+    voteSharesFromAverage; LM-4), keyed by list id, plus the small lists under LM.OTHER ("_other")."""
+    return LM.poll_shares(polls)
 
 
 # ------------------------------------------------------------------ results
