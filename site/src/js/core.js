@@ -87,11 +87,26 @@ function svgEl(container, w, h) {
   container.innerHTML = '';
   return d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
 }
+// Label colour that stays readable on a given fill (party colours change between themes).
+function onFill(c) {
+  const raw = String(c).startsWith('var(') ? cssVar(String(c).slice(4, -1)) : c;
+  const k = d3.rgb(raw);
+  if (!k || isNaN(k.r)) return 'var(--ink)';
+  const lum = (0.2126 * k.r + 0.7152 * k.g + 0.0722 * k.b) / 255;
+  return lum > 0.55 ? '#0c1320' : '#ffffff';
+}
 // Text width in px for gutter sizing (canvas measure, same UI font).
 const _ctx = document.createElement('canvas').getContext('2d');
 function textWidth(str, size = 12.5, weight = 400) {
   _ctx.font = `${weight} ${size}px "IBM Plex Sans Hebrew", "Arial Hebrew", sans-serif`;
   return _ctx.measureText(String(str)).width;
+}
+// shorten a label with an ellipsis so it fits maxW pixels
+function fitLabel(str, maxW, size = 12.5, weight = 400) {
+  let s = String(str);
+  if (textWidth(s, size, weight) <= maxW) return s;
+  while (s.length > 3 && textWidth(s + '…', size, weight) > maxW) s = s.slice(0, -1);
+  return s.trim() + '…';
 }
 function widthOf(el, fallback = 800) { return Math.max(300, Math.round(el.getBoundingClientRect().width || fallback)); }
 
@@ -138,15 +153,16 @@ function baderOfer(votes, { seats = 120, threshold = 0.0325, agreements = [] } =
 const dayMs = 864e5;
 const toDate = s => new Date(s + 'T12:00:00Z');
 function pollWeights(polls, asOf, halfLife) {
-  // recency × sample size; prolific pollsters are damped so one house cannot dominate
-  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, p => p.house);
+  // recency × sample size; prolific firms are damped so one company cannot dominate
+  const firm = p => p.firm || p.house;
+  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, firm);
   return polls.map(p => {
     const age = (asOf - toDate(p.date)) / dayMs;
     if (age < 0 || age > 28) return 0;
     const rec = Math.pow(0.5, age / halfLife);
     const n = p.n || 700;
     const size = Math.min(1.4, Math.max(0.7, Math.sqrt(n / 700)));
-    const k = byHouse.get(p.house) || 1;
+    const k = byHouse.get(firm(p)) || 1;
     return rec * size / Math.sqrt(k);
   });
 }

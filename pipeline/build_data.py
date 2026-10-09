@@ -28,6 +28,9 @@ from bader_ofer import allocate  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SES_MIN_ELIG = 5000
+# Large localities that are not local authorities: the SES file gives them their
+# regional council's cluster (Hof HaCarmel, Mateh Yehuda, Mateh Binyamin), not their own.
+SES_NOT_OWN = {"עתלית", "קיסריה", "צור הדסה", "כוכב יעקב"}
 
 
 def read_ballots(src, e):
@@ -351,7 +354,8 @@ def build(src, polygons, ses_path, out_dir):
             "lat": lat, "lng": lng, "tribe": tribe,
             # The SES file falls back to the regional council's cluster for small localities,
             # so a cluster is attached only where the locality is large enough to have its own.
-            "ses": ses.get(norm_name(L["name"])) if max(a["elig"] for a in L["el"].values()) >= SES_MIN_ELIG else None,
+            "ses": ses.get(norm_name(L["name"]))
+            if max(a["elig"] for a in L["el"].values()) >= SES_MIN_ELIG and L["name"] not in SES_NOT_OWN else None,
             "el": {},
         }
         for e, agg in L["el"].items():

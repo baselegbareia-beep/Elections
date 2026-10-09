@@ -88,7 +88,7 @@ function drawNational() {
     if (p.pred === 'new') return '<span class="badge">חדשה</span>';
     if (p.pred === 'split') return '<span class="badge" title="הרשימה נוצרה מפיצול של רשימה קודמת">פיצול</span>';
     const before = sum(p.pred.map(prevSeats)), d = p.seats - before;
-    const merged = p.pred.length > 1 ? ` title="מול ${before} מושבים של ${esc(p.pred.map(id => partyName(prev.id, id)).join(' + '))}"` : '';
+    const merged = p.pred.length > 1 ? ` title="מול ${before} מנדטים של ${esc(p.pred.map(id => partyName(prev.id, id)).join(' + '))}"` : '';
     return `<span class="num ${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''}"${merged}>${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}${p.pred.length > 1 ? '*' : ''}</span>`;
   };
   const rows = ev.parties.filter(p => p.pct >= 0.5);
@@ -96,10 +96,10 @@ function drawNational() {
   const wasted = sum(ev.parties.filter(p => p.seats === 0).map(p => p.votes));
   $('#rs-national').innerHTML = `
     <div class="card-head"><div><h3>${ev.label} · ${dateHe(ev.date)}</h3>
-    <p class="sub">${ev.bloc_note} אחוז החסימה: ${fmt(ev.threshold_votes)} קולות.</p></div>
+    <p class="sub">${ev.bloc_note} אחוז החסימה (3.25%): ${fmt(ev.threshold_votes)} קולות.</p></div>
     <span class="badge off">רשמי</span></div>
     <div class="chart" id="rs-strip"></div>
-    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n hide-sm">קולות</th><th class="n">אחוז</th><th class="n">מושבים</th><th class="n">שינוי</th><th class="hide-sm"></th></tr></thead><tbody>${
+    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n hide-sm">קולות</th><th class="n">אחוז</th><th class="n">מנדטים</th><th class="n">שינוי</th><th class="hide-sm"></th></tr></thead><tbody>${
       rows.map(p => {
         return `<tr><td>${slip(p.id, p.name, famColor(p.family))}</td><td class="n hide-sm">${fmt(p.votes)}</td><td class="n">${pct(p.pct, 2)}</td><td class="n"><b>${p.seats || '—'}</b></td>
           <td class="n">${change(p)}</td>
@@ -115,7 +115,7 @@ function drawNational() {
       <div><b class="num">${pct(100 * wasted / ev.valid)}</b><span>קולות לרשימות שלא עברו</span></div>
       <div><b class="num">${fmt(ev.envelope_voters)}</b><span>הצביעו במעטפות כפולות</span></div>
     </div>
-    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener">${esc(ev.official_url.replace('https://', ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במושבים מחושב מול הרשימה הקודמת; * = מול סך הרשימות שהתאחדו לתוכה.</p>`;
+    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener" dir="ltr">${esc(ev.official_url.replace('https://', '').replace(/\/$/, ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במנדטים מחושב מול הרשימה הקודמת; * = מול סך הרשימות שהתאחדו לתוכה.</p>`;
   drawSeatStrip($('#rs-strip'), ev);
 }
 
@@ -128,8 +128,8 @@ function drawSeatStrip(el, ev) {
   ps.forEach(p => {
     const x0 = x(acc), x1 = x(acc + p.seats);
     svg.append('rect').attr('x', x1 + 1).attr('y', 4).attr('width', Math.max(0, x0 - x1 - 2)).attr('height', 22).attr('rx', 3).attr('fill', famColor(p.family))
-      .call(sel => bindTT(sel, () => `<h4>${esc(p.name)}</h4>${ttRows([['מושבים', p.seats], ['קולות', fmt(p.votes)], ['אחוז', pct(p.pct, 2)]])}`));
-    if (x0 - x1 > 20) svg.append('text').attr('class', 'lbl').attr('x', (x0 + x1) / 2).attr('y', 15).attr('dy', '.35em').attr('text-anchor', 'middle').style('fill', '#fff').style('font-weight', 600).text(p.seats);
+      .call(sel => bindTT(sel, () => `<h4>${esc(p.name)}</h4>${ttRows([['מנדטים', p.seats], ['קולות', fmt(p.votes)], ['אחוז', pct(p.pct, 2)]])}`));
+    if (x0 - x1 > 20) svg.append('text').attr('class', 'lbl').attr('x', (x0 + x1) / 2).attr('y', 15).attr('dy', '.35em').attr('text-anchor', 'middle').style('fill', onFill(famColor(p.family))).style('font-weight', 600).text(p.seats);
     acc += p.seats;
   });
   svg.append('line').attr('class', 'ref-line').attr('x1', x(60.5)).attr('x2', x(60.5)).attr('y1', 0).attr('y2', 30);
@@ -204,7 +204,11 @@ function drawMap() {
     });
   }
   bindTT(bub, d => locTooltip(d, eid));
-  bub.on('click', (ev, d) => { S.locSel = d.code; g.selectAll('circle.bub').classed('sel', x => x.code === d.code); drawLocality(); });
+  bub.on('click', (ev, d) => {
+    S.locSel = d.code; g.selectAll('circle.bub').classed('sel', x => x.code === d.code); drawLocality();
+    const r = $('#rs-loc').getBoundingClientRect();
+    if (r.top > window.innerHeight - 160) $('#rs-loc').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
   const zoom = d3.zoom().scaleExtent([1, 14])
     .filter(ev => ev.type === 'wheel' ? (ev.ctrlKey || ev.metaKey) : ev.type.startsWith('touch') ? ev.touches.length > 1 : !ev.button)
     .on('zoom', ev => {
@@ -241,13 +245,13 @@ async function drawLocality() {
   const w = v ? winnerOf(l, eid) : null;
   box.innerHTML = `
     <div class="loc-head"><div><span class="eyebrow">פרופיל יישוב</span><h3>${esc(l.name)}</h3></div>
-      <div class="chips"><span class="badge ${sec[1]}">${sec[0]}</span>${region && l.sector !== 'mixed' ? `<span class="badge">${esc(region)}</span>` : ''}${l.ses ? `<span class="badge">אשכול חברתי-כלכלי ${l.ses} מתוך 10</span>` : ''}<span class="badge off">רשמי</span></div></div>
+      <div class="chips"><span class="badge ${sec[1]}">${sec[0]}</span>${region && l.sector !== 'mixed' ? `<span class="badge">${esc(region)}</span>` : ''}<span class="badge off" title="תוצאות לפי קובצי הקלפיות של ועדת הבחירות המרכזית">תוצאות רשמיות</span>${l.ses ? `<span class="badge est" title="מקור משני: מדד חברתי-כלכלי של הלמ״ס">אשכול חברתי-כלכלי ${l.ses} מתוך 10 (למ״ס)</span>` : ''}</div></div>
     ${v ? `<div class="kv">
       <div><b class="num">${fmt(v.elig)}</b><span>בעלי זכות · ${E(eid).short}</span></div>
       <div><b class="num">${pct(100 * v.voters / v.elig)}</b><span>שיעור הצבעה</span></div>
       <div><b class="num">${fmt(v.boxes)}</b><span>קלפיות${v.arabBoxes ? ` (${v.arabBoxes} ערביות)` : ''}</span></div>
       <div><b>${w ? esc(partyName(eid, w.id)) : '—'}</b><span>מובילה, ${w ? pct(100 * w.share) : ''}</span></div>
-    </div>` : `<p class="empty">אין נתונים ליישוב זה ב${E(eid).label}.</p>`}
+    </div>` : `<p class="empty">אין נתונים ליישוב זה בבחירות ל${E(eid).label.replace(/^ה/, '')}.</p>`}
     <div class="grid" style="gap:18px">
       <div class="c6"><h3 style="font-size:var(--t-md)">ההצבעה לאורך חמש מערכות</h3><p class="sub">שיעור הקולות לפי משפחה פוליטית (קווים) ושיעור ההצבעה (טבלה).</p><div class="chart" id="loc-trend"></div><div class="tbl-wrap" id="loc-turn"></div></div>
       <div class="c6"><h3 style="font-size:var(--t-md)">תוצאות לפי קלפי · ${E(eid).short}</h3><p class="sub">לחצו על כותרת עמודה למיון.${l.sector === 'mixed' ? ' קלפיות שבהן לרשימות הערביות רוב מסומנות.' : ''}</p><div id="loc-ballots" class="tbl-wrap scroll-y"><p class="empty">טוען קלפיות…</p></div></div>

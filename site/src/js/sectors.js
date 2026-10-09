@@ -50,16 +50,16 @@ function renderSectors() {
 
 function drawTurnHeat() {
   const sc = d3.scaleLinear().domain([30, 80]).range([cssVar('--seq-0'), cssVar('--seq-1')]).interpolate(d3.interpolateLab).clamp(true);
-  const ink = v => (v > 60) === !isDark() ? '#fff' : 'var(--ink)';
+  const ink = v => onFill(sc(v));
   const rows = SUBS.filter(([k]) => ELS.some(e => subStat(e, k)?.elig));
-  $('#sc-turn').innerHTML = `<table class="t"><thead><tr><th>קבוצה</th><th class="n">בעלי זכות, 2022</th>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}<th class="n">שינוי מ-2021</th></tr></thead><tbody>${
+  $('#sc-turn').innerHTML = `<table class="t sticky1"><thead><tr><th>קבוצה</th><th class="n hide-sm">בעלי זכות, 2022</th>${ELS.map((e, i) => `<th class="n${i < 3 ? ' hide-sm' : ''}">${E(e).short}</th>`).join('')}<th class="n">שינוי מ-2021</th></tr></thead><tbody>${
     rows.map(([k, name, sec, bold]) => {
       const vals = ELS.map(e => { const s = subStat(e, k); return s && s.elig ? 100 * s.voters / s.elig : null; });
       const d = vals[4] != null && vals[3] != null ? vals[4] - vals[3] : null;
-      return `<tr><td><span class="slip"><i class="dot" style="background:var(--${sec})"></i><span class="nm" style="${bold ? 'font-weight:700' : ''}">${esc(name)}</span></span></td><td class="n">${fmt(subStat('K25', k)?.elig)}</td>${
-        vals.map(v => `<td class="n" style="background:${v == null ? 'transparent' : sc(v)};color:${v == null ? 'inherit' : ink(v)}">${pct(v)}</td>`).join('')}<td class="n">${d == null ? '' : `<span class="num ${d > 0 ? 'delta-up' : 'delta-down'}">${d > 0 ? '+' : '−'}${fmt1(Math.abs(d))}</span>`}</td></tr>`;
+      return `<tr><td><span class="slip"><i class="dot" style="background:var(--${sec})"></i><span class="nm" style="${bold ? 'font-weight:700' : ''}">${esc(name)}</span></span></td><td class="n hide-sm">${fmt(subStat('K25', k)?.elig)}</td>${
+        vals.map((v, i) => `<td class="n${i < 3 ? ' hide-sm' : ''}" style="background:${v == null ? 'transparent' : sc(v)};color:${v == null ? 'inherit' : ink(v)}">${pct(v)}</td>`).join('')}<td class="n">${d == null ? '' : `<span class="num ${d > 0 ? 'delta-up' : 'delta-down'}">${d > 0 ? '+' : '−'}${fmt1(Math.abs(d))}</span>`}</td></tr>`;
     }).join('')}
-    <tr><td><span class="slip"><span class="nm" style="font-weight:700">ארצי (רשמי)</span></span></td><td class="n">${fmt(E('K25').eligible)}</td>${ELS.map(e => `<td class="n"><b>${pct(E(e).turnout)}</b></td>`).join('')}<td class="n"></td></tr>
+    <tr><td><span class="slip"><span class="nm" style="font-weight:700">ארצי (רשמי)</span></span></td><td class="n hide-sm">${fmt(E('K25').eligible)}</td>${ELS.map((e, i) => `<td class="n${i < 3 ? ' hide-sm' : ''}"><b>${pct(E(e).turnout)}</b></td>`).join('')}<td class="n"></td></tr>
   </tbody></table><p class="foot">שיעורי ההצבעה של ״שאר הקלפיות״ אינם כוללים את המעטפות הכפולות (חיילים, נציגויות ועוד), ולכן נמוכים מהשיעור האמיתי בקבוצה. הקלפיות החרדיות מוגדרות לפי ההצבעה ולכן אינן מדד בלתי תלוי.</p>`;
 }
 
@@ -76,10 +76,10 @@ function drawVoteHeat() {
     return sum(ev.parties.filter(p => p.family === fam).map(p => s.votes[p.id] || 0)) / s.valid;
   };
   const sc = d3.scaleLinear().domain([0, 0.5]).range([cssVar('--surface-2'), cssVar('--seq-1')]).interpolate(d3.interpolateLab).clamp(true);
-  $('#sc-heat').innerHTML = `<table class="t"><thead><tr><th>משפחה</th>${groups.map(([, n]) => `<th class="n">${n}</th>`).join('')}</tr></thead><tbody>${
+  $('#sc-heat').innerHTML = `<table class="t sticky1"><thead><tr><th>משפחה</th>${groups.map(([, n]) => `<th class="n">${n}</th>`).join('')}</tr></thead><tbody>${
     fams.map(f => `<tr><td>${slip('', S.core.families[f].name.split(' / ')[0], famColor(f))}</td>${groups.map(([k]) => {
       const v = share(k, f);
-      return `<td class="n" style="background:${v == null ? 'transparent' : sc(v)};color:${v != null && v > 0.3 && !isDark() ? '#fff' : 'var(--ink)'}">${v == null ? '—' : pct(100 * v, v < 0.1 ? 1 : 0)}</td>`;
+      return `<td class="n" style="background:${v == null ? 'transparent' : sc(v)};color:${v == null ? 'var(--ink)' : onFill(sc(v))}">${v == null ? '—' : pct(100 * v, v < 0.1 ? 1 : 0)}</td>`;
     }).join('')}</tr>`).join('')}</tbody></table>`;
 }
 

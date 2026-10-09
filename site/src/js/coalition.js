@@ -31,7 +31,7 @@ function renderCoalition() {
   <div class="section-head"><div>
     <span class="eyebrow">בונה קואליציה · מחולל תרחישים</span>
     <h2>הדרך ל-61</h2>
-    <p>לחצו על רשימות כדי להכניס או להוציא אותן מהקואליציה. המושבים מחושבים מממוצע הסקרים בשיטת בדר-עופר עם אחוז החסימה. שני המחוונים משנים את ההנחות ומחשבים מחדש את כל 120 המושבים.</p>
+    <p>לחצו על רשימות כדי להכניס או להוציא אותן מהקואליציה. המנדטים מחושבים מממוצע הסקרים בשיטת בדר-עופר עם אחוז החסימה. שני המחוונים משנים את ההנחות ומחשבים מחדש את כל 120 המושבים.</p>
   </div></div>
   <div class="grid">
     <div class="card c7">
@@ -55,19 +55,23 @@ function renderCoalition() {
         <button type="button" class="slip" data-preset="unity">אחדות: ליכוד, ישר!, ביחד</button>
       </div>
       <h3 style="margin-top:22px">מחולל תרחישים</h3>
-      <p class="sub">מה קורה לחלוקת המושבים כשמשתנות ההנחות.</p>
+      <p class="sub">מה קורה לחלוקת המנדטים כשמשתנות ההנחות.</p>
       <label class="ctl-label" for="sc-arab">שיעור ההצבעה בחברה הערבית: <b class="num" id="sc-arab-v"></b></label>
       <input type="range" id="sc-arab" dir="ltr" min="35" max="75" step="1" value="${S.scn.arabT}">
-      <div class="range-ticks" dir="ltr">${['K21', 'K22', 'K23', 'K24', 'K25'].map(e => { const T = rate(e, 'arab_std'); return `<span style="left:${(T - 35) / 40 * 100}%" title="${E(e).label}: ${pct(T)}">${COMPACT[e]}</span>`; }).join('')}</div>
+      <div class="range-ticks" dir="ltr">${(() => {
+        // two staggered rows so close turnout values do not collide on narrow screens
+        const ts = ['K21', 'K22', 'K23', 'K24', 'K25'].map(e => ({ e, T: rate(e, 'arab_std') })).sort((a, b) => a.T - b.T);
+        return ts.map(({ e, T }, i) => `<span style="left:${(T - 35) / 40 * 100}%;top:${i % 2 ? 15 : 0}px" title="${E(e).label}: ${pct(T)}">${COMPACT[e]}</span>`).join('');
+      })()}</div>
       <label class="ctl-label" for="sc-swing" style="display:block;margin-top:14px">תזוזה בין גוש נתניהו לאופוזיציה: <b class="num" id="sc-swing-v"></b></label>
       <input type="range" id="sc-swing" dir="ltr" min="-4" max="4" step="0.25" value="${S.scn.swing}">
       <div class="legend" dir="ltr" style="justify-content:space-between"><span>← לטובת האופוזיציה</span><span>לטובת גוש נתניהו →</span></div>
       <button type="button" class="slip" id="sc-reset" style="margin-top:10px">איפוס לממוצע הסקרים</button>
-      <p class="foot">ההנחות: ממוצע הסקרים משקף שיעור הצבעה ערבי של ${pct(ARAB_T0)} ביישובים הערביים והדרוזיים, כמו ב-2022. ${pct(100 * ARAB_FROM_SECTOR, 1)} מקולות הרשימות הערביות ב-2022 ניתנו בקלפיות של החברה הערבית; רק החלק הזה משתנה עם שיעור ההצבעה, וההשתתפות בקלפיות הערביות בערים המעורבות נעה יחד איתו. תזוזה של נקודת אחוז = כ-1.2 מושבים.</p>
+      <p class="foot">ההנחות: ממוצע הסקרים משקף שיעור הצבעה ערבי של ${pct(ARAB_T0)} ביישובים הערביים והדרוזיים, כמו ב-2022. ${pct(100 * ARAB_FROM_SECTOR, 1)} מקולות הרשימות הערביות ב-2022 ניתנו בקלפיות של החברה הערבית; רק החלק הזה משתנה עם שיעור ההצבעה, וההשתתפות בקלפיות הערביות בערים המעורבות נעה יחד איתו. תזוזה של נקודת אחוז = כ-1.2 מנדטים.</p>
     </div>
     <div class="card c12">
       <h3>כמה שווה כל נקודת אחוז של הצבעה ערבית?</h3>
-      <p class="sub">מושבי הקואליציה שבחרתם (קו כהה) ומושבי הרשימות הערביות, כפונקציה של שיעור ההצבעה בחברה הערבית. הקווים האנכיים מסמנים את חמש מערכות הבחירות האחרונות.</p>
+      <p class="sub">מנדטי הקואליציה שבחרתם (קו כהה) ומנדטי הרשימות הערביות, כפונקציה של שיעור ההצבעה בחברה הערבית. הקווים האנכיים מסמנים את חמש מערכות הבחירות האחרונות.</p>
       <div class="chart" id="sc-curve"></div>
     </div>
   </div>`;
@@ -114,10 +118,10 @@ function drawCoalition() {
   $('#sc-arab-v').textContent = Math.round(S.scn.arabT) === Math.round(ARAB_T0) ? pct(ARAB_T0) + ' (כמו ב-2022)' : pct(S.scn.arabT, 0);
   $('#sc-swing-v').textContent = S.scn.swing === 0 ? 'ללא' : `${fmt1(Math.abs(S.scn.swing))} נק׳ ${S.scn.swing > 0 ? 'לגוש נתניהו' : 'לאופוזיציה'}`;
   $('#cb-total').textContent = total;
-  $('#cb-status').innerHTML = total >= 61 ? `<span class="status ok">${ICON_OK}רוב של ${total}</span>` : `<span class="status no">${ICON_NO}חסרים ${61 - total} לרוב</span>`;
+  $('#cb-status').innerHTML = total >= 61 ? `<span class="status ok">${ICON_OK}רוב של ${total}</span>` : `<span class="status no">${ICON_NO}${61 - total === 1 ? 'חסר מנדט אחד לרוב' : `חסרים ${61 - total} לרוב`}</span>`;
   const sim = simSummary(S.sims, [...S.coalition]);
   $('#cb-sub').innerHTML = baseline
-    ? `מושבים לפי ממוצע הסקרים. בסימולציות, ההרכב הזה מגיע ל-61 ב-${N(pct(100 * sim.p61, 0))} מהמקרים (80% מהתרחישים: ${N(sim.q10)}–${N(sim.q90)}).`
+    ? `מנדטים לפי ממוצע הסקרים. בסימולציות, ההרכב הזה מגיע ל-61 ב-${N(pct(100 * sim.p61, 0))} מהמקרים (80% מהתרחישים: ${N(sim.q10)}–${N(sim.q90)}).`
     : `תרחיש: שיעור הצבעה ערבי ${N(pct(S.scn.arabT, 0))}${S.scn.swing ? `, תזוזה של ${N(fmt1(Math.abs(S.scn.swing)))} נק׳ ${S.scn.swing > 0 ? 'לגוש נתניהו' : 'לאופוזיציה'}` : ''}. ההסתברות מחושבת רק לממוצע עצמו.`;
   const parties = S.polls.parties.filter(p => (seats[p.id] || 0) > 0 || S.avg.avg[p.id] > 1);
   $('#cb-chips').innerHTML = parties.map(p => `<button type="button" class="slip" data-id="${esc(p.id)}" aria-pressed="${inC(p.id)}"><i class="dot" style="background:${party26Color(p)}"></i><b class="let">${esc(p.letters)}</b><span class="nm">${esc(p.name)}</span><span class="num" style="font-weight:600">${seats[p.id] || 0}</span></button>`).join('');
@@ -153,7 +157,7 @@ function drawHemicycle(el, seats) {
     .attr('cx', d => cx + d.x * R).attr('cy', d => cy - d.y * R).attr('r', seatR)
     .attr('fill', (d, i) => assign[i] ? party26Color(assign[i]) : 'var(--rule)')
     .attr('opacity', (d, i) => assign[i] && S.coalition.has(assign[i].id) ? 1 : 0.22)
-    .call(s => bindTT(s, (d, ev) => { const i = pts.indexOf(d); const p = assign[i]; return p ? `<h4>${esc(p.name)}</h4>${ttRows([['מושבים', seats[p.id]], ['בקואליציה', S.coalition.has(p.id) ? 'כן' : 'לא']])}` : ''; }));
+    .call(s => bindTT(s, (d, ev) => { const i = pts.indexOf(d); const p = assign[i]; return p ? `<h4>${esc(p.name)}</h4>${ttRows([['מנדטים', seats[p.id]], ['בקואליציה', S.coalition.has(p.id) ? 'כן' : 'לא']])}` : ''; }));
   // 61 marker between seat 60 and 61 along the angle
   const a = (pts[59].a + pts[60].a) / 2;
   svg.append('line').attr('class', 'ref-line').attr('x1', cx + Math.cos(a) * R * 0.34).attr('y1', cy - Math.sin(a) * R * 0.34)

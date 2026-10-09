@@ -32,7 +32,8 @@ function countdown() {
   const today = Date.UTC(il.getFullYear(), il.getMonth(), il.getDate());
   const days = Math.round((Date.UTC(2026, 9, 27) - today) / dayMs);
   const el = $('#cd-days');
-  if (days > 0) el.textContent = days;
+  if (days > 1) el.textContent = days;
+  else if (days === 1) { el.textContent = 'מחר'; el.nextElementSibling.textContent = 'הבחירות'; }
   else if (days === 0) { el.textContent = 'היום'; el.nextElementSibling.textContent = 'יום הבחירות'; }
   else { el.textContent = '✓'; el.nextElementSibling.textContent = 'הבחירות התקיימו'; }
 }

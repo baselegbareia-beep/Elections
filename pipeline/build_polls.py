@@ -21,18 +21,18 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # lists; "opp" = the rest. The UI lets the reader move any list.
 PARTIES_2026 = {
     "Likud":            ("הליכוד", "בנימין נתניהו", "coal", "#1d4ed8", "#5b8cff"),
-    "Yashar":           ("ישר!", "גדי איזנקוט", "opp", "#0f766e", "#2dd4bf"),
+    "Yashar":           ("ישר!", "גדי איזנקוט", "opp", "#be185d", "#f472b6"),
     "Together":         ("ביחד", "נפתלי בנט ויאיר לפיד", "opp", "#0891b2", "#38bdf8"),
     "The Democrats":    ("הדמוקרטים", "יאיר גולן", "opp", "#dc2626", "#f87171"),
     "Yisrael Beiteinu": ("ישראל ביתנו", "אביגדור ליברמן", "opp", "#7c3aed", "#a78bfa"),
-    "Shas":             ("ש״ס", "אריה דרעי", "coal", "#3f3f46", "#c4c4cc"),
+    "Shas":             ("ש״ס", "אריה דרעי", "coal", "#52525b", "#8b8b94"),
     "UTJ":              ("יהדות התורה", "יצחק גולדקנופף", "coal", "#0f172a", "#e2e8f0"),
-    "Otzma Yehudit":    ("עוצמה יהודית", "איתמר בן גביר", "coal", "#ca8a04", "#facc15"),
+    "Otzma Yehudit":    ("עוצמה יהודית", "איתמר בן גביר", "coal", "#ca8a04", "#eab308"),
     "Religious Zionism":("הציונות הדתית", "בצלאל סמוטריץ׳", "coal", "#b45309", "#fb923c"),
     "Joint List":       ("הרשימה המשותפת", "חד״ש-תע״ל ובל״ד", "arab", "#047857", "#34d399"),
     "Ra'am":            ("רע״ם", "מנסור עבאס", "arab", "#4d7c0f", "#a3e635"),
-    "Amcha Yisrael":    ("עמך ישראל", "עופר וינטר", "coal", "#9a3412", "#fdba74"),
-    "Reservists":       ("המילואימניקים", "יועז הנדל וחילי טרופר", "opp", "#57534e", "#d6d3d1"),
+    "Amcha Yisrael":    ("עמך ישראל", "עופר וינטר", "coal", "#78350f", "#c08457"),
+    "Reservists":       ("המילואימניקים", "יועז הנדל וחילי טרופר", "opp", "#0d9488", "#2dd4bf"),
     "National Unity":   ("כחול לבן", "בני גנץ", "opp", "#4f46e5", "#a5b4fc"),
     "Haredi Public":    ("הציבור החרדי", "מוטי לייטנר", "coal", "#52525b", "#a1a1aa"),
 }
@@ -65,6 +65,12 @@ def house_of(pollster, outlet):
     if pollster == "Midgam":
         return "midgam", "מדגם (חדשות 12)"
     return pollster.lower().replace(" ", "-").replace(".", ""), None
+
+
+# Firms that run more than one house: Filber's company Direct Polls also polls for i24NEWS.
+# The houses keep separate house effects (their numbers differ by outlet), but the
+# per-firm damping in the average counts them together.
+FIRM_OF_HOUSE = {"direct-polls": "filber"}
 
 
 # Kantar polls are broadcast by Kan 11 (kan.org.il publishes them); the source table labels them Israel Hayom.
@@ -144,7 +150,7 @@ def build(src, out):
         polls.append({
             "date": p["date"], "fieldwork": fieldwork,
             "pollster": p["pollster"], "pollster_he": POLLSTER_HE.get(p["pollster"], p["pollster"]),
-            "house": house, "house_he": house_he or POLLSTER_HE.get(p["pollster"], p["pollster"]),
+            "house": house, "firm": FIRM_OF_HOUSE.get(house, house), "house_he": house_he or POLLSTER_HE.get(p["pollster"], p["pollster"]),
             "outlet": p.get("outlet", ""),
             "outlet_he": OUTLET_BY_POLLSTER.get(p["pollster"]) or OUTLET_HE.get(p.get("outlet", ""), p.get("outlet", "")),
             "n": n, "moe": moe,

@@ -17,11 +17,11 @@ function renderPolls() {
   <div class="section-head"><div>
     <span class="eyebrow">${polls.length} סקרים · ${houses.length} סוקרים · ${polls.filter(p => p.filing).length} עם קובץ דיווח רשמי לוועדת הבחירות</span>
     <h2>מגמות בסקרים</h2>
-    <p>כל נקודה היא סקר שפורסם; הקו הוא הממוצע המשוקלל ביום נתון (מחצית משקל אחרי ${S.halfLife} ימים, תיקון לגודל מדגם ולסוקרים שמפרסמים הרבה). הממוצע מתוקנן להטיית הבית של כל סוקר כשהמתג פעיל.</p>
+    <p>כל נקודה היא סקר שפורסם; הקו הוא הממוצע המשוקלל ביום נתון (מחצית משקל אחרי ${S.halfLife} ימים, תיקון לגודל מדגם ולסוקרים שמפרסמים הרבה). כשהמתג פעיל, הממוצע מתוקן להטיה הקבועה של כל סוקר.</p>
   </div></div>
   <div class="controls">
     <label class="toggle"><input type="checkbox" id="pl-adj" ${S.adjustHouse ? 'checked' : ''}> תיקון הטיית סוקרים</label>
-    <span class="ctl-label">זמן מחצית</span>${seg('pl-hl', [['7', '7 ימים'], ['10', '10 ימים'], ['14', '14 ימים']], String(S.halfLife))}
+    <span class="ctl-label">מחצית משקל אחרי</span>${seg('pl-hl', [['7', '7 ימים'], ['10', '10 ימים'], ['14', '14 ימים']], String(S.halfLife))}
   </div>
   <div class="grid">
     <div class="card c12">
@@ -38,8 +38,8 @@ function renderPolls() {
       <div class="legend"><span><i class="line" style="background:var(--coal)"></i>גוש נתניהו</span><span><i class="line" style="background:var(--opp)"></i>האופוזיציה</span><span><i class="line" style="background:var(--arab)"></i>הרשימות הערביות</span></div>
     </div>
     <div class="card c5">
-      <h3>הטיית בית לפי סוקר</h3>
-      <p class="sub">בכמה מנדטים כל סוקר נותן לרשימה יותר (כחול) או פחות (אדום) מהממוצע של כל הסקרים. מכווץ לאפס לסוקרים עם מעט סקרים.</p>
+      <h3>הטיית סוקרים</h3>
+      <p class="sub">בכמה מנדטים כל סוקר נותן לרשימה יותר (סגול) או פחות (חום) מהממוצע של כל הסקרים. אצל סוקרים עם מעט סקרים ההטיה מוקטנת לכיוון אפס.</p>
       <div class="chart" id="pl-house"></div>
     </div>
     <div class="card c12">
@@ -64,19 +64,23 @@ function renderPolls() {
 }
 
 function timeScale(W, M) {
-  const first = d3.timeDay.offset(toDate(S.polls.polls[0].date), -2);
-  return d3.scaleUtc().domain([first, toDate('2026-10-27')]).range([M.l, W - M.r]);
+  const first = d3.utcDay.offset(toDate(S.polls.polls[0].date), -2);
+  // on phones the empty run-up to election day is cut so the data gets the width
+  const last = W < 560 ? d3.utcDay.offset(latestDate(), 3) : toDate('2026-10-27');
+  return d3.scaleUtc().domain([first, last]).range([M.l, W - M.r]);
 }
-function timeAxis(svg, x, H, M) {
-  const ticks = x.ticks(d3.utcWeek.every(1));
+function timeAxis(svg, x, H, M, W = 800) {
+  const ticks = x.ticks(d3.utcWeek.every(W < 560 ? 2 : 1));
   ticks.forEach(t => {
     svg.append('line').attr('class', 'gridline').attr('x1', x(t)).attr('x2', x(t)).attr('y1', M.t).attr('y2', H - M.b);
     svg.append('text').attr('class', 'lbl').attr('x', x(t)).attr('y', H - M.b + 16).attr('text-anchor', 'middle')
       .text(t.toLocaleDateString('he-IL', { day: 'numeric', month: 'numeric', timeZone: 'UTC' }));
   });
-  const ed = x(toDate('2026-10-27'));
-  svg.append('line').attr('class', 'ref-line').attr('x1', ed).attr('x2', ed).attr('y1', M.t - 6).attr('y2', H - M.b);
-  svg.append('text').attr('class', 'ref-text').attr('x', ed).attr('y', M.t - 10).attr('text-anchor', 'middle').text('יום הבחירות');
+  if (x.domain()[1] >= toDate('2026-10-27')) {
+    const ed = x(toDate('2026-10-27'));
+    svg.append('line').attr('class', 'ref-line').attr('x1', ed).attr('x2', ed).attr('y1', M.t - 6).attr('y2', H - M.b);
+    svg.append('text').attr('class', 'ref-text').attr('x', ed).attr('y', M.t - 10).attr('text-anchor', 'middle').text('יום הבחירות');
+  }
 }
 
 function placeLabels(items, minGap, lo, hi) {
@@ -96,18 +100,20 @@ function placeLabels(items, minGap, lo, hi) {
 
 function drawTrend() {
   const el = $('#pl-trend'); const { polls, parties } = S.polls;
-  const W = widthOf(el), H = 380, M = { t: 24, r: 120, b: 28, l: 34 };
+  const W = widthOf(el), H = 380, M = { t: 24, r: W < 560 ? 64 : 120, b: 28, l: 34 };
   const svg = svgEl(el, W, H);
   const x = timeScale(W, M);
   const sel = parties.filter(p => S.trendParties.has(p.id));
   const maxY = Math.max(10, d3.max(sel, p => d3.max(polls, q => q.seats[p.id] || 0)) || 10) + 2;
   const y = d3.scaleLinear().domain([0, maxY]).range([H - M.b, M.t]);
   svg.append('rect').attr('class', 'zone').attr('x', M.l).attr('width', W - M.l - M.r).attr('y', y(3.9)).attr('height', y(0) - y(3.9));
+  svg.append('line').attr('class', 'ref-line').attr('x1', M.l).attr('x2', W - M.r).attr('y1', y(3.9)).attr('y2', y(3.9)).style('opacity', .5);
+  svg.append('text').attr('class', 'lbl halo').attr('x', M.l + 4).attr('y', y(3.9) + 12).attr('text-anchor', 'end').text('אחוז החסימה (כ-4)');
   y.ticks(6).forEach(v => {
     svg.append('line').attr('class', 'gridline').attr('x1', M.l).attr('x2', W - M.r).attr('y1', y(v)).attr('y2', y(v));
     svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', y(v)).attr('dy', '.32em').attr('text-anchor', 'start').text(v);
   });
-  timeAxis(svg, x, H, M);
+  timeAxis(svg, x, H, M, W);
   const series = dailyAverages(toDate(polls[0].date), latestDate());
   const labels = [];
   sel.forEach(p => {
@@ -124,7 +130,7 @@ function drawTrend() {
   });
   placeLabels(labels, 15, M.t, H - M.b).forEach(o => {
     svg.append('text').attr('class', 'lbl-strong').attr('x', o.x + 10).attr('y', o.y).attr('dy', '.35em').attr('text-anchor', 'end')
-      .text(`${o.p.name} ${fmt1(o.v)}`);
+      .text(W < 560 ? `${o.p.letters} ${fmt1(o.v)}` : `${o.p.name} ${fmt1(o.v)}`);
   });
   // crosshair
   const cross = svg.append('line').attr('y1', M.t).attr('y2', H - M.b).attr('stroke', 'var(--ink)').attr('stroke-width', 1).attr('opacity', 0);
@@ -146,7 +152,7 @@ function pollBlocs(q, blocs = currentBlocs()) {
 }
 function drawBlocTrend() {
   const el = $('#pl-blocs'); const { polls } = S.polls;
-  const W = widthOf(el), H = 300, M = { t: 24, r: 58, b: 28, l: 34 };
+  const W = widthOf(el), H = 300, M = { t: 24, r: 46, b: 28, l: 34 };
   const svg = svgEl(el, W, H);
   const x = timeScale(W, M);
   const y = d3.scaleLinear().domain([0, 70]).range([H - M.b, M.t]);
@@ -154,7 +160,7 @@ function drawBlocTrend() {
     svg.append('line').attr('class', v === 61 ? 'ref-line' : 'gridline').attr('x1', M.l).attr('x2', W - M.r).attr('y1', y(v)).attr('y2', y(v));
     svg.append('text').attr('class', v === 61 ? 'ref-text' : 'lbl').attr('x', M.l - 8).attr('y', y(v)).attr('dy', '.32em').attr('text-anchor', 'start').text(v);
   });
-  timeAxis(svg, x, H, M);
+  timeAxis(svg, x, H, M, W);
   const series = dailyAverages(toDate(polls[0].date), latestDate()).map(s => ({ date: s.date, ...blocTotals(s.avg) }));
   const l = series[series.length - 1], labels = [];
   ['coal', 'opp', 'arab'].forEach(b => {
@@ -177,7 +183,8 @@ function drawHouse() {
   const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: 64, l: 0 };
   const H = M.t + rh * houses.length + 6;
   const svg = svgEl(el, W, H);
-  const color = d3.scaleLinear().domain([-3, 0, 3]).range([cssVar('--crit') || '#d03b3b', cssVar('--surface-2') || '#eee', cssVar('--coal')]).clamp(true);
+  // diverging pair that is not a bloc colour: brown = fewer seats than average, violet = more
+  const color = d3.scaleLinear().domain([-3, 0, 3]).range(['#b45f06', cssVar('--surface-2') || '#eee', '#5b5bd6']).interpolate(d3.interpolateLab).clamp(true);
   cols.forEach((p, j) => {
     const cx = W - LW - j * cw - cw / 2;
     svg.append('text').attr('class', 'lbl').attr('transform', `translate(${cx},${M.t - 8}) rotate(-50)`).attr('text-anchor', 'end').text(p.name);
@@ -185,14 +192,18 @@ function drawHouse() {
   houses.forEach((h, i) => {
     const yy = M.t + i * rh;
     const name = polls.find(p => p.house === h).house_he;
-    svg.append('text').attr('class', 'lbl-ink').attr('x', W - 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'start').style('font-size', W < 560 ? '10.5px' : null).text(W < 560 ? name.split(' (')[0] : `${name} (${he[h]._n})`);
+    let lab = W < 560 ? name.split(' (')[0] : `${name} (${he[h]._n})`;
+    const fs = W < 560 ? 10.5 : 12.5;
+    while (lab.length > 4 && textWidth(lab, fs) > LW - 8) lab = lab.slice(0, -2).trim() + '…';
+    svg.append('text').attr('class', 'lbl-ink').attr('x', W - 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'start').style('font-size', fs + 'px').text(lab)
+      .append('title').text(`${name} (${he[h]._n} סקרים)`);
     cols.forEach((p, j) => {
       const v = he[h][p.id];
       const cx = W - LW - (j + 1) * cw;
       svg.append('rect').attr('x', cx + 1).attr('y', yy + 1).attr('width', cw - 2).attr('height', rh - 2).attr('rx', 3).attr('fill', color(v))
         .call(s => bindTT(s, () => `<h4>${esc(name)} · ${esc(p.name)}</h4>${ttRows([['הטיה (מנדטים)', (v > 0 ? '+' : '') + fmt1(v)], ['סקרים', he[h]._n]])}`));
       if (Math.abs(v) >= 1 && cw >= 26) svg.append('text').attr('class', 'lbl').attr('x', cx + cw / 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'middle')
-        .style('direction', 'ltr').style('fill', Math.abs(v) > 2 ? '#fff' : 'var(--ink)').style('font-size', '10.5px').text((v > 0 ? '+' : '−') + fmt1(Math.abs(v)));
+        .style('direction', 'ltr').style('fill', onFill(color(v))).style('font-size', '10.5px').text((v > 0 ? '+' : '−') + fmt1(Math.abs(v)));
     });
   });
 }
