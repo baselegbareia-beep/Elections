@@ -1,0 +1,17 @@
+{
+  "election_day": "2026-10-27",
+  "results_url": "https://media26.bechirot.gov.il/files/expb.csv",
+  "results_url_localities": "https://media26.bechirot.gov.il/files/expc.csv",
+  "station_turnout_url": null,
+  "eligible": 7340000,
+  "notes": {
+    "eligible": "Replace with the official register size published by the CEC (בעלי זכות בחירה). 7,340,000 is the approximate figure reported before the election.",
+    "results_url": "Same path as 2019–2022 (media2X.bechirot.gov.il/files/expb.csv). Returned 404 on 9.10.2026; the CEC fills it on election night.",
+    "station_turnout_url": "Set to the CEC per-station turnout file once its address is known (ruling of 16.8.2026: published at least four times on election day).",
+    "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page.",
+    "envelopes_expected": "Valid votes expected in double envelopes, if the CEC announces it; otherwise estimated from 2022."
+  },
+  "projection_paused": false,
+  "pause_reason": "",
+  "envelopes_expected": null
+}

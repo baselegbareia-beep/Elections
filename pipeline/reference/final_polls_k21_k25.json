@@ -1,0 +1,452 @@
+{
+"2019a": [
+{
+"date": "2019-04-02",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Blue and White\":28,\"Likud\":29,\"Shas\":5,\"UTJ\":6,\"Hadash-Ta'al\":6,\"Labor\":14,\"URWP (Union of Right-Wing Parties)\":7,\"Yisrael Beiteinu\":0,\"Kulanu\":4,\"Meretz\":5,\"Ra'am-Balad\":5,\"Gesher\":0,\"New Right\":5,\"Zehut\":6}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-03",
+"pollster": "Dialog",
+"outlet": "Haaretz",
+"seats_json": "{\"Blue and White\":27,\"Likud\":30,\"Shas\":5,\"UTJ\":6,\"Hadash-Ta'al\":7,\"Labor\":10,\"URWP (Union of Right-Wing Parties)\":7,\"Yisrael Beiteinu\":4,\"Kulanu\":5,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":5,\"Zehut\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-03",
+"pollster": "Panels Politics",
+"outlet": "Walla!",
+"seats_json": "{\"Blue and White\":30,\"Likud\":29,\"Shas\":5,\"UTJ\":6,\"Hadash-Ta'al\":8,\"Labor\":10,\"URWP (Union of Right-Wing Parties)\":7,\"Yisrael Beiteinu\":4,\"Kulanu\":0,\"Meretz\":6,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-04",
+"pollster": "Maagar Mochot",
+"outlet": "Israel Hayom & i24 News",
+"seats_json": "{\"Blue and White\":32,\"Likud\":27,\"Shas\":5,\"UTJ\":8,\"Hadash-Ta'al\":6,\"Labor\":10,\"URWP (Union of Right-Wing Parties)\":6,\"Yisrael Beiteinu\":0,\"Kulanu\":6,\"Meretz\":8,\"Ra'am-Balad\":0,\"Gesher\":0,\"New Right\":6,\"Zehut\":6}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://israelhayom.com/2019/04/05/last-pre-election-poll-gives-gantz-32-seats-netanyahu-27"
+},
+{
+"date": "2019-04-04",
+"pollster": "Midgam",
+"outlet": "Yedioth Ahronoth",
+"seats_json": "{\"Blue and White\":30,\"Likud\":26,\"Shas\":5,\"UTJ\":7,\"Hadash-Ta'al\":7,\"Labor\":11,\"URWP (Union of Right-Wing Parties)\":5,\"Yisrael Beiteinu\":4,\"Kulanu\":5,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":5}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://en.globes.co.il/en/article-polls-likud-trails-but-has-majority-for-coalition-1001281136"
+},
+{
+"date": "2019-04-04",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Blue and White\":30,\"Likud\":26,\"Shas\":5,\"UTJ\":7,\"Hadash-Ta'al\":7,\"Labor\":10,\"URWP (Union of Right-Wing Parties)\":5,\"Yisrael Beiteinu\":5,\"Kulanu\":5,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":5}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://www.jpost.com/israel-news/post-poll-predicts-easy-win-for-right-585821"
+},
+{
+"date": "2019-04-04",
+"pollster": "Miskar",
+"outlet": "unknown",
+"seats_json": "{\"Blue and White\":28,\"Likud\":31,\"Shas\":6,\"UTJ\":6,\"Hadash-Ta'al\":7,\"Labor\":10,\"URWP (Union of Right-Wing Parties)\":8,\"Yisrael Beiteinu\":0,\"Kulanu\":0,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":7,\"Zehut\":8}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-04",
+"pollster": "Smith Consulting",
+"outlet": "Jerusalem Post",
+"seats_json": "{\"Blue and White\":28,\"Likud\":27,\"Shas\":6,\"UTJ\":6,\"Hadash-Ta'al\":6,\"Labor\":9,\"URWP (Union of Right-Wing Parties)\":6,\"Yisrael Beiteinu\":5,\"Kulanu\":5,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":4,\"New Right\":5,\"Zehut\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-04",
+"pollster": "TNS",
+"outlet": "Kan",
+"seats_json": "{\"Blue and White\":30,\"Likud\":31,\"Shas\":4,\"UTJ\":6,\"Hadash-Ta'al\":8,\"Labor\":8,\"URWP (Union of Right-Wing Parties)\":6,\"Yisrael Beiteinu\":0,\"Kulanu\":5,\"Meretz\":6,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":6}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://www.jpost.com/israel-news/post-poll-predicts-easy-win-for-right-585821"
+},
+{
+"date": "2019-04-05",
+"pollster": "Maagar Mochot",
+"outlet": "103FM",
+"seats_json": "{\"Blue and White\":31,\"Likud\":28,\"Shas\":6,\"UTJ\":7,\"Hadash-Ta'al\":7,\"Labor\":9,\"URWP (Union of Right-Wing Parties)\":7,\"Yisrael Beiteinu\":0,\"Kulanu\":6,\"Meretz\":7,\"Ra'am-Balad\":0,\"Gesher\":0,\"New Right\":6,\"Zehut\":6}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-05",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Blue and White\":28,\"Likud\":28,\"Shas\":5,\"UTJ\":6,\"Hadash-Ta'al\":6,\"Labor\":11,\"URWP (Union of Right-Wing Parties)\":7,\"Yisrael Beiteinu\":4,\"Kulanu\":4,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":6}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-04-05",
+"pollster": "Smith Consulting",
+"outlet": "Maariv",
+"seats_json": "{\"Blue and White\":29,\"Likud\":27,\"Shas\":6,\"UTJ\":7,\"Hadash-Ta'al\":7,\"Labor\":9,\"URWP (Union of Right-Wing Parties)\":6,\"Yisrael Beiteinu\":4,\"Kulanu\":5,\"Meretz\":5,\"Ra'am-Balad\":4,\"Gesher\":0,\"New Right\":6,\"Zehut\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_April_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+}
+],
+"2019s": [
+{
+"date": "2019-09-10",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Blue and White\":32,\"Likud\":31,\"Joint List\":9,\"Shas\":7,\"Yisrael Beiteinu\":9,\"UTJ\":7,\"Yamina\":9,\"Labor-Gesher\":6,\"Democratic Union\":6,\"Otzma Yehudit\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-10",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Blue and White\":32,\"Likud\":31,\"Joint List\":11,\"Shas\":6,\"Yisrael Beiteinu\":9,\"UTJ\":7,\"Yamina\":9,\"Labor-Gesher\":5,\"Democratic Union\":6,\"Otzma Yehudit\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-11",
+"pollster": "Maagar Mochot",
+"outlet": "Israel Hayom",
+"seats_json": "{\"Blue and White\":31,\"Likud\":33,\"Joint List\":12,\"Shas\":7,\"Yisrael Beiteinu\":9,\"UTJ\":7,\"Yamina\":7,\"Labor-Gesher\":6,\"Democratic Union\":4,\"Otzma Yehudit\":4}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://israelhayom.com/2019/09/13/poll-predicts-62-seats-for-left-wing-coalition-with-lieberman"
+},
+{
+"date": "2019-09-12",
+"pollster": "Kantar",
+"outlet": "Kan 11",
+"seats_json": "{\"Blue and White\":33,\"Likud\":31,\"Joint List\":11,\"Shas\":7,\"Yisrael Beiteinu\":7,\"UTJ\":8,\"Yamina\":9,\"Labor-Gesher\":5,\"Democratic Union\":5,\"Otzma Yehudit\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-12",
+"pollster": "Panels Politics",
+"outlet": "Knesset Channel",
+"seats_json": "{\"Blue and White\":32,\"Likud\":36,\"Joint List\":10,\"Shas\":7,\"Yisrael Beiteinu\":9,\"UTJ\":8,\"Yamina\":9,\"Labor-Gesher\":4,\"Democratic Union\":5,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-12",
+"pollster": "Smith Consulting",
+"outlet": "Maariv",
+"seats_json": "{\"Blue and White\":32,\"Likud\":33,\"Joint List\":12,\"Shas\":8,\"Yisrael Beiteinu\":8,\"UTJ\":7,\"Yamina\":9,\"Labor-Gesher\":5,\"Democratic Union\":6,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-12",
+"pollster": "Smith Consulting",
+"outlet": "103FM",
+"seats_json": "{\"Blue and White\":32,\"Likud\":33,\"Joint List\":12,\"Shas\":8,\"Yisrael Beiteinu\":9,\"UTJ\":7,\"Yamina\":9,\"Labor-Gesher\":4,\"Democratic Union\":6,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2019-09-13",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Blue and White\":32,\"Likud\":32,\"Joint List\":10,\"Shas\":7,\"Yisrael Beiteinu\":8,\"UTJ\":8,\"Yamina\":8,\"Labor-Gesher\":5,\"Democratic Union\":6,\"Otzma Yehudit\":4}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://www.timesofisrael.com/final-polls-have-netanyahu-edging-toward-majority-right-wing-bloc/"
+},
+{
+"date": "2019-09-13",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Blue and White\":32,\"Likud\":32,\"Joint List\":12,\"Shas\":6,\"Yisrael Beiteinu\":9,\"UTJ\":7,\"Yamina\":9,\"Labor-Gesher\":4,\"Democratic Union\":5,\"Otzma Yehudit\":4}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://www.timesofisrael.com/final-polls-have-netanyahu-edging-toward-majority-right-wing-bloc/"
+},
+{
+"date": "2019-09-13",
+"pollster": "Shvakim Panorama",
+"outlet": "HOT",
+"seats_json": "{\"Blue and White\":32,\"Likud\":33,\"Joint List\":11,\"Shas\":7,\"Yisrael Beiteinu\":9,\"UTJ\":8,\"Yamina\":7,\"Labor-Gesher\":4,\"Democratic Union\":5,\"Otzma Yehudit\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_September_2019_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+}
+],
+"2020": [
+{
+"date": "2020-02-24",
+"pollster": "Kantar",
+"outlet": "Kan 11",
+"seats_json": "{\"Likud\":34,\"Blue and White\":33,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":10,\"UTJ\":7,\"Yisrael Beiteinu\":7,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-24",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Likud\":33,\"Blue and White\":32,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":10,\"UTJ\":7,\"Yisrael Beiteinu\":8,\"Yamina\":8,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-25",
+"pollster": "Midgam",
+"outlet": "Walla!",
+"seats_json": "{\"Likud\":34,\"Blue and White\":34,\"Joint List\":13,\"Shas\":8,\"Labor-Gesher-Meretz\":9,\"UTJ\":8,\"Yisrael Beiteinu\":7,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-25",
+"pollster": "Panels Politics",
+"outlet": "103FM",
+"seats_json": "{\"Likud\":34,\"Blue and White\":32,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":9,\"UTJ\":7,\"Yisrael Beiteinu\":8,\"Yamina\":8,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-26",
+"pollster": "Direct Polls",
+"outlet": "Arutz Sheva",
+"seats_json": "{\"Likud\":35,\"Blue and White\":33,\"Joint List\":13,\"Shas\":9,\"Labor-Gesher-Meretz\":9,\"UTJ\":8,\"Yisrael Beiteinu\":6,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-27",
+"pollster": "Kantar",
+"outlet": "Kan 11",
+"seats_json": "{\"Likud\":35,\"Blue and White\":34,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":8,\"UTJ\":8,\"Yisrael Beiteinu\":6,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://en.globes.co.il/en/article-final-polls-show-likud-arab-list-strengthening-1001320118"
+},
+{
+"date": "2020-02-27",
+"pollster": "Maagar Mochot",
+"outlet": "Israel Hayom & i24 News",
+"seats_json": "{\"Likud\":33,\"Blue and White\":33,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":9,\"UTJ\":7,\"Yisrael Beiteinu\":7,\"Yamina\":9,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-27",
+"pollster": "Panels Politics",
+"outlet": "Maariv & The Jerusalem Post",
+"seats_json": "{\"Likud\":34,\"Blue and White\":34,\"Joint List\":13,\"Shas\":9,\"Labor-Gesher-Meretz\":9,\"UTJ\":7,\"Yisrael Beiteinu\":7,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2020-02-28",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Likud\":35,\"Blue and White\":33,\"Joint List\":14,\"Shas\":8,\"Labor-Gesher-Meretz\":9,\"UTJ\":8,\"Yisrael Beiteinu\":6,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://en.globes.co.il/en/article-final-polls-show-likud-arab-list-strengthening-1001320118"
+},
+{
+"date": "2020-02-28",
+"pollster": "Midgam Project",
+"outlet": "Channel 13",
+"seats_json": "{\"Likud\":33,\"Blue and White\":33,\"Joint List\":15,\"Shas\":8,\"Labor-Gesher-Meretz\":9,\"UTJ\":7,\"Yisrael Beiteinu\":7,\"Yamina\":8,\"Otzma Yehudit\":0}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://en.globes.co.il/en/article-final-polls-show-likud-arab-list-strengthening-1001320118"
+},
+{
+"date": "2020-02-28",
+"pollster": "Smith Consulting",
+"outlet": "Maariv",
+"seats_json": "{\"Likud\":35,\"Blue and White\":34,\"Joint List\":14,\"Shas\":9,\"Labor-Gesher-Meretz\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Yamina\":7,\"Otzma Yehudit\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2020_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+}
+],
+"2021": [
+{
+"date": "2021-03-15",
+"pollster": "Panels Politics",
+"outlet": "103FM",
+"seats_json": "{\"Likud\":28,\"Yesh Atid\":20,\"Shas\":7,\"Blue and White\":4,\"Labor\":5,\"UTJ\":7,\"Yamina\":11,\"Yisrael Beiteinu\":7,\"Joint List\":8,\"Meretz\":4,\"New Hope\":10,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-16",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Likud\":30,\"Yesh Atid\":18,\"Shas\":8,\"Blue and White\":4,\"Labor\":6,\"UTJ\":7,\"Yamina\":10,\"Yisrael Beiteinu\":7,\"Joint List\":8,\"Meretz\":4,\"New Hope\":10,\"Religious Zionism\":4,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-18",
+"pollster": "Direct Polls",
+"outlet": "unknown (self-published)",
+"seats_json": "{\"Likud\":32,\"Yesh Atid\":17,\"Shas\":9,\"Blue and White\":7,\"Labor\":4,\"UTJ\":7,\"Yamina\":8,\"Yisrael Beiteinu\":9,\"Joint List\":7,\"Meretz\":4,\"New Hope\":7,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-18",
+"pollster": "Kantar",
+"outlet": "Kan 11",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":19,\"Shas\":8,\"Blue and White\":4,\"Labor\":5,\"UTJ\":7,\"Yamina\":9,\"Yisrael Beiteinu\":7,\"Joint List\":8,\"Meretz\":4,\"New Hope\":9,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-18",
+"pollster": "Maagar Mochot",
+"outlet": "Israel Hayom",
+"seats_json": "{\"Likud\":29,\"Yesh Atid\":18,\"Shas\":9,\"Blue and White\":4,\"Labor\":5,\"UTJ\":7,\"Yamina\":10,\"Yisrael Beiteinu\":8,\"Joint List\":10,\"Meretz\":5,\"New Hope\":10,\"Religious Zionism\":5,\"Ra'am\":0,\"New Economic Party\":0}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv | https://www.israelhayom.com/2021/03/19/last-poll-before-election-shows-blocs-in-dead-heat/"
+},
+{
+"date": "2021-03-18",
+"pollster": "Panels Politics",
+"outlet": "Maariv",
+"seats_json": "{\"Likud\":30,\"Yesh Atid\":19,\"Shas\":8,\"Blue and White\":5,\"Labor\":5,\"UTJ\":6,\"Yamina\":10,\"Yisrael Beiteinu\":8,\"Joint List\":8,\"Meretz\":4,\"New Hope\":8,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-18",
+"pollster": "Smith Consulting",
+"outlet": "Mako",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":19,\"Shas\":8,\"Blue and White\":4,\"Labor\":5,\"UTJ\":7,\"Yamina\":9,\"Yisrael Beiteinu\":7,\"Joint List\":8,\"Meretz\":4,\"New Hope\":9,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-19",
+"pollster": "Camil Fuchs",
+"outlet": "Channel 13",
+"seats_json": "{\"Likud\":30,\"Yesh Atid\":18,\"Shas\":8,\"Blue and White\":4,\"Labor\":6,\"UTJ\":7,\"Yamina\":10,\"Yisrael Beiteinu\":6,\"Joint List\":8,\"Meretz\":4,\"New Hope\":10,\"Religious Zionism\":5,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+},
+{
+"date": "2021-03-19",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Likud\":32,\"Yesh Atid\":18,\"Shas\":8,\"Blue and White\":4,\"Labor\":6,\"UTJ\":7,\"Yamina\":9,\"Yisrael Beiteinu\":7,\"Joint List\":8,\"Meretz\":4,\"New Hope\":9,\"Religious Zionism\":4,\"Ra'am\":4,\"New Economic Party\":0}",
+"confidence": "medium (Wikipedia table via GitHub scrape, 2 scrapes agree)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2021_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://raw.githubusercontent.com/sina-chen/predictors_of_polling_errors/master/data/international/final_israel.csv"
+}
+],
+"2022": [
+{
+"date": "2022-10-24",
+"pollster": "Direct Polls",
+"outlet": "Channel 14",
+"seats_json": "{\"Likud\":34,\"Yesh Atid\":23,\"Religious Zionism (RZP-Otzma-Noam)\":12,\"National Unity\":12,\"Shas\":9,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":4,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-24",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Likud\":32,\"Yesh Atid\":24,\"Religious Zionism (RZP-Otzma-Noam)\":13,\"National Unity\":13,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":5,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-25",
+"pollster": "Camil Fuchs",
+"outlet": "Channel 13",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":27,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":11,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":4,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-25",
+"pollster": "Midgam",
+"outlet": "Galei Tzahal",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":12,\"National Unity\":13,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-25",
+"pollster": "Panels Politics",
+"outlet": "Mako / Knesset Channel",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":24,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":12,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-25",
+"pollster": "Smith Consulting",
+"outlet": "Galei Israel",
+"seats_json": "{\"Likud\":32,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":13,\"National Unity\":12,\"Shas\":9,\"UTJ\":7,\"Yisrael Beiteinu\":5,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-26",
+"pollster": "Maagar Mochot",
+"outlet": "Israel Hayom",
+"seats_json": "{\"Likud\":30,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":15,\"National Unity\":11,\"Shas\":9,\"UTJ\":7,\"Yisrael Beiteinu\":5,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":6,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://www.jta.org/?p=1657752"
+},
+{
+"date": "2022-10-27",
+"pollster": "Direct Polls",
+"outlet": "Channel 14",
+"seats_json": "{\"Likud\":34,\"Yesh Atid\":23,\"Religious Zionism (RZP-Otzma-Noam)\":12,\"National Unity\":13,\"Shas\":9,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":4,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://www.jta.org/?p=1657752"
+},
+{
+"date": "2022-10-27",
+"pollster": "Kantar",
+"outlet": "Kan 11",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":24,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":11,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":6,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://www.jta.org/?p=1657752"
+},
+{
+"date": "2022-10-27",
+"pollster": "Panels Politics (Menachem Lazar / Panel4All)",
+"outlet": "Maariv",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":12,\"Shas\":9,\"UTJ\":6,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":4,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "high (topline corroborated by news report)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv | https://www.jta.org/?p=1657752"
+},
+{
+"date": "2022-10-27",
+"pollster": "Smith Consulting",
+"outlet": "Galei Israel",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":11,\"Shas\":9,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-28",
+"pollster": "Camil Fuchs",
+"outlet": "Channel 13",
+"seats_json": "{\"Likud\":30,\"Yesh Atid\":27,\"Religious Zionism (RZP-Otzma-Noam)\":15,\"National Unity\":10,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":5,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":6,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":4}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+},
+{
+"date": "2022-10-28",
+"pollster": "Midgam",
+"outlet": "Channel 12 (N12)",
+"seats_json": "{\"Likud\":31,\"Yesh Atid\":25,\"Religious Zionism (RZP-Otzma-Noam)\":14,\"National Unity\":11,\"Shas\":8,\"UTJ\":7,\"Yisrael Beiteinu\":6,\"Hadash-Ta'al\":4,\"Ra'am\":4,\"Labor\":5,\"Balad\":0,\"Jewish Home\":0,\"Meretz\":5}",
+"confidence": "medium (Wikipedia table via GitHub scrape)",
+"source_url": "https://en.wikipedia.org/wiki/Opinion_polling_for_the_2022_Israeli_legislative_election | https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/processed/polls.csv"
+}
+]
+}
