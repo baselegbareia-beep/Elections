@@ -1,35 +1,54 @@
 {
-  "note": "Cumulative national turnout published by the Central Elections Committee during election day (share of all eligible voters, CEC estimate from polling-station reports and a CBS sample). 'final' is the official final turnout including double envelopes. Curated by hand from the CEC pages listed under 'sources'.",
+  "note": "Cumulative national turnout published by the Central Elections Committee during election day (share of all eligible voters). The hourly figures are estimates, not counts: polling-station secretaries' reports weighted with a sample survey run by the CBS for the committee (stated on the 2021 and 2022 pages). 'final' is the official final turnout including double envelopes. The 22:00 estimate missed the final by up to 0.7 points (2022: 71.3% announced on the night, 70.63% final). Curated by hand from the CEC pages listed under 'sources' and per election under 'source'.",
+  "release_lag": "Each figure is released 30–65 minutes after its cutoff (2022: the 19:00 figure was published at 19:30, Israel Hayom https://www.israelhayom.co.il/news/politics/article/13245058).",
   "hours": ["10:00", "12:00", "14:00", "16:00", "18:00", "20:00", "22:00"],
   "elections": {
-    "K19": {"label": "2013", "values": [11.4, 26.7, 38.3, 46.6, 55.5, 63.7, 66.6], "final": 67.8},
-    "K20": {"label": "2015", "values": [14.3, 26.9, 36.6, 45.4, 54.6, 62.4, 71.8], "final": 72.34},
-    "K21": {"label": "אפר׳ 2019", "values": [12.9, 24.8, 35.8, 42.8, 52.0, 61.3, 67.9], "final": 68.46},
+    "K19": {"label": "2013", "values": [11.4, 26.7, 38.3, 46.6, 55.5, 63.7, 66.6], "final": 67.8,
+            "source": "https://www.gov.il/apps/elections/elections-knesset-19/eng/about/PercentVote19_eng.html"},
+    "K20": {"label": "2015", "values": [14.3, 26.9, 36.6, 45.4, 54.6, 62.4, 71.8], "final": 72.34,
+            "source": "https://www.gov.il/apps/elections/heb/history/PercentTimes.html",
+            "note20": "18:00: the dedicated page https://www.gov.il/he/pages/voting-by-hour-20 prints 56.4% (and a final of 72.4%); the CEC history table (PercentTimes, also reproduced on the bechirot22/24 pages), the Jerusalem Post's live coverage of 17.3.2015 ('only 54.6% at 6 p.m.', https://www.jpost.com/Israel-News/Voter-turnout-at-10-am-higher-than-in-2013-election-394166) and the CEC's own April-2019 comparison (52.0%, 'down 2.6 from 2015') give 54.6%, which is kept here."},
+    "K21": {"label": "אפר׳ 2019", "values": [12.9, 24.8, 35.8, 42.8, 52.0, 61.3, 67.9], "final": 68.46,
+            "source": "https://bechirot22.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx"},
     "K22": {"label": "ספט׳ 2019", "values": [15.0, 26.8, 36.5, 44.3, 53.5, 63.7, 69.4], "final": 69.83,
-            "voters": [956856, 1713936, 2331974, 2834584, 3418531, 4071398, 4440141]},
+            "voters": [956856, 1713936, 2331974, 2834584, 3418531, 4071398, 4440141],
+            "source": "https://bechirot22.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx"},
     "K23": {"label": "2020", "values": [14.5, 27.6, 38.1, 47.0, 56.3, 65.6, 71.0], "final": 71.52,
-            "voters": [937871, 1782128, 2460462, 3033521, 3634474, 4233012, 4579931]},
+            "voters": [937871, 1782128, 2460462, 3033521, 3634474, 4233012, 4579931],
+            "source": "https://bechirot23.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx"},
     "K24": {"label": "2021", "values": [14.8, 25.4, 34.6, 42.3, 51.5, 60.9, 67.2], "final": 67.44,
-            "voters": [974557, 1669085, 2278032, 2782010, 3384482, 4008422, 4420677]},
+            "voters": [974557, 1669085, 2278032, 2782010, 3384482, 4008422, 4420677],
+            "source": "https://bechirot24.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx"},
     "K25": {"label": "2022", "values": [15.9, 28.4, 38.9, 47.5, 57.7, 66.3, 71.3], "final": 70.63,
             "voters": [1076076, 1925393, 2638581, 3224350, 3919367, 4498410, 4843023],
-            "extra": {"19:00": 62.5}, "note22": "71.3% was announced on election night; the gov.il table later shows 70.6% at 22:00, equal to the final count."}
+            "extra": {"19:00": 62.5},
+            "official_22": {"value": 70.6, "voters": 4794593},
+            "source": "https://www.gov.il/he/pages/voting-by-hour",
+            "note22": "71.3% (4,843,023 voters) was announced on election night and is kept as the 22:00 series value; the gov.il table's 22:00 row shows 70.6% / 4,794,593, equal to the final count ('official_22'). The gov.il page states the hourly figures were computed from a CBS sample survey. The 19:00 figure (62.5%, CBS sample stations only) was published for the first time in 2022, at about 19:30. Some English outlets misprinted the 10:00 count as 1,760,076; the official figure is 1,076,076."}
   },
   "arab_estimates": {
-    "note": "Not official. Estimates for Arab society published during election day 2022 by the aChord Center (Hebrew University): observers at sampled polling stations plus a model built on past results. Official final for Arab and Druze localities: 53.2%.",
+    "note": "Not official. Estimates for Arab society published during election day 2022, attributed by the Times of Israel live blog to the aChord Center (Hebrew University): surveys at sampled polling stations plus a model built on past results; aChord said it was the first time such turnout surveys were published during a vote. Official final for Arab and Druze localities: 53.2%.",
     "K25": {"source": "aChord Center, Hebrew University (via Times of Israel live blog, 1.11.2022)",
             "points": {"14:00": 17, "16:00": 23, "18:00": 30, "20:00": 44}, "projected_final": 54, "final": 53.2,
+            "points_note": {"18:00": "The Times of Israel entry attributes 30% to an unnamed 'research center'; a separate Times of Israel article attributes 30% to unofficial Channel 12 figures. Not confirmed as aChord's."},
             "urls": ["https://www.timesofisrael.com/liveblog_entry/research-center-arab-vote-stands-at-17-at-2-p-m/",
                      "https://www.timesofisrael.com/liveblog_entry/arab-turnout-trailing-far-behind-overall-voting-levels-research-center/",
-                     "https://www.timesofisrael.com/liveblog_entry/research-center-reports-uptick-in-arab-voter-turnout/"]}
+                     "https://www.timesofisrael.com/liveblog_entry/research-center-reports-uptick-in-arab-voter-turnout/",
+                     "https://www.timesofisrael.com/turnout-highest-in-decades-as-parties-project-tight-contest-to-drive-final-votes/",
+                     "https://www.timesofisrael.com/liveblog_entry/hadash-taal-says-arab-turnout-at-12-at-12-p-m/"]},
+    "verified": "partial: values 14:00=17, 16:00=23, 20:00=44, projected 54, final 53.2 confirmed from Times of Israel summaries on 9.10.2026; the 18:00 point only as reported, not as aChord's"
   },
   "sources": [
     "https://www.gov.il/he/pages/voting-by-hour",
     "https://bechirot24.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx",
+    "https://bechirot24.bechirot.gov.il/election/English/About/Pages/Hours_section_turnout_eng.aspx",
     "https://bechirot23.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx",
     "https://bechirot22.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx",
-    "https://bechirot23.bechirot.gov.il/election/about/Pages/CumulativeVotingPercentage20.aspx",
+    "https://bechirot24.bechirot.gov.il/election/about/Pages/CumulativeVotingPercentage20.aspx",
+    "https://www.gov.il/he/pages/voting-by-hour-20",
+    "https://www.gov.il/apps/elections/heb/history/PercentTimes.html",
     "https://www.gov.il/apps/elections/elections-knesset-19/eng/about/PercentVote19_eng.html"
   ],
-  "verified": false
+  "verified": true,
+  "verification": "9.10.2026: every percentage and every listed voter count of the seven national series was matched value-for-value against the official pages (bechirot22/23/24 'Hours_section_turnout', gov.il 'voting-by-hour', gov.il 'PercentVote19_eng' and the CEC history table 'PercentTimes'), read through search-engine extractions because gov.il and bechirot.gov.il were unreachable from the build network; the only conflict between official pages is 2015 at 18:00 (see K20.note20). 'final' values equal the official turnout in site/data/core.json. A maintainer should open the source pages from an unblocked connection before election day."
 }

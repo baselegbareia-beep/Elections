@@ -5,8 +5,12 @@ For each election the official CEC ballot file is tried first:
 If the CEC host cannot be reached (it is blocked from some cloud networks),
 the normalised public mirror of the same files is used instead and every file
 is checked against the mirror's published SHA-256 manifest. build_data.py
-prefers data/raw/official/* whenever it exists, and both paths reconcile to
-the official national totals.
+(official_path) looks for each election's official file in this order: the
+committed copy in data/official/ (stored by .github/workflows/official-data.yml
+with its SHA-256 in data/official/fetch_log.json), then a fresh download in
+data/raw/official/, then the mirror. So a committed copy takes precedence over
+a new download; compare the SHA-256 in the two logs to see whether the CEC file
+changed. Both paths reconcile to the official national totals.
 
 Every download is recorded in data/raw/fetch_log.json (url, bytes, sha256).
 

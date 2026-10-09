@@ -1,25 +1,25 @@
 [
  {
   "url": "https://media22.bechirot.gov.il/files/expb.csv",
-  "path": "data/raw/official/k22_expb.csv",
+  "path": "data/official/k22_expb.csv",
   "bytes": 1250507,
   "sha256": "672982b0c267c41cd1179497d5ee71f287bb45c46ebe34abfcde7b201a340c29"
  },
  {
   "url": "https://media23.bechirot.gov.il/files/expb.csv",
-  "path": "data/raw/official/k23_expb.csv",
+  "path": "data/official/k23_expb.csv",
   "bytes": 1239425,
   "sha256": "b3e2d9b4858eab61a97716e618c20e7b03c2469442928c6595adadd78176643c"
  },
  {
   "url": "https://media24.bechirot.gov.il/files/expb.csv",
-  "path": "data/raw/official/k24_expb.csv",
+  "path": "data/official/k24_expb.csv",
   "bytes": 1704000,
   "sha256": "4c228dbf4387854ccf2a0faaf117113db47cb29c544c98275b00e4765a56745d"
  },
  {
   "url": "https://media25.bechirot.gov.il/files/expb.csv",
-  "path": "data/raw/official/k25_expb.csv",
+  "path": "data/official/k25_expb.csv",
   "bytes": 1746531,
   "sha256": "07c71db1bf844d40cbc4d96c606550f2ada3c9f258287d08679180d0b9a413bc"
  }
