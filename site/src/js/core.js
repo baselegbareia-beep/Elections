@@ -18,6 +18,15 @@ const $$ = (sel, root = document) => [...root.querySelectorAll(sel)];
 const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
 const N = s => `<span class="num">${s}</span>`;
 const sum = a => a.reduce((x, y) => x + y, 0);
+// wall-clock date and time in Israel, as {y, m, d, h, min}
+function ilNow() {
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jerusalem', year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit', hour12: false })
+    .formatToParts(new Date()).map(x => [x.type, x.value]));
+  return { y: +p.year, m: +p.month, d: +p.day, h: +p.hour % 24, min: +p.minute };
+}
+const ilStamp = t => t.y * 1e8 + t.m * 1e6 + t.d * 1e4 + t.h * 100 + t.min;   // sortable yyyymmddhhmm
+const POLL_BAN = 202610240000;       // from the end of Friday 23.10 until polls close
+const ELECTION_DAY = [202610270600, 202610281200];   // the site opens on the election-day tab
 
 function isDark() {
   const t = document.documentElement.getAttribute('data-theme');

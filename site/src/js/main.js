@@ -59,7 +59,9 @@ async function boot() {
     e.preventDefault(); showTab(a.dataset.goto); window.scrollTo({ top: 0, behavior: 'smooth' });
   });
   const h = (location.hash || '').replace('#', '');
-  showTab(RENDER[h] ? h : 'overview', { push: false });
+  const t = ilStamp(ilNow());
+  const dflt = t >= ELECTION_DAY[0] && t < ELECTION_DAY[1] ? 'live' : 'overview';
+  showTab(RENDER[h] ? h : dflt, { push: false });
   // label gutters are measured on canvas; redraw once the web fonts are in
   if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(rerenderAll);
   // redraw charts on theme or width change
