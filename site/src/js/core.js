@@ -114,7 +114,7 @@ function widthOf(el, fallback = 800) { return Math.max(300, Math.round(el.getBou
 function baderOfer(votes, { seats = 120, threshold = 0.0325, agreements = [] } = {}) {
   const ids = Object.keys(votes);
   const total = sum(ids.map(k => votes[k]));
-  const q = ids.filter(k => votes[k] >= threshold * total);
+  const q = ids.filter(k => k[0] !== '_' && votes[k] >= threshold * total);   // '_other' = small lists not polled
   const res = Object.fromEntries(ids.map(k => [k, 0]));
   if (!q.length) return res;
   const quota = sum(q.map(k => votes[k])) / seats;
@@ -204,61 +204,91 @@ function pollAverage(asOf, { adjust = S.adjustHouse, halfLife = S.halfLife } = {
 }
 function latestDate() { return toDate(S.polls.polls[S.polls.polls.length - 1].date); }
 
-/* Seats → vote shares. Seat counts are rounded results of D'Hondt, so the
-   midpoint inverse v = (1 − w)(s + 0.5) / (120 + 0.5K) fits official K21–K25
-   results better than s/120 (RMSE 0.26 vs 0.37 points). A list averaging under
-   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: each
-   poll in the averaging window contributes its raw % from the CEC filing when
-   there is one, else the seat-implied share, or 2.2% for a poll that put the
-   list below the threshold. Same recency weights as the seat average. */
-const WASTED = 0.045, CENSORED = 0.022;
+/* Seats → vote shares. Seat counts are rounded results of D'Hondt, so a list
+   is placed at the midpoint of its seat band, s + 0.5 (better than s/120 on
+   K21–K25: RMSE 0.26 vs 0.37 points). A list that any poll in the window puts
+   at 0 seats is estimated poll by poll instead, so its estimate does not jump
+   when its average crosses 3 seats: each poll gives its raw % from the CEC
+   filing when there is one, else the seat-implied share, else an imputed share
+   below the threshold. Same recency weights as the seat average. The shares
+   add up to 100%: the lists estimated poll by poll and the small lists that
+   pollsters do not ask about (OTHER_SHARE) are fixed first, and the remaining
+   lists split the rest in proportion to s + 0.5. */
+const OTHER_SHARE = 0.008, CENSORED = 0.022, NEVER_SEATED = 0.01;
 function voteSharesFromAverage(avg) {
+  const { parties, polls } = S.polls;
+  const w = pollWeights(polls, latestDate(), S.halfLife);
+  const inWin = polls.map((q, i) => w[i] > 0);
+  const midPoll = (q, s) => {
+    const K = Object.values(q.seats).filter(x => x > 0).length;
+    return (1 - 0.045) * (s + 0.5) / (120 + 0.5 * K);
+  };
+  // imputed share for a poll that put the list below the threshold and has no filing
+  const zeroShare = id => {
+    const filed = polls.filter(q => !(q.seats[id] > 0) && q.pct && q.pct[id] != null).map(q => q.pct[id] / 100);
+    if (filed.length) return d3.mean(filed);                       // the list's own filed % in zero-seat polls
+    return polls.some(q => q.seats[id] > 0) ? CENSORED : NEVER_SEATED;
+  };
   const shares = {};
-  const K = S.polls.parties.filter(p => avg[p.id] >= 3).length;
-  const mid = s => (1 - WASTED) * (s + 0.5) / (120 + 0.5 * K);
-  const w = pollWeights(S.polls.polls, latestDate(), S.halfLife);
   S.shareBasis = {};
-  S.polls.parties.forEach(p => {
-    if (avg[p.id] >= 3) { shares[p.id] = mid(avg[p.id]); return; }
+  const byPoll = parties.filter(p => avg[p.id] < 3 || polls.some((q, i) => inWin[i] && !(q.seats[p.id] > 0)));
+  byPoll.forEach(p => {
+    const z = zeroShare(p.id);
     let sw = 0, sv = 0, filings = 0, n = 0;
-    S.polls.polls.forEach((q, i) => {
+    polls.forEach((q, i) => {
       if (!w[i]) return;
       const raw = q.pct && q.pct[p.id] != null ? q.pct[p.id] / 100 : null;
-      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? mid(q.seats[p.id]) : CENSORED;
+      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? midPoll(q, q.seats[p.id]) : z;
       sw += w[i]; sv += w[i] * est; n++; if (raw != null) filings++;
     });
-    shares[p.id] = sw ? sv / sw : CENSORED;
-    S.shareBasis[p.id] = { polls: n, filings };
+    shares[p.id] = sw ? sv / sw : z;
+    S.shareBasis[p.id] = { polls: n, filings, zero: z };
   });
-  shares._other = Math.max(0.005, 1 - sum(Object.values(shares)));
+  const rest = parties.filter(p => !(p.id in shares));
+  const left = 1 - OTHER_SHARE - sum(byPoll.map(p => shares[p.id]));
+  const units = sum(rest.map(p => avg[p.id] + 0.5));
+  rest.forEach(p => { shares[p.id] = left * (avg[p.id] + 0.5) / units; });
+  shares._other = OTHER_SHARE;    // counted in the total, never a list (see baderOfer)
   return shares;
 }
 
 /* ---------- Monte Carlo ---------- */
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-// Uncertainty calibrated on final-poll errors K21–K25 (Netanyahu-bloc RMSE ≈ 2.1 seats in the final week,
-// Arab lists ≈ 1.7 seats), widened for the ~2.5 weeks left before election day.
 // Surplus-vote agreements reported in the media (Sep–Oct 2026). The CEC publishes the official list after the 16 Oct filing deadline.
 const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List']];
-const SIM = { n: 4000, blocSd: 0.024, arabSd: 0.13, partySd: 0.10, addSd: 0.004, agreements: AGREEMENTS_2026 };
-function simulate(shares, blocOf, opts = {}) {
+/* Final-week poll average vs result, K21–K25 (final_polls.json): Netanyahu-bloc RMSE 2.4 seats,
+   Arab lists 1.55 seats. With about 2.5 weeks left the spread is widened by half, to about 3.6 and
+   2.3 seats. The bloc spread comes only from the swing between the two Jewish camps and the
+   Arab-turnout shock; list-level noise moves votes inside a camp and does not widen the blocs. */
+const SIM = { n: 4000, blocSd: 0.023, arabSd: 0.14, partySd: 0.12, addSd: 0.004, agreements: AGREEMENTS_2026 };
+const SIM_TARGET = { coal: 3.6, arab: 2.3 };
+function simulate(shares, opts = {}) {
   const o = { ...SIM, ...opts };
   const rnd = mulberry32(20261027);
-  const ids = S.polls.parties.map(p => p.id);
+  const parties = S.polls.parties, ids = parties.map(p => p.id);
+  // shocks follow the camps in the data, not the editable coalition blocs
+  const camp = Object.fromEntries(parties.map(p => [p.id, p.bloc]));
+  const camps = [...new Set(Object.values(camp))];
+  const members = Object.fromEntries(camps.map(c => [c, ids.filter(id => camp[id] === c)]));
+  const cs = sum(members.coal.map(id => shares[id])), os = sum(members.opp.map(id => shares[id]));
   const out = { seats: [], ids };
   for (let i = 0; i < o.n; i++) {
-    const swing = gauss(rnd) * o.blocSd;            // coalition vs opposition, shared by all lists in the bloc
+    const swing = gauss(rnd) * o.blocSd;            // points of the total vote, from the opposition to the Netanyahu camp
     const arab = Math.exp(gauss(rnd) * o.arabSd);   // Arab turnout shock, shared by the Arab lists
     const v = {};
-    ids.forEach(id => {
-      let x = shares[id];
-      const b = blocOf[id];
-      if (b === 'coal') x *= 1 + swing / 0.45;
-      else if (b === 'opp') x *= 1 - swing / 0.42;
-      if (b === 'arab') x *= arab;
-      x = x * Math.exp(gauss(rnd) * o.partySd) + gauss(rnd) * o.addSd;
-      v[id] = Math.max(0.0005, x);
+    camps.forEach(c => {
+      const m = members[c];
+      const base = m.map(id => {
+        let x = shares[id];
+        if (c === 'coal') x *= 1 + swing / cs;
+        else if (c === 'opp') x *= 1 - swing / os;
+        else if (c === 'arab') x *= arab;
+        return Math.max(0.0005, x);
+      });
+      const noisy = base.map(x => Math.max(0.0005, x * Math.exp(gauss(rnd) * o.partySd) + gauss(rnd) * o.addSd));
+      const k = sum(base) / sum(noisy);              // list noise redistributes votes within the camp
+      m.forEach((id, j) => { v[id] = noisy[j] * k; });
     });
     v._other = shares._other;
     const seats = baderOfer(v, { agreements: o.agreements });

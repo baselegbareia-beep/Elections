@@ -197,6 +197,7 @@ table.t th[data-sort]:hover { color: var(--ink); }
 #tt { position: fixed; z-index: 50; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--rule-strong); border-radius: 8px; box-shadow: var(--shadow); padding: 9px 11px; font-size: var(--t-sm); min-width: 160px; max-width: 290px; opacity: 0; transition: opacity .08s; }
 #tt.on { opacity: 1; }
 #tt h4 { margin: 0 0 4px; font-size: var(--t-md); }
+#tt .tt-note { margin: 6px 0 0; font-size: var(--t-xs); color: var(--muted); }
 #tt .row { display: flex; justify-content: space-between; gap: 14px; }
 #tt .row span:first-child { color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
 #tt .k { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }
@@ -445,7 +446,7 @@ function widthOf(el, fallback = 800) { return Math.max(300, Math.round(el.getBou
 function baderOfer(votes, { seats = 120, threshold = 0.0325, agreements = [] } = {}) {
   const ids = Object.keys(votes);
   const total = sum(ids.map(k => votes[k]));
-  const q = ids.filter(k => votes[k] >= threshold * total);
+  const q = ids.filter(k => k[0] !== '_' && votes[k] >= threshold * total);   // '_other' = small lists not polled
   const res = Object.fromEntries(ids.map(k => [k, 0]));
   if (!q.length) return res;
   const quota = sum(q.map(k => votes[k])) / seats;
@@ -535,61 +536,91 @@ function pollAverage(asOf, { adjust = S.adjustHouse, halfLife = S.halfLife } = {
 }
 function latestDate() { return toDate(S.polls.polls[S.polls.polls.length - 1].date); }
 
-/* Seats → vote shares. Seat counts are rounded results of D'Hondt, so the
-   midpoint inverse v = (1 − w)(s + 0.5) / (120 + 0.5K) fits official K21–K25
-   results better than s/120 (RMSE 0.26 vs 0.37 points). A list averaging under
-   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: each
-   poll in the averaging window contributes its raw % from the CEC filing when
-   there is one, else the seat-implied share, or 2.2% for a poll that put the
-   list below the threshold. Same recency weights as the seat average. */
-const WASTED = 0.045, CENSORED = 0.022;
+/* Seats → vote shares. Seat counts are rounded results of D'Hondt, so a list
+   is placed at the midpoint of its seat band, s + 0.5 (better than s/120 on
+   K21–K25: RMSE 0.26 vs 0.37 points). A list that any poll in the window puts
+   at 0 seats is estimated poll by poll instead, so its estimate does not jump
+   when its average crosses 3 seats: each poll gives its raw % from the CEC
+   filing when there is one, else the seat-implied share, else an imputed share
+   below the threshold. Same recency weights as the seat average. The shares
+   add up to 100%: the lists estimated poll by poll and the small lists that
+   pollsters do not ask about (OTHER_SHARE) are fixed first, and the remaining
+   lists split the rest in proportion to s + 0.5. */
+const OTHER_SHARE = 0.008, CENSORED = 0.022, NEVER_SEATED = 0.01;
 function voteSharesFromAverage(avg) {
+  const { parties, polls } = S.polls;
+  const w = pollWeights(polls, latestDate(), S.halfLife);
+  const inWin = polls.map((q, i) => w[i] > 0);
+  const midPoll = (q, s) => {
+    const K = Object.values(q.seats).filter(x => x > 0).length;
+    return (1 - 0.045) * (s + 0.5) / (120 + 0.5 * K);
+  };
+  // imputed share for a poll that put the list below the threshold and has no filing
+  const zeroShare = id => {
+    const filed = polls.filter(q => !(q.seats[id] > 0) && q.pct && q.pct[id] != null).map(q => q.pct[id] / 100);
+    if (filed.length) return d3.mean(filed);                       // the list's own filed % in zero-seat polls
+    return polls.some(q => q.seats[id] > 0) ? CENSORED : NEVER_SEATED;
+  };
   const shares = {};
-  const K = S.polls.parties.filter(p => avg[p.id] >= 3).length;
-  const mid = s => (1 - WASTED) * (s + 0.5) / (120 + 0.5 * K);
-  const w = pollWeights(S.polls.polls, latestDate(), S.halfLife);
   S.shareBasis = {};
-  S.polls.parties.forEach(p => {
-    if (avg[p.id] >= 3) { shares[p.id] = mid(avg[p.id]); return; }
+  const byPoll = parties.filter(p => avg[p.id] < 3 || polls.some((q, i) => inWin[i] && !(q.seats[p.id] > 0)));
+  byPoll.forEach(p => {
+    const z = zeroShare(p.id);
     let sw = 0, sv = 0, filings = 0, n = 0;
-    S.polls.polls.forEach((q, i) => {
+    polls.forEach((q, i) => {
       if (!w[i]) return;
       const raw = q.pct && q.pct[p.id] != null ? q.pct[p.id] / 100 : null;
-      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? mid(q.seats[p.id]) : CENSORED;
+      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? midPoll(q, q.seats[p.id]) : z;
       sw += w[i]; sv += w[i] * est; n++; if (raw != null) filings++;
     });
-    shares[p.id] = sw ? sv / sw : CENSORED;
-    S.shareBasis[p.id] = { polls: n, filings };
+    shares[p.id] = sw ? sv / sw : z;
+    S.shareBasis[p.id] = { polls: n, filings, zero: z };
   });
-  shares._other = Math.max(0.005, 1 - sum(Object.values(shares)));
+  const rest = parties.filter(p => !(p.id in shares));
+  const left = 1 - OTHER_SHARE - sum(byPoll.map(p => shares[p.id]));
+  const units = sum(rest.map(p => avg[p.id] + 0.5));
+  rest.forEach(p => { shares[p.id] = left * (avg[p.id] + 0.5) / units; });
+  shares._other = OTHER_SHARE;    // counted in the total, never a list (see baderOfer)
   return shares;
 }
 
 /* ---------- Monte Carlo ---------- */
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-// Uncertainty calibrated on final-poll errors K21–K25 (Netanyahu-bloc RMSE ≈ 2.1 seats in the final week,
-// Arab lists ≈ 1.7 seats), widened for the ~2.5 weeks left before election day.
 // Surplus-vote agreements reported in the media (Sep–Oct 2026). The CEC publishes the official list after the 16 Oct filing deadline.
 const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List']];
-const SIM = { n: 4000, blocSd: 0.024, arabSd: 0.13, partySd: 0.10, addSd: 0.004, agreements: AGREEMENTS_2026 };
-function simulate(shares, blocOf, opts = {}) {
+/* Final-week poll average vs result, K21–K25 (final_polls.json): Netanyahu-bloc RMSE 2.4 seats,
+   Arab lists 1.55 seats. With about 2.5 weeks left the spread is widened by half, to about 3.6 and
+   2.3 seats. The bloc spread comes only from the swing between the two Jewish camps and the
+   Arab-turnout shock; list-level noise moves votes inside a camp and does not widen the blocs. */
+const SIM = { n: 4000, blocSd: 0.023, arabSd: 0.14, partySd: 0.12, addSd: 0.004, agreements: AGREEMENTS_2026 };
+const SIM_TARGET = { coal: 3.6, arab: 2.3 };
+function simulate(shares, opts = {}) {
   const o = { ...SIM, ...opts };
   const rnd = mulberry32(20261027);
-  const ids = S.polls.parties.map(p => p.id);
+  const parties = S.polls.parties, ids = parties.map(p => p.id);
+  // shocks follow the camps in the data, not the editable coalition blocs
+  const camp = Object.fromEntries(parties.map(p => [p.id, p.bloc]));
+  const camps = [...new Set(Object.values(camp))];
+  const members = Object.fromEntries(camps.map(c => [c, ids.filter(id => camp[id] === c)]));
+  const cs = sum(members.coal.map(id => shares[id])), os = sum(members.opp.map(id => shares[id]));
   const out = { seats: [], ids };
   for (let i = 0; i < o.n; i++) {
-    const swing = gauss(rnd) * o.blocSd;            // coalition vs opposition, shared by all lists in the bloc
+    const swing = gauss(rnd) * o.blocSd;            // points of the total vote, from the opposition to the Netanyahu camp
     const arab = Math.exp(gauss(rnd) * o.arabSd);   // Arab turnout shock, shared by the Arab lists
     const v = {};
-    ids.forEach(id => {
-      let x = shares[id];
-      const b = blocOf[id];
-      if (b === 'coal') x *= 1 + swing / 0.45;
-      else if (b === 'opp') x *= 1 - swing / 0.42;
-      if (b === 'arab') x *= arab;
-      x = x * Math.exp(gauss(rnd) * o.partySd) + gauss(rnd) * o.addSd;
-      v[id] = Math.max(0.0005, x);
+    camps.forEach(c => {
+      const m = members[c];
+      const base = m.map(id => {
+        let x = shares[id];
+        if (c === 'coal') x *= 1 + swing / cs;
+        else if (c === 'opp') x *= 1 - swing / os;
+        else if (c === 'arab') x *= arab;
+        return Math.max(0.0005, x);
+      });
+      const noisy = base.map(x => Math.max(0.0005, x * Math.exp(gauss(rnd) * o.partySd) + gauss(rnd) * o.addSd));
+      const k = sum(base) / sum(noisy);              // list noise redistributes votes within the camp
+      m.forEach((id, j) => { v[id] = noisy[j] * k; });
     });
     v._other = shares._other;
     const seats = baderOfer(v, { agreements: o.agreements });
@@ -654,7 +685,7 @@ function ensureSims() {
   S.avg = av;
   S.shares = voteSharesFromAverage(av.avg);
   S.seatsNow = baderOfer({ ...S.shares }, { agreements: AGREEMENTS_2026 });
-  S.sims = simulate(S.shares, currentBlocs());
+  S.sims = simulate(S.shares);
   return S.sims;
 }
 function blocTotals(seats, blocs = currentBlocs()) {
@@ -714,7 +745,7 @@ function renderOverview() {
       <p class="sub">כמה מנדטים מקבל גוש נתניהו ב-${fmt(sims.seats.length)} סימולציות. כל עמודה היא מספר מנדטים אפשרי, גובהה הוא שכיחותו.</p>
       <div class="chart" id="ov-hist"></div>
       <div class="legend"><span><i style="background:var(--coal)"></i>61 ומעלה (רוב)</span><span><i style="background:var(--rule-strong)"></i>פחות מ-61</span></div>
-      <p class="foot">מודל הדגמה. אי-הוודאות מכוילת לפי טעויות הסקרים האחרונים ב-2019–2022: תזוזה משותפת בין הגושים (סטיית תקן 2.4 נק׳ אחוז, כ-3 מנדטים), זעזוע משותף להצבעה לרשימות הערביות (13%) ורעש לכל רשימה. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
+      <p class="foot">מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי, הפיזור הורחב בחצי: סטיית התקן של הגוש בתרחישים היא ${fmt1(d3.deviation(coalSim.tot))} מנדטים. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
     </div>
 
     <div class="card c5">
@@ -747,7 +778,7 @@ function rate(eid, sector) { const s = E(eid).sectors[sector]; return 100 * s.vo
 
 function drawSeatBars(el, av) {
   const parties = [...S.polls.parties].filter(p => av.hi[p.id] > 0 || av.avg[p.id] > 0.3).sort((a, b) => av.avg[b.id] - av.avg[a.id]);
-  const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 10, l: 40 };
+  const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 14, l: 40 };
   const H = M.t + M.b + rowH * parties.length;
   const svg = svgEl(el, W, H);
   const maxV = Math.max(30, d3.max(parties, p => av.hi[p.id]));
@@ -757,7 +788,7 @@ function drawSeatBars(el, av) {
   svg.append('text').attr('class', 'lbl').attr('x', x(0)).attr('y', M.t - 10).attr('text-anchor', 'start').text('אזור אחוז החסימה');
   [0, 10, 20, 30].filter(v => v <= maxV).forEach(v => {
     svg.append('line').attr('class', 'gridline').attr('x1', x(v)).attr('x2', x(v)).attr('y1', M.t - 4).attr('y2', H - M.b);
-    svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H).attr('text-anchor', 'middle').text(v);
+    svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 3).attr('text-anchor', 'middle').text(v);
   });
   const g = svg.selectAll('g.row').data(parties).join('g').attr('transform', (d, i) => `translate(0,${y(i)})`);
   // SVG text inherits the page's RTL direction: anchor 'start' = right edge.
@@ -1016,7 +1047,7 @@ function drawHouse() {
   const he = houseEffects(polls, parties);
   const houses = Object.keys(he).filter(h => he[h]._n >= 2).sort((a, b) => he[b]._n - he[a]._n);
   const cols = parties.filter(p => d3.mean(polls, q => q.seats[p.id] || 0) >= 3);
-  const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: 64, l: 0 };
+  const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: Math.ceil(14 + Math.sin(50 * Math.PI / 180) * d3.max(cols, p => textWidth(p.name, 11.5))), l: 0 };
   const H = M.t + rh * houses.length + 6;
   const svg = svgEl(el, W, H);
   // diverging pair that is not a bloc colour: brown = fewer seats than average, violet = more
@@ -1056,7 +1087,7 @@ function drawPollTable() {
 /* ===================== coalition builder + scenario generator ===================== */
 S.scn = { arabT: 53, swing: 0 };   // slider value; 53 stands for the 53.2% baseline
 const ARAB_T0 = 53.2;        // assumed Arab turnout implied by the polls (K25, Arab and Druze localities)
-const ARAB_FROM_SECTOR = 0.881; // share of Arab-list votes cast in Arab boxes, K25 (computed from ballot data)
+const ARAB_FROM_SECTOR = 0.878; // share of Arab-list votes cast in Arab boxes, K25 (computed from ballot data)
 
 function scenarioShares(arabT = S.scn.arabT, swing = S.scn.swing) {
   ensureSims();
@@ -1067,7 +1098,7 @@ function scenarioShares(arabT = S.scn.arabT, swing = S.scn.swing) {
   Object.keys(base).forEach(k => { v[k] = base[k]; });
   // Arab turnout: Arab-list votes scale with turnout for the part cast in the Arab sector
   S.polls.parties.forEach(p => {
-    if (blocs[p.id] === 'arab' || p.bloc === 'arab') v[p.id] = base[p.id] * (ARAB_FROM_SECTOR * arabT / ARAB_T0 + (1 - ARAB_FROM_SECTOR));
+    if (p.bloc === 'arab') v[p.id] = base[p.id] * (ARAB_FROM_SECTOR * arabT / ARAB_T0 + (1 - ARAB_FROM_SECTOR));
   });
   // uniform swing between the Netanyahu bloc and the Jewish opposition (points of the total vote)
   const coal = S.polls.parties.filter(p => blocs[p.id] === 'coal'), opp = S.polls.parties.filter(p => blocs[p.id] === 'opp');
@@ -1199,7 +1230,7 @@ function hemicycleLayout(n = 120, rows = 6) {
   return pts.sort((p, q) => p.a - q.a || q.r - p.r);   // a=0 is the right-hand end
 }
 function drawHemicycle(el, seats) {
-  const W = widthOf(el, 640), H = Math.round(W * 0.52);
+  const W = widthOf(el, 640), H = Math.round(W * 0.52) + 22;
   const svg = svgEl(el, W, H);
   const pts = hemicycleLayout();
   const R = W * 0.47, cx = W / 2, cy = H - 12;
@@ -1448,7 +1479,7 @@ function drawArabComposition(el) {
 function drawArabRegions(el) {
   const e = S.arabRegEl, ev = E(e);
   const regs = ['negev', 'north_bedouin', 'wadi_ara', 'triangle_south', 'nazareth', 'galilee', 'christian', 'mixed_town', 'jerusalem', 'mixed'];
-  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? Math.max(168, d3.max(regs, k => textWidth(S.core.arab_regions[k] || '', 12.5, 600)) + 10) : 112, b: 8, l: W >= 560 ? 64 : 48 };
+  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? Math.max(168, d3.max(regs, k => textWidth(S.core.arab_regions[k] || '', 12.5, 600)) + 10) : 112, b: 8, l: W >= 560 ? 64 : Math.ceil(textWidth('100%', 22, 700)) + 12 };
   const H = M.t + M.b + rowH * regs.length;
   const svg = svgEl(el, W, H);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
@@ -1482,7 +1513,8 @@ function drawArabRegions(el) {
 }
 
 function drawArabPolls(el) {
-  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(150, W * 0.38), b: 26, l: 28 };
+  const endW = d3.max(S.polls.parties.filter(p => p.bloc === 'arab'), p => textWidth(`${p.name} 00.0`, 12.5, 600)) + 14;
+  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(Math.max(150, endW), W * 0.5), b: 26, l: 28 };
   const svg = svgEl(el, W, H);
   const { polls, parties } = S.polls;
   const x = d3.scaleUtc().domain([d3.timeDay.offset(toDate(polls[0].date), -2), d3.timeDay.offset(latestDate(), 2)]).range([M.l, W - M.r]);
@@ -1514,7 +1546,9 @@ function drawSankey(el) {
   const color = (eid, id) => id === 'abstain' ? 'var(--rule-strong)' : id === 'other' ? 'var(--muted)' : famColor(famOf(eid, id));
   const total = sum(t.src_mass);
   const flows = [];
-  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) flows.push({ s, d, v, i, j }); }));
+  // 90% bootstrap interval for each cell; flows whose interval is wider than 25 points are faded
+  const ci = (i, j) => { const m = t.matrix[i][j], [lo, hi] = t.ci ? t.ci[i][j] : [m, m]; return [Math.min(lo, m), Math.max(hi, m)]; };
+  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) { const [lo, hi] = ci(i, j); flows.push({ s, d, v, i, j, lo, hi, shaky: hi - lo > 0.25 }); } }));
   const srcNodes = t.src.map((id, i) => ({ id, v: sum(flows.filter(f => f.i === i).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const dstNodes = t.dst.map((id, j) => ({ id, v: sum(flows.filter(f => f.j === j).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const tot = sum(srcNodes.map(n => n.v));
@@ -1537,8 +1571,9 @@ function drawSankey(el) {
     const ys = sN.y0 + sN.off + h / 2, yd = dN.y0 + dN.off + h / 2; sN.off += h; dN.off += h;
     const mid = (xs + nodeW + xd) / 2;
     svg.append('path').attr('d', `M${xs + nodeW},${ys} C${mid},${ys} ${mid},${yd} ${xd},${yd}`).attr('fill', 'none')
-      .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', .42).attr('stroke-width', Math.max(1, h))
-      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', pct(100 * t.matrix[f.i][f.j], 0)]])}`));
+      .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', f.shaky ? .14 : .42).attr('stroke-width', Math.max(1, h))
+      .attr('stroke-dasharray', f.shaky && h > 3 ? '6 3' : null)
+      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', `${pct(100 * t.matrix[f.i][f.j], 0)} (טווח 90%: ${Math.round(100 * f.lo)}–${Math.round(100 * f.hi)}%)`]])}${f.shaky ? '<p class="tt-note">אומדן לא יציב: הטווח רחב מ-25 נקודות.</p>' : ''}`));
   });
   const halo = sel => narrow ? sel.attr('class', 'lbl-ink halo') : sel;
   srcNodes.forEach(n => {
@@ -1551,7 +1586,7 @@ function drawSankey(el) {
     if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xd - 4 : xd + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
       .attr('text-anchor', narrow ? 'start' : 'end').text(nodeLabel(t.to, n)));
   });
-  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת ברמת הקלפי, ${fmt(t.matched)} קלפיות שהותאמו). אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
+  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת). קלפי מותאמת לקלפי באותו מספר רק כשמספר בעלי הזכות בה דומה (${fmt(t.matched)} זוגות); שאר הקלפיות בכל יישוב מאוחדות ליחידה אחת. היחידות מכסות ${pct(100 * t.coverage, 0)} מבעלי הזכות. זרמים חיוורים ומקווקווים: טווח 90% (bootstrap) רחב מ-25 נקודות. ערכים של 0% או 100% נובעים מהאילוץ ולא מהנתונים. אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
 }
 
 function drawMixed(el) {
@@ -1850,7 +1885,15 @@ async function drawLocality() {
     </div>`;
   drawLocTrend($('#loc-trend'), l);
   $('#loc-turn').innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
-  const b = await loadBallots(eid);
+  let b;
+  try { b = await loadBallots(eid); } catch (err) {
+    console.error(err);
+    if (S.locSel === l.code && S.election === eid) {
+      $('#loc-ballots').innerHTML = '<p class="empty">טעינת הקלפיות נכשלה. <button type="button" class="slip" id="loc-retry">ניסיון נוסף</button></p>';
+      $('#loc-retry').onclick = () => drawLocality();
+    }
+    return;
+  }
   if (S.locSel !== l.code || S.election !== eid) return;
   drawBallotTable($('#loc-ballots'), l, b, eid);
 }
@@ -1933,7 +1976,7 @@ function renderSectors() {
   <div class="section-head"><div>
     <span class="eyebrow">פילוח · ערבים, יהודים, דרוזים, חרדים</span>
     <h2>מי מצביע, ולמי</h2>
-    <p>השוואה בין קבוצות האוכלוסייה על בסיס תוצאות הקלפיות. קבוצות שהוגדרו לפי היישוב (ערבים, דרוזים) הן מדויקות יחסית; ״קלפיות חרדיות״ מוגדרות לפי ההצבעה עצמה (יהדות התורה וש״ס מעל 70%) ולכן הן אומדן בלבד.</p>
+    <p>השוואה בין קבוצות האוכלוסייה על בסיס תוצאות הקלפיות. קבוצות שהוגדרו לפי היישוב (ערבים, דרוזים) הן מדויקות יחסית; ״קלפיות חרדיות״ מוגדרות לפי ההצבעה עצמה (יהדות התורה וש״ס מעל 70% בחציון חמש המערכות) ולכן הן אומדן בלבד.</p>
   </div></div>
   <div class="controls"><span class="ctl-label">בחירות</span>${seg('sc-el', ELS.map(e => [e, E(e).short]), S.sectorElection)}</div>
   <div class="grid">
@@ -2039,7 +2082,7 @@ function drawScatter() {
     svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', y(v)).attr('dy', '.32em').attr('text-anchor', 'start').text(v + '%');
   });
   d3.range(1, 11).forEach(v => svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 22).attr('text-anchor', 'middle').text(v));
-  svg.append('text').attr('class', 'lbl').attr('x', (M.l + W - M.r) / 2).attr('y', H - 4).attr('text-anchor', 'middle').text('אשכול חברתי-כלכלי של הלמ״ס, 2021 (1 = הנמוך, 10 = הגבוה)');
+  svg.append('text').attr('class', 'lbl').attr('x', (M.l + W - M.r) / 2).attr('y', H - 4).attr('text-anchor', 'middle').text(W < 560 ? 'אשכול חברתי-כלכלי (1 נמוך, 10 גבוה)' : 'אשכול חברתי-כלכלי של הלמ״ס, 2021 (1 = הנמוך, 10 = הגבוה)');
   const col = { arab: 'var(--arab)', druze: 'var(--druze)', jewish: 'var(--jewish)', mixed: 'var(--muted)' };
   // deterministic jitter so the dots in one cluster spread out
   const jit = l => ((l.code * 9301 + 49297) % 233280) / 233280 - 0.5;
@@ -2209,8 +2252,8 @@ function renderMethod() {
       <h4>מגזרים</h4>
       <ul>
         <li><b>יישובים ערביים ודרוזיים</b>: ההגדרה המקובלת במחקר. כוללת בדואים בנגב (גם ״שבטים״, שהם יחידות רישום), דרוזים בגליל, בכרמל ובגולן, וע׳ג׳ר.</li>
-        <li><b>קלפיות ערביות בערים מעורבות</b>: בחיפה, תל אביב-יפו, לוד, רמלה, עכו, מעלות-תרשיחא, נוף הגליל וירושלים, קלפי שבה הרשימות הערביות קיבלו לפחות 50% מהקולות הכשרים.</li>
-        <li><b>קלפיות חרדיות</b>: קלפי שבה יהדות התורה וש״ס קיבלו יחד לפחות 70%. ההגדרה נשענת על ההצבעה עצמה, ולכן משמשת רק לתיאור ולא להסקה.</li>
+        <li><b>קלפיות ערביות בערים מעורבות</b>: בחיפה, תל אביב-יפו, לוד, רמלה, עכו, מעלות-תרשיחא, נוף הגליל וירושלים, קלפי שבה הרשימות הערביות קיבלו לפחות 50% מהקולות הכשרים (חציון על פני המערכות שבהן הקלפי קיימת, כך שאותן קלפיות נספרות בכל חמש המערכות).</li>
+        <li><b>קלפיות חרדיות</b>: קלפי שבה יהדות התורה וש״ס קיבלו יחד לפחות 70% (באותו חציון). ההגדרה נשענת על ההצבעה עצמה, ולכן משמשת רק לתיאור ולא להסקה.</li>
         <li><b>מעטפות כפולות</b>: חיילים, נציגויות בחו״ל, אסירים, מאושפזים ועובדי ועדות. אינן משויכות לקלפי ולכן נכללות ב״יהודים ואחרים״.</li>
       </ul>
       <h4>גושים</h4>
@@ -2223,9 +2266,9 @@ function renderMethod() {
       <h4>ממוצע הסקרים</h4>
       <p>ממוצע משוקלל של הסקרים מ-28 הימים האחרונים. משקל לפי עדכניות (מחצית אחרי ${S.halfLife} ימים), לפי גודל המדגם (שורש, בתחום 0.7–1.4), וחלוקה בשורש מספר הסקרים של אותה חברה בחלון (פילבר ודיירקט פולס, שבבעלות אחת, נספרות יחד). תיקון הטיית סוקרים: הסטייה הממוצעת של כל סוקר מממוצע כל הסקרים, מכווצת לאפס לפי <code>k/(k+3)</code>.</p>
       <h4>מסקרים לקולות ולמנדטים</h4>
-      <p>הסקרים מדווחים מנדטים. הם מומרים לשיעור קולות בנוסחת אמצע המרווח, <code>(s+0.5)/(120+0.5K)</code>, שמשחזרת את תוצאות 2019–2022 טוב יותר מחלוקה פשוטה ב-120, בהנחה ש-4.5% מהקולות הולכים לרשימות שלא עוברות. לרשימות שנמדדו באפס נלקח האחוז הגולמי מקובץ הדיווח הרשמי כשהוא קיים. המנדטים מחושבים מחדש בשיטת בדר-עופר, עם אחוז חסימה של 3.25% והסכמי העודפים שדווחו.</p>
+      <p>הסקרים מדווחים מנדטים. רשימה שלפחות סקר אחד בחלון נתן לה אפס מוערכת סקר אחר סקר: האחוז הגולמי מקובץ הדיווח הרשמי כשהוא קיים, אחרת השיעור שנגזר מהמנדטים, ובסקר שנתן אפס בלי קובץ דיווח, האחוז הממוצע של אותה רשימה בקובצי הדיווח שבהם קיבלה אפס (בלי קובץ כזה: 2.2% לרשימה שעברה בסקר כלשהו, 1% לרשימה שלא עברה באף סקר). ל"אחרות" שלא נשאלות בסקרים מוקצים 0.8%. שאר הרשימות מתחלקות ביתרה ביחס ל-<code>s+0.5</code> (אמצע מרווח המנדטים), כך שסך הקולות הוא 100%. המנדטים מחושבים מחדש בשיטת בדר-עופר, עם אחוז חסימה של 3.25% והסכמי העודפים שדווחו.</p>
       <h4>הסימולציה</h4>
-      <p>${fmt(SIM.n)} הגרלות. בכל הגרלה: תזוזה משותפת בין גוש נתניהו לאופוזיציה (סטיית תקן 2.4 נק׳ אחוז), זעזוע משותף לכל הרשימות הערביות (13%), רעש לכל רשימה (10% יחסי). הפרמטרים מכוילים לטעויות הסקרים האחרונים ב-2019–2022 ומורחבים לזמן שנותר עד הבחירות. מודל הדגמה, לא תחזית.</p>
+      <p>${fmt(SIM.n)} הגרלות. בכל הגרלה: תזוזה בין המחנה של גוש נתניהו למחנה האופוזיציה היהודית (סטיית תקן ${fmt1(100 * SIM.blocSd)} נק׳ מכלל הקולות), זעזוע משותף לרשימות הערביות (${Math.round(100 * SIM.arabSd)}%), ורעש לכל רשימה (${Math.round(100 * SIM.partySd)}% יחסי) שמעביר קולות בתוך המחנה בלבד. המחנות קבועים לפי הנתונים ואינם משתנים כשמזיזים רשימה בעורך הגושים. כיול: בשבוע האחרון ב-2019–2022 טעה הממוצע בגוש נתניהו ב-2.4 מנדטים וברשימות הערביות ב-1.55 (שורש ממוצע הריבועים). הפיזור הורחב בחצי לזמן שנותר, ליעד של ${SIM_TARGET.coal} ו-${SIM_TARGET.arab} מנדטים. מודל הדגמה, לא תחזית.</p>
       <h4>מעברי קולות</h4>
       <p>רגרסיה מאולצת ברמת הקלפי: לכל זוג מערכות מוצאת מטריצה שבה כל שורה היא חלוקה של מצביעי רשימה בבחירות הקודמות. מבוססת רק על קלפיות שאפשר להתאים בין המערכות. זה אומדן אקולוגי, ולא מעקב אחר מצביעים בודדים.</p>
     </div>
@@ -2237,7 +2280,7 @@ function renderMethod() {
         <li>בערים המעורבות, ערבים שמצביעים בקלפיות מעורבות נספרים כיהודים, ולהפך.</li>
         <li>שבטי הנגב הם יחידות רישום ולא מקומות. הם מוצגים במפה כעיגול אחד.</li>
         <li>המיקום של כל יישוב הוא מרכז הפוליגון, לא מיקום הקלפיות. בייצור יתווסף מיפוי קלפי לאזור סטטיסטי של הלמ״ס.</li>
-        <li>הסקרים מדווחים במנדטים ומעוגלים; הממוצע מומר לקולות בהנחה גסה על הקולות האבודים.</li>
+        <li>הסקרים מדווחים במנדטים ומעוגלים. ההמרה לקולות נשענת על קובצי הדיווח רק לרשימות הקטנות; לשאר הרשימות היא אומדן.</li>
       </ul>
     </div>
   </div>`;
@@ -2410,6 +2453,8 @@ async function boot() {
   });
   const h = (location.hash || '').replace('#', '');
   showTab(RENDER[h] ? h : 'overview', { push: false });
+  // label gutters are measured on canvas; redraw once the web fonts are in
+  if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(rerenderAll);
   // redraw charts on theme or width change
   if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', rerenderAll);
   new MutationObserver(rerenderAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });

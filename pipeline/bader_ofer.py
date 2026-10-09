@@ -15,7 +15,8 @@ def allocate(votes, seats=120, threshold=0.0325, agreements=()):
     """votes: {list_id: int}. agreements: iterable of (a, b) pairs.
     Returns {list_id: seats} for every list in `votes`."""
     total_valid = sum(votes.values())
-    qualify = {k: v for k, v in votes.items() if v >= threshold * total_valid}
+    # keys starting with '_' (e.g. '_other') count toward the total but are not lists
+    qualify = {k: v for k, v in votes.items() if not str(k).startswith('_') and v >= threshold * total_valid}
     result = {k: 0 for k in votes}
     if not qualify:
         return result

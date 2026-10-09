@@ -60,6 +60,8 @@ async function boot() {
   });
   const h = (location.hash || '').replace('#', '');
   showTab(RENDER[h] ? h : 'overview', { push: false });
+  // label gutters are measured on canvas; redraw once the web fonts are in
+  if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(rerenderAll);
   // redraw charts on theme or width change
   if (window.matchMedia) matchMedia('(prefers-color-scheme: dark)').addEventListener('change', rerenderAll);
   new MutationObserver(rerenderAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });

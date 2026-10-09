@@ -186,6 +186,7 @@ table.t th[data-sort]:hover { color: var(--ink); }
 #tt { position: fixed; z-index: 50; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--rule-strong); border-radius: 8px; box-shadow: var(--shadow); padding: 9px 11px; font-size: var(--t-sm); min-width: 160px; max-width: 290px; opacity: 0; transition: opacity .08s; }
 #tt.on { opacity: 1; }
 #tt h4 { margin: 0 0 4px; font-size: var(--t-md); }
+#tt .tt-note { margin: 6px 0 0; font-size: var(--t-xs); color: var(--muted); }
 #tt .row { display: flex; justify-content: space-between; gap: 14px; }
 #tt .row span:first-child { color: var(--ink-2); display: inline-flex; align-items: center; gap: 6px; }
 #tt .k { width: 8px; height: 8px; border-radius: 2px; display: inline-block; }

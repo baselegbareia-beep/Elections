@@ -16,7 +16,7 @@ function renderSectors() {
   <div class="section-head"><div>
     <span class="eyebrow">פילוח · ערבים, יהודים, דרוזים, חרדים</span>
     <h2>מי מצביע, ולמי</h2>
-    <p>השוואה בין קבוצות האוכלוסייה על בסיס תוצאות הקלפיות. קבוצות שהוגדרו לפי היישוב (ערבים, דרוזים) הן מדויקות יחסית; ״קלפיות חרדיות״ מוגדרות לפי ההצבעה עצמה (יהדות התורה וש״ס מעל 70%) ולכן הן אומדן בלבד.</p>
+    <p>השוואה בין קבוצות האוכלוסייה על בסיס תוצאות הקלפיות. קבוצות שהוגדרו לפי היישוב (ערבים, דרוזים) הן מדויקות יחסית; ״קלפיות חרדיות״ מוגדרות לפי ההצבעה עצמה (יהדות התורה וש״ס מעל 70% בחציון חמש המערכות) ולכן הן אומדן בלבד.</p>
   </div></div>
   <div class="controls"><span class="ctl-label">בחירות</span>${seg('sc-el', ELS.map(e => [e, E(e).short]), S.sectorElection)}</div>
   <div class="grid">
@@ -122,7 +122,7 @@ function drawScatter() {
     svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', y(v)).attr('dy', '.32em').attr('text-anchor', 'start').text(v + '%');
   });
   d3.range(1, 11).forEach(v => svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 22).attr('text-anchor', 'middle').text(v));
-  svg.append('text').attr('class', 'lbl').attr('x', (M.l + W - M.r) / 2).attr('y', H - 4).attr('text-anchor', 'middle').text('אשכול חברתי-כלכלי של הלמ״ס, 2021 (1 = הנמוך, 10 = הגבוה)');
+  svg.append('text').attr('class', 'lbl').attr('x', (M.l + W - M.r) / 2).attr('y', H - 4).attr('text-anchor', 'middle').text(W < 560 ? 'אשכול חברתי-כלכלי (1 נמוך, 10 גבוה)' : 'אשכול חברתי-כלכלי של הלמ״ס, 2021 (1 = הנמוך, 10 = הגבוה)');
   const col = { arab: 'var(--arab)', druze: 'var(--druze)', jewish: 'var(--jewish)', mixed: 'var(--muted)' };
   // deterministic jitter so the dots in one cluster spread out
   const jit = l => ((l.code * 9301 + 49297) % 233280) / 233280 - 0.5;

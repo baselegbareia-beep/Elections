@@ -1,7 +1,7 @@
 /* ===================== coalition builder + scenario generator ===================== */
 S.scn = { arabT: 53, swing: 0 };   // slider value; 53 stands for the 53.2% baseline
 const ARAB_T0 = 53.2;        // assumed Arab turnout implied by the polls (K25, Arab and Druze localities)
-const ARAB_FROM_SECTOR = 0.881; // share of Arab-list votes cast in Arab boxes, K25 (computed from ballot data)
+const ARAB_FROM_SECTOR = 0.878; // share of Arab-list votes cast in Arab boxes, K25 (computed from ballot data)
 
 function scenarioShares(arabT = S.scn.arabT, swing = S.scn.swing) {
   ensureSims();
@@ -12,7 +12,7 @@ function scenarioShares(arabT = S.scn.arabT, swing = S.scn.swing) {
   Object.keys(base).forEach(k => { v[k] = base[k]; });
   // Arab turnout: Arab-list votes scale with turnout for the part cast in the Arab sector
   S.polls.parties.forEach(p => {
-    if (blocs[p.id] === 'arab' || p.bloc === 'arab') v[p.id] = base[p.id] * (ARAB_FROM_SECTOR * arabT / ARAB_T0 + (1 - ARAB_FROM_SECTOR));
+    if (p.bloc === 'arab') v[p.id] = base[p.id] * (ARAB_FROM_SECTOR * arabT / ARAB_T0 + (1 - ARAB_FROM_SECTOR));
   });
   // uniform swing between the Netanyahu bloc and the Jewish opposition (points of the total vote)
   const coal = S.polls.parties.filter(p => blocs[p.id] === 'coal'), opp = S.polls.parties.filter(p => blocs[p.id] === 'opp');
@@ -144,7 +144,7 @@ function hemicycleLayout(n = 120, rows = 6) {
   return pts.sort((p, q) => p.a - q.a || q.r - p.r);   // a=0 is the right-hand end
 }
 function drawHemicycle(el, seats) {
-  const W = widthOf(el, 640), H = Math.round(W * 0.52);
+  const W = widthOf(el, 640), H = Math.round(W * 0.52) + 22;
   const svg = svgEl(el, W, H);
   const pts = hemicycleLayout();
   const R = W * 0.47, cx = W / 2, cy = H - 12;

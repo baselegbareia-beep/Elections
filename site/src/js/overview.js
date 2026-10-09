@@ -9,7 +9,7 @@ function ensureSims() {
   S.avg = av;
   S.shares = voteSharesFromAverage(av.avg);
   S.seatsNow = baderOfer({ ...S.shares }, { agreements: AGREEMENTS_2026 });
-  S.sims = simulate(S.shares, currentBlocs());
+  S.sims = simulate(S.shares);
   return S.sims;
 }
 function blocTotals(seats, blocs = currentBlocs()) {
@@ -69,7 +69,7 @@ function renderOverview() {
       <p class="sub">כמה מנדטים מקבל גוש נתניהו ב-${fmt(sims.seats.length)} סימולציות. כל עמודה היא מספר מנדטים אפשרי, גובהה הוא שכיחותו.</p>
       <div class="chart" id="ov-hist"></div>
       <div class="legend"><span><i style="background:var(--coal)"></i>61 ומעלה (רוב)</span><span><i style="background:var(--rule-strong)"></i>פחות מ-61</span></div>
-      <p class="foot">מודל הדגמה. אי-הוודאות מכוילת לפי טעויות הסקרים האחרונים ב-2019–2022: תזוזה משותפת בין הגושים (סטיית תקן 2.4 נק׳ אחוז, כ-3 מנדטים), זעזוע משותף להצבעה לרשימות הערביות (13%) ורעש לכל רשימה. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
+      <p class="foot">מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי, הפיזור הורחב בחצי: סטיית התקן של הגוש בתרחישים היא ${fmt1(d3.deviation(coalSim.tot))} מנדטים. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
     </div>
 
     <div class="card c5">
@@ -102,7 +102,7 @@ function rate(eid, sector) { const s = E(eid).sectors[sector]; return 100 * s.vo
 
 function drawSeatBars(el, av) {
   const parties = [...S.polls.parties].filter(p => av.hi[p.id] > 0 || av.avg[p.id] > 0.3).sort((a, b) => av.avg[b.id] - av.avg[a.id]);
-  const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 10, l: 40 };
+  const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 14, l: 40 };
   const H = M.t + M.b + rowH * parties.length;
   const svg = svgEl(el, W, H);
   const maxV = Math.max(30, d3.max(parties, p => av.hi[p.id]));
@@ -112,7 +112,7 @@ function drawSeatBars(el, av) {
   svg.append('text').attr('class', 'lbl').attr('x', x(0)).attr('y', M.t - 10).attr('text-anchor', 'start').text('אזור אחוז החסימה');
   [0, 10, 20, 30].filter(v => v <= maxV).forEach(v => {
     svg.append('line').attr('class', 'gridline').attr('x1', x(v)).attr('x2', x(v)).attr('y1', M.t - 4).attr('y2', H - M.b);
-    svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H).attr('text-anchor', 'middle').text(v);
+    svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 3).attr('text-anchor', 'middle').text(v);
   });
   const g = svg.selectAll('g.row').data(parties).join('g').attr('transform', (d, i) => `translate(0,${y(i)})`);
   // SVG text inherits the page's RTL direction: anchor 'start' = right edge.

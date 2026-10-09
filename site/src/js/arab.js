@@ -188,7 +188,7 @@ function drawArabComposition(el) {
 function drawArabRegions(el) {
   const e = S.arabRegEl, ev = E(e);
   const regs = ['negev', 'north_bedouin', 'wadi_ara', 'triangle_south', 'nazareth', 'galilee', 'christian', 'mixed_town', 'jerusalem', 'mixed'];
-  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? Math.max(168, d3.max(regs, k => textWidth(S.core.arab_regions[k] || '', 12.5, 600)) + 10) : 112, b: 8, l: W >= 560 ? 64 : 48 };
+  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? Math.max(168, d3.max(regs, k => textWidth(S.core.arab_regions[k] || '', 12.5, 600)) + 10) : 112, b: 8, l: W >= 560 ? 64 : Math.ceil(textWidth('100%', 22, 700)) + 12 };
   const H = M.t + M.b + rowH * regs.length;
   const svg = svgEl(el, W, H);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
@@ -222,7 +222,8 @@ function drawArabRegions(el) {
 }
 
 function drawArabPolls(el) {
-  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(150, W * 0.38), b: 26, l: 28 };
+  const endW = d3.max(S.polls.parties.filter(p => p.bloc === 'arab'), p => textWidth(`${p.name} 00.0`, 12.5, 600)) + 14;
+  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(Math.max(150, endW), W * 0.5), b: 26, l: 28 };
   const svg = svgEl(el, W, H);
   const { polls, parties } = S.polls;
   const x = d3.scaleUtc().domain([d3.timeDay.offset(toDate(polls[0].date), -2), d3.timeDay.offset(latestDate(), 2)]).range([M.l, W - M.r]);
@@ -254,7 +255,9 @@ function drawSankey(el) {
   const color = (eid, id) => id === 'abstain' ? 'var(--rule-strong)' : id === 'other' ? 'var(--muted)' : famColor(famOf(eid, id));
   const total = sum(t.src_mass);
   const flows = [];
-  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) flows.push({ s, d, v, i, j }); }));
+  // 90% bootstrap interval for each cell; flows whose interval is wider than 25 points are faded
+  const ci = (i, j) => { const m = t.matrix[i][j], [lo, hi] = t.ci ? t.ci[i][j] : [m, m]; return [Math.min(lo, m), Math.max(hi, m)]; };
+  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) { const [lo, hi] = ci(i, j); flows.push({ s, d, v, i, j, lo, hi, shaky: hi - lo > 0.25 }); } }));
   const srcNodes = t.src.map((id, i) => ({ id, v: sum(flows.filter(f => f.i === i).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const dstNodes = t.dst.map((id, j) => ({ id, v: sum(flows.filter(f => f.j === j).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const tot = sum(srcNodes.map(n => n.v));
@@ -277,8 +280,9 @@ function drawSankey(el) {
     const ys = sN.y0 + sN.off + h / 2, yd = dN.y0 + dN.off + h / 2; sN.off += h; dN.off += h;
     const mid = (xs + nodeW + xd) / 2;
     svg.append('path').attr('d', `M${xs + nodeW},${ys} C${mid},${ys} ${mid},${yd} ${xd},${yd}`).attr('fill', 'none')
-      .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', .42).attr('stroke-width', Math.max(1, h))
-      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', pct(100 * t.matrix[f.i][f.j], 0)]])}`));
+      .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', f.shaky ? .14 : .42).attr('stroke-width', Math.max(1, h))
+      .attr('stroke-dasharray', f.shaky && h > 3 ? '6 3' : null)
+      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', `${pct(100 * t.matrix[f.i][f.j], 0)} (טווח 90%: ${Math.round(100 * f.lo)}–${Math.round(100 * f.hi)}%)`]])}${f.shaky ? '<p class="tt-note">אומדן לא יציב: הטווח רחב מ-25 נקודות.</p>' : ''}`));
   });
   const halo = sel => narrow ? sel.attr('class', 'lbl-ink halo') : sel;
   srcNodes.forEach(n => {
@@ -291,7 +295,7 @@ function drawSankey(el) {
     if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xd - 4 : xd + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
       .attr('text-anchor', narrow ? 'start' : 'end').text(nodeLabel(t.to, n)));
   });
-  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת ברמת הקלפי, ${fmt(t.matched)} קלפיות שהותאמו). אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
+  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת). קלפי מותאמת לקלפי באותו מספר רק כשמספר בעלי הזכות בה דומה (${fmt(t.matched)} זוגות); שאר הקלפיות בכל יישוב מאוחדות ליחידה אחת. היחידות מכסות ${pct(100 * t.coverage, 0)} מבעלי הזכות. זרמים חיוורים ומקווקווים: טווח 90% (bootstrap) רחב מ-25 נקודות. ערכים של 0% או 100% נובעים מהאילוץ ולא מהנתונים. אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
 }
 
 function drawMixed(el) {

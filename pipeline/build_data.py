@@ -14,6 +14,7 @@ estimates in the UI and their rules are documented in docs/METHODOLOGY.md.
 """
 import argparse
 import collections
+import statistics
 import csv
 import json
 import math
@@ -205,6 +206,30 @@ def build(src, polygons, ses_path, out_dir):
                 loc_sector[code] = "jewish"
     tribal_point = (31.22, 34.93)
 
+    # Vote-based box classes (Arab boxes in mixed cities and Jewish localities,
+    # Haredi boxes) are fixed once per box across all five elections, so the
+    # set does not change with each election's own vote: a box (locality, base
+    # box number; sub-boxes merged) is Arab if the median Arab-list share over
+    # the elections it appears in is >= ARAB_BOX_MIN_SHARE; same for Haredi.
+    box_votes = collections.defaultdict(list)
+    for e in R.ELECTIONS:
+        acc = collections.defaultdict(lambda: [0, 0, 0])
+        for r in data[e][1]:
+            if r["env"] or r["code"] is None or loc_sector.get(r["code"], "jewish") in ("arab", "druze"):
+                continue
+            a = acc[(r["code"], kalpi_base(r["kalpi"]))]
+            a[0] += sum(r["votes"].get(p, 0) for p in R.ARAB_LISTS[e])
+            a[1] += r["votes"].get("ג", 0) + r["votes"].get("שס", 0)
+            a[2] += r["valid"]
+        for k, (ar, hd, v) in acc.items():
+            if v:
+                box_votes[k].append((ar / v, hd / v))
+    box_class = {}
+    for k, xs in box_votes.items():
+        arab = statistics.median(x[0] for x in xs) >= R.ARAB_BOX_MIN_SHARE
+        haredi = statistics.median(x[1] for x in xs) >= R.HAREDI_BOX_MIN_SHARE
+        box_class[k] = "arab" if arab else "haredi" if haredi else "general"
+
     def box_sector(e, r):
         """Return (sector, sub) for one ballot row."""
         if r["env"]:
@@ -212,11 +237,8 @@ def build(src, polygons, ses_path, out_dir):
         ls = loc_sector.get(r["code"], "jewish")
         if ls in ("arab", "druze"):
             return ls, loc_sub[r["code"]]
-        share = sum(r["votes"].get(p, 0) for p in R.ARAB_LISTS[e]) / r["valid"] if r["valid"] else 0
-        if share >= R.ARAB_BOX_MIN_SHARE:
-            return "arab", "mixed"
-        haredi = (r["votes"].get("ג", 0) + r["votes"].get("שס", 0)) / r["valid"] if r["valid"] else 0
-        return "jewish", "haredi" if haredi >= R.HAREDI_BOX_MIN_SHARE else "general"
+        c = box_class.get((r["code"], kalpi_base(r["kalpi"])), "general")
+        return ("arab", "mixed") if c == "arab" else ("jewish", c)
 
     # ---- 2. National results, validation, sectors -------------------------
     report = []
@@ -380,8 +402,8 @@ def build(src, polygons, ses_path, out_dir):
             t = estimate_transfer(a, b, data, box_sector, scope)
             if t:
                 transfers.append(t)
-                report.append(f"transfer {a}->{b} [{scope}]: matched boxes={t['matched']} "
-                              f"rmse={t['rmse']:.4f}")
+                report.append(f"transfer {a}->{b} [{scope}]: box pairs={t['matched']} units={t['units']} "
+                              f"coverage={t['coverage']:.0%} rmse={t['rmse']:.4f}")
 
     core = {
         "meta": {
@@ -426,23 +448,26 @@ def kalpi_base(k):
         return k
 
 
-def estimate_transfer(a, b, data, box_sector, scope):
-    """Constrained least squares at ballot-box level:
+def estimate_transfer(a, b, data, box_sector, scope, boot=40, seed=20261027):
+    """Constrained least squares on matched units:
     minimise sum_i w_i * || x_i M - y_i ||^2, rows of M on the simplex.
     x_i, y_i are shares of *eligible voters* (incl. 'did not vote'), so the
-    matrix answers: of 100 voters of list A, how many voted B next time."""
+    matrix answers: of 100 voters of list A, how many voted B next time.
+
+    Units: a ballot box (locality, base number; sub-boxes merged) is paired
+    with the same box next time only when its eligible voters agree within
+    -20%/+25%; box numbers were reassigned in 2021 (station.box), so a pair
+    that changed size is not the same place. The rest of each locality forms
+    one more unit on each side. Intervals come from a bootstrap over units."""
     def group(e, rows):
-        reg = R.PARTIES[e]
-        main = [p for p, v in reg.items()]
+        main = list(R.PARTIES[e])
         out = {}
         for r in rows:
             if r["env"] or r["code"] is None or r["elig"] <= 0:
                 continue
-            s, _ = box_sector(e, r)
-            if scope == "arab" and s != "arab":
+            sec, _ = box_sector(e, r)
+            if scope == "arab" and sec != "arab":
                 continue
-            # Sub-boxes (14.1, 14.2 …) are merged into their base box on both
-            # sides, because splits change from one election to the next.
             key = (r["code"], kalpi_base(r["kalpi"]))
             vec = [r["votes"].get(p, 0) for p in main]
             vec.append(r["valid"] - sum(vec) + r["invalid"])          # other lists + invalid
@@ -453,49 +478,73 @@ def estimate_transfer(a, b, data, box_sector, scope):
 
     ca, A = group(a, data[a][1])
     cb, B = group(b, data[b][1])
-    keys = [k for k in A if k in B]
-    if len(keys) < 200:
+    ok = lambda ea, eb: 0.8 <= eb / ea <= 1.25
+    pairs = [k for k in A if k in B and ok(A[k][0], B[k][0])]
+    units = [(A[k][0], A[k][1], B[k][0], B[k][1]) for k in pairs]
+    used = set(pairs)
+    rest = {}
+    for side, D in ((0, A), (1, B)):
+        for k, (el, vec) in D.items():
+            if k in used:
+                continue
+            r = rest.setdefault(k[0], [[0, None], [0, None]])[side]
+            r[0] += el
+            r[1] = vec if r[1] is None else [x + y for x, y in zip(r[1], vec)]
+    for code, ((ea, va), (eb, vb)) in rest.items():
+        if ea > 0 and eb > 0 and ok(ea, eb):
+            units.append((ea, va, eb, vb))
+    if len(units) < 200:
         return None
-    X = np.array([np.array(A[k][1]) / A[k][0] for k in keys])
-    Y = np.array([np.array(B[k][1]) / B[k][0] for k in keys])
-    w = np.array([(A[k][0] + B[k][0]) / 2 for k in keys])
-    # Drop source columns that are essentially empty in this scope.
-    weight_a = (X * w[:, None]).sum(0)
+    eA = np.array([u[0] for u in units], float)
+    X = np.array([np.array(u[1]) / u[0] for u in units])
+    Y = np.array([np.array(u[3]) / u[2] for u in units])
+    w = (eA + np.array([u[2] for u in units], float)) / 2
+    coverage = float(eA.sum() / sum(v[0] for v in A.values()))
+    # Drop source / destination columns that are essentially empty in this scope.
+    weight_a = (X * eA[:, None]).sum(0)
     keep_a = [i for i in range(len(ca)) if weight_a[i] > 0.002 * weight_a.sum()]
     weight_b = (Y * w[:, None]).sum(0)
     keep_b = [j for j in range(len(cb)) if weight_b[j] > 0.002 * weight_b.sum()]
     X = X[:, keep_a]
     Y = Y[:, keep_b]
-    Xw = X * np.sqrt(w)[:, None]
-    Yw = Y * np.sqrt(w)[:, None]
-    XtX = Xw.T @ Xw
-    XtY = Xw.T @ Yw
-    L = np.linalg.eigvalsh(XtX).max()
-    M = np.full((X.shape[1], Y.shape[1]), 1.0 / Y.shape[1])
-    for _ in range(4000):
-        G = XtX @ M - XtY
-        M = project_rows_to_simplex(M - G / L)
+
+    def fit(idx, M0=None, steps=4000):
+        Xw = X[idx] * np.sqrt(w[idx])[:, None]
+        Yw = Y[idx] * np.sqrt(w[idx])[:, None]
+        XtX, XtY = Xw.T @ Xw, Xw.T @ Yw
+        L = np.linalg.eigvalsh(XtX).max()
+        M = np.full((X.shape[1], Y.shape[1]), 1.0 / Y.shape[1]) if M0 is None else M0.copy()
+        for _ in range(steps):
+            M = project_rows_to_simplex(M - (XtX @ M - XtY) / L)
+        return M, Xw, Yw
+
+    allidx = np.arange(len(units))
+    M, Xw, Yw = fit(allidx)
     resid = Xw @ M - Yw
     rmse = float(np.sqrt((resid ** 2).sum() / w.sum()))
-    flows = (X * w[:, None]).sum(0)  # eligible-weighted mass of each source
+    rng = np.random.default_rng(seed)
+    draws = np.array([fit(rng.integers(0, len(units), len(units)), M, 1500)[0] for _ in range(boot)])
+    lo, hi = np.percentile(draws, 5, axis=0), np.percentile(draws, 95, axis=0)
     return {
-        "from": a, "to": b, "scope": scope, "matched": len(keys),
+        "from": a, "to": b, "scope": scope, "matched": len(pairs), "units": len(units),
+        "coverage": round(coverage, 3),
         "src": [ca[i] for i in keep_a], "dst": [cb[j] for j in keep_b],
-        "src_mass": [round(float(v)) for v in flows],
+        # real source-election votes in the matched units
+        "src_mass": [round(float(v)) for v in (X * eA[:, None]).sum(0)],
         "matrix": [[round(float(v), 4) for v in row] for row in M],
+        "ci": [[[round(float(l), 3), round(float(h), 3)] for l, h in zip(rl, rh)] for rl, rh in zip(lo, hi)],
         "rmse": rmse,
     }
 
 
 def project_rows_to_simplex(M):
-    out = np.empty_like(M)
-    for i, v in enumerate(M):
-        u = np.sort(v)[::-1]
-        css = np.cumsum(u)
-        rho = np.nonzero(u * np.arange(1, len(u) + 1) > (css - 1))[0][-1]
-        theta = (css[rho] - 1) / (rho + 1.0)
-        out[i] = np.maximum(v - theta, 0)
-    return out
+    """Euclidean projection of each row onto the probability simplex (vectorised)."""
+    U = -np.sort(-M, axis=1)
+    css = np.cumsum(U, axis=1)
+    k = np.arange(1, M.shape[1] + 1)
+    rho = M.shape[1] - 1 - np.argmax((U * k > css - 1)[:, ::-1], axis=1)
+    theta = (css[np.arange(M.shape[0]), rho] - 1) / (rho + 1.0)
+    return np.maximum(M - theta[:, None], 0)
 
 
 if __name__ == "__main__":

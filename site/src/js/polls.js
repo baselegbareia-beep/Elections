@@ -180,7 +180,7 @@ function drawHouse() {
   const he = houseEffects(polls, parties);
   const houses = Object.keys(he).filter(h => he[h]._n >= 2).sort((a, b) => he[b]._n - he[a]._n);
   const cols = parties.filter(p => d3.mean(polls, q => q.seats[p.id] || 0) >= 3);
-  const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: 64, l: 0 };
+  const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: Math.ceil(14 + Math.sin(50 * Math.PI / 180) * d3.max(cols, p => textWidth(p.name, 11.5))), l: 0 };
   const H = M.t + rh * houses.length + 6;
   const svg = svgEl(el, W, H);
   // diverging pair that is not a bloc colour: brown = fewer seats than average, violet = more

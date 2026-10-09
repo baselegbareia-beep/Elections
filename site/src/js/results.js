@@ -258,7 +258,15 @@ async function drawLocality() {
     </div>`;
   drawLocTrend($('#loc-trend'), l);
   $('#loc-turn').innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
-  const b = await loadBallots(eid);
+  let b;
+  try { b = await loadBallots(eid); } catch (err) {
+    console.error(err);
+    if (S.locSel === l.code && S.election === eid) {
+      $('#loc-ballots').innerHTML = '<p class="empty">טעינת הקלפיות נכשלה. <button type="button" class="slip" id="loc-retry">ניסיון נוסף</button></p>';
+      $('#loc-retry').onclick = () => drawLocality();
+    }
+    return;
+  }
   if (S.locSel !== l.code || S.election !== eid) return;
   drawBallotTable($('#loc-ballots'), l, b, eid);
 }
