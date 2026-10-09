@@ -272,3 +272,4 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
 @media (max-width: 400px) { table.t td, table.t th { padding: 6px 5px; } }
+@media (max-width: 560px) { table.t.sticky1 .slip { white-space: normal; } table.t.sticky1 td:first-child { max-width: 44vw; } }

@@ -52,14 +52,14 @@ function drawTurnHeat() {
   const sc = d3.scaleLinear().domain([30, 80]).range([cssVar('--seq-0'), cssVar('--seq-1')]).interpolate(d3.interpolateLab).clamp(true);
   const ink = v => onFill(sc(v));
   const rows = SUBS.filter(([k]) => ELS.some(e => subStat(e, k)?.elig));
-  $('#sc-turn').innerHTML = `<table class="t sticky1"><thead><tr><th>קבוצה</th><th class="n hide-sm">בעלי זכות, 2022</th>${ELS.map((e, i) => `<th class="n${i < 3 ? ' hide-sm' : ''}">${E(e).short}</th>`).join('')}<th class="n">שינוי מ-2021</th></tr></thead><tbody>${
+  $('#sc-turn').innerHTML = `<table class="t sticky1"><thead><tr><th>קבוצה</th><th class="n hide-sm">בעלי זכות, 2022</th>${ELS.map((e, i) => `<th class="n${i < 4 ? ' hide-sm' : ''}">${E(e).short}</th>`).join('')}<th class="n">שינוי מ-2021</th></tr></thead><tbody>${
     rows.map(([k, name, sec, bold]) => {
       const vals = ELS.map(e => { const s = subStat(e, k); return s && s.elig ? 100 * s.voters / s.elig : null; });
       const d = vals[4] != null && vals[3] != null ? vals[4] - vals[3] : null;
       return `<tr><td><span class="slip"><i class="dot" style="background:var(--${sec})"></i><span class="nm" style="${bold ? 'font-weight:700' : ''}">${esc(name)}</span></span></td><td class="n hide-sm">${fmt(subStat('K25', k)?.elig)}</td>${
-        vals.map((v, i) => `<td class="n${i < 3 ? ' hide-sm' : ''}" style="background:${v == null ? 'transparent' : sc(v)};color:${v == null ? 'inherit' : ink(v)}">${pct(v)}</td>`).join('')}<td class="n">${d == null ? '' : `<span class="num ${d > 0 ? 'delta-up' : 'delta-down'}">${d > 0 ? '+' : '−'}${fmt1(Math.abs(d))}</span>`}</td></tr>`;
+        vals.map((v, i) => `<td class="n${i < 4 ? ' hide-sm' : ''}" style="background:${v == null ? 'transparent' : sc(v)};color:${v == null ? 'inherit' : ink(v)}">${pct(v)}</td>`).join('')}<td class="n">${d == null ? '' : `<span class="num ${d > 0 ? 'delta-up' : 'delta-down'}">${d > 0 ? '+' : '−'}${fmt1(Math.abs(d))}</span>`}</td></tr>`;
     }).join('')}
-    <tr><td><span class="slip"><span class="nm" style="font-weight:700">ארצי (רשמי)</span></span></td><td class="n hide-sm">${fmt(E('K25').eligible)}</td>${ELS.map((e, i) => `<td class="n${i < 3 ? ' hide-sm' : ''}"><b>${pct(E(e).turnout)}</b></td>`).join('')}<td class="n"></td></tr>
+    <tr><td><span class="slip"><span class="nm" style="font-weight:700">ארצי (רשמי)</span></span></td><td class="n hide-sm">${fmt(E('K25').eligible)}</td>${ELS.map((e, i) => `<td class="n${i < 4 ? ' hide-sm' : ''}"><b>${pct(E(e).turnout)}</b></td>`).join('')}<td class="n"></td></tr>
   </tbody></table><p class="foot">שיעורי ההצבעה של ״שאר הקלפיות״ אינם כוללים את המעטפות הכפולות (חיילים, נציגויות ועוד), ולכן נמוכים מהשיעור האמיתי בקבוצה. הקלפיות החרדיות מוגדרות לפי ההצבעה ולכן אינן מדד בלתי תלוי.</p>`;
 }
 

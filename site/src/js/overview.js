@@ -69,7 +69,7 @@ function renderOverview() {
       <p class="sub">כמה מנדטים מקבל גוש נתניהו ב-${fmt(sims.seats.length)} סימולציות. כל עמודה היא מספר מנדטים אפשרי, גובהה הוא שכיחותו.</p>
       <div class="chart" id="ov-hist"></div>
       <div class="legend"><span><i style="background:var(--coal)"></i>61 ומעלה (רוב)</span><span><i style="background:var(--rule-strong)"></i>פחות מ-61</span></div>
-      <p class="foot">מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי, הפיזור הורחב בחצי: סטיית התקן של הגוש בתרחישים היא ${fmt1(d3.deviation(coalSim.tot))} מנדטים. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
+      <p class="foot">מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי הפיזור הורחב בחצי. ההרחבה היא הנחה: אין בנתונים ממוצעים משבועיים לפני הבחירות. סטיית התקן של הגוש בתרחישים היא ${fmt1(d3.deviation(coalSim.tot))} מנדטים. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
     </div>
 
     <div class="card c5">
@@ -152,37 +152,36 @@ function drawHistogram(el, totals) {
 }
 
 function drawStrip(el, seats) {
-  // 120 squares in reading order (right to left), one block per bloc with a gap between blocs
+  // 120 squares in reading order (right to left), grouped by bloc
   const blocs = currentBlocs();
   const order = ['coal', 'opp', 'arab'];
   const parties = S.polls.parties.filter(p => seats[p.id] > 0)
     .sort((a, b) => order.indexOf(blocs[a.id]) - order.indexOf(blocs[b.id]) || seats[b.id] - seats[a.id]);
-  const W = widthOf(el), rows = W < 560 ? 8 : 4, gap = 3, bgap = 8;
-  const cols = 120 / rows, size = Math.min(26, (W - gap * (cols - 1) - bgap * 2) / cols);
-  const H = rows * (size + gap) + 22;
+  // seats fill continuously, column by column from the right; rows divide 60 so the majority line is straight
+  const W = widthOf(el), rows = W < 560 ? 10 : 4, gap = 3;
+  const cols = 120 / rows, size = Math.min(26, (W - gap * (cols - 1)) / cols), step = size + gap;
+  const H = rows * step + 22;
   const svg = svgEl(el, W, H);
   const cells = [];
   parties.forEach(p => { for (let i = 0; i < seats[p.id]; i++) cells.push(p); });
-  // column index with extra space whenever a new bloc starts
-  let col = 0, row = 0, shift = 0, prevBloc = null;
-  const pos = cells.map(p => {
-    const b = blocs[p.id];
-    if (prevBloc && b !== prevBloc) { if (row !== 0) { col++; row = 0; } shift += bgap; }
-    prevBloc = b;
-    const out = { p, x: W - (col + 1) * (size + gap) + gap - shift, y: row * (size + gap) };
-    row++; if (row === rows) { row = 0; col++; }
-    return out;
-  });
+  const colX = c => W - (c + 1) * step + gap;
+  const pos = cells.map((p, i) => ({ p, x: colX(Math.floor(i / rows)), y: (i % rows) * step }));
   svg.selectAll('rect.seat').data(pos).join('rect').attr('class', 'seat')
     .attr('x', d => d.x).attr('y', d => d.y).attr('width', size).attr('height', size).attr('rx', Math.min(4, size / 5))
     .attr('fill', d => party26Color(d.p))
     .call(sel => bindTT(sel, d => `<h4>${esc(d.p.name)}</h4>${ttRows([['מנדטים', seats[d.p.id]], ['גוש', BLOC_NAME[blocs[d.p.id]]]])}`));
-  // 61 marker: after the 60th seat counted from the right
-  if (pos[60]) {
-    const mx = pos[60].x + size + gap / 2;
-    svg.append('line').attr('class', 'ref-line').attr('x1', mx).attr('x2', mx).attr('y1', -4).attr('y2', rows * (size + gap) + 2);
-    svg.append('text').attr('class', 'ref-text').attr('x', mx).attr('y', rows * (size + gap) + 16).attr('text-anchor', 'middle').text('61');
-  }
+  // bloc boundaries: a stepped channel in the surface colour between the last seat of one bloc and the first of the next
+  const bottom = rows * step - gap;
+  cells.forEach((p, i) => {
+    if (!i || blocs[p.id] === blocs[cells[i - 1].id]) return;
+    const c = Math.floor(i / rows), r = i % rows, xR = colX(c) + size + gap / 2, xL = colX(c) - gap / 2, yB = r * step - gap / 2;
+    const d = r === 0 ? `M${xR},-2 V${bottom + 2}` : `M${xL},-2 V${yB} H${xR} V${bottom + 2}`;
+    svg.append('path').attr('d', d).attr('fill', 'none').attr('stroke', 'var(--surface)').attr('stroke-width', gap + 4).attr('stroke-linejoin', 'round');
+  });
+  // 61 marker: between seat 60 and seat 61, counted from the right
+  const mx = colX(60 / rows - 1) - gap / 2;
+  svg.append('line').attr('class', 'ref-line').attr('x1', mx).attr('x2', mx).attr('y1', -4).attr('y2', rows * step + 2);
+  svg.append('text').attr('class', 'ref-text').attr('x', mx).attr('y', rows * step + 16).attr('text-anchor', 'middle').text('61');
   $('#ov-strip-legend').innerHTML = order.map(b => {
     const ps = parties.filter(p => blocs[p.id] === b), n = sum(ps.map(p => seats[p.id]));
     return n ? `<span class="lg-group"><b>${BLOC_NAME[b]} ${n}:</b> ${ps.map(p => `<span><i style="background:${party26Color(p)}"></i>${esc(p.name)} ${seats[p.id]}</span>`).join(' ')}</span>` : '';

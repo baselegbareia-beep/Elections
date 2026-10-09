@@ -283,23 +283,43 @@ function drawLocTrend(el, l) {
   const shares = Object.fromEntries(ELS.map(e => [e, famShares(l, e)]));
   const fams = new Set(); ELS.forEach(e => { if (shares[e]) Object.entries(shares[e]).forEach(([f, s]) => { if (s >= 0.08 && f !== 'other') fams.add(f); }); });
   const famList = [...fams].sort((a, b) => d3.max(ELS, e => shares[e]?.[b] || 0) - d3.max(ELS, e => shares[e]?.[a] || 0)).slice(0, 6);
+  // a family is plotted only in elections where it ran, so splits and mergers do not read as 0%
+  const ran = (e, f) => E(e).parties.some(p => p.family === f);
+  const series = famList.map(f => ({ key: f, name: S.core.families[f].name.split(' / ')[0], color: famColor(f), w: 2.2,
+    pts: ELS.map(e => ({ e, v: shares[e] && ran(e, f) ? shares[e][f] || 0 : null })) }));
+  // in Arab, Druze and mixed localities the combined Arab-list vote is the continuous story
+  if (l.sector !== 'jewish') {
+    series.unshift({ key: 'arab-all', name: 'כל הרשימות הערביות', color: 'var(--ink)', w: 3.4,
+      pts: ELS.map(e => { const v = locVotes(l, e); return { e, v: v && v.valid ? sum(E(e).parties.filter(p => p.bloc === 'arab').map(p => v.votes[p.id] || 0)) / v.valid : null }; }) });
+  }
+  // a dashed line for a family whose colour is close to one already drawn
+  series.forEach((sr, i) => {
+    const c = d3.lab(sr.color.startsWith('var(') ? cssVar(sr.color.slice(4, -1)) : sr.color);
+    sr.dash = series.slice(0, i).some(o => { const k = d3.lab(o.color.startsWith('var(') ? cssVar(o.color.slice(4, -1)) : o.color); return Math.hypot(c.l - k.l, c.a - k.a, c.b - k.b) < 25; }) ? '5 3' : null;
+  });
   const x = d3.scalePoint().domain(ELS).range([M.l, W - M.r]).padding(0.2);
-  const maxY = Math.min(1, (d3.max(famList, f => d3.max(ELS, e => shares[e]?.[f] || 0)) || 0.5) + 0.06);
+  const maxY = Math.min(1, (d3.max(series, sr => d3.max(sr.pts, d => d.v || 0)) || 0.5) + 0.06);
   const y = d3.scaleLinear().domain([0, maxY]).range([H - M.b, M.t]);
   y.ticks(4).forEach(t => {
     svg.append('line').attr('class', 'gridline').attr('x1', M.l).attr('x2', W - M.r).attr('y1', y(t)).attr('y2', y(t));
     svg.append('text').attr('class', 'lbl').attr('x', M.l - 6).attr('y', y(t)).attr('dy', '.32em').attr('text-anchor', 'start').text(Math.round(t * 100) + '%');
   });
   ELS.forEach(e => svg.append('text').attr('class', 'lbl').attr('x', x(e)).attr('y', H - 6).attr('text-anchor', 'middle').text(elLabel(e, W)));
-  const labels = [];
-  famList.forEach(f => {
-    const pts = ELS.filter(e => shares[e]).map(e => ({ e, v: shares[e][f] || 0 }));
-    svg.append('path').attr('d', d3.line().x(d => x(d.e)).y(d => y(d.v))(pts)).attr('fill', 'none').attr('stroke', famColor(f)).attr('stroke-width', 2.2);
-    svg.selectAll(null).data(pts).join('circle').attr('cx', d => x(d.e)).attr('cy', d => y(d.v)).attr('r', 3.5).attr('fill', famColor(f)).attr('stroke', 'var(--surface)')
-      .call(sel => bindTT(sel, d => `<h4>${esc(S.core.families[f].name)} · ${E(d.e).short}</h4>${ttRows([['שיעור הקולות', pct(100 * d.v)]])}`));
-    const last = pts[pts.length - 1]; if (last) labels.push({ f, y: y(last.v), x: x(last.e) });
+  const labels = [], lastE = ELS[ELS.length - 1];
+  series.forEach(sr => {
+    svg.append('path').attr('d', d3.line().defined(d => d.v != null).x(d => x(d.e)).y(d => y(d.v))(sr.pts)).attr('fill', 'none')
+      .attr('stroke', sr.color).attr('stroke-width', sr.w).attr('stroke-dasharray', sr.dash);
+    const pts = sr.pts.filter(d => d.v != null);
+    svg.selectAll(null).data(pts).join('circle').attr('cx', d => x(d.e)).attr('cy', d => y(d.v)).attr('r', sr.w > 3 ? 4 : 3.5).attr('fill', sr.color).attr('stroke', 'var(--surface)')
+      .call(sel => bindTT(sel, d => `<h4>${esc(sr.name)} · ${E(d.e).short}</h4>${ttRows([['שיעור הקולות', pct(100 * d.v)]])}`));
+    const last = pts[pts.length - 1];
+    if (last && last.e === lastE) labels.push({ f: sr.key, name: sr.name, y: y(last.v), x: x(last.e), strong: sr.w > 3 });
   });
-  placeLabels(labels, 13, M.t, H - M.b).forEach(o => svg.append('text').attr('class', 'lbl-ink').attr('x', o.x + 8).attr('y', o.y).attr('dy', '.35em').attr('text-anchor', 'end').style('font-size', '11.5px').text(S.core.families[o.f].name.split(' / ')[0]));
+  placeLabels(labels, 13, M.t, H - M.b).forEach(o => svg.append('text').attr('class', 'lbl-ink').attr('x', o.x + 8).attr('y', o.y).attr('dy', '.35em')
+    .attr('text-anchor', 'end').style('font-size', '11.5px').style('font-weight', o.strong ? 700 : null).text(o.name));
+  // series that did not run in the last election are named in a legend under the chart
+  const gone = series.filter(sr => !labels.some(o => o.f === sr.key));
+  if (gone.length) el.insertAdjacentHTML('beforeend', `<div class="legend">${gone.map(sr => `<span><i style="background:${sr.color}"></i>${esc(sr.name)} (עד ${E(sr.pts.filter(d => d.v != null).pop().e).short})</span>`).join('')}</div>`);
 }
 
 function drawBallotTable(el, l, b, eid) {

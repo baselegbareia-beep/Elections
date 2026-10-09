@@ -87,13 +87,19 @@ function svgEl(container, w, h) {
   container.innerHTML = '';
   return d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
 }
-// Label colour that stays readable on a given fill (party colours change between themes).
-function onFill(c) {
+// text colour for a label on a filled mark: whichever of ink and white has the higher WCAG contrast,
+// with the fill blended over the surface when the mark is translucent
+function onFill(c, alpha = 1) {
   const raw = String(c).startsWith('var(') ? cssVar(String(c).slice(4, -1)) : c;
-  const k = d3.rgb(raw);
+  let k = d3.rgb(raw);
   if (!k || isNaN(k.r)) return 'var(--ink)';
-  const lum = (0.2126 * k.r + 0.7152 * k.g + 0.0722 * k.b) / 255;
-  return lum > 0.55 ? '#0c1320' : '#ffffff';
+  if (alpha < 1) {
+    const b = d3.rgb(cssVar('--surface') || '#ffffff');
+    k = d3.rgb(k.r * alpha + b.r * (1 - alpha), k.g * alpha + b.g * (1 - alpha), k.b * alpha + b.b * (1 - alpha));
+  }
+  const lin = v => ((v /= 255) <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4);
+  const L = 0.2126 * lin(k.r) + 0.7152 * lin(k.g) + 0.0722 * lin(k.b);
+  return (L + 0.05) / 0.0565 >= 1.05 / (L + 0.05) ? '#0c1320' : '#ffffff';
 }
 // Text width in px for gutter sizing (canvas measure, same UI font).
 const _ctx = document.createElement('canvas').getContext('2d');
@@ -259,7 +265,7 @@ function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 
 const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List']];
 /* Final-week poll average vs result, K21–K25 (final_polls.json): Netanyahu-bloc RMSE 2.4 seats,
    Arab lists 1.55 seats. With about 2.5 weeks left the spread is widened by half, to about 3.6 and
-   2.3 seats. The bloc spread comes only from the swing between the two Jewish camps and the
+   2.3 seats; the factor is an assumption (no averages from 2.5 weeks out are in the data). The bloc spread comes only from the swing between the two Jewish camps and the
    Arab-turnout shock; list-level noise moves votes inside a camp and does not widen the blocs. */
 const SIM = { n: 4000, blocSd: 0.023, arabSd: 0.14, partySd: 0.12, addSd: 0.004, agreements: AGREEMENTS_2026 };
 const SIM_TARGET = { coal: 3.6, arab: 2.3 };

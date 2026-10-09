@@ -61,7 +61,7 @@ function renderArab() {
     </div>
 
     <div class="card c12">
-      <div class="card-head"><div><h3>לאן עברו הקולות</h3><p class="sub">אומדן לאן עברו בעלי זכות הבחירה בקלפיות הערביות בין שתי מערכות: מצביעי כל רשימה ומי שלא הצביע, באלפים. מבוסס על קלפיות שהותאמו בין שתי המערכות.</p></div>${seg('ar-pair', [[0, 'אפר׳ עד ספט׳ 2019'], [1, 'ספט׳ 2019 עד 2020'], [2, '2020 עד 2021'], [3, '2021 עד 2022']], String(S.pairIdx))}</div>
+      <div class="card-head"><div><h3>לאן עברו הקולות</h3><p class="sub">אומדן לאן עברו בעלי זכות הבחירה בקלפיות הערביות בין שתי מערכות: מצביעי כל רשימה ומי שלא הצביע, באלפים. מבוסס על קלפיות שהותאמו בין שתי המערכות.</p></div>${seg('ar-pair', [[0, 'אפר׳ עד ספט׳ 2019'], [1, 'ספט׳ 2019 עד 2020'], [2, '2020 עד 2021'], [3, '2021 עד 2022']].filter(([i]) => arabTransfer(i)), String(S.pairIdx))}</div>
       <div class="chart" id="ar-sankey"></div>
       <p class="foot" id="ar-sankey-foot"></p>
     </div>
@@ -119,8 +119,13 @@ function drawSectorTurnout(el) {
     svg.selectAll(null).data(pts).join('circle').attr('cx', d => x(d.e)).attr('cy', d => y(d.v)).attr('r', s.w ? 5 : 3.2)
       .attr('fill', s.dash && s.k === 'mixed' ? 'var(--surface)' : s.c).attr('stroke', s.k === 'mixed' ? s.c : 'var(--surface)').attr('stroke-width', 1.5)
       .call(sel => bindTT(sel, d => `<h4>${E(d.e).label}</h4>${ttRows(series.map(q => [q.name, pct(q.f(d.e)), cssVar(q.c.slice(4, -1))]))}`));
-    if (s.k === 'arab_std') svg.selectAll(null).data(pts).join('text').attr('class', 'lbl-strong').attr('x', d => x(d.e)).attr('y', d => y(d.v) - 11)
-      .attr('text-anchor', 'middle').text(d => pct(d.v));
+  });
+  // value labels for the headline series, drawn last with a halo; flipped below the point when another series sits just above
+  ELS.forEach(e => {
+    const v = series[0].f(e);
+    const clash = series.slice(1).some(q => { const qy = y(q.f(e)); return qy < y(v) && y(v) - qy < 22; });
+    svg.append('text').attr('class', 'lbl-strong halo').style('font-size', '12.5px').attr('x', x(e)).attr('y', clash ? y(v) + 19 : y(v) - 11)
+      .attr('text-anchor', 'middle').text(pct(v));
   });
   const ann = (e, v, text, dy) => svg.append('text').attr('class', 'lbl').attr('x', x(e)).attr('y', y(v) + dy).attr('text-anchor', 'middle').style('fill', 'var(--ink-2)').text(text);
   const nar = W < 560;
@@ -146,7 +151,7 @@ function drawArabSeats(el) {
         .attr('fill', l.color).attr('opacity', e === 'K26' ? 0.75 : 1)
         .call(sel => bindTT(sel, () => `<h4>${esc(l.name)}</h4>${ttRows([[e === 'K26' ? 'ממוצע סקרים' : 'מנדטים', e === 'K26' ? fmt1(l.seats) : l.seats], ...(l.votes ? [['קולות', fmt(l.votes)], ['אחוז', pct(l.pct, 2)]] : [])])}`));
       if (y0 - y1 > 16) svg.append('text').attr('class', 'lbl').attr('x', x(e) + x.bandwidth() / 2).attr('y', (y0 + y1) / 2).attr('dy', '.35em')
-        .attr('text-anchor', 'middle').style('fill', onFill(l.color)).style('font-weight', 600).text(e === 'K26' ? fmt1(l.seats) : l.seats);
+        .attr('text-anchor', 'middle').style('fill', onFill(l.color, e === 'K26' ? 0.75 : 1)).style('font-weight', 600).text(e === 'K26' ? fmt1(l.seats) : l.seats);
       stack += l.seats;
     });
     svg.append('text').attr('class', 'lbl-strong').attr('x', x(e) + x.bandwidth() / 2).attr('y', y(stack) - 6).attr('text-anchor', 'middle').text(e === 'K26' ? fmt1(stack) : stack);
@@ -247,17 +252,22 @@ function drawArabPolls(el) {
   });
 }
 
+// transfers are looked up by election pair, so a pair missing from the data drops its button instead of shifting the others
+const TRANSFER_PAIRS = [['K21', 'K22'], ['K22', 'K23'], ['K23', 'K24'], ['K24', 'K25']];
+function arabTransfer(i) { const [a, b] = TRANSFER_PAIRS[i] || []; return S.core.transfers.find(x => x.scope === 'arab' && x.from === a && x.to === b); }
 function drawSankey(el) {
-  const t = S.core.transfers.filter(x => x.scope === 'arab')[S.pairIdx];
+  if (!arabTransfer(S.pairIdx)) S.pairIdx = TRANSFER_PAIRS.findIndex((p, i) => arabTransfer(i));
+  const t = arabTransfer(S.pairIdx);
+  if (!t) { el.innerHTML = '<p class="empty">אין אומדן מעברי קולות.</p>'; return; }
   const W = widthOf(el), H = 420, M = { t: 28, r: 8, b: 8, l: 8 }, nodeW = 14, gap = 8;
   const svg = svgEl(el, W, H);
   const label = (eid, id) => id === 'abstain' ? 'לא הצביעו' : id === 'other' ? 'אחרות ופסולים' : partyName(eid, id);
   const color = (eid, id) => id === 'abstain' ? 'var(--rule-strong)' : id === 'other' ? 'var(--muted)' : famColor(famOf(eid, id));
   const total = sum(t.src_mass);
   const flows = [];
-  // 90% bootstrap interval for each cell; flows whose interval is wider than 25 points are faded
+  // 90% bootstrap interval for each cell; flows whose interval is wider than 20 points are faded
   const ci = (i, j) => { const m = t.matrix[i][j], [lo, hi] = t.ci ? t.ci[i][j] : [m, m]; return [Math.min(lo, m), Math.max(hi, m)]; };
-  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) { const [lo, hi] = ci(i, j); flows.push({ s, d, v, i, j, lo, hi, shaky: hi - lo > 0.25 }); } }));
+  t.src.forEach((s, i) => t.dst.forEach((d, j) => { const v = t.src_mass[i] * t.matrix[i][j]; if (v / total > 0.004) { const [lo, hi] = ci(i, j), m = t.matrix[i][j]; flows.push({ s, d, v, i, j, lo, hi, shaky: hi - lo > 0.2, pinned: m < 0.005 || m > 0.995 }); } }));
   const srcNodes = t.src.map((id, i) => ({ id, v: sum(flows.filter(f => f.i === i).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const dstNodes = t.dst.map((id, j) => ({ id, v: sum(flows.filter(f => f.j === j).map(f => f.v)) })).filter(n => n.v > 0).sort((a, b) => b.v - a.v);
   const tot = sum(srcNodes.map(n => n.v));
@@ -282,7 +292,7 @@ function drawSankey(el) {
     svg.append('path').attr('d', `M${xs + nodeW},${ys} C${mid},${ys} ${mid},${yd} ${xd},${yd}`).attr('fill', 'none')
       .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', f.shaky ? .14 : .42).attr('stroke-width', Math.max(1, h))
       .attr('stroke-dasharray', f.shaky && h > 3 ? '6 3' : null)
-      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', `${pct(100 * t.matrix[f.i][f.j], 0)} (טווח 90%: ${Math.round(100 * f.lo)}–${Math.round(100 * f.hi)}%)`]])}${f.shaky ? '<p class="tt-note">אומדן לא יציב: הטווח רחב מ-25 נקודות.</p>' : ''}`));
+      .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', `${pct(100 * t.matrix[f.i][f.j], 0)} (טווח 90%: ${Math.round(100 * f.lo)}–${Math.round(100 * f.hi)}%)`]])}${f.shaky ? '<p class="tt-note">אומדן לא יציב: הטווח רחב מ-20 נקודות.</p>' : ''}${f.pinned ? '<p class="tt-note">הערך נקבע על ידי האילוץ (0% או 100%), לא על ידי הנתונים.</p>' : ''}`));
   });
   const halo = sel => narrow ? sel.attr('class', 'lbl-ink halo') : sel;
   srcNodes.forEach(n => {
@@ -295,7 +305,7 @@ function drawSankey(el) {
     if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xd - 4 : xd + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
       .attr('text-anchor', narrow ? 'start' : 'end').text(nodeLabel(t.to, n)));
   });
-  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת). קלפי מותאמת לקלפי באותו מספר רק כשמספר בעלי הזכות בה דומה (${fmt(t.matched)} זוגות); שאר הקלפיות בכל יישוב מאוחדות ליחידה אחת. היחידות מכסות ${pct(100 * t.coverage, 0)} מבעלי הזכות. זרמים חיוורים ומקווקווים: טווח 90% (bootstrap) רחב מ-25 נקודות. ערכים של 0% או 100% נובעים מהאילוץ ולא מהנתונים. אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
+  $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת). קלפי מותאמת לקלפי באותו מספר רק כשמספר בעלי הזכות בה דומה (${fmt(t.matched)} זוגות); שאר הקלפיות בכל יישוב מאוחדות ליחידה אחת. היחידות מכסות ${pct(100 * t.coverage, 0)} מבעלי הזכות. זרמים חיוורים ומקווקווים: טווח 90% (bootstrap) רחב מ-20 נקודות. ערכים של 0% או 100% נובעים מהאילוץ ולא מהנתונים. אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
 }
 
 function drawMixed(el) {
