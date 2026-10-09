@@ -176,6 +176,7 @@ table.t th[data-sort]:hover { color: var(--ink); }
 .lbl-ink { fill: var(--ink); font-size: 12.5px; font-family: var(--font-ui); }
 .lbl-strong { fill: var(--ink); font-weight: 600; font-size: 12.5px; font-family: var(--font-ui); }
 .lbl-big { fill: var(--ink); font: 700 26px var(--font-display); }
+.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 3px; stroke-linejoin: round; font-size: 11px; }
 .ref-line { stroke: var(--ink); stroke-width: 1.5; stroke-dasharray: 4 3; }
 .ref-text { fill: var(--ink); font-size: 11.5px; font-weight: 600; }
 .zone { fill: var(--crit); opacity: .07; }
@@ -193,7 +194,7 @@ table.t th[data-sort]:hover { color: var(--ink); }
 
 /* map */
 .map-wrap { position: relative; border: 1px solid var(--rule); border-radius: 8px; background: var(--surface-2); overflow: hidden; }
-.map-wrap svg { display: block; width: 100%; height: auto; touch-action: none; cursor: grab; }
+.map-wrap svg { display: block; width: 100%; height: auto; touch-action: pan-y; cursor: grab; }
 .map-wrap svg:active { cursor: grabbing; }
 .map-btns { position: absolute; top: 10px; inset-inline-start: 10px; display: flex; flex-direction: column; gap: 4px; }
 .map-btns button { width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--rule-strong); background: var(--surface); cursor: pointer; font-size: 17px; line-height: 1; }
@@ -220,10 +221,18 @@ table.t th[data-sort]:hover { color: var(--ink); }
 /* hemicycle & coalition */
 .coal-total { display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
 .coal-total .big { font: 700 72px/.85 var(--font-display); }
-.status { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: var(--t-sm); padding: 3px 10px; border-radius: 99px; }
+.status { display: inline-flex; align-items: center; gap: 6px; font-weight: 600; font-size: var(--t-sm); padding: 3px 10px; border-radius: 99px; white-space: nowrap; }
 .status.ok { background: color-mix(in srgb, var(--good) 16%, transparent); color: var(--ink); }
 .status.no { background: color-mix(in srgb, var(--crit) 14%, transparent); color: var(--ink); }
 .status svg { width: 14px; height: 14px; }
+
+/* range ticks placed at their values */
+.range-ticks { position: relative; height: 18px; font-size: var(--t-xs); color: var(--muted); margin-top: 2px; }
+.range-ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.bloc-edit summary { cursor: pointer; font-weight: 600; font-size: var(--t-sm); color: var(--ink-2); }
+.bloc-grid { display: grid; gap: 6px; }
+.bloc-row { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.bloc-row .seg button { padding: 3px 8px; font-size: var(--t-xs); }
 
 /* notes and callouts */
 .note { background: var(--surface-2); border: 1px solid var(--rule); border-radius: 8px; padding: 12px 14px; font-size: var(--t-sm); color: var(--ink-2); }
@@ -252,6 +261,7 @@ table.t th[data-sort]:hover { color: var(--ink); }
 .loading { padding: 80px 0; text-align: center; color: var(--muted); }
 .disclaimer { font-size: var(--t-xs); color: var(--muted); border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 36px; }
 
+@media (max-width: 560px) { .hide-sm { display: none; } }
 @media (max-width: 720px) {
   .mast .wrap { grid-template-columns: 1fr; }
   .brand h1 { font-size: 46px; }
@@ -315,7 +325,7 @@ const S = {               // app state
   election: 'K25',
   mapMode: 'winner', mapParty: null, locality: null,
   adjustHouse: true, halfLife: 10,
-  coalition: null, pairIdx: 3, sectorElection: 'K25', arabElection: 'K25',
+  coalition: null, pairIdx: 3, sectorElection: 'K25', arabRegEl: 'K25', arabMixEl: 'K25',
   sims: null,
 };
 const HE = new Intl.NumberFormat('he-IL');
@@ -379,7 +389,7 @@ function slip(letters, name, color, extra = '') {
   return `<span class="slip" ${extra}><i class="dot" style="background:${color}"></i>${letters ? `<b class="let">${esc(letters)}</b>` : ''}<span class="nm">${esc(name)}</span></span>`;
 }
 function seg(id, options, value) {
-  return `<div class="seg" role="group" id="${id}">${options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === value}">${l}</button>`).join('')}</div>`;
+  return `<div class="seg" role="group" id="${id}">${options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${String(v) === String(value)}">${l}</button>`).join('')}</div>`;
 }
 function onSeg(root, id, cb) {
   const el = $('#' + id, root); if (!el) return;
@@ -395,6 +405,12 @@ const ICON_NO = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M1
 function svgEl(container, w, h) {
   container.innerHTML = '';
   return d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
+}
+// Text width in px for gutter sizing (canvas measure, same UI font).
+const _ctx = document.createElement('canvas').getContext('2d');
+function textWidth(str, size = 12.5, weight = 400) {
+  _ctx.font = `${weight} ${size}px "IBM Plex Sans Hebrew", "Arial Hebrew", sans-serif`;
+  return _ctx.measureText(String(str)).width;
 }
 function widthOf(el, fallback = 800) { return Math.max(300, Math.round(el.getBoundingClientRect().width || fallback)); }
 
@@ -442,14 +458,14 @@ const dayMs = 864e5;
 const toDate = s => new Date(s + 'T12:00:00Z');
 function pollWeights(polls, asOf, halfLife) {
   // recency × sample size; prolific pollsters are damped so one house cannot dominate
-  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, p => p.pollster);
+  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, p => p.house);
   return polls.map(p => {
     const age = (asOf - toDate(p.date)) / dayMs;
     if (age < 0 || age > 28) return 0;
     const rec = Math.pow(0.5, age / halfLife);
     const n = p.n || 700;
     const size = Math.min(1.4, Math.max(0.7, Math.sqrt(n / 700)));
-    const k = byHouse.get(p.pollster) || 1;
+    const k = byHouse.get(p.house) || 1;
     return rec * size / Math.sqrt(k);
   });
 }
@@ -458,7 +474,7 @@ function houseEffects(polls, parties) {
   const ids = parties.map(p => p.id);
   const mean = Object.fromEntries(ids.map(id => [id, d3.mean(polls, p => p.seats[id] || 0)]));
   const out = {};
-  d3.group(polls, p => p.pollster).forEach((ps, house) => {
+  d3.group(polls, p => p.house).forEach((ps, house) => {
     const k = ps.length, shrink = k / (k + 3);
     out[house] = Object.fromEntries(ids.map(id => [id, shrink * (d3.mean(ps, p => p.seats[id] || 0) - mean[id])]));
     out[house]._n = k;
@@ -471,14 +487,14 @@ function pollAverage(asOf, { adjust = S.adjustHouse, halfLife = S.halfLife } = {
   // house effects use only polls published by asOf, so the trend line has no look-ahead
   const known = polls.filter(p => toDate(p.date) <= asOf);
   const heKnown = adjust && known.length ? houseEffects(known, parties) : null;
-  const he = heKnown && Object.fromEntries(polls.map(p => [p.pollster, heKnown[p.pollster] || Object.fromEntries(parties.map(pt => [pt.id, 0]))]));
+  const he = heKnown && Object.fromEntries(polls.map(p => [p.house, heKnown[p.house] || Object.fromEntries(parties.map(pt => [pt.id, 0]))]));
   const tw = sum(w);
   const avg = {}, lo = {}, hi = {};
   parties.forEach(pt => {
     let s = 0; const vals = [];
     polls.forEach((p, i) => {
       if (!w[i]) return;
-      const v = (p.seats[pt.id] || 0) - (he ? he[p.pollster][pt.id] : 0);
+      const v = (p.seats[pt.id] || 0) - (he ? he[p.house][pt.id] : 0);
       s += w[i] * v; vals.push(p.seats[pt.id] || 0);
     });
     avg[pt.id] = tw ? s / tw : 0;
@@ -494,17 +510,28 @@ function latestDate() { return toDate(S.polls.polls[S.polls.polls.length - 1].da
 /* Seats → vote shares. Seat counts are rounded results of D'Hondt, so the
    midpoint inverse v = (1 − w)(s + 0.5) / (120 + 0.5K) fits official K21–K25
    results better than s/120 (RMSE 0.26 vs 0.37 points). A list averaging under
-   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: its
-   share comes from the raw % in the CEC filings when present, else 2%. */
-const WASTED = 0.045;
+   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: each
+   poll in the averaging window contributes its raw % from the CEC filing when
+   there is one, else the seat-implied share, or 2.2% for a poll that put the
+   list below the threshold. Same recency weights as the seat average. */
+const WASTED = 0.045, CENSORED = 0.022;
 function voteSharesFromAverage(avg) {
   const shares = {};
-  const recent = S.polls.polls.slice(-20);
   const K = S.polls.parties.filter(p => avg[p.id] >= 3).length;
+  const mid = s => (1 - WASTED) * (s + 0.5) / (120 + 0.5 * K);
+  const w = pollWeights(S.polls.polls, latestDate(), S.halfLife);
+  S.shareBasis = {};
   S.polls.parties.forEach(p => {
-    const raw = recent.map(q => q.pct && q.pct[p.id]).filter(v => v != null);
-    const seatsShare = (1 - WASTED) * (avg[p.id] + 0.5) / (120 + 0.5 * K);
-    shares[p.id] = avg[p.id] >= 3 ? seatsShare : (raw.length ? d3.mean(raw) / 100 : Math.min(0.03, Math.max(avg[p.id] / 120, 0.02)));
+    if (avg[p.id] >= 3) { shares[p.id] = mid(avg[p.id]); return; }
+    let sw = 0, sv = 0, filings = 0, n = 0;
+    S.polls.polls.forEach((q, i) => {
+      if (!w[i]) return;
+      const raw = q.pct && q.pct[p.id] != null ? q.pct[p.id] / 100 : null;
+      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? mid(q.seats[p.id]) : CENSORED;
+      sw += w[i]; sv += w[i] * est; n++; if (raw != null) filings++;
+    });
+    shares[p.id] = sw ? sv / sw : CENSORED;
+    S.shareBasis[p.id] = { polls: n, filings };
   });
   shares._other = Math.max(0.005, 1 - sum(Object.values(shares)));
   return shares;
@@ -572,9 +599,21 @@ function locVotes(loc, eid) {
   return { boxes, elig, voters, valid, arabBoxes, votes: Object.fromEntries(cols.map((c, i) => [c, v[i]])) };
 }
 async function loadBallots(eid) {
-  if (!S.ballots[eid]) S.ballots[eid] = fetch(`data/ballots_${eid}.json`).then(r => r.json());
+  if (!S.ballots[eid]) {
+    S.ballots[eid] = fetchJSON(`data/ballots_${eid}.json`).catch(err => { delete S.ballots[eid]; throw err; });
+  }
   return S.ballots[eid];
 }
+function fetchJSON(url) {
+  return fetch(url).then(r => { if (!r.ok) throw new Error(`${url}: ${r.status}`); return r.json(); });
+}
+// Every tab that reads the poll average, the simulation or the bloc assignment.
+function invalidatePolls() {
+  S.sims = null;
+  ['overview', 'polls', 'coalition', 'arab', 'method'].forEach(t => { if (t !== S.tab) rendered.delete(t); });
+}
+// Date-only strings ('2022-11-01') are calendar dates: format them in UTC so no viewer sees the previous day.
+const dateHe = (s, opts = { day: 'numeric', month: 'long', year: 'numeric' }) => toDate(s).toLocaleDateString('he-IL', { ...opts, timeZone: 'UTC' });
 
 /* ===================== overview ===================== */
 function currentBlocs() {
@@ -602,6 +641,7 @@ function renderOverview() {
   const av = S.avg, parties = S.polls.parties;
   const blocs = currentBlocs();
   const seatAvg = blocTotals(av.avg);
+  const seatNow = blocTotals(S.seatsNow);
   const members = k => parties.filter(p => blocs[p.id] === k).map(p => p.id);
   const coalSim = simSummary(sims, members('coal'));
   const oppSim = simSummary(sims, members('opp'));
@@ -616,14 +656,14 @@ function renderOverview() {
 
   root.innerHTML = `
   <div class="section-head"><div>
-    <span class="eyebrow">נכון ל-${new Date(last.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })} · ${av.n} סקרים ב-28 הימים האחרונים</span>
+    <span class="eyebrow">נכון ל-${dateHe(last.date)} · ${av.n} סקרים ב-28 הימים האחרונים</span>
     <h2>מי מגיע ל-61?</h2>
     <p>ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, מתוקנן להטיית סוקרים. ממנו נגזרים ${fmt(sims.seats.length)} תרחישים של חלוקת מושבים לפי שיטת בדר-עופר ואחוז החסימה.</p>
   </div></div>
   <div class="grid">
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>גוש נתניהו (ממוצע)</span><span class="v num">${fmt1(seatAvg.coal)}</span><span class="d">ב-${pct(100 * coalSim.p61, 0)} מהתרחישים: 61 ומעלה</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>האופוזיציה היהודית (ממוצע)</span><span class="v num">${fmt1(seatAvg.opp)}</span><span class="d">לבדה 61+: ${pct(100 * oppSim.p61, 0)} · עם הרשימות הערביות: ${pct(100 * oppArab.p61, 0)}</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>הרשימה המשותפת + רע״ם</span><span class="v num">${fmt1(seatAvg.arab)}</span><span class="d">בכנסת ה-25: 10 מושבים (רע״ם 5, חד״ש-תע״ל 5)</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>גוש נתניהו</span><span class="v num">${seatNow.coal}</span><span class="d">מושבים לפי ממוצע הסקרים (סכום הממוצעים: ${fmt1(seatAvg.coal)}). 61 ומעלה ב-${pct(100 * coalSim.p61, 0)} מהתרחישים</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>האופוזיציה היהודית</span><span class="v num">${seatNow.opp}</span><span class="d">סכום הממוצעים: ${fmt1(seatAvg.opp)}. 61 ומעלה לבדה: ${pct(100 * oppSim.p61, 0)}; עם הרשימות הערביות: ${pct(100 * oppArab.p61, 0)}</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>הרשימה המשותפת ורע״ם</span><span class="v num">${seatNow.arab}</span><span class="d">סכום הממוצעים: ${fmt1(seatAvg.arab)}. בכנסת ה-25: 10 מושבים (רע״ם 5, חד״ש-תע״ל 5)</span></div>
     <div class="card c3 tile"><span class="l">שיעור ההצבעה בחברה הערבית, 2022</span><span class="v num">${pct(100 * arab25.voters / arab25.elig)}</span><span class="d">ביישובים הערביים והדרוזיים, מול ${pct(100 * jew25.voters / jew25.elig)} ביהודים ואחרים</span></div>
 
     <div class="card c7">
@@ -642,12 +682,12 @@ function renderOverview() {
 
     <div class="card c7">
       <h3>הכנסת לפי הממוצע</h3>
-      <p class="sub">חלוקת 120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה וחלוקת העודפים לפי הסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת).</p>
+      <p class="sub">חלוקת 120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמושבים שלהן מתחלקים בין האחרות.</p>
       <div class="chart" id="ov-strip"></div>
     </div>
     <div class="card c5">
       <h3>מעקב אחוז החסימה</h3>
-      <p class="sub">הסיכוי של כל רשימה לעבור 3.25% בתרחישים.</p>
+      <p class="sub">הסיכוי של כל רשימה לעבור 3.25% בתרחישים. אומדן הקולות לרשימות מתחת ל-3 מנדטים בממוצע נשען על האחוזים הגולמיים בקובצי הדיווח של הסוקרים, כשהם קיימים.</p>
       <div id="ov-thr" class="tbl-wrap"></div>
     </div>
 
@@ -664,10 +704,10 @@ function renderOverview() {
   drawSeatBars($('#ov-bars'), av);
   drawHistogram($('#ov-hist'), coalSim.tot);
   drawStrip($('#ov-strip'), S.seatsNow);
-  $('#ov-thr').innerHTML = passP.length ? `<table class="t"><thead><tr><th>רשימה</th><th class="n">ממוצע</th><th class="n">סיכוי לעבור</th><th>הערכה</th></tr></thead><tbody>${
+  $('#ov-thr').innerHTML = passP.length ? `<table class="t"><thead><tr><th>רשימה</th><th class="n">קולות (אומדן)</th><th class="n">סיכוי לעבור</th><th>הערכה</th></tr></thead><tbody>${
     passP.map(x => {
       const band = x.prob > 0.95 ? ['בטוחה', 'ok'] : x.prob > 0.68 ? ['כנראה עוברת', 'ok'] : x.prob > 0.32 ? ['על הגדר', 'no'] : ['כנראה בחוץ', 'no'];
-      return `<tr><td>${slip(x.p.letters, x.p.name, party26Color(x.p))}</td><td class="n">${fmt1(x.avg)}</td><td class="n">${pct(100 * x.prob, 0)}</td><td><span class="status ${band[1]}">${band[1] === 'ok' ? ICON_OK : ICON_NO}${band[0]}</span></td></tr>`;
+      return `<tr><td>${slip(x.p.letters, x.p.name, party26Color(x.p))}</td><td class="n">${pct(100 * S.shares[x.p.id])}</td><td class="n">${pct(100 * x.prob, 0)}</td><td><span class="status ${band[1]}">${band[1] === 'ok' ? ICON_OK : ICON_NO}${band[0]}</span></td></tr>`;
     }).join('')}</tbody></table>` : '<p class="empty">כל הרשימות רחוקות מהסף.</p>';
 }
 function rate(eid, sector) { const s = E(eid).sectors[sector]; return 100 * s.voters / s.elig; }
@@ -752,7 +792,8 @@ function drawStrip(el, seats) {
     svg.append('line').attr('x1', xa).attr('x2', xb).attr('y1', 4 * (size + gap) + 30).attr('y2', 4 * (size + gap) + 30).attr('stroke', blocColor(b)).attr('stroke-width', 3);
     const short = { coal: 'גוש נתניהו', opp: 'אופוזיציה', arab: 'ערביות' }[b];
     const label = `${W < 560 ? short : BLOC_NAME[b]} · ${n}`;
-    const mid = Math.max(40, Math.min(W - 40, (xa + xb) / 2));
+    const half = textWidth(label, 12.5, 600) / 2 + 2;
+    const mid = Math.max(half, Math.min(W - half, (xa + xb) / 2));
     svg.append('text').attr('class', 'lbl-strong').attr('x', mid).attr('y', 4 * (size + gap) + 50).attr('text-anchor', 'middle').text(label);
     start += n;
   });
@@ -763,7 +804,8 @@ S.trendParties = null;
 S.pollHouse = 'all';
 
 function dailyAverages(fromDate, toDateV) {
-  const days = d3.timeDay.range(fromDate, d3.timeDay.offset(toDateV, 1));
+  // UTC days from the first to the latest poll inclusive; the last point equals the headline average
+  const days = d3.utcDay.range(d3.utcDay.floor(fromDate), d3.utcDay.offset(d3.utcDay.floor(toDateV), 1));
   return days.map(d => ({ date: d, ...pollAverage(new Date(d.getTime() + 12 * 36e5)) }));
 }
 
@@ -771,10 +813,10 @@ function renderPolls() {
   const root = $('#tab-polls');
   const { parties, polls } = S.polls;
   if (!S.trendParties) S.trendParties = new Set(['Likud', 'Yashar', 'Together', 'The Democrats', 'Joint List', "Ra'am"]);
-  const houses = [...new Set(polls.map(p => p.pollster))];
+  const houses = [...new Set(polls.map(p => p.house))];
   root.innerHTML = `
   <div class="section-head"><div>
-    <span class="eyebrow">${polls.length} סקרים · ${houses.length} גופי סקר · ${polls.filter(p => p.filing).length} עם קובץ דיווח רשמי לוועדת הבחירות</span>
+    <span class="eyebrow">${polls.length} סקרים · ${houses.length} סוקרים · ${polls.filter(p => p.filing).length} עם קובץ דיווח רשמי לוועדת הבחירות</span>
     <h2>מגמות בסקרים</h2>
     <p>כל נקודה היא סקר שפורסם; הקו הוא הממוצע המשוקלל ביום נתון (מחצית משקל אחרי ${S.halfLife} ימים, תיקון לגודל מדגם ולסוקרים שמפרסמים הרבה). הממוצע מתוקנן להטיית הבית של כל סוקר כשהמתג פעיל.</p>
   </div></div>
@@ -792,7 +834,7 @@ function renderPolls() {
     </div>
     <div class="card c7">
       <h3>הגושים לאורך זמן</h3>
-      <p class="sub">סך המנדטים לגוש בכל סקר, והממוצע המשוקלל. השיוך לגושים ניתן לשינוי במחשבון הקואליציות.</p>
+      <p class="sub">סך המנדטים לגוש בכל סקר, והממוצע המשוקלל. את שיוך הרשימות לגושים אפשר לשנות במחשבון הקואליציות.</p>
       <div class="chart" id="pl-blocs"></div>
       <div class="legend"><span><i class="line" style="background:var(--coal)"></i>גוש נתניהו</span><span><i class="line" style="background:var(--opp)"></i>האופוזיציה</span><span><i class="line" style="background:var(--arab)"></i>הרשימות הערביות</span></div>
     </div>
@@ -804,14 +846,14 @@ function renderPolls() {
     <div class="card c12">
       <h3>כל הסקרים</h3>
       <p class="sub">מהחדש לישן. ⎙ מסמן סקר שנמצא לו קובץ דיווח רשמי לוועדת הבחירות, לפי חוק הבחירות (דרכי תעמולה).</p>
-      <div class="controls"><span class="ctl-label">סוקר</span><select id="pl-house-sel"><option value="all">כל הסוקרים</option>${houses.map(h => `<option value="${esc(h)}" ${S.pollHouse === h ? 'selected' : ''}>${esc(polls.find(p => p.pollster === h).pollster_he)}</option>`).join('')}</select></div>
+      <div class="controls"><span class="ctl-label">סוקר</span><select id="pl-house-sel"><option value="all">כל הסוקרים</option>${houses.map(h => `<option value="${esc(h)}" ${S.pollHouse === h ? 'selected' : ''}>${esc(polls.find(p => p.house === h).house_he)}</option>`).join('')}</select></div>
       <div class="tbl-wrap scroll-y" id="pl-table"></div>
       <p class="foot">${esc(S.polls.source)}.</p>
     </div>
   </div>`;
   const redraw = () => { drawTrend(); drawBlocTrend(); drawHouse(); drawPollTable(); };
-  $('#pl-adj').addEventListener('change', e => { S.adjustHouse = e.target.checked; S.sims = null; rendered.delete('overview'); rendered.delete('coalition'); redraw(); });
-  onSeg(root, 'pl-hl', v => { S.halfLife = +v; S.sims = null; rendered.delete('overview'); rendered.delete('coalition'); redraw(); });
+  $('#pl-adj').addEventListener('change', e => { S.adjustHouse = e.target.checked; invalidatePolls(); redraw(); });
+  onSeg(root, 'pl-hl', v => { S.halfLife = +v; invalidatePolls(); redraw(); });
   $('#pl-chips').addEventListener('click', e => {
     const b = e.target.closest('button'); if (!b) return;
     const id = b.dataset.id;
@@ -874,7 +916,7 @@ function drawTrend() {
     svg.append('g').selectAll('circle').data(polls.filter(q => q.seats[p.id] != null)).join('circle')
       .attr('cx', q => x(toDate(q.date))).attr('cy', q => y(q.seats[p.id] || 0)).attr('r', 3)
       .attr('fill', c).attr('opacity', .28)
-      .call(s => bindTT(s, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.pollster_he)], ['גוף', esc(q.outlet_he)], ['תאריך', toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC' })]])}`));
+      .call(s => bindTT(s, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.house_he)], ['גוף', esc(q.outlet_he)], ['תאריך', toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC' })]])}`));
     const line = d3.line().x(d => x(d.date)).y(d => y(d.avg[p.id])).curve(d3.curveMonotoneX);
     svg.append('path').attr('d', line(series)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5).attr('stroke-linecap', 'round');
     const last = series[series.length - 1];
@@ -933,7 +975,7 @@ function drawHouse() {
   const he = houseEffects(polls, parties);
   const houses = Object.keys(he).filter(h => he[h]._n >= 2).sort((a, b) => he[b]._n - he[a]._n);
   const cols = parties.filter(p => d3.mean(polls, q => q.seats[p.id] || 0) >= 3);
-  const LW = 150, W = widthOf(el, 480), cw = Math.max(24, (W - LW) / cols.length), rh = 26, M = { t: 64, l: 0 };
+  const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: 64, l: 0 };
   const H = M.t + rh * houses.length + 6;
   const svg = svgEl(el, W, H);
   const color = d3.scaleLinear().domain([-3, 0, 3]).range([cssVar('--crit') || '#d03b3b', cssVar('--surface-2') || '#eee', cssVar('--coal')]).clamp(true);
@@ -943,14 +985,14 @@ function drawHouse() {
   });
   houses.forEach((h, i) => {
     const yy = M.t + i * rh;
-    const name = polls.find(p => p.pollster === h).pollster_he;
-    svg.append('text').attr('class', 'lbl-ink').attr('x', W - 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'start').text(`${name} (${he[h]._n})`);
+    const name = polls.find(p => p.house === h).house_he;
+    svg.append('text').attr('class', 'lbl-ink').attr('x', W - 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'start').style('font-size', W < 560 ? '10.5px' : null).text(W < 560 ? name.split(' (')[0] : `${name} (${he[h]._n})`);
     cols.forEach((p, j) => {
       const v = he[h][p.id];
       const cx = W - LW - (j + 1) * cw;
       svg.append('rect').attr('x', cx + 1).attr('y', yy + 1).attr('width', cw - 2).attr('height', rh - 2).attr('rx', 3).attr('fill', color(v))
         .call(s => bindTT(s, () => `<h4>${esc(name)} · ${esc(p.name)}</h4>${ttRows([['הטיה (מנדטים)', (v > 0 ? '+' : '') + fmt1(v)], ['סקרים', he[h]._n]])}`));
-      if (Math.abs(v) >= 1) svg.append('text').attr('class', 'lbl').attr('x', cx + cw / 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'middle')
+      if (Math.abs(v) >= 1 && cw >= 26) svg.append('text').attr('class', 'lbl').attr('x', cx + cw / 2).attr('y', yy + rh / 2).attr('dy', '.35em').attr('text-anchor', 'middle')
         .style('direction', 'ltr').style('fill', Math.abs(v) > 2 ? '#fff' : 'var(--ink)').style('font-size', '10.5px').text((v > 0 ? '+' : '−') + fmt1(Math.abs(v)));
     });
   });
@@ -959,9 +1001,9 @@ function drawHouse() {
 function drawPollTable() {
   const { polls, parties } = S.polls;
   const cols = parties.filter(p => d3.max(polls, q => q.seats[p.id] || 0) > 0);
-  const rows = polls.filter(p => S.pollHouse === 'all' || p.pollster === S.pollHouse).slice().reverse();
+  const rows = polls.filter(p => S.pollHouse === 'all' || p.house === S.pollHouse).slice().reverse();
   $('#pl-table').innerHTML = `<table class="t"><thead><tr><th>תאריך</th><th>סוקר</th><th>גוף</th><th class="n">מדגם</th>${cols.map(p => `<th class="n" title="${esc(p.name)}">${esc(p.letters)}</th>`).join('')}<th class="n">גוש נתניהו</th><th class="n">אופוזיציה</th><th class="n">ערביות</th><th></th></tr></thead><tbody>${
-    rows.map(q => { const b = pollBlocs(q); return `<tr><td>${toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'numeric' })}</td><td>${esc(q.pollster_he)}</td><td>${esc(q.outlet_he)}</td><td class="n">${q.n ? fmt(q.n) : '—'}</td>${cols.map(p => `<td class="n">${q.seats[p.id] ?? 0}</td>`).join('')}<td class="n"><b>${b.coal}</b></td><td class="n">${b.opp}</td><td class="n">${b.arab}</td><td>${q.filing ? `<a href="${esc(q.filing)}" target="_blank" rel="noopener" title="קובץ הדיווח לוועדת הבחירות">⎙</a>` : ''}</td></tr>`; }).join('')
+    rows.map(q => { const b = pollBlocs(q); return `<tr><td>${toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'numeric' })}</td><td>${esc(q.house_he)}</td><td>${esc(q.outlet_he)}</td><td class="n">${q.n ? fmt(q.n) : '—'}</td>${cols.map(p => `<td class="n">${q.seats[p.id] ?? 0}</td>`).join('')}<td class="n"><b>${b.coal}</b></td><td class="n">${b.opp}</td><td class="n">${b.arab}</td><td>${q.filing ? `<a href="${esc(q.filing)}" target="_blank" rel="noopener" title="קובץ הדיווח לוועדת הבחירות">⎙</a>` : ''}</td></tr>`; }).join('')
   }</tbody></table>`;
 }
 
@@ -1006,6 +1048,10 @@ function renderCoalition() {
       <p class="sub" id="cb-sub" style="margin-top:6px"></p>
       <div class="chart" id="cb-hemi"></div>
       <div class="chips" id="cb-chips" style="margin-top:10px"></div>
+      <details class="bloc-edit" style="margin-top:14px"><summary>שיוך הרשימות לגושים</summary>
+        <p class="sub" style="margin-top:6px">ברירת המחדל: מפלגות הממשלה היוצאת ועמך ישראל בגוש נתניהו, הרשימה המשותפת ורע״ם בנפרד. השינוי חל על כל הדשבורד: ממוצע הגושים, הסימולציה והגרפים.</p>
+        <div id="cb-blocs" class="bloc-grid"></div>
+      </details>
     </div>
     <div class="card c5">
       <h3>הרכבים מוכנים</h3>
@@ -1020,11 +1066,11 @@ function renderCoalition() {
       <h3 style="margin-top:22px">מחולל תרחישים</h3>
       <p class="sub">מה קורה לחלוקת המושבים כשמשתנות ההנחות.</p>
       <label class="ctl-label" for="sc-arab">שיעור ההצבעה בחברה הערבית: <b class="num" id="sc-arab-v"></b></label>
-      <input type="range" id="sc-arab" min="35" max="75" step="1" value="${S.scn.arabT}">
-      <div class="legend" style="justify-content:space-between"><span>2021: ${pct(rate('K24', 'arab_std'))}</span><span>2022: ${pct(rate('K25', 'arab_std'))}</span><span>2020: ${pct(rate('K23', 'arab_std'))}</span></div>
+      <input type="range" id="sc-arab" dir="ltr" min="35" max="75" step="1" value="${S.scn.arabT}">
+      <div class="range-ticks" dir="ltr">${['K21', 'K22', 'K23', 'K24', 'K25'].map(e => { const T = rate(e, 'arab_std'); return `<span style="left:${(T - 35) / 40 * 100}%" title="${E(e).label}: ${pct(T)}">${COMPACT[e]}</span>`; }).join('')}</div>
       <label class="ctl-label" for="sc-swing" style="display:block;margin-top:14px">תזוזה בין גוש נתניהו לאופוזיציה: <b class="num" id="sc-swing-v"></b></label>
-      <input type="range" id="sc-swing" min="-4" max="4" step="0.25" value="${S.scn.swing}">
-      <div class="legend" style="justify-content:space-between"><span>לטובת גוש נתניהו</span><span>לטובת האופוזיציה</span></div>
+      <input type="range" id="sc-swing" dir="ltr" min="-4" max="4" step="0.25" value="${S.scn.swing}">
+      <div class="legend" dir="ltr" style="justify-content:space-between"><span>← לטובת האופוזיציה</span><span>לטובת גוש נתניהו →</span></div>
       <button type="button" class="slip" id="sc-reset" style="margin-top:10px">איפוס לממוצע הסקרים</button>
       <p class="foot">ההנחות: ממוצע הסקרים משקף שיעור הצבעה ערבי של ${pct(ARAB_T0)} ביישובים הערביים והדרוזיים, כמו ב-2022. ${pct(100 * ARAB_FROM_SECTOR, 1)} מקולות הרשימות הערביות ב-2022 ניתנו בקלפיות של החברה הערבית; רק החלק הזה משתנה עם שיעור ההצבעה, וההשתתפות בקלפיות הערביות בערים המעורבות נעה יחד איתו. תזוזה של נקודת אחוז = כ-1.2 מושבים.</p>
     </div>
@@ -1045,11 +1091,22 @@ function renderCoalition() {
     const P = { coal: by('coal'), opp: by('opp'), 'opp-raam': [...by('opp'), "Ra'am"], 'opp-arab': [...by('opp'), ...by('arab')], unity: ['Likud', 'Yashar', 'Together'] };
     S.coalition = new Set(P[b.dataset.preset]); update();
   });
+  drawBlocEditor();
   const sa = $('#sc-arab'), ss = $('#sc-swing');
   sa.addEventListener('input', () => { S.scn.arabT = +sa.value; update(); });
   ss.addEventListener('input', () => { S.scn.swing = +ss.value; update(); });
   $('#sc-reset').addEventListener('click', () => { S.scn = { arabT: Math.round(ARAB_T0), swing: 0 }; sa.value = S.scn.arabT; ss.value = 0; update(); });
   update();
+}
+
+function drawBlocEditor() {
+  const blocs = currentBlocs();
+  const ps = S.polls.parties.filter(p => S.avg.avg[p.id] > 0.5);
+  $('#cb-blocs').innerHTML = ps.map(p => `<div class="bloc-row"><span class="slip"><i class="dot" style="background:${party26Color(p)}"></i><b class="let">${esc(p.letters)}</b><span class="nm">${esc(p.name)}</span></span>${
+    seg('bl-' + p.letters, [['coal', 'נתניהו'], ['opp', 'אופוזיציה'], ['arab', 'ערביות']], blocs[p.id])}</div>`).join('');
+  ps.forEach(p => onSeg($('#cb-blocs'), 'bl-' + p.letters, v => {
+    S.coalitionBlocs[p.id] = v; invalidatePolls(); ensureSims(); drawCoalition(); drawCurve();
+  }));
 }
 
 function coalitionSeats() {
@@ -1181,10 +1238,10 @@ function renderArab() {
 
     <div class="card c7">
       <h3>שיעור ההצבעה לפי מגזר</h3>
-      <p class="sub">הקו הירוק הוא החברה הערבית. הפער מול היהודים נע בין 8 ל-28 נקודות, והוא שמכריע כמה מושבים יקבלו הרשימות הערביות.</p>
+      <p class="sub">הקו הירוק הוא היישובים הערביים והדרוזיים. הפער מול יהודים ואחרים נע בין ${fmt(d3.min(ELS, e => sectorRate(e, 'jewish') - sectorRate(e, 'arab_std')))} ל-${fmt(d3.max(ELS, e => sectorRate(e, 'jewish') - sectorRate(e, 'arab_std')))} נקודות, והוא שמכריע כמה מושבים יקבלו הרשימות הערביות.</p>
       <div class="chart" id="ar-turnout"></div>
       <div class="legend"><span><i class="line" style="background:var(--arab)"></i>יישובים ערביים ודרוזיים</span><span><i class="line" style="background:transparent;border-top:2px dashed var(--arab);height:0"></i>קלפיות ערביות בערים מעורבות</span><span><i class="line" style="background:var(--druze)"></i>דרוזים בגליל ובכרמל</span><span><i class="line" style="background:var(--jewish)"></i>יהודים ואחרים</span><span><i class="line" style="background:var(--muted)"></i>ארצי (רשמי)</span></div>
-      <p class="foot">יהודים ואחרים = כל שאר הקלפיות, כולל המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים). פנקס הבוחרים כולל ישראלים השוהים בחו״ל, ולכן כל שיעורי ההצבעה נמוכים מעט מהשיעור בפועל. המכון הישראלי לדמוקרטיה פרסם: 49.2%, 59.2%, 64.8%, 44.6%, 53.2%.</p>
+      <p class="foot">יהודים ואחרים = כל שאר הקלפיות וכל המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים), כולל מצביעים ערבים ודרוזים שהצביעו במעטפה. לכן השיעור שם מוטה מעט כלפי מעלה, ושיעור ההצבעה ביישובים הערביים, ובמיוחד הדרוזיים, מוטה מעט כלפי מטה. פנקס הבוחרים כולל גם ישראלים השוהים בחו״ל. המכון הישראלי לדמוקרטיה פרסם: 49.2%, 59.2%, 64.8%, 44.6%, 53.2%.</p>
     </div>
     <div class="card c5">
       <h3>מושבי הרשימות הערביות</h3>
@@ -1199,7 +1256,7 @@ function renderArab() {
     </div>
 
     <div class="card c7">
-      <div class="card-head"><div><h3>לפי אזור</h3><p class="sub">השתתפות והצבעה בכל אזור. רע״ם שולטת בנגב ובקרב הבדואים בצפון; חד״ש-תע״ל בנצרת ובכפרים הנוצריים; בל״ד חזקה בוואדי עארה.</p></div>${seg('ar-reg-el', ELS.map(e => [e, E(e).short]), S.arabElection)}</div>
+      <div class="card-head"><div><h3>לפי אזור</h3><p class="sub">השתתפות והצבעה בכל אזור. רע״ם שולטת בנגב ובקרב הבדואים בצפון; חד״ש-תע״ל בנצרת ובכפרים הנוצריים; בל״ד חזקה בוואדי עארה.</p></div>${seg('ar-reg-el', ELS.map(e => [e, E(e).short]), S.arabRegEl)}</div>
       <div class="chart" id="ar-regions"></div>
     </div>
     <div class="card c5">
@@ -1220,7 +1277,7 @@ function renderArab() {
     </div>
 
     <div class="card c7">
-      <div class="card-head"><div><h3>הערים המעורבות</h3><p class="sub">פיצול ברמת הקלפי: קלפיות שבהן הרשימות הערביות קיבלו רוב מול שאר הקלפיות באותה עיר.</p></div>${seg('ar-mix-el', ELS.map(e => [e, E(e).short]), S.arabElection)}</div>
+      <div class="card-head"><div><h3>הערים המעורבות</h3><p class="sub">פיצול ברמת הקלפי: קלפיות שבהן הרשימות הערביות קיבלו רוב מול שאר הקלפיות באותה עיר.</p></div>${seg('ar-mix-el', ELS.map(e => [e, E(e).short]), S.arabMixEl)}</div>
       <div class="tbl-wrap" id="ar-mixed"></div>
     </div>
     <div class="card c5">
@@ -1238,8 +1295,8 @@ function renderArab() {
   drawSankey($('#ar-sankey'));
   drawMixed($('#ar-mixed'));
   drawDruze($('#ar-druze'));
-  onSeg(root, 'ar-reg-el', v => { S.arabElection = v; drawArabRegions($('#ar-regions')); });
-  onSeg(root, 'ar-mix-el', v => { S.arabElection = v; drawMixed($('#ar-mixed')); });
+  onSeg(root, 'ar-reg-el', v => { S.arabRegEl = v; drawArabRegions($('#ar-regions')); });
+  onSeg(root, 'ar-mix-el', v => { S.arabMixEl = v; drawMixed($('#ar-mixed')); });
   onSeg(root, 'ar-pair', v => { S.pairIdx = +v; drawSankey($('#ar-sankey')); });
 }
 
@@ -1284,7 +1341,7 @@ function drawArabSeats(el) {
   const W = widthOf(el, 480), H = 300, M = { t: 18, r: 12, b: 40, l: 12 };
   const svg = svgEl(el, W, H);
   const cols = [...ELS, 'K26'];
-  const x = d3.scaleBand().domain(cols).range([W - M.r, M.l]).padding(0.28);
+  const x = d3.scaleBand().domain(cols).range([M.l, W - M.r]).padding(0.28);   // chronological left to right, like the other charts
   const y = d3.scaleLinear().domain([0, 16]).range([H - M.b, M.t]);
   const av = S.avg.avg;
   cols.forEach(e => {
@@ -1328,22 +1385,26 @@ function drawArabComposition(el) {
       const f = sg.v / s.valid, x0 = x(acc), x1 = x(acc + f);
       svg.append('rect').attr('x', x1 + 1).attr('y', yy + 6).attr('width', Math.max(0, x0 - x1 - 2)).attr('height', rowH - 12).attr('rx', 3).attr('fill', sg.color)
         .call(sel => bindTT(sel, () => `<h4>${esc(sg.name)} · ${E(e).short}</h4>${ttRows([['קולות', fmt(sg.v)], ['מהקולות בקלפיות הערביות', pct(100 * f)]])}${sg.parts ? '<hr style="border:0;border-top:1px solid var(--rule)">' + ttRows(sg.parts.slice(0, 6).map(p => [p.name, fmt(p.v)])) : ''}`));
-      if (x0 - x1 > 70) svg.append('text').attr('class', 'lbl').attr('x', x0 - 8).attr('y', yy + rowH / 2).attr('dy', '.35em').attr('text-anchor', 'start')
-        .style('fill', sg.arab ? '#fff' : 'var(--ink)').style('font-weight', 600).text(`${sg.name} ${pct(100 * f, 0)}`);
+      const full = `${sg.name} ${pct(100 * f, 0)}`, short = pct(100 * f, 0);
+      const txt = x0 - x1 > textWidth(full, 11.5, 600) + 16 ? full : x0 - x1 > textWidth(short, 11.5, 600) + 10 ? short : null;
+      if (txt) svg.append('text').attr('class', 'lbl').attr('x', x0 - 8).attr('y', yy + rowH / 2).attr('dy', '.35em').attr('text-anchor', 'start')
+        .style('fill', sg.arab ? '#fff' : 'var(--ink)').style('font-weight', 600).text(txt);
       acc += f;
     });
   });
 }
 
 function drawArabRegions(el) {
-  const e = S.arabElection, ev = E(e);
+  const e = S.arabRegEl, ev = E(e);
   const regs = ['negev', 'north_bedouin', 'wadi_ara', 'triangle_south', 'nazareth', 'galilee', 'christian', 'mixed_town', 'jerusalem', 'mixed'];
-  const W = widthOf(el), rowH = 40, M = { t: 24, r: 168, b: 8, l: 64 };
+  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? 168 : 112, b: 8, l: W >= 560 ? 64 : 48 };
   const H = M.t + M.b + rowH * regs.length;
   const svg = svgEl(el, W, H);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
-  svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', 12).attr('text-anchor', 'start').text('השתתפות');
-  svg.append('text').attr('class', 'lbl').attr('x', W - M.r).attr('y', 12).attr('text-anchor', 'start').text('חלוקת הקולות הכשרים');
+  if (W >= 560) {
+    svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', 12).attr('text-anchor', 'start').text('השתתפות');
+    svg.append('text').attr('class', 'lbl').attr('x', W - M.r).attr('y', 12).attr('text-anchor', 'start').text('חלוקת הקולות הכשרים');
+  }
   regs.forEach((r, i) => {
     const s = ev.subsectors['arab:' + r]; if (!s) return;
     const yy = M.t + i * rowH;
@@ -1368,7 +1429,7 @@ function drawArabRegions(el) {
 }
 
 function drawArabPolls(el) {
-  const W = widthOf(el, 480), H = 230, M = { t: 16, r: 92, b: 26, l: 28 };
+  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(150, W * 0.38), b: 26, l: 28 };
   const svg = svgEl(el, W, H);
   const { polls, parties } = S.polls;
   const x = d3.scaleUtc().domain([d3.timeDay.offset(toDate(polls[0].date), -2), d3.timeDay.offset(latestDate(), 2)]).range([M.l, W - M.r]);
@@ -1383,7 +1444,7 @@ function drawArabPolls(el) {
   parties.filter(p => p.bloc === 'arab').forEach(p => {
     const c = party26Color(p);
     svg.selectAll(null).data(polls).join('circle').attr('cx', q => x(toDate(q.date))).attr('cy', q => y(q.seats[p.id] || 0)).attr('r', 3).attr('fill', c).attr('opacity', .35)
-      .call(sel => bindTT(sel, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.pollster_he)], ['גוף', esc(q.outlet_he)]])}`));
+      .call(sel => bindTT(sel, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.house_he)], ['גוף', esc(q.outlet_he)]])}`));
     svg.append('path').attr('d', d3.line().x(d => x(d.date)).y(d => y(d.avg[p.id])).curve(d3.curveMonotoneX)(series)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5);
     const l = series[series.length - 1];
     svg.append('text').attr('class', 'lbl-strong').attr('x', x(l.date) + 8).attr('y', y(l.avg[p.id])).attr('dy', '.35em').attr('text-anchor', 'end').text(`${p.name} ${fmt1(l.avg[p.id])}`);
@@ -1406,7 +1467,12 @@ function drawSankey(el) {
   const k = (avail - gap * (Math.max(srcNodes.length, dstNodes.length) - 1)) / tot;
   const place = (nodes) => { let yy = M.t; nodes.forEach(n => { n.y0 = yy; n.h = Math.max(1.5, n.v * k); yy += n.h + gap; n.off = 0; }); };
   place(srcNodes); place(dstNodes);
-  const xs = W - M.r - nodeW - 120, xd = M.l + 120;  // earlier election on the right
+  // earlier election on the right; on wide screens labels sit outside the nodes, on phones inside with a halo
+  const nodeLabel = (eid, n) => `${label(eid, n.id)} · ${fmt(n.v / 1000)} אלף`;
+  const narrow = W < 640;
+  const gutS = narrow ? 0 : d3.max(srcNodes, n => textWidth(nodeLabel(t.from, n))) + 12;
+  const gutD = narrow ? 0 : d3.max(dstNodes, n => textWidth(nodeLabel(t.to, n))) + 12;
+  const xs = W - M.r - nodeW - gutS, xd = M.l + gutD;
   svg.append('text').attr('class', 'lbl-strong').attr('x', W - M.r).attr('y', 14).attr('text-anchor', 'start').text(E(t.from).label);
   svg.append('text').attr('class', 'lbl-strong').attr('x', M.l).attr('y', 14).attr('text-anchor', 'end').text(E(t.to).label);
   const byS = Object.fromEntries(srcNodes.map(n => [n.id, n])), byD = Object.fromEntries(dstNodes.map(n => [n.id, n]));
@@ -1419,19 +1485,22 @@ function drawSankey(el) {
       .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', .42).attr('stroke-width', Math.max(1, h))
       .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', pct(100 * t.matrix[f.i][f.j], 0)]])}`));
   });
+  const halo = sel => narrow ? sel.attr('class', 'lbl-ink halo') : sel;
   srcNodes.forEach(n => {
     svg.append('rect').attr('x', xs).attr('y', n.y0).attr('width', nodeW).attr('height', n.h).attr('fill', color(t.from, n.id)).attr('rx', 2);
-    if (n.h > 9) svg.append('text').attr('class', 'lbl-ink').attr('x', xs + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em').attr('text-anchor', 'end').text(`${label(t.from, n.id)} · ${fmt(n.v / 1000)} אלף`);
+    if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xs - 4 : xs + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
+      .attr('text-anchor', narrow ? 'start' : 'end').text(nodeLabel(t.from, n)));
   });
   dstNodes.forEach(n => {
     svg.append('rect').attr('x', xd).attr('y', n.y0).attr('width', nodeW).attr('height', n.h).attr('fill', color(t.to, n.id)).attr('rx', 2);
-    if (n.h > 9) svg.append('text').attr('class', 'lbl-ink').attr('x', xd - 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em').attr('text-anchor', 'start').text(`${label(t.to, n.id)} · ${fmt(n.v / 1000)} אלף`);
+    if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xd + nodeW + 4 : xd - 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
+      .attr('text-anchor', narrow ? 'end' : 'start').text(nodeLabel(t.to, n)));
   });
   $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת ברמת הקלפי, ${fmt(t.matched)} קלפיות שהותאמו). אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
 }
 
 function drawMixed(el) {
-  const e = S.arabElection, ev = E(e);
+  const e = S.arabMixEl, ev = E(e);
   const rows = Object.entries(ev.mixed).map(([code, d]) => {
     const a = d.arab, j = d.jewish;
     const aLists = arabLists(e).map(p => p.id);
@@ -1503,13 +1572,14 @@ function renderResults() {
     <span class="ctl-label">צביעה</span>${seg('rs-mode', [['winner', 'הרשימה המובילה'], ['party', 'רשימה'], ['turnout', 'השתתפות'], ['sector', 'מגזר']], S.mapMode)}
     <select id="rs-party" aria-label="רשימה לצביעה" ${S.mapMode === 'party' ? '' : 'hidden'}></select>
     <input type="search" id="rs-search" list="rs-names" placeholder="חיפוש יישוב…" aria-label="חיפוש יישוב">
+    <span id="rs-search-msg" class="ctl-label" role="status" style="color:var(--crit)"></span>
     <datalist id="rs-names">${names.map(n => `<option value="${esc(n)}"></option>`).join('')}</datalist>
   </div>
   <div class="grid">
     <div class="card c7" id="rs-national"></div>
     <div class="card c5">
       <h3 id="rs-map-title">מפת היישובים</h3>
-      <p class="sub">כל עיגול הוא יישוב; שטחו לפי מספר המצביעים. גלגלו או צבטו כדי להתקרב.</p>
+      <p class="sub">כל עיגול הוא יישוב; שטחו לפי מספר המצביעים. להתקרבות: הכפתורים, Ctrl עם גלגלת, או שתי אצבעות.</p>
       <div class="map-wrap" id="rs-map"></div>
       <div class="legend" id="rs-legend"></div>
       <p class="foot">מיקום היישוב: מרכז הפוליגון של הלמ״ס (2022). הקו המקווקו מסמן את הקו הירוק. שבטי הנגב מוצגים כעיגול אחד.</p>
@@ -1521,13 +1591,22 @@ function renderResults() {
   onSeg(root, 'rs-mode', v => { S.mapMode = v; $('#rs-party').hidden = v !== 'party'; drawMap(); });
   $('#rs-party').addEventListener('change', e => { S.mapParty = e.target.value; drawMap(); });
   const search = $('#rs-search');
+  // match regardless of geresh vs apostrophe, hyphens and spacing ("אום אל פחם" finds "אום אל-פחם")
+  const norm = s => s.replace(/[׳`’]/g, "'").replace(/[״“”]/g, '"').replace(/[\s\-־'"().]/g, '');
+  let lastQ = '';
   const go = () => {
-    const q = search.value.trim(); if (!q) return;
-    let l = q === 'שבטים ופזורה בנגב' ? findLoc(TRIBES) : S.core.localities.find(x => x.name === q) || S.core.localities.find(x => x.name.includes(q));
-    if (l) { S.locSel = l.tribe && l.code !== TRIBES ? TRIBES : l.code; drawMap(); drawLocality(); $('#rs-loc').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    const q = search.value.trim(); if (!q || q === lastQ) return; lastQ = q;
+    const nq = norm(q);
+    let l = nq === norm('שבטים ופזורה בנגב') ? findLoc(TRIBES)
+      : S.core.localities.find(x => norm(x.name) === nq) || S.core.localities.find(x => norm(x.name).includes(nq));
+    if (!l) { $('#rs-search-msg').textContent = `לא נמצא יישוב בשם ״${q}״`; return; }
+    $('#rs-search-msg').textContent = '';
+    S.locSel = l.tribe && l.code !== TRIBES ? TRIBES : l.code; drawMap(); drawLocality();
+    $('#rs-loc').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   search.addEventListener('change', go);
-  search.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  search.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+  search.addEventListener('input', () => { lastQ = ''; });
   drawNational(); drawMap(); drawLocality();
 }
 
@@ -1540,24 +1619,30 @@ function fillPartySelect() {
 
 function drawNational() {
   const ev = E(S.election), prev = PREV[S.election] ? E(PREV[S.election]) : null;
-  const famSeatsPrev = {};
-  if (prev) prev.parties.forEach(p => { famSeatsPrev[p.family] = (famSeatsPrev[p.family] || 0) + p.seats; });
+  const prevSeats = id => (prev && prev.parties.find(p => p.id === id) || { seats: 0 }).seats;
+  const change = p => {
+    if (!prev || !p.pred || p.seats === 0) return '';
+    if (p.pred === 'new') return '<span class="badge">חדשה</span>';
+    if (p.pred === 'split') return '<span class="badge" title="הרשימה נוצרה מפיצול של רשימה קודמת">פיצול</span>';
+    const before = sum(p.pred.map(prevSeats)), d = p.seats - before;
+    const merged = p.pred.length > 1 ? ` title="מול ${before} מושבים של ${esc(p.pred.map(id => partyName(prev.id, id)).join(' + '))}"` : '';
+    return `<span class="num ${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''}"${merged}>${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}${p.pred.length > 1 ? '*' : ''}</span>`;
+  };
   const rows = ev.parties.filter(p => p.pct >= 0.5);
   const small = ev.parties.filter(p => p.pct < 0.5);
   const wasted = sum(ev.parties.filter(p => p.seats === 0).map(p => p.votes));
   $('#rs-national').innerHTML = `
-    <div class="card-head"><div><h3>${ev.label} · ${new Date(ev.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })}</h3>
+    <div class="card-head"><div><h3>${ev.label} · ${dateHe(ev.date)}</h3>
     <p class="sub">${ev.bloc_note} אחוז החסימה: ${fmt(ev.threshold_votes)} קולות.</p></div>
     <span class="badge off">רשמי</span></div>
     <div class="chart" id="rs-strip"></div>
-    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n">קולות</th><th class="n">אחוז</th><th class="n">מושבים</th><th class="n">שינוי</th><th></th></tr></thead><tbody>${
+    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n hide-sm">קולות</th><th class="n">אחוז</th><th class="n">מושבים</th><th class="n">שינוי</th><th class="hide-sm"></th></tr></thead><tbody>${
       rows.map(p => {
-        const d = prev && p.family !== 'other' && famSeatsPrev[p.family] != null ? p.seats - famSeatsPrev[p.family] : null;
-        return `<tr><td>${slip(p.id, p.name, famColor(p.family))}</td><td class="n">${fmt(p.votes)}</td><td class="n">${pct(p.pct, 2)}</td><td class="n"><b>${p.seats || '—'}</b></td>
-          <td class="n">${d == null || p.seats === 0 ? '' : `<span class="${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''} num">${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}</span>`}</td>
-          <td><span class="minibar" style="width:${Math.round(p.pct * 3)}px;background:${famColor(p.family)};opacity:${p.seats ? 1 : .4}"></span></td></tr>`;
+        return `<tr><td>${slip(p.id, p.name, famColor(p.family))}</td><td class="n hide-sm">${fmt(p.votes)}</td><td class="n">${pct(p.pct, 2)}</td><td class="n"><b>${p.seats || '—'}</b></td>
+          <td class="n">${change(p)}</td>
+          <td class="hide-sm"><span class="minibar" style="width:${Math.round(p.pct * 3)}px;background:${famColor(p.family)};opacity:${p.seats ? 1 : .4}"></span></td></tr>`;
       }).join('')}
-      <tr><td><span class="slip"><span class="nm">${small.length} רשימות קטנות</span></span></td><td class="n">${fmt(sum(small.map(p => p.votes)))}</td><td class="n">${pct(sum(small.map(p => p.pct)), 2)}</td><td class="n">—</td><td></td><td></td></tr>
+      <tr><td><span class="slip"><span class="nm">${small.length} רשימות קטנות</span></span></td><td class="n hide-sm">${fmt(sum(small.map(p => p.votes)))}</td><td class="n">${pct(sum(small.map(p => p.pct)), 2)}</td><td class="n">—</td><td></td><td class="hide-sm"></td></tr>
     </tbody></table></div>
     <div class="kv kv3">
       <div><b class="num">${fmt(ev.eligible)}</b><span>בעלי זכות בחירה</span></div>
@@ -1567,7 +1652,7 @@ function drawNational() {
       <div><b class="num">${pct(100 * wasted / ev.valid)}</b><span>קולות לרשימות שלא עברו</span></div>
       <div><b class="num">${fmt(ev.envelope_voters)}</b><span>הצביעו במעטפות כפולות</span></div>
     </div>
-    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener">${esc(ev.official_url.replace('https://', ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במושבים מחושב מול אותה משפחה פוליטית בבחירות הקודמות.</p>`;
+    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener">${esc(ev.official_url.replace('https://', ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במושבים מחושב מול הרשימה הקודמת; * = מול סך הרשימות שהתאחדו לתוכה.</p>`;
   drawSeatStrip($('#rs-strip'), ev);
 }
 
@@ -1657,7 +1742,9 @@ function drawMap() {
   }
   bindTT(bub, d => locTooltip(d, eid));
   bub.on('click', (ev, d) => { S.locSel = d.code; g.selectAll('circle.bub').classed('sel', x => x.code === d.code); drawLocality(); });
-  const zoom = d3.zoom().scaleExtent([1, 14]).on('zoom', ev => {
+  const zoom = d3.zoom().scaleExtent([1, 14])
+    .filter(ev => ev.type === 'wheel' ? (ev.ctrlKey || ev.metaKey) : ev.type.startsWith('touch') ? ev.touches.length > 1 : !ev.button)
+    .on('zoom', ev => {
     g.attr('transform', ev.transform);
     g.selectAll('circle.bub').attr('r', d => Math.max(1.3, r(d.el[eid][2])) / Math.sqrt(ev.transform.k)).attr('stroke-width', .6 / ev.transform.k);
     g.selectAll('path.land, path.greenline').attr('stroke-width', 0.8 / ev.transform.k);
@@ -1703,7 +1790,7 @@ async function drawLocality() {
       <div class="c6"><h3 style="font-size:var(--t-md)">תוצאות לפי קלפי · ${E(eid).short}</h3><p class="sub">לחצו על כותרת עמודה למיון.${l.sector === 'mixed' ? ' קלפיות שבהן לרשימות הערביות רוב מסומנות.' : ''}</p><div id="loc-ballots" class="tbl-wrap scroll-y"><p class="empty">טוען קלפיות…</p></div></div>
     </div>`;
   drawLocTrend($('#loc-trend'), l);
-  $('#loc-turn').innerHTML = `<table class="t"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
+  $('#loc-turn').innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
   const b = await loadBallots(eid);
   if (S.locSel !== l.code || S.election !== eid) return;
   drawBallotTable($('#loc-ballots'), l, b, eid);
@@ -1809,7 +1896,7 @@ function renderSectors() {
     </div>
     <div class="card c7">
       <h3>מעמד חברתי-כלכלי והשתתפות</h3>
-      <p class="sub">כל עיגול הוא יישוב: מיקומו לפי האשכול החברתי-כלכלי של הלמ״ס (1 = הנמוך) ושיעור ההצבעה; שטחו לפי בעלי זכות הבחירה. יישובים ערביים מרוכזים באשכולות 1–4, ולכן קשה להפריד בין השפעת המגזר להשפעת המעמד.</p>
+      <p class="sub">כל עיגול הוא יישוב עם 5,000 בעלי זכות ומעלה: מיקומו לפי האשכול החברתי-כלכלי של הלמ״ס (1 = הנמוך) ושיעור ההצבעה; שטחו לפי בעלי זכות הבחירה. יישובים ערביים מרוכזים באשכולות 1–4, ולכן קשה להפריד בין השפעת המגזר להשפעת המעמד.</p>
       <div class="chart" id="sc-scatter"></div>
       <div class="legend"><span><i style="background:var(--jewish)"></i>יישוב יהודי</span><span><i style="background:var(--arab)"></i>יישוב ערבי</span><span><i style="background:var(--druze)"></i>יישוב דרוזי או צ׳רקסי</span><span><i style="background:var(--muted)"></i>עיר מעורבת</span></div>
     </div>
@@ -1908,14 +1995,14 @@ function drawScatter() {
 S.accEl = 'K25';
 // Netanyahu camp as it was framed before each election (includes right-wing lists that then missed the threshold)
 const PRE_BLOC = {
-  K21: ['מחל', 'שס', 'ג', 'טב', 'כ', 'נ', 'ז'], K22: ['מחל', 'שס', 'ג', 'טב', 'כף'], K23: ['מחל', 'שס', 'ג', 'טב', 'נץ'],
+  K21: ['מחל', 'שס', 'ג', 'טב', 'כ', 'נ', 'ז', 'ל'], K22: ['מחל', 'שס', 'ג', 'טב', 'כף'], K23: ['מחל', 'שס', 'ג', 'טב', 'נץ'],
   K24: ['מחל', 'שס', 'ג', 'ט'], K25: ['מחל', 'ט', 'שס', 'ג'],
 };
 
 async function renderAccuracy() {
   const root = $('#tab-accuracy');
   root.innerHTML = '<p class="loading">טוען סקרים היסטוריים…</p>';
-  if (!S.finalPolls) S.finalPolls = await fetch('data/final_polls.json').then(r => r.json());
+  if (!S.finalPolls) S.finalPolls = await fetchJSON('data/final_polls.json');
   const F = S.finalPolls;
   const fe = id => F.elections.find(e => e.id === id);
   const blocErr = id => { const e = fe(id); return sum(PRE_BLOC[id].map(k => e.avg[k] || 0)) - sum(PRE_BLOC[id].map(k => e.actual[k] || 0)); };
@@ -1936,7 +2023,7 @@ async function renderAccuracy() {
           const sign = v => `<span class="num" style="${Math.abs(v) >= 2 ? 'color:var(--crit);font-weight:600' : ''}">${v > 0 ? '+' : v < 0 ? '−' : ''}${fmt1(Math.abs(v))}</span>`;
           return `<tr><td><b>${E(e.id).short}</b> · ${E(e.id).label}</td><td class="n">${e.polls.length}</td><td class="n"><span class="minibar" style="width:${Math.round(e.mae * 26)}px;background:var(--ink);margin-inline-end:6px"></span>${fmt1(e.mae)}</td><td class="n">${sign(be)}</td><td class="n">${sign(ae)}</td><td style="min-width:260px">${esc(LESSON[e.id])}</td></tr>`;
         }).join('')}</tbody></table></div>
-      <p class="foot">ערך חיובי = הסקרים נתנו יותר מהתוצאה. גוש נתניהו לפני הבחירות כולל רשימות ימין שלא עברו את אחוז החסימה (הימין החדש וזהות ב-2019, עוצמה יהודית ב-2019–2020), ולכן הסקרים ״הגזימו״ בו בבחירות שבהן קולות כאלה הלכו לפח.</p>
+      <p class="foot">ערך חיובי = הסקרים נתנו יותר מהתוצאה. גוש נתניהו כפי שהוגדר לפני הבחירות כולל רשימות ימין שבסוף לא עברו את אחוז החסימה (הימין החדש וזהות באפריל 2019, עוצמה יהודית בספטמבר 2019 וב-2020), ובאפריל 2019 גם את ישראל ביתנו. בספטמבר 2019 הסקרים הגזימו בגוש בגלל עוצמה יהודית, שנמדדה ב-4 מושבים ולא עברה; ב-2021 וב-2022 הם חסרו לו 2–4 מושבים.</p>
     </div>
     <div class="card c12">
       <div class="card-head"><div><h3>ממוצע הסקרים מול התוצאה, לפי רשימה</h3><p class="sub">עיגול חלול = ממוצע הסקרים האחרונים; עיגול מלא = התוצאה הרשמית; נקודות קטנות = סקרים בודדים.</p></div>${seg('acc-el', ELS.map(e => [e, E(e).short]), S.accEl)}</div>
@@ -1954,7 +2041,7 @@ async function renderAccuracy() {
     </div>
     <div class="card c6">
       <h3>מדד דיוק לפי סוקר</h3>
-      <p class="sub">טעות ממוצעת לרשימה בכל סקר אחרון שפרסם הסוקר, על פני כל המערכות שבהן השתתף.</p>
+      <p class="sub">כמה כל סוקר היה מדויק יותר (מינוס) או פחות (פלוס) מהסוקרים האחרים באותן בחירות, בממוצע לרשימה. ההשוואה היא בתוך כל מערכת, כי אפריל 2019 הייתה קשה במיוחד לכולם.</p>
       <div class="tbl-wrap" id="acc-houses"></div>
       <p class="foot">${esc(F.source)}. מספרי המדגם לא נכללו במקורות, ולכן כל סקר מקבל משקל שווה.</p>
     </div>
@@ -2004,16 +2091,20 @@ function drawDumbbell() {
 
 function drawHouseAccuracy() {
   const F = S.finalPolls; const acc = new Map();
-  F.elections.forEach(e => e.polls.forEach(p => {
-    const key = p.pollster_he;
+  F.elections.forEach(e => {
     const keys = Object.keys(e.actual);
-    const mae = d3.mean(keys, k => Math.abs((p.seats[k] || 0) - (e.actual[k] || 0)));
-    if (!acc.has(key)) acc.set(key, { n: 0, sum: 0, els: new Set() });
-    const a = acc.get(key); a.n++; a.sum += mae; a.els.add(E(e.id).short);
-  }));
-  const rows = [...acc].map(([k, v]) => ({ k, n: v.n, mae: v.sum / v.n, els: [...v.els] })).filter(r => r.n >= 2).sort((a, b) => a.mae - b.mae);
-  $('#acc-houses').innerHTML = `<table class="t"><thead><tr><th>סוקר</th><th class="n">סקרים</th><th class="n">טעות ממוצעת לרשימה</th><th>מערכות</th></tr></thead><tbody>${
-    rows.map(r => `<tr><td>${esc(r.k)}</td><td class="n">${r.n}</td><td class="n"><span class="minibar" style="width:${Math.round(r.mae * 26)}px;background:var(--ink);margin-inline-end:6px"></span>${fmt1(r.mae)}</td><td>${r.els.join(', ')}</td></tr>`).join('')}</tbody></table>`;
+    const maes = e.polls.map(p => d3.mean(keys, k => Math.abs((p.seats[k] || 0) - (e.actual[k] || 0))));
+    const base = d3.mean(maes);
+    e.polls.forEach((p, i) => {
+      const key = p.pollster_he;
+      if (!acc.has(key)) acc.set(key, { n: 0, rel: 0, raw: 0, els: new Set() });
+      const a = acc.get(key); a.n++; a.rel += maes[i] - base; a.raw += maes[i]; a.els.add(E(e.id).short);
+    });
+  });
+  const rows = [...acc].map(([k, v]) => ({ k, n: v.n, rel: v.rel / v.n, raw: v.raw / v.n, els: [...v.els] })).filter(r => r.n >= 2).sort((a, b) => a.rel - b.rel);
+  const sgn = v => `${v > 0 ? '+' : v < 0 ? '−' : ''}${fmt1(Math.abs(v))}`;
+  $('#acc-houses').innerHTML = `<table class="t"><thead><tr><th>סוקר</th><th class="n">סקרים</th><th class="n">מול הסוקרים האחרים</th><th class="n">טעות ממוצעת לרשימה</th><th>מערכות</th></tr></thead><tbody>${
+    rows.map(r => `<tr><td>${esc(r.k)}</td><td class="n">${r.n}</td><td class="n"><b class="num">${sgn(r.rel)}</b></td><td class="n">${fmt1(r.raw)}</td><td>${r.els.join(', ')}</td></tr>`).join('')}</tbody></table>`;
 }
 
 /* ===================== methodology & sources ===================== */
@@ -2033,11 +2124,11 @@ function renderMethod() {
     <div class="card c12">
       <h3>בדיקות תקינות על הנתונים הרשמיים</h3>
       <p class="sub">הבדיקות רצות בכל בנייה של הנתונים, וכל חריגה עוצרת את הבנייה.</p>
-      <div class="tbl-wrap"><table class="t"><thead><tr><th>בחירות</th><th class="n">שורות קלפי</th><th class="n">קולות כשרים</th><th>סכום כל רשימה מול הטבלה הארצית</th><th>מושבים בבדר-עופר מול הרשמי</th><th class="n">הצבעה ערבית: אצלנו</th><th class="n">המכון הישראלי לדמוקרטיה</th></tr></thead><tbody>${
+      <div class="tbl-wrap"><table class="t"><thead><tr><th>בחירות</th><th class="n">קלפיות (בלי מעטפות)</th><th class="n">קולות כשרים</th><th>סכום כל רשימה מול הטבלה הארצית</th><th>מושבים בבדר-עופר מול הרשמי</th><th class="n">הצבעה ערבית: אצלנו</th><th class="n">המכון הישראלי לדמוקרטיה</th></tr></thead><tbody>${
         els.map(e => {
           const st = e.sectors.arab_std; const ours = 100 * st.voters / st.elig;
           const seatNote = e.seats_check === 'identical' ? '<span class="status ok">' + ICON_OK + 'זהה</span>' : `בלי הסכמי עודפים: ${Object.entries(e.seats_check).map(([k, [c, o]]) => `${esc(partyName(e.id, k))} ${c} במקום ${o}`).join(', ')}`;
-          return `<tr><td>${esc(e.label)}</td><td class="n">${fmt(e.boxes)}</td><td class="n">${fmt(e.valid)}</td><td><span class="status ok">${ICON_OK}זהה בכל ${e.parties.length} הרשימות</span></td><td>${seatNote}</td><td class="n"><b>${pct(ours)}</b></td><td class="n">${pct(IDI_TURNOUT[e.id])}</td></tr>`;
+          return `<tr><td>${esc(e.label)}</td><td class="n">${fmt(e.boxes)}</td><td class="n">${fmt(e.valid)}</td><td>${e.reconcile && e.reconcile.mismatches === 0 ? `<span class="status ok">${ICON_OK}זהה בכל ${e.reconcile.lists} הרשימות</span>` : `<span class="status no">${ICON_NO}${e.reconcile ? e.reconcile.mismatches : '?'} הפרשים</span>`}</td><td>${seatNote}</td><td class="n"><b>${pct(ours)}</b></td><td class="n">${pct(IDI_TURNOUT[e.id])}</td></tr>`;
         }).join('')}</tbody></table></div>
       <p class="foot">בספטמבר 2019 הדף הארצי מדווח 6,394,030 בעלי זכות, 2,812 יותר מסכום שורות הקלפי; בטבלאות מוצג הנתון הארצי (69.83%). בכל שורת קלפי סכום קולות הרשימות שווה למספר הקולות הכשרים. חלוקת המושבים מחושבת מחדש בשיטת בדר-עופר; בלי הסכמי העודפים מתקבל הפרש של מושב אחד בין זוג רשימות בשלוש מערכות, ועם הסכמים אפשריים מתקבלת התוצאה הרשמית בדיוק. ההצבעה הערבית מחושבת על היישובים הערביים והדרוזיים, כמו בפרסומי המכון.</p>
     </div>
@@ -2049,7 +2140,7 @@ function renderMethod() {
         <tr><td><b>סקרים אחרונים 2019–2022</b></td><td>הסקרים האחרונים שפורסמו לפני כל מערכת, כפי שרוכזו בטבלאות הסקרים של ויקיפדיה; שתי סריקות עצמאיות זהות, כותרות מרכזיות אומתו מול דיווחי חדשות</td><td>סקר</td><td><span class="badge">פורסם</span> 54 סקרים (סקר כפול אחד הוסר). בייצור: השלמה מארכיוני כלי התקשורת וממאגרי הדיווח של ועדת הבחירות.</td></tr>
         <tr><td><b>רשימות 2026 ואותיות הפתק</b></td><td>38 הרשימות שאישרה ועדת הבחירות (סוף ספטמבר 2026), כפי שפורסמו בכלי התקשורת</td><td>רשימה</td><td><span class="badge">פורסם</span> האותיות יאומתו מול הפרסום הרשמי של הוועדה; אותיות הרשימה המשותפת (ודם) טרם אומתו.</td></tr>
         <tr><td><b>מיקום יישובים</b></td><td>הלמ״ס: גבולות יישובים 2022 (מרכז הפוליגון הגדול)</td><td>יישוב</td><td><span class="badge off">רשמי</span> טביעת SHA-256 נבדקה</td></tr>
-        <tr><td><b>מדד חברתי-כלכלי</b></td><td>הלמ״ס: מדד חברתי-כלכלי 2021 (פרסום 1955), אשכול 1–10</td><td>רשות מקומית / יישוב</td><td><span class="badge off">רשמי</span> הוצמד לפי שם יישוב</td></tr>
+        <tr><td><b>מדד חברתי-כלכלי</b></td><td>הלמ״ס: מדד חברתי-כלכלי 2021 (פרסום 1955), אשכול 1–10, דרך עותק משני</td><td>רשות מקומית / יישוב</td><td><span class="badge est">משני</span> הוצמד לפי שם יישוב, ורק ליישובים עם 5,000 בעלי זכות ומעלה: בעותק, יישוב קטן בתוך מועצה אזורית מקבל את ערך המועצה. בייצור: קובץ הלמ״ס לפי קוד יישוב.</td></tr>
         <tr><td><b>סיווג יישובים ערביים ודרוזיים</b></td><td>155 קודי יישוב בחלוקה ל-15 קבוצות (בדואים בנגב, ואדי עארה, נצרת, כפרים נוצריים, דרוזים ועוד)</td><td>יישוב</td><td><span class="badge est">אומדן</span> נבנה לפי כלל מוגדר ואומת מול פרסומי המכון הישראלי לדמוקרטיה. בייצור: שדה ״קבוצת אוכלוסייה״ בקובץ היישובים של הלמ״ס.</td></tr>
       </tbody></table></div>
     </div>
@@ -2082,7 +2173,7 @@ function renderMethod() {
       <h3>מגבלות ידועות</h3>
       <ul>
         <li>פנקס הבוחרים כולל ישראלים השוהים בחו״ל, ולכן כל שיעורי ההצבעה נמוכים מהשיעור בקרב התושבים.</li>
-        <li>בקלפיות של ״שאר היהודים״ חסרים המצביעים במעטפות כפולות, ולכן שיעור ההצבעה שם מוטה כלפי מטה.</li>
+        <li>המעטפות הכפולות אינן משויכות ליישוב, ולכן כולן נספרות ב״יהודים ואחרים״, גם של מצביעים ערבים ודרוזים (למשל חיילים ושוטרים). כך שיעור ההצבעה של ״יהודים ואחרים״ מוטה מעט כלפי מעלה, ושל היישובים הערביים, ובמיוחד הדרוזיים, מעט כלפי מטה. בטבלת הפילוח, ״שאר הקלפיות״ אינן כוללות מעטפות כלל ולכן מוטות כלפי מטה.</li>
         <li>בערים המעורבות, ערבים שמצביעים בקלפיות מעורבות נספרים כיהודים, ולהפך.</li>
         <li>שבטי הנגב הם יחידות רישום ולא מקומות. הם מוצגים במפה כעיגול אחד.</li>
         <li>המיקום של כל יישוב הוא מרכז הפוליגון, לא מיקום הקלפיות. בייצור יתווסף מיפוי קלפי לאזור סטטיסטי של הלמ״ס.</li>
@@ -2211,8 +2302,9 @@ function showTab(tab, { push = true } = {}) {
   $$('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
   $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab; });
   if (!rendered.has(tab)) {
-    try { RENDER[tab](); } catch (err) { console.error(err); $(`#tab-${tab}`).innerHTML = `<p class="empty">שגיאה בהצגת המדור: ${esc(err.message)}</p>`; }
+    const fail = err => { console.error(err); rendered.delete(tab); $(`#tab-${tab}`).innerHTML = `<p class="empty">טעינת המדור נכשלה. <button type="button" class="slip" data-goto="${tab}">ניסיון נוסף</button></p>`; };
     rendered.add(tab);
+    try { const r = RENDER[tab](); if (r && r.catch) r.catch(fail); } catch (err) { fail(err); }
   }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -2239,9 +2331,9 @@ async function boot() {
   countdown();
   try {
     const [core, polls, outline] = await Promise.all([
-      fetch('data/core.json').then(r => r.json()),
-      fetch('data/polls_2026.json').then(r => r.json()),
-      fetch('data/outline.json').then(r => r.json()),
+      fetchJSON('data/core.json'),
+      fetchJSON('data/polls_2026.json'),
+      fetchJSON('data/outline.json'),
     ]);
     S.core = core; S.polls = polls; S.outline = outline;
   } catch (err) {

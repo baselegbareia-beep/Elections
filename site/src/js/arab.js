@@ -28,10 +28,10 @@ function renderArab() {
 
     <div class="card c7">
       <h3>שיעור ההצבעה לפי מגזר</h3>
-      <p class="sub">הקו הירוק הוא החברה הערבית. הפער מול היהודים נע בין 8 ל-28 נקודות, והוא שמכריע כמה מושבים יקבלו הרשימות הערביות.</p>
+      <p class="sub">הקו הירוק הוא היישובים הערביים והדרוזיים. הפער מול יהודים ואחרים נע בין ${fmt(d3.min(ELS, e => sectorRate(e, 'jewish') - sectorRate(e, 'arab_std')))} ל-${fmt(d3.max(ELS, e => sectorRate(e, 'jewish') - sectorRate(e, 'arab_std')))} נקודות, והוא שמכריע כמה מושבים יקבלו הרשימות הערביות.</p>
       <div class="chart" id="ar-turnout"></div>
       <div class="legend"><span><i class="line" style="background:var(--arab)"></i>יישובים ערביים ודרוזיים</span><span><i class="line" style="background:transparent;border-top:2px dashed var(--arab);height:0"></i>קלפיות ערביות בערים מעורבות</span><span><i class="line" style="background:var(--druze)"></i>דרוזים בגליל ובכרמל</span><span><i class="line" style="background:var(--jewish)"></i>יהודים ואחרים</span><span><i class="line" style="background:var(--muted)"></i>ארצי (רשמי)</span></div>
-      <p class="foot">יהודים ואחרים = כל שאר הקלפיות, כולל המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים). פנקס הבוחרים כולל ישראלים השוהים בחו״ל, ולכן כל שיעורי ההצבעה נמוכים מעט מהשיעור בפועל. המכון הישראלי לדמוקרטיה פרסם: 49.2%, 59.2%, 64.8%, 44.6%, 53.2%.</p>
+      <p class="foot">יהודים ואחרים = כל שאר הקלפיות וכל המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים), כולל מצביעים ערבים ודרוזים שהצביעו במעטפה. לכן השיעור שם מוטה מעט כלפי מעלה, ושיעור ההצבעה ביישובים הערביים, ובמיוחד הדרוזיים, מוטה מעט כלפי מטה. פנקס הבוחרים כולל גם ישראלים השוהים בחו״ל. המכון הישראלי לדמוקרטיה פרסם: 49.2%, 59.2%, 64.8%, 44.6%, 53.2%.</p>
     </div>
     <div class="card c5">
       <h3>מושבי הרשימות הערביות</h3>
@@ -46,7 +46,7 @@ function renderArab() {
     </div>
 
     <div class="card c7">
-      <div class="card-head"><div><h3>לפי אזור</h3><p class="sub">השתתפות והצבעה בכל אזור. רע״ם שולטת בנגב ובקרב הבדואים בצפון; חד״ש-תע״ל בנצרת ובכפרים הנוצריים; בל״ד חזקה בוואדי עארה.</p></div>${seg('ar-reg-el', ELS.map(e => [e, E(e).short]), S.arabElection)}</div>
+      <div class="card-head"><div><h3>לפי אזור</h3><p class="sub">השתתפות והצבעה בכל אזור. רע״ם שולטת בנגב ובקרב הבדואים בצפון; חד״ש-תע״ל בנצרת ובכפרים הנוצריים; בל״ד חזקה בוואדי עארה.</p></div>${seg('ar-reg-el', ELS.map(e => [e, E(e).short]), S.arabRegEl)}</div>
       <div class="chart" id="ar-regions"></div>
     </div>
     <div class="card c5">
@@ -67,7 +67,7 @@ function renderArab() {
     </div>
 
     <div class="card c7">
-      <div class="card-head"><div><h3>הערים המעורבות</h3><p class="sub">פיצול ברמת הקלפי: קלפיות שבהן הרשימות הערביות קיבלו רוב מול שאר הקלפיות באותה עיר.</p></div>${seg('ar-mix-el', ELS.map(e => [e, E(e).short]), S.arabElection)}</div>
+      <div class="card-head"><div><h3>הערים המעורבות</h3><p class="sub">פיצול ברמת הקלפי: קלפיות שבהן הרשימות הערביות קיבלו רוב מול שאר הקלפיות באותה עיר.</p></div>${seg('ar-mix-el', ELS.map(e => [e, E(e).short]), S.arabMixEl)}</div>
       <div class="tbl-wrap" id="ar-mixed"></div>
     </div>
     <div class="card c5">
@@ -85,8 +85,8 @@ function renderArab() {
   drawSankey($('#ar-sankey'));
   drawMixed($('#ar-mixed'));
   drawDruze($('#ar-druze'));
-  onSeg(root, 'ar-reg-el', v => { S.arabElection = v; drawArabRegions($('#ar-regions')); });
-  onSeg(root, 'ar-mix-el', v => { S.arabElection = v; drawMixed($('#ar-mixed')); });
+  onSeg(root, 'ar-reg-el', v => { S.arabRegEl = v; drawArabRegions($('#ar-regions')); });
+  onSeg(root, 'ar-mix-el', v => { S.arabMixEl = v; drawMixed($('#ar-mixed')); });
   onSeg(root, 'ar-pair', v => { S.pairIdx = +v; drawSankey($('#ar-sankey')); });
 }
 
@@ -131,7 +131,7 @@ function drawArabSeats(el) {
   const W = widthOf(el, 480), H = 300, M = { t: 18, r: 12, b: 40, l: 12 };
   const svg = svgEl(el, W, H);
   const cols = [...ELS, 'K26'];
-  const x = d3.scaleBand().domain(cols).range([W - M.r, M.l]).padding(0.28);
+  const x = d3.scaleBand().domain(cols).range([M.l, W - M.r]).padding(0.28);   // chronological left to right, like the other charts
   const y = d3.scaleLinear().domain([0, 16]).range([H - M.b, M.t]);
   const av = S.avg.avg;
   cols.forEach(e => {
@@ -175,22 +175,26 @@ function drawArabComposition(el) {
       const f = sg.v / s.valid, x0 = x(acc), x1 = x(acc + f);
       svg.append('rect').attr('x', x1 + 1).attr('y', yy + 6).attr('width', Math.max(0, x0 - x1 - 2)).attr('height', rowH - 12).attr('rx', 3).attr('fill', sg.color)
         .call(sel => bindTT(sel, () => `<h4>${esc(sg.name)} · ${E(e).short}</h4>${ttRows([['קולות', fmt(sg.v)], ['מהקולות בקלפיות הערביות', pct(100 * f)]])}${sg.parts ? '<hr style="border:0;border-top:1px solid var(--rule)">' + ttRows(sg.parts.slice(0, 6).map(p => [p.name, fmt(p.v)])) : ''}`));
-      if (x0 - x1 > 70) svg.append('text').attr('class', 'lbl').attr('x', x0 - 8).attr('y', yy + rowH / 2).attr('dy', '.35em').attr('text-anchor', 'start')
-        .style('fill', sg.arab ? '#fff' : 'var(--ink)').style('font-weight', 600).text(`${sg.name} ${pct(100 * f, 0)}`);
+      const full = `${sg.name} ${pct(100 * f, 0)}`, short = pct(100 * f, 0);
+      const txt = x0 - x1 > textWidth(full, 11.5, 600) + 16 ? full : x0 - x1 > textWidth(short, 11.5, 600) + 10 ? short : null;
+      if (txt) svg.append('text').attr('class', 'lbl').attr('x', x0 - 8).attr('y', yy + rowH / 2).attr('dy', '.35em').attr('text-anchor', 'start')
+        .style('fill', sg.arab ? '#fff' : 'var(--ink)').style('font-weight', 600).text(txt);
       acc += f;
     });
   });
 }
 
 function drawArabRegions(el) {
-  const e = S.arabElection, ev = E(e);
+  const e = S.arabRegEl, ev = E(e);
   const regs = ['negev', 'north_bedouin', 'wadi_ara', 'triangle_south', 'nazareth', 'galilee', 'christian', 'mixed_town', 'jerusalem', 'mixed'];
-  const W = widthOf(el), rowH = 40, M = { t: 24, r: 168, b: 8, l: 64 };
+  const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? 168 : 112, b: 8, l: W >= 560 ? 64 : 48 };
   const H = M.t + M.b + rowH * regs.length;
   const svg = svgEl(el, W, H);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
-  svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', 12).attr('text-anchor', 'start').text('השתתפות');
-  svg.append('text').attr('class', 'lbl').attr('x', W - M.r).attr('y', 12).attr('text-anchor', 'start').text('חלוקת הקולות הכשרים');
+  if (W >= 560) {
+    svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', 12).attr('text-anchor', 'start').text('השתתפות');
+    svg.append('text').attr('class', 'lbl').attr('x', W - M.r).attr('y', 12).attr('text-anchor', 'start').text('חלוקת הקולות הכשרים');
+  }
   regs.forEach((r, i) => {
     const s = ev.subsectors['arab:' + r]; if (!s) return;
     const yy = M.t + i * rowH;
@@ -215,7 +219,7 @@ function drawArabRegions(el) {
 }
 
 function drawArabPolls(el) {
-  const W = widthOf(el, 480), H = 230, M = { t: 16, r: 92, b: 26, l: 28 };
+  const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(150, W * 0.38), b: 26, l: 28 };
   const svg = svgEl(el, W, H);
   const { polls, parties } = S.polls;
   const x = d3.scaleUtc().domain([d3.timeDay.offset(toDate(polls[0].date), -2), d3.timeDay.offset(latestDate(), 2)]).range([M.l, W - M.r]);
@@ -230,7 +234,7 @@ function drawArabPolls(el) {
   parties.filter(p => p.bloc === 'arab').forEach(p => {
     const c = party26Color(p);
     svg.selectAll(null).data(polls).join('circle').attr('cx', q => x(toDate(q.date))).attr('cy', q => y(q.seats[p.id] || 0)).attr('r', 3).attr('fill', c).attr('opacity', .35)
-      .call(sel => bindTT(sel, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.pollster_he)], ['גוף', esc(q.outlet_he)]])}`));
+      .call(sel => bindTT(sel, q => `<h4>${esc(p.name)}: ${q.seats[p.id] || 0}</h4>${ttRows([['סוקר', esc(q.house_he)], ['גוף', esc(q.outlet_he)]])}`));
     svg.append('path').attr('d', d3.line().x(d => x(d.date)).y(d => y(d.avg[p.id])).curve(d3.curveMonotoneX)(series)).attr('fill', 'none').attr('stroke', c).attr('stroke-width', 2.5);
     const l = series[series.length - 1];
     svg.append('text').attr('class', 'lbl-strong').attr('x', x(l.date) + 8).attr('y', y(l.avg[p.id])).attr('dy', '.35em').attr('text-anchor', 'end').text(`${p.name} ${fmt1(l.avg[p.id])}`);
@@ -253,7 +257,12 @@ function drawSankey(el) {
   const k = (avail - gap * (Math.max(srcNodes.length, dstNodes.length) - 1)) / tot;
   const place = (nodes) => { let yy = M.t; nodes.forEach(n => { n.y0 = yy; n.h = Math.max(1.5, n.v * k); yy += n.h + gap; n.off = 0; }); };
   place(srcNodes); place(dstNodes);
-  const xs = W - M.r - nodeW - 120, xd = M.l + 120;  // earlier election on the right
+  // earlier election on the right; on wide screens labels sit outside the nodes, on phones inside with a halo
+  const nodeLabel = (eid, n) => `${label(eid, n.id)} · ${fmt(n.v / 1000)} אלף`;
+  const narrow = W < 640;
+  const gutS = narrow ? 0 : d3.max(srcNodes, n => textWidth(nodeLabel(t.from, n))) + 12;
+  const gutD = narrow ? 0 : d3.max(dstNodes, n => textWidth(nodeLabel(t.to, n))) + 12;
+  const xs = W - M.r - nodeW - gutS, xd = M.l + gutD;
   svg.append('text').attr('class', 'lbl-strong').attr('x', W - M.r).attr('y', 14).attr('text-anchor', 'start').text(E(t.from).label);
   svg.append('text').attr('class', 'lbl-strong').attr('x', M.l).attr('y', 14).attr('text-anchor', 'end').text(E(t.to).label);
   const byS = Object.fromEntries(srcNodes.map(n => [n.id, n])), byD = Object.fromEntries(dstNodes.map(n => [n.id, n]));
@@ -266,19 +275,22 @@ function drawSankey(el) {
       .attr('stroke', color(t.from, f.s)).attr('stroke-opacity', .42).attr('stroke-width', Math.max(1, h))
       .call(sel => bindTT(sel, () => `<h4>${esc(label(t.from, f.s))} (${E(t.from).short})</h4>${ttRows([['עברו אל', esc(label(t.to, f.d)) + ` (${E(t.to).short})`], ['אומדן בעלי זכות', fmt(f.v)], ['מתוך מצביעי המקור', pct(100 * t.matrix[f.i][f.j], 0)]])}`));
   });
+  const halo = sel => narrow ? sel.attr('class', 'lbl-ink halo') : sel;
   srcNodes.forEach(n => {
     svg.append('rect').attr('x', xs).attr('y', n.y0).attr('width', nodeW).attr('height', n.h).attr('fill', color(t.from, n.id)).attr('rx', 2);
-    if (n.h > 9) svg.append('text').attr('class', 'lbl-ink').attr('x', xs + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em').attr('text-anchor', 'end').text(`${label(t.from, n.id)} · ${fmt(n.v / 1000)} אלף`);
+    if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xs - 4 : xs + nodeW + 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
+      .attr('text-anchor', narrow ? 'start' : 'end').text(nodeLabel(t.from, n)));
   });
   dstNodes.forEach(n => {
     svg.append('rect').attr('x', xd).attr('y', n.y0).attr('width', nodeW).attr('height', n.h).attr('fill', color(t.to, n.id)).attr('rx', 2);
-    if (n.h > 9) svg.append('text').attr('class', 'lbl-ink').attr('x', xd - 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em').attr('text-anchor', 'start').text(`${label(t.to, n.id)} · ${fmt(n.v / 1000)} אלף`);
+    if (n.h > 9) halo(svg.append('text').attr('class', 'lbl-ink').attr('x', narrow ? xd + nodeW + 4 : xd - 6).attr('y', n.y0 + n.h / 2).attr('dy', '.35em')
+      .attr('text-anchor', narrow ? 'end' : 'start').text(nodeLabel(t.to, n)));
   });
   $('#ar-sankey-foot').textContent = `אומדן סטטיסטי (רגרסיה מאולצת ברמת הקלפי, ${fmt(t.matched)} קלפיות שהותאמו). אינו מדידה של מצביעים בודדים; זרמים קטנים מ-0.4% הושמטו. קולות במעטפות כפולות אינם כלולים.`;
 }
 
 function drawMixed(el) {
-  const e = S.arabElection, ev = E(e);
+  const e = S.arabMixEl, ev = E(e);
   const rows = Object.entries(ev.mixed).map(([code, d]) => {
     const a = d.arab, j = d.jewish;
     const aLists = arabLists(e).map(p => p.id);

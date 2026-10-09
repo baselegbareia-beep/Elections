@@ -27,6 +27,7 @@ import registry as R  # noqa: E402
 from bader_ofer import allocate  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SES_MIN_ELIG = 5000
 
 
 def read_ballots(src, e):
@@ -257,6 +258,7 @@ def build(src, polygons, ses_path, out_dir):
                 "id": p, "name": name, "full": official_names[e].get(p, ""), "family": fam, "bloc": bloc,
                 "votes": nat[p], "pct": round(100 * nat[p] / tot["valid"], 3),
                 "seats": off.get(p, computed.get(p, 0)), "main": p in reg,
+                "pred": R.PRED.get(e, {}).get(p),
             })
 
         # Sectors
@@ -332,6 +334,7 @@ def build(src, polygons, ses_path, out_dir):
             "mixed": {str(code): {side: {"elig": v[0], "voters": v[1], "valid": v[2], "votes": dict(v[3])}
                                   for side, v in d.items()} for code, d in mixed_split.items()},
             "seats_check": "identical" if not seat_diff else {k: list(v) for k, v in seat_diff.items()},
+            "reconcile": {"lists": sum(1 for p in party_cols if totals[e].get(p) is not None), "mismatches": len(mism)},
         })
 
     # ---- 3. Locality table ------------------------------------------------
@@ -346,7 +349,9 @@ def build(src, polygons, ses_path, out_dir):
             "code": code, "name": L["name"], "sector": ls,
             "region": loc_sub.get(code) if ls in ("arab", "druze") else ("mixed" if ls == "mixed" else None),
             "lat": lat, "lng": lng, "tribe": tribe,
-            "ses": ses.get(norm_name(L["name"])),
+            # The SES file falls back to the regional council's cluster for small localities,
+            # so a cluster is attached only where the locality is large enough to have its own.
+            "ses": ses.get(norm_name(L["name"])) if max(a["elig"] for a in L["el"].values()) >= SES_MIN_ELIG else None,
             "el": {},
         }
         for e, agg in L["el"].items():

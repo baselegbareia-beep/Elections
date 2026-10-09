@@ -39,6 +39,10 @@ function renderCoalition() {
       <p class="sub" id="cb-sub" style="margin-top:6px"></p>
       <div class="chart" id="cb-hemi"></div>
       <div class="chips" id="cb-chips" style="margin-top:10px"></div>
+      <details class="bloc-edit" style="margin-top:14px"><summary>שיוך הרשימות לגושים</summary>
+        <p class="sub" style="margin-top:6px">ברירת המחדל: מפלגות הממשלה היוצאת ועמך ישראל בגוש נתניהו, הרשימה המשותפת ורע״ם בנפרד. השינוי חל על כל הדשבורד: ממוצע הגושים, הסימולציה והגרפים.</p>
+        <div id="cb-blocs" class="bloc-grid"></div>
+      </details>
     </div>
     <div class="card c5">
       <h3>הרכבים מוכנים</h3>
@@ -53,11 +57,11 @@ function renderCoalition() {
       <h3 style="margin-top:22px">מחולל תרחישים</h3>
       <p class="sub">מה קורה לחלוקת המושבים כשמשתנות ההנחות.</p>
       <label class="ctl-label" for="sc-arab">שיעור ההצבעה בחברה הערבית: <b class="num" id="sc-arab-v"></b></label>
-      <input type="range" id="sc-arab" min="35" max="75" step="1" value="${S.scn.arabT}">
-      <div class="legend" style="justify-content:space-between"><span>2021: ${pct(rate('K24', 'arab_std'))}</span><span>2022: ${pct(rate('K25', 'arab_std'))}</span><span>2020: ${pct(rate('K23', 'arab_std'))}</span></div>
+      <input type="range" id="sc-arab" dir="ltr" min="35" max="75" step="1" value="${S.scn.arabT}">
+      <div class="range-ticks" dir="ltr">${['K21', 'K22', 'K23', 'K24', 'K25'].map(e => { const T = rate(e, 'arab_std'); return `<span style="left:${(T - 35) / 40 * 100}%" title="${E(e).label}: ${pct(T)}">${COMPACT[e]}</span>`; }).join('')}</div>
       <label class="ctl-label" for="sc-swing" style="display:block;margin-top:14px">תזוזה בין גוש נתניהו לאופוזיציה: <b class="num" id="sc-swing-v"></b></label>
-      <input type="range" id="sc-swing" min="-4" max="4" step="0.25" value="${S.scn.swing}">
-      <div class="legend" style="justify-content:space-between"><span>לטובת גוש נתניהו</span><span>לטובת האופוזיציה</span></div>
+      <input type="range" id="sc-swing" dir="ltr" min="-4" max="4" step="0.25" value="${S.scn.swing}">
+      <div class="legend" dir="ltr" style="justify-content:space-between"><span>← לטובת האופוזיציה</span><span>לטובת גוש נתניהו →</span></div>
       <button type="button" class="slip" id="sc-reset" style="margin-top:10px">איפוס לממוצע הסקרים</button>
       <p class="foot">ההנחות: ממוצע הסקרים משקף שיעור הצבעה ערבי של ${pct(ARAB_T0)} ביישובים הערביים והדרוזיים, כמו ב-2022. ${pct(100 * ARAB_FROM_SECTOR, 1)} מקולות הרשימות הערביות ב-2022 ניתנו בקלפיות של החברה הערבית; רק החלק הזה משתנה עם שיעור ההצבעה, וההשתתפות בקלפיות הערביות בערים המעורבות נעה יחד איתו. תזוזה של נקודת אחוז = כ-1.2 מושבים.</p>
     </div>
@@ -78,11 +82,22 @@ function renderCoalition() {
     const P = { coal: by('coal'), opp: by('opp'), 'opp-raam': [...by('opp'), "Ra'am"], 'opp-arab': [...by('opp'), ...by('arab')], unity: ['Likud', 'Yashar', 'Together'] };
     S.coalition = new Set(P[b.dataset.preset]); update();
   });
+  drawBlocEditor();
   const sa = $('#sc-arab'), ss = $('#sc-swing');
   sa.addEventListener('input', () => { S.scn.arabT = +sa.value; update(); });
   ss.addEventListener('input', () => { S.scn.swing = +ss.value; update(); });
   $('#sc-reset').addEventListener('click', () => { S.scn = { arabT: Math.round(ARAB_T0), swing: 0 }; sa.value = S.scn.arabT; ss.value = 0; update(); });
   update();
+}
+
+function drawBlocEditor() {
+  const blocs = currentBlocs();
+  const ps = S.polls.parties.filter(p => S.avg.avg[p.id] > 0.5);
+  $('#cb-blocs').innerHTML = ps.map(p => `<div class="bloc-row"><span class="slip"><i class="dot" style="background:${party26Color(p)}"></i><b class="let">${esc(p.letters)}</b><span class="nm">${esc(p.name)}</span></span>${
+    seg('bl-' + p.letters, [['coal', 'נתניהו'], ['opp', 'אופוזיציה'], ['arab', 'ערביות']], blocs[p.id])}</div>`).join('');
+  ps.forEach(p => onSeg($('#cb-blocs'), 'bl-' + p.letters, v => {
+    S.coalitionBlocs[p.id] = v; invalidatePolls(); ensureSims(); drawCoalition(); drawCurve();
+  }));
 }
 
 function coalitionSeats() {

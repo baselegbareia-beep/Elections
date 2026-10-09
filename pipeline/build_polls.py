@@ -53,13 +53,27 @@ OUTLET_HE = {
     "Maariv": "מעריב", "Zman Israel / Times of Israel": "זמן ישראל", "i24NEWS": "i24NEWS",
     "Walla": "וואלה", "": "—",
 }
+# One polling operation sometimes appears under several labels; weights and
+# house effects are computed per canonical house.
+def house_of(pollster, outlet):
+    if pollster in ("Filber", "SF+ND", "Filber, NEXT DATA"):
+        return "filber", "פילבר (ערוץ 14)"
+    if pollster in ("Lazar", "LRI+P4A"):
+        return "lazar", "לזר / פאנל4אול"
+    if pollster == "MP+TM+SN+A" or (pollster == "Midgam" and outlet.startswith("Channel 13")):
+        return "ch13", "מדגם פרויקט וסטטנט (חדשות 13)"
+    if pollster == "Midgam":
+        return "midgam", "מדגם (חדשות 12)"
+    return pollster.lower().replace(" ", "-").replace(".", ""), None
+
+
 # Kantar polls are broadcast by Kan 11 (kan.org.il publishes them); the source table labels them Israel Hayom.
 OUTLET_BY_POLLSTER = {"Kantar": "כאן 11"}
 POLLSTER_HE = {
     "Midgam": "מדגם", "Kantar": "קנטאר", "Lazar": "לזר", "Maagar Mochot": "מאגר מוחות",
     "Direct Polls": "דיירקט פולס", "Filber": "פילבר", "S.M.L.T.": "S.M.L.T.",
     "Yossi Tatika": "יוסי טטיקה", "LRI+P4A": "לזר + פאנל4אול", "SF+ND": "פילבר + נקסט דאטה",
-    "MP+TM+SN+A": "מאגר מוחות + שותפים", "Filber, NEXT DATA": "פילבר + נקסט דאטה",
+    "MP+TM+SN+A": "מדגם פרויקט וסטטנט", "Filber, NEXT DATA": "פילבר + נקסט דאטה",
 }
 
 
@@ -118,15 +132,24 @@ def build(src, out):
             dropped.append(f"{p['date']} {p['pollster']}: total={total} dropped={seats.get('_dropped', 0)}")
             continue
         pct = {FOLD.get(k, k): v for k, v in (p.get("pct") or {}).items() if FOLD.get(k, k) in PARTIES_2026}
+        filing, n, moe = p.get("govilSourceUrl"), p.get("respondents") or p.get("sampleSize"), p.get("marginOfError")
+        fieldwork = p.get("fieldworkDate") or p["date"]
+        if fieldwork > p["date"]:
+            # a filing dated after publication belongs to a different poll: drop the enrichment
+            dropped.append(f"filing mismatch: {p['date']} {p['pollster']} (filing fieldwork {fieldwork})")
+            filing, pct, moe, fieldwork, n = None, {}, None, p["date"], p.get("sampleSize")
+        if moe and n and moe < 0.8 * 98 / (n ** 0.5):
+            moe = None  # below the sampling minimum for this n: a parsing error
+        house, house_he = house_of(p["pollster"], p.get("outlet", ""))
         polls.append({
-            "date": p["date"], "fieldwork": p.get("fieldworkDate") or p["date"],
+            "date": p["date"], "fieldwork": fieldwork,
             "pollster": p["pollster"], "pollster_he": POLLSTER_HE.get(p["pollster"], p["pollster"]),
+            "house": house, "house_he": house_he or POLLSTER_HE.get(p["pollster"], p["pollster"]),
             "outlet": p.get("outlet", ""),
             "outlet_he": OUTLET_BY_POLLSTER.get(p["pollster"]) or OUTLET_HE.get(p.get("outlet", ""), p.get("outlet", "")),
-            "n": p.get("respondents") or p.get("sampleSize"),
-            "moe": p.get("marginOfError"),
+            "n": n, "moe": moe,
             "seats": seats, "pct": pct or None,
-            "filing": p.get("govilSourceUrl"),
+            "filing": filing,
         })
     polls.sort(key=lambda x: (x["date"], x["pollster"]))
     polls, dupes = dedupe(polls)

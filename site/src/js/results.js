@@ -35,13 +35,14 @@ function renderResults() {
     <span class="ctl-label">צביעה</span>${seg('rs-mode', [['winner', 'הרשימה המובילה'], ['party', 'רשימה'], ['turnout', 'השתתפות'], ['sector', 'מגזר']], S.mapMode)}
     <select id="rs-party" aria-label="רשימה לצביעה" ${S.mapMode === 'party' ? '' : 'hidden'}></select>
     <input type="search" id="rs-search" list="rs-names" placeholder="חיפוש יישוב…" aria-label="חיפוש יישוב">
+    <span id="rs-search-msg" class="ctl-label" role="status" style="color:var(--crit)"></span>
     <datalist id="rs-names">${names.map(n => `<option value="${esc(n)}"></option>`).join('')}</datalist>
   </div>
   <div class="grid">
     <div class="card c7" id="rs-national"></div>
     <div class="card c5">
       <h3 id="rs-map-title">מפת היישובים</h3>
-      <p class="sub">כל עיגול הוא יישוב; שטחו לפי מספר המצביעים. גלגלו או צבטו כדי להתקרב.</p>
+      <p class="sub">כל עיגול הוא יישוב; שטחו לפי מספר המצביעים. להתקרבות: הכפתורים, Ctrl עם גלגלת, או שתי אצבעות.</p>
       <div class="map-wrap" id="rs-map"></div>
       <div class="legend" id="rs-legend"></div>
       <p class="foot">מיקום היישוב: מרכז הפוליגון של הלמ״ס (2022). הקו המקווקו מסמן את הקו הירוק. שבטי הנגב מוצגים כעיגול אחד.</p>
@@ -53,13 +54,22 @@ function renderResults() {
   onSeg(root, 'rs-mode', v => { S.mapMode = v; $('#rs-party').hidden = v !== 'party'; drawMap(); });
   $('#rs-party').addEventListener('change', e => { S.mapParty = e.target.value; drawMap(); });
   const search = $('#rs-search');
+  // match regardless of geresh vs apostrophe, hyphens and spacing ("אום אל פחם" finds "אום אל-פחם")
+  const norm = s => s.replace(/[׳`’]/g, "'").replace(/[״“”]/g, '"').replace(/[\s\-־'"().]/g, '');
+  let lastQ = '';
   const go = () => {
-    const q = search.value.trim(); if (!q) return;
-    let l = q === 'שבטים ופזורה בנגב' ? findLoc(TRIBES) : S.core.localities.find(x => x.name === q) || S.core.localities.find(x => x.name.includes(q));
-    if (l) { S.locSel = l.tribe && l.code !== TRIBES ? TRIBES : l.code; drawMap(); drawLocality(); $('#rs-loc').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    const q = search.value.trim(); if (!q || q === lastQ) return; lastQ = q;
+    const nq = norm(q);
+    let l = nq === norm('שבטים ופזורה בנגב') ? findLoc(TRIBES)
+      : S.core.localities.find(x => norm(x.name) === nq) || S.core.localities.find(x => norm(x.name).includes(nq));
+    if (!l) { $('#rs-search-msg').textContent = `לא נמצא יישוב בשם ״${q}״`; return; }
+    $('#rs-search-msg').textContent = '';
+    S.locSel = l.tribe && l.code !== TRIBES ? TRIBES : l.code; drawMap(); drawLocality();
+    $('#rs-loc').scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   search.addEventListener('change', go);
-  search.addEventListener('keydown', e => { if (e.key === 'Enter') go(); });
+  search.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); go(); } });
+  search.addEventListener('input', () => { lastQ = ''; });
   drawNational(); drawMap(); drawLocality();
 }
 
@@ -72,24 +82,30 @@ function fillPartySelect() {
 
 function drawNational() {
   const ev = E(S.election), prev = PREV[S.election] ? E(PREV[S.election]) : null;
-  const famSeatsPrev = {};
-  if (prev) prev.parties.forEach(p => { famSeatsPrev[p.family] = (famSeatsPrev[p.family] || 0) + p.seats; });
+  const prevSeats = id => (prev && prev.parties.find(p => p.id === id) || { seats: 0 }).seats;
+  const change = p => {
+    if (!prev || !p.pred || p.seats === 0) return '';
+    if (p.pred === 'new') return '<span class="badge">חדשה</span>';
+    if (p.pred === 'split') return '<span class="badge" title="הרשימה נוצרה מפיצול של רשימה קודמת">פיצול</span>';
+    const before = sum(p.pred.map(prevSeats)), d = p.seats - before;
+    const merged = p.pred.length > 1 ? ` title="מול ${before} מושבים של ${esc(p.pred.map(id => partyName(prev.id, id)).join(' + '))}"` : '';
+    return `<span class="num ${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''}"${merged}>${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}${p.pred.length > 1 ? '*' : ''}</span>`;
+  };
   const rows = ev.parties.filter(p => p.pct >= 0.5);
   const small = ev.parties.filter(p => p.pct < 0.5);
   const wasted = sum(ev.parties.filter(p => p.seats === 0).map(p => p.votes));
   $('#rs-national').innerHTML = `
-    <div class="card-head"><div><h3>${ev.label} · ${new Date(ev.date).toLocaleDateString('he-IL', { day: 'numeric', month: 'long', year: 'numeric' })}</h3>
+    <div class="card-head"><div><h3>${ev.label} · ${dateHe(ev.date)}</h3>
     <p class="sub">${ev.bloc_note} אחוז החסימה: ${fmt(ev.threshold_votes)} קולות.</p></div>
     <span class="badge off">רשמי</span></div>
     <div class="chart" id="rs-strip"></div>
-    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n">קולות</th><th class="n">אחוז</th><th class="n">מושבים</th><th class="n">שינוי</th><th></th></tr></thead><tbody>${
+    <div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n hide-sm">קולות</th><th class="n">אחוז</th><th class="n">מושבים</th><th class="n">שינוי</th><th class="hide-sm"></th></tr></thead><tbody>${
       rows.map(p => {
-        const d = prev && p.family !== 'other' && famSeatsPrev[p.family] != null ? p.seats - famSeatsPrev[p.family] : null;
-        return `<tr><td>${slip(p.id, p.name, famColor(p.family))}</td><td class="n">${fmt(p.votes)}</td><td class="n">${pct(p.pct, 2)}</td><td class="n"><b>${p.seats || '—'}</b></td>
-          <td class="n">${d == null || p.seats === 0 ? '' : `<span class="${d > 0 ? 'delta-up' : d < 0 ? 'delta-down' : ''} num">${d > 0 ? '+' : d < 0 ? '−' : '±'}${Math.abs(d)}</span>`}</td>
-          <td><span class="minibar" style="width:${Math.round(p.pct * 3)}px;background:${famColor(p.family)};opacity:${p.seats ? 1 : .4}"></span></td></tr>`;
+        return `<tr><td>${slip(p.id, p.name, famColor(p.family))}</td><td class="n hide-sm">${fmt(p.votes)}</td><td class="n">${pct(p.pct, 2)}</td><td class="n"><b>${p.seats || '—'}</b></td>
+          <td class="n">${change(p)}</td>
+          <td class="hide-sm"><span class="minibar" style="width:${Math.round(p.pct * 3)}px;background:${famColor(p.family)};opacity:${p.seats ? 1 : .4}"></span></td></tr>`;
       }).join('')}
-      <tr><td><span class="slip"><span class="nm">${small.length} רשימות קטנות</span></span></td><td class="n">${fmt(sum(small.map(p => p.votes)))}</td><td class="n">${pct(sum(small.map(p => p.pct)), 2)}</td><td class="n">—</td><td></td><td></td></tr>
+      <tr><td><span class="slip"><span class="nm">${small.length} רשימות קטנות</span></span></td><td class="n hide-sm">${fmt(sum(small.map(p => p.votes)))}</td><td class="n">${pct(sum(small.map(p => p.pct)), 2)}</td><td class="n">—</td><td></td><td class="hide-sm"></td></tr>
     </tbody></table></div>
     <div class="kv kv3">
       <div><b class="num">${fmt(ev.eligible)}</b><span>בעלי זכות בחירה</span></div>
@@ -99,7 +115,7 @@ function drawNational() {
       <div><b class="num">${pct(100 * wasted / ev.valid)}</b><span>קולות לרשימות שלא עברו</span></div>
       <div><b class="num">${fmt(ev.envelope_voters)}</b><span>הצביעו במעטפות כפולות</span></div>
     </div>
-    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener">${esc(ev.official_url.replace('https://', ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במושבים מחושב מול אותה משפחה פוליטית בבחירות הקודמות.</p>`;
+    <p class="foot">המקור: קובץ התוצאות לפי קלפיות של ועדת הבחירות המרכזית, <a href="${esc(ev.official_url)}" target="_blank" rel="noopener">${esc(ev.official_url.replace('https://', ''))}</a>. סכומי הקולות זהים לטבלה הארצית הרשמית לכל רשימה. השינוי במושבים מחושב מול הרשימה הקודמת; * = מול סך הרשימות שהתאחדו לתוכה.</p>`;
   drawSeatStrip($('#rs-strip'), ev);
 }
 
@@ -189,7 +205,9 @@ function drawMap() {
   }
   bindTT(bub, d => locTooltip(d, eid));
   bub.on('click', (ev, d) => { S.locSel = d.code; g.selectAll('circle.bub').classed('sel', x => x.code === d.code); drawLocality(); });
-  const zoom = d3.zoom().scaleExtent([1, 14]).on('zoom', ev => {
+  const zoom = d3.zoom().scaleExtent([1, 14])
+    .filter(ev => ev.type === 'wheel' ? (ev.ctrlKey || ev.metaKey) : ev.type.startsWith('touch') ? ev.touches.length > 1 : !ev.button)
+    .on('zoom', ev => {
     g.attr('transform', ev.transform);
     g.selectAll('circle.bub').attr('r', d => Math.max(1.3, r(d.el[eid][2])) / Math.sqrt(ev.transform.k)).attr('stroke-width', .6 / ev.transform.k);
     g.selectAll('path.land, path.greenline').attr('stroke-width', 0.8 / ev.transform.k);
@@ -235,7 +253,7 @@ async function drawLocality() {
       <div class="c6"><h3 style="font-size:var(--t-md)">תוצאות לפי קלפי · ${E(eid).short}</h3><p class="sub">לחצו על כותרת עמודה למיון.${l.sector === 'mixed' ? ' קלפיות שבהן לרשימות הערביות רוב מסומנות.' : ''}</p><div id="loc-ballots" class="tbl-wrap scroll-y"><p class="empty">טוען קלפיות…</p></div></div>
     </div>`;
   drawLocTrend($('#loc-trend'), l);
-  $('#loc-turn').innerHTML = `<table class="t"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
+  $('#loc-turn').innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
   const b = await loadBallots(eid);
   if (S.locSel !== l.code || S.election !== eid) return;
   drawBallotTable($('#loc-ballots'), l, b, eid);

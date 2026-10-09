@@ -12,8 +12,9 @@ function showTab(tab, { push = true } = {}) {
   $$('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
   $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab; });
   if (!rendered.has(tab)) {
-    try { RENDER[tab](); } catch (err) { console.error(err); $(`#tab-${tab}`).innerHTML = `<p class="empty">שגיאה בהצגת המדור: ${esc(err.message)}</p>`; }
+    const fail = err => { console.error(err); rendered.delete(tab); $(`#tab-${tab}`).innerHTML = `<p class="empty">טעינת המדור נכשלה. <button type="button" class="slip" data-goto="${tab}">ניסיון נוסף</button></p>`; };
     rendered.add(tab);
+    try { const r = RENDER[tab](); if (r && r.catch) r.catch(fail); } catch (err) { fail(err); }
   }
   if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
@@ -40,9 +41,9 @@ async function boot() {
   countdown();
   try {
     const [core, polls, outline] = await Promise.all([
-      fetch('data/core.json').then(r => r.json()),
-      fetch('data/polls_2026.json').then(r => r.json()),
-      fetch('data/outline.json').then(r => r.json()),
+      fetchJSON('data/core.json'),
+      fetchJSON('data/polls_2026.json'),
+      fetchJSON('data/outline.json'),
     ]);
     S.core = core; S.polls = polls; S.outline = outline;
   } catch (err) {

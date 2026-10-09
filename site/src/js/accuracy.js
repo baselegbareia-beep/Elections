@@ -2,14 +2,14 @@
 S.accEl = 'K25';
 // Netanyahu camp as it was framed before each election (includes right-wing lists that then missed the threshold)
 const PRE_BLOC = {
-  K21: ['מחל', 'שס', 'ג', 'טב', 'כ', 'נ', 'ז'], K22: ['מחל', 'שס', 'ג', 'טב', 'כף'], K23: ['מחל', 'שס', 'ג', 'טב', 'נץ'],
+  K21: ['מחל', 'שס', 'ג', 'טב', 'כ', 'נ', 'ז', 'ל'], K22: ['מחל', 'שס', 'ג', 'טב', 'כף'], K23: ['מחל', 'שס', 'ג', 'טב', 'נץ'],
   K24: ['מחל', 'שס', 'ג', 'ט'], K25: ['מחל', 'ט', 'שס', 'ג'],
 };
 
 async function renderAccuracy() {
   const root = $('#tab-accuracy');
   root.innerHTML = '<p class="loading">טוען סקרים היסטוריים…</p>';
-  if (!S.finalPolls) S.finalPolls = await fetch('data/final_polls.json').then(r => r.json());
+  if (!S.finalPolls) S.finalPolls = await fetchJSON('data/final_polls.json');
   const F = S.finalPolls;
   const fe = id => F.elections.find(e => e.id === id);
   const blocErr = id => { const e = fe(id); return sum(PRE_BLOC[id].map(k => e.avg[k] || 0)) - sum(PRE_BLOC[id].map(k => e.actual[k] || 0)); };
@@ -30,7 +30,7 @@ async function renderAccuracy() {
           const sign = v => `<span class="num" style="${Math.abs(v) >= 2 ? 'color:var(--crit);font-weight:600' : ''}">${v > 0 ? '+' : v < 0 ? '−' : ''}${fmt1(Math.abs(v))}</span>`;
           return `<tr><td><b>${E(e.id).short}</b> · ${E(e.id).label}</td><td class="n">${e.polls.length}</td><td class="n"><span class="minibar" style="width:${Math.round(e.mae * 26)}px;background:var(--ink);margin-inline-end:6px"></span>${fmt1(e.mae)}</td><td class="n">${sign(be)}</td><td class="n">${sign(ae)}</td><td style="min-width:260px">${esc(LESSON[e.id])}</td></tr>`;
         }).join('')}</tbody></table></div>
-      <p class="foot">ערך חיובי = הסקרים נתנו יותר מהתוצאה. גוש נתניהו לפני הבחירות כולל רשימות ימין שלא עברו את אחוז החסימה (הימין החדש וזהות ב-2019, עוצמה יהודית ב-2019–2020), ולכן הסקרים ״הגזימו״ בו בבחירות שבהן קולות כאלה הלכו לפח.</p>
+      <p class="foot">ערך חיובי = הסקרים נתנו יותר מהתוצאה. גוש נתניהו כפי שהוגדר לפני הבחירות כולל רשימות ימין שבסוף לא עברו את אחוז החסימה (הימין החדש וזהות באפריל 2019, עוצמה יהודית בספטמבר 2019 וב-2020), ובאפריל 2019 גם את ישראל ביתנו. בספטמבר 2019 הסקרים הגזימו בגוש בגלל עוצמה יהודית, שנמדדה ב-4 מושבים ולא עברה; ב-2021 וב-2022 הם חסרו לו 2–4 מושבים.</p>
     </div>
     <div class="card c12">
       <div class="card-head"><div><h3>ממוצע הסקרים מול התוצאה, לפי רשימה</h3><p class="sub">עיגול חלול = ממוצע הסקרים האחרונים; עיגול מלא = התוצאה הרשמית; נקודות קטנות = סקרים בודדים.</p></div>${seg('acc-el', ELS.map(e => [e, E(e).short]), S.accEl)}</div>
@@ -48,7 +48,7 @@ async function renderAccuracy() {
     </div>
     <div class="card c6">
       <h3>מדד דיוק לפי סוקר</h3>
-      <p class="sub">טעות ממוצעת לרשימה בכל סקר אחרון שפרסם הסוקר, על פני כל המערכות שבהן השתתף.</p>
+      <p class="sub">כמה כל סוקר היה מדויק יותר (מינוס) או פחות (פלוס) מהסוקרים האחרים באותן בחירות, בממוצע לרשימה. ההשוואה היא בתוך כל מערכת, כי אפריל 2019 הייתה קשה במיוחד לכולם.</p>
       <div class="tbl-wrap" id="acc-houses"></div>
       <p class="foot">${esc(F.source)}. מספרי המדגם לא נכללו במקורות, ולכן כל סקר מקבל משקל שווה.</p>
     </div>
@@ -98,14 +98,18 @@ function drawDumbbell() {
 
 function drawHouseAccuracy() {
   const F = S.finalPolls; const acc = new Map();
-  F.elections.forEach(e => e.polls.forEach(p => {
-    const key = p.pollster_he;
+  F.elections.forEach(e => {
     const keys = Object.keys(e.actual);
-    const mae = d3.mean(keys, k => Math.abs((p.seats[k] || 0) - (e.actual[k] || 0)));
-    if (!acc.has(key)) acc.set(key, { n: 0, sum: 0, els: new Set() });
-    const a = acc.get(key); a.n++; a.sum += mae; a.els.add(E(e.id).short);
-  }));
-  const rows = [...acc].map(([k, v]) => ({ k, n: v.n, mae: v.sum / v.n, els: [...v.els] })).filter(r => r.n >= 2).sort((a, b) => a.mae - b.mae);
-  $('#acc-houses').innerHTML = `<table class="t"><thead><tr><th>סוקר</th><th class="n">סקרים</th><th class="n">טעות ממוצעת לרשימה</th><th>מערכות</th></tr></thead><tbody>${
-    rows.map(r => `<tr><td>${esc(r.k)}</td><td class="n">${r.n}</td><td class="n"><span class="minibar" style="width:${Math.round(r.mae * 26)}px;background:var(--ink);margin-inline-end:6px"></span>${fmt1(r.mae)}</td><td>${r.els.join(', ')}</td></tr>`).join('')}</tbody></table>`;
+    const maes = e.polls.map(p => d3.mean(keys, k => Math.abs((p.seats[k] || 0) - (e.actual[k] || 0))));
+    const base = d3.mean(maes);
+    e.polls.forEach((p, i) => {
+      const key = p.pollster_he;
+      if (!acc.has(key)) acc.set(key, { n: 0, rel: 0, raw: 0, els: new Set() });
+      const a = acc.get(key); a.n++; a.rel += maes[i] - base; a.raw += maes[i]; a.els.add(E(e.id).short);
+    });
+  });
+  const rows = [...acc].map(([k, v]) => ({ k, n: v.n, rel: v.rel / v.n, raw: v.raw / v.n, els: [...v.els] })).filter(r => r.n >= 2).sort((a, b) => a.rel - b.rel);
+  const sgn = v => `${v > 0 ? '+' : v < 0 ? '−' : ''}${fmt1(Math.abs(v))}`;
+  $('#acc-houses').innerHTML = `<table class="t"><thead><tr><th>סוקר</th><th class="n">סקרים</th><th class="n">מול הסוקרים האחרים</th><th class="n">טעות ממוצעת לרשימה</th><th>מערכות</th></tr></thead><tbody>${
+    rows.map(r => `<tr><td>${esc(r.k)}</td><td class="n">${r.n}</td><td class="n"><b class="num">${sgn(r.rel)}</b></td><td class="n">${fmt1(r.raw)}</td><td>${r.els.join(', ')}</td></tr>`).join('')}</tbody></table>`;
 }

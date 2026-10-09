@@ -6,7 +6,7 @@ const S = {               // app state
   election: 'K25',
   mapMode: 'winner', mapParty: null, locality: null,
   adjustHouse: true, halfLife: 10,
-  coalition: null, pairIdx: 3, sectorElection: 'K25', arabElection: 'K25',
+  coalition: null, pairIdx: 3, sectorElection: 'K25', arabRegEl: 'K25', arabMixEl: 'K25',
   sims: null,
 };
 const HE = new Intl.NumberFormat('he-IL');
@@ -70,7 +70,7 @@ function slip(letters, name, color, extra = '') {
   return `<span class="slip" ${extra}><i class="dot" style="background:${color}"></i>${letters ? `<b class="let">${esc(letters)}</b>` : ''}<span class="nm">${esc(name)}</span></span>`;
 }
 function seg(id, options, value) {
-  return `<div class="seg" role="group" id="${id}">${options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${v === value}">${l}</button>`).join('')}</div>`;
+  return `<div class="seg" role="group" id="${id}">${options.map(([v, l]) => `<button type="button" data-v="${v}" aria-pressed="${String(v) === String(value)}">${l}</button>`).join('')}</div>`;
 }
 function onSeg(root, id, cb) {
   const el = $('#' + id, root); if (!el) return;
@@ -86,6 +86,12 @@ const ICON_NO = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M4 4l8 8M1
 function svgEl(container, w, h) {
   container.innerHTML = '';
   return d3.select(container).append('svg').attr('viewBox', `0 0 ${w} ${h}`).attr('role', 'img');
+}
+// Text width in px for gutter sizing (canvas measure, same UI font).
+const _ctx = document.createElement('canvas').getContext('2d');
+function textWidth(str, size = 12.5, weight = 400) {
+  _ctx.font = `${weight} ${size}px "IBM Plex Sans Hebrew", "Arial Hebrew", sans-serif`;
+  return _ctx.measureText(String(str)).width;
 }
 function widthOf(el, fallback = 800) { return Math.max(300, Math.round(el.getBoundingClientRect().width || fallback)); }
 
@@ -133,14 +139,14 @@ const dayMs = 864e5;
 const toDate = s => new Date(s + 'T12:00:00Z');
 function pollWeights(polls, asOf, halfLife) {
   // recency × sample size; prolific pollsters are damped so one house cannot dominate
-  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, p => p.pollster);
+  const byHouse = d3.rollup(polls.filter(p => toDate(p.date) <= asOf && (asOf - toDate(p.date)) / dayMs <= 28), v => v.length, p => p.house);
   return polls.map(p => {
     const age = (asOf - toDate(p.date)) / dayMs;
     if (age < 0 || age > 28) return 0;
     const rec = Math.pow(0.5, age / halfLife);
     const n = p.n || 700;
     const size = Math.min(1.4, Math.max(0.7, Math.sqrt(n / 700)));
-    const k = byHouse.get(p.pollster) || 1;
+    const k = byHouse.get(p.house) || 1;
     return rec * size / Math.sqrt(k);
   });
 }
@@ -149,7 +155,7 @@ function houseEffects(polls, parties) {
   const ids = parties.map(p => p.id);
   const mean = Object.fromEntries(ids.map(id => [id, d3.mean(polls, p => p.seats[id] || 0)]));
   const out = {};
-  d3.group(polls, p => p.pollster).forEach((ps, house) => {
+  d3.group(polls, p => p.house).forEach((ps, house) => {
     const k = ps.length, shrink = k / (k + 3);
     out[house] = Object.fromEntries(ids.map(id => [id, shrink * (d3.mean(ps, p => p.seats[id] || 0) - mean[id])]));
     out[house]._n = k;
@@ -162,14 +168,14 @@ function pollAverage(asOf, { adjust = S.adjustHouse, halfLife = S.halfLife } = {
   // house effects use only polls published by asOf, so the trend line has no look-ahead
   const known = polls.filter(p => toDate(p.date) <= asOf);
   const heKnown = adjust && known.length ? houseEffects(known, parties) : null;
-  const he = heKnown && Object.fromEntries(polls.map(p => [p.pollster, heKnown[p.pollster] || Object.fromEntries(parties.map(pt => [pt.id, 0]))]));
+  const he = heKnown && Object.fromEntries(polls.map(p => [p.house, heKnown[p.house] || Object.fromEntries(parties.map(pt => [pt.id, 0]))]));
   const tw = sum(w);
   const avg = {}, lo = {}, hi = {};
   parties.forEach(pt => {
     let s = 0; const vals = [];
     polls.forEach((p, i) => {
       if (!w[i]) return;
-      const v = (p.seats[pt.id] || 0) - (he ? he[p.pollster][pt.id] : 0);
+      const v = (p.seats[pt.id] || 0) - (he ? he[p.house][pt.id] : 0);
       s += w[i] * v; vals.push(p.seats[pt.id] || 0);
     });
     avg[pt.id] = tw ? s / tw : 0;
@@ -185,17 +191,28 @@ function latestDate() { return toDate(S.polls.polls[S.polls.polls.length - 1].da
 /* Seats → vote shares. Seat counts are rounded results of D'Hondt, so the
    midpoint inverse v = (1 − w)(s + 0.5) / (120 + 0.5K) fits official K21–K25
    results better than s/120 (RMSE 0.26 vs 0.37 points). A list averaging under
-   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: its
-   share comes from the raw % in the CEC filings when present, else 2%. */
-const WASTED = 0.045;
+   3 seats is a mix of "0" (below threshold, not 0%) and 4–5 seat polls: each
+   poll in the averaging window contributes its raw % from the CEC filing when
+   there is one, else the seat-implied share, or 2.2% for a poll that put the
+   list below the threshold. Same recency weights as the seat average. */
+const WASTED = 0.045, CENSORED = 0.022;
 function voteSharesFromAverage(avg) {
   const shares = {};
-  const recent = S.polls.polls.slice(-20);
   const K = S.polls.parties.filter(p => avg[p.id] >= 3).length;
+  const mid = s => (1 - WASTED) * (s + 0.5) / (120 + 0.5 * K);
+  const w = pollWeights(S.polls.polls, latestDate(), S.halfLife);
+  S.shareBasis = {};
   S.polls.parties.forEach(p => {
-    const raw = recent.map(q => q.pct && q.pct[p.id]).filter(v => v != null);
-    const seatsShare = (1 - WASTED) * (avg[p.id] + 0.5) / (120 + 0.5 * K);
-    shares[p.id] = avg[p.id] >= 3 ? seatsShare : (raw.length ? d3.mean(raw) / 100 : Math.min(0.03, Math.max(avg[p.id] / 120, 0.02)));
+    if (avg[p.id] >= 3) { shares[p.id] = mid(avg[p.id]); return; }
+    let sw = 0, sv = 0, filings = 0, n = 0;
+    S.polls.polls.forEach((q, i) => {
+      if (!w[i]) return;
+      const raw = q.pct && q.pct[p.id] != null ? q.pct[p.id] / 100 : null;
+      const est = raw != null ? raw : (q.seats[p.id] || 0) > 0 ? mid(q.seats[p.id]) : CENSORED;
+      sw += w[i]; sv += w[i] * est; n++; if (raw != null) filings++;
+    });
+    shares[p.id] = sw ? sv / sw : CENSORED;
+    S.shareBasis[p.id] = { polls: n, filings };
   });
   shares._other = Math.max(0.005, 1 - sum(Object.values(shares)));
   return shares;
@@ -263,6 +280,18 @@ function locVotes(loc, eid) {
   return { boxes, elig, voters, valid, arabBoxes, votes: Object.fromEntries(cols.map((c, i) => [c, v[i]])) };
 }
 async function loadBallots(eid) {
-  if (!S.ballots[eid]) S.ballots[eid] = fetch(`data/ballots_${eid}.json`).then(r => r.json());
+  if (!S.ballots[eid]) {
+    S.ballots[eid] = fetchJSON(`data/ballots_${eid}.json`).catch(err => { delete S.ballots[eid]; throw err; });
+  }
   return S.ballots[eid];
 }
+function fetchJSON(url) {
+  return fetch(url).then(r => { if (!r.ok) throw new Error(`${url}: ${r.status}`); return r.json(); });
+}
+// Every tab that reads the poll average, the simulation or the bloc assignment.
+function invalidatePolls() {
+  S.sims = null;
+  ['overview', 'polls', 'coalition', 'arab', 'method'].forEach(t => { if (t !== S.tab) rendered.delete(t); });
+}
+// Date-only strings ('2022-11-01') are calendar dates: format them in UTC so no viewer sees the previous day.
+const dateHe = (s, opts = { day: 'numeric', month: 'long', year: 'numeric' }) => toDate(s).toLocaleDateString('he-IL', { ...opts, timeZone: 'UTC' });
