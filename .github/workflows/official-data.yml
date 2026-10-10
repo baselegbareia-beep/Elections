@@ -1,9 +1,9 @@
 # Rebuilds every data file from the official CEC ballot files (media2X.bechirot.gov.il),
 # which GitHub's runners can reach, and checks the result against the committed site/data.
-# The election-day files (live_config.json, live_fetch.py, live_model.py, test_live.py, arab_turnout.py)
-# do not feed site/data, so editing them on election day does not start this 3–5-minute job; neither do
-# the feed's commits to site/live/ or the daily poll update (outside pipeline/, and pushed with
-# GITHUB_TOKEN, which starts no workflow).
+# The election-day files (live_config.json, live_fetch.py, live_model.py, test_live.py, arab_turnout.py,
+# discover.py) do not feed site/data, so editing them on election day does not start this 3–5-minute
+# job; neither do the feed's commits to site/live/ or the daily poll update (outside pipeline/, and
+# pushed with GITHUB_TOKEN, which starts no workflow).
 name: Official data check
 
 on:
@@ -16,6 +16,7 @@ on:
       - '!pipeline/live_model.py'
       - '!pipeline/test_live.py'
       - '!pipeline/arab_turnout.py'
+      - '!pipeline/discover.py'
       - '.github/workflows/official-data.yml'
   workflow_dispatch:
 

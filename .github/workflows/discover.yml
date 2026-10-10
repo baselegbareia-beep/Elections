@@ -2,7 +2,9 @@
 # turnout ordered on 16.8.2026, double envelopes, the national hourly turnout page) and what each holds.
 # GitHub's runners reach the CEC hosts; the build container does not. The report goes to the ops-reports
 # branch (reports/latest.md, reports/discover-YYYYMMDD-HHMM.*, Israel time), never to main: Pages builds
-# from main. How to read it and what to do: docs/FILE_DISCOVERY.md.
+# from main. The bytes of every candidate turnout / results file go with it (reports/files/<stamp>/, up to
+# 8 MB each, each version once), so a release the feed cannot read can be converted by someone who cannot
+# reach gov.il. How to read it and what to do: docs/FILE_DISCOVERY.md.
 name: Find the election files
 
 on:
@@ -44,14 +46,27 @@ jobs:
     runs-on: ${{ github.event.inputs.runner || vars.DISCOVER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 25
     steps:
+      - name: Only 15–29.10.2026 (a cron has no year field; these would fire again every October)
+        id: window
+        run: |
+          d=$(date -u +%Y%m%d)
+          if [ "$GITHUB_EVENT_NAME" = schedule ] && { [ "$d" -lt 20261015 ] || [ "$d" -gt 20261029 ]; }; then
+            echo "::notice::Outside 15–29.10.2026: nothing to do. Disable or delete this workflow (docs/FILE_DISCOVERY.md)."
+            echo 'run=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'run=true' >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/checkout@v6
+        if: steps.window.outputs.run == 'true'
       - uses: actions/setup-python@v7
-        if: runner.environment == 'github-hosted'
+        if: steps.window.outputs.run == 'true' && runner.environment == 'github-hosted'
         with:
           python-version: '3.12'
-      - name: numpy (lets the report run the feed's own reader on result files)
-        run: python3 -m pip install -q numpy || echo '::warning::numpy not installed; the reader check is skipped'
+      - name: numpy (lets the report run the feed's own readers on result and turnout files)
+        if: steps.window.outputs.run == 'true'
+        run: python3 -m pip install -q numpy || echo '::warning::numpy not installed; the reader checks are emulated or skipped'
       - name: Probe the CEC hosts and push the report to ops-reports
+        if: steps.window.outputs.run == 'true'
         env:
           MODE: ${{ github.event.inputs.mode || 'auto' }}
           URLS: ${{ github.event.inputs.urls }}
@@ -67,8 +82,8 @@ jobs:
             echo
             echo "Full report: https://github.com/$GITHUB_REPOSITORY/blob/ops-reports/reports/latest.md"
           } >> "$GITHUB_STEP_SUMMARY"
-      - name: Keep the report with the run (also when the push failed)
-        if: always()
+      - name: Keep the report and the stored files with the run (also when the push failed)
+        if: always() && steps.window.outputs.run == 'true'
         uses: actions/upload-artifact@v6
         with:
           name: discover-report

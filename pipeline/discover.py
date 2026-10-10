@@ -9,6 +9,12 @@ reports to the ops-reports branch. It runs the same way from a laptop or a self-
     python3 pipeline/discover.py --out disc                  # disc/report.json + disc/report.md
     python3 pipeline/discover.py --out disc --push           # and reports/ on the ops-reports branch
     python3 pipeline/discover.py --previous old.json         # new / changed / gone against an older report
+    python3 pipeline/discover.py --convert FILE              # a stored turnout release -> live_input/stations.csv
+
+The raw bytes of every candidate turnout / results file (up to 8 MB each, each version once) are kept with
+the report: disc/files/<YYYYMMDD-HHMM>/<name>, and with --push reports/files/… on the ops-reports branch,
+so a release the feed cannot read (JSON, xlsx, another delimiter, percent only) can be converted by
+someone who cannot reach gov.il (--convert; docs/FILE_DISCOVERY.md §3).
 
 What it probes. mode full: everything below. mode quick: the known files, the pages and what they
 link to, and every URL that answered in the previous report.
@@ -41,6 +47,8 @@ import datetime as dt
 import email.utils
 import hashlib
 import html
+import http.client
+import inspect
 import io
 import json
 import os
@@ -119,7 +127,7 @@ except Exception as _exc:                      # noqa: BLE001
                      "בזב", "מצביעים", "פסולים", "כשרים", "ת. עדכון", "סמל קלפי", ""}
 EXPECT = {"code": "סמל ישוב", "name": "שם ישוב", "station": "קלפי", "eligible": "בזב", "voters": "מצביעים",
           "invalid": "פסולים", "valid": "כשרים"}
-# names each reader takes without an alias: read_expb (results) and live_fetch.station_turnout
+# names each reader takes without an alias: read_expb (results) and live_fetch.station_rows (per-station turnout)
 RESULTS_OK = {"code": {"סמל ישוב", *[k for k, v in HEADER_ALIASES.items() if v == "סמל ישוב"]},
               "name": {"שם ישוב", *[k for k, v in HEADER_ALIASES.items() if v == "שם ישוב"]},
               "station": {"קלפי", "מספר קלפי"}, "eligible": {"בזב", *[k for k, v in HEADER_ALIASES.items() if v == "בזב"]},
@@ -193,18 +201,87 @@ def ref():
                                                                                   "arab_localities.csv"), encoding="utf-8"))}
     except Exception:
         arab = set()
-    try:          # does live_fetch.station_turnout apply live_config column_aliases? (not at 516627d)
-        src = open(os.path.join(ROOT, "pipeline", "live_fetch.py"), encoding="utf-8").read()
-        body = src.split("def station_turnout", 1)[1].split("\ndef ", 1)[0]
-        station_aliases = "column_aliases" in body
-    except Exception:
-        station_aliases = False
     _REF.update(l26=l26, l22=l22, st22=st22, st22n={(c, k.split(".")[0]) for c, k in st22}, arab=arab,
-                station_aliases=station_aliases)
+                station_aliases=station_alias_support())
     return _REF
 
 
+_STATION = {}
+
+
+def station_reader():
+    """live_fetch.station_rows, the feed's own per-station reader (imported on first use: it needs numpy).
+    (None, why) when it cannot be imported; the check then emulates it (comma-separated, fixed names)."""
+    if not _STATION:
+        try:
+            import live_fetch
+            _STATION.update(fn=live_fetch.station_rows, err="")
+        except Exception as exc:                # noqa: BLE001
+            _STATION.update(fn=None, err=f"{exc.__class__.__name__}: {exc}"[:160])
+    return _STATION["fn"], _STATION["err"]
+
+
+def _alias_param(fn):
+    try:
+        params = inspect.signature(fn).parameters
+    except (TypeError, ValueError):
+        return None
+    return next((p for p in ("column_aliases", "aliases") if p in params), None)
+
+
+def station_alias_support():
+    """Does the feed map per-station turnout headers through live_config column_aliases? (not at ebb3201)
+    Either station_rows takes the aliases as a parameter and turnout_pass hands it column_aliases, or the
+    function that parses the header (station_rows; station_turnout before r5/feed) reads column_aliases."""
+    try:
+        src = open(os.path.join(ROOT, "pipeline", "live_fetch.py"), encoding="utf-8").read()
+    except OSError:
+        return False
+
+    def body(name):
+        return src.split(f"def {name}(", 1)[1].split("\ndef ", 1)[0] if f"def {name}(" in src else ""
+    parsers = [b for b in (body("station_rows"), body("station_turnout")) if "header" in b]
+    if any("column_aliases" in b for b in parsers):
+        return True
+    fn, _ = station_reader()
+    return bool(fn and _alias_param(fn) and "column_aliases" in body("turnout_pass"))
+
+
 # ------------------------------------------------------------------ network
+URL_SAFE = ":/?#[]@!$&'()*+,;=%~"
+
+
+def enc_url(url):
+    """The URL as it goes on the wire: raw Hebrew, spaces and other unsafe characters percent-encoded (UTF-8),
+    what is already encoded left alone. The report and the suggested live_config.json values use this form,
+    because live_fetch.fetch() sends the configured URL as it is."""
+    url = re.sub(r"[\t\r\n]", "", url.strip())
+    return urllib.parse.quote(url, safe=URL_SAFE)
+
+
+def host_of(url):
+    """The host of a URL that can be sent, else "" (an invalid IPv6 literal "http://[x/…", a port out of range)."""
+    try:
+        p = urllib.parse.urlsplit(url)
+        p.port                                      # noqa: B018 - raises ValueError when out of range
+        return (p.hostname or "").lower()
+    except ValueError:
+        return ""
+
+
+def is_web(url):
+    return bool(url) and str(url).startswith(("http://", "https://"))
+
+
+def network_error(exc):
+    """True for a failure of the network or the host; False for a URL this script could not send at all
+    (InvalidURL, a non-ASCII character, an unknown scheme), which says nothing about the host."""
+    if isinstance(exc, urllib.error.URLError) and "unknown url type" in str(exc.reason):
+        return False
+    return isinstance(exc, OSError) or (isinstance(exc, http.client.HTTPException)
+                                        and not isinstance(exc, http.client.InvalidURL))
+
+
 class Net:
     """GET with a per-host pace, a size cap, and the test-mode host rewrite."""
 
@@ -226,19 +303,22 @@ class Net:
         return url
 
     def get(self, url):
-        target, host = self.target(url), urllib.parse.urlsplit(url).hostname or ""
+        target, host = self.target(url), host_of(url)
         if target is None:
             return {"status": 0, "error": "skipped: host not rewritten (test mode)"}
+        target = enc_url(target)
+        if not is_web(target) or not host:
+            return {"status": 0, "local": True, "error": "bad URL, not sent: not an http(s) URL with a host"}
         if self.fails[host] >= 3:
             return {"status": 0, "error": "skipped: the host did not answer 3 times in this run"}
         with self.lock:                             # at most one request start per host every `delay` seconds
             start = max(time.time(), self.slot.get(host, 0.0))
             self.slot[host] = start + self.delay
         time.sleep(max(0.0, start - time.time()))
-        req = urllib.request.Request(target, headers={"User-Agent": UA, "Accept": "*/*", "Cache-Control": "no-cache",
-                                                      "Accept-Language": "he-IL,he;q=0.9,en;q=0.5"})
         t0 = time.time()
         try:
+            req = urllib.request.Request(target, headers={"User-Agent": UA, "Accept": "*/*", "Cache-Control": "no-cache",
+                                                          "Accept-Language": "he-IL,he;q=0.9,en;q=0.5"})
             with urllib.request.urlopen(req, timeout=self.timeout) as r:
                 body = r.read(self.max + 1)
                 out = {"status": r.status, "headers": r.headers, "final": r.geturl()}
@@ -249,6 +329,8 @@ class Net:
                 body = b""
             out = {"status": exc.code, "headers": exc.headers, "final": exc.geturl() or target}
         except Exception as exc:                    # DNS, refused, timeout, TLS: a finding, not a crash
+            if not network_error(exc):              # never sent: not held against the host
+                return {"status": 0, "local": True, "error": f"bad URL, not sent: {exc.__class__.__name__}: {exc}"[:200]}
             with self.lock:
                 self.fails[host] += 1
             return {"status": 0, "error": f"{exc.__class__.__name__}: {exc}"[:200], "ms": round(1000 * (time.time() - t0))}
@@ -263,6 +345,8 @@ def decode(body, truncated=False):
         body = body[:body.rindex(b"\n")]
     if body.startswith(b"\xef\xbb\xbf"):
         return body[3:].decode("utf-8", "replace"), "utf-8-sig"
+    if body[:2] in (b"\xff\xfe", b"\xfe\xff"):     # Excel's "Unicode text": UTF-16, usually tab-separated
+        return body.decode("utf-16", "replace"), "utf-16"
     try:
         return body.decode("utf-8"), "utf-8"
     except UnicodeDecodeError:
@@ -271,11 +355,17 @@ def decode(body, truncated=False):
 
 def sniff(body, ctype, url):
     h = body.lstrip(b"\xef\xbb\xbf \t\r\n")[:64]
-    ctype, path = (ctype or "").lower(), urllib.parse.urlsplit(url).path.lower()
+    ctype, path = (ctype or "").lower(), url.split("?", 1)[0].lower()
     if h.startswith(b"PK\x03\x04"):
         return "zip"
     if h.startswith(b"%PDF"):
         return "pdf"
+    if h.startswith(b"\xd0\xcf\x11\xe0"):           # OLE2: Excel 97–2003 (.xls)
+        return "xls"
+    if body[:2] in (b"\xff\xfe", b"\xfe\xff"):      # UTF-16 text (decode() reads it)
+        return "text"
+    if b"\x00" in body[:1024]:
+        return "binary"
     if h[:1] == b"<":
         low = body[:3000].lower()
         return "html" if (b"<html" in low or b"<!doctype html" in low or b"<body" in low) else "xml"
@@ -405,9 +495,9 @@ def num(x):
 
 
 # ------------------------------------------------------------------ classifying a table
-def describe_table(e, tab, body):
-    header, rows = tab["header"], tab["rows"]
-    roles, notes = {}, e.setdefault("notes", [])
+def table_roles(header, notes):
+    """{role: header} for the columns this script recognises (SYN)."""
+    roles = {}
     for h in header:
         r = role_of(h)
         if r and r not in roles:
@@ -417,6 +507,13 @@ def describe_table(e, tab, body):
         if r not in roles and hv:
             roles[r] = hv[-1]
             notes.append(f"{r} by hour {hv}: the last column is used; check it is the latest release")
+    return roles
+
+
+def describe_table(e, tab, body):
+    header, rows = tab["header"], tab["rows"]
+    notes = e.setdefault("notes", [])
+    roles = table_roles(header, notes)
     letters = [h for h in header if LETTERS.fullmatch(h) and not role_of(h) and h not in OFFICIAL_META]
     hour_cols = [h for h in header if HOUR.fullmatch(h.strip())]
     if "code" in roles and len(letters) >= 3 and ("valid" in roles or "voters" in roles):
@@ -482,17 +579,24 @@ def describe_table(e, tab, body):
             notes.append(f"{env} double-envelope rows (סמל ישוב 9999)")
     elif cls == "turnout-station":
         if "voters" not in roles and "percent" in roles:
-            notes.append("turnout % but no voters column: the feed needs voters (a code change: voters = % × eligible)")
+            notes.append("turnout % but no voters column: the feed needs voters; --convert computes voters = % × eligible")
         if "eligible" not in roles:
             notes.append("no eligible-voters column: the feed computes pace against 2022, not turnout %")
         e["aliases"], e["missing"] = aliases_for(header, roles, STATION_OK, optional=("eligible",))
         e["fits"] = "station_turnout_url"
-        if e["aliases"] and not ref()["station_aliases"]:
-            notes.append("live_fetch.station_turnout does not apply column_aliases yet: rename in code, or add alias support")
-        ok = not e["missing"] and (not e["aliases"] or ref()["station_aliases"]) and tab["format"] == "csv"
-        e["reader"] = {"ok": ok, "reader": "station_turnout (column names only)"}
+        alias_ok = ref()["station_aliases"]
+        if e["aliases"] and not alias_ok and tab["format"] == "csv":
+            notes.append("the per-station turnout reader (live_fetch.station_rows) does not apply column_aliases yet: "
+                         "convert the file to live_input/stations.csv (--convert), or add alias support")
+        blocking = list(e["missing"]) + ([v for v in e["aliases"].values() if v != EXPECT["eligible"]] if not alias_ok else [])
+        e["reader"] = station_check(body, tab, e["aliases"] if alias_ok else {}, blocking)
         if tab["format"] != "csv":
-            notes.append(f"{tab['format']}: the feed reads CSV only (live_fetch.fetch refuses JSON; xlsx needs a converter)")
+            notes.append(f"{tab['format']}: the feed reads CSV only (live_fetch.fetch refuses JSON); "
+                         "convert the stored copy to live_input/stations.csv (--convert)")
+        elif tab.get("delimiter") != ",":
+            notes.append(f"delimiter {tab['delimiter']!r}: the feed reads comma-separated files only; "
+                         "convert the stored copy to live_input/stations.csv (--convert)")
+        e["release"] = release_hint(e)
     elif cls == "turnout-locality":
         e["fits"] = "none (by locality: the feed reads stations); usable by hand"
     elif cls == "turnout-national":
@@ -512,6 +616,53 @@ def aliases_for(header, roles, need, optional=()):
         elif r not in optional:
             missing.append(EXPECT[r])
     return aliases, missing
+
+
+def station_check(body, tab, aliases, blocking):
+    """Run the feed's own per-station reader (live_fetch.station_rows: csv.reader with commas, columns found
+    by name) on the file, as reader_check does for results. Without it (no numpy), emulate it: comma-separated
+    and every required column under a name it accepts (`blocking`: the expected names missing or renamed)."""
+    name = "live_fetch.station_rows"
+    if tab["format"] != "csv":
+        return {"ok": False, "reader": name, "error": f"{tab['format']}: the feed reads CSV only"}
+    fn, err = station_reader()
+    if fn is None:
+        why = ("missing or renamed columns: " + ", ".join(blocking) if blocking else
+               f"delimiter {tab['delimiter']!r}: the feed splits on commas" if tab.get("delimiter") != "," else "")
+        return {"ok": not why, "reader": f"emulated ({name} not loaded: {err})", **({"error": why} if why else {})}
+    kw, param = {}, _alias_param(fn)
+    if aliases and param:
+        kw[param] = aliases
+    try:
+        res = fn(body, **kw)
+        rows, excluded = res if isinstance(res, tuple) else (res, {})
+    except Exception as exc:                        # noqa: BLE001
+        return {"ok": False, "reader": name, "error": f"{exc.__class__.__name__}: {exc}"[:200]}
+    excluded = dict(excluded or {})
+    out = {"reader": name, "rows": len(rows), "excluded": excluded}
+    if not rows or excluded.get("unreadable", 0) > len(rows):
+        return {"ok": False, **out, "error": "no readable rows" if not rows else "most rows unreadable"}
+    return {"ok": True, **out}
+
+
+def release_hint(e):
+    """The release's cut-off time, for sectors_time in live_input/turnout.json: the file's time column, else an
+    hour in its name. Last-Modified is the upload time (later than the cut-off), shown for reference only."""
+    out, t = {}, (e.get("table") or {}).get("data_time")
+    m = HOUR.search(str(t or ""))
+    base = urllib.parse.unquote(e["url"]).split("?", 1)[0].rsplit("/", 1)[-1]
+    n = re.search(r"(?<!\d)(0?\d|1\d|2[0-3])[:_.-]?00(?!\d)", base) or re.search(r"[_-](0?[7-9]|1\d|2[0-2])(?=\.\w+$)", base)
+    if m:
+        out.update(sectors_time=f"{int(m.group(1)):02d}:{m.group(2)}", source="the file's time column")
+    elif n:
+        out.update(sectors_time=f"{int(n.group(1)):02d}:00", source="the file name")
+    try:
+        lm = email.utils.parsedate_to_datetime(e["last_modified"]).astimezone(IL) if e.get("last_modified") else None
+    except (TypeError, ValueError):
+        lm = None
+    if lm:
+        out["last_modified_il"] = lm.strftime("%d.%m %H:%M")
+    return out or None
 
 
 def reader_check(body, aliases, header, letters, roles):
@@ -540,10 +691,29 @@ def reader_check(body, aliases, header, letters, roles):
 
 
 # ------------------------------------------------------------------ one URL
-def analyze(url, r):
+BINARY = ("zip", "pdf", "xls", "binary")
+STORE_CLASSES = ("turnout-station", "turnout-locality", "results-ballot", "results-locality")
+
+
+def candidate_file(e):
+    """A file whose bytes are kept: anything classified as turnout or results, and an unreadable data file
+    (xls, a broken xlsx, JSON, PDF …) whose address talks about turnout or results."""
+    if e.get("cls") in STORE_CLASSES:
+        return True
+    u = urllib.parse.unquote(e["url"])
+    return e.get("cls") == "data-other" and e.get("kind") != "xml" and bool(INTEREST.search(u)) and bool(DATA.search(u))
+
+
+def analyze(url, r, keep=None):
+    """One answer -> its report entry, and the text to harvest links from. `keep` (a dict) receives the
+    body of a candidate file (candidate_file) by URL."""
     e = {"url": url, "status": r.get("status", 0)}
+    if "%" in url and urllib.parse.unquote(url) != url:
+        e["url_decoded"] = urllib.parse.unquote(url)
     if r.get("error"):
         e.update(cls="error", error=r["error"])
+        if r.get("local"):
+            e["local"] = True
         return e, None
     h, body = r["headers"], r["body"]
     for k, n in (("type", "Content-Type"), ("length", "Content-Length"), ("last_modified", "Last-Modified"),
@@ -557,7 +727,7 @@ def analyze(url, r):
         e["truncated"] = True
     kind = e["kind"] = sniff(body, e.get("type"), url)
     text, enc = decode(body, r.get("truncated"))
-    if kind in ("zip", "pdf"):
+    if kind in BINARY:
         e["first"] = f"(binary: {kind})"
     else:
         e.update(encoding=enc, first=printable(text))
@@ -604,15 +774,24 @@ def analyze(url, r):
             e["cls"] = "data-other"
             if kind == "pdf":
                 e.setdefault("notes", []).append("PDF: figures have to be entered by hand")
+            elif kind == "xls":
+                e.setdefault("notes", []).append("xls (Excel 97–2003): save the stored copy as xlsx or CSV, then --convert")
+    if keep is not None and candidate_file(e):
+        keep[url] = (body, bool(r.get("truncated")))
     return e, (text if kind in ("html", "js", "xml", "json", "text") else None)
 
 
 # ------------------------------------------------------------------ harvesting links from pages and scripts
 URL_ABS = re.compile(r"""https?://[A-Za-z0-9.-]+(?::\d+)?(?:/[^\s"'<>()\\`{}|^]*)?""")
-ATTR = re.compile(r"""(?:href|src|data-src|data-url|action|content)\s*=\s*["']([^"'#<>]+)["']""", re.I)
+# not <meta content=…>: that is prose (description, keywords, og:title), and harvested as a relative link it
+# became a request with raw Hebrew and spaces; absolute og:url / og:image values are caught by URL_ABS
+ATTR = re.compile(r"""(?:href|src|data-src|data-url|action)\s*=\s*["']([^"'#<>]+)["']""", re.I)
+REFRESH = re.compile(r"""content\s*=\s*["']\s*\d+\s*;\s*url\s*=\s*['"]?([^"'>\s]+)""", re.I)   # <meta http-equiv=refresh>
+ANCHOR = re.compile(r"""<a\b[^>]*?\bhref\s*=\s*["']([^"'#<>]+)["'][^>]*>(.*?)</a\s*>""", re.I | re.S)
 QUOTED = re.compile(r"""["'`]((?:\.{0,2}/)?[A-Za-z0-9_\-./%]*(?:\.(?:csv|json|xlsx?|zip|pdf|txt|xml)|/files/[^"'`\s]*|/api/[^"'`\s]*|/data/[^"'`\s]*|files/[^"'`\s]+)(?:\?[^"'`\s]*)?)["'`]""", re.I)
 SCRIPT = re.compile(r"""["'`]((?:\.{0,2}/|https?://)?[A-Za-z0-9_\-./%:]+\.m?js)(?:\?[^"'`\s]*)?["'`]""")
 FRAG = re.compile(r"""["'`]([^"'`\n]{0,100}(?:files/|\.csv|\.xlsx|/api/|turnout|kalpi|ballot|percent)[^"'`\n]{0,100})["'`]""", re.I)
+JS_CONTEXT = re.compile(r"files/|turnout|kalpi|/api/", re.I)
 ROBOTS = re.compile(r"(?im)^\s*(?:dis)?allow:\s*(\S+)")
 S3KEY = re.compile(r"<Key>([^<]+)</Key>")
 ASSET = re.compile(r"\.(?:png|jpe?g|gif|svg|webp|ico|css|woff2?|ttf|eot|otf|mp4|webm|mp3|map)(?:[?#]|$)", re.I)
@@ -620,51 +799,88 @@ DATA = re.compile(r"\.(?:csv|json|xlsx?|zip|pdf|txt|xml)(?:[?#]|$)|/files/|/api/
 # not "election"/"בחירות": every page of the CEC sites has it, and the crawl would follow all of them
 INTEREST = re.compile(r"turnout|percent|hatzba|achuz|ahuz|kalpi|ballot|result|voting|envelop|maatafot|"
                       r"הצבעה|קלפי|תוצאות|מעטפות", re.I)
+MAX_FRAGS = 30
 
 
 def allowed(url, allow):
-    host = (urllib.parse.urlsplit(url).hostname or "").lower()
+    host = host_of(url)
     return any(host == d or host.endswith("." + d) for d in allow)
 
 
 def resolve(base, m):
-    m = html.unescape(m.strip()).replace("\\/", "/")
-    if not m or m.startswith(("javascript:", "mailto:", "tel:", "data:", "#", "${")) or "${" in m or "{{" in m:
+    """An href, src or quoted path -> an absolute, percent-encoded http(s) URL, or None. Never raises: one
+    malformed link on a page (e.g. href="//[x/…", an invalid IPv6 literal) must not stop the run."""
+    try:
+        m = re.sub(r"[\t\r\n]", "", html.unescape(m.strip())).replace("\\/", "/")
+        if not m or m.startswith(("javascript:", "mailto:", "tel:", "data:", "#", "${")) or "${" in m or "{{" in m:
+            return None
+        u = urllib.parse.urljoin(base, m).split("#")[0]
+        if not u.startswith(("http://", "https://")):
+            return None
+        u = enc_url(u)
+        return u if host_of(u) else None
+    except ValueError:
         return None
-    u = urllib.parse.urljoin(base, m).split("#")[0]
-    return u if u.startswith(("http://", "https://")) else None
 
 
 def harvest(text, page, doc, kind):
-    """Links, scripts and unresolved fragments in a page or script. `doc` is the page a script was
-    loaded by: relative fetches in a bundle resolve against the document, not the script."""
-    links, scripts, frags = set(), set(), []
+    """Links, scripts, unresolved fragments, and the links whose anchor text talks about turnout or results
+    (`named`: gov.il news addresses are numbers or English slugs) in a page or script. `doc` is the page a
+    script was loaded by: relative fetches in a bundle resolve against the document, not the script."""
+    links, scripts, frags, named = set(), set(), [], set()
+    base = doc if kind == "js" else page
+
+    def frag(m):
+        if len(frags) < MAX_FRAGS and m not in frags:
+            frags.append(m)
     raw = set(URL_ABS.findall(text)) | set(QUOTED.findall(text))
     if kind == "html":
-        raw |= set(ATTR.findall(text))
+        raw |= set(ATTR.findall(text)) | set(REFRESH.findall(text))
+        for href, label in ANCHOR.findall(text):
+            u = resolve(page, href)
+            if u and not ASSET.search(u) and INTEREST.search(html.unescape(re.sub(r"<[^>]+>", " ", label))):
+                named.add(u)
     if kind == "text":
         raw |= set(ROBOTS.findall(text))
     if kind == "xml":
         raw |= {"/" + k.lstrip("/") for k in S3KEY.findall(text)}
-    for m in raw:
-        u = resolve(doc if kind == "js" else page, m)
+    for m in sorted(raw):
+        u = resolve(base, m)
         if u and kind == "js" and re.search(r"(?:^|/)\.\w+$|[_-]$", m):   # "/files/turnout_" + h + ".csv": pieces
-            if len(frags) < 30 and m not in frags:
-                frags.append(m)
+            frag(m)
             continue
         if not u or ASSET.search(u):
             continue
         (scripts if re.search(r"\.m?js(?:\?|$)", u) else links).add(u)
     if kind in ("html", "js"):
-        scripts |= {u for u in (resolve(doc if kind == "js" else page, m) for m in SCRIPT.findall(text)) if u}
+        scripts |= {u for u in (resolve(base, m) for m in SCRIPT.findall(text)) if u}
+    if kind == "html":
         for m in FRAG.findall(text):
-            if (("${" in m or "+" in m or not resolve(page, m)) and len(frags) < 30 and m not in frags
-                    and not ASSET.search(m)):
-                frags.append(m)
-    return links, scripts, frags
+            if ("${" in m or "+" in m or not resolve(page, m)) and not ASSET.search(m):
+                frag(m)
+    elif kind == "js":      # ±80 characters around each mention, so a split concatenation is read whole
+        end = -1
+        for mt in JS_CONTEXT.finditer(text):
+            if mt.start() < end:
+                continue
+            a, end = max(0, mt.start() - 80), mt.end() + 80
+            frag(re.sub(r"\s+", " ", text[a:end]))
+            if len(frags) >= MAX_FRAGS:
+                break
+    return links, scripts, frags, named
 
 
-def crawl(net, seeds, allow, pool, results, sources, max_pages=80):
+def probe_one(net, url, keep=None, answer=None):
+    """analyze(url, net.get(url)) that never raises: a URL that trips this script is one error entry.
+    `answer` replaces the request (a file read from the repository)."""
+    try:
+        return analyze(url, answer if answer is not None else net.get(url), keep)
+    except Exception as exc:                        # noqa: BLE001
+        return {"url": url, "status": 0, "cls": "error", "local": True,
+                "error": f"discover.py failed on this URL: {exc.__class__.__name__}: {exc}"[:200]}, None
+
+
+def crawl(net, seeds, allow, pool, results, sources, max_pages=80, keep=None):
     """Seeds, then the scripts and the interesting pages they link to (two levels). Returns the data-like
     links found and, per page, what was harvested."""
     level, seen, found_on, log, js_per_host = [(u, u) for u in seeds], set(), collections.defaultdict(set), {}, collections.Counter()
@@ -672,20 +888,24 @@ def crawl(net, seeds, allow, pool, results, sources, max_pages=80):
         todo = [(u, d) for u, d in dict(level).items() if u not in seen][:max_pages]
         seen |= {u for u, _ in todo}
         nxt = []
-        for (u, doc), (e, text) in zip(todo, pool.map(lambda ud: analyze(ud[0], net.get(ud[0])), todo)):
+        for (u, doc), (e, text) in zip(todo, pool.map(lambda ud: probe_one(net, ud[0], keep), todo)):
             results[u] = e
             sources[u].add("seed" if depth == 0 and u in seeds else "harvested")
             if text is None:
                 continue
-            links, scripts, frags = harvest(text, u, doc, e.get("kind"))
-            links = {x for x in links if allowed(x, allow)}
-            data = sorted(x for x in links if DATA.search(x) or INTEREST.search(urllib.parse.unquote(x)))
+            try:
+                links, scripts, frags, named = harvest(text, u, doc, e.get("kind"))
+            except Exception as exc:                # noqa: BLE001 - a page this script cannot parse is a note, not a crash
+                e.setdefault("notes", []).append(f"links not harvested: {exc.__class__.__name__}: {exc}"[:160])
+                continue
+            links = {x for x in links | named if allowed(x, allow)}
+            data = sorted(x for x in links if DATA.search(x) or x in named or INTEREST.search(urllib.parse.unquote(x)))
             log[u] = {"links": len(links), "scripts": len(scripts), "data_links": data[:60], "fragments": frags}
             for x in data:
                 found_on[x].add(u)
             if depth < 2:
                 for s in sorted(scripts):
-                    h = urllib.parse.urlsplit(s).hostname
+                    h = host_of(s)
                     if allowed(s, allow) and js_per_host[h] < 40 and s not in seen:
                         js_per_host[h] += 1
                         nxt.append((s, doc if e.get("kind") == "js" else u))
@@ -714,28 +934,73 @@ def score(e):
             (e.get("table") or {}).get("rows", 0))
 
 
-def verdicts(entries, cfg, now, election_day):
+def turnout_test(e, now, election_day):
+    """A per-station turnout file before election day, or one uploaded before it, is a test file: turnout files
+    carry no ballot letters that would tell."""
+    if now.date() < election_day:
+        return True
+    try:
+        lm = email.utils.parsedate_to_datetime(e["last_modified"]).astimezone(IL) if e.get("last_modified") else None
+    except (TypeError, ValueError):
+        lm = None
+    return bool(lm and lm.date() < election_day)
+
+
+BLOCKING = ("control", "2022/test", "letters ", "before 27.10", "uploaded before", "reader fails", "repo file")  # rule out a switch
+
+
+def verdicts(entries, cfg, now, election_day, control=None):
     closed = now >= dt.datetime.combine(election_day, dt.time(22, 0), IL)
     by_url, out = {e["url"]: e for e in entries}, []
     for key, cls in (("results_url", "results-ballot"), ("results_url_localities", "results-locality"),
                      ("station_turnout_url", "turnout-station")):
         cur = cfg.get(key)
-        ce = by_url.get(cur) if cur else None
+        ce = (by_url.get(cur) or by_url.get(enc_url(cur))) if cur else None
+
+        def tags(e):
+            t, v = [], (e.get("letters") or {}).get("verdict", "")
+            if e["url"] == control:
+                t.append("control")
+            if v.startswith("2022"):
+                t.append("2022/test")
+            elif cls.startswith("results") and v != "2026":
+                t.append(f"letters {v or 'not checked'}")
+            if cls.startswith("results") and not closed and (e.get("table") or {}).get("counted_rows") and not v.startswith("2022"):
+                t.append("counted rows before 22:00: test")
+            if cls == "turnout-station" and turnout_test(e, now, election_day):
+                t.append("before 27.10: test?" if now.date() < election_day else "uploaded before 27.10: test?")
+            if (e.get("reader") or {}).get("ok") is False:
+                t.append("reader fails")
+            if not is_web(e["url"]):
+                t.append("repo file")
+            return t
+
+        def usable(e):
+            return not any(x.startswith(BLOCKING) for x in tags(e))
         cands = sorted((e for e in entries if e.get("cls") == cls and answering(e) and not e.get("envelopes_only")),
-                       key=score, reverse=True)
-        best = cands[0] if cands else None
+                       key=lambda e: (usable(e), score(e)), reverse=True)
+        best = next((e for e in cands if usable(e)), None)
         test = lambda e: e and ((e.get("letters") or {}).get("verdict", "").startswith("2022")  # noqa: E731
                                 or (cls.startswith("results") and not closed and (e.get("table") or {}).get("counted_rows")))
-        if ce and ce.get("cls") == cls:
-            state = "test file" if test(ce) else "ok" if (ce.get("reader") or {}).get("ok") is not False else "reader fails"
+        ok = lambda e: (e.get("reader") or {}).get("ok") is not False  # noqa: E731
+        if cur and not is_web(cur):                 # the operator's converted copy (live_input/stations.csv): read, not probed
+            state = (f"repo copy, {'ok' if ok(ce) else 'reader fails'}" if ce and ce.get("cls") == cls else
+                     f"repo copy, reads as {ce.get('cls')} {ce.get('error', '')}".strip() if ce else "repo copy, not read")
+        elif ce and ce.get("cls") == cls:
+            state = ("test file" if test(ce) else "test file?" if cls == "turnout-station" and turnout_test(ce, now, election_day)
+                     else "ok" if ok(ce) else "reader fails")
         elif ce:
             state = f"answers as {ce.get('cls')} ({ce.get('status') or ce.get('error', '')})"
         else:
             state = "not set" if not cur else "not probed"
-        switch = best if best and best["url"] != cur and (not ce or ce.get("cls") != cls or score(best) > score(ce)) else None
-        out.append({"key": key, "current": cur, "state": state, "best": best and best["url"],
-                    "switch": switch and switch["url"], "aliases": (switch or ce or {}).get("aliases") or {},
-                    "candidates": [c["url"] for c in cands[:5]]})
+        switch = best if (best and best["url"] != (ce or {}).get("url", cur) and (not cur or is_web(cur))
+                          and (not ce or ce.get("cls") != cls or score(best) > score(ce))) else None
+        v = {"key": key, "current": cur, "state": state, "best": best and best["url"],
+             "switch": switch and switch["url"], "aliases": (switch or ce or {}).get("aliases") or {},
+             "candidates": [c["url"] + (f" ({', '.join(tags(c))})" if tags(c) else "") for c in cands[:6]]}
+        if cls == "turnout-station" and (switch or ce or {}).get("release"):
+            v["release"] = (switch or ce)["release"]
+        out.append(v)
     nat = [e for e in entries if e.get("cls") == "turnout-national" and answering(e)]
     out.append({"key": "national hourly (live_input/turnout.json)", "current": None,
                 "state": f"{len(nat)} page(s) with hourly figures" if nat else "none found",
@@ -744,7 +1009,7 @@ def verdicts(entries, cfg, now, election_day):
     return out
 
 
-FIELDS = ("status", "cls", "sha256", "bytes", "last_modified", "etag")
+FIELDS = ("status", "cls", "bytes", "last_modified", "etag", "sha256")    # the hashes last: they fill a Markdown cell
 
 
 def compare(prev, cur):
@@ -776,13 +1041,16 @@ def cell(x, n=90):
 
 
 def table(rows, cols):
-    out = ["| " + " | ".join(c for c, _ in cols) + " |", "|" + "---|" * len(cols)]
-    out += ["| " + " | ".join(cell(f(r)) for _, f in cols) + " |" for r in rows]
+    """cols: (title, value function[, cell width])."""
+    out = ["| " + " | ".join(c[0] for c in cols) + " |", "|" + "---|" * len(cols)]
+    out += ["| " + " | ".join(cell(c[1](r), *c[2:]) for c in cols) + " |" for r in rows]
     return "\n".join(out)
 
 
 def brief(e):
     t, bits = e.get("table") or {}, []
+    if e.get("url_decoded"):
+        bits.append(f"address {e['url_decoded']}")
     if t:
         bits.append(f"{t.get('format')} {t.get('rows')} rows")
         if t.get("localities") is not None:
@@ -797,8 +1065,18 @@ def brief(e):
         bits.append(f"aliases {json.dumps(e['aliases'], ensure_ascii=False)}")
     if e.get("hourly"):
         bits.append(json.dumps(e["hourly"]))
+    if (e.get("release") or {}).get("sectors_time"):
+        bits.append(f"release {e['release']['sectors_time']} (from {e['release']['source']})")
     bits += e.get("notes", [])
+    if e.get("saved"):
+        bits.append(f"stored: {e['saved']}")
+    elif e.get("not_saved"):
+        bits.append(f"not stored: {e['not_saved']}")
     return "; ".join(bits)
+
+
+def short_hash(k, x):
+    return x[:12] if k == "sha256" and isinstance(x, str) else x
 
 
 def markdown(rep, short=False):
@@ -808,24 +1086,45 @@ def markdown(rep, short=False):
          table(rep["verdicts"], [("live_config key", lambda v: v["key"]), ("now", lambda v: v["current"] or "—"),
                                  ("state", lambda v: v["state"]), ("switch to", lambda v: v["switch"] or "—"),
                                  ("column_aliases", lambda v: json.dumps(v["aliases"], ensure_ascii=False) if v["aliases"] else "")])]
+    others = [(v["key"], c) for v in rep["verdicts"] if not v["key"].startswith("national")
+              for c in v["candidates"] if c.split(" (", 1)[0] not in (v["switch"], v["current"])]
+    if others:
+        L += ["", "Other candidates (in brackets: why not suggested, or what to check):", ""]
+        L += [f"- {k}: {cell(c, 220)}" for k, c in others[:12 if short else 30]]
     if rep.get("suggested_config"):
         L += ["", "Suggested live_config.json change (confirm first: header, rows, 2026 letters, time):", "", "```json",
               json.dumps(rep["suggested_config"], ensure_ascii=False, indent=1), "```"]
+    rel = next((v.get("release") for v in rep["verdicts"]
+                if v["key"] == "station_turnout_url" and (v["switch"] or v["current"])), None)
+    if rel:
+        L += ["", "Per-station release time: " + (f'"sectors_time": "{rel["sectors_time"]}" (from {rel["source"]})'
+                                                  if rel.get("sectors_time") else "not in the file or its name") +
+              (f"; Last-Modified {rel['last_modified_il']} Israel time is the upload, later than the cut-off"
+               if rel.get("last_modified_il") else "") +
+              ". In live_input/turnout.json, in the same commit as the switch, use the cut-off time the CEC states."]
     d = rep.get("diff")
     if d:
         L += ["", f"### Since {d['previous']}: {len(d['new'])} new, {len(d['changed'])} changed, {len(d['gone'])} gone"]
         rows = ([("new", x["url"], x["cls"], f"was {x['was']}") for x in d["new"]] +
-                [("changed", x["url"], x["cls"], ", ".join(f"{k}: {a} → {b}" for k, (a, b) in x["diff"].items())) for x in d["changed"]] +
+                [("changed", x["url"], x["cls"], ", ".join(f"{k}: {short_hash(k, a)} → {short_hash(k, b)}"
+                                                            for k, (a, b) in x["diff"].items())) for x in d["changed"]] +
                 [("gone", x["url"], x["cls"], f"now {x['now']}") for x in d["gone"]])
         if rows:
             L += ["", table(rows[:15 if short else 200], [("", lambda r: r[0]), ("URL", lambda r: r[1]), ("class", lambda r: r[2]),
-                                                       ("what", lambda r: r[3])])]
+                                                       ("what", lambda r: r[3], 200)])]
     data = [e for e in rep["urls"] if answering(e) and e["cls"] not in ("html", "script")]
     if data:
         L += ["", "### Files and pages with data", "",
               table(data[:12 if short else 300], [("class", lambda e: e["cls"]), ("URL", lambda e: e["url"]),
                                                   ("HTTP", lambda e: e["status"]), ("bytes", lambda e: e.get("bytes")),
-                                                  ("last-modified", lambda e: e.get("last_modified")), ("details", brief)])]
+                                                  ("last-modified", lambda e: e.get("last_modified")), ("details", brief, 400)])]
+    stored = [e for e in rep["urls"] if e.get("saved")]
+    if stored:
+        L += ["", f"### Stored files ({len(stored)}; on the ops-reports branch under reports/, locally under the --out folder)", "",
+              "`git fetch origin ops-reports && git show origin/ops-reports:reports/<path> > <file>`; convert a turnout "
+              "release with `python3 pipeline/discover.py --convert <file>` (docs/FILE_DISCOVERY.md §3).", "",
+              table(stored[:12 if short else 100], [("class", lambda e: e["cls"]), ("URL", lambda e: e.get("url_decoded") or e["url"]),
+                                                    ("bytes", lambda e: e.get("bytes")), ("path", lambda e: e["saved"])])]
     L += ["", "### Hosts", "", table(sorted(rep["hosts"].items()), [
         ("host", lambda h: h[0]), ("IPs", lambda h: ", ".join(h[1]["ips"][:3])), ("probed", lambda h: h[1]["probed"]),
         ("answered", lambda h: h[1]["answered"]), ("status codes", lambda h: json.dumps(h[1]["status"])),
@@ -843,7 +1142,7 @@ def markdown(rep, short=False):
         for u, h in hv:
             L.append(f"- {u}: {h['links']} links, {h['scripts']} scripts")
             L += [f"  - {x}" for x in h["data_links"][:25]]
-            L += [f"  - fragment: `{cell(x, 120)}`" for x in h["fragments"][:10]]
+            L += [f"  - fragment: `{cell(x, 180).replace('`', chr(39))}`" for x in h["fragments"][:12]]
     errs = [e for e in rep["urls"] if not answering(e)]
     L += ["", f"<details><summary>{len(errs)} URLs that did not answer with data</summary>", "",
           table(errs, [("URL", lambda e: e["url"]), ("HTTP", lambda e: e["status"]),
@@ -855,15 +1154,17 @@ def markdown(rep, short=False):
 def host_table(entries, rewrite, only_rewritten):
     hosts = {}
     for e in entries:
-        h = urllib.parse.urlsplit(e["url"]).hostname or ""
+        if not is_web(e["url"]):                    # the operator's copy in the repository
+            continue
+        h = host_of(e["url"])
         d = hosts.setdefault(h, {"probed": 0, "answered": 0, "status": collections.Counter(), "hints": collections.Counter()})
         d["probed"] += 1
         d["answered"] += answering(e)
-        d["status"][str(e.get("status") or "no answer")] += 1
+        d["status"][str(e.get("status") or ("bad URL" if e.get("local") else "no answer"))] += 1
         if e.get("hint") or e.get("error"):
             d["hints"][e.get("hint") or re.sub(r":.*", "", e.get("error", ""))] += 1
     for h, d in hosts.items():
-        real = next((urllib.parse.urlsplit(dst).hostname for src, dst in rewrite if urllib.parse.urlsplit(src).hostname == h),
+        real = next((host_of(dst) for src, dst in rewrite if host_of(src) == h),
                     None if only_rewritten else h)
         try:                                        # CloudFront, a gov.il front end, or no DNS at all
             d["ips"] = sorted({a[4][0] for a in socket.getaddrinfo(real, 443, proto=socket.IPPROTO_TCP)})[:6] if real else ["skipped"]
@@ -911,12 +1212,15 @@ def push_report(files, branch, remote, message):
             if fetch_branch(branch, remote):
                 git("checkout", "-q", "--detach", f"{remote}/{branch}", cwd=wt)
                 git("reset", "-q", "--hard", f"{remote}/{branch}", cwd=wt)
-            else:
+            else:                                   # first report; a retry drops the branch its rejected commit made
+                git("checkout", "-q", "--detach", cwd=wt, check=False)
+                git("branch", "-D", tmp, cwd=wt, check=False)
                 git("checkout", "-q", "--orphan", tmp, cwd=wt)
                 git("rm", "-rfq", "--ignore-unmatch", ".", cwd=wt)
             git("clean", "-fdxq", cwd=wt)
             os.makedirs(os.path.join(wt, "reports"), exist_ok=True)
-            for name, src in files.items():
+            for name, src in files.items():             # name may be a path: files/<stamp>/<name>
+                os.makedirs(os.path.dirname(os.path.join(wt, "reports", name)), exist_ok=True)
                 shutil.copyfile(src, os.path.join(wt, "reports", name))
             git("add", "reports", cwd=wt)
             if not git("diff", "--cached", "--quiet", cwd=wt, check=False).returncode:
@@ -931,6 +1235,143 @@ def push_report(files, branch, remote, message):
         shutil.rmtree(wt, ignore_errors=True)
         git("worktree", "prune", check=False)
         git("branch", "-D", tmp, check=False)
+
+
+# ------------------------------------------------------------------ stored copies, and converting one
+STORE_MAX = 8_000_000                   # bytes per stored file
+STORE_RUN_MAX = 40_000_000              # bytes stored per run
+RESULTS_EVERY = dt.timedelta(hours=3)   # a results file that keeps changing is stored at most this often
+STATIONS_HEADER = ["סמל ישוב", "שם ישוב", "קלפי", "בזב", "מצביעים"]   # live_input/stations.csv (live_input/README.md)
+
+
+def safe_name(url, sha, e):
+    p = urllib.parse.urlsplit(url)
+    base = urllib.parse.unquote(p.path.rstrip("/").rsplit("/", 1)[-1]) or "index"
+    if p.query:
+        base += "_" + urllib.parse.unquote(p.query)
+    stem = re.sub(r"_+", "_", re.sub(r"[^A-Za-z0-9.-]+", "_", f"{p.hostname}_{base}")).strip("._")[:90]
+    if not re.search(r"\.[A-Za-z0-9]{2,5}$", stem):
+        fmt = (e.get("table") or {}).get("format")
+        stem += {"json": ".json", "xls": ".xls", "pdf": ".pdf", "binary": ".bin",
+                 "zip": ".xlsx" if fmt == "xlsx" else ".zip"}.get(e.get("kind"), ".csv" if fmt == "csv" else ".txt")
+    return f"{sha[:8]}-{stem}"
+
+
+def store_files(results, kept, prev, now, closed, out, stamp, max_bytes=STORE_MAX):
+    """Write the bytes of the candidate files to <out>/files/<stamp>/ (pushed as reports/files/<stamp>/), so a
+    release the feed cannot read can be converted by someone who cannot reach gov.il. Each version (SHA-256)
+    once across runs (the index travels in report.json); turnout files every time they change, a results file
+    at most every 3 hours; nothing over max_bytes; and no results file with counted rows before the polls
+    close (test data that would read as results), unless it is a copy of 2022. Returns ({path under reports/:
+    local path}, the updated index)."""
+    index, files, total = dict((prev or {}).get("files_index") or {}), {}, 0
+    for u in sorted(kept, key=lambda u: (not str(results.get(u, {}).get("cls", "")).startswith("turnout"), u)):
+        e, (body, truncated) = results.get(u), kept[u]
+        if not e or not answering(e) or not candidate_file(e):
+            continue
+        sha, cls = e.get("sha256"), e["cls"]
+        if sha in index:
+            e["saved"] = index[sha]["path"]
+            continue
+        last = max((v["at"] for v in index.values() if v.get("url") == u), default=None)
+        if truncated or len(body) > max_bytes:
+            why = f"over the {max_bytes / 1e6:g} MB limit for a stored copy"
+        elif total + len(body) > STORE_RUN_MAX:
+            why = f"this run already stored {total / 1e6:.1f} MB"
+        elif (cls.startswith("results") and not closed and (e.get("table") or {}).get("counted_rows")
+              and not (e.get("letters") or {}).get("verdict", "").startswith("2022")):
+            why = "a results file with counted rows before the polls close (test data)"
+        elif cls.startswith("results") and last and now - dt.datetime.fromisoformat(last) < RESULTS_EVERY:
+            at = dt.datetime.fromisoformat(last).astimezone(IL).strftime("%d.%m %H:%M")
+            why = f"a version from {at} is stored (results: every 3 hours)"
+        else:
+            why = ""
+        if why:
+            e["not_saved"] = why
+            continue
+        name = f"files/{stamp}/{safe_name(u, sha, e)}"
+        os.makedirs(os.path.dirname(os.path.join(out, name)), exist_ok=True)
+        with open(os.path.join(out, name), "wb") as f:
+            f.write(body)
+        files[name], total, e["saved"] = os.path.join(out, name), total + len(body), name
+        index[sha] = {"path": name, "url": u, "cls": cls, "bytes": len(body), "at": now.isoformat(timespec="seconds")}
+    return files, index
+
+
+def convert(src, dest, maps=()):
+    """A per-station turnout release in a format the feed does not read (another delimiter, xlsx, JSON, percent
+    only, other header names) -> the CSV live_fetch.station_rows reads: סמל ישוב,שם ישוב,קלפי,בזב,מצביעים in
+    UTF-8, one row per station; a station without a figure keeps a blank מצביעים. --map ROLE=HEADER names a
+    column the report did not recognise (roles: code, name, station, eligible, voters, percent, time)."""
+    body = open(src, "rb").read()
+    kind = sniff(body, "", src)
+    text, _ = decode(body)
+    if kind == "xls":
+        raise SystemExit(f"{src}: xls (Excel 97–2003): open it, save it as xlsx or CSV, and convert that")
+    try:
+        tab = (csv_table(text) if kind == "text" else xlsx_table(body) if kind == "zip" else
+               json_table(json.loads(text)) if kind == "json" else None)
+    except Exception as exc:                        # noqa: BLE001
+        raise SystemExit(f"{src}: could not read as {kind}: {exc.__class__.__name__}: {exc}"[:300])
+    if not tab or not tab["header"]:
+        raise SystemExit(f"{src}: no table found ({kind})")
+    notes, header = [], tab["header"]
+    roles = table_roles(header, notes)
+    for m in maps:
+        r, _, h = m.partition("=")
+        if h not in header:
+            raise SystemExit(f"--map {m}: no column {h!r}; the header is {header[:20]}")
+        roles[r.strip()] = h
+    if not {"code", "station"} <= roles.keys() or not ("voters" in roles or {"percent", "eligible"} <= roles.keys()):
+        raise SystemExit(f"{src}: need columns for code, station and voters (or percent and eligible); found {roles}; "
+                         f"header {header[:20]}; name the missing ones with --map ROLE=HEADER")
+    idx = {r: header.index(h) for r, h in roles.items()}
+
+    def get(rec, r):
+        i = idx.get(r)
+        return str(rec[i]).strip() if i is not None and i < len(rec) else ""
+    pct = [num(get(rec, "percent")) or 0 for rec in tab["rows"]] if "voters" not in roles else []
+    scale = 1 if pct and max(pct) <= 1 else 100      # a fraction or a percentage
+    out, skipped, times = [], collections.Counter(), []
+    for rec in tab["rows"]:
+        code, kalpi = num(get(rec, "code")), re.sub(r"^(\d+)\.0$", r"\1", get(rec, "station"))
+        if not get(rec, "code") or code is None or code != int(code) or code <= 0:
+            skipped["no locality code (a total or a note)"] += 1
+            continue
+        if int(code) in (9999, 99999):
+            skipped["double envelopes (9999)"] += 1
+            continue
+        if not kalpi:
+            skipped["no station number"] += 1
+            continue
+        elig = num(get(rec, "eligible")) if get(rec, "eligible") else None
+        if "voters" in roles:
+            v = num(get(rec, "voters")) if get(rec, "voters") not in ("", "-") else None
+        else:
+            p = num(get(rec, "percent")) if get(rec, "percent") not in ("", "-") else None
+            v = p * elig / scale if p is not None and elig else None
+        if get(rec, "time"):
+            times.append(get(rec, "time"))
+        out.append([int(code), get(rec, "name"), kalpi, "" if elig is None else int(elig), "" if v is None else int(round(v))])
+    os.makedirs(os.path.dirname(os.path.abspath(dest)), exist_ok=True)
+    with open(dest, "w", encoding="utf-8", newline="") as f:
+        csv.writer(f).writerows([STATIONS_HEADER] + out)
+    fn, err = station_reader()
+    check = {"ok": None, "error": f"live_fetch not loaded: {err}"}
+    if fn:
+        try:
+            rows, excluded = fn(open(dest, "rb").read())
+            check = {"ok": bool(rows), "rows": len(rows), "excluded": dict(excluded)}
+        except Exception as exc:                    # noqa: BLE001
+            check = {"ok": False, "error": f"{exc.__class__.__name__}: {exc}"[:200]}
+    rel = release_hint({"url": src, "table": {"data_time": max(times) if times else None}})
+    print(json.dumps({"wrote": dest, "rows": len(out), "skipped": dict(skipped), "columns": roles,
+                      "voters_from_percent": "voters" not in roles, "blank_voters": sum(r[4] == "" for r in out),
+                      "notes": notes, "release": rel, "feed_reader": check}, ensure_ascii=False))
+    print("Next, in ONE commit to main: this file as live_input/stations.csv, \"station_turnout_url\": "
+          "\"live_input/stations.csv\" in pipeline/live_config.json (once), and \"sectors_time\": \"HH:MM\" (the CEC's "
+          "cut-off for this release) in live_input/turnout.json.", file=sys.stderr)
+    return 0 if check.get("ok") is not False else 1
 
 
 # ------------------------------------------------------------------ main
@@ -959,9 +1400,16 @@ def main():
     ap.add_argument("--push", action="store_true", help="commit the report to the ops-reports branch and push")
     ap.add_argument("--branch", default="ops-reports")
     ap.add_argument("--remote", default="origin")
+    ap.add_argument("--store-max-bytes", type=int, default=STORE_MAX, help="largest file whose bytes are kept with the report")
+    ap.add_argument("--convert", metavar="FILE", help="convert a stored per-station turnout release for the feed, and stop")
+    ap.add_argument("--convert-out", default=os.path.join(ROOT, "live_input", "stations.csv"), help="where --convert writes")
+    ap.add_argument("--map", action="append", default=[], metavar="ROLE=HEADER", help="--convert: a column it did not recognise")
+    ap.add_argument("--now", help=argparse.SUPPRESS)       # testing: pretend it is this Israel time, e.g. 2026-10-27T14:30
     a = ap.parse_args()
+    if a.convert:
+        return convert(a.convert, a.convert_out, a.map)
 
-    now = dt.datetime.now(dt.timezone.utc).astimezone(IL)
+    now = (dt.datetime.fromisoformat(a.now).replace(tzinfo=IL) if a.now else dt.datetime.now(dt.timezone.utc).astimezone(IL))
     try:
         cfg = json.load(open(a.config, encoding="utf-8"))
     except Exception as exc:
@@ -979,40 +1427,58 @@ def main():
     elif a.push:
         prev = previous_from_branch(a.branch, a.remote)
 
-    seeds = list(dict.fromkeys(list(over.get("seeds", SEEDS)) + a.url))
+    a.url = [enc_url(u) for u in a.url]           # every URL in the report is in the encoded form fetch() sends
+    seeds = list(dict.fromkeys([enc_url(u) for u in over.get("seeds", SEEDS)] + a.url))
     allow = tuple(over.get("allow_hosts", ALLOW))
-    control = over.get("control", CONTROL)
+    control = enc_url(over.get("control", CONTROL))
     sources = collections.defaultdict(set)
     for u in a.url:
         sources[u].add("operator")
-    probe = []
+    probe, repo_copies = [], []
     for u, src in ([(u, "known") for u in over.get("probe", KNOWN) + [control]] +
                    [(cfg.get(k), "config") for k in ("results_url", "results_url_localities", "station_turnout_url")] +
                    [(u, "enumerated") for u in (enumerated() if over.get("enumerate", mode == "full") else [])] +
                    [(e["url"], "previous") for e in (prev or {}).get("urls", [])
                     if answering(e) and (e["cls"] not in ("html", "script") or "seed" in e.get("source", []))]):
+        if u and not is_web(u):                   # a repository path (live_input/stations.csv): read, never probed
+            if src == "config":
+                repo_copies.append(u)
+            continue
         if u:
+            u = enc_url(u)
             sources[u].add(src)
             probe.append(u)
 
-    net, results = Net(a), {}
+    net, results, kept = Net(a), {}, {}
     with cf.ThreadPoolExecutor(max_workers=max(1, a.workers)) as pool:
-        found_on, log = crawl(net, seeds, allow, pool, results, sources)
+        found_on, log = crawl(net, seeds, allow, pool, results, sources, keep=kept)
         linked = [u for u in sorted(found_on) if DATA.search(u)][:400] + [u for u in sorted(found_on) if not DATA.search(u)][:100]
         rest = list(dict.fromkeys(u for u in probe + linked if u not in results))
-        for u, (e, _) in zip(rest, pool.map(lambda u: analyze(u, net.get(u)), rest)):
+        for u, (e, _) in zip(rest, pool.map(lambda u: probe_one(net, u, kept), rest)):
             results[u] = e
-    roots = {}
+    for u in dict.fromkeys(repo_copies):
+        try:
+            with open(os.path.join(ROOT, u), "rb") as f:
+                r = {"status": 200, "headers": {}, "body": f.read(), "final": u, "ms": 0}
+        except OSError as exc:
+            r = {"status": 0, "local": True,
+                 "error": f"repository file not read: {exc.__class__.__name__} ({exc.strerror or exc})"[:200]}
+        results[u] = probe_one(net, u, answer=r)[0]
+        sources[u].add("config (repository file)")
+    roots, split = {}, {}
     for u, e in results.items():
-        p = urllib.parse.urlsplit(u)
+        try:
+            split[u] = p = urllib.parse.urlsplit(u)
+        except ValueError:
+            continue
         if p.path in ("", "/") and not p.query and e.get("sha256"):
             roots[p.hostname] = e["sha256"]
     for u, e in results.items():
-        p = urllib.parse.urlsplit(u)
+        p = split.get(u)
         e["source"] = sorted(sources[u])
         if u in found_on:
             e["found_on"] = sorted(found_on[u])[:5]
-        if e.get("kind") == "html" and (p.path not in ("", "/") or p.query) and e.get("sha256") == roots.get(p.hostname):
+        if p and e.get("kind") == "html" and (p.path not in ("", "/") or p.query) and e.get("sha256") == roots.get(p.hostname):
             e["spa"] = True                       # a single-page app answers every path with its shell
 
     entries = sorted(results.values(), key=lambda e: (not answering(e), e.get("cls", ""), e["url"]))
@@ -1028,7 +1494,7 @@ def main():
                         else "this runner may not reach the CEC at all")),
            "counts": {"probed": len(entries), "answered": sum(map(answering, entries)),
                       "by_class": dict(collections.Counter(e.get("cls") for e in entries))},
-           "verdicts": verdicts(entries, cfg, now, election_day)}
+           "verdicts": verdicts(entries, cfg, now, election_day, control)}
     sugg = {v["key"]: v["switch"] for v in rep["verdicts"] if v.get("switch") and not v["key"].startswith("national")}
     aliases = {k: x for v in rep["verdicts"] if v["key"] in ("results_url",) or (v["key"] == "station_turnout_url" and ref()["station_aliases"])
                for k, x in v["aliases"].items()}
@@ -1042,9 +1508,13 @@ def main():
     rep["diff"] = compare(prev, results)
     rep["hosts"] = host_table(entries, net.rewrite, a.only_rewritten)
     rep["harvest"] = log
+    stamp = now.strftime("%Y%m%d-%H%M")
+    os.makedirs(a.out, exist_ok=True)
+    stored, rep["files_index"] = store_files(results, kept, prev, now, now >= dt.datetime.combine(election_day, dt.time(22, 0), IL),
+                                             a.out, stamp, a.store_max_bytes)
+    rep["counts"]["stored"] = len(stored)
     rep["urls"] = entries
 
-    os.makedirs(a.out, exist_ok=True)
     pj, pm = os.path.join(a.out, "report.json"), os.path.join(a.out, "report.md")
     with open(pj, "w", encoding="utf-8") as f:
         json.dump(rep, f, ensure_ascii=False, indent=1, default=str)
@@ -1055,13 +1525,12 @@ def main():
             f.write(markdown(rep, short=True))
     d = rep["diff"] or {"new": [], "changed": [], "gone": []}
     line = {"mode": mode, "probed": rep["counts"]["probed"], "answered": rep["counts"]["answered"],
-            "new": len(d["new"]), "changed": len(d["changed"]), "gone": len(d["gone"]),
+            "new": len(d["new"]), "changed": len(d["changed"]), "gone": len(d["gone"]), "stored": sorted(stored),
             "verdicts": {v["key"]: v["state"] for v in rep["verdicts"]}, "report": pm}
     if a.push:
-        stamp = now.strftime("%Y%m%d-%H%M")
         try:
             line["pushed"] = push_report({f"discover-{stamp}.json": pj, f"discover-{stamp}.md": pm, "latest.json": pj,
-                                          "latest.md": pm}, a.branch, a.remote,
+                                          "latest.md": pm, **stored}, a.branch, a.remote,
                                          f"discover {now.strftime('%d.%m %H:%M')} IL ({mode}): {len(d['new'])} new, "
                                          f"{len(d['changed'])} changed, {len(d['gone'])} gone")
         except Exception as exc:
