@@ -18,23 +18,32 @@ Inputs
   * Turnout during the day: the CEC national hourly figures and, if the CEC publishes them as
     announced (ruling of 16.8.2026), per-station turnout. National figures are typed into
     live_input/turnout.json (the CEC releases them as statements, not files) or scraped when a
-    URL is configured.
+    URL is configured. A per-station release also feeds the Arab-society section
+    (pipeline/arab_turnout.py, when present): turnout by locality, by the list that led there in
+    2022 (Ra'am / Joint List) and by region, published during voting hours too.
   * Exit polls: live_input/exit_polls.json, published only after polls close (22:00).
 
-Outputs (next to the page on GitHub Pages; the JSON contract is in the lead's ARCH_V2 notes)
+Outputs (next to the page; the JSON contract is in the lead's ARCH_V2/V3 notes)
   live/results.json   counted totals + projection frame (pipeline/live_model.make_frame);
                       updated_he is the time the CEC file last changed, not the time of the check
-  live/turnout.json   national hourly series, sector turnout from per-station data
+  live/turnout.json   national hourly series, sector turnout from per-station data, "arab" and
+                      "arab_history" (one entry per per-station release, the last 8)
   live/exit_polls.json, live/status.json, live/history.json (projection over the night)
   live/state.json     persisted state keyed by source: last accepted sha256, stations, last valid
                       inputs and config, probe times. State from another source is ignored.
+
+Publishing (--publish; the workflow and the laptop share the code, see publish_step): branch mode
+(Pages "Deploy from a branch", the owner's setting) commits the files to site/live/ on main and asks
+Pages for a build, at most once every publish_every_min minutes (live_config.json, default 8; the
+first results and the first exit polls at once); Actions mode commits them to the live-data branch
+and dispatches pages.yml.
 
 Every download is checked: an empty body, HTML or JSON instead of CSV (maintenance page, WAF,
 rate limit) is rejected, a file without the expected columns or without a single counted station
 is rejected, rows with more voters than eligible voters are dropped and counted, a file whose
 station count shrank is rejected, an unchanged file (same SHA-256) is skipped, and the SHA-256 of
 each accepted file is recorded. Each pass prints one JSON line (the status plus "changed": the
-files written or removed), which the workflow uses to decide whether to commit.
+files written or removed, and what was published), which the workflow logs.
 """
 import argparse
 import collections
@@ -60,6 +69,14 @@ import live_model as LM  # noqa: E402
 from build_data import load_election, read_expb  # noqa: E402
 
 ROOT = LM.ROOT
+try:                                    # the Arab-society election-day section; optional: absent = skipped
+    import arab_turnout as AT           # noqa: E402
+    AT_ERR = ""
+except Exception as _exc:               # a broken module is reported in status.errors, the feed runs on
+    AT = None
+    AT_ERR = "" if isinstance(_exc, ModuleNotFoundError) and _exc.name == "arab_turnout" else f"{_exc.__class__.__name__}: {_exc}"
+ARAB_BASE = os.path.join(ROOT, "site", "data", "arab_day_2022.json")
+ARAB_HISTORY = 8                        # turnout.json arab_history: one entry per per-station release, the last 8
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live"
 try:
     from zoneinfo import ZoneInfo
@@ -97,12 +114,26 @@ def fetch(url, timeout=40):
         if "maintenance" in r.geturl():
             raise IOError(f"redirected to {r.geturl()}")
         data = r.read()
+    return check_body(data)
+
+
+def check_body(data):
+    """data, unless it is empty or an HTML/JSON page (maintenance, WAF, rate limit) instead of a data file."""
     head = data[:200].lstrip(b"\xef\xbb\xbf \t\r\n").lower()     # the 2022 file starts with a UTF-8 BOM
     if not head:
         raise IOError("empty body")
     if head[:1] in (b"<", b"{", b"["):
         raise IOError("got an HTML or JSON page instead of a data file")
     return data
+
+
+def read_source(url):
+    """A data file from a URL, or from a path in the repository (a copy the operator committed, e.g.
+    live_input/stations.csv, when the CEC's file cannot be read directly)."""
+    if re.match(r"https?://", url):
+        return fetch(url)
+    with open(os.path.join(ROOT, url), "rb") as f:
+        return check_body(f.read())
 
 
 def probe(url, timeout=20):
@@ -550,41 +581,47 @@ def turnout_pass(E, cfg, out, state, status, inputs):
             doc[k] = manual[k]
     url = cfg.get("station_turnout_url")
     if url:
+        old = read_json(os.path.join(out, "turnout.json"), {}) or {}
+        lean_ok = closed or cfg.get("lean_during_voting")
         try:
-            data = fetch(url)
-            st = station_turnout(E, data)
+            data = read_source(url)
+            sha = hashlib.sha256(data).hexdigest()
+            if state.get("station_sha") != sha:   # a new release is stamped once, when first seen (not every pass)
+                state["station_sha"], state["station_seen"] = sha, now_il().strftime("%H:%M")
+            rows, excluded = station_rows(data)
+            st = station_turnout(E, rows, excluded)
+            released = str(manual.get("sectors_time") or state.get("station_seen") or now_il().strftime("%H:%M"))
             if st["sectors"]:
-                doc.update({"sectors": st["sectors"], "stations_national": st["national"],
-                            "sectors_time": manual.get("sectors_time", "") or now_il().strftime("%H:%M"),
-                            "sectors_coverage": st["coverage"], "sectors_excluded": st["excluded"],
-                            "sectors_sha256": hashlib.sha256(data).hexdigest()})
+                doc.update({"sectors": st["sectors"], "stations_national": st["national"], "sectors_time": released,
+                            "sectors_coverage": st["coverage"], "sectors_excluded": st["excluded"], "sectors_sha256": sha})
                 # the 2022-vote-weighted pace is an open question for the CEC legal adviser: not during voting
-                if closed or cfg.get("lean_during_voting"):
+                if lean_ok:
                     doc["lean"] = st["lean"]
+            arab_pass(rows, st["national"], released, doc, old, state, status["errors"])
         except Exception as exc:
             doc["station_error"] = f"{exc.__class__.__name__}: {exc}"[:200]
+            # the CEC file comes and goes: the last release read stays on the page
+            doc.update({k: old[k] for k in STATION_KEYS if k in old})
+            if lean_ok and "lean" in old:
+                doc["lean"] = old["lean"]
     write_json(out, "turnout.json", doc)
     return doc
 
 
-def station_turnout(E, data):
-    """Per-station turnout release -> turnout by sector and by 2022 vote.
+STATION_KEYS = ("sectors", "stations_national", "sectors_time", "sectors_coverage", "sectors_excluded",
+                "sectors_sha256", "arab", "arab_history")
 
-    The CEC format is not known in advance, so columns are found by their Hebrew names (as in
-    expb.csv: סמל ישוב, קלפי, בזב, מצביעים). For every sector:
-      turnout  = voters so far / eligible, over the stations in the release;
-      ratio    = that turnout / the national turnout of the same release;
-      pace     = voters so far / the same stations' final voters in 2022.
-    The lean-weighted signal weights each station's pace by its 2022 votes for each bloc: are the
-    stations that voted for the Netanyahu bloc, the Jewish opposition or the Arab lists in 2022
-    turning out faster or slower than then? Stations that cannot be matched to 2022 or whose pace
-    is implausible (>2.0, usually a renumbered station) are left out of pace and counted."""
+
+def station_rows(data):
+    """A per-station turnout release -> rows [{"code", "kalpi", "elig" (None without a בזב column), "voters"}]
+    and a count of the rows left out, by reason. The CEC format is not known in advance, so columns are
+    found by their Hebrew names (as in expb.csv: סמל ישוב, קלפי, בזב, מצביעים)."""
     try:
         text = data.decode("utf-8-sig")
     except UnicodeDecodeError:
         text = data.decode("cp1255", "replace")
     rd = csv.reader(io.StringIO(text))
-    header = [h.strip() for h in next(rd)]
+    header = [h.strip() for h in next(rd, [])]
 
     def col(*names):
         return next((header.index(n) for n in names if n in header), None)
@@ -592,20 +629,38 @@ def station_turnout(E, data):
     ie, iv = col("בזב", "בעלי זכות בחירה"), col("מצביעים", "הצביעו")
     if None in (ic, ik, iv):
         raise ValueError(f"unknown columns: {header[:12]}")
-    agg = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "stations": 0, "now": 0, "then": 0})
-    lean = collections.defaultdict(lambda: [0.0, 0.0])           # bloc -> [Σ pace×votes22, Σ votes22]
-    nat = {"elig": 0, "voters": 0}
-    excluded = collections.Counter()
+    rows, excluded = [], collections.Counter()
     for rec in rd:
+        if not any(c.strip() for c in rec):
+            continue
         try:
-            code, kalpi, voters = int(rec[ic]), rec[ik].strip(), int(float(rec[iv] or 0))
+            code, kalpi, voters = int(float(rec[ic])), rec[ik].strip(), int(float(rec[iv] or 0))
+            elig = int(float(rec[ie] or 0)) if ie is not None else None
         except (ValueError, IndexError):
             excluded["unreadable"] += 1
             continue
-        elig = int(float(rec[ie] or 0)) if ie is not None else 0
         if elig and voters > elig * 1.02:
             excluded["more voters than eligible"] += 1
             continue
+        rows.append({"code": code, "kalpi": kalpi, "elig": elig, "voters": voters})
+    return rows, excluded
+
+
+def station_turnout(E, rows, excluded=None):
+    """Per-station turnout rows (station_rows) -> turnout by sector and by 2022 vote. For every sector:
+      turnout  = voters so far / eligible, over the stations in the release;
+      ratio    = that turnout / the national turnout of the same release;
+      pace     = voters so far / the same stations' final voters in 2022.
+    The lean-weighted signal weights each station's pace by its 2022 votes for each bloc: are the
+    stations that voted for the Netanyahu bloc, the Jewish opposition or the Arab lists in 2022
+    turning out faster or slower than then? Stations that cannot be matched to 2022 or whose pace
+    is implausible (>2.0, usually a renumbered station) are left out of pace and counted."""
+    agg = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "stations": 0, "now": 0, "then": 0})
+    lean = collections.defaultdict(lambda: [0.0, 0.0])           # bloc -> [Σ pace×votes22, Σ votes22]
+    nat = {"elig": 0, "voters": 0}
+    excluded = collections.Counter(excluded or {})
+    for r in rows:
+        code, kalpi, voters, elig = r["code"], r["kalpi"], r["voters"], r["elig"] or 0
         key = (code, kalpi) if (code, kalpi) in E.station22 else (code, kalpi.split(".")[0])
         sec = E.station_sector.get(key, "jewish")
         a = agg[sec]
@@ -645,6 +700,43 @@ def station_turnout(E, data):
             "excluded": dict(excluded)}
 
 
+_arab_base = {}
+
+
+def arab_pass(rows, national, released, doc, old, state, errors):
+    """The Arab-society section (pipeline/arab_turnout.py; ARCH_V3 §2): the official per-station turnout
+    by locality, by the list that led there in 2022 (Ra'am / Joint List), by region and by kind, shown
+    during voting hours too. It carries no party votes, seats or threshold figures. turnout.json gets
+    "arab" (this release) and "arab_history" (one compact entry per release, the last 8, kept in state).
+    A missing module or base file skips the section; a failure keeps the last one and is reported."""
+    if AT is None or not os.path.exists(ARAB_BASE):
+        if AT_ERR:
+            errors.append(f"arab: {AT_ERR}"[:200])
+        return
+    try:
+        if "base" not in _arab_base:
+            _arab_base["base"] = json.load(open(ARAB_BASE, encoding="utf-8"))
+        sec = AT.arab_section(rows, _arab_base["base"], national_turnout=national, released=released)
+    except Exception as exc:
+        errors.append(f"arab: {exc.__class__.__name__}: {exc}"[:200])
+        doc.update({k: old[k] for k in ("arab", "arab_history") if k in old})
+        return
+
+    def tp(d):
+        return {"turnout": (d or {}).get("turnout"), "pace": (d or {}).get("pace")}
+    entry = {"released": sec.get("released") or released, "total": tp(sec.get("total")),
+             "groups": {k: tp(v) for k, v in (sec.get("groups") or {}).items()},
+             "regions": {k: tp(v) for k, v in (sec.get("regions") or {}).items()}}
+    hist = [h for h in state.get("arab_history") or [] if isinstance(h, dict)]
+    i = next((i for i, h in enumerate(hist) if h.get("released") == entry["released"]), None)
+    if i is None:
+        hist.append(entry)
+    else:                                   # the same release again, or a corrected file with the same time
+        hist[i] = entry
+    state["arab_history"] = hist[-ARAB_HISTORY:]
+    doc["arab"], doc["arab_history"] = sec, state["arab_history"]
+
+
 # ------------------------------------------------------------------ exit polls
 def exit_polls_pass(out, election_day, state, status, inputs):
     """Publish live_input/exit_polls.json after the polls close; remove the published copy when
@@ -663,7 +755,30 @@ def exit_polls_pass(out, election_day, state, status, inputs):
     return False
 
 
-# ------------------------------------------------------------------ publishing from a laptop
+# ------------------------------------------------------------------ publishing (the workflow and the laptop)
+# Two paths, picked from the Pages build_type (ARCH_V3 §1):
+#   branch   Pages "Deploy from a branch: main / (root)" (build_type legacy, the owner's setting): out/*.json ->
+#            site/live/ on main, then a Pages build is requested (POST /pages/builds). Branch builds have a soft
+#            limit of 10 an hour and the operator's pushes to main count too, so this happens at most once every
+#            publish_every_min minutes (live_config.json, default 8); the first results.json and the first
+#            exit_polls.json go out at once.
+#   actions  Pages "GitHub Actions" (build_type workflow): out/*.json -> live/ on the live-data branch, then
+#            pages.yml is dispatched (no build limit), after every changed pass.
+# Both use the same reset cycle: fetch, reset --hard to the remote tip, copy, commit only the live folder,
+# push; never rebase, so a rejected push is simply repeated and nothing can wedge. The feed owns the live
+# folder alone; whatever else lands on main in between (the operator's inputs, code) is kept as it is.
+TARGET = {"branch": "site/live", "actions": "live"}
+PUB = ".publish.json"            # the publisher's cadence state, in the out folder (a dotfile: never published)
+URGENT = ("results.json", "exit_polls.json")   # the first one of each is published at once
+PUBLISH_EVERY = 8                # minutes between publishes in branch mode (live_config.json publish_every_min)
+BUILD_GAP = 50                   # seconds between build requests (a failed one is retried after this)
+DISPATCH_TOO = False             # branch mode with an unknown Pages source: also dispatch pages.yml (request_build)
+PLACEHOLDER = {"phase": "pre", "has_results": False, "has_turnout": False, "exit_polls": False,
+               "results_state": "before-22", "errors": [],
+               "note": "Placeholder until election day; pipeline/live_fetch.py replaces it (site/live/ on main in "
+                       "branch mode, live/ on the live-data branch in Actions mode)."}
+
+
 def git(*args, cwd=ROOT, check=True):
     r = subprocess.run(["git", *args], cwd=cwd, capture_output=True, text=True)
     if check and r.returncode:
@@ -671,48 +786,224 @@ def git(*args, cwd=ROOT, check=True):
     return r
 
 
-def publish(out, branch="live-data", wt=None, repo=ROOT):
-    """Laptop fallback when GitHub's runners cannot reach the CEC: copy out/*.json into a worktree
-    of the live-data branch and push with the same reset cycle as the workflow (fetch, reset --hard
-    to the remote tip, copy, commit, push; never rebase, so two writers cannot wedge each other).
-    The branch holds only live/; the page is rebuilt by pages.yml (see dispatch_pages)."""
-    wt = wt or os.path.join(repo, ".live-data")
+def publish_every(cfg, errors=None):
+    """publish_every_min from the config: minutes between publishes in branch mode (1-60, default 8)."""
+    v = cfg.get("publish_every_min")
+    if v is None:
+        return PUBLISH_EVERY
+    if isinstance(v, (int, float)) and not isinstance(v, bool) and 1 <= v <= 60:
+        return v
+    if errors is not None:
+        errors.append(f"config: publish_every_min {v!r} is not a number of minutes 1-60; using {PUBLISH_EVERY}")
+    return PUBLISH_EVERY
+
+
+def worktree(mode, wt, branch, repo=ROOT):
+    """A detached worktree of origin/<branch> at wt, created on first use; the live-data branch is created
+    as an orphan holding only live/ with the placeholder status."""
     ref = f"+refs/heads/{branch}:refs/remotes/origin/{branch}"
-    if not os.path.exists(os.path.join(wt, ".git")):
-        shutil.rmtree(wt, ignore_errors=True)
-        git("worktree", "prune", cwd=repo, check=False)     # a stale registration from a deleted folder
-        if git("fetch", "-q", "origin", ref, cwd=repo, check=False).returncode == 0:
-            git("worktree", "add", "-q", "--detach", wt, f"origin/{branch}", cwd=repo)
-        else:                                     # first use: an orphan branch holding only live/
-            git("worktree", "add", "-q", "--detach", wt, cwd=repo)
-            git("checkout", "-q", "--orphan", f"{branch}-{int(time.time())}", cwd=wt)
-            git("rm", "-rfq", "--cached", ".", cwd=wt)
-            for name in os.listdir(wt):
-                if name != ".git":
-                    (shutil.rmtree if os.path.isdir(os.path.join(wt, name)) else os.remove)(os.path.join(wt, name))
-            os.makedirs(os.path.join(wt, "live"))
-            shutil.copy(os.path.join(repo, "site", "live", "status.json"), os.path.join(wt, "live", "status.json"))
-            git("add", "-A", cwd=wt)
-            git("commit", "-q", "-m", "live-data: placeholder", cwd=wt)
-            git("push", "-q", "origin", f"HEAD:{branch}", cwd=wt, check=False)
-            git("checkout", "-q", "--detach", cwd=wt)
+    if os.path.exists(os.path.join(wt, ".git")):
+        return
+    shutil.rmtree(wt, ignore_errors=True)
+    git("worktree", "prune", cwd=repo, check=False)       # a stale registration from a deleted folder (OPS-5)
+    if git("fetch", "-q", "origin", ref, cwd=repo, check=False).returncode == 0:
+        git("worktree", "add", "-q", "--detach", wt, f"origin/{branch}", cwd=repo)
+        return
+    if mode == "branch":
+        raise RuntimeError(f"cannot fetch origin/{branch}")
+    git("worktree", "add", "-q", "--detach", wt, cwd=repo)
+    git("checkout", "-q", "--orphan", f"{branch}-{int(time.time())}", cwd=wt)
+    git("rm", "-rfq", "--cached", ".", cwd=wt)
+    for name in os.listdir(wt):
+        if name != ".git":
+            (shutil.rmtree if os.path.isdir(os.path.join(wt, name)) else os.remove)(os.path.join(wt, name))
+    os.makedirs(os.path.join(wt, "live"))
+    with open(os.path.join(wt, "live", "status.json"), "w", encoding="utf-8") as f:
+        json.dump(PLACEHOLDER, f, ensure_ascii=False, separators=(",", ":"))
+    git("add", "-A", cwd=wt)
+    git("commit", "-q", "-m", "live-data: placeholder", cwd=wt)
+    git("push", "-q", "origin", f"HEAD:{branch}", cwd=wt, check=False)   # someone created it first: the cycle takes theirs
+    git("checkout", "-q", "--detach", cwd=wt)
+
+
+def sync(wt, branch):
+    """The worktree at the remote tip of branch (False when the fetch failed)."""
+    if git("fetch", "-q", "origin", f"+refs/heads/{branch}:refs/remotes/origin/{branch}", cwd=wt, check=False).returncode:
+        return False
+    git("reset", "-q", "--hard", f"origin/{branch}", cwd=wt)
+    return True
+
+
+def publish(out, mode="branch", wt=None, repo=ROOT, branch=None, who=""):
+    """Copy out/*.json into the live folder of the target branch and push (the reset cycle above). Only
+    that folder is ever committed. Returns ("pushed" | "unchanged" | "push failed", the commit at the tip)."""
+    branch = branch or ("live-data" if mode == "actions" else "main")
+    wt = wt or os.path.join(repo, ".live-data" if mode == "actions" else ".live-main")
+    sub = TARGET[mode]
+    worktree(mode, wt, branch, repo)
     for attempt in range(5):
-        if git("fetch", "-q", "origin", ref, cwd=wt, check=False).returncode == 0:
-            git("reset", "-q", "--hard", f"origin/{branch}", cwd=wt)
-        live = os.path.join(wt, "live")
+        sync(wt, branch)
+        live = os.path.join(wt, sub)
         os.makedirs(live, exist_ok=True)
         for p in glob.glob(os.path.join(live, "*.json")):
             os.remove(p)
         for p in glob.glob(os.path.join(out, "*.json")):
             shutil.copy(p, live)
-        if not git("status", "--porcelain", cwd=wt).stdout.strip():
-            return "unchanged"
-        git("add", "-A", "live", cwd=wt)
-        git("commit", "-q", "-m", f"live {now_il().strftime('%H:%M')} (laptop)", cwd=wt)
+        if not git("status", "--porcelain", "--", sub, cwd=wt).stdout.strip():
+            return "unchanged", git("rev-parse", "HEAD", cwd=wt).stdout.strip()
+        git("add", "-A", "--", sub, cwd=wt)
+        git("commit", "-q", "-m", f"live {now_il().strftime('%H:%M')}{who}", cwd=wt)
         if git("push", "-q", "origin", f"HEAD:{branch}", cwd=wt, check=False).returncode == 0:
-            return "pushed"
-        time.sleep(3 + 2 * attempt)
-    return "push failed"
+            return "pushed", git("rev-parse", "HEAD", cwd=wt).stdout.strip()
+        time.sleep(3 + 2 * attempt)               # someone else pushed in between: fetch, reset and copy again
+    return "push failed", None
+
+
+def api(method, path, body=None):
+    """A GitHub REST call: with $GH_TOKEN / $GITHUB_TOKEN (the workflows; a laptop with a token), else through
+    the gh CLI when it is logged in. Returns (HTTP status, parsed JSON or None); 0 = the call could not be made."""
+    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
+    if token:
+        req = urllib.request.Request(
+            os.environ.get("GITHUB_API_URL", "https://api.github.com").rstrip("/") + path, method=method,
+            data=json.dumps(body).encode() if body is not None else (b"" if method == "POST" else None),
+            headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
+                     "User-Agent": UA, "Content-Type": "application/json", "X-GitHub-Api-Version": "2022-11-28"})
+        try:
+            with urllib.request.urlopen(req, timeout=30) as r:
+                raw = r.read()
+                return r.status, (json.loads(raw) if raw.strip() else None)
+        except urllib.error.HTTPError as exc:
+            return exc.code, None
+        except Exception:
+            return 0, None
+    if shutil.which("gh"):
+        r = subprocess.run(["gh", "api", "-X", method, path.lstrip("/")] + (["--input", "-"] if body is not None else []),
+                           input=json.dumps(body) if body is not None else None, capture_output=True, text=True)
+        if r.returncode == 0:
+            try:
+                return 200, (json.loads(r.stdout) if r.stdout.strip() else None)
+            except ValueError:
+                return 200, None
+        m = re.search(r"HTTP (\d{3})", r.stderr)
+        return (int(m.group(1)) if m else 0), None
+    return 0, None
+
+
+def origin_repo(repo=ROOT):
+    r = git("remote", "get-url", "origin", cwd=repo, check=False)
+    m = re.search(r"github\.com[:/]([^/\s]+/[^/\s]+?)(?:\.git)?$", r.stdout.strip())
+    return m.group(1) if m else ""
+
+
+def repo_slug(repo=ROOT):
+    return os.environ.get("GITHUB_REPOSITORY") or origin_repo(repo)
+
+
+def pages_source(repo=ROOT):
+    """(build_type, source branch) of the repository's Pages site: ("legacy", "main") for "Deploy from a
+    branch", ("workflow", None) for GitHub Actions, (None, None) when it cannot be read."""
+    code, d = api("GET", f"/repos/{repo_slug(repo)}/pages")
+    if code != 200 or not isinstance(d, dict):
+        return None, None
+    return d.get("build_type"), (d.get("source") or {}).get("branch")
+
+
+def request_build(mode, sha=None, ref="main", repo=ROOT):
+    """Have the page rebuilt after a push. Branch mode: POST /pages/builds (pushes made with GITHUB_TOKEN
+    are documented as not starting a Pages build), unless the push already started one for this commit
+    (a laptop pushing with its own credentials does), so no build is spent twice. Actions mode: dispatch
+    pages.yml on ref. Returns (ok, label)."""
+    slug = repo_slug(repo)
+    if not slug:
+        return False, "no repository to ask (set GITHUB_REPOSITORY)"
+    if mode == "actions":
+        code, _ = api("POST", f"/repos/{slug}/actions/workflows/pages.yml/dispatches", {"ref": ref})
+        return code in (200, 204), (f"pages.yml dispatched on {ref}" if code in (200, 204) else f"dispatch failed ({code})")
+    ok, label = False, ""
+    if sha:
+        time.sleep(float(os.environ.get("LIVE_BUILD_WAIT", "15")))   # give a push-started build time to show up
+        code, d = api("GET", f"/repos/{slug}/pages/builds/latest")
+        if code == 200 and isinstance(d, dict) and d.get("commit") == sha:
+            ok, label = True, f"Pages build started by the push ({d.get('status')})"
+    if not ok:
+        code, d = api("POST", f"/repos/{slug}/pages/builds")
+        ok = code in (200, 201)
+        label = f"Pages build requested ({(d or {}).get('status', code)})" if ok else f"Pages build request failed ({code})"
+    if DISPATCH_TOO:                      # the Pages source is unknown: under Actions, pages.yml deploys main's site/live/
+        d_ok, d_label = request_build("actions", ref=ref, repo=repo)
+        ok, label = ok or d_ok, f"{label}; {d_label}"
+    return ok, label
+
+
+def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_publish=False, who="", now=None):
+    """After a pass: publish out/*.json when due (above) and have the page rebuilt. now_publish ignores the
+    cadence (the end of a run, a reset). A failed build request is retried after BUILD_GAP seconds, up to
+    five times. Returns the fields for the status line: published, next_publish_s, build."""
+    now = time.time() if now is None else now
+    pp = os.path.join(out, PUB)
+    p = read_json(pp, {}) or {}
+    if CHANGED:
+        p["dirty"] = True
+    res = {}
+    try:                                          # the state is saved even when a git or API call raises
+        if p.get("dirty"):
+            live = os.path.join(wt, TARGET[mode])
+            first = [n for n in URGENT if os.path.exists(os.path.join(out, n)) and not os.path.exists(os.path.join(live, n))]
+            wait = (every_min * 60 if mode == "branch" else 0) - (now - p.get("last", 0))
+            if now_publish or first or wait <= 0:
+                r, sha = publish(out, mode, wt, repo, branch, who)
+                res["published"] = r + (f" ({', '.join(first)}: first, at once)" if first and r == "pushed" else "")
+                if r == "pushed":
+                    p.update(dirty=False, last=now, build=sha, build_fails=0)
+                elif r == "unchanged":
+                    p["dirty"] = False
+            else:
+                res["published"], res["next_publish_s"] = "held", int(wait)
+        # a one-shot call (the flush at the end of a run, a reset) asks at once: nothing would retry it later
+        if p.get("build") and (now_publish or now - p.get("last_build", 0) >= BUILD_GAP):
+            ok, res["build"] = request_build(mode, p["build"], ref, repo)
+            p["last_build"] = now
+            if ok:
+                p.update(build=None, build_fails=0)
+            else:
+                p["build_fails"] = p.get("build_fails", 0) + 1
+                if p["build_fails"] >= 5:      # stop asking until the next publish; the push itself may have built
+                    p["build"] = None
+                    res["build"] += "; five failures in a row, giving up until the next publish"
+    finally:
+        with open(pp, "w", encoding="utf-8") as f:
+            json.dump(p, f)
+    return res
+
+
+def seed(out, mode, wt, branch, repo=ROOT):
+    """Start of a workflow run: the worktree of the target branch at its tip, and the out folder seeded
+    from the published files (history, last good copies, state), except a rehearsal's (OPS-3): a real run
+    never inherits a drill, and a new drill starts clean."""
+    worktree(mode, wt, branch, repo)
+    sync(wt, branch)
+    live = os.path.join(wt, TARGET[mode])
+    os.makedirs(out, exist_ok=True)
+    st = read_json(os.path.join(live, "status.json"), {}) or {}
+    if isinstance(st, dict) and st.get("drill"):
+        return {"seeded": [], "note": "the published files are a rehearsal's: starting clean"}
+    names = sorted(os.path.basename(p) for p in glob.glob(os.path.join(live, "*.json")))
+    for n in names:
+        shutil.copy(os.path.join(live, n), out)
+    return {"seeded": names}
+
+
+def reset_out(out):
+    """The out folder back to the placeholder status alone (after a drill, or to start over); the next
+    publish removes everything else from the live folder."""
+    for p in glob.glob(os.path.join(out, "*.json")):
+        if os.path.basename(p) != "status.json":
+            remove_json(out, os.path.basename(p))
+    for name in (RESULTS_CACHE, ".drill_source.csv"):
+        if os.path.exists(os.path.join(out, name)):
+            os.remove(os.path.join(out, name))
+    write_json(out, "status.json", PLACEHOLDER)
 
 
 def refresh_inputs(ref="main", repo=ROOT):
@@ -721,46 +1012,6 @@ def refresh_inputs(ref="main", repo=ROOT):
     --no-overlay also removes a file deleted there (OPS-14). Local edits of those files are lost."""
     git("fetch", "-q", "origin", ref, cwd=repo)
     git("checkout", "-q", "--no-overlay", f"origin/{ref}", "--", "live_input", "pipeline/live_config.json", cwd=repo)
-
-
-_dispatch = {"last": 0.0, "warned": False}
-
-
-def dispatch_pages(ref="main", min_gap=50, repo=ROOT, pending=None):
-    """Ask GitHub to rebuild the page (pages.yml, workflow_dispatch) at most once per min_gap
-    seconds: with gh when it is installed and logged in, else through the REST API with $GH_TOKEN."""
-    if time.time() - _dispatch["last"] < min_gap:
-        return "deferred"
-    _dispatch["last"] = time.time()
-    if shutil.which("gh"):
-        r = subprocess.run(["gh", "workflow", "run", "pages.yml", "--ref", ref], cwd=repo, capture_output=True, text=True)
-        if r.returncode == 0:
-            return "gh"
-    token = os.environ.get("GH_TOKEN") or os.environ.get("GITHUB_TOKEN")
-    slug = os.environ.get("GITHUB_REPOSITORY") or origin_repo(repo)
-    if token and slug:
-        req = urllib.request.Request(
-            f"https://api.github.com/repos/{slug}/actions/workflows/pages.yml/dispatches",
-            data=json.dumps({"ref": ref}).encode(), method="POST",
-            headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
-                     "User-Agent": UA, "Content-Type": "application/json"})
-        try:
-            with urllib.request.urlopen(req, timeout=30) as r:
-                return f"rest {r.status}"
-        except urllib.error.HTTPError as exc:
-            return f"rest failed {exc.code}"
-        except Exception as exc:
-            return f"rest failed {exc.__class__.__name__}"
-    if not _dispatch["warned"]:
-        _dispatch["warned"] = True
-        print("warning: the page will not be rebuilt: install gh and run `gh auth login`, or set GH_TOKEN", file=sys.stderr)
-    return "no dispatcher"
-
-
-def origin_repo(repo=ROOT):
-    r = git("remote", "get-url", "origin", cwd=repo, check=False)
-    m = re.search(r"github\.com[:/]([^/\s]+/[^/\s]+?)(?:\.git)?$", r.stdout.strip())
-    return m.group(1) if m else ""
 
 
 # ------------------------------------------------------------------ main
@@ -787,6 +1038,27 @@ def load_config(path, state, errors):
     return cfg
 
 
+def publish_target(a, errors):
+    """(mode, branch, worktree) for --publish and the one-shot actions. --mode auto reads the Pages
+    build_type: legacy -> branch (site/live/ on the branch Pages deploys), workflow -> actions (live-data);
+    unknown -> branch plus a dispatch of pages.yml after each publish, which reaches the page under both
+    settings (under Actions pages.yml deploys the newer of main's site/live/ and live-data), with a warning."""
+    global DISPATCH_TOO
+    mode, branch = a.mode, a.branch
+    DISPATCH_TOO = os.environ.get("PAGES_SOURCE") == "error"      # the workflow's own check failed
+    if mode == "auto":
+        bt, src_branch = pages_source(a.repo)
+        mode = "actions" if bt == "workflow" else "branch"
+        branch = branch or src_branch
+        if bt not in ("workflow", "legacy"):
+            DISPATCH_TOO = True
+            errors.append("publish: the Pages source could not be read (gh or GH_TOKEN with Pages access); publishing "
+                          "to site/live/ on main (branch mode) and dispatching pages.yml too")
+    branch = "live-data" if mode == "actions" else (branch or "main")   # --branch names the Pages branch only
+    wt = os.path.abspath(a.wt or os.path.join(a.repo, ".live-main" if mode == "branch" else ".live-data"))
+    return mode, branch, wt
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser()
     ap.add_argument("--out", default=os.path.join(ROOT, "live"))
@@ -801,10 +1073,22 @@ def main(argv=None):
     ap.add_argument("--drill", action="store_true", help="rehearsal on the 2022 file, revealed progressively; every output is marked")
     ap.add_argument("--drill-url", default=DRILL_URL)
     ap.add_argument("--drill-fraction", type=float, default=None, help="drill: reveal this share of 2022 instead of following the clock")
-    ap.add_argument("--publish", action="store_true", help="push live/*.json to the live-data branch and redeploy after every pass (laptop mode)")
-    ap.add_argument("--ref", default="main", help="branch of pages.yml to dispatch with --publish, and to take the inputs from")
+    ap.add_argument("--publish", action="store_true",
+                    help="after every pass publish the files and have the page rebuilt (branch mode: site/live/ on main, "
+                         "at most every publish_every_min minutes; actions mode: the live-data branch)")
+    ap.add_argument("--mode", choices=("auto", "branch", "actions"), default="auto",
+                    help="publishing path; auto = from the Pages settings (Deploy from a branch -> branch, GitHub Actions -> actions)")
+    ap.add_argument("--branch", default=None, help="branch mode: the branch Pages deploys from (default: from the Pages settings, else main)")
+    ap.add_argument("--wt", default=None, help="worktree of the target branch (default .live-main / .live-data in the repository)")
+    ap.add_argument("--ref", default="main", help="branch to take the inputs from (laptop) and to dispatch pages.yml on (actions mode)")
     ap.add_argument("--no-refresh", action="store_true",
                     help="--publish: keep the local live_input/ and live_config.json instead of taking them from origin/<ref> every pass")
+    ap.add_argument("--seed", action="store_true", help="only prepare the worktree and copy the published files into --out (not a drill's)")
+    ap.add_argument("--flush", action="store_true", help="only publish what the cadence held back, now")
+    ap.add_argument("--reset-live", action="store_true", help="only put the placeholder back in the published folder and rebuild the page")
+    ap.add_argument("--request-build", action="store_true", help="only have the page rebuilt (after another push to main, e.g. the daily update)")
+    ap.add_argument("--repo", default=ROOT, help=argparse.SUPPRESS)   # the clone holding the worktree (tests)
+    ap.add_argument("--sha", default=None, help="--request-build: the commit just pushed (skips the request when its push started a build)")
     a = ap.parse_args(argv)
     global DRILL
     DRILL = a.drill
@@ -816,6 +1100,24 @@ def main(argv=None):
     state = read_json(os.path.join(a.out, STATE), {}) or {}
     boot_errors = []
     cfg = load_config(a.config, state, boot_errors)
+    who = "" if os.environ.get("GITHUB_ACTIONS") else " (laptop)"
+    pub_errors = []                               # reported once, on the first pass
+    if a.publish or a.seed or a.flush or a.reset_live or a.request_build:
+        mode, branch, wt = publish_target(a, pub_errors)
+        if a.seed or a.flush or a.reset_live or a.request_build:   # one-shot actions: no pass, no model
+            if a.seed:
+                res = seed(a.out, mode, wt, branch, a.repo)
+            elif a.request_build:
+                ok, label = request_build(mode, a.sha, a.ref, a.repo)
+                res = {"ok": ok, "build": label}
+            else:
+                if a.reset_live:
+                    reset_out(a.out)
+                res = publish_step(a.out, mode, publish_every(cfg), wt, branch, a.ref, a.repo, now_publish=True, who=who)
+            print(json.dumps({"mode": mode, "branch": branch, **res, "errors": boot_errors + pub_errors}, ensure_ascii=False), flush=True)
+            return
+    else:
+        mode = os.environ.get("PUBLISH_MODE") or None   # the workflow's unpublished probe pass reports it too
     E = Election2026(cfg, a.as_election)
     hist_path = os.path.join(a.out, "history.json")
     history = read_json(hist_path, []) if os.path.exists(hist_path) else []
@@ -825,23 +1127,30 @@ def main(argv=None):
         t = now_il()
         status = {"updated_at": t.isoformat(), "updated_he": he_time(t), "checked_he": he_time(t),
                   "election": E.dry or "K26", "phase": "pre", "has_results": False, "has_turnout": False,
-                  "exit_polls": False, "results_state": "waiting", "errors": [],
-                  "heartbeat_s": HEARTBEAT}   # the page's staleness threshold follows this (PAGE-1)
-        if os.environ.get("PAGES_SOURCE"):
-            status["pages_source"] = os.environ["PAGES_SOURCE"]
+                  "exit_polls": False, "results_state": "waiting", "errors": pub_errors}
+        pub_errors = []
         if DRILL:
             status["drill"] = True
         if a.publish and not a.no_refresh:
             try:
-                refresh_inputs(a.ref)             # DOC-2: edits made on GitHub reach the laptop too
+                refresh_inputs(a.ref, a.repo)     # DOC-2: edits made on GitHub reach the laptop too
             except Exception as exc:
                 status["errors"].append(f"refresh from origin/{a.ref}: {exc}"[:200])
         cfg = E.cfg = load_config(a.config, state, status["errors"])
+        every = publish_every(cfg, status["errors"])
+        # the page's staleness threshold follows heartbeat_s (PAGE-1): in branch mode the effective publish
+        # cadence, so its note does not fire between two publishes; otherwise the status re-stamp interval
+        status["heartbeat_s"] = round(every * 60) if mode == "branch" else HEARTBEAT
+        if mode:
+            status["publish_mode"] = mode
+        src = os.environ.get("PAGES_SOURCE")
+        if src and not (src == "legacy" and mode == "branch"):   # legacy is the expected source in branch mode
+            status["pages_source"] = src
         election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
         E.set_register(cfg)
         if not E.dry and cfg.get("eligible") == PLACEHOLDER_ELIGIBLE and t.date() >= election_day - dt.timedelta(days=2):
             status["errors"].append("eligible in live_config.json is still the estimate 7,340,000: set the register size "
-                                    "the CEC published (בעלי זכות בחירה), docs/ELECTION_DAY.md הכנות 3")
+                                    "the CEC published (בעלי זכות בחירה), docs/ELECTION_DAY.md הכנות 2")
         if discard_drill_output(a.out):
             status["errors"].append("discarded the files of a rehearsal")
             history = []
@@ -869,17 +1178,22 @@ def main(argv=None):
                            else "day" if t.date() == election_day else "pre")
         write_json(a.out, STATE, state)
         write_json(a.out, "status.json", status, heartbeat=HEARTBEAT)
-        if a.publish and CHANGED:
+        line = {**status, "changed": list(CHANGED)}
+        if a.publish:                             # every pass: a held publish or a failed build request may be due
             try:
-                status["published"] = publish(a.out)
-                if status["published"] == "pushed":
-                    status["dispatched"] = dispatch_pages(a.ref)
+                line.update(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, who=who))
             except Exception as exc:
-                status["errors"].append(f"publish: {exc}"[:200])
-        print(json.dumps({**status, "changed": list(CHANGED)}, ensure_ascii=False), flush=True)
+                line["errors"] = status["errors"] + [f"publish: {exc}"[:200]]
+        print(json.dumps(line, ensure_ascii=False), flush=True)
         if a.once or (a.minutes is not None and (time.time() - start) / 60 > a.minutes):
             break                                 # DOC-1: without --minutes the laptop loop runs until stopped
-        time.sleep(a.loop)
+        try:
+            time.sleep(a.loop)
+        except KeyboardInterrupt:                 # Ctrl-C on the laptop: publish what the cadence held back, then stop
+            if a.publish:
+                CHANGED.clear()
+                print(json.dumps(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, now_publish=True, who=who)), flush=True)
+            break
 
 
 if __name__ == "__main__":

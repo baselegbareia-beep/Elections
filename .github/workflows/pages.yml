@@ -1,19 +1,20 @@
-# Publishes the dashboard with GitHub Pages, Source "GitHub Actions": site/index.html + site/data
-# from main, plus live/*.json from the live-data branch (written by the election-day feed, live.yml).
-# Runs on every push to main that touches the site, and on workflow_dispatch (the feed dispatches it
-# after each live-data push). Actions-based Pages has no builds-per-hour limit and never shares a
-# branch with the feed.
+# "Publish site": the GitHub Actions path of GitHub Pages, kept working for the day the Source is switched.
 #
-# While Settings → Pages → Source is still "Deploy from a branch" (main, / root) this workflow only
-# builds and reports: the page is then served straight from main (the root index.html forwards to
-# site/) and live data cannot reach it. Switch the Source to "GitHub Actions" before 27.10
-# (docs/ELECTION_DAY.md). The gh-pages branch is no longer used and can be deleted.
+# The owner's setting is Settings → Pages: "Deploy from a branch: main / (root)" (build_type legacy). Then this
+# workflow only builds and reports, green: the page is served straight from main (the root index.html forwards
+# to site/), and the election-day feed (live.yml) commits its data to site/live/ on main and requests a Pages
+# build itself. Nothing here is needed for that.
+#
+# If the Source is ever "GitHub Actions" (build_type workflow), this workflow deploys site/index.html +
+# site/data from main, plus live/*.json: the newer of the live-data branch (the feed's Actions path) and
+# main's site/live/. It runs on pushes to main that touch the site (never for site/live/**, which only the
+# feed writes) and on workflow_dispatch (the feed dispatches it after each live-data push).
 name: Publish site
 
 on:
   push:
     branches: [main]
-    paths: ['site/**', 'pipeline/build_site.py', '.github/workflows/pages.yml']
+    paths: ['site/**', '!site/live/**', 'pipeline/build_site.py', '.github/workflows/pages.yml']
   workflow_dispatch:
 
 permissions:
@@ -43,14 +44,26 @@ jobs:
           mkdir -p _site/live _site/site
           cp site/index.html _site/index.html
           cp -r site/data _site/data
-          # live/*.json from the live-data branch (the election-day feed), else the placeholder
+          # live/*.json: main's site/live/ (branch mode, or the placeholder), replaced by the live-data branch
+          # (the feed's Actions path) when that one is newer
+          cp site/live/*.json _site/live/
           if git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data 2>/dev/null \
              && git cat-file -e origin/live-data:live/status.json 2>/dev/null; then
-            git archive origin/live-data live | tar -x -C _site
-            echo "live/ from live-data $(git rev-parse --short origin/live-data)"
+            newer=$(git show origin/live-data:live/status.json | python3 -c '
+          import datetime as dt, json, sys
+          def t(d):
+              try:
+                  return dt.datetime.fromisoformat(d["updated_at"]).timestamp()
+              except Exception:
+                  return 0
+          print("live-data" if t(json.load(sys.stdin)) >= t(json.load(open("site/live/status.json"))) else "main")' 2>/dev/null || echo live-data)
+            if [ "$newer" = live-data ]; then
+              rm -f _site/live/*.json
+              git archive origin/live-data live | tar -x -C _site
+            fi
+            echo "live/ from $newer (live-data $(git rev-parse --short origin/live-data))"
           else
-            cp site/live/status.json _site/live/status.json
-            echo 'live/ is the placeholder (no live-data branch yet)'
+            echo 'live/ from main site/live/ (no live-data branch)'
           fi
           # the branch-mode address .../site/ keeps working: it forwards to the root
           cat > _site/site/index.html <<'EOF'
@@ -67,8 +80,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           DEPLOY_ANYWAY: ${{ vars.PAGES_DEPLOY_ANYWAY }}   # "true": deploy even when the check below cannot be made
         run: |
-          # "workflow" = Source: GitHub Actions (deploy); "legacy" = Deploy from a branch (build only, green);
-          # anything else = the check itself failed (API, token, network), not the setting: say so and go red (WF-3)
+          # "legacy" = Deploy from a branch (the owner's setting): nothing to deploy, green; "workflow" = Source:
+          # GitHub Actions: deploy; anything else = the check itself failed (API, token, network): say so, red (WF-3)
           resp=$(curl -sS -m 30 -w '\n%{http_code}' -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
                    "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" 2>/dev/null) || resp=$'\n000'
           http=${resp##*$'\n'}
@@ -81,10 +94,10 @@ jobs:
             legacy)
               echo "deploy=false" >> "$GITHUB_OUTPUT"
               {
-                echo "## Pages deploys from a branch (build_type: legacy); nothing was deployed"
+                echo "## Pages deploys from a branch (build_type: legacy): built and checked, nothing to deploy"
                 echo
-                echo "The site is served from main/site/. Switch **Settings → Pages → Build and deployment → Source** to"
-                echo "**GitHub Actions** before 27.10 for live election-night updates (docs/ELECTION_DAY.md)."
+                echo "The site is served from main (site/), live data included: the election-day feed commits site/live/"
+                echo "to main and requests a Pages build itself (docs/ELECTION_DAY.md). This is the intended setting."
               } >> "$GITHUB_STEP_SUMMARY" ;;
             *)
               if [ "$DEPLOY_ANYWAY" = true ]; then
@@ -97,9 +110,9 @@ jobs:
                 {
                   echo "## :x: The Pages source check failed (http=$http); nothing was deployed"
                   echo
-                  echo "This is the check itself (API, token or network), not the Pages setting; the feed's next dispatch tries"
-                  echo "again. If it keeps failing after the Source was switched to GitHub Actions, set the repository variable"
-                  echo "**PAGES_DEPLOY_ANYWAY** = \`true\` (Settings → Secrets and variables → Actions → Variables) to skip the check."
+                  echo "This is the check itself (API, token or network), not the Pages setting. Under \"Deploy from a branch\""
+                  echo "(the intended setting) this workflow deploys nothing anyway. Under \"GitHub Actions\", if it keeps failing,"
+                  echo "set the repository variable **PAGES_DEPLOY_ANYWAY** = \`true\` (Settings → Secrets and variables → Actions → Variables)."
                 } >> "$GITHUB_STEP_SUMMARY"
                 exit 1
               fi ;;

@@ -21,10 +21,23 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      exit polls appear only after 22:00 and disappear when the input is removed (OPS-14);
      the 2022-vote-weighted lean is omitted during voting hours;
   7. a drill is marked, and a real run discards its files (OPS-3);
-  8. the laptop publisher's reset cycle survives another writer on live-data (OPS-1), and the
+  8. the Actions-mode publisher's reset cycle survives another writer on live-data (OPS-1), and the
      laptop takes live_input/ and live_config.json from origin/main every pass (DOC-2);
-  9. pipeline/live_config.json still holds the 7,340,000 placeholder after 25.10 (LM-B).
-The drill in live.yml runs this first. Runtime about one to two minutes."""
+  8c. branch mode (the owner's Pages setting): site/live/ is committed to main and nothing else, the
+     operator's commits on main are kept, a push rejected by a concurrent writer is redone (no rebase);
+  8d. the cadence (publish_every_min) and the first results / exit polls at once; the Pages build request
+     against a mock API (POST /pages/builds, skipped when the push started a build; retried after a
+     failure), the Actions-mode dispatch of pages.yml, and the Pages-source auto-detection;
+  8e. seeding a run (never from a drill), the reset to the placeholder, and one end-to-end pass of
+     live_fetch.py --publish; status.json carries heartbeat_s and publish_mode;
+  9. pipeline/live_config.json still holds the 7,340,000 placeholder after 25.10 (LM-B);
+ 10. the Arab-society section in turnout.json during voting hours: "arab" and "arab_history" (one entry
+     per release, the last 8) through a stand-in pipeline/arab_turnout.py, a failure keeps the last
+     section, a failed station fetch keeps the last release; then the real module on a synthetic
+     per-station release (pipeline/make_demo_turnout.py's when it can write one), if both are present;
+ 11. the workflows: bash -n on every run: block, the daily poll-ban guard on dates around the ban, and
+     the push filters (site/live/** starts no workflow).
+The drill in live.yml and the daily poll update run this first. Runtime about two to three minutes."""
 import contextlib
 import datetime as dt
 import glob
@@ -33,12 +46,14 @@ import io
 import json
 import os
 import random
+import re
 import shutil
 import subprocess
 import sys
 import tempfile
 import threading
 import time
+import types
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import live_fetch as LF  # noqa: E402
@@ -189,6 +204,109 @@ def cfg_file(name, **kw):
 
 def sh(args, cwd):
     return subprocess.run(args, cwd=cwd, capture_output=True, text=True, check=True).stdout.strip()
+
+
+def station_release(src, f, name, seed=0):
+    """A per-station turnout release built from the 2022 file: voters = 2022 final voters x f (with a
+    little station noise), header like the CEC's ballot file (סמל ישוב, שם ישוב, קלפי, בזב, מצביעים)."""
+    lines = open(src, encoding="utf-8-sig").read().splitlines()
+    hdr = lines[0].split(",")
+    ix = [hdr.index(c) for c in ("סמל ישוב", "שם ישוב", "קלפי", "בזב", "מצביעים")]
+    rng = random.Random(seed)
+    out = ["סמל ישוב,שם ישוב,קלפי,בזב,מצביעים"]
+    for ln in lines[1:]:
+        c = ln.split(",")
+        if c[ix[0]].strip() in ("9999", "99999"):
+            continue
+        v = round(int(float(c[ix[4]] or 0)) * f * rng.uniform(0.9, 1.1))
+        out.append(",".join([c[ix[0]], c[ix[1]], c[ix[2]], c[ix[3]], str(v)]))
+    return write(os.path.join(TMP, name), "﻿" + "\n".join(out) + "\n")
+
+
+class Api(http.server.BaseHTTPRequestHandler):
+    """A stand-in for the GitHub REST API: the Pages source, the latest Pages build, build requests and
+    workflow dispatches. latest = "tip" answers with the commit at the tip of origin's main (the push
+    started a build), anything else with an older commit."""
+    calls, origin, latest, build_code, build_type = [], "", "old", 201, "legacy"
+
+    def _json(self, code, obj=None):
+        body = json.dumps(obj).encode() if obj is not None else b""
+        self.send_response(code)
+        self.send_header("Content-Type", "application/json")
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        self.calls.append(("GET", self.path, self.headers.get("Authorization"), None))
+        if self.path.endswith("/pages/builds/latest"):
+            tip = sh(["git", "rev-parse", "main"], self.origin) if self.latest == "tip" else "0" * 40
+            return self._json(200, {"status": "built", "commit": tip})
+        if self.path.endswith("/pages"):
+            return self._json(200, {"build_type": self.build_type, "source": {"branch": "main", "path": "/"}})
+        self._json(404, {"message": "Not Found"})
+
+    def do_POST(self):
+        n = int(self.headers.get("Content-Length") or 0)
+        body = self.rfile.read(n).decode() if n else ""
+        self.calls.append(("POST", self.path, self.headers.get("Authorization"), body))
+        if self.path.endswith("/pages/builds"):
+            return self._json(self.build_code, {"status": "queued"} if self.build_code == 201 else {"message": "boom"})
+        if self.path.endswith("/actions/workflows/pages.yml/dispatches"):
+            return self._json(204)
+        self._json(404, {"message": "Not Found"})
+
+    def log_message(self, *a):
+        pass
+
+
+def load_yaml(path):
+    """A workflow file as a dict: PyYAML when installed, else Ruby's YAML (on GitHub's runners), else None."""
+    try:
+        import yaml
+        return yaml.safe_load(open(path, encoding="utf-8"))
+    except ImportError:
+        pass
+    if shutil.which("ruby"):
+        r = subprocess.run(["ruby", "-ryaml", "-rjson", "-e", "puts JSON.dump(YAML.load_file(ARGV[0]))", path],
+                           capture_output=True, text=True)
+        if r.returncode == 0:
+            return json.loads(r.stdout)
+    return None
+
+
+def workflow_steps(doc):
+    """(job, step) pairs of a parsed workflow."""
+    for job, j in (doc.get("jobs") or {}).items():
+        for st in j.get("steps") or []:
+            yield job, st
+
+
+def push_paths(doc):
+    on = doc.get("on", doc.get(True)) or {}             # YAML 1.1 reads the key `on` as true
+    push = on.get("push") if isinstance(on, dict) else None
+    return None if push is None else (push or {}).get("paths")
+
+
+def path_filter(patterns, path):
+    """GitHub's push `paths` filter: the last pattern that matches decides; '!' excludes."""
+    import fnmatch
+    hit = False
+    for p in patterns:
+        neg = p.startswith("!")
+        if fnmatch.fnmatchcase(path, p.lstrip("!").replace("**", "*")):
+            hit = not neg
+    return hit
+
+
+def run_block(script, env, cwd):
+    """A workflow run: block under bash -e with the given environment (GITHUB_OUTPUT and friends set)."""
+    out_file = os.path.join(cwd, "gh_output")
+    open(out_file, "w").close()
+    full = {**os.environ, "GITHUB_OUTPUT": out_file, "GITHUB_STEP_SUMMARY": os.path.join(cwd, "gh_summary"), **env}
+    r = subprocess.run(["bash", "-e", "-c", script], cwd=cwd, env=full, capture_output=True, text=True)
+    outputs = dict(ln.split("=", 1) for ln in open(out_file).read().splitlines() if "=" in ln)
+    return r.returncode, outputs, r.stdout + r.stderr
 
 
 # ---------------------------------------------------------------- tests
@@ -402,7 +520,7 @@ def main():
     res = load(o7, "results.json")
     check(not st.get("drill") and res and not res.get("drill") and len(load(o7, "history.json")) == 1, "real run discarded the drill files (OPS-3)")
 
-    print("8. laptop publisher: reset cycle against a bare repository with a second writer")
+    print("8. Actions-mode publisher (live-data): reset cycle against a bare repository with a second writer")
     origin = os.path.join(TMP, "origin.git")
     sh(["git", "init", "-q", "--bare", "-b", "main", origin], TMP)
     repo = os.path.join(TMP, "repo")
@@ -415,7 +533,7 @@ def main():
     sh(["git", "add", "-A"], repo)
     sh(["git", "commit", "-q", "-m", "code"], repo)
     sh(["git", "push", "-q", "origin", "HEAD:main"], repo)
-    r1 = LF.publish(o1, wt=os.path.join(repo, ".live-data"), repo=repo)
+    r1, _ = LF.publish(o1, "actions", wt=os.path.join(repo, ".live-data"), repo=repo)
     check(r1 == "pushed", f"first publish creates live-data: {r1}")
     files = sh(["git", "ls-tree", "--name-only", "origin/live-data", "live/"], repo).split()
     check("live/results.json" in files and "live/status.json" in files, f"live-data holds {files}")
@@ -427,12 +545,12 @@ def main():
     write(os.path.join(other, "live", "status.json"), {"phase": "night", "writer": "workflow"})
     sh(["git", "commit", "-qam", "workflow"], other)
     sh(["git", "push", "-q", "origin", "HEAD:live-data"], other)
-    r2 = LF.publish(o1, wt=os.path.join(repo, ".live-data"), repo=repo)
+    r2, _ = LF.publish(o1, "actions", wt=os.path.join(repo, ".live-data"), repo=repo)
     check(r2 == "pushed", f"publish after a foreign push: {r2}")
     sh(["git", "fetch", "-q", "origin", "live-data"], other)
     tip = json.loads(sh(["git", "show", "origin/live-data:live/status.json"], other))
     check(tip.get("writer") is None and tip.get("has_results") is True, "the laptop's files are on the tip, no rebase, no conflict")
-    r3 = LF.publish(o1, wt=os.path.join(repo, ".live-data"), repo=repo)
+    r3, _ = LF.publish(o1, "actions", wt=os.path.join(repo, ".live-data"), repo=repo)
     check(r3 == "unchanged", f"nothing new: {r3}")
     check(len(sh(["git", "rev-list", "origin/live-data"], other).split()) == 4, "four commits on live-data (placeholder, laptop, workflow, laptop)")
 
@@ -456,12 +574,344 @@ def main():
     LF.refresh_inputs("main", repo=repo)
     check(not os.path.exists(os.path.join(repo, "live_input", "turnout.json")), "a file deleted on GitHub disappears locally (OPS-14)")
 
+    print("8c. branch mode: site/live/ on main, the operator's commits kept, a rejected push redone")
+    wt = os.path.join(repo, ".live-main")
+    ob = os.path.join(TMP, "ob")
+    shutil.copytree(o1, ob)
+    op_tip = sh(["git", "rev-parse", "origin/main"], editor)           # main after the editor's pushes (8b)
+    r, sha = LF.publish(ob, "branch", wt=wt, repo=repo)
+    sh(["git", "fetch", "-q", "origin"], editor)
+    changed = sh(["git", "show", "--name-only", "--format=", "origin/main"], editor).split()
+    check(r == "pushed" and sha == sh(["git", "rev-parse", "origin/main"], editor), f"pushed to main: {r}")
+    check(changed and all(f.startswith("site/live/") for f in changed) and "site/live/results.json" in changed,
+          f"the commit touches site/live/ only: {changed}")
+    check(sh(["git", "merge-base", "--is-ancestor", op_tip, "origin/main"], editor) == "", "the editor's commits are its ancestors (no rebase, nothing lost)")
+    check(sh(["git", "log", "-1", "--format=%s", "origin/main"], editor).startswith("live "), "commit message 'live HH:MM'")
+    # the operator pushes turnout to main (pull --rebase first: the feed commits there) while the feed's data changes
+    sh(["git", "pull", "-q", "--rebase", "origin", "main"], editor)
+    write(os.path.join(editor, "live_input", "turnout.json"), {"national": {"10:00": 15.2, "12:00": 27.9}})
+    sh(["git", "add", "-A"], editor)
+    sh(["git", "commit", "-q", "-m", "turnout 12:00"], editor)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+    op_tip = sh(["git", "rev-parse", "HEAD"], editor)
+    write(os.path.join(ob, "status.json"), {**load(ob, "status.json"), "phase": "day"})
+    real_git, raced = LF.git, []
+
+    def racing_git(*args, **kw):                   # another writer pushes to main just before the feed's first push
+        if args[:1] == ("push",) and not raced:
+            raced.append(1)
+            write(os.path.join(editor, "live_input", "turnout.json"), {"national": {"10:00": 15.2, "12:00": 27.9, "14:00": 38.4}})
+            sh(["git", "commit", "-qam", "turnout 14:00"], editor)
+            sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+        return real_git(*args, **kw)
+    LF.git = racing_git
+    try:
+        r, sha = LF.publish(ob, "branch", wt=wt, repo=repo)
+    finally:
+        LF.git = real_git
+    sh(["git", "fetch", "-q", "origin"], editor)
+    tip_turnout = json.loads(sh(["git", "show", "origin/main:live_input/turnout.json"], editor))
+    check(r == "pushed" and raced and "14:00" in tip_turnout["national"], f"rejected push redone on the new tip: {r}")
+    check(json.loads(sh(["git", "show", "origin/main:site/live/status.json"], editor)).get("phase") == "day",
+          "the feed's new status is on main")
+    parents = sh(["git", "log", "--format=%s", "-3", "origin/main"], editor).splitlines()
+    check(parents[1:] == ["turnout 14:00", "turnout 12:00"], f"linear history, the operator's commits kept: {parents}")
+    check(LF.publish(ob, "branch", wt=wt, repo=repo)[0] == "unchanged", "nothing new: unchanged")
+
+    print("8d. cadence and the Pages build request (mock API)")
+    api_srv = http.server.HTTPServer(("127.0.0.1", 0), Api)
+    threading.Thread(target=api_srv.serve_forever, daemon=True).start()
+    Api.origin = origin
+    saved_env = {k: os.environ.get(k) for k in ("GH_TOKEN", "GITHUB_TOKEN", "GITHUB_REPOSITORY", "GITHUB_API_URL", "LIVE_BUILD_WAIT")}
+    os.environ.update({"GH_TOKEN": "test-token", "GITHUB_REPOSITORY": "o/r", "LIVE_BUILD_WAIT": "0",
+                       "GITHUB_API_URL": f"http://127.0.0.1:{api_srv.server_address[1]}"})
+    os.environ.pop("GITHUB_TOKEN", None)
+    try:
+        oc = os.path.join(TMP, "oc")
+        os.makedirs(oc)
+        for n in ("status.json", "turnout.json", "state.json"):
+            shutil.copy(os.path.join(ob, n), oc)
+        write(os.path.join(oc, "status.json"), {**load(oc, "status.json"), "phase": "day", "has_results": False})
+        for n in ("results.json", "history.json"):           # the day: no results on main yet
+            sh(["git", "rm", "-q", f"site/live/{n}"], wt)
+        sh(["git", "commit", "-q", "-m", "day"], wt)
+        sh(["git", "push", "-q", "origin", "HEAD:main"], wt)
+        T0 = 1_800_000_000.0
+        Api.calls.clear()
+        Api.latest = "old"
+        LF.CHANGED[:] = ["status.json"]
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0)
+        posts = [c for c in Api.calls if c[0] == "POST"]
+        check(res.get("published") == "pushed" and "requested" in res.get("build", ""), f"first pass: published and a build requested: {res}")
+        check([c[1] for c in Api.calls] == ["/repos/o/r/pages/builds/latest", "/repos/o/r/pages/builds"]
+              and posts[0][2] == "Bearer test-token", f"GET latest, then POST /pages/builds with the token: {Api.calls}")
+        tip = sh(["git", "ls-remote", origin, "refs/heads/main"], TMP).split()[0]
+        write(os.path.join(oc, "status.json"), {**load(oc, "status.json"), "updated_he": "10:05", "x": 1})
+        LF.CHANGED[:] = ["status.json"]
+        Api.calls.clear()
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 60)
+        check(res.get("published") == "held" and 410 <= res.get("next_publish_s", 0) <= 420 and not Api.calls
+              and sh(["git", "ls-remote", origin, "refs/heads/main"], TMP).split()[0] == tip, f"a change 1 minute later is held: {res}")
+        LF.CHANGED[:] = []
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 200)
+        check(res.get("published") == "held", f"still held without a new change: {res}")
+        shutil.copy(os.path.join(ob, "results.json"), oc)    # the first results file (22:00)
+        LF.CHANGED[:] = ["results.json"]
+        Api.latest = "tip"                                  # this time the push itself started a build
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 240)
+        check(res.get("published", "").startswith("pushed (results.json: first") and "started by the push" in res.get("build", "")
+              and not [c for c in Api.calls if c[0] == "POST"], f"the first results go out at once, no second build: {res}")
+        write(os.path.join(oc, "status.json"), {**load(oc, "status.json"), "x": 2})
+        LF.CHANGED[:] = ["status.json"]
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 300)
+        check(res.get("published") == "held", f"then the cadence again: {res}")
+        write(os.path.join(oc, "exit_polls.json"), {"polls": [{"outlet": "כאן 11", "seats": {"מחל": 25}}]})
+        LF.CHANGED[:] = ["exit_polls.json"]
+        Api.latest, Api.build_code = "old", 500
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 320)
+        check(res.get("published", "").startswith("pushed (exit_polls.json: first") and "failed (500)" in res.get("build", ""),
+              f"the first exit polls at once; a failed build request is reported: {res}")
+        LF.CHANGED[:] = []
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 340)
+        check("build" not in res, f"no retry within {LF.BUILD_GAP} s: {res}")
+        Api.build_code = 201
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 380)
+        check("requested" in res.get("build", ""), f"retried after {LF.BUILD_GAP} s: {res}")
+        write(os.path.join(oc, "status.json"), {**load(oc, "status.json"), "x": 3})
+        LF.CHANGED[:] = ["status.json"]
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 320 + 470)
+        check(res.get("published") == "held", f"7 min 50 s after the last publish: held ({res})")
+        LF.CHANGED[:] = []
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 320 + 480)
+        check(res.get("published") == "pushed", f"8 minutes after the last publish: published ({res})")
+        res = LF.publish_step(oc, "branch", 5, wt, "main", repo=repo, now=T0 + 1000, now_publish=True)
+        check("published" not in res, f"--flush with nothing pending does nothing: {res}")
+        # Actions mode: live-data every changed pass, pages.yml dispatched
+        Api.calls.clear()
+        LF.CHANGED[:] = ["status.json"]
+        res = LF.publish_step(oc, "actions", 8, os.path.join(repo, ".live-data"), "live-data", repo=repo, now=T0 + 2000)
+        disp = [c for c in Api.calls if c[0] == "POST"]
+        check(res.get("published", "").startswith("pushed") and "dispatched" in res.get("build", "")
+              and disp and disp[0][1] == "/repos/o/r/actions/workflows/pages.yml/dispatches" and json.loads(disp[0][3]) == {"ref": "main"},
+              f"Actions mode: live-data pushed, pages.yml dispatched on main: {res}")
+        check(LF.pages_source(repo) == ("legacy", "main"), "the Pages source read from the API: legacy, main")
+        Api.build_type = "workflow"
+        a = types.SimpleNamespace(mode="auto", branch=None, wt=None, repo=repo)
+        check(LF.publish_target(a, [])[:2] == ("actions", "live-data"), "auto: GitHub Actions -> the live-data path")
+        Api.build_type = "legacy"
+        check(LF.publish_target(a, [])[:2] == ("branch", "main"), "auto: Deploy from a branch -> site/live/ on main")
+
+        print("8e. seeding a run, the reset, and one pass of live_fetch.py --publish")
+        os_ = os.path.join(TMP, "os")
+        res = LF.seed(os_, "branch", wt, "main", repo)
+        check(set(res["seeded"]) >= {"status.json", "results.json", "exit_polls.json"} and load(os_, "results.json") is not None,
+              f"seeded from main's site/live/: {res}")
+        write(os.path.join(oc, "status.json"), {**load(oc, "status.json"), "drill": True})
+        LF.CHANGED[:] = ["status.json"]
+        LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 5000)
+        res = LF.seed(os.path.join(TMP, "os2"), "branch", wt, "main", repo)
+        check(res["seeded"] == [] and "rehearsal" in res.get("note", ""), f"a drill on main is not seeded: {res}")
+        LF.CHANGED[:] = []
+        LF.reset_out(oc)
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 5010, now_publish=True)
+        sh(["git", "fetch", "-q", "origin"], wt)
+        files = sh(["git", "ls-tree", "--name-only", "origin/main", "site/live/"], wt).split()
+        ph = json.loads(sh(["git", "show", "origin/main:site/live/status.json"], wt))
+        check(res.get("published") == "pushed" and files == ["site/live/status.json"] and ph == LF.PLACEHOLDER,
+              f"reset: only the placeholder status left on main ({files})")
+        check("requested" in res.get("build", ""), f"a one-shot publish asks for the build at once, 10 s after the last one: {res}")
+        check(json.load(open(os.path.join(ROOT, "site", "live", "status.json"), encoding="utf-8")) == LF.PLACEHOLDER,
+              "site/live/status.json in the repository is the placeholder of live_fetch.PLACEHOLDER")
+        oe = os.path.join(TMP, "oe")
+        LF.seed(oe, "branch", wt, "main", repo)
+        args = ["--out", oe, "--publish", "--no-refresh", "--mode", "branch", "--branch", "main", "--wt", wt, "--repo", repo,
+                "--results-file", k25_30, "--as", "K25", "--inputs", inputs, "--config", cfg_file("ce.json", publish_every_min=6)]
+        Api.calls.clear()
+        st = run(*args, now=NIGHT)
+        sh(["git", "fetch", "-q", "origin"], wt)
+        on_main = json.loads(sh(["git", "show", "origin/main:site/live/results.json"], wt))
+        check(st.get("published", "").startswith("pushed (results.json: first") and on_main["checks"]["counted_stations"] > 0,
+              f"one pass with --publish: results on main at once: {st.get('published')} / {st.get('build')}")
+        check(st.get("heartbeat_s") == 360 and st.get("publish_mode") == "branch" and load(oe, "status.json").get("heartbeat_s") == 360,
+              f"status: heartbeat_s = the cadence (6 min), publish_mode branch: {st.get('heartbeat_s')}, {st.get('publish_mode')}")
+        st = run(*args, now=NIGHT + dt.timedelta(minutes=1))
+        check("published" not in st and st["changed"] == [], f"the same file a minute later: nothing to publish ({st.get('published')}, {st['changed']})")
+        os.environ.update({"PUBLISH_MODE": "branch", "PAGES_SOURCE": "legacy"})
+        st = run("--out", os.path.join(TMP, "oh"), "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=NIGHT)
+        check(st.get("heartbeat_s") == 60 * LF.PUBLISH_EVERY and st.get("publish_mode") == "branch" and "pages_source" not in st,
+              f"the probe pass reports the workflow's mode; legacy is not flagged in branch mode: {st.get('heartbeat_s')}")
+        os.environ["PAGES_SOURCE"] = "error"
+        st = run("--out", os.path.join(TMP, "oh"), "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=NIGHT)
+        check(st.get("pages_source") == "error", "a failed Pages-source check is reported")
+        os.environ.pop("PUBLISH_MODE")
+        os.environ.pop("PAGES_SOURCE")
+        st = run("--out", os.path.join(TMP, "oh"), "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=NIGHT)
+        check(st.get("heartbeat_s") == LF.HEARTBEAT and "publish_mode" not in st, "without a publisher: heartbeat_s is the re-stamp interval")
+    finally:
+        for k, v in saved_env.items():
+            if v is None:
+                os.environ.pop(k, None)
+            else:
+                os.environ[k] = v
+        api_srv.shutdown()
+
     print("9. the register size in pipeline/live_config.json (LM-B)")
     cfg = json.load(open(os.path.join(ROOT, "pipeline", "live_config.json"), encoding="utf-8"))
     late = dt.date.today() >= dt.date(2026, 10, 25)
     check(not (late and cfg.get("eligible") == LF.PLACEHOLDER_ELIGIBLE),
-          "eligible is still the 7,340,000 placeholder: set the CEC's official register size (docs/ELECTION_DAY.md, הכנות 3)")
+          "eligible is still the 7,340,000 placeholder: set the CEC's official register size (docs/ELECTION_DAY.md, הכנות 2)")
     check(cfg.get("ignore_columns") == [] and cfg.get("column_aliases") == {}, "ignore_columns / column_aliases present and empty")
+
+    print("10. the Arab-society section in turnout.json (during voting hours)")
+    seen = []
+
+    def fake_section(rows, base, national_turnout=None, released=None):   # a stand-in with the contract's shape
+        rows = list(rows)
+        seen.append({"rows": rows, "base": base, "national": national_turnout, "released": released})
+        v, e = sum(r["voters"] for r in rows if r["code"] in ARAB_CODES), sum(r["elig"] or 0 for r in rows if r["code"] in ARAB_CODES)
+        t = round(v / e, 4) if e else None
+        grp = {"voters": v, "elig": e, "turnout": t, "pace": 0.5, "localities": 2}
+        return {"released": released, "localities": [{"key": "1", "voters": v, "elig": e, "turnout": t, "pace": 0.5, "stations": 3, "coverage": 1.0}],
+                "groups": {"raam": grp, "joint": grp, "other": grp}, "regions": {"negev": grp, "triangle": grp}, "kinds": {"arab": grp},
+                "total": {**grp, "ratio_to_national": 0.8, "projected_final": {"lo": 0.4, "mid": 0.5, "hi": 0.6}}}
+    real_at, real_err, real_base = LF.AT, LF.AT_ERR, LF.ARAB_BASE
+    core = json.load(open(os.path.join(ROOT, "site", "data", "core.json"), encoding="utf-8"))
+    ARAB_CODES = {loc["code"] for loc in core["localities"] if loc.get("sector") == "arab"}
+    LF.AT, LF.AT_ERR = types.SimpleNamespace(arab_section=fake_section), ""
+    LF.ARAB_BASE = write(os.path.join(TMP, "arab_base.json"), {"localities": [], "note": "stand-in"})
+    LF._arab_base.clear()
+    Server.bodies.update({f"/st{i}.csv": open(station_release(k25_30, 0.2 + 0.05 * i, f"st{i}.csv", seed=i), "rb").read()
+                                           for i in range(10)})
+    o10 = os.path.join(TMP, "o10")
+    write(os.path.join(inputs, "turnout.json"), {"national": {"10:00": 15.2}})
+
+    def day_pass(path, minutes):
+        return run("--out", o10, "--config", cfg_file("c10.json", results_url=base + "/nothing", station_turnout_url=base + path),
+                   "--as", "K25", "--inputs", inputs, now=dt.datetime(2026, 10, 27, 10, 0, tzinfo=IL) + dt.timedelta(minutes=minutes))
+    try:
+        st = day_pass("/st0.csv", 0)
+        T = load(o10, "turnout.json")
+        ok_rows = seen and seen[-1]["rows"] and set(seen[-1]["rows"][0]) == {"code", "kalpi", "elig", "voters"}
+        check(st["phase"] == "day" and T.get("arab") and T["arab"]["total"]["ratio_to_national"] == 0.8 and ok_rows,
+              f"10:00, polls open: turnout.json has the section; rows reach arab_section as code/kalpi/elig/voters; errors={st['errors']}")
+        check(seen[-1]["national"] == T.get("stations_national") and seen[-1]["released"] == T.get("sectors_time") == "10:00"
+              and seen[-1]["base"] == {"localities": [], "note": "stand-in"}, "national turnout of the same release, its time and the 2022 base passed in")
+        h = T.get("arab_history") or []
+        check(len(h) == 1 and set(h[0]) == {"released", "total", "groups", "regions"} and set(h[0]["total"]) == {"turnout", "pace"}
+              and set(h[0]["groups"]) == {"raam", "joint", "other"}, f"arab_history: one compact entry: {h[:1]}")
+        check("lean" not in T, "the bloc lean stays withheld during voting")
+        st = day_pass("/st0.csv", 5)
+        check("turnout.json" not in st["changed"] and len(load(o10, "turnout.json")["arab_history"]) == 1,
+              f"the same release 5 minutes later: nothing rewritten (its time stays 10:00): {st['changed']}")
+        st = day_pass("/st1.csv", 240)
+        T = load(o10, "turnout.json")
+        check([x["released"] for x in T["arab_history"]] == ["10:00", "14:00"] and T["sectors_time"] == "14:00",
+              f"a new release at 14:00: a second entry: {[x['released'] for x in T['arab_history']]}")
+        for i in range(2, 10):
+            day_pass(f"/st{i}.csv", 240 + 10 * i)
+        T = load(o10, "turnout.json")
+        check(len(T["arab_history"]) == LF.ARAB_HISTORY and T["arab_history"][0]["released"] == "14:20" and T["arab_history"][-1]["released"] == "15:30",
+              f"ten releases: the last {LF.ARAB_HISTORY} kept: {[x['released'] for x in T['arab_history']]}")
+        day_pass("/nothing", 400)
+        T2 = load(o10, "turnout.json")
+        check(T2.get("station_error") and T2.get("arab") == T["arab"] and T2.get("sectors") == T["sectors"],
+              f"a failed station fetch keeps the last release on the page: {T2.get('station_error')}")
+        LF.AT = types.SimpleNamespace(arab_section=lambda *a, **k: 1 / 0)
+        st = day_pass("/st0.csv", 420)
+        T2 = load(o10, "turnout.json")
+        check(any(e.startswith("arab: ZeroDivisionError") for e in st["errors"]) and T2.get("arab") == T["arab"] and T2.get("sectors"),
+              f"a failing section is reported and the last one kept; sectors unaffected: {st['errors']}")
+        LF.AT = None
+        o10b = os.path.join(TMP, "o10b")
+        run("--out", o10b, "--config", cfg_file("c10b.json", results_url=base + "/nothing", station_turnout_url=base + "/st0.csv"),
+            "--as", "K25", "--inputs", inputs, now=EVENING)
+        T = load(o10b, "turnout.json")
+        check(T.get("sectors") and "arab" not in T, "without pipeline/arab_turnout.py: no section, the rest as before")
+    finally:
+        LF.AT, LF.AT_ERR, LF.ARAB_BASE = real_at, real_err, real_base
+        LF._arab_base.clear()
+    real_mod = os.path.join(ROOT, "pipeline", "arab_turnout.py")
+    if LF.AT is None or not os.path.exists(LF.ARAB_BASE):
+        print(f"  skip the real section: {'pipeline/arab_turnout.py' if LF.AT is None else 'site/data/arab_day_2022.json'} not here"
+              + (f" ({LF.AT_ERR})" if LF.AT_ERR else ""))
+        check(not (os.path.exists(real_mod) and LF.AT is None), f"pipeline/arab_turnout.py, when present, imports: {LF.AT_ERR or 'not present'}")
+    else:
+        csv_path, how = os.path.join(TMP, "demo_release.csv"), "synthetic (2022 voters x 0.45)"
+        demo = os.path.join(ROOT, "pipeline", "make_demo_turnout.py")
+        if os.path.exists(demo):
+            h = subprocess.run([sys.executable, demo, "--help"], capture_output=True, text=True)
+            if "--csv" in h.stdout:
+                r = subprocess.run([sys.executable, demo, "--csv", csv_path], capture_output=True, text=True, cwd=ROOT)
+                if r.returncode == 0 and os.path.exists(csv_path):
+                    how = "pipeline/make_demo_turnout.py --csv"
+        if not os.path.exists(csv_path):
+            shutil.copy(station_release(k25_30, 0.45, "demo45.csv"), csv_path)
+        Server.bodies["/demo.csv"] = open(csv_path, "rb").read()
+        o10c = os.path.join(TMP, "o10c")
+        st = run("--out", o10c, "--config", cfg_file("c10c.json", results_url=base + "/nothing", station_turnout_url=base + "/demo.csv"),
+                 "--as", "K25", "--inputs", inputs, now=EVENING)
+        A = (load(o10c, "turnout.json") or {}).get("arab") or {}
+        tot = A.get("total") or {}
+        check(set(A) >= {"released", "localities", "groups", "regions", "kinds", "total"} and tot.get("turnout") is not None
+              and set((tot.get("projected_final") or {})) >= {"lo", "mid", "hi"} and set(A["groups"]) <= {"raam", "joint", "other"},
+              f"the real section on a {how} release: total turnout {tot.get('turnout')}, pace {tot.get('pace')}; errors={st['errors']}")
+
+        def keys(o):
+            return set(o) | set().union(*(keys(v) for v in o.values())) if isinstance(o, dict) else \
+                set().union(*(keys(v) for v in o)) if isinstance(o, list) else set()
+        bad = {k for k in keys(A) if any(w in k for w in ("seat", "threshold", "vote_share", "raam22", "joint22"))}
+        check(not bad, f"no party votes, seats or threshold figures in the section: {sorted(bad)}")
+
+    print("11. the workflows: bash -n, the daily poll-ban guard, the push filters")
+    wf_dir = os.path.join(ROOT, ".github", "workflows")
+    docs = {os.path.basename(p): load_yaml(p) for p in sorted(glob.glob(os.path.join(wf_dir, "*.yml")))}
+    if any(d is None for d in docs.values()):
+        print("  skip: no YAML reader here (PyYAML or ruby)")
+    else:
+        wtmp = os.path.join(TMP, "wf")
+        os.makedirs(wtmp)
+        n = 0
+        for name, doc in docs.items():
+            for job, stp in workflow_steps(doc):
+                if "run" not in stp:
+                    continue
+                script = re.sub(r"\$\{\{[^}]*\}\}", "X", stp["run"])
+                r = subprocess.run(["bash", "-n"], input=script, capture_output=True, text=True)
+                n += 1
+                check(r.returncode == 0, f"bash -n {name} / {job} / {stp.get('name') or stp['run'][:30]!r}: {r.stderr.strip()[:200]}")
+        print(f"  ({n} run blocks parsed)")
+        daily = docs.get("daily.yml") or {}
+        guard = next((s["run"] for _, s in workflow_steps(daily) if s.get("id") == "guard"), "")
+        push = next((s["run"] for _, s in workflow_steps(daily) if s.get("id") == "push"), "")
+        push_guard = push.split("# (end of the ban guard)")[0] if "# (end of the ban guard)" in push else ""
+        check(guard and push_guard, "daily.yml has the guard step and the push-time guard")
+        cases = [  # (Israel time, event, exit code, go)
+            ("202610101200", "schedule", 0, "true"), ("202610231941", "schedule", 0, "true"),
+            ("202610232359", "workflow_dispatch", 0, "true"), ("202610240000", "schedule", 0, "false"),
+            ("202610240000", "workflow_dispatch", 1, "false"), ("202610261200", "workflow_dispatch", 1, "false"),
+            ("202610272159", "workflow_dispatch", 1, "false"), ("202610272200", "workflow_dispatch", 0, "true"),
+            ("202610272200", "schedule", 0, "false"), ("202610091200", "schedule", 0, "false"),
+            ("202710150723", "schedule", 0, "false"),
+        ]
+        for now_il, event, code, go in cases:
+            rc, outs, log = run_block(guard, {"NOW_IL": now_il, "EVENT": event}, wtmp)
+            check(rc == code and outs.get("go") == go, f"daily guard {now_il[6:8]}.{now_il[4:6]}.{now_il[:4]} {now_il[8:10]}:{now_il[10:]} "
+                                                        f"{event}: exit {rc}, go={outs.get('go')} (want {code}, {go})")
+        for now_il, code in (("202610231200", 0), ("202610240001", 1), ("202610272159", 1), ("202610280900", 0)):
+            rc, _, _ = run_block(push_guard, {"NOW_IL": now_il}, wtmp)
+            check(rc == code, f"push-time guard at {now_il}: exit {rc} (want {code})")
+        on_daily = daily.get("on", daily.get(True)) or {}
+        check("push" not in on_daily and set(on_daily) == {"schedule", "workflow_dispatch"}, f"daily.yml: schedule and dispatch only: {list(on_daily)}")
+        crons = [c["cron"] for c in on_daily.get("schedule", [])]
+        check(crons and all(c.split()[0] not in ("0", "30") and c.split()[3] == "10" for c in crons), f"daily crons off the hour, in October: {crons}")
+        for wf in ("pages.yml", "official-data.yml", "daily.yml", "net-check.yml", "live.yml"):
+            pats = push_paths(docs[wf])
+            fires = pats is not None and path_filter(pats, "site/live/status.json")
+            check(not fires, f"{wf}: a commit to site/live/ starts no run")
+        check(path_filter(push_paths(docs["pages.yml"]), "site/src/js/live.js"), "pages.yml still runs for site/src changes")
+        live_perm = docs["live.yml"].get("permissions") or {}
+        check(live_perm.get("pages") == "write" and live_perm.get("contents") == "write", f"live.yml permissions: {live_perm}")
+        check((daily.get("permissions") or {}).get("pages") == "write", "daily.yml may request a Pages build")
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")
