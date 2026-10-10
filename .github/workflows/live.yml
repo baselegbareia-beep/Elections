@@ -69,6 +69,9 @@ jobs:
       MINUTES: ${{ inputs.minutes }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch || 'main' }}   # empty on schedule events
       GH_TOKEN: ${{ github.token }}
+      # seconds the feed waits after a push before asking whether the push itself started a Pages build (then it
+      # requests none); repository variable LIVE_BUILD_WAIT, e.g. 45 if the drill shows two builds per publish
+      LIVE_BUILD_WAIT: ${{ vars.LIVE_BUILD_WAIT || '15' }}
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v7
@@ -144,8 +147,24 @@ jobs:
             | python3 -c 'import json,sys; s=json.load(sys.stdin); print("ok: results_state", s.get("results_state"), "probe", s.get("results_probe"), "publish_mode", s.get("publish_mode"), "errors", s.get("errors"))'
       - name: Poll the elections committee and publish
         run: |
-          # shellcheck disable=SC2086
-          if [ "$RESET" = true ]; then python3 pipeline/live_fetch.py --out _live --reset-live $PUB_ARGS; exit 0; fi
+          # the placeholder back on the page; the run goes red unless it was published (or was there already) and,
+          # when pushed, the Pages build was asked for
+          reset_live() {
+            local out last
+            # shellcheck disable=SC2086
+            out=$(python3 pipeline/live_fetch.py --out _live --reset-live $PUB_ARGS 2>&1) || true
+            printf '%s\n' "$out" | tail -n 4 | cut -c1-400
+            last=$(printf '%s\n' "$out" | tail -n 1)
+            if ! printf '%s\n' "$last" | python3 -c '
+          import json, sys
+          d = json.load(sys.stdin)
+          pub, build = str(d.get("published") or "unchanged"), str(d.get("build") or "")
+          sys.exit(0 if pub.split()[0] in ("pushed", "unchanged") and "failed" not in build else 1)' 2>/dev/null; then
+              echo "::error::the reset was not published, or the page rebuild was not requested: ${last:0:300}"
+              return 1
+            fi
+          }
+          if [ "$RESET" = true ]; then reset_live; exit $?; fi
           crashes=0
           end=$(( $(date +%s) + MINUTES * 60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
@@ -188,6 +207,5 @@ jobs:
           # shellcheck disable=SC2086
           python3 pipeline/live_fetch.py --out _live --flush $PUB_ARGS || echo '::warning::the final publish failed; the next run publishes again'
           if [ "$DRILL" = true ]; then   # the page returns to its pre-election state
-            # shellcheck disable=SC2086
-            python3 pipeline/live_fetch.py --out _live --reset-live $PUB_ARGS
+            reset_live
           fi

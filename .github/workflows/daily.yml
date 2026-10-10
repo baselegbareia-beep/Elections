@@ -3,6 +3,14 @@
 # POLLS_2026), rebuilds site/data/polls_2026.json and the page (pipeline/build_polls.py, build_site.py), runs
 # the election-day feed's smoke test (pipeline/test_live.py) as a health check, and commits the three built
 # files to main only when they changed and the check passed.
+# Two jobs, because build_polls.py evaluates the third-party polls-data.js with node:
+#   build   runs it with nothing to steal: read-only permissions, no GH_TOKEN, no git credentials left in the
+#           checkout (persist-credentials: false). The only thing that leaves it is the poll table it built,
+#           as an artifact.
+#   commit  never runs polls-data.js. It checks the artifact's shape (step "validate": the parties exactly as
+#           build_polls.py defines them, every poll's fields, types and ranges, seats adding up to 120, no markup
+#           in any text), rebuilds the page from main's own code, runs the health check, and pushes. Its checkout
+#           keeps no credentials either: the token reaches only the push step and the build request.
 # Never from Sat 24.10 00:00 to Tue 27.10 22:00 Israel time (Elections (Propaganda) Law §16ה(ח)): the guard
 # job refuses (a manual run goes red), and the push step checks the clock again right before pushing.
 # The commit is pushed with GITHUB_TOKEN, which starts no other workflow (no cascade: pages.yml and
@@ -18,9 +26,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write   # commit to main
-  pages: write      # read the Pages source, request a Pages build (branch mode)
-  actions: write    # dispatch pages.yml (Actions mode)
+  contents: read     # each job states its own; only the commit job writes
 
 concurrency:
   group: daily-polls
@@ -30,6 +36,7 @@ jobs:
   guard:
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions: {}
     outputs:
       go: ${{ steps.guard.outputs.go }}
     steps:
@@ -56,22 +63,22 @@ jobs:
           echo "go=true" >> "$GITHUB_OUTPUT"
           echo "Israel time $now: updating"
 
-  update:
+  build:
+    # evaluates the third-party polls-data.js: no token, no credentials, read-only (see the top of the file)
     needs: guard
     if: needs.guard.outputs.go == 'true'
     runs-on: ubuntu-latest
-    timeout-minutes: 25
-    env:
-      GH_TOKEN: ${{ github.token }}
-      BRANCH: ${{ github.event.repository.default_branch || 'main' }}
+    timeout-minutes: 10
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ github.event.repository.default_branch || 'main' }}
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: python3 -m pip install -q numpy
       - name: Fetch the 2026 poll table (polls-data.js)
         run: |
           mkdir -p data/raw
@@ -85,19 +92,149 @@ jobs:
           open("data/raw/polls-data.js", "wb").write(data)
           print(F.POLLS_2026, len(data), "bytes")
           PY
+      - name: Build the poll table (runs polls-data.js in node)
+        env:
+          HANDOFF: ${{ runner.temp }}/polls
+        run: |
+          mkdir -p "$HANDOFF"
+          python3 pipeline/build_polls.py --src data/raw/polls-data.js --out "$HANDOFF/polls_2026.json" | cut -c1-300
+      - name: Hand the poll table to the commit job
+        uses: actions/upload-artifact@v6
+        with:
+          name: polls_2026
+          path: ${{ runner.temp }}/polls/polls_2026.json
+          if-no-files-found: error
+          retention-days: 7
+
+  commit:
+    # trusted: never runs polls-data.js; checks the artifact, rebuilds the page from main's code, tests, pushes
+    needs: [guard, build]
+    if: needs.guard.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    permissions:
+      contents: write   # commit to main
+      pages: write      # read the Pages source, request a Pages build (branch mode)
+      actions: write    # dispatch pages.yml (Actions mode)
+    env:
+      BRANCH: ${{ github.event.repository.default_branch || 'main' }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch || 'main' }}
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install -q numpy
+      - name: Take the poll table from the build job
+        uses: actions/download-artifact@v6
+        with:
+          name: polls_2026
+          path: ${{ runner.temp }}/polls
+      - name: Check the poll table before it goes anywhere near main
+        id: validate
+        env:
+          POLLS: ${{ runner.temp }}/polls/polls_2026.json
+        run: |
+          # the shape build_polls.py writes, checked field by field: the file came out of a job that ran a third
+          # party's JavaScript. pipeline/test_live.py runs this block on good and broken tables.
+          python3 - "$POLLS" <<'PY'
+          import datetime as dt
+          import json
+          import os
+          import re
+          import sys
+          sys.path.insert(0, "pipeline")
+          import build_polls as B
+          path, bad = sys.argv[1], []
+          if os.path.getsize(path) > 3_000_000:
+              sys.exit("::error::polls_2026.json is over 3 MB")
+          def no_constant(x):
+              raise ValueError(f"{x} is not a number")
+          try:
+              d = json.load(open(path, encoding="utf-8"), parse_constant=no_constant)
+          except Exception as exc:
+              sys.exit(f"::error::polls_2026.json does not parse: {exc}"[:300])
+          UNSAFE = re.compile(r"[<>\"`\\\x00-\x1f\x7f]")
+          def safe(x):          # untrusted text in a log line: no newlines or workflow commands
+              return re.sub(r"[^\w .,+/()'-]", "?", str(x))[:120]
+          def text(x, n=100, empty=False):
+              return isinstance(x, str) and len(x) <= n and (empty or x.strip() != "") and not UNSAFE.search(x)
+          def num(x, lo, hi, integer=False):
+              return (isinstance(x, int) or (isinstance(x, float) and not integer)) and not isinstance(x, bool) and lo <= x <= hi
+          def day(x):
+              try:
+                  return re.fullmatch(r"\d{4}-\d{2}-\d{2}", x) and dt.date.fromisoformat(x)
+              except (TypeError, ValueError):
+                  return None
+          parties = [{"id": k, "name": v[0], "leader": v[1], "bloc": v[2], "color": v[3], "dark": v[4],
+                      "letters": B.LETTERS_2026.get(k, "")} for k, v in B.PARTIES_2026.items()]
+          ids = set(B.PARTIES_2026)
+          KEYS = {"date", "fieldwork", "pollster", "pollster_he", "house", "firm", "house_he", "outlet", "outlet_he",
+                  "n", "moe", "seats", "pct", "filing"}
+          if not isinstance(d, dict) or set(d) != {"parties", "polls", "dropped", "source"}:
+              sys.exit(f"::error::polls_2026.json: top-level keys {safe(sorted(d) if isinstance(d, dict) else type(d).__name__)}")
+          if d["parties"] != parties:
+              bad.append("parties differ from build_polls.PARTIES_2026 / LETTERS_2026")
+          if not text(d["source"], 400):
+              bad.append("source is not plain text")
+          if not isinstance(d["dropped"], list) or len(d["dropped"]) > 2000 or not all(text(x, 300) for x in d["dropped"]):
+              bad.append("dropped is not a list of plain-text lines")
+          polls = d["polls"]
+          if not isinstance(polls, list) or not 1 <= len(polls) <= 3000:
+              sys.exit("::error::polls_2026.json: polls is not a list of 1-3000 polls")
+          latest = dt.date.today() + dt.timedelta(days=2)
+          for i, p in enumerate(polls):
+              where = f"poll {i}"
+              if not isinstance(p, dict) or set(p) != KEYS:
+                  bad.append(f"{where}: keys {safe(sorted(p) if isinstance(p, dict) else type(p).__name__)}")
+                  continue
+              where = f"poll {i} ({safe(p['date'])} {safe(p['pollster'])})"[:80]
+              d1, d0 = day(p["date"]), day(p["fieldwork"])
+              if not (d1 and d0 and dt.date(2022, 11, 2) <= d0 <= d1 <= latest):
+                  bad.append(f"{where}: date / fieldwork")
+              for k in ("pollster", "pollster_he", "house", "firm", "house_he"):
+                  if not text(p[k]):
+                      bad.append(f"{where}: {k} is not plain text")
+              for k in ("outlet", "outlet_he"):
+                  if not text(p[k], empty=True):
+                      bad.append(f"{where}: {k} is not plain text")
+              if not (p["n"] is None or num(p["n"], 1, 1_000_000, integer=True)):
+                  bad.append(f"{where}: n")
+              if not (p["moe"] is None or num(p["moe"], 0.01, 20)):
+                  bad.append(f"{where}: moe")
+              s = p["seats"]
+              if not (isinstance(s, dict) and set(s) <= ids and all(num(v, 0, 120, integer=True) for v in s.values())
+                      and sum(s.values()) == 120):
+                  bad.append(f"{where}: seats must be whole numbers for build_polls.PARTIES_2026 lists, adding up to 120")
+              if not (p["pct"] is None or (isinstance(p["pct"], dict) and set(p["pct"]) <= ids
+                                           and all(num(v, 0, 100) for v in p["pct"].values()))):
+                  bad.append(f"{where}: pct")
+              if not (p["filing"] is None or (text(p["filing"], 600) and re.fullmatch(r"https://\S+", p["filing"])
+                                              and "'" not in p["filing"])):
+                  bad.append(f"{where}: filing is not an https address")
+          if bad:
+              for b in bad[:20]:
+                  print(f"::error::polls_2026.json: {b}")
+              sys.exit(f"{len(bad)} problem(s) in the poll table: nothing is committed")
+          print(f"ok: {len(polls)} polls, newest {max(p['date'] for p in polls)}")
+          PY
       - name: Rebuild the poll data and the page
         id: build
+        env:
+          POLLS: ${{ runner.temp }}/polls/polls_2026.json
         run: |
           count() { python3 -c 'import json; d=json.load(open("site/data/polls_2026.json")); print(len(d["polls"]), max((p["date"] for p in d["polls"]), default="-"))'; }
           read -r old _ <<< "$(count)"
-          python3 pipeline/build_polls.py --src data/raw/polls-data.js | cut -c1-300
+          cp "$POLLS" site/data/polls_2026.json
           python3 pipeline/build_site.py
           read -r new latest <<< "$(count)"
           { echo "old=$old"; echo "new=$new"; echo "latest=$latest"; } >> "$GITHUB_OUTPUT"
           echo "polls: $old -> $new, newest $latest"
           # polls only get added; a table that lost more than two is a broken source, not news
           if [ "$new" -lt $(( old - 2 )) ]; then
-            echo "::error::the poll table shrank from $old to $new polls: not committing (check the source, polls-data.js)"
+            echo "::error::the poll table shrank from $old to $new polls: not committing (check the source poll table)"
             exit 1
           fi
           git status --short -- site/data/polls_2026.json site/index.html site/artifact.html
@@ -108,6 +245,8 @@ jobs:
         id: push
         env:
           NEW: ${{ steps.build.outputs.new }}
+          POLLS: ${{ runner.temp }}/polls/polls_2026.json
+          GH_TOKEN: ${{ github.token }}
         run: |
           now=${NOW_IL:-$(TZ=Asia/Jerusalem date +%Y%m%d%H%M)}
           if [ "$now" -ge 202610240000 ] && [ "$now" -lt 202610272200 ]; then
@@ -120,19 +259,23 @@ jobs:
           if git diff --quiet -- $files; then echo "changed=false" >> "$GITHUB_OUTPUT"; echo 'no change: nothing committed'; exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # the checkout kept no credentials: the token goes to these git calls only, as a header
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          gitauth() { git -c "http.extraheader=AUTHORIZATION: basic $auth" "$@"; }
           msg="Daily poll update $(TZ=Asia/Jerusalem date '+%d.%m %H:%M') ($NEW polls)"
           # shellcheck disable=SC2086
           git add -- $files && git commit -q -m "$msg"
           for i in 1 2 3; do
-            if git push -q origin "HEAD:$BRANCH"; then
+            if gitauth push -q origin "HEAD:$BRANCH"; then
               { echo "changed=true"; echo "sha=$(git rev-parse HEAD)"; } >> "$GITHUB_OUTPUT"
               echo "pushed $(git rev-parse --short HEAD)"; exit 0
             fi
-            # main moved meanwhile (the operator, a drill): rebuild on its tip and try again
+            # main moved meanwhile (the operator, a drill): the checked table again on its tip, the page rebuilt there
             echo "push rejected ($i); rebuilding on the new tip"
             sleep 5
-            git fetch -q origin "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" && git reset -q --hard "origin/$BRANCH"
-            python3 pipeline/build_polls.py --src data/raw/polls-data.js > /dev/null
+            gitauth fetch -q origin "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" && git reset -q --hard "origin/$BRANCH"
+            cp "$POLLS" site/data/polls_2026.json
             python3 pipeline/build_site.py > /dev/null
             # shellcheck disable=SC2086
             if git diff --quiet -- $files; then echo "changed=false" >> "$GITHUB_OUTPUT"; echo 'main already has it'; exit 0; fi
@@ -145,6 +288,8 @@ jobs:
         if: steps.push.outputs.changed == 'true'
         env:
           SHA: ${{ steps.push.outputs.sha }}
+          GH_TOKEN: ${{ github.token }}
+          LIVE_BUILD_WAIT: ${{ vars.LIVE_BUILD_WAIT || '15' }}
         run: |
           out=$(python3 pipeline/live_fetch.py --out _rb --request-build --mode auto --sha "$SHA" 2>&1 | tail -n 1)
           echo "$out"
@@ -157,6 +302,7 @@ jobs:
           OLD: ${{ steps.build.outputs.old }}
           NEW: ${{ steps.build.outputs.new }}
           LATEST: ${{ steps.build.outputs.latest }}
+          VALID: ${{ steps.validate.outcome }}
           HEALTH: ${{ steps.health.outcome }}
           CHANGED: ${{ steps.push.outputs.changed }}
           SHA: ${{ steps.push.outputs.sha }}
@@ -167,6 +313,7 @@ jobs:
             echo
             echo "| | |"
             echo "|---|---|"
+            echo "| poll table check | ${VALID:-not run} |"
             echo "| polls (before → after) | ${OLD:-?} → ${NEW:-?} |"
             echo "| newest poll | ${LATEST:--} |"
             echo "| health check (pipeline/test_live.py) | ${HEALTH:-not run} |"
