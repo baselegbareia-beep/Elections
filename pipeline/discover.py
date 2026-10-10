@@ -13,8 +13,8 @@ reports to the ops-reports branch. It runs the same way from a laptop or a self-
 
 The raw bytes of every candidate turnout / results file (up to 8 MB each, each version once) are kept with
 the report: disc/files/<YYYYMMDD-HHMM>/<name>, and with --push reports/files/… on the ops-reports branch,
-so a release the feed's reader fails on (JSON, xlsx, other header names, figures written as 45.3% or 1,234)
-can be converted by someone who cannot reach gov.il (--convert; docs/FILE_DISCOVERY.md §3).
+so a release the feed's reader fails on (JSON, xlsx, UTF-16, header names it does not know, figures written as
+1,234 or as fractions) can be converted by someone who cannot reach gov.il (--convert; docs/FILE_DISCOVERY.md §3).
 
 What it probes. mode full: everything below. mode quick: the known files, the pages and what they
 link to, and every URL that answered in the previous report.
@@ -701,9 +701,13 @@ def describe_table(e, tab, body):
         # what the feed takes is whatever its reader does: these notes follow the reader's result, never a rule kept here
         if rd["ok"] is False:
             err = printable(rd["error"], 90) + ("…" if len(rd["error"]) > 90 else "")     # in full: reader.error
+            # --convert needs voters, or a turnout % and eligible voters (the roles found here, as convert finds them)
+            fix = ("convert the stored copy to live_input/stations.csv (--convert)" if "voters" in roles or "eligible" in roles
+                   else "a turnout % without an eligible-voters column gives no voter count, so --convert cannot use it "
+                        "either: if the file has that column under a name not recognised, --convert --map eligible=HEADER; "
+                        "if not, a code change")
             notes.append(f"the feed's reader fails on this {tab['format']} file ({err})" +
-                         (f"; columns not found: {', '.join(e['missing'])}" if e["missing"] else "") +
-                         "; convert the stored copy to live_input/stations.csv (--convert)")
+                         (f"; columns not found: {', '.join(e['missing'])}" if e["missing"] else "") + "; " + fix)
         elif rd["ok"] is None:
             notes.append(f"the feed's reader was not run ({rd['error']}); convert the stored copy (--convert) and "
                          "check its feed_reader line, or run the report where live_fetch loads")
@@ -1212,7 +1216,9 @@ def markdown(rep, short=False):
                                                   if rel.get("sectors_time") else "not in the file or its name") +
               (f"; Last-Modified {rel['last_modified_il']} Israel time is the upload, later than the cut-off"
                if rel.get("last_modified_il") else "") +
-              ". In live_input/turnout.json, in the same commit as the switch, use the cut-off time the CEC states."]
+              ". In live_input/turnout.json use the cut-off time the CEC states for this release: as soon as it is "
+              "announced, before the file if possible (while the polls are open the feed holds a new release up to 10 "
+              "minutes for its own time), at the latest in the same commit as the switch."]
     d = rep.get("diff")
     if d:
         L += ["", f"### Since {d['previous']}: {len(d['new'])} new, {len(d['changed'])} changed, {len(d['gone'])} gone"]
@@ -1413,7 +1419,7 @@ def store_files(results, kept, prev, now, closed, out, stamp, max_bytes=STORE_MA
 
 def convert(src, dest, maps=(), blanks=()):
     """A per-station turnout release the feed's reader fails on (xlsx, JSON, UTF-16, other header names, figures
-    written as 45.3% or 1,234 …) -> the CSV live_fetch.station_rows reads: סמל ישוב,שם ישוב,קלפי,בזב,מצביעים in
+    written as 1,234 or 45,3, fractions …) -> the CSV live_fetch.station_rows reads: סמל ישוב,שם ישוב,קלפי,בזב,מצביעים in
     UTF-8, one row per station; a station without a figure keeps a blank מצביעים. --map ROLE=HEADER names a
     column the report did not recognise (roles: code, name, station, eligible, voters, percent, time).
     Figures are read by num() (percent signs, thousands separators, a decimal comma, Arabic-Indic digits). A blank,
@@ -1530,7 +1536,7 @@ def convert(src, dest, maps=(), blanks=()):
               + ", ".join(f"{s!r} x{k}" for s, k in u["examples"].items()), file=sys.stderr)
     print("Next, in ONE commit to main: this file as live_input/stations.csv, \"station_turnout_url\": "
           "\"live_input/stations.csv\" in pipeline/live_config.json (once), and \"sectors_time\": \"HH:MM\" (the CEC's "
-          "cut-off for this release) in live_input/turnout.json.", file=sys.stderr)
+          "cut-off for this release, unless it was pushed already) in live_input/turnout.json.", file=sys.stderr)
     return 0 if check.get("ok") is not False else 1
 
 
