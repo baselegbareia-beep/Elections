@@ -12,7 +12,6 @@ import argparse
 import json
 import os
 import re
-import subprocess
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -107,11 +106,26 @@ def dedupe(polls):
 
 
 def load_js(path):
-    out = subprocess.run(
-        ["node", "-e", "const fs=require('fs');const w={};new Function('window',fs.readFileSync(process.argv[1],'utf8'))(w);"
-                       "process.stdout.write(JSON.stringify(w.BASE_POLLS_DATA))", path],
-        check=True, capture_output=True, text=True)
-    return json.loads(out.stdout)
+    """The poll records of polls-data.js, a third party's file: the JSON array assigned to
+    window.BASE_POLLS_DATA, read as data. Nothing in the file is ever executed (no node): the
+    workflows that build from it hold write credentials (official-data.yml) or hand the result to
+    a job that does (daily.yml). Anything other than a plain JSON array of records there (code, a
+    NaN or Infinity, a missing assignment) raises, so a changed or tampered file fails closed."""
+    with open(path, encoding="utf-8-sig") as f:
+        s = f.read()
+    m = re.search(r"window\.BASE_POLLS_DATA\s*=\s*", s)
+    if not m:
+        raise ValueError(f"{path}: no 'window.BASE_POLLS_DATA = [...]' in the file")
+
+    def no_constant(x):
+        raise ValueError(f"{path}: {x} in BASE_POLLS_DATA is not JSON")
+    try:
+        data, _ = json.JSONDecoder(parse_constant=no_constant).raw_decode(s, m.end())
+    except json.JSONDecodeError as exc:
+        raise ValueError(f"{path}: BASE_POLLS_DATA is not a JSON array ({exc})") from None
+    if not isinstance(data, list) or not all(isinstance(p, dict) for p in data):
+        raise ValueError(f"{path}: BASE_POLLS_DATA is not a list of poll records")
+    return data
 
 
 def build(src, out):

@@ -29,7 +29,8 @@ Outputs (next to the page; the JSON contract is in the lead's ARCH_V2/V3 notes)
   live/turnout.json   national hourly series, sector turnout from per-station data, "arab" and
                       "arab_history" (one entry per per-station release, the last 8, with every
                       locality's and kind's turnout and pace); a release's time is sectors_time from
-                      live_input/turnout.json for the file it was set for, else when first seen
+                      live_input/turnout.json for the file it was set for, else when first seen; while
+                      the polls are open a new release waits up to 10 minutes for its sectors_time
   live/exit_polls.json, live/status.json, live/history.json (projection over the night)
   live/state.json     persisted state keyed by source: last accepted sha256, stations, last valid
                       inputs and config, probe times. State from another source is ignored.
@@ -37,13 +38,15 @@ Outputs (next to the page; the JSON contract is in the lead's ARCH_V2/V3 notes)
 Publishing (--publish; the workflow and the laptop share the code, see publish_step): branch mode
 (Pages "Deploy from a branch", the owner's setting) commits the files to site/live/ on main and asks
 Pages for a build, at most once every publish_every_min minutes (live_config.json, default 8; the
-first results and the first exit polls at once); Actions mode commits them to the live-data branch
-and dispatches pages.yml.
+first results and the first exit polls at once), and a feed with nothing new but its timestamps at
+most every 30 minutes (60 from noon the day after the election); Actions mode commits them to the
+live-data branch and dispatches pages.yml.
 
 Every download is checked: an empty body, HTML or JSON instead of CSV (maintenance page, WAF,
 rate limit) is rejected, a file without the expected columns or without a single counted station
-is rejected, rows with more voters than eligible voters are dropped and counted, a file whose
-station count shrank is rejected, an unchanged file (same SHA-256) is skipped, and the SHA-256 of
+is rejected, rows with more voters than eligible voters are dropped and counted, a file whose count
+of counted stations shrank by more than 2% is rejected (a smaller shrink is a CEC correction and is
+accepted), an unchanged file (same SHA-256) is skipped, and the SHA-256 of
 each accepted file is recorded. Each pass prints one JSON line (the status plus "changed": the
 files written or removed, and what was published), which the workflow logs.
 """
@@ -92,10 +95,15 @@ DRILL_URL = "https://media25.bechirot.gov.il/files/expb.csv"
 DEFAULT_CFG = {"election_day": "2026-10-27", "results_url": "https://media26.bechirot.gov.il/files/expb.csv"}
 PROBE_EVERY = 600       # seconds between probes of the results URL before 22:00
 HEARTBEAT = 300         # status.json is rewritten at least this often even when nothing changed
+QUIET_EVERY = 30        # minutes: branch mode publishes a feed with nothing new but timestamps at most this often
+QUIET_AFTER = 60        # minutes: the same from noon the day after the election (the regular count is over)
+HOLD_FOR_TIME = 10      # minutes a new per-station release waits for its sectors_time while the polls are open
+SHRINK_OK = 0.98        # a results file may lose up to 2% of its counted stations (a CEC correction), not more
 HOUR_RE = re.compile(r"^\d{2}:\d{2}$")
 PLACEHOLDER_ELIGIBLE = 7340000   # the pre-election estimate in live_config.json; the CEC's official figure replaces it (LM-B)
 REGISTER_SLACK = 0.99            # while the counted register exceeds the configured one, the share reads this, not "all counted"
 RESULTS_CACHE = ".results_last.csv"   # the last accepted CEC file, re-rendered when an operator switch changes (DOC-3)
+PAUSED_HE = "התחזית הושהתה על ידי המפעיל."   # frame.paused when pause_reason is empty
 
 
 def now_il():
@@ -332,12 +340,14 @@ def results_pass(E, data, out, source_url, history, state, errors, restamp=True)
                                column_aliases=E.cfg.get("column_aliases") or None)
     finally:
         os.unlink(path)
-    # The CEC file was briefly empty during the 2020 and 2021 counts. Rows only ever get added,
-    # so an empty or shrunken file is rejected and the last good results stay published.
+    # The CEC file was briefly empty during the 2020 and 2021 counts. Rows only ever get added, so an empty
+    # file, or one with more than 2% fewer counted stations than the last accepted one, is rejected and the
+    # last good results stay published; a smaller shrink is the CEC correcting a few stations and is accepted
+    # (the count on the page then steps back a little; the history line does not, below)
     n_counted = sum(1 for r in rows if r["voters"])
     if n_counted == 0:
         raise IOError("no counted stations in the file yet; nothing to publish")
-    if n_counted < 0.98 * state.get("rows", 0):
+    if n_counted < SHRINK_OK * state.get("rows", 0):
         raise IOError(f"results file shrank from {state['rows']} to {n_counted} counted stations; keeping the last good snapshot")
     keep = set(E.lists)
     counted, env, dropped = {}, None, 0
@@ -365,7 +375,7 @@ def results_pass(E, data, out, source_url, history, state, errors, restamp=True)
                       "live_config.json; set the CEC's official figure (the count is shown as 99% until then)")
     frame = LM.make_frame(E.proj, counted, env if (env and env["valid"]) else None, E.meta, n_boot=200)
     if E.cfg.get("projection_paused"):
-        frame["paused"] = E.cfg.get("pause_reason") or "התחזית הושהתה על ידי המפעיל."
+        frame["paused"] = E.cfg.get("pause_reason") or PAUSED_HE
     # what came in since the last accepted file: stations by sector and their vote by camp
     stations = {(r["code"], r["kalpi"]) for r in rows if r["voters"] and not r["env"] and r["code"] is not None}
     prev = {tuple(k.rsplit(":", 1)) for k in state.get("stations", [])}
@@ -388,9 +398,11 @@ def results_pass(E, data, out, source_url, history, state, errors, restamp=True)
             frame["batch"] = old["frame"]["batch"]
     if restamp or not state.get("at"):
         t = now_il()                           # the file changed: this is the data time
-        history.append({"t": t.strftime("%H:%M"), "counted": frame["counted"]["share"],
-                        "coal": frame["blocs"]["coal"]["seats"], "coal_lo": frame["blocs"]["coal"]["lo"],
-                        "coal_hi": frame["blocs"]["coal"]["hi"], "p61": frame["blocs"]["coal"]["p61"]})
+        # a corrected file with a few stations fewer (SHRINK_OK) adds no point that steps back in the history
+        if not (history and frame["counted"]["share"] < (history[-1].get("counted") or 0)):
+            history.append({"t": t.strftime("%H:%M"), "counted": frame["counted"]["share"],
+                            "coal": frame["blocs"]["coal"]["seats"], "coal_lo": frame["blocs"]["coal"]["lo"],
+                            "coal_hi": frame["blocs"]["coal"]["hi"], "p61": frame["blocs"]["coal"]["p61"]})
     else:
         t = dt.datetime.fromisoformat(state["at"])   # same file, a switch changed: the data time stays
     acc = replay_accuracy()
@@ -523,9 +535,32 @@ def switches(cfg):
 
 def switches_pass(E, cfg, out, history, state, status):
     """DOC-3: projection_paused / pause_reason / envelopes_expected act on the last accepted file even
-    while the CEC file cannot be fetched or is being rejected (the case the switch is for)."""
-    sw, cache = switches(cfg), os.path.join(out, RESULTS_CACHE)
-    if state.get("switches") == sw or not os.path.exists(cache) or not os.path.exists(os.path.join(out, "results.json")):
+    while the CEC file cannot be fetched or is being rejected (the case the switch is for). A run that took
+    over from another (the workflow chains runs) has no copy of that file (RESULTS_CACHE is not published):
+    then the pause acts on the published results.json itself, and envelopes_expected / eligible, which need
+    the file, are reported until it is read again (R4)."""
+    sw, cache, res_p = switches(cfg), os.path.join(out, RESULTS_CACHE), os.path.join(out, "results.json")
+    if state.get("switches") == sw or not os.path.exists(res_p):
+        return
+    if not os.path.exists(cache):
+        old = state.get("switches")
+        try:
+            doc = read_json(res_p)
+            want = (cfg.get("pause_reason") or PAUSED_HE) if sw[0] else None
+            if doc["frame"].get("paused") != want:
+                if want:
+                    doc["frame"]["paused"] = want
+                else:
+                    doc["frame"].pop("paused", None)
+                write_json(out, "results.json", doc)          # the data time and the history stay as they were
+        except Exception as exc:
+            status["errors"].append(f"switches: {exc.__class__.__name__}: {exc}"[:200])
+            return
+        if old and list(old[2:]) != sw[2:]:
+            status["errors"].append("switches: envelopes_expected / eligible not applied yet: this run has no copy of the "
+                                    "last accepted CEC file; they act when the file is next read")
+            sw = sw[:2] + list(old[2:])                       # still due: the next read of the file re-renders it
+        state["switches"] = sw
         return
     try:
         results_pass(E, open(cache, "rb").read(), out, (state.get("source") or ["", ""])[1], history, state,
@@ -590,6 +625,15 @@ def turnout_pass(E, cfg, out, state, status, inputs):
             sha = hashlib.sha256(data).hexdigest()
             released = release_time(manual, state, sha, election_day, status["errors"])
             rows, excluded = station_rows(data, cfg.get("column_aliases") or None)
+            if held_for_time(state, sha, closed):
+                # R1: the page keeps the last release until this one has its CEC time (or the hold ends)
+                status["errors"].append(f"turnout: per-station release seen {state.get('station_seen')} held for sectors_time "
+                                        f"(up to {HOLD_FOR_TIME} minutes): set the CEC's time for it in live_input/turnout.json")
+                doc.update({k: old[k] for k in STATION_KEYS if k in old})
+                if lean_ok and "lean" in old:
+                    doc["lean"] = old["lean"]
+                write_json(out, "turnout.json", doc)
+                return doc
             st = station_turnout(E, rows, excluded)
             if st["sectors"]:
                 doc.update({"sectors": st["sectors"], "stations_national": st["national"], "sectors_time": released,
@@ -611,6 +655,11 @@ def turnout_pass(E, cfg, out, state, status, inputs):
 
 STATION_KEYS = ("sectors", "stations_national", "sectors_time", "sectors_coverage", "sectors_excluded",
                 "sectors_sha256", "arab", "arab_history")
+# turnout.json "sectors_excluded" {key: stations}: the per-station rows left out, by reason. The keys are part of the
+# contract with the page, which shows each in Hebrew. Out of every sum: "no figure" (blank or '-': not reported yet),
+# "zero voters" (0: not reported yet), "unreadable", "more voters than eligible". In the turnout but out of the pace:
+# "no 2022 match" and "implausible pace" (more than twice the station's 2022 voters, usually a renumbered station).
+EXCLUDED_KEYS = ("no figure", "zero voters", "unreadable", "more voters than eligible", "no 2022 match", "implausible pace")
 SECTORS_FIT = (10, 180)   # minutes: a sectors_time fits a release first seen up to 10 minutes before it to 3 hours after
 
 
@@ -662,6 +711,19 @@ def release_time(manual, state, sha, election_day, errors):
     errors.append(f"turnout: sectors_time {s} does not fit the per-station release first seen at {seen} (it can be up to "
                   f"3 hours earlier, not later); it waits for the next release, this one stays {mine or seen}"[:200])
     return mine or seen
+
+
+def held_for_time(state, sha, closed):
+    """R1: while the polls are open, a new per-station release that has no sectors_time bound to it yet (release_time)
+    is held back for HOLD_FOR_TIME minutes after it was first seen: the page keeps the last release meanwhile. Its
+    figures are read against the 2022 curve at the release's time (the Arab section's same-hour comparison, on_track,
+    the final-turnout range), so a release labelled with the time it was first seen, until the operator's time
+    arrives a publish later, shows wrong figures in between. A time typed before the file arrives binds at once (no
+    hold); after the hold the release goes out labelled with the time it was first seen, as before."""
+    if closed or (state.get("sectors_bind") or {}).get("sha") == sha or not state.get("station_seen_at"):
+        return False
+    seen_at = dt.datetime.fromisoformat(state["station_seen_at"])
+    return now_il() - seen_at < dt.timedelta(minutes=HOLD_FOR_TIME)
 
 
 # per-station turnout headers read without an alias, by role (the names arab_turnout.read_station_csv takes);
@@ -837,7 +899,11 @@ def arab_pass(rows, national, released, sha, doc, old, state, errors):
         doc.update({k: old[k] for k in ("arab", "arab_history") if k in old})
         return
     if state.get("station_seen_at"):
-        sec["seen_he"] = he_time(dt.datetime.fromisoformat(state["station_seen_at"]))
+        # the clock time, fixed when the file was first seen (he_time would add a date at midnight and rewrite
+        # turnout.json with nothing new); a date only for a file first seen on a later day than its release's (R5)
+        at = dt.datetime.fromisoformat(state["station_seen_at"]).astimezone(IL)
+        later = state.get("station_day") and at.date().isoformat() != state["station_day"]
+        sec["seen_he"] = at.strftime("%H:%M") + (at.strftime(" (%d.%m)") if later else "")
     entry["sha"] = sha[:12]
     hist = [h for h in state.get("arab_history") or [] if isinstance(h, dict)]
     # the same file again (relabelled by sectors_time) or another file with the same time (a corrected file):
@@ -865,10 +931,30 @@ def exit_polls_pass(out, election_day, state, status, inputs):
         status["errors"].append(f"exit polls: {exc.__class__.__name__}: {exc}"[:200])
         ep = state.get("exit_input")              # OPS-10: the last valid copy
     if ep and closed:
+        gaps = disclosure_gaps(ep)
+        if gaps:
+            status["errors"].append(("exit polls: disclosure items missing (§16ה(ב)–(ג): fill them from the channel's "
+                                     f"disclosure or write לא פורסם): {'; '.join(gaps)}")[:300])
         write_json(out, "exit_polls.json", ep)
         return True
     remove_json(out, "exit_polls.json")           # OPS-14, and never before polls close (Elections Law)
     return False
+
+
+# §16ה(ב)–(ג): what whoever publishes a poll within 24 hours of its release must give with it (live_input/README.md)
+DISCLOSURE = ("commissioner", "pollster", "date", "population", "n_invited", "n", "moe", "questions")
+
+
+def disclosure_gaps(ep):
+    """Exit polls without one of the DISCLOSURE items (absent, empty or null; 'לא פורסם' counts as given, the page
+    shows it as such): ["כאן 11: population, questions", ...]."""
+    out = []
+    for p in (ep.get("polls") if isinstance(ep, dict) else None) or []:
+        if isinstance(p, dict):
+            gap = [k for k in DISCLOSURE if p.get(k) is None or str(p.get(k)).strip() == ""]
+            if gap:
+                out.append(f"{p.get('outlet') or '?'}: {', '.join(gap)}")
+    return out
 
 
 # ------------------------------------------------------------------ publishing (the workflow and the laptop)
@@ -877,7 +963,9 @@ def exit_polls_pass(out, election_day, state, status, inputs):
 #            site/live/ on main, then a Pages build is requested (POST /pages/builds). Branch builds have a soft
 #            limit of 10 an hour and the operator's pushes to main count too, so this happens at most once every
 #            publish_every_min minutes (live_config.json, default 8); the first results.json and the first
-#            exit_polls.json go out at once.
+#            exit_polls.json go out at once. A feed with nothing new but timestamps (status.json's heartbeat, the
+#            probe's time, state.json) costs a build only every quiet_every minutes (30; 60 from noon the day after
+#            the election), and status.heartbeat_s says so, so the page's stale note stays quiet in between (R3).
 #   actions  Pages "GitHub Actions" (build_type workflow): out/*.json -> live/ on the live-data branch, then
 #            pages.yml is dispatched (no build limit), after every changed pass.
 # Both use the same reset cycle: fetch, reset --hard to the remote tip, copy, commit only the live folder,
@@ -912,6 +1000,44 @@ def publish_every(cfg, errors=None):
     if errors is not None:
         errors.append(f"config: publish_every_min {v!r} is not a number of minutes 1-60; using {PUBLISH_EVERY}")
     return PUBLISH_EVERY
+
+
+def quiet_every(every, now, election_day):
+    """Minutes between branch-mode publishes when nothing but timestamps changed (R3): QUIET_EVERY, or twice the
+    cadence when that is longer; from noon the day after the election, when the regular count is over and the page
+    no longer warns about a stale feed, QUIET_AFTER (WF-9). status.heartbeat_s is this, in seconds."""
+    q = max(QUIET_EVERY, 2 * every)
+    if now >= closing(election_day) + dt.timedelta(hours=14):
+        q = max(q, QUIET_AFTER)
+    return q
+
+
+def _quiet(o):
+    """A published file without what changes on every pass: the timestamps (_strip) and the probe's time."""
+    if isinstance(o, dict):
+        return {k: _quiet(v) for k, v in o.items() if k not in ("updated_at", "updated_he", "checked_he", "at_he")}
+    if isinstance(o, list):
+        return [_quiet(x) for x in o]
+    return o
+
+
+def pending(out, live):
+    """(news, any): the out/*.json files that differ from the published copies in live/ beyond timestamps (or were
+    added or removed), and whether any file differs at all. state.json never counts as news: the page does not
+    read it, and its own changes (probe times, the inputs' last valid copies) come with the files that matter."""
+    names = {os.path.basename(p) for p in glob.glob(os.path.join(out, "*.json")) + glob.glob(os.path.join(live, "*.json"))}
+    news, differ = [], False
+    for n in sorted(names):
+        a, b = os.path.join(out, n), os.path.join(live, n)
+        if os.path.exists(a) and os.path.exists(b):
+            with open(a, "rb") as f1, open(b, "rb") as f2:
+                if f1.read() == f2.read():
+                    continue
+        differ = True
+        both = os.path.exists(a) and os.path.exists(b)
+        if n != STATE and not (both and _quiet(read_json(a, object())) == _quiet(read_json(b, object()))):
+            news.append(n)                    # (a file that does not parse never equals anything)
+    return news, differ
 
 
 def worktree(mode, wt, branch, repo=ROOT):
@@ -1055,11 +1181,16 @@ def request_build(mode, sha=None, ref="main", repo=ROOT):
     return ok, label
 
 
-def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_publish=False, who="", now=None):
-    """After a pass: publish out/*.json when due (above) and have the page rebuilt. now_publish ignores the
-    cadence (the end of a run, a reset). A failed build request is retried after BUILD_GAP seconds, up to
-    five times. Returns the fields for the status line: published, next_publish_s, build."""
+def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_publish=False, who="", now=None,
+                 quiet_min=None):
+    """After a pass: publish out/*.json when due (above) and have the page rebuilt. In branch mode a change a reader
+    sees is due every_min minutes after the last publish, one in timestamps only quiet_min minutes after it (default
+    quiet_every's: 30); the first results / exit polls at once. now_publish (the end of a run, a reset, Ctrl-C)
+    publishes what is held at once, except timestamps alone before quiet_min: the next run takes them up, and
+    publishing them would only spend a build (R2). A failed build request is retried after BUILD_GAP seconds, up
+    to five times. Returns the fields for the status line: published, next_publish_s, build."""
     now = time.time() if now is None else now
+    quiet_min = max(QUIET_EVERY, 2 * every_min) if quiet_min is None else quiet_min
     pp = os.path.join(out, PUB)
     p = read_json(pp, {}) or {}
     if CHANGED:
@@ -1069,8 +1200,12 @@ def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_pu
         if p.get("dirty"):
             live = os.path.join(wt, TARGET[mode])
             first = [n for n in URGENT if os.path.exists(os.path.join(out, n)) and not os.path.exists(os.path.join(live, n))]
-            wait = (every_min * 60 if mode == "branch" else 0) - (now - p.get("last", 0))
-            if now_publish or first or wait <= 0:
+            news, differ = pending(out, live) if os.path.isdir(live) else (["(nothing published yet)"], True)
+            gap = (every_min if news else quiet_min) * 60 if mode == "branch" else 0
+            wait = gap - (now - p.get("last", 0))
+            if not differ:
+                res["published"], p["dirty"] = "unchanged", False
+            elif first or wait <= 0 or (now_publish and news):
                 r, sha = publish(out, mode, wt, repo, branch, who)
                 res["published"] = r + (f" ({', '.join(first)}: first, at once)" if first and r == "pushed" else "")
                 if r == "pushed":
@@ -1078,7 +1213,7 @@ def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_pu
                 elif r == "unchanged":
                     p["dirty"] = False
             else:
-                res["published"], res["next_publish_s"] = "held", int(wait)
+                res["published"], res["next_publish_s"] = ("held" if news else "held (timestamps only)"), int(wait)
         # a one-shot call (the flush at the end of a run, a reset) asks at once: nothing would retry it later
         if p.get("build") and (now_publish or now - p.get("last_build", 0) >= BUILD_GAP):
             ok, res["build"] = request_build(mode, p["build"], ref, repo)
@@ -1096,16 +1231,38 @@ def publish_step(out, mode, every_min, wt, branch, ref="main", repo=ROOT, now_pu
     return res
 
 
-def seed(out, mode, wt, branch, repo=ROOT):
+def last_published(wt, mode):
+    """When the live folder was last published: the time of the newest feed commit ("live HH:MM") that touched it,
+    else (a shallow clone may not hold that commit) the published status's updated_at, else 0."""
+    r = git("log", "-1", "--format=%ct", "--grep=^live ", "--", TARGET[mode], cwd=wt, check=False)
+    if r.returncode == 0 and r.stdout.strip().isdigit():
+        return int(r.stdout.strip())
+    st = read_json(os.path.join(wt, TARGET[mode], "status.json"), {}) or {}
+    try:
+        return dt.datetime.fromisoformat(st["updated_at"]).timestamp()
+    except Exception:
+        return 0
+
+
+def seed(out, mode, wt, branch, repo=ROOT, drill=False):
     """Start of a workflow run: the worktree of the target branch at its tip, and the out folder seeded
     from the published files (history, last good copies, state), except a rehearsal's (OPS-3): a real run
-    never inherits a drill, and a new drill starts clean."""
+    never inherits a drill, and a new drill starts clean. The publisher's cadence carries over (R2): the
+    last publish is the newest feed commit, so a new run does not publish on its first pass. A drill is
+    refused while the published files are the real election's (WF-2): it would overwrite them, and its
+    reset at the end would delete them."""
     worktree(mode, wt, branch, repo)
     sync(wt, branch)
     live = os.path.join(wt, TARGET[mode])
     os.makedirs(out, exist_ok=True)
     st = read_json(os.path.join(live, "status.json"), {}) or {}
-    if isinstance(st, dict) and st.get("drill"):
+    st = st if isinstance(st, dict) else {}
+    if drill and not st.get("drill") and (st.get("has_results") or st.get("phase") in ("day", "night")):
+        raise SystemExit(f"refused: {TARGET[mode]}/ on {branch} holds the real election's files (phase {st.get('phase')}, "
+                         f"has_results {st.get('has_results')}); a drill would overwrite them and its reset delete them")
+    with open(os.path.join(out, PUB), "w", encoding="utf-8") as f:
+        json.dump({"dirty": False, "last": last_published(wt, mode)}, f)
+    if st.get("drill"):
         return {"seeded": [], "note": "the published files are a rehearsal's: starting clean"}
     names = sorted(os.path.basename(p) for p in glob.glob(os.path.join(live, "*.json")))
     for n in names:
@@ -1157,6 +1314,24 @@ def load_config(path, state, errors):
     return cfg
 
 
+def drill_refused(cfg, minutes, start=None):
+    """WF-2: why a drill that publishes may not run now ('' when it may). A drill puts a rehearsal projection on the
+    public page and its reset puts the placeholder back: not when it would still run (plus 15 minutes for the reset
+    and the build) at the start of the poll ban (three days before election day, 00:00), and not from then until ten
+    days after election day (6.11, after the final file), when the real night's files are on main. start: when the
+    drill began (state drill_start, a Unix time), else now. live.yml's guard applies the same rule."""
+    ed = dt.date.fromisoformat(cfg.get("election_day") or DEFAULT_CFG["election_day"])
+    ban = dt.datetime.combine(ed - dt.timedelta(days=3), dt.time(0, 0), IL)
+    back = dt.datetime.combine(ed + dt.timedelta(days=10), dt.time(0, 0), IL)
+    now = now_il()
+    began = dt.datetime.fromtimestamp(start, IL) if start else now
+    end = max(began + dt.timedelta(minutes=minutes or 0), now) + dt.timedelta(minutes=15)
+    if end >= ban and now < back:
+        return (f"no drill that runs into {ban:%d.%m %H:%M} Israel time (the poll ban), nor from then until "
+                f"{back:%d.%m}: the page would show a rehearsal projection, and its reset would delete the real files")
+    return ""
+
+
 def publish_target(a, errors):
     """(mode, branch, worktree) for --publish and the one-shot actions. --mode auto reads the Pages
     build_type: legacy -> branch (site/live/ on the branch Pages deploys), workflow -> actions (live-data);
@@ -1202,8 +1377,10 @@ def main(argv=None):
     ap.add_argument("--ref", default="main", help="branch to take the inputs from (laptop) and to dispatch pages.yml on (actions mode)")
     ap.add_argument("--no-refresh", action="store_true",
                     help="--publish: keep the local live_input/ and live_config.json instead of taking them from origin/<ref> every pass")
-    ap.add_argument("--seed", action="store_true", help="only prepare the worktree and copy the published files into --out (not a drill's)")
-    ap.add_argument("--flush", action="store_true", help="only publish what the cadence held back, now")
+    ap.add_argument("--seed", action="store_true", help="only prepare the worktree and copy the published files into --out (not a "
+                                                        "drill's); with --drill: refused while they are the real election's")
+    ap.add_argument("--flush", action="store_true", help="only publish what the cadence held back, now (a change in "
+                                                         "timestamps alone waits for its quiet_every gap: the next run takes it)")
     ap.add_argument("--reset-live", action="store_true", help="only put the placeholder back in the published folder and rebuild the page")
     ap.add_argument("--request-build", action="store_true", help="only have the page rebuilt (after another push to main, e.g. the daily update)")
     ap.add_argument("--repo", default=ROOT, help=argparse.SUPPRESS)   # the clone holding the worktree (tests)
@@ -1219,20 +1396,26 @@ def main(argv=None):
     state = read_json(os.path.join(a.out, STATE), {}) or {}
     boot_errors = []
     cfg = load_config(a.config, state, boot_errors)
+    if DRILL and (a.publish or a.seed):           # WF-2: never into the poll ban or over the real night's files
+        why = drill_refused(cfg, a.minutes, state.get("drill_start"))
+        if why:
+            sys.exit(f"refused: {why}")
     who = "" if os.environ.get("GITHUB_ACTIONS") else " (laptop)"
     pub_errors = []                               # reported once, on the first pass
     if a.publish or a.seed or a.flush or a.reset_live or a.request_build:
         mode, branch, wt = publish_target(a, pub_errors)
         if a.seed or a.flush or a.reset_live or a.request_build:   # one-shot actions: no pass, no model
             if a.seed:
-                res = seed(a.out, mode, wt, branch, a.repo)
+                res = seed(a.out, mode, wt, branch, a.repo, drill=DRILL)
             elif a.request_build:
                 ok, label = request_build(mode, a.sha, a.ref, a.repo)
                 res = {"ok": ok, "build": label}
             else:
                 if a.reset_live:
                     reset_out(a.out)
-                res = publish_step(a.out, mode, publish_every(cfg), wt, branch, a.ref, a.repo, now_publish=True, who=who)
+                every = publish_every(cfg)
+                res = publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, now_publish=True, who=who,
+                                   quiet_min=quiet_every(every, now_il(), dt.date.fromisoformat(cfg["election_day"])))
             print(json.dumps({"mode": mode, "branch": branch, **res, "errors": boot_errors + pub_errors}, ensure_ascii=False), flush=True)
             return
     else:
@@ -1257,15 +1440,17 @@ def main(argv=None):
                 status["errors"].append(f"refresh from origin/{a.ref}: {exc}"[:200])
         cfg = E.cfg = load_config(a.config, state, status["errors"])
         every = publish_every(cfg, status["errors"])
-        # the page's staleness threshold follows heartbeat_s (PAGE-1): in branch mode the effective publish
-        # cadence, so its note does not fire between two publishes; otherwise the status re-stamp interval
-        status["heartbeat_s"] = round(every * 60) if mode == "branch" else HEARTBEAT
+        election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
+        quiet = quiet_every(every, t, election_day)
+        # the page's staleness threshold follows heartbeat_s (PAGE-1): in branch mode the longest gap between two
+        # publishes of a healthy feed (quiet_every: when nothing but timestamps changed), so its note does not fire
+        # in between; otherwise the status re-stamp interval
+        status["heartbeat_s"] = round(quiet * 60) if mode == "branch" else HEARTBEAT
         if mode:
             status["publish_mode"] = mode
         src = os.environ.get("PAGES_SOURCE")
         if src and not (src == "legacy" and mode == "branch"):   # legacy is the expected source in branch mode
             status["pages_source"] = src
-        election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
         E.set_register(cfg)
         if not E.dry and cfg.get("eligible") == PLACEHOLDER_ELIGIBLE and t.date() >= election_day - dt.timedelta(days=2):
             status["errors"].append("eligible in live_config.json is still the estimate 7,340,000: set the register size "
@@ -1300,7 +1485,7 @@ def main(argv=None):
         line = {**status, "changed": list(CHANGED)}
         if a.publish:                             # every pass: a held publish or a failed build request may be due
             try:
-                line.update(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, who=who))
+                line.update(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, who=who, quiet_min=quiet))
             except Exception as exc:
                 line["errors"] = status["errors"] + [f"publish: {exc}"[:200]]
         print(json.dumps(line, ensure_ascii=False), flush=True)
@@ -1311,7 +1496,8 @@ def main(argv=None):
         except KeyboardInterrupt:                 # Ctrl-C on the laptop: publish what the cadence held back, then stop
             if a.publish:
                 CHANGED.clear()
-                print(json.dumps(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, now_publish=True, who=who)), flush=True)
+                print(json.dumps(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, now_publish=True, who=who,
+                                              quiet_min=quiet)), flush=True)
             break
 
 

@@ -1,12 +1,13 @@
 # Can GitHub's runners reach the elections committee? The election-night feed (live.yml) depends on it.
-# Runs daily 20–27.10 and on demand; the summary table is in the run's summary page. On 9.10.2026
-# media26 (CloudFront) answered 404 to GitHub runners while serving other networks, so if the 2026
-# files stay unreachable from here, the feed moves to a self-hosted runner in Israel (docs/ELECTION_DAY.md).
+# Runs daily 20–27.10 (08:17 Israel time until 24.10, 07:17 from 25.10) and on demand; the summary table
+# is in the run's summary page. On 9.10.2026 media26 (CloudFront) answered 404 to GitHub runners while
+# serving other networks, so if the 2026 files stay unreachable from here, the feed moves to a self-hosted
+# runner in Israel (docs/ELECTION_DAY.md). It has no permissions, so the yearly repeat of its cron is harmless.
 name: Check access to the elections committee
 
 on:
   schedule:
-    - cron: '17 5 20-27 10 *'   # 07:17 Israel time (UTC+2 from 25.10), daily 20–27.10
+    - cron: '17 5 20-27 10 *'   # 05:17 UTC: 08:17 Israel time until 24.10 (UTC+3), 07:17 from 25.10 (UTC+2); daily 20–27.10
   workflow_dispatch:
 
 permissions: {}

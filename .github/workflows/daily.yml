@@ -3,20 +3,25 @@
 # POLLS_2026), rebuilds site/data/polls_2026.json and the page (pipeline/build_polls.py, build_site.py), runs
 # the election-day feed's smoke test (pipeline/test_live.py) as a health check, and commits the three built
 # files to main only when they changed and the check passed.
-# Two jobs, because build_polls.py evaluates the third-party polls-data.js with node:
-#   build   runs it with nothing to steal: read-only permissions, no GH_TOKEN, no git credentials left in the
+# polls-data.js is a third party's JavaScript file. build_polls.py reads the poll records in it as JSON and never
+# runs it (no node); a file that is anything else fails the build. Two jobs all the same (defence in depth):
+#   build   reads it with nothing to steal: read-only permissions, no GH_TOKEN, no git credentials left in the
 #           checkout (persist-credentials: false). The only thing that leaves it is the poll table it built,
 #           as an artifact.
-#   commit  never runs polls-data.js. It checks the artifact's shape (step "validate": the parties exactly as
+#   commit  never reads polls-data.js. It checks the artifact's shape (step "validate": the parties exactly as
 #           build_polls.py defines them, every poll's fields, types and ranges, seats adding up to 120, no markup
 #           in any text), rebuilds the page from main's own code, runs the health check, and pushes. Its checkout
 #           keeps no credentials either: the token reaches only the push step and the build request.
-# Never from Sat 24.10 00:00 to Tue 27.10 22:00 Israel time (Elections (Propaganda) Law §16ה(ח)): the guard
-# job refuses (a manual run goes red), and the push step checks the clock again right before pushing.
+# Never from Sat 24.10 00:00 to Tue 27.10 22:00 Israel time (Elections (Propaganda) Law §16ה(ח)), and no push after
+# Fri 23.10 23:30, so the page's build is done before the ban starts: the guard job refuses (a manual run goes red),
+# and the push step checks the clock again right before pushing. A run goes red if the page could not be rebuilt
+# after three requests (after the 23.10 run the polls would otherwise reach the page with the next push to main,
+# in the ban).
 # The commit is pushed with GITHUB_TOKEN, which starts no other workflow (no cascade: pages.yml and
 # official-data.yml stay quiet), so the page is rebuilt explicitly: a Pages build request in branch mode
 # (the current setting), a dispatch of pages.yml under GitHub Actions (live_fetch.py --request-build).
 # Crons are UTC (Israel is UTC+3 until 25.10); the year is checked by the guard (cron has none).
+# Scheduled workflows run only from the default branch: this one runs once it is on main.
 name: Daily poll update
 
 on:
@@ -46,13 +51,14 @@ jobs:
           EVENT: ${{ github.event_name }}
         run: |
           # §16ה(ח): no poll may be published from Sat 24.10 00:00 until the polls close, Tue 27.10 22:00 Israel
-          # time. NOW_IL (YYYYmmddHHMM, Israel time) stands in for the clock in pipeline/test_live.py.
+          # time. The last push is at 23.10 23:30, so its Pages build is done before 00:00 (WF-7). NOW_IL
+          # (YYYYmmddHHMM, Israel time) stands in for the clock in pipeline/test_live.py.
           now=${NOW_IL:-$(TZ=Asia/Jerusalem date +%Y%m%d%H%M)}
-          if [ "$now" -ge 202610240000 ] && [ "$now" -lt 202610272200 ]; then
+          if [ "$now" -ge 202610232330 ] && [ "$now" -lt 202610272200 ]; then
             echo "go=false" >> "$GITHUB_OUTPUT"
-            echo "## Refused: poll-publication ban (24.10 00:00 to 27.10 22:00 Israel time), no poll update" >> "$GITHUB_STEP_SUMMARY"
+            echo "## Refused: poll-publication ban (24.10 00:00 to 27.10 22:00 Israel time; no update after 23.10 23:30), no poll update" >> "$GITHUB_STEP_SUMMARY"
             if [ "$EVENT" = schedule ]; then echo "::warning::poll-publication ban: no poll update"; exit 0; fi
-            echo "::error::poll-publication ban (§16ה(ח)) from 24.10 00:00 to 27.10 22:00 Israel time: no poll update"
+            echo "::error::poll-publication ban (§16ה(ח)) from 24.10 00:00 to 27.10 22:00 Israel time, and no update after 23.10 23:30 (its page build must be done before the ban): no poll update"
             exit 1
           fi
           if [ "$EVENT" = schedule ] && { [ "$now" -lt 202610100000 ] || [ "$now" -ge 202610240000 ]; }; then
@@ -92,7 +98,7 @@ jobs:
           open("data/raw/polls-data.js", "wb").write(data)
           print(F.POLLS_2026, len(data), "bytes")
           PY
-      - name: Build the poll table (runs polls-data.js in node)
+      - name: Build the poll table (reads the records in polls-data.js as JSON; nothing in it runs)
         env:
           HANDOFF: ${{ runner.temp }}/polls
         run: |
@@ -240,6 +246,8 @@ jobs:
           git status --short -- site/data/polls_2026.json site/index.html site/artifact.html
       - name: Health check (the election-day feed's smoke test on the new polls)
         id: health
+        env:
+          HEALTH_GATE: '1'   # the code's health only: a drill's files or a test run's on main's site/live/ do not block the update (WF-4)
         run: python3 pipeline/test_live.py
       - name: Commit and push to main (only when something changed)
         id: push
@@ -249,8 +257,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           now=${NOW_IL:-$(TZ=Asia/Jerusalem date +%Y%m%d%H%M)}
-          if [ "$now" -ge 202610240000 ] && [ "$now" -lt 202610272200 ]; then
-            echo "::error::poll-publication ban (§16ה(ח)) began during this run: not pushing"
+          if [ "$now" -ge 202610232330 ] && [ "$now" -lt 202610272200 ]; then
+            echo "::error::past 23.10 23:30, the last push before the poll-publication ban (§16ה(ח)): not pushing"
             exit 1
           fi
           # (end of the ban guard)
@@ -291,11 +299,20 @@ jobs:
           GH_TOKEN: ${{ github.token }}
           LIVE_BUILD_WAIT: ${{ vars.LIVE_BUILD_WAIT || '15' }}
         run: |
-          out=$(python3 pipeline/live_fetch.py --out _rb --request-build --mode auto --sha "$SHA" 2>&1 | tail -n 1)
-          echo "$out"
-          label=$(printf '%s' "$out" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(("" if d.get("ok") else "FAILED: ") + str(d.get("build")))' 2>/dev/null || echo "FAILED: $out")
+          # three requests a minute apart; if all fail the run goes red: the new polls would reach the page only with
+          # the next push to main, which after the 23.10 run falls in the poll ban (WF-7)
+          for i in 1 2 3; do
+            out=$(python3 pipeline/live_fetch.py --out _rb --request-build --mode auto --sha "$SHA" 2>&1 | tail -n 1)
+            echo "$out"
+            label=$(printf '%s' "$out" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(("" if d.get("ok") else "FAILED: ") + str(d.get("build")))' 2>/dev/null || echo "FAILED: $out")
+            case "$label" in FAILED*) ;; *) break ;; esac
+            if [ "$i" -lt 3 ]; then sleep "${RETRY_WAIT:-60}"; fi
+          done
           echo "label=${label:0:200}" >> "$GITHUB_OUTPUT"
-          case "$label" in FAILED*) echo "::warning::the page was not rebuilt ($label): it updates with the next push to main" ;; esac
+          case "$label" in FAILED*)
+            echo "::error::the page was not rebuilt after three requests (${label:0:200}): request a Pages build by hand (docs/ELECTION_DAY.md, עדכון סקרים יומי)"
+            exit 1 ;;
+          esac
       - name: Summary
         if: always()
         env:
