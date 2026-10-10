@@ -3,6 +3,8 @@
 Inputs (all in the repository):
   site/data/core.json        locality sector and sub-region (the site's own classification), names, centroids
   site/data/ballots_K25.json 2022 results per polling station (sector code per station)
+  data/official/k25_expb.csv the CEC's 2022 file, every list in its own column (ballots_K25.json lumps the lists
+                             that did not pass the threshold into "other"): the top other list and the margin
   pipeline/reference/arab_localities.csv     the CEC regional committee of each Arab/Druze locality
   pipeline/reference/turnout_hourly.json     2022 national hourly series and aChord's Arab estimates
 
@@ -12,9 +14,11 @@ Entries (one per locality, `key`):
   kind "arab"       an Arab locality (core.json sector "arab"), key "<code>";
   kind "druze"      a Druze locality or Ghajar (sector "druze"), key "<code>"; the two Circassian villages are
                     left out, as in the site's Arab+Druze standard (registry.STANDARD_SEGMENTS: 53.2% in 2022);
-  kind "mixed_arab" the Arab stations of a mixed city or Jewish locality, key "<code>:arab": stations whose
-                    sector code is 1 (code % 10 == 1) in ballots_K25.json, i.e. the vote-based box rule of
-                    build_data.py, as live_fetch.station_sector reads it during the day.
+  kind "mixed_arab" the Arab stations of a mixed city or Jewish locality, key "<code>:arab": the station groups of
+                    arab_turnout.arab_boxes, i.e. the vote-based box rule of build_data.py (sector code 1 in
+                    ballots_K25.json, as live_fetch.station_sector reads it during the day) or an Arab-list
+                    majority in 2022 itself, since the 2026 stations are numbered as in 2022 (three station groups
+                    more than the box rule alone: Jaffa's 875 and Haifa's 85 and 301).
 Regions (geographic; the community is in `kind`, the site's finer sub-region in `sub`):
   negev      Bedouin localities in the Negev (sub "negev")
   triangle   Wadi Ara and the southern Triangle (subs "wadi_ara", "triangle_south"; al-Arian sits in Wadi Ara)
@@ -25,9 +29,11 @@ Regions (geographic; the community is in `kind`, the site's finer sub-region in 
   galilee    every other Arab and Druze locality in the north (Nazareth, the Galilee, the valleys)
   mixed      the Arab stations of mixed cities and Jewish localities (kind "mixed_arab")
 2022 vote (shares of valid votes): raam22 = Ra'am (עם); joint22 = Hadash-Ta'al (ום) + Balad (ד), the two lists
-that run together in 2026 as the Joint List (live_model.BASE_MAP); other22 = everything else. leader22 is the
-larger of raam22 and joint22, or "other" when a single non-Arab list beat both (most Druze localities);
-margin22 is the leader's lead over the next of the three (Ra'am, the Joint List, the top non-Arab list).
+that run together in 2026 as the Joint List (live_model.BASE_MAP); other22 = everything else. top_other22 is the
+largest other list, read from every list of the official file (a list under the threshold too: in Mas'ade, Wajdi
+Taher's list); leader22 is the larger of raam22 and joint22, or "other" when a single other list beat both (most
+Druze localities); margin22 is the leader's lead over the next of the three (Ra'am, the Joint List, the top other
+list).
 
 The hourly Arab curve and the projection range are documented in pipeline/arab_turnout.py. The curve is of the
 Arab and Druze localities (its end, 53.2%, is their official final); the Arab stations of mixed cities have no
@@ -46,8 +52,10 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import arab_turnout as AT  # noqa: E402
+from build_data import read_expb  # noqa: E402
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+OFFICIAL_K25 = os.path.join(ROOT, "data", "official", "k25_expb.csv")
 RAAM, JOINT = ["עם"], ["ום", "ד"]
 REGION_NAMES = {"negev": "הנגב", "triangle": "המשולש", "galilee": "הגליל והעמקים", "haifa": "הכרמל ומחוז חיפה",
                 "jerusalem": "אזור ירושלים", "golan": "רמת הגולן", "mixed": "ערים מעורבות"}
@@ -63,9 +71,10 @@ SIGMA_FACTOR = 2.0       # Arab timing is less stable than the national one (202
 Z80 = 1.2816             # the range is a rough 80% interval
 NOTE_HE = ("בסיס 2022 לשיעור ההצבעה בחברה הערבית ביום הבחירות. היישובים לפי הסיווג של האתר: יישובים ערביים "
            "ודרוזיים (בלי שני הכפרים הצ׳רקסיים), והקלפיות הערביות בערים מעורבות וביישובים יהודיים, רשומה אחת לכל "
-           "עיר. שיעור ההצבעה הוא מצביעים בקלפיות חלקי בעלי זכות הבחירה בהן, בלי המעטפות הכפולות. הרשימה שהובילה "
-           "ב-2022 היא רע״ם או חד״ש-תע״ל ובל״ד יחד (ב-2026 הן רצות כרשימה המשותפת), לפי הגדולה מביניהן, או רשימה "
-           "אחרת כשרשימה שאינה ערבית קיבלה יותר מכל אחת מהן (רוב היישובים הדרוזיים). עקומת השעות של 2022 בחברה "
+           "עיר (קלפי שרוב הקולות בה ניתנו לרשימות הערביות לאורך 2019–2022 או ב-2022 עצמה). שיעור ההצבעה הוא "
+           "מצביעים בקלפיות חלקי בעלי זכות הבחירה בהן, בלי המעטפות הכפולות. הרשימה שהובילה ב-2022 היא רע״ם או "
+           "חד״ש-תע״ל ובל״ד יחד (ב-2026 הן רצות כרשימה המשותפת), לפי הגדולה מביניהן, או רשימה אחרת כשרשימה "
+           "אחרת אחת קיבלה יותר מכל אחת מהן (רוב היישובים הדרוזיים). עקומת השעות של 2022 בחברה "
            "הערבית אינה רשמית: אומדני "
            "מרכז אקורד (האוניברסיטה העברית) ל-14:00 (17%), ל-16:00 (23%) ול-20:00 (44%), 30% ל-18:00 שפורסם בלי "
            "ייחוס, והשיעור הסופי הרשמי, 53.2%; שעות הבוקר חושבו מהיחס לשיעור הארצי. ההערכה לסוף היום מחלקת את "
@@ -164,8 +173,11 @@ def main():
     el25 = next(e for e in core["elections"] if e["id"] == "K25")
     list_name = {p["id"]: p["name"] for p in el25["parties"]}
     loc = {L["code"]: L for L in core["localities"]}
-    cols = b25["cols"]
     subnames = {**core["arab_regions"], **core["druze_regions"]}
+    arab_boxes = AT.arab_boxes(b25)
+    # every list's votes per station from the official file (ballots_K25.json lumps the small lists into "other")
+    _, off_rows = read_expb(OFFICIAL_K25)
+    official = {(r["code"], AT.kalpi_id(r["kalpi"])): r for r in off_rows if not r["env"]}
 
     acc = {}
     for row in b25["rows"]:
@@ -176,15 +188,17 @@ def main():
             if L["region"] == "circassian":
                 continue
             key, kind = str(code), sec
-        elif sc % 10 == 1:
+        elif (code, AT.kalpi_base(AT.kalpi_id(kalpi))) in arab_boxes:
             key, kind = f"{code}:arab", "mixed_arab"
         else:
             continue
+        o = official.get((code, AT.kalpi_id(kalpi)))
+        if not o or o["valid"] != valid or o["voters"] != voters:
+            raise SystemExit(f"{OFFICIAL_K25}: station {code}/{kalpi} missing or not as in ballots_K25.json")
         e = acc.setdefault(key, {"code": code, "kind": kind, "elig": 0, "voters": 0, "valid": 0, "stations": 0,
                                  "votes": collections.Counter()})
         e["elig"] += elig; e["voters"] += voters; e["valid"] += valid; e["stations"] += 1
-        for c, v in zip(cols, row[6:]):
-            e["votes"][c] += v
+        e["votes"].update(o["votes"])
 
     entries = []
     for key, e in acc.items():
@@ -193,8 +207,9 @@ def main():
         raam = sum(sh.get(c, 0) for c in RAAM)
         hadash, balad = sh.get("ום", 0), sh.get("ד", 0)
         joint = hadash + balad
-        top = max(((c, s) for c, s in sh.items() if c not in RAAM + JOINT + ["other"]), key=lambda x: x[1],
-                  default=(None, 0))
+        # the largest other list; a tie goes to the list that passed the threshold (ballots_K25.json's columns first)
+        order = [c for c in b25["cols"] if c in sh] + sorted(c for c in sh if c not in b25["cols"])
+        top = max(((c, sh[c]) for c in order if c not in RAAM + JOINT), key=lambda x: x[1], default=(None, 0))
         if top[1] > max(raam, joint):
             leader = "other"
         else:
@@ -263,26 +278,28 @@ def main():
         if k in groups:
             groups[k]["name"] = name
     doc = {
-        "generated": "pipeline/build_arab_day.py from site/data/core.json and site/data/ballots_K25.json "
-                     "(official CEC results of 1.11.2022)",
+        "generated": "pipeline/build_arab_day.py from site/data/core.json, site/data/ballots_K25.json and "
+                     "data/official/k25_expb.csv (official CEC results of 1.11.2022)",
         "note": NOTE_HE,
         "method": ("2022 base of the election-day Arab-society section. Localities as the site classifies them: Arab "
-                   "and Druze localities (sector of core.json; the two Circassian villages left out) and, as one entry "
-                   "per city, the Arab polling stations of mixed cities and Jewish localities (box rule of "
-                   "build_data.py, as live_fetch reads per-station turnout). Turnout = station voters / eligible "
-                   "voters, without double envelopes. Shares are of valid votes; joint22 = Hadash-Ta'al + Balad, "
-                   "which run together in 2026 as the Joint List; leader22 = the larger of raam22 and joint22, or "
-                   "'other' where a single non-Arab list led. Regions are geographic (see build_arab_day.py). The "
-                   "hourly Arab curve of 2022 is built from unofficial estimates (aChord Center, Hebrew University: "
-                   "14:00 17%, 16:00 23%, 20:00 44%; 18:00 30% reported without attribution) and the official final "
-                   "53.2%, with the morning modelled; a projected final from a release at hour h divides turnout so "
-                   "far by the 2022 share of the day's turnout cast by h, with a rough 80% range that is twice the "
-                   "spread of the national curve across 2013-2022. It assumes 2026 keeps the 2022 Arab timing, which "
-                   "is the main uncertainty (a sixth of the 2022 Arab vote came after 20:00). The Druze localities "
-                   "and the Arab stations of mixed cities have no hourly figures of their own and are given the same "
-                   "timing on their own 2022 final, for the same-hour comparison, on_track and the range alike "
-                   "(curve.mixed_arab; curve.section is the whole section, the two weighted by 2022 voters). Turnout "
-                   "only: nothing here is translated into votes or seats. Details: pipeline/arab_turnout.py."),
+                   "and Druze localities (sector of core.json; the two Circassian villages left out) and, as one "
+                   "entry per city, the Arab polling stations of mixed cities and Jewish localities (an Arab-list "
+                   "majority over 2019-2022, the box rule of build_data.py, or in 2022 itself: "
+                   "arab_turnout.arab_boxes). Turnout = station voters / eligible voters, without double envelopes. "
+                   "Shares are of valid votes; joint22 = Hadash-Ta'al + Balad, which run together in 2026 as the "
+                   "Joint List; leader22 = the larger of raam22 and joint22, or 'other' where a single other list "
+                   "led (every list of the official file, top_other22). Regions are geographic (see "
+                   "build_arab_day.py). The hourly Arab curve of 2022 is built from unofficial estimates (aChord "
+                   "Center, Hebrew University: 14:00 17%, 16:00 23%, 20:00 44%; 18:00 30% reported without "
+                   "attribution) and the official final 53.2%, with the morning modelled; a projected final from a "
+                   "release at hour h divides turnout so far by the 2022 share of the day's turnout cast by h, with "
+                   "a rough 80% range that is twice the spread of the national curve across 2013-2022. It assumes "
+                   "2026 keeps the 2022 Arab timing, which is the main uncertainty (a sixth of the 2022 Arab vote "
+                   "came after 20:00). The Druze localities and the Arab stations of mixed cities have no hourly "
+                   "figures of their own and are given the same timing on their own 2022 final, for the same-hour "
+                   "comparison, on_track and the range alike (curve.mixed_arab; curve.section is the whole section, "
+                   "the two weighted by 2022 voters). Turnout only: nothing here is translated into votes or seats. "
+                   "Details: pipeline/arab_turnout.py."),
         "units": {"turnout": "fraction", "shares": "fraction of valid votes", "curve": "percent"},
         "region_names": REGION_NAMES, "kind_names": KIND_NAMES, "group_names": GROUP_NAMES, "group_short": GROUP_SHORT,
         "sub_names": subnames,

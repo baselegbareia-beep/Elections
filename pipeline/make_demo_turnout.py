@@ -22,6 +22,7 @@ import tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import arab_turnout as AT  # noqa: E402
+import registry as R  # noqa: E402
 
 ROOT = AT.ROOT
 OUT = os.path.join(ROOT, "site", "data", "arab_day_demo.json")
@@ -44,6 +45,11 @@ def national_share(curve, h):
     h = max(h, AT.OPEN_H)
     i = next(i for i in range(1, len(hs)) if h <= hs[i])
     return sh[i - 1] + (h - hs[i - 1]) / (hs[i] - hs[i - 1]) * (sh[i] - sh[i - 1])
+
+
+def _ballots(path=AT.BALLOTS_PATH):
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
 
 
 def synthetic_rows(base, at, noise=True, seed=SEED, ballots_path=AT.BALLOTS_PATH):
@@ -92,9 +98,11 @@ def build(base, times=TIMES, csv_dir=None):
 
 
 def check(base):
-    """Unit checks: shares, leaders, a 100% release equals 2022, monotone releases, projections; partial, split,
-    renumbered, absent, blank, duplicate and impossible stations; the same-hour 2022 curve; the history entry; CSV
-    round trip; the official 2022 file and the 2021 file read as releases."""
+    """Unit checks: shares, leaders, the top other list, the mixed cities' Arab stations, a 100% release equals 2022,
+    monotone releases, projections; partial, split, renumbered, absent, blank, duplicate and impossible stations; one
+    basis per locality from release to release (blank stations with registers grown by new ones); a locality above
+    its 2022 final; the same-hour 2022 curve; the history entry; CSV round trip; the official 2022 file and the 2021
+    file read as releases."""
     fails = []
 
     def ok(cond, what):
@@ -125,8 +133,26 @@ def check(base):
     full = at22(synthetic_rows(base, "22:00", noise=False))
     by = {x["key"]: x for x in L}
     ok(len(full["localities"]) == len(L), f"100% release covers every entry ({len(full['localities'])}/{len(L)})")
-    ok(all(x["pace"] == 1.0 and x["coverage"] == 1.0 for x in full["localities"]),
-       "100% release: pace 1.0 and coverage 1.0 everywhere")
+    ok(all(x["pace"] == 1.0 and x["coverage"] == 1.0 for x in full["localities"])
+       and all(x["basis"] == ("stations" if by[x["key"]]["kind"] == "mixed_arab" else "whole")
+               for x in full["localities"]),
+       "100% release: pace 1.0 and coverage 1.0 everywhere, every Arab and Druze locality compared whole")
+    ok(all(x["voters"] == by[x["key"]]["voters22"] for x in full["localities"])
+       and full["kinds"]["mixed_arab"]["voters"] == base["kinds"]["mixed_arab"]["voters22"]
+       and AT.arab_boxes(_ballots()) >= {(5000, 875), (4000, 85), (4000, 301)}
+       and AT.ARAB_LISTS_K25 == tuple(R.ARAB_LISTS["K25"]) and AT.ARAB_BOX_SHARE == R.ARAB_BOX_MIN_SHARE,
+       "mixed cities: the Arab stations of the base and of a release are the same (the box rule or an Arab-list "
+       "majority in 2022: Jaffa's 875, Haifa's 85 and 301 too), with registry.py's lists and threshold")
+    mas = by["4203"]
+
+    def lead(x):        # the first of Ra'am, the Joint List and the top other list, ahead of the second
+        s = sorted([x["raam22"], x["joint22"], x["top_other22"]["share"]])
+        return s[-1] - s[-2]
+    ok(mas["top_other22"]["id"] == "ז" and mas["margin22"] > 0.3
+       and all(x["top_other22"]["share"] > max(x["raam22"], x["joint22"]) for x in L if x["leader22"] == "other")
+       and all(abs(x["margin22"] - lead(x)) < 2e-4 for x in L if x["top_other22"]),
+       f"top other list from every list of the official file: Mas'ade {mas['top_other22']['name']} "
+       f"{mas['top_other22']['share']:.1%} (not the Likud's 12.9%), margin {mas['margin22']:.1%}")
     ok(all(x["voters"] == by[x["key"]]["voters22"] and x["elig"] == by[x["key"]]["elig22"]
            and x["turnout"] == by[x["key"]]["turnout22"] for x in full["localities"]),
        "100% release equals the 2022 finals")
@@ -185,7 +211,8 @@ def check(base):
     last = AT.kalpi_base(naz[-1]["kalpi"])
     gone = [r for r in rows if not (r["code"] == 7300 and AT.kalpi_base(r["kalpi"]) == last)]
     ns = loc(at22(gone), "7300")
-    ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0, "a locality with a station missing is compared station by station")
+    ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0 and ns["basis"] == "stations",
+       "a locality with a station missing from the file is compared station by station")
     moved = [{**r, "elig": r["elig"] * 3} if r["code"] == 7300 and r is naz[0] else r for r in gone]
     sec = at22(moved)
     ok(loc(sec, "7300")["pace"] == 1.0 and sec["checks"].get("register changed") == 1,
@@ -194,8 +221,9 @@ def check(base):
              for r in rows]
     sec = at22(blank)
     ns = loc(sec, "7300")
-    ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0 and sec["checks"].get("no figure", 0) >= 1,
-       "a station without a figure (blank) is left out, not read as zero voters")
+    ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0 and sec["checks"].get("no figure", 0) >= 1
+       and ns["basis"] == "whole-minus-blank",
+       "a station without a figure (blank) is left out, not read as zero voters: the whole locality less its station")
     # a station split under its own number (N -> N and a new N.1) in a locality compared station by station
     idx = AT._index(base)
     b1 = next(b for b in sorted(idx["groups"]["7300"]) if len(idx["subs"][(7300, b)]) == 1 and b != last)
@@ -263,6 +291,96 @@ def check(base):
        "a row with more voters than eligible voters is dropped")
     ok(at22(rows, national_turnout=64.0)["national"] == 0.64,
        "national turnout accepted in percent")
+
+    # one definition per locality from release to release: whole, whole less its blank stations, station by station
+    rng = random.Random(7)
+    some = [{**r, "voters": ""} if rng.random() < 0.3 else r for r in rows]
+    sec = at22(some)
+    std = [x for x in sec["localities"] if by[x["key"]]["kind"] != "mixed_arab"]
+    ok(all(x["pace"] == 1.0 and x["basis"] in ("whole", "whole-minus-blank") for x in std)
+       and sum(x["basis"] == "whole-minus-blank" for x in std) > 100 and sec["total"]["pace"] == 1.0
+       and abs(sec["total"]["coverage"] - sec["total"]["voters"] / t["voters22"]) < 0.01,
+       f"100% release with 30% of the stations blank: every Arab and Druze locality on its whole less the blank "
+       f"stations' 2022 counterparts, pace 1.0 ({sum(x['basis'] == 'whole-minus-blank' for x in std)} of {len(std)} "
+       f"localities), coverage {sec['total']['coverage']}")
+    two = next(b for b in sorted(idx["groups"]["7300"]) if len(idx["subs"][(7300, b)]) >= 2)
+    k2 = idx["subs"][(7300, two)][-1]
+    sec = at22([{**r, "voters": ""} if r["code"] == 7300 and AT.kalpi_id(r["kalpi"]) == k2 else r for r in rows])
+    ns, v2 = loc(sec, "7300"), idx["st22"][(7300, k2)][0]
+    ok(ns["basis"] == "whole-minus-blank" and ns["pace"] == 1.0
+       and ns["coverage"] == round((x7300["voters22"] - v2) / x7300["voters22"], 3)
+       and not sec["checks"].get("unplaced station"),
+       f"blank sub-station {k2} of a group that kept its 2022 sub-stations: only its own 2022 voters ({v2}) leave the "
+       f"comparison (coverage {ns['coverage']})")
+    sec = at22(split_n(rows, blank_new=True))
+    ns, v1 = loc(sec, "7300"), sum(idx["st22"][(7300, k)][0] for k in idx["subs"][(7300, b1)])
+    ok(ns["basis"] == "whole-minus-blank" and ns["pace"] == 1.0 and sec["checks"].get("unplaced station") == 1
+       and ns["coverage"] == round((x7300["voters22"] - v1) / x7300["voters22"], 3),
+       f"station {b1} split, the new {b1}.1 blank: the whole group {b1} leaves both sides, the rest whole")
+    ns = loc(at22(split_n(rows)), "7300")
+    ok(ns["basis"] == "whole" and ns["pace"] == 1.0 and ns["coverage"] == 1.0, f"the same with {b1}.1 reported: whole")
+    # the register grew: new stations under numbers not used in 2022 in the ten largest Arab localities, 5% more
+    # voters; then one old station of each without a figure. Station by station would drop the new stations
+    big = [x for x in L if x["watch"]]
+    r18 = synthetic_rows(base, "18:00", noise=False)
+    grown = []
+    for x in big:
+        n = max(1, round(0.05 * x["stations22"]))
+        v = round(0.05 * sum(r["voters"] for r in r18 if r["code"] == x["code"]) / n)
+        grown += [{"code": x["code"], "kalpi": str(900 + i), "elig": 600, "voters": v} for i in range(n)]
+    lone = {}
+    for r in r18:
+        if r["code"] in {x["code"] for x in big} and r["code"] not in lone:
+            lone[r["code"]] = r["kalpi"]
+    f18 = AT.arab_section(r18 + grown, base, released="18:00")
+    b18 = AT.arab_section([{**r, "voters": ""} if lone.get(r["code"]) == r["kalpi"] else r for r in r18] + grown,
+                          base, released="18:00")
+    F, B = ({x["key"]: x for x in s["localities"]} for s in (f18, b18))
+    gap = max(abs(F[x["key"]]["pace"] - B[x["key"]]["pace"]) for x in big)
+    ggap = max(abs(f18["groups"][g]["pace"] - b18["groups"][g]["pace"]) for g in ("raam", "joint"))
+    f18h = AT.curve_at(base["curve"], 18.0)[1]       # the 2022 share of the day cast by 18:00
+    ok(all(F[x["key"]]["basis"] == "whole" and B[x["key"]]["basis"] == "whole-minus-blank" for x in big)
+       and gap < 0.002 and ggap < 0.002 and all(B[x["key"]]["pace"] > 1.04 * f18h for x in big)
+       and abs(f18["total"]["projected_final"]["mid"] - b18["total"]["projected_final"]["mid"]) < 0.003,
+       f"one station blank in each of the ten largest localities, whose registers grew: the same pace as with "
+       f"every station (largest gap {gap:.4f}; Ra'am-led and Joint-led groups {ggap:.4f}), new stations counted")
+    # a locality above its 2022 final: Majdal Shams voted 23% in 2022
+    up = [{**r, "voters": min(r["elig"], round(2.2 * r["voters"]))} if r["code"] == 4201 else r for r in rows]
+    sec = at22(up)
+    g = loc(sec, "4201")
+    ok(g["basis"] == "whole" and g["pace"] > 2.0 and g["coverage"] == 1.0
+       and sec["kinds"]["druze"]["coverage"] == 1.0 and not sec["checks"].get("implausible pace"),
+       f"a locality at 2.2 times its 2022 voters (Majdal Shams, 23% in 2022) with eligible counts: compared whole, "
+       f"pace {g['pace']}, not dropped")
+    sec = at22([{**r, "elig": None} if r["code"] == 4201 else r for r in up])
+    g = loc(sec, "4201")
+    ok(g["basis"] == "stations" and g["pace"] is None and sec["checks"].get("implausible pace") == 2,
+       "the same without eligible counts: no register to check, the 2x cap holds station by station")
+    x4201 = by["4201"]
+    new2 = [{"code": 4201, "kalpi": str(900 + i), "elig": round(0.35 * x4201["elig22"]),
+             "voters": round(0.175 * x4201["elig22"])} for i in range(2)]
+    sec = at22(up + new2)
+    g = loc(sec, "4201")
+    ok(g["basis"] == "whole" and g["pace"] > 3 and g["coverage"] == 1.0 and g["elig"] > 1.6 * x4201["elig22"]
+       and not sec["checks"].get("register changed") and not sec["checks"].get("implausible pace"),
+       f"the same with its register 1.7 times 2022's in two new stations (as residents take citizenship): still "
+       f"whole, pace {g['pace']}")
+    blank1 = [{**r, "voters": ""} if r["code"] == 4201 and AT.kalpi_base(r["kalpi"]) == 1 else r for r in up]
+    gb = loc(at22(blank1 + new2), "4201")
+    ok(gb["basis"] == "whole-minus-blank" and abs(gb["pace"] - g["pace"]) < 0.01 and gb["coverage"] < 0.6,
+       f"... and with one of its two 2022 stations blank: the whole less that station, the new stations in "
+       f"proportion, pace {gb['pace']} (counted in full against the one station left: "
+       f"{sum(r['voters'] or 0 for r in blank1 + new2 if r['code'] == 4201) / idx['st22'][(4201, '2')][0]:.2f})")
+    allold = [{**r, "voters": ""} if r["code"] == 4201 else r for r in rows] + new2
+    g = loc(at22(allold), "4201")
+    ok(g["pace"] is None and g["coverage"] == 0.0, "only new stations reported: nothing to compare")
+    worst = []
+    for d in demo + [f18, b18, at22(up), at22(some)]:
+        for m in [d["total"], *d["groups"].values(), *d["regions"].values(), *d["kinds"].values()]:
+            p = m["projected_final"]
+            if p and not ((m["turnout"] or 0) <= p["lo"] + 1e-9 and p["lo"] <= p["mid"] <= p["hi"] <= 1.0):
+                worst.append((d["as_of"], m.get("localities"), p))
+    ok(not worst, f"projected_final: turnout so far <= lo <= mid <= hi <= 100% everywhere {worst[:3]}")
 
     with tempfile.TemporaryDirectory() as d:
         r14 = synthetic_rows(base, "14:00")
@@ -346,8 +464,14 @@ def check(base):
     ok(size < 8000 and h["total"]["turnout"] == sec["total"]["turnout"]
        and h["total"]["curve22"] == sec["total"]["curve22"]
        and h["kinds"] == {k: {"turnout": v["turnout"], "pace": v["pace"]} for k, v in sec["kinds"].items()}
-       and h["localities"] == {x["key"]: [x["turnout"], x["pace"]] for x in sec["localities"]},
-       f"history entry: total, groups, regions, kinds and every locality as [turnout, pace], {size:,} bytes")
+       and h["localities"] == {x["key"]: [x["turnout"], x["pace"]] for x in sec["localities"]}
+       and h["basis"] == {"stations": [x["key"] for x in sec["localities"] if by[x["key"]]["kind"] == "mixed_arab"]},
+       f"history entry: total, groups, regions, kinds and every locality as [turnout, pace], the basis of those not "
+       f"compared whole, {size:,} bytes")
+    hb = AT.history_entry(b18)
+    ok(sorted(hb["basis"]) == ["stations", "whole-minus-blank"]
+       and sorted(hb["basis"]["whole-minus-blank"]) == sorted(x["key"] for x in big),
+       f"history entry of the release with blank stations: basis {[(k, len(v)) for k, v in hb['basis'].items()]}")
     print("FAILED: " + "; ".join(fails) if fails else "all arab_turnout checks passed")
     return not fails
 

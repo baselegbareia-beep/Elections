@@ -9,25 +9,42 @@ seats or threshold figures (owner's decision of 10.10.2026, ARCH_V3 §2). Standa
 
 Measures, for a locality or a group of localities (fractions):
   turnout   voters so far / eligible voters, over the release's stations that carry an eligible count;
-  pace      voters so far / the same stations' final voters in 2022. When the release holds the whole of an
-            Arab or Druze locality, the whole locality is compared, new, split and renumbered stations included
-            (the CEC adds stations as the register grows). Whole means: no station without a figure, and every
-            2022 station group of the locality (12, 12.1 and 12.2 share the number 12) in the release with at
-            least as many stations as in 2022 - a station absent from the file is not hidden by new ones. Only
-            where the stations were renumbered (fewer than half of the 2022 numbers in the release, RENUMBERED)
-            do the counts decide instead: as many stations as in 2022, or the whole 2022 register. Otherwise station
-            group by station group: a station by its own number; a group whose 2022 stations all have a figure
-            and that gained sub-stations (a station split under its number, 12 -> 12 and 12.1) as one block,
-            all of it now against all of it in 2022 (checks "split station"); in a group renumbered or merged,
-            the sub-stations left on both sides as one block. A matched pair whose register grew by more than
-            half or shrank by more than a third is another station ("register changed"). A station that
-            cannot be placed is left out of pace and counted: a number not used in 2022 ("new station"), or
-            the stations of a group that gained sub-stations while one of its stations has no figure yet
-            ("unplaced station");
+  pace      voters so far / the same stations' final voters in 2022, on one of three bases (each locality's
+            `basis`), so that a locality keeps one definition from release to release while its stations report:
+            "whole": the release holds the whole of an Arab or Druze locality, every station with a figure, and
+            the whole locality is compared, new, split and renumbered stations included (the CEC adds stations
+            as the register grows). Whole means every 2022 station group of the locality (12, 12.1 and 12.2
+            share the number 12) in the release with at least as many stations as in 2022 - a station absent
+            from the file is not hidden by new ones. Only where the stations were renumbered (fewer than half of
+            the 2022 numbers in the release, RENUMBERED) do the counts decide instead: as many stations as in
+            2022, or the whole 2022 register.
+            "whole-minus-blank": the same with the 2022 numbering in place, but some stations listed without a
+            figure yet: the voters reported so far against the locality's 2022 voters less the 2022 counterparts
+            of the blank stations - the station itself, or the whole station group where the group gained or
+            changed sub-stations (its reported stations then left out too, "unplaced station"). The stations
+            under numbers not used in 2022 count in proportion to the share of 2022 voters still compared (they
+            hold the register's growth across the whole locality): pace = the 2022 stations' voters / their 2022
+            voters + the new stations' voters / the locality's 2022 voters, which is the whole locality's pace
+            if the blank stations keep the pace of the rest, and "whole" itself when none is blank. A blank
+            station under a new number has no counterpart: its voters are missing until it reports.
+            "stations": otherwise - a 2022 station group absent from the file, a renumbered locality not yet
+            whole, the Arab stations of mixed cities - station group by station group: a station by its own
+            number; a group whose 2022 stations all have a figure and that gained sub-stations (a station split
+            under its number, 12 -> 12 and 12.1) as one block, all of it now against all of it in 2022 (checks
+            "split station"); in a group renumbered or merged, the sub-stations left on both sides as one block.
+            A matched pair whose register grew by more than half or shrank by more than a third is another
+            station ("register changed"). A station that cannot be placed is left out of pace and counted: a
+            number not used in 2022 ("new station"), or the stations of a group that gained sub-stations while
+            one of its stations has no figure yet ("unplaced station").
+            A whole or whole-minus-blank comparison needs a turnout: with an eligible count on every compared
+            station, at most 1.02 voters per eligible voter, with no cap on pace (where 2022 turnout was low, as
+            in the Golan villages at 15-25% or Kisra-Sumei after its 2022 boycott, 2026 can be more than twice
+            2022) or on the register's growth (the Golan villages' grew 1.4-1.7 times from 2019-2021 to 2022);
+            without eligible counts, a pace of at most MAX_PACE. A locality that fails is compared on "stations";
   coverage  share of the 2022 voters of the locality (group) whose stations the comparison covers;
   turnout22 the 2022 final turnout of those same stations;
   curve22   2022 at the same hour on those same stations: turnout22 x f(h) (from 10:00), so the total, which
-            holds the Arab stations of mixed cities (2022 final 45.9%) beside the Arab and Druze localities
+            holds the Arab stations of mixed cities (2022 final 46%) beside the Arab and Druze localities
             (53.2%), is compared like with like;
   on_track  pace / f(h), f(h) = the 2022 Arab share of the day's turnout cast by hour h: 1.0 = on course
             for as many voters as in 2022 (the register grows about 2% a year, so 1.0 is a lower turnout);
@@ -53,20 +70,24 @@ Uncertainty: mid = turnout / f(h) assumes 2026 keeps the 2022 Arab timing. Timin
   reached. A judgement, not a calibrated interval: there is one election of Arab hourly data. Nothing is
   projected before 10:00. A release without eligible counts projects pace x the 2022 final turnout of the
   same stations (basis "pace", i.e. the 2022 register).
-Limits: a mixed city's stations are classified by their 2022 number (the box rule of build_data.py): a new
-  station there is not counted (checks.unclassified) and a renumbered one takes the class of its new number.
-  The 2021 file read as a release, a hard case (its stations numbered their own way): 82 of 128 Arab
-  localities compared whole, the rest station by station; pace of the Arab localities 0.808 against 0.796
-  true, of the Druze localities 0.844 against 0.849 without Kisra-Sumei (a local boycott in 2022 left two of
-  its stations with 37 and 67 voters, beyond the pace cap; with it 0.857 against 0.901); the Arab stations of
-  mixed cities off by 3-40% per city, 8% of the section. Where the stations were renumbered, a file that
-  lacks a few stations but gained new ones still passes as whole, with pace understated by the stations
-  lacking. A row with more voters than eligible voters (beyond 2%) is dropped and a station group whose
-  pace exceeds 2.0 is left out of pace, as in live_fetch.station_turnout. A station with a blank figure or
-  0 voters is taken as not reported yet and left out (no station had 0 voters in 2022); a second row for
-  the same station is dropped; all are counted in checks (rows, stations; unreadable, duplicate row, no
-  figure, zero voters, more voters than eligible, unclassified, new station, split station, unplaced
-  station, register changed, implausible pace).
+Limits: a mixed city's stations are classified by their 2022 number (arab_boxes: the box rule of
+  build_data.py, or an Arab-list majority in 2022): a new station there is not counted (checks.unclassified)
+  and a renumbered one takes the class of its new number. A locality's basis can change between releases (a
+  station group missing from one file, present in the next): each locality carries its `basis`, and
+  history_entry keeps it, so that a change of pace is read only between releases on the same basis.
+  The 2021 file read as a release, a hard case (its stations numbered their own way): 81 of 128 Arab and 6 of
+  16 Druze localities compared whole, the rest station by station; pace of the Arab localities 0.808 against
+  0.796 true, of the Druze localities 0.844 against 0.849 without Kisra-Sumei (renumbered and short of its
+  2022 stations, so station by station, where a local boycott in 2022 left two of its stations with 37 and
+  67 voters, beyond the station pace cap; with it 0.857 against 0.901); the Arab stations of mixed cities off
+  by up to 35% per city, 7% of the section. Where the stations were renumbered, a file that lacks a few
+  stations but gained new ones still passes as whole, with pace understated by the stations lacking. A row
+  with more voters than eligible voters (beyond 2%) is dropped, as in live_fetch.station_turnout, and its
+  station taken as without a figure; station by station, a station group whose pace exceeds 2.0 is left out
+  of pace. A station with a blank figure or 0 voters is taken as not reported yet and left out (no station
+  had 0 voters in 2022); a second row for the same station is dropped; all are counted in checks (rows, stations;
+  unreadable, duplicate row, no figure, zero voters, more voters than eligible, unclassified, new station,
+  split station, unplaced station, register changed, implausible pace).
 `released` is the time the figures refer to (the CEC's cutoff, e.g. "14:00"), not the download time: 45
   minutes off at 14:00 moves the projection by about a tenth. `as_of` overrides it for the curve. A time
   after 22:00 (a file first seen after the polls closed) is read as 22:00, and as_of says so.
@@ -91,9 +112,13 @@ OPEN_H = 7.0             # polls open; the curve starts from 0 here
 CLOSE_H = 22.0           # polls close; a later release time is read as 22:00
 PROJECT_FROM = 10.0      # earlier releases are not projected: too little of the day has passed
 ELIG_SPREAD = 1.5        # a matched station whose register changed more than this (either way) is another station
-MAX_PACE = 2.0           # a station group above this is a renumbered or merged station, not a turnout
+MAX_PACE = 2.0           # a station group above this is a renumbered or merged station, not a turnout (and a
+                         # whole locality without eligible counts, which cannot be checked against its register)
+MAX_TURNOUT = 1.02       # more voters per eligible voter than this: not a turnout (a row is dropped, as in live_fetch)
 RENUMBERED = 0.5         # a locality with less than this share of its 2022 station numbers in a release was
                          # renumbered: station counts decide whether it is whole (0: never; the numbers alone)
+ARAB_LISTS_K25 = ("עם", "ום", "ד")   # registry.ARAB_LISTS["K25"]: Ra'am, Hadash-Ta'al, Balad
+ARAB_BOX_SHARE = 0.5     # registry.ARAB_BOX_MIN_SHARE: a mixed city's station with this Arab-list share in 2022 is Arab
 _IDX = {}
 try:
     from zoneinfo import ZoneInfo
@@ -148,6 +173,24 @@ def load_base(path=BASE_PATH):
         return json.load(f)
 
 
+def arab_boxes(b25):
+    """The station groups (locality code, base number) of ballots_K25.json that the section takes as Arab where the
+    locality itself is not Arab or Druze: the box rule of build_data.py (sector code 1: a median Arab-list share of at
+    least half over 2019-2022) or an Arab-list majority in 2022 itself. The 2026 stations are numbered as in 2022,
+    while the median also reads the 2019-2021 stations that carried the number before the 2021 renumbering; by it
+    alone, Jaffa's station 875 (66% Arab lists in 2022, 15-29% under the number before) and two of Haifa's were
+    out. pipeline/build_arab_day.py builds the base's mixed-city entries from the same groups."""
+    cols = b25["cols"]
+    ia = [cols.index(c) for c in ARAB_LISTS_K25 if c in cols]
+    acc = collections.defaultdict(lambda: [0, 0, False])
+    for row in b25["rows"]:
+        a = acc[(row[0], kalpi_base(kalpi_id(row[1])))]
+        a[0] += sum(row[6 + i] for i in ia)
+        a[1] += row[5]
+        a[2] = a[2] or row[2] % 10 == 1
+    return {k for k, (ar, valid, box_rule) in acc.items() if box_rule or (valid and ar / valid >= ARAB_BOX_SHARE)}
+
+
 def _index(base, ballots_path=BALLOTS_PATH):
     """The 2022 stations of the section from ballots_K25.json: per station (locality, number) its final voters,
     eligible voters and section key, the sub-stations of each station group, and the stations of mixed cities."""
@@ -159,6 +202,7 @@ def _index(base, ballots_path=BALLOTS_PATH):
     mixed = {x["code"] for x in base["localities"] if x["kind"] == "mixed_arab"}
     with open(ballots_path, encoding="utf-8") as f:
         b25 = json.load(f)
+    arab = arab_boxes(b25)
     st22, cls, subs, known = {}, {}, collections.defaultdict(list), set()
     for row in b25["rows"]:
         code, kalpi, sc, elig, voters = row[0], kalpi_id(row[1]), row[2], row[3], row[4]
@@ -167,7 +211,7 @@ def _index(base, ballots_path=BALLOTS_PATH):
             key = str(code)
         elif code in mixed:
             known.add((code, b))
-            if sc % 10 != 1:          # a mixed city's group is Arab or not as a whole (build_data box rule)
+            if (code, b) not in arab:     # a mixed city's group is Arab or not as a whole (arab_boxes)
                 continue
             key = f"{code}:arab"
         else:
@@ -191,19 +235,96 @@ def _block(rows, olds):
             sum(x[0] for x in olds), sum(x[1] for x in olds))
 
 
-def _whole(code, key, stations, idx, stations22, elig22):
-    """True when the release holds the whole locality, every station with a figure (`stations`: its stations with
-    one; the caller checks that none is without). Where the 2022 numbering still holds (at least RENUMBERED, half,
-    of the locality's 2022 station numbers are in the release), every 2022 station group (12, 12.1 and 12.2 share
-    the number 12) must be there with at least as many stations as in 2022: its sub-stations by their own numbers,
-    or renumbered or split under the same number. Where the stations were renumbered (fewer than half of the 2022
+def _whole(x, a, idx):
+    """How an Arab or Druze locality is compared when the release holds all of it: "whole", "whole-minus-blank" or
+    None (station by station). `a`: its stations with a figure (a["stations"], (number, voters, eligible)) and the
+    numbers of those without one (a["blank"]). Where the 2022 numbering still holds (at least RENUMBERED, half, of
+    the locality's 2022 station numbers are in the release, blank stations included), every 2022 station group (12,
+    12.1 and 12.2 share the number 12) must be in the release with at least as many stations as in 2022, its
+    sub-stations by their own numbers or renumbered or split under the same number; "whole" when every station has a
+    figure, "whole-minus-blank" when some are blank. Where the stations were renumbered (fewer than half of the 2022
     numbers here; in the 2021 file, 24 of 144 Arab and Druze localities), the numbers say nothing and the counts
-    decide: as many stations as in 2022, or the whole 2022 register."""
-    groups = idx["groups"].get(key, ())
-    have = collections.Counter(kalpi_base(k) for k, _, _ in stations)
-    if sum(1 for b in groups if have[b]) >= RENUMBERED * len(groups):
-        return all(have[b] >= len(idx["subs"][(code, b)]) for b in groups)
-    return len(stations) >= stations22 or sum(el or 0 for _, _, el in stations) >= elig22
+    decide, with every station reported: as many stations as in 2022, or the whole 2022 register."""
+    code, groups = x["code"], idx["groups"].get(x["key"], ())
+    listed = collections.Counter(kalpi_base(k) for k, _, _ in a["stations"])
+    listed.update(kalpi_base(k) for k in a["blank"])
+    if sum(1 for b in groups if listed[b]) >= RENUMBERED * len(groups):
+        if all(listed[b] >= len(idx["subs"][(code, b)]) for b in groups):
+            return "whole-minus-blank" if a["blank"] else "whole"
+        return None
+    if a["blank"]:
+        return None
+    st = a["stations"]
+    return "whole" if len(st) >= x["stations22"] or sum(el or 0 for _, _, el in st) >= x["elig22"] else None
+
+
+def _minus_blank(x, a, idx):
+    """(voters, eligible or None, voters now for pace, 2022 voters, 2022 eligible, stations left out) of a locality
+    compared whole minus its blank stations: every reported voter against the locality's 2022 voters less the 2022
+    counterparts of its blank stations. The counterpart is the station of the same number where its group kept its
+    2022 sub-stations; where the group gained or changed sub-stations (12 -> 12 and 12.1, one blank) the blank one
+    has no counterpart of its own, so the whole group leaves both sides (its reported stations counted as "unplaced
+    station"). The stations under numbers not used in 2022 (the register's growth, drawn from the whole locality)
+    count in proportion to the share of the 2022 voters still compared, so that the pace is the whole locality's if
+    the blank stations keep the pace of the rest: pace = old stations' voters / their 2022 voters + new stations'
+    voters / the locality's 2022 voters, "whole" being the case with no blank station. A blank station under a new
+    number has no counterpart and leaves nothing; its voters are missing until it reports."""
+    code, groups = x["code"], idx["groups"].get(x["key"], ())
+    out = set()                                  # station groups that leave both sides
+    then, e22 = x["voters22"], x["elig22"]
+    by_b = collections.defaultdict(set)
+    for k, _, _ in a["stations"]:
+        by_b[kalpi_base(k)].add(k)
+    for k in a["blank"]:
+        by_b[kalpi_base(k)].add(k)
+    for k in sorted(a["blank"], key=str):
+        b = kalpi_base(k)
+        subs = idx["subs"].get((code, b))
+        if not subs or b in out:
+            continue
+        if by_b[b] <= set(subs):
+            v22, el22 = idx["st22"][(code, k)]
+            then, e22 = then - v22, e22 - el22
+        else:
+            out.add(b)
+            then -= sum(idx["st22"][(code, j)][0] for j in subs)
+            e22 -= sum(idx["st22"][(code, j)][1] for j in subs)
+    kept = [r for r in a["stations"] if kalpi_base(r[0]) not in out]
+    el = [r[2] for r in kept]
+    old = sum(r[1] for r in kept if kalpi_base(r[0]) in groups)
+    new = sum(r[1] for r in kept if kalpi_base(r[0]) not in groups)
+    now = old + new * then / x["voters22"] if x["voters22"] else old + new
+    return (old + new, sum(el) if el and all(el) else None, now, then, e22, len(a["stations"]) - len(kept))
+
+
+def _plausible(voters, elig, now, then):
+    """A whole-locality comparison is kept when it is a turnout: with an eligible count on every compared station, at
+    most MAX_TURNOUT voters per eligible voter, whatever the pace (where 2022 turnout was low, 2026 can be more than
+    twice 2022) and however much the register grew (the Golan villages' grew 1.4-1.7 times from 2019-2021 to 2022);
+    without one, a pace of at most MAX_PACE."""
+    if not then:
+        return False
+    if elig:
+        return voters <= MAX_TURNOUT * elig
+    return now <= MAX_PACE * then
+
+
+def _locality(x, a, idx, checks):
+    """(voters now for pace, 2022 voters, 2022 eligible, basis) of one entry of the base with stations in the release:
+    "whole" or "whole-minus-blank" when the release holds all of an Arab or Druze locality and its figures are a
+    turnout (_plausible), else "stations" (_compare; always for the Arab stations of mixed cities)."""
+    basis = _whole(x, a, idx) if x["kind"] != "mixed_arab" else None
+    if basis == "whole":
+        el = [r[2] for r in a["stations"]]
+        voters, elig, now, then, e22, left = (a["voters"], sum(el) if all(el) else None, a["voters"],
+                                              x["voters22"], x["elig22"], 0)
+    elif basis:
+        voters, elig, now, then, e22, left = _minus_blank(x, a, idx)
+    if basis and _plausible(voters, elig, now, then):
+        if left:
+            checks["unplaced station"] += left
+        return now, then, e22, basis
+    return (*_compare(x["code"], a["stations"], a["blank"], idx, checks), "stations")
 
 
 def _compare(code, stations, blank, idx, checks):
@@ -399,16 +520,11 @@ def arab_section(rows, base, national_turnout=None, released=None, as_of=None):
             continue
         s = {k: a[k] for k in ("voters", "voters_e", "elig")}
         s["stations"] = len(a["stations"])
-        whole = (x["kind"] != "mixed_arab" and not a["blank"]
-                 and _whole(x["code"], x["key"], a["stations"], idx, x["stations22"], x["elig22"]))
-        if whole and a["voters"] <= MAX_PACE * x["voters22"]:
-            # every 2022 station of the locality is here with a figure, and none without one: the locality is
-            # compared as a whole, new, split and renumbered stations included
-            s.update(now=a["voters"], then=x["voters22"], e22=x["elig22"])
-        else:
-            s["now"], s["then"], s["e22"] = _compare(x["code"], a["stations"], a["blank"], idx, checks)
+        # one definition per locality from release to release: the whole locality, the whole less its blank
+        # stations, or station by station (see the module docstring); the groups, regions, kinds and total sum them
+        s["now"], s["then"], s["e22"], basis = _locality(x, a, idx, checks)
         s["v22"] = x["voters22"]
-        locs.append({"key": x["key"], **_measures(s, h, curve, full=False)})
+        locs.append({"key": x["key"], **_measures(s, h, curve, full=False), "basis": basis})
         for t in (sums["groups"][x["leader22"]], sums["regions"][x["region"]], sums["kinds"][x["kind"]], total):
             for k in ("voters", "voters_e", "elig", "stations", "now", "then", "e22"):
                 t[k] += s[k]
@@ -428,17 +544,25 @@ def arab_section(rows, base, national_turnout=None, released=None, as_of=None):
 def history_entry(sec):
     """A compact record of one release for turnout.json["arab_history"]: the time, the national turnout, the total
     (turnout, pace, curve22, projected_final), turnout and pace by group, region and kind ({key: {turnout, pace}};
-    the page's Druze panel reads kinds), and every reported locality as {key: [turnout, pace]} (the page's change
-    since the previous release). live_fetch.history_entry builds the same "kinds" and "localities"."""
+    the page's Druze panel reads kinds), every reported locality as {key: [turnout, pace]} (the page's change
+    since the previous release) and "basis": {basis: [key, ...]} for the reported localities not compared "whole"
+    ("whole-minus-blank", "stations"; a reported locality in neither list was compared whole), so that a change of
+    pace between two releases is read only where the basis is the same. live_fetch.history_entry builds the same
+    "kinds" and "localities" and keeps "basis"."""
     def pick(m):
         return {"turnout": m["turnout"], "pace": m["pace"]}
+    bases = collections.defaultdict(list)
+    for x in sec["localities"]:
+        if x.get("basis", "whole") != "whole":
+            bases[x["basis"]].append(str(x["key"]))
     return {"released": sec["released"], "as_of": sec["as_of"], "national": sec["national"],
             "total": {**pick(sec["total"]), "curve22": sec["total"].get("curve22"),
                       "projected_final": sec["total"]["projected_final"]},
             "groups": {k: pick(v) for k, v in sec["groups"].items()},
             "regions": {k: pick(v) for k, v in sec["regions"].items()},
             "kinds": {k: pick(v) for k, v in sec["kinds"].items()},
-            "localities": {str(x["key"]): [x["turnout"], x["pace"]] for x in sec["localities"]}}
+            "localities": {str(x["key"]): [x["turnout"], x["pace"]] for x in sec["localities"]},
+            "basis": dict(sorted(bases.items()))}
 
 
 def read_station_csv(data, column_aliases=None):
