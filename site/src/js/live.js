@@ -7,7 +7,8 @@
 const SECTOR_NAME = { arab: 'יישובים ערביים', druze: 'יישובים דרוזיים', mixed: 'ערים מעורבות', haredi: 'יישובים חרדיים', jewish: 'שאר היישובים' };
 // The daytime release is classified box by box (live_fetch.station_sector: Haredi boxes, Arab boxes in mixed
 // cities and Jewish localities), the night projection locality by locality, so the two tables need their own labels.
-const DAY_SECTOR_NAME = { arab: 'יישובים ערביים', druze: 'יישובים דרוזיים', mixed: 'קלפיות ערביות בערים מעורבות וביישובים יהודיים', haredi: 'קלפיות חרדיות', jewish: 'שאר הקלפיות' };
+// The day's Druze sector also holds the two Circassian villages, which the Arab section's Druze panel leaves out.
+const DAY_SECTOR_NAME = { arab: 'יישובים ערביים', druze: 'יישובים דרוזיים וצ׳רקסיים', mixed: 'קלפיות ערביות בערים מעורבות וביישובים יהודיים', haredi: 'קלפיות חרדיות', jewish: 'שאר הקלפיות' };
 const SECTOR_ORDER = ['jewish', 'haredi', 'mixed', 'druze', 'arab'];
 const LIVE_POLL_MS = 60000;
 S.liveIdx = null; S.livePlay = null;
@@ -89,16 +90,12 @@ async function renderLive() {
   const waiting = demo && inElectionWindow();   // election day before the first results file: no replay
   if (demo && (S.liveIdx == null || S.liveIdx >= R0.frames.length)) S.liveIdx = Math.min(R0.simulated_order ? 5 : 6, R0.frames.length - 1);
   const exit26 = waiting && S.liveExit && (S.liveExit.polls || []).length && !exitHidden() ? exitTable(S.liveExit, null) : '';
-  root.innerHTML = `
-  <div class="section-head"><div>
-    <span class="eyebrow">יום הבחירות · יום שלישי, 27 באוקטובר 2026 · הקלפיות פתוחות 07:00–22:00</span>
-    <h2>יום הבחירות, בזמן אמת</h2>
-    <p>במהלך היום: שיעור ההצבעה הרשמי של ועדת הבחירות, מול אותה שעה בבחירות הקודמות, ולראשונה גם לפי קלפי. מ-22:00: ספירת הקולות קלפי אחר קלפי, ותחזית לסיום הספירה שמשווה כל יישוב שנספר לתוצאה שלו ב-2022. התחזית אינה תוצאה רשמית.</p>
-  </div></div>
-  <p class="lv-notes" id="lv-notes" hidden></p>
-  ${dayMarkup()}
-  <h2 class="lv-h2">ליל הבחירות: ספירת הקולות</h2>
-  ${waiting ? `<div class="card c12 lv-wait"><h3>${!pollsClosed() ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
+  // the sections follow the clock: the day's turnout first while the polls are open, the count first once they close
+  // (the Arab section's long table and map sit in the day section and must not push the count down on the night)
+  const closed = pollsClosed();
+  S.liveNightFirst = closed;
+  const night = `<h2 class="lv-h2" id="lv-count">ליל הבחירות: ספירת הקולות</h2>
+  ${waiting ? `<div class="card c12 lv-wait"><h3>${!closed ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
     <p class="sub">ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. מדגמי הטלוויזיה מתפרסמים ב-22:00. ב-2021 הגרסה הראשונה של קובץ הקלפיות הרשמי שהכילה נתונים הופיעה ב-01:01, כשלוש שעות אחרי סגירת הקלפיות (הגרסה שלפניה, מ-23:37, הייתה ריקה); כמחצית הקולות נספרו עד 04:00–05:00 וכ-97% עד שעות הבוקר המאוחרות. המעטפות הכפולות נספרות מהלילה שאחרי, והתוצאה הסופית מתפרסמת ביום חמישי.</p></div>
     ${exit26 ? `<div class="card c12" id="lv-exit26"><h3>המדגמים של 22:00</h3>
     <p class="sub">המדגמים של ערוצי הטלוויזיה כפי שפורסמו. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה: ב-2021 וב-2022 הזיזו המדגמים 5–8 מנדטים בין רשימות וטעו בגוש ב-1–3 מנדטים. התחזית מהספירה תופיע כשיגיע הקובץ הראשון של ועדת הבחירות.</p>
@@ -112,7 +109,7 @@ async function renderLive() {
       <span class="live-ctl"><button type="button" class="slip" id="lv-play" aria-label="הפעלה">▶ הפעלה</button>
       <input type="range" id="lv-step" dir="ltr" min="0" max="${R0.frames.length - 1}" step="1" value="${S.liveIdx}" aria-label="שלב בספירה">
       <b class="num lv-when" id="lv-when" aria-live="polite"></b></span>`
-    : `${L.drill ? '<span class="live-chip demo">תרגול</span>' : '<span class="live-chip on">חי</span>'}<span class="live-text">${L.drill ? 'תרגול על קובץ 2022. ' : ''}<span id="lv-upd">${updatedLine('results')}</span>. מקור: <a href="${esc(L.source_url || '#')}" target="_blank" rel="noopener" dir="ltr">${esc(L.source_label || 'ועדת הבחירות המרכזית')}</a>. <span class="lv-cad">${cadence()}</span>; השעה היא שעת הנתונים.</span>`}
+    : `${L.drill ? '<span class="live-chip demo">תרגול</span>' : liveChip(L.updated_at, 'הספירה', 'lv-chip')}<span class="live-text">${L.drill ? 'תרגול על קובץ 2022. ' : ''}<span id="lv-upd">${updatedLine('results')}</span>. מקור: <a href="${esc(L.source_url || '#')}" target="_blank" rel="noopener" dir="ltr">${esc(L.source_label || 'ועדת הבחירות המרכזית')}</a>. <span class="lv-cad">${cadence()}</span>; השעה היא שעת הנתונים.</span>`}
   </div>
   <div class="grid">
     <div class="card c12" id="lv-progress-card"></div>
@@ -148,6 +145,19 @@ async function renderLive() {
   </div>
   </div>
   <p class="foot">${demo && !waiting ? esc(R0.note || '') + ' ' : ''}השיטה: אמידה יחסית לפי שכבות (מגזר, אזור והצבעה קודמת), עם נקודת מוצא מממוצע הסקרים, וחלוקת מנדטים בבדר-עופר עם הסכמי העודפים. פירוט בלשונית "שיטה ומקורות".</p>`;
+  root.innerHTML = `
+  <div class="section-head"><div>
+    <span class="eyebrow">יום הבחירות · יום שלישי, 27 באוקטובר 2026 · הקלפיות פתוחות 07:00–22:00</span>
+    <h2>יום הבחירות, בזמן אמת</h2>
+    <p>במהלך היום: שיעור ההצבעה הרשמי של ועדת הבחירות, מול אותה שעה בבחירות הקודמות, ולראשונה גם לפי קלפי. מ-22:00: ספירת הקולות קלפי אחר קלפי, ותחזית לסיום הספירה שמשווה כל יישוב שנספר לתוצאה שלו ב-2022. התחזית אינה תוצאה רשמית.</p>
+    ${closed ? '<p class="lv-jump"><a href="#lv-day" data-jump="lv-day">לשיעור ההצבעה במהלך היום ולחברה הערבית ↓</a></p>' : ''}
+  </div></div>
+  <p class="lv-notes" id="lv-notes" hidden></p>
+  ${closed ? night + dayMarkup() : dayMarkup() + night}`;
+  // the in-page jump keeps the address on '#live' (a reload must land on this tab)
+  $$('[data-jump]', root).forEach(a => a.addEventListener('click', e => {
+    e.preventDefault(); const t = document.getElementById(a.dataset.jump); if (t) t.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }));
   drawDay();
   if (!waiting) drawLiveFrame();
   $$('#lv-exit26 .lv-scroll', root).forEach(scrollHint);
@@ -180,6 +190,7 @@ async function liveTick() {
     const switched = d.mode !== S.live.mode;
     S.live = d;
     if (switched) { S.liveIdx = null; stopPlay(); renderLive(); return; }
+    if (pollsClosed() !== S.liveNightFirst) { renderLive(); return; }   // 22:00 with the tab open: the count moves up
     if (liveSig() !== S.liveSigDrawn) {   // the data or a clock gate changed since the last draw
       if (d.mode === 'live') { drawLiveFrame(); drawDay(); S.liveSigDrawn = liveSig(); }
       else if (inElectionWindow()) { renderLive(); return; }   // the waiting card, the day cards and the 2026 exit polls
@@ -204,9 +215,27 @@ function drawArab() {
 /* ---------- freshness: 'עודכן' is the data time, 'נבדק' the fetcher's last pass ---------- */
 function updatedLine(kind) {
   // results.updated_he: when the CEC file last changed; turnout.updated_he: the pass that published the figure
-  const st = S.liveStatus || {};
-  const data = kind === 'results' ? (S.live || {}).updated_he : (S.liveTurnout || {}).updated_he;
-  return `עודכן ${data || '—'}${st.updated_he && st.updated_he !== data ? ` · נבדק ${st.updated_he}` : ''}`;
+  const st = S.liveStatus || {}, src = kind === 'results' ? (S.live || {}) : (S.liveTurnout || {});
+  const data = withDate(src.updated_he, src.updated_at), chk = withDate(st.updated_he, st.updated_at);
+  return `עודכן ${data || '—'}${chk && chk !== data ? ` · נבדק ${chk}` : ''}`;
+}
+// 'HH:MM' from the feed, with the date when the ISO time is not today in Israel ('01:56 (28.10)'); the feed's own
+// he_time already adds one when it wrote the file on another day
+function withDate(he, iso) {
+  if (!he) return null;
+  const t = Date.parse(iso || '');
+  if (/\(/.test(he) || isNaN(t)) return String(he);
+  const p = Object.fromEntries(new Intl.DateTimeFormat('en-GB', { timeZone: 'Asia/Jerusalem', month: '2-digit', day: '2-digit' })
+    .formatToParts(new Date(t)).map(x => [x.type, x.value]));
+  const n = ilNow();
+  return +p.day === n.d && +p.month === n.m ? String(he) : `${he} (${p.day}.${p.month})`;
+}
+// The red 'חי' chip while the figures can still move. After election day and night (ELECTION_DAY[1], 28.10 12:00) a
+// file unchanged for two hours gets a neutral chip, so a reader on 29.10 is not told that the night's figures are live.
+function liveChip(iso, neutral, id = '') {
+  const age = (Date.now() - Date.parse(iso || '')) / 36e5;
+  const quiet = ilStamp(ilNow()) >= ELECTION_DAY[1] && !(age <= 2);
+  return `<span class="live-chip ${quiet ? 'demo' : 'on'}"${id ? ` id="${id}"` : ''}>${quiet ? neutral : 'חי'}</span>`;
 }
 // The feed publishes into main at most every publish_every_min (8) minutes in branch mode (ARCH_V3), so the page
 // changes every few minutes; with the Actions path a change reaches it within a minute or two.
@@ -250,6 +279,15 @@ function refreshBars() {
   const u1 = $('#lv-upd'), u2 = $('#dy-upd'), n = $('#lv-notes');
   if (u1) u1.textContent = updatedLine('results');
   if (u2) u2.textContent = updatedLine('turnout');
+  const c1 = $('#lv-chip'), c2 = $('#dy-chip');
+  if (c1 && S.live) c1.outerHTML = liveChip(S.live.updated_at, 'הספירה', 'lv-chip');
+  if (c2 && S.liveTurnout) c2.outerHTML = liveChip(S.liveTurnout.updated_at, 'יום הבחירות', 'dy-chip');
+  // the header's register size: the official figure the operator entered (turnout.json eligible), once it is not the
+  // pre-election placeholder; a drill's figure is the 2022 file's and stays out of the header
+  const el = $('#cd-elig'), elig = +(S.liveTurnout || {}).eligible;
+  if (el && elig > 5e6 && elig !== ELIGIBLE_2026 && !(S.liveTurnout.drill || (S.liveStatus || {}).drill)) {
+    el.textContent = `כ-${(elig / 1e6).toFixed(2)} מיליון בעלי זכות בחירה · 38 רשימות`;
+  }
   $$('#tab-live .lv-cad').forEach(e => { e.textContent = cadence(); });
   if (n) { const h = feedNotes(); n.hidden = !h; n.innerHTML = h; }
   const ban = $('#ban-note'); if (ban && !ban.hidden && !inPollBan()) ban.hidden = true;   // the ban ends at 22:00 while the tab is open
@@ -327,20 +365,20 @@ function exitTable(E, F, past = false) {
   }
   const final = F && (F.final || E.final) || null;
   const col = F ? (F.paused ? 'לפי מה שנספר' : 'תחזית עכשיו') : null;
-  // §16ה(ב)–(ג) disclosure of every 2026 poll (past: the replay's 2021/2022 polls, which need none), saying
-  // 'לא פורסם' for what the channel did not publish (PAGE-4); an item typed as 'לא פורסם' reads the same, and a
-  // missing optional item is left out
+  // §16ה(ב)–(ג) disclosure of every 2026 poll (past: the replay's 2021/2022 polls, which need none): every item the
+  // law lists is shown, and one the channel did not publish (empty, null or typed as 'לא פורסם') says so (PAGE-4)
   const num = v => typeof v === 'number' ? fmt(v) : esc(v);
-  const item = (v, yes, no, always) => v == null || v === '' ? (always ? no : null) : /^לא פורס[םמ]/.test(String(v).trim()) ? no : yes(v);
+  const given = v => !(v == null || String(v).trim() === '' || /^לא פורס[םמ]/.test(String(v).trim()));
+  const item = (v, yes, no) => given(v) ? yes(v) : no;
   const meta = past ? [] : E.polls.map(p => `${esc(p.outlet)}: ${[
     item(p.commissioner, v => `בהזמנת ${esc(v)}`, 'המזמין לא פורסם'),
-    item(p.pollster, v => `מכון ${esc(v)}`, 'המכון לא פורסם', true),
-    item(p.date, v => `מועד ${esc(v)}${p.time && !/^לא פורס/.test(String(p.time).trim()) ? ` ${esc(p.time)}` : ''}`, 'המועד לא פורסם'),
+    item(p.pollster, v => `מכון ${esc(v)}`, 'המכון לא פורסם'),
+    item([p.date, p.time].filter(given).join(' '), v => `מועד ${esc(v)}`, 'המועד לא פורסם'),
     item(p.population, v => `אוכלוסייה: ${esc(v)}`, 'האוכלוסייה לא פורסמה'),
     item(p.n_invited, v => `${num(v)} פונים`, 'מספר הפונים לא פורסם'),
-    item(p.n, v => `${num(v)} משיבים`, 'מספר המשיבים לא פורסם', true),
+    item(p.n, v => `${num(v)} משיבים`, 'מספר המשיבים לא פורסם'),
     // a bare number is a percentage, as the channels state it ('±3.5%')
-    item(p.moe, v => `טעות דגימה ±${esc(String(v).trim().replace(/^[±+]/, ''))}${/^[±+]?\d+(\.\d+)?$/.test(String(v).trim()) ? '%' : ''}`, 'טעות הדגימה לא פורסמה', true),
+    item(p.moe, v => `טעות דגימה ±${esc(String(v).trim().replace(/^[±+]/, ''))}${/^[±+]?\d+(\.\d+)?$/.test(String(v).trim()) ? '%' : ''}`, 'טעות הדגימה לא פורסמה'),
     item(p.questions, v => `נוסח השאלות: ${esc(v)}`, 'נוסח השאלות לא פורסם'),
     p.revised ? `עודכן ב-${esc(p.revised)}` : null].filter(Boolean).join(', ')}`);
   // the projection and the result sit next to the list name, so at phone width the channels scroll under the
@@ -370,11 +408,14 @@ function drawLiveProgress(el, F) {
   // a replay frame is complete when it carries the official result
   const complete = c.env_status ? c.env_status === 'complete' : !!(F.final && c.envelopes);
   const base = demo ? 'הבחירות הקודמות' : '2022';
-  const envs = `${fmt(c.env_valid)} קולות במעטפות הכפולות (הצפי לפי ${base}: כ-${fmt(c.env_expected)}; המספר הסופי טרם פורסם)`;
+  // env_override: the envelope total the operator entered from the CEC's own statement, not an estimate from 2022
+  const envs = c.env_override
+    ? `${fmt(c.env_valid)} קולות במעטפות הכפולות (לפי הודעת ועדת הבחירות: כ-${fmt(c.env_override)}; הספירה טרם הסתיימה)`
+    : `${fmt(c.env_valid)} קולות במעטפות הכפולות (הצפי לפי ${base}: כ-${fmt(c.env_expected)}; המספר הסופי טרם פורסם)`;
   const done = complete ? 'הספירה הושלמה, כולל המעטפות הכפולות'
     : c.envelopes && c.share >= 0.995 ? `הקלפיות נספרו; נספרו ${envs}`
     : c.envelopes ? `נספרו קלפיות של ${pct(100 * c.share, 0)} מבעלי זכות הבחירה, וגם ${envs}`
-    : c.share >= 0.995 ? `כל הקלפיות נספרו; המעטפות הכפולות (כ-${fmt(c.env_expected)} קולות לפי ${base}) עוד לא`
+    : c.share >= 0.995 ? `כל הקלפיות נספרו; המעטפות הכפולות (${c.env_override ? `כ-${fmt(c.env_override)} קולות לפי הודעת ועדת הבחירות` : `כ-${fmt(c.env_expected)} קולות לפי ${base}`}) עוד לא`
     : `נספרו קלפיות של ${pct(100 * c.share, 0)} מבעלי זכות הבחירה`;
   const sectors = SECTOR_ORDER.filter(k => F.sectors[k]);
   el.innerHTML = `<div class="lv-prog">
@@ -559,9 +600,9 @@ function dayMarkup() {
   const live = !!S.liveTurnout, day = inElectionWindow(), H0 = S.turnoutHistory;
   // the 22:00 figure is the CEC's election-night estimate; its largest miss of the final count in 2015–2022
   const miss = H0 ? d3.max(['K20', 'K21', 'K22', 'K23', 'K24', 'K25'].filter(e => H0.elections[e]), e => Math.abs(H0.elections[e].final - H0.elections[e].values[6])) : 0.7;
-  return `<h2 class="lv-h2">במהלך היום: שיעור ההצבעה</h2>
+  return `<h2 class="lv-h2" id="lv-day">במהלך היום: שיעור ההצבעה</h2>
   <div class="live-bar ${live ? 'on' : 'demo'}">${live
-    ? `<span class="live-chip on">חי</span><span class="live-text">נתוני ועדת הבחירות, <span id="dy-upd">${updatedLine('turnout')}</span>. <span class="lv-cad">${cadence()}</span>.</span>`
+    ? `${liveChip(S.liveTurnout.updated_at, 'יום הבחירות', 'dy-chip')}<span class="live-text">נתוני ועדת הבחירות, <span id="dy-upd">${updatedLine('turnout')}</span>. <span class="lv-cad">${cadence()}</span>.</span>`
     : day ? '<span class="live-chip demo">יום הבחירות</span><span class="live-text">ממתינים לפרסום הראשון של ועדת הבחירות (הנתון של 10:00 מתפרסם בדרך כלל 30–65 דקות אחרי השעה). עד אז מוצגות הסדרות של הבחירות הקודמות.</span>'
     : '<span class="live-chip demo">לפני יום הבחירות</span><span class="live-text">ועדת הבחירות מפרסמת שיעור הצבעה ארצי מצטבר בשעות 10:00, 12:00, 14:00, 16:00, 18:00, 20:00 ו-22:00 (ב-2022 פורסם גם נתון ל-19:00). כאן מוצגות הסדרות של הבחירות הקודמות; ב-27 באוקטובר יתווסף אליהן הקו של 2026.</span>'}</div>
   <div class="grid">
@@ -705,7 +746,18 @@ function drawDaySectors(el, H0) {
   // the 2022-weighted pace by bloc is published by the feed only after 22:00 (or when the operator switches
   // lean_during_voting on, pending the CEC legal adviser), so it is shown exactly when it is present
   const L = T.lean || {};
-  const exc = Object.entries(T.sectors_excluded || {}).filter(([, n]) => n);
+  // live_fetch.station_turnout's exclusions: a station without a figure (or with 0 voters) has not reported and is out
+  // of every figure; an unreadable or impossible row is dropped; a station with no 2022 match or an implausible pace
+  // counts in the turnout but not in the pace
+  const X = T.sectors_excluded || {}, xn = k => +X[k] || 0;
+  const notYet = xn('no figure') + xn('zero voters');
+  const EXC_HE = { unreadable: 'שורה לא קריאה', 'more voters than eligible': 'יותר מצביעים מבעלי זכות', 'no 2022 match': 'אין קלפי מקבילה ב-2022', 'implausible pace': 'קצב לא סביר' };
+  const excList = keys => keys.filter(k => xn(k)).map(k => `${fmt(xn(k))} (${esc(EXC_HE[k] || k)})`).join(', ');
+  const paceOnly = ['no 2022 match', 'implausible pace'];
+  const dropped = excList(Object.keys(X).filter(k => !paceOnly.includes(k) && k !== 'no figure' && k !== 'zero voters'));
+  const noPace = excList(paceOnly);
+  const exc = [notYet ? `${fmt(notYet)} קלפיות עוד לא דיווחו (בלי נתון או עם אפס מצביעים) ואינן בחישוב.` : '',
+    dropped ? `לא נכללו בחישוב: ${dropped}.` : '', noPace ? `נכללו בשיעור ההצבעה ולא בחישוב הקצב: ${noPace}.` : ''].filter(Boolean).join(' ');
   el.innerHTML = `<h3>שיעור ההצבעה לפי מגזר${T.sectors_time ? `, עד ${esc(T.sectors_time)}` : ''}</h3>
     <p class="sub">מנתוני ועדת הבחירות לכל קלפי רגילה (בלי מעטפות כפולות). הסיווג הוא לפי קלפי: קלפיות חרדיות וקלפיות ערביות בערים מעורבות וביישובים יהודיים מזוהות לפי ההצבעה ב-2022. <b>קצב</b>: כמה הצביעו עד עכשיו, ביחס לכל מי שהצביע באותן קלפיות ב-2022. <b>יחס לארצי</b>: שיעור ההצבעה במגזר חלקי השיעור בכל הקלפיות באותו פרסום. בחברה הערבית מצביעים מאוחר יותר, ולכן הקצב שלה נמוך במהלך היום גם כשההשתתפות הסופית דומה.</p>
     <div class="tbl-wrap"><table class="t"><thead><tr><th>מגזר</th><th class="n">שיעור הצבעה</th><th class="n">קצב מול 2022</th><th class="n">יחס לארצי</th><th class="n hide-sm">סופי 2022</th><th class="n hide-sm">קלפיות</th></tr></thead><tbody>${
@@ -713,7 +765,7 @@ function drawDaySectors(el, H0) {
     ${Object.keys(L).length ? `<h3 style="margin-top:14px">מי מגיע לקלפי, לפי ההצבעה ב-2022</h3>
       <p class="sub">הקצב בכל קלפי, משוקלל לפי מספר הקולות שקיבל כל גוש באותה קלפי ב-2022. מספר גבוה יותר: הקלפיות שבהן הגוש היה חזק מגיעות מהר יותר לרמת ההצבעה של 2022. זה אומדן אקולוגי, לא מדידה של מצביעים, ואינו מתורגם למנדטים.</p>
       <div class="lv-lean">${['coal', 'opp', 'arab'].filter(b => L[b] != null).map(b => `<div><span><i class="swatch" style="background:var(${blocVar(b)})"></i>${b === 'coal' ? 'קלפיות של גוש נתניהו' : b === 'opp' ? 'קלפיות של האופוזיציה היהודית' : 'קלפיות של הרשימות הערביות'}</span><b class="num">${pct(100 * L[b], 0)}</b></div>`).join('')}</div>` : ''}
-    ${exc.length ? `<p class="foot">לא נכללו בחישוב הקצב: ${exc.map(([k, n]) => `${fmt(n)} (${esc({ 'no 2022 match': 'אין קלפי מקבילה ב-2022', 'implausible pace': 'קצב לא סביר', 'more voters than eligible': 'יותר מצביעים מבעלי זכות', unreadable: 'שורה לא קריאה' }[k] || k)})`).join(', ')}.</p>` : ''}
+    ${exc ? `<p class="foot">${exc}</p>` : ''}
     ${(T.claims || []).length && closed ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
     <p class="foot">${noSeats}</p>`;
 }

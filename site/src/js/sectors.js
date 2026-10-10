@@ -88,7 +88,7 @@ function drawOrigin() {
   const parties = ev.parties.filter(p => p.seats > 0 || (p.main && p.pct >= 2.5));
   const W = widthOf(el, 480), rowH = 28, M = { t: 4, r: 110, b: 4, l: 6 };
   const H = M.t + M.b + rowH * parties.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, `מאיפה הגיעו הקולות של כל רשימה, לפי קבוצה, ${ev.short}`);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
   parties.forEach((p, i) => {
     const yy = M.t + i * rowH;
@@ -112,7 +112,7 @@ function drawOrigin() {
 function drawScatter() {
   const el = $('#sc-scatter'); const eid = S.sectorElection;
   const W = widthOf(el), H = 380, M = { t: 14, r: 20, b: 40, l: 44 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'מעמד חברתי-כלכלי מול שיעור ההצבעה, לפי יישוב');
   const locs = S.core.localities.filter(l => l.ses && l.el[eid] && l.el[eid][1] >= 300);
   const x = d3.scaleLinear().domain([0.5, 10.5]).range([M.l, W - M.r]);
   const y = d3.scaleLinear().domain([15, 100]).range([H - M.b, M.t]);

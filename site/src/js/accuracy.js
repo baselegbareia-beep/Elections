@@ -69,7 +69,7 @@ function drawDumbbell() {
   const letters = Object.keys(e.actual).filter(k => (e.actual[k] || 0) > 0 || (e.avg[k] || 0) >= 2).sort((a, b) => (e.actual[b] - e.actual[a]) || (e.avg[b] - e.avg[a]));
   const W = widthOf(el), nar = W < 560, rowH = 28, M = { t: 26, r: nar ? 92 : 204, b: 24, l: 12 };
   const H = M.t + M.b + rowH * letters.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, `ממוצע הסקרים האחרונים מול התוצאה הרשמית, לפי רשימה, ${E(S.accEl).short}`);
   const maxV = Math.max(36, d3.max(e.polls, p => d3.max(Object.values(p.seats))) + 2);
   const x = d3.scaleLinear().domain([0, maxV]).range([W - M.r, M.l]);
   svg.append('rect').attr('class', 'zone').attr('x', x(3.9)).attr('y', M.t - 6).attr('width', x(0) - x(3.9)).attr('height', H - M.t - M.b + 6);
@@ -110,7 +110,8 @@ function drawHouseAccuracy() {
     });
   });
   const rows = [...acc].map(([k, v]) => ({ k, n: v.n, rel: v.rel / v.n, raw: v.raw / v.n, els: [...v.els] })).filter(r => r.n >= 2).sort((a, b) => a.rel - b.rel);
-  const sgn = v => `${v > 0 ? '+' : v < 0 ? '−' : ''}${fmt1(Math.abs(v))}`;
+  // the sign of the value as shown: −0.04 rounds to 0.0, not '−0.0'
+  const sgn = v => { const r = Math.round(v * 10) / 10; return `${r > 0 ? '+' : r < 0 ? '−' : ''}${fmt1(Math.abs(r))}`; };
   $('#acc-houses').innerHTML = `<table class="t"><thead><tr><th>סוקר</th><th class="n">סקרים</th><th class="n">מול הסוקרים האחרים</th><th class="n">טעות ממוצעת לרשימה</th><th>מערכות</th></tr></thead><tbody>${
     rows.map(r => `<tr><td>${esc(r.k)}</td><td class="n">${r.n}</td><td class="n"><b class="num">${sgn(r.rel)}</b></td><td class="n">${fmt1(r.raw)}</td><td>${r.els.join(', ')}</td></tr>`).join('')}</tbody></table>`;
 }

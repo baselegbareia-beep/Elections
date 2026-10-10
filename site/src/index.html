@@ -21,31 +21,31 @@
 </header>
 <nav class="tabs" aria-label="מדורים">
   <div class="wrap" role="tablist">
-    <button class="tab" role="tab" data-tab="overview" aria-selected="true">תמונת מצב</button>
-    <button class="tab" role="tab" data-tab="live" aria-selected="false">יום הבחירות<span class="pill live">27.10</span></button>
-    <button class="tab" role="tab" data-tab="arab" aria-selected="false">החברה הערבית<span class="pill">מוקד</span></button>
-    <button class="tab" role="tab" data-tab="polls" aria-selected="false">סקרים</button>
-    <button class="tab" role="tab" data-tab="coalition" aria-selected="false">מחשבון קואליציות</button>
-    <button class="tab" role="tab" data-tab="results" aria-selected="false">תוצאות ומפה</button>
-    <button class="tab" role="tab" data-tab="sectors" aria-selected="false">פילוח מגזרי</button>
-    <button class="tab" role="tab" data-tab="accuracy" aria-selected="false">סקרים מול תוצאות</button>
-    <button class="tab" role="tab" data-tab="method" aria-selected="false">שיטה ומקורות</button>
-    <button class="tab" role="tab" data-tab="plan" aria-selected="false">תוכנית העבודה</button>
+    <button class="tab" role="tab" id="tabbtn-overview" aria-controls="tab-overview" data-tab="overview" aria-selected="true" tabindex="0">תמונת מצב</button>
+    <button class="tab" role="tab" id="tabbtn-live" aria-controls="tab-live" data-tab="live" aria-selected="false" tabindex="-1">יום הבחירות<span class="pill live">27.10</span></button>
+    <button class="tab" role="tab" id="tabbtn-arab" aria-controls="tab-arab" data-tab="arab" aria-selected="false" tabindex="-1">החברה הערבית<span class="pill">מוקד</span></button>
+    <button class="tab" role="tab" id="tabbtn-polls" aria-controls="tab-polls" data-tab="polls" aria-selected="false" tabindex="-1">סקרים</button>
+    <button class="tab" role="tab" id="tabbtn-coalition" aria-controls="tab-coalition" data-tab="coalition" aria-selected="false" tabindex="-1">מחשבון קואליציות</button>
+    <button class="tab" role="tab" id="tabbtn-results" aria-controls="tab-results" data-tab="results" aria-selected="false" tabindex="-1">תוצאות ומפה</button>
+    <button class="tab" role="tab" id="tabbtn-sectors" aria-controls="tab-sectors" data-tab="sectors" aria-selected="false" tabindex="-1">פילוח מגזרי</button>
+    <button class="tab" role="tab" id="tabbtn-accuracy" aria-controls="tab-accuracy" data-tab="accuracy" aria-selected="false" tabindex="-1">סקרים מול תוצאות</button>
+    <button class="tab" role="tab" id="tabbtn-method" aria-controls="tab-method" data-tab="method" aria-selected="false" tabindex="-1">שיטה ומקורות</button>
+    <button class="tab" role="tab" id="tabbtn-plan" aria-controls="tab-plan" data-tab="plan" aria-selected="false" tabindex="-1">תוכנית העבודה</button>
   </div>
 </nav>
 <main class="wrap" id="main">
   <div class="ban-note" id="ban-note" hidden></div>
   <div class="loading" id="loading">טוען נתונים רשמיים…</div>
-  <section id="tab-overview" data-panel="overview" hidden></section>
-  <section id="tab-live" data-panel="live" hidden></section>
-  <section id="tab-polls" data-panel="polls" hidden></section>
-  <section id="tab-coalition" data-panel="coalition" hidden></section>
-  <section id="tab-arab" data-panel="arab" hidden></section>
-  <section id="tab-results" data-panel="results" hidden></section>
-  <section id="tab-sectors" data-panel="sectors" hidden></section>
-  <section id="tab-accuracy" data-panel="accuracy" hidden></section>
-  <section id="tab-method" data-panel="method" hidden></section>
-  <section id="tab-plan" data-panel="plan" hidden></section>
+  <section id="tab-overview" data-panel="overview" role="tabpanel" aria-labelledby="tabbtn-overview" hidden></section>
+  <section id="tab-live" data-panel="live" role="tabpanel" aria-labelledby="tabbtn-live" hidden></section>
+  <section id="tab-polls" data-panel="polls" role="tabpanel" aria-labelledby="tabbtn-polls" hidden></section>
+  <section id="tab-coalition" data-panel="coalition" role="tabpanel" aria-labelledby="tabbtn-coalition" hidden></section>
+  <section id="tab-arab" data-panel="arab" role="tabpanel" aria-labelledby="tabbtn-arab" hidden></section>
+  <section id="tab-results" data-panel="results" role="tabpanel" aria-labelledby="tabbtn-results" hidden></section>
+  <section id="tab-sectors" data-panel="sectors" role="tabpanel" aria-labelledby="tabbtn-sectors" hidden></section>
+  <section id="tab-accuracy" data-panel="accuracy" role="tabpanel" aria-labelledby="tabbtn-accuracy" hidden></section>
+  <section id="tab-method" data-panel="method" role="tabpanel" aria-labelledby="tabbtn-method" hidden></section>
+  <section id="tab-plan" data-panel="plan" role="tabpanel" aria-labelledby="tabbtn-plan" hidden></section>
   <p class="disclaimer">דמו לתצוגה. תוצאות העבר הן ספירות רשמיות של ועדת הבחירות המרכזית (קובצי תוצאות לפי קלפי), מאומתות מול הסיכומים הארציים הרשמיים. נתוני הסקרים נלקחו מסקרים שפורסמו, עם קישור לדיווח הרשמי לוועדת הבחירות כשנמצא. פילוח מגזרי, מעברי קולות וסימולציות מסומנים כאומדן.</p>
 </main>
 <div id="tt" role="tooltip"></div>

@@ -12,6 +12,11 @@ function ensureSims() {
   S.sims = simulate(S.shares);
   return S.sims;
 }
+// From 27.10 22:00 the overview and the coalition calculator keep the frozen pre-election forecast: this note on top
+// says so and points to the count on the election-day tab.
+function postCloseNote(lastDate) {
+  return `<p class="post-note"><b>התחזית שלפני הבחירות</b> (סקרים עד ${dateHe(lastDate, { day: 'numeric', month: 'numeric' })}). התוצאות בלשונית <a href="#live" data-goto="live">יום הבחירות</a>.</p>`;
+}
 function blocTotals(seats, blocs = currentBlocs()) {
   const t = { coal: 0, opp: 0, arab: 0 };
   S.polls.parties.forEach(p => { t[blocs[p.id]] = (t[blocs[p.id]] || 0) + (seats[p.id] || 0); });
@@ -38,17 +43,24 @@ function renderOverview() {
   // threshold watch
   const passP = parties.map((p, i) => ({ p, prob: sims.seats.filter(s => s[i] > 0).length / sims.seats.length, avg: av.avg[p.id] }))
     .filter(x => x.prob > 0.02 && x.prob < 0.995).sort((a, b) => a.prob - b.prob);
+  // 'in danger': the lists the table calls on the fence or out (≤ 68%); with none, the three closest to the threshold
+  const danger = passP.filter(x => x.prob <= 0.68).slice(0, 3);
+  // once the polls close the page keeps the frozen pre-election forecast, said in the past tense and pointing to the
+  // count, so a reader on 28.10 is not given odds that the count contradicts
+  const closed = ilStamp(ilNow()) >= POLLS_CLOSE;
+  const chance = closed ? 'הסיכוי שנתן הממוצע ל-61' : 'סיכוי ל-61';
 
   root.innerHTML = `
+  ${closed ? postCloseNote(last.date) : ''}
   <div class="section-head"><div>
-    <span class="eyebrow">נכון ל-${dateHe(last.date)} · ${av.n} סקרים ב-28 הימים האחרונים</span>
-    <h2>מי מגיע ל-61?</h2>
-    <p>ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, ומתוקן להטיה הקבועה של כל סוקר. ממנו נגזרים ${fmt(sims.seats.length)} תרחישים של חלוקת מנדטים לפי שיטת בדר-עופר ואחוז החסימה.</p>
+    <span class="eyebrow">${closed ? 'התחזית שלפני הבחירות · ' : ''}נכון ל-${dateHe(last.date)} · ${av.n} סקרים ב-28 הימים ${closed ? 'שלפני כן' : 'האחרונים'}</span>
+    <h2>${closed ? 'מה צפו הסקרים' : 'מי מגיע ל-61?'}</h2>
+    <p>ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, ומתוקן להטיה הקבועה של כל סוקר. ממנו ${closed ? 'נגזרו' : 'נגזרים'} ${fmt(sims.seats.length)} תרחישים של חלוקת מנדטים לפי שיטת בדר-עופר ואחוז החסימה.</p>
   </div></div>
   <div class="grid">
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>גוש נתניהו</span><span class="v num">${seatNow.coal}</span><span class="p61"><b class="num">${pct(100 * coalSim.p61, 0)}</b> סיכוי ל-61</span><span class="d">מנדטים לפי ממוצע הסקרים; סכום הממוצעים ${fmt1(seatAvg.coal)}</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>האופוזיציה היהודית</span><span class="v num">${seatNow.opp}</span><span class="p61"><b class="num">${pct(100 * oppSim.p61, 0)}</b> סיכוי ל-61 לבדה</span><span class="d">עם הרשימות הערביות: ${pct(100 * oppArab.p61, 0)} · סכום הממוצעים ${fmt1(seatAvg.opp)}</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>הרשימה המשותפת ורע״ם</span><span class="v num">${seatNow.arab}</span><span class="p61"><b class="num">${pct(100 * kingmaker, 0)}</b> מהתרחישים: אף גוש בלעדיהן</span><span class="d">בכנסת ה-25: 10 מנדטים (רע״ם 5, חד״ש-תע״ל 5)</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>גוש נתניהו</span><span class="v num">${seatNow.coal}</span><span class="p61"><b class="num">${pct(100 * coalSim.p61, 0)}</b> ${chance}</span><span class="d">מנדטים לפי ממוצע הסקרים; סכום הממוצעים ${fmt1(seatAvg.coal)}</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>האופוזיציה היהודית</span><span class="v num">${seatNow.opp}</span><span class="p61"><b class="num">${pct(100 * oppSim.p61, 0)}</b> ${chance} לבדה</span><span class="d">עם הרשימות הערביות: ${pct(100 * oppArab.p61, 0)} · סכום הממוצעים ${fmt1(seatAvg.opp)}</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>הרשימה המשותפת ורע״ם</span><span class="v num">${seatNow.arab}</span><span class="p61"><b class="num">${pct(100 * kingmaker, 0)}</b> ${closed ? 'מהתרחישים שלפני הבחירות' : 'מהתרחישים'}: אף גוש בלעדיהן</span><span class="d">בכנסת ה-25: 10 מנדטים (רע״ם 5, חד״ש-תע״ל 5) · סכום הממוצעים ${fmt1(seatAvg.arab)}</span></div>
     <div class="card c3 tile"><span class="l">שיעור ההצבעה בחברה הערבית, 2022</span><span class="v num">${pct(100 * arab25.voters / arab25.elig)}</span><span class="p61"><b class="num">${fmt1(100 * jew25.voters / jew25.elig - 100 * arab25.voters / arab25.elig)}</b> נקודות פחות מיהודים ואחרים</span><span class="d">ביישובים הערביים והדרוזיים; ${pct(100 * jew25.voters / jew25.elig)} בקרב יהודים ואחרים</span></div>
 
     <div class="card c12">
@@ -83,7 +95,9 @@ function renderOverview() {
       <h3>שלושה דברים שכדאי לדעת</h3>
       <ul class="callout-list" style="margin-top:12px">
         <li><span class="n">1</span><p><b>השתתפות הערבים מכריעה את הגושים.</b> בין 2020 ל-2021 צנח שיעור ההצבעה בחברה הערבית מ-${pct(rate('K23', 'arab_std'))} ל-${pct(rate('K24', 'arab_std'))}. במחשבון הקואליציות אפשר לראות כמה מנדטים זז הגוש כשההשתתפות משתנה. <a href="#coalition" data-goto="coalition">למחשבון</a></p></li>
-        <li><span class="n">2</span><p><b>קולות שהולכים לפח.</b> ב-2022 לא עברו את אחוז החסימה מרצ (${fmt(k25.parties.find(p => p.id === 'מרצ').votes)} קולות) ובל״ד (${fmt(k25.parties.find(p => p.id === 'ד').votes)}). ${passP.length ? `השנה בסכנה: ${passP.slice(0, 3).map(x => x.p.name).join(', ')}.` : ''} <a href="#polls" data-goto="polls">למגמות בסקרים</a></p></li>
+        <li><span class="n">2</span><p><b>קולות שהולכים לפח.</b> ב-2022 לא עברו את אחוז החסימה מרצ (${fmt(k25.parties.find(p => p.id === 'מרצ').votes)} קולות) ובל״ד (${fmt(k25.parties.find(p => p.id === 'ד').votes)}). ${danger.length
+          ? `${closed ? 'לפי הסקרים שלפני הבחירות היו בסכנה' : 'השנה בסכנה'}: ${heList(danger.map(x => x.p.name))}.`
+          : passP.length ? `${closed ? 'לפי הסקרים שלפני הבחירות היו הכי קרובות לסף' : 'הכי קרובות לסף'}: ${heList(passP.slice(0, 3).map(x => x.p.name))}.` : ''} <a href="#polls" data-goto="polls">למגמות בסקרים</a></p></li>
         <li><span class="n">3</span><p><b>הפילוג הערבי חזר בצורה חדשה.</b> חד״ש, תע״ל ובל״ד רצות יחד כ״הרשימה המשותפת״, ורע״ם לבדה. ועדת הבחירות פסלה את שתיהן ב-23.9.2026, ובית המשפט העליון ביטל את הפסילה פה אחד ב-2.10.2026. <a href="#arab" data-goto="arab">לעמוד החברה הערבית</a></p></li>
       </ul>
     </div>
@@ -92,7 +106,7 @@ function renderOverview() {
   drawSeatBars($('#ov-bars'), av);
   drawHistogram($('#ov-hist'), coalSim.tot);
   drawStrip($('#ov-strip'), S.seatsNow);
-  $('#ov-thr').innerHTML = passP.length ? `<table class="t wrap"><thead><tr><th>רשימה</th><th class="n hide-sm">קולות (אומדן)</th><th class="n">סיכוי לעבור</th><th>הערכה</th></tr></thead><tbody>${
+  $('#ov-thr').innerHTML = passP.length ? `<table class="t wrap"><thead><tr><th>רשימה</th><th class="n hide-sm">אחוז הקולות (אומדן)</th><th class="n">סיכוי לעבור</th><th>הערכה</th></tr></thead><tbody>${
     passP.map(x => {
       const maybe = '<span class="hide-sm">כנראה </span>';
       const band = x.prob > 0.95 ? ['בטוחה', 'ok'] : x.prob > 0.68 ? [maybe + 'עוברת', 'ok'] : x.prob > 0.32 ? ['על הגדר', 'no'] : [maybe + 'בחוץ', 'no'];
@@ -105,7 +119,7 @@ function drawSeatBars(el, av) {
   const parties = [...S.polls.parties].filter(p => av.hi[p.id] > 0 || av.avg[p.id] > 0.3).sort((a, b) => av.avg[b.id] - av.avg[a.id]);
   const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 14, l: 40 };
   const H = M.t + M.b + rowH * parties.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'ממוצע הסקרים לפי רשימה, עם הטווח בין הסקר הנמוך לגבוה');
   const maxV = Math.max(30, d3.max(parties, p => av.hi[p.id]));
   const x = d3.scaleLinear().domain([0, maxV]).range([W - M.r, M.l]);
   const y = (i) => M.t + i * rowH;
@@ -134,7 +148,7 @@ function drawSeatBars(el, av) {
 
 function drawHistogram(el, totals) {
   const W = widthOf(el, 480), H = 230, M = { t: 18, r: 12, b: 30, l: 12 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'מספר המנדטים של גוש נתניהו בתרחישים');
   const counts = d3.rollup(totals, v => v.length, d => d);
   const xs = d3.range(d3.min(totals), d3.max(totals) + 1);
   const x = d3.scaleBand().domain(xs).range([M.l, W - M.r]).padding(0.12);  // more seats to the right, like the sliders
@@ -162,7 +176,7 @@ function drawStrip(el, seats) {
   const W = widthOf(el), rows = W < 560 ? 10 : 4, gap = 3;
   const cols = 120 / rows, size = Math.min(26, (W - gap * (cols - 1)) / cols), step = size + gap;
   const H = rows * step + 22;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'הכנסת לפי ממוצע הסקרים: 120 המושבים לפי גוש');
   const cells = [];
   parties.forEach(p => { for (let i = 0; i < seats[p.id]; i++) cells.push(p); });
   const colX = c => W - (c + 1) * step + gap;

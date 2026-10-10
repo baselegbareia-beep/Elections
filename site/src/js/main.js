@@ -9,7 +9,8 @@ const rendered = new Set();
 function showTab(tab, { push = true } = {}) {
   if (!RENDER[tab]) tab = 'overview';
   S.tab = tab;
-  $$('.tab').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === tab));
+  // roving tabindex: only the selected tab is in the Tab order; the arrow keys move between tabs (boot)
+  $$('.tab').forEach(b => { const on = b.dataset.tab === tab; b.setAttribute('aria-selected', on); b.tabIndex = on ? 0 : -1; });
   $$('[data-panel]').forEach(p => { p.hidden = p.dataset.panel !== tab; });
   if (!rendered.has(tab)) {
     const fail = err => { console.error(err); rendered.delete(tab); $(`#tab-${tab}`).innerHTML = `<p class="empty">טעינת המדור נכשלה. <button type="button" class="slip" data-goto="${tab}">ניסיון נוסף</button></p>`; };
@@ -65,6 +66,19 @@ async function boot() {
   }
   $('#loading').remove();
   $$('.tab').forEach(b => b.addEventListener('click', () => showTab(b.dataset.tab)));
+  // the tab strip as a WAI-ARIA tablist: in RTL the next tab is to the left, so ArrowLeft moves forward
+  const tablist = $('[role="tablist"]');
+  if (tablist) tablist.addEventListener('keydown', e => {
+    const tabs = $$('.tab', tablist), cur = e.target.closest('.tab');
+    const i = cur ? tabs.indexOf(cur) : tabs.findIndex(b => b.dataset.tab === S.tab);
+    const rtl = getComputedStyle(tablist).direction === 'rtl';
+    const j = e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1
+      : e.key === 'ArrowLeft' ? i + (rtl ? 1 : -1) : e.key === 'ArrowRight' ? i + (rtl ? -1 : 1) : null;
+    if (j == null) return;
+    e.preventDefault();
+    const t = tabs[(j + tabs.length) % tabs.length];
+    showTab(t.dataset.tab); t.focus();
+  });
   // in-page links between sections
   document.addEventListener('click', e => {
     const a = e.target.closest('[data-goto]'); if (!a) return;
@@ -76,6 +90,18 @@ async function boot() {
   const t = ilStamp(ilNow());
   const dflt = t >= ELECTION_DAY[0] && t < LANDING_LIVE_UNTIL ? 'live' : 'overview';
   showTab(RENDER[h] ? h : dflt, { push: false });
+  // a page left open across a clock gate: the poll ban starting (Sat 24.10 00:00) or ending, and the polls closing
+  // (27.10 22:00), re-run the ban notice and redraw the poll tabs, whose footnote and tense follow the clock; the
+  // countdown follows the date
+  const gates = () => { const t = ilStamp(ilNow()); return `${t >= POLL_BAN}|${t >= POLLS_CLOSE}`; };
+  S.clockGates = gates();
+  setInterval(() => {
+    countdown();
+    const g = gates(); if (g === S.clockGates) return;
+    S.clockGates = g;
+    ['overview', 'coalition'].forEach(k => rendered.delete(k));
+    showTab(S.tab, { push: false });
+  }, 60000);
   // label gutters are measured on canvas; redraw once the web fonts are in
   if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(rerenderAll);
   // redraw charts on theme or width change
