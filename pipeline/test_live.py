@@ -58,9 +58,13 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red), a drill
      request through live.yml's guard into the poll ban and a daily request through the ban guard, the groups and
      write targets (main, ops-reports; never the triggering branch), a run from ops-control taking live_input/
-     from main, and the "restart" request that ends a running loop.
-The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the one check of the
-repository's own state (site/live/status.json is the placeholder) is skipped. Runtime about three minutes."""
+     from main, and the "restart" request that ends a running loop, only for a request the requested run will
+     take (the same request check, then its guard's drill rule); the runbook's request command, also when the
+     forced push is refused; and 11b again as the drill's smoke test runs it, in a checkout whose
+     ops/request.json is the drill request.
+The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
+repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
+push to ops-control started has the request itself checked out. Runtime about four minutes."""
 import contextlib
 import datetime as dt
 import glob
@@ -363,6 +367,46 @@ def run_block(script, env, cwd):
 # the workflows a push of ops/request.json to ops-control starts: (the name a request gives it, the fields it takes)
 OPS_REQUESTS = {"live.yml": ("live", "drill reset minutes runner restart"), "discover.yml": ("discover", "mode urls runner"),
                 "net-check.yml": ("net-check", ""), "daily.yml": ("daily", "")}
+# ops/request.json on main: a request for no workflow. The samples and the scratch origin below use this constant, not
+# the checkout's file: a run that a push to ops-control started (the drill's smoke test) has the request checked out
+OPS_PLACEHOLDER = {"workflow": "none", "id": "init"}
+
+
+def ops_placeholder(root):
+    """The repository's state (WF-4): ops/request.json in the checkout at `root` is main's placeholder."""
+    try:
+        req = json.load(open(os.path.join(root, "ops", "request.json"), encoding="utf-8"))
+    except (OSError, ValueError) as exc:
+        return False, repr(exc)
+    return isinstance(req, dict) and req.get("workflow") == "none", req
+
+
+def ops_control_in_request_checkout(docs, body):
+    """11b as the drill's smoke test runs it: HEALTH_GATE=1, in a checkout of ops-control whose ops/request.json is
+    the request `body` (a scratch copy of what 11b reads: docs/, ops/, pipeline/discover.py). Returns the failures
+    (taken off the list: the caller reports them in one check), the output and the scratch checkout."""
+    global ROOT
+    root, wtmp = os.path.join(TMP, "ops_checkout"), os.path.join(TMP, "wf_checkout")
+    os.makedirs(wtmp)
+    for d in ("docs", "ops"):
+        shutil.copytree(os.path.join(ROOT, d), os.path.join(root, d))
+    os.makedirs(os.path.join(root, "pipeline"))
+    shutil.copy(os.path.join(ROOT, "pipeline", "discover.py"), os.path.join(root, "pipeline"))
+    write(os.path.join(root, "ops", "request.json"), body)
+    saved, gate, before, buf = ROOT, os.environ.get("HEALTH_GATE"), len(failures), io.StringIO()
+    ROOT, os.environ["HEALTH_GATE"] = root, "1"
+    try:
+        with contextlib.redirect_stdout(buf):
+            ops_control(docs, wtmp)
+    finally:
+        ROOT = saved
+        if gate is None:
+            os.environ.pop("HEALTH_GATE", None)
+        else:
+            os.environ["HEALTH_GATE"] = gate
+    new = failures[before:]
+    del failures[before:]
+    return new, buf.getvalue(), root
 
 
 def ops_control(docs, wtmp):
@@ -393,19 +437,28 @@ def ops_control(docs, wtmp):
               and ((doc["jobs"][job].get("permissions") or doc.get("permissions")) == {"contents": "read"}),
               f"{wf}: the request is read first, from a checkout of ops/ without stored credentials, in a read-only job ({job})")
         steps[wf] = st
-    check(len({st.get("run") for st in steps.values()}) == 1, "the request step is the same block in the four workflows")
+    check(len({st.get("run") for st in steps.values()}) == 1
+          and all(st.get("run", "").rstrip().endswith("\npython3 ops/check_request.py ops/request.json") for st in steps.values()),
+          "the request step is the same block in the four workflows, and runs ops/check_request.py")
     for wf in ("pages.yml", "official-data.yml"):
         on = docs[wf].get("on", docs[wf].get(True)) or {}
         check((on.get("push") or {}).get("branches") == ["main"], f"{wf}: pushes to main only (a request starts nothing else)")
-    main_req = json.load(open(os.path.join(ROOT, "ops", "request.json"), encoding="utf-8"))
-    check(main_req.get("workflow") == "none", f"ops/request.json on main names no workflow: {main_req}")
+    # the checkout's ops/request.json is the repository's state (WF-4): main's placeholder. A run that a push to
+    # ops-control started has the request itself checked out (the drill's smoke test, HEALTH_GATE): nothing else in
+    # 11b reads it
+    if os.environ.get("HEALTH_GATE"):
+        print("  skip the checkout's ops/request.json (HEALTH_GATE: a run from ops-control has the request checked out)")
+    else:
+        ok, req = ops_placeholder(ROOT)
+        check(ok, f"ops/request.json on main names no workflow: {req}")
 
     # the step on sample requests: {workflow file: (exit code, outputs)}; a workflow not named: exit 0 and run=false
     rdir = os.path.join(wtmp, "ops_request")
     os.makedirs(os.path.join(rdir, "ops"), exist_ok=True)
+    shutil.copy(os.path.join(ROOT, "ops", "check_request.py"), os.path.join(rdir, "ops"))
     red = {wf: (1, {}) for wf in OPS_REQUESTS}
     cases = [
-        (json.dumps(main_req), {}),
+        (json.dumps(OPS_PLACEHOLDER), {}),
         ('{"workflow": "live", "drill": true, "minutes": 15, "id": "drill-1"}', {"live.yml": (0, {"drill": "true", "minutes": "15"})}),
         ('{"workflow": "live", "reset": true, "id": "r"}', {"live.yml": (0, {"reset": "true"})}),
         ('{"workflow": "live", "minutes": 345, "runner": "ubuntu-latest", "id": "x"}',
@@ -427,6 +480,9 @@ def ops_control(docs, wtmp):
         ('{"workflow": "live", "minutes": -5}', {"live.yml": (1, {})}),
         ('{"workflow": "live", "minute": 15}', {"live.yml": (1, {})}),
         ('{"workflow": "live", "runner": "self-hosted\\nrun=true"}', {"live.yml": (1, {})}),
+        # a label no runner has would wait for one, holding the group: only GitHub's servers or the computer in Israel
+        ('{"workflow": "live", "runner": "ubuntu-lates"}', {"live.yml": (1, {})}),
+        ('{"workflow": "discover", "runner": "self hosted"}', {"discover.yml": (1, {})}),
         ('{"workflow": "live", "mode": "full"}', {"live.yml": (1, {})}),
         ('{"workflow": "discover", "mode": "fast"}', {"discover.yml": (1, {})}),
         ('{"workflow": "discover", "urls": "https://a.gov.il/x\\nrun=true"}', {"discover.yml": (1, {})}),
@@ -526,8 +582,11 @@ def ops_control(docs, wtmp):
     # afresh from origin/main, the request with an id, a forced push
     runbook = open(os.path.join(ROOT, "docs", "ELECTION_DAY.md"), encoding="utf-8").read()
     block = re.search(r"```bash\n(REQ='[^\n]*'\ngit -C \.\./ops fetch.*?)```", runbook, re.S)
-    check(block and "checkout -q -f -B ops-control origin/main" in block.group(1) and "push -qf origin ops-control" in block.group(1),
-          "docs/ELECTION_DAY.md: the request command makes ops-control from origin/main and force-pushes it")
+    check(block and "checkout -q -f -B ops-control origin/main" in block.group(1) and "push -qf origin ops-control" in block.group(1)
+          and re.search(r"push -qf origin ops-control\s*\\?\s*\|\| \{ git -C \.\./ops push -q origin --delete ops-control "
+                        r"&& git -C \.\./ops push -q origin ops-control; \}", block.group(1)),
+          "docs/ELECTION_DAY.md: the request command makes ops-control from origin/main and force-pushes it "
+          "(refused: deletes the branch and pushes it anew)")
     scan = re.search(r"```bash\n(REQ='[^\n]*'\ngit -C \.\./ops fetch.*?)```",
                      open(os.path.join(ROOT, "docs", "FILE_DISCOVERY.md"), encoding="utf-8").read(), re.S)
     check(block and scan and scan.group(1).split("\n", 1)[1] == block.group(1).split("\n", 1)[1]
@@ -544,7 +603,8 @@ def ops_control(docs, wtmp):
             sh(["git", "config", k, v], d)
     write(os.path.join(editor, "live_input", "turnout.json"), '{"national": {"10:00": 15.2}}')
     write(os.path.join(editor, "pipeline", "live_config.json"), '{"github_feed": true}')
-    write(os.path.join(editor, "ops", "request.json"), json.dumps(main_req))
+    write(os.path.join(editor, "ops", "request.json"), json.dumps(OPS_PLACEHOLDER))
+    shutil.copy(os.path.join(ROOT, "ops", "check_request.py"), os.path.join(editor, "ops"))
     sh(["git", "add", "-A"], editor)
     sh(["git", "commit", "-q", "-m", "main"], editor)
     sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
@@ -594,12 +654,32 @@ def ops_control(docs, wtmp):
     m = re.search(r"^restart_requested\(\) \{\n.*?^\}\n", loop, re.S | re.M)
     check(m and loop.index("restart_requested()") < loop.index("while [") and re.search(r"if restart_requested; then\n.*?break", loop, re.S),
           "live.yml: the loop asks restart_requested at every pass and stops")
+    # ... and only for a request the requested run will carry out: the request job's own check, then the guard's
+    check(m and f"FIELDS='{steps['live.yml']['env']['FIELDS']}'" in m.group(0) and "python3 ops/check_request.py " in m.group(0)
+          and "GITHUB_OUTPUT=_req/out" in m.group(0),
+          "live.yml: restart_requested checks the request with ops/check_request.py and the request step's FIELDS")
+    _, genv, _ = run_block(lguard, {"NOW_S": str(int(EVENING.timestamp())), "GITHUB_EVENT_NAME": "push", "DRILL": "false",
+                                    "RESET": "false", "MINUTES": ""}, rdir)
+    drill_env = {k: genv.get(k, "") for k in ("DRILL_BAN_S", "DRILL_BACK_S")}
+    check(all(v.isdigit() for v in drill_env.values()) and f"ban={drill_env['DRILL_BAN_S']} " in lguard,
+          f"live.yml: the guard hands its drill rule (the poll ban) to the loop's restart check: {drill_env}")
 
-    def restart(seen, cwd=run_dir):
+    def restart(seen, cwd=run_dir, now=EVENING, env=None):
         rc_, outs_, log_ = run_block((m.group(0) if m else "restart_requested() { return 1; }\n")
                                      + 'if restart_requested; then echo "restart=yes"; else echo "restart=no"; fi\n'
-                                     + 'echo "seen=$OPS_SEEN" >> "$GITHUB_OUTPUT"\n', {"OPS_SEEN": seen}, cwd)
-        return rc_ == 0 and "restart=yes" in log_, outs_.get("seen")
+                                     + 'echo "seen=$OPS_SEEN" >> "$GITHUB_OUTPUT"\n',
+                                     {"OPS_SEEN": seen, "NOW_S": str(int(now.timestamp())), **(drill_env if env is None else env)}, cwd)
+        return rc_ == 0 and "restart=yes" in log_, outs_.get("seen"), log_
+
+    def taken(body, now):
+        """Would the run this request starts carry it out, 10 minutes from now? Its request step, then its guard."""
+        write(req_path, body)
+        rc_, o, _ = run_block(steps["live.yml"]["run"], {**steps["live.yml"]["env"], "GITHUB_EVENT_NAME": "push"}, rdir)
+        if rc_ or o.get("run") != "true":
+            return False
+        rc_, _, _ = run_block(lguard, {"NOW_S": str(int(now.timestamp()) + 600), "GITHUB_EVENT_NAME": "push",
+                                       "DRILL": o.get("drill", "false"), "RESET": o.get("reset", "false"), "MINUTES": o.get("minutes", "")}, rdir)
+        return rc_ == 0
 
     t_run = tip
     for body, seen, want in (('{"workflow": "live", "restart": true, "id": "2"}', "start", True),
@@ -611,11 +691,48 @@ def ops_control(docs, wtmp):
                              ('{"workflow": "net-check", "restart": true, "id": "7"}', "start", False),
                              ('{"workflow": "live", "restart": true, "reset": true, "id": "8"}', "none", True)):
         new_tip = request(body) if body else sh(["git", "rev-parse", "HEAD"], ops_wt)
-        stop, after = restart({"start": t_run, "same": new_tip, "off": "off", "none": "none"}[seen])
+        stop, after, _ = restart({"start": t_run, "same": new_tip, "off": "off", "none": "none"}[seen])
         check(stop == want and (seen == "off" or after == new_tip),
               f"restart check, {body or 'the request that started the run'} (seen: {seen}): restart={stop} (want {want}), seen {str(after)[:8]}")
-    stop, _ = restart(t_run, lost)
+
+    # a restart request the requested run would refuse leaves the active run going (a warning; the tip is noted, so
+    # it is not read again): a bad field or value (its request job is red), a drill into the poll ban (its guard)
+    def at(d, hh, mm):
+        return dt.datetime(2026, 10, d, hh, mm, tzinfo=IL)
+    d40 = '{"workflow": "live", "restart": true, "drill": true, "minutes": 40}'
+    last = None
+    for body, now, env, want, what in (
+            ('{"workflow": "live", "restart": true, "minutes": "abc"}', EVENING, None, False, "minutes not a number"),
+            ('{"workflow": "live", "restart": true, "runner": "self hosted"}', EVENING, None, False, "a runner label with a space"),
+            ('{"workflow": "live", "restart": true, "runner": "ubuntu-lates"}', EVENING, None, False, "a runner no one has"),
+            ('{"workflow": "live", "restart": true, "bogus": 1}', EVENING, None, False, "a field live does not take"),
+            ('{"workflow": "live", "restart": true, "drill": true}', at(27, 12, 0), None, False, "a drill on election day"),
+            ('{"workflow": "live", "restart": true, "drill": true, "reset": true}', at(27, 23, 0), None, True, "drill and reset: a reset"),
+            (d40, at(23, 22, 0), None, True, "a 40-minute drill at 23.10 22:00"),
+            (None, at(23, 22, 56), None, False, "the same at 22:56 (its guard, 10 minutes on, refuses it)"),
+            (None, at(23, 23, 10), None, False, "the same at 23:10"),
+            (None, at(15, 12, 0), {}, False, "the guard's rule not handed on: no drill restart"),
+            ('{"workflow": "live", "restart": true, "minutes": 345, "runner": "self-hosted"}', at(27, 19, 35), None, True,
+             "the 19:30 handover onto the computer in Israel")):
+        last = body or last
+        new_tip = request(body) if body else sh(["git", "rev-parse", "HEAD"], ops_wt)
+        stop, after, log = restart(t_run, now=now, env=env)
+        agrees = env is not None or stop == taken(last, now)
+        check(stop == want and agrees and after == new_tip and (stop or "::warning::ops-control" in log),
+              f"restart check, {last} at {now:%d.%m %H:%M} ({what}): restart={stop} (want {want}; the requested run's "
+              f"request step and guard agree: {agrees}), seen {str(after)[:8]} {' | '.join(log.strip().splitlines())[-110:]}")
+    stop, _, _ = restart(t_run, lost)
     check(not stop, "restart check where git cannot reach the remote: no restart")
+
+    # the request command when the forced push is refused (a ruleset, or a token without the workflows permission for
+    # main's workflow changes): it deletes ops-control and pushes it anew
+    sh(["git", "config", "receive.denyNonFastForwards", "true"], origin)
+    old = sh(["git", "rev-parse", "refs/heads/ops-control"], origin)
+    new_tip = request('{"workflow": "net-check"}')
+    remote = sh(["git", "rev-parse", "refs/heads/ops-control"], origin)
+    sh(["git", "config", "--unset", "receive.denyNonFastForwards"], origin)
+    check(remote == new_tip != old,
+          f"the request command after a refused forced push: ops-control made anew at the request ({remote[:8]}, was {old[:8]})")
 
 
 # ---------------------------------------------------------------- tests
@@ -1695,6 +1812,13 @@ def main():
         check(not any(re.search(r"\bnode\b", s_.get("run") or "") for wf in ("daily.yml", "official-data.yml")
                       for _, s_ in workflow_steps(docs[wf])), "no workflow runs node on polls-data.js")
         ops_control(docs, wtmp)
+        # the drill's smoke test runs this file with HEALTH_GATE=1 in a checkout of ops-control, where
+        # ops/request.json is the drill request itself: 11b passes there too (only the repository-state check, which
+        # would catch it, is skipped)
+        drill = '{"workflow": "live", "drill": true, "minutes": 40, "id": "20261020-120000"}'
+        new, out, root = ops_control_in_request_checkout(docs, drill)
+        check(not new and "skip the checkout's ops/request.json" in out and not ops_placeholder(root)[0],
+              f"11b in a checkout of the request {drill} with HEALTH_GATE=1 (the drill's smoke test): {len(new)} failure(s) {new[:3]}")
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")

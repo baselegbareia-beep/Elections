@@ -26,7 +26,8 @@
 # runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
 # A running loop is replaced only when it ends: to switch at once, cancel the active run (the owner), or push a
-# request with "restart": true (below), which the loop sees at its next pass.
+# request with "restart": true (below), which the loop sees at its next pass; it stops only for a request that the
+# requested run will carry out (the same request check, ops/check_request.py, and the guard's drill rule).
 # Requests: the election-day operator (a Claude session) can push but cannot dispatch or cancel runs (403), so a
 # push to the ops-control branch that changes ops/request.json stands in for Run workflow, e.g.
 # {"workflow": "live", "drill": true, "minutes": 40, "id": "…"} (docs/ELECTION_DAY.md, "בקשות דרך ops-control").
@@ -93,71 +94,14 @@ jobs:
           FIELDS: 'drill reset minutes runner restart'
         run: |
           # A push to the ops-control branch is the operator's Run workflow: the session's token can push but not
-          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). A request names one workflow (WORKFLOW is this
-          # one's name); the others end here, quietly (run=false). Its fields (FIELDS: the dispatch inputs) are
-          # checked as tightly as Run workflow checks them; a request that does not parse, names no known workflow,
-          # or has a field this workflow does not take, goes red. Other events: run=true, nothing read.
-          # The same block in live.yml, discover.yml, net-check.yml and daily.yml (pipeline/test_live.py runs it).
+          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). ops/check_request.py goes on (run=true) only for
+          # a request that names this workflow (WORKFLOW), its fields (FIELDS: the dispatch inputs) checked as tightly
+          # as Run workflow checks them; a request for another workflow ends here, quietly (run=false); one that does
+          # not parse, names no known workflow, or has a field or value this workflow does not take, goes red. Other
+          # events: run=true, nothing read. The same step in live.yml, discover.yml, net-check.yml and daily.yml;
+          # live.yml's loop runs the same check on a restart request (pipeline/test_live.py runs both).
           if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
-          python3 - ops/request.json <<'PY'
-          import json, os, re, sys
-          me, fields = os.environ["WORKFLOW"], os.environ.get("FIELDS", "").split()
-          WORKFLOWS = ("live", "discover", "net-check", "daily", "none")     # none: the placeholder on main
-          def safe(x):          # request text in a log line: no newlines, no workflow commands
-              return re.sub(r"[^\w .,:/=+()'\"\[\]-]", "?", str(x))[:80]
-          def fail(msg):
-              print(f"::error::ops/request.json: {msg}")
-              sys.exit(1)
-          def flag(v):
-              return str(v).lower() if isinstance(v, bool) else None
-          def whole(v):         # whole minutes, as Run workflow's minutes (the feed's guard checks them again)
-              if isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 9999:
-                  return str(v)
-              return str(int(v)) if isinstance(v, str) and re.fullmatch(r"[0-9]{1,4}", v) else None
-          def label(v):         # a runner label: ubuntu-latest, self-hosted
-              return v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,62}", v) else None
-          def mode(v):
-              return v if isinstance(v, str) and v in ("auto", "full", "quick") else None
-          def urls(v):          # addresses for the scan: a list, or one string separated by spaces
-              v = v.split() if isinstance(v, str) else v
-              ok = isinstance(v, list) and 0 < len(v) <= 20 and all(
-                  isinstance(u, str) and re.fullmatch(r"https?://[^\s\"'`<>\\]{1,500}", u) for u in v)
-              return " ".join(v) if ok else None
-          CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode,
-                    "urls": urls}
-          try:
-              with open(sys.argv[1], encoding="utf-8") as f:
-                  req = json.load(f)
-          except FileNotFoundError:
-              fail("not on this commit: make ops-control from origin/main (docs/ELECTION_DAY.md)")
-          except (ValueError, OSError) as exc:
-              fail(f"does not parse: {safe(exc)}")
-          if not isinstance(req, dict):
-              fail("not a JSON object")
-          wf, rid = req.get("workflow"), safe(req.get("id", "-"))
-          if wf not in WORKFLOWS:
-              fail(f"workflow is {safe(wf)!r}, not one of {', '.join(WORKFLOWS)}")
-          out = {"run": "false"}
-          if wf != me:
-              print(f"request {rid} is for {wf}, not {me}: nothing to do")
-          else:
-              extra = [safe(k) for k in req if k not in ("workflow", "id") and k not in fields]
-              if extra:
-                  fail(f"{me} takes {', '.join(fields) or 'no fields'} (besides workflow and id), not {', '.join(extra)}")
-              out["run"] = "true"
-              for k in fields:
-                  if k in req:
-                      v = CHECKS[k](req[k])
-                      if v is None:
-                          fail(f"{k}: {safe(json.dumps(req[k]))} is not a valid value")
-                      out[k] = v
-              said = " ".join(f"{k}={v}" for k, v in out.items() if k != "run") or "no fields"
-              print(f"request {rid}: {me} {said}")
-              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
-                  f.write(f"Request {rid} (ops/request.json on ops-control): {me} {said}\n")
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-              f.writelines(f"{k}={v}\n" for k, v in out.items())
-          PY
+          python3 ops/check_request.py ops/request.json
 
   feed:
     needs: request
@@ -215,6 +159,8 @@ jobs:
           # applies the same rule, and its --seed refuses a drill over real files)
           ban=1792789200    # 24.10.2026 00:00 Israel time (23.10 21:00 UTC)
           back=1793916000   # 6.11.2026 00:00 Israel time (5.11 22:00 UTC)
+          # the same rule for a restart request, which the loop checks before it stops (restart_requested)
+          printf 'DRILL_BAN_S=%s\nDRILL_BACK_S=%s\n' "$ban" "$back" >> "$GITHUB_ENV"
           if [ "$DRILL" = true ] && [ "$RESET" != true ] && [ $(( now_s + (MINUTES + 15) * 60 )) -ge "$ban" ] && [ "$now_s" -lt "$back" ]; then
             echo "::error::no drill that runs into 24.10 00:00 Israel time (the poll ban: $MINUTES minutes from $(ildate '+%d.%m %H:%M'), plus 15 for the reset), nor from then until 6.11: the page would show a rehearsal projection during the ban or the vote, or the drill would overwrite the real files"
             exit 1
@@ -290,7 +236,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm -rf lm ld _live _probe; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
+          rm -rf lm ld _live _probe _req; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
           # history, last good files, state and the publishing cadence from the published folder, except a
           # rehearsal's (OPS-3); a drill is refused here while the published files are the real election's (WF-2)
           seed=(--out _live --seed)
@@ -333,19 +279,45 @@ jobs:
           }
           # Cancel run for the operator, whose token cannot cancel: a {"workflow": "live", "restart": true} request
           # pushed to ops-control after this run began (OPS_SEEN: the tip then) ends it at its next pass, and the run
-          # that request started, pending in the live-feed group, takes over at once. Any failure here: no restart.
+          # that request started, pending in the live-feed group, takes over at once. Only when that run will carry
+          # the request out: the same check as its request job (ops/check_request.py: a bad field or value there
+          # makes it red and skips its feed), then its guard's drill rule (a drill into the poll ban is refused; 10
+          # minutes added for this run's last publish and that run's start). A request it would refuse leaves this
+          # run going, with a warning. Any failure here: no restart.
           restart_requested() {
-            local out tip
+            local out tip k v line run='' restart='' drill='' reset='' minutes='' now_s
             [ "${OPS_SEEN:-off}" != off ] || return 1
             out=$(git ls-remote origin refs/heads/ops-control 2>/dev/null) || return 1
             tip=${out%%[[:space:]]*}
             if [ -z "$tip" ] || [ "$tip" = "$OPS_SEEN" ]; then return 1; fi
             git fetch -q origin "+refs/heads/ops-control:refs/remotes/origin/ops-control" 2>/dev/null || return 1
             OPS_SEEN=$(git rev-parse origin/ops-control) || return 1
-            git show "$OPS_SEEN:ops/request.json" 2>/dev/null | python3 -c '
-          import json, sys
-          r = json.load(sys.stdin)
-          sys.exit(0 if isinstance(r, dict) and r.get("workflow") == "live" and r.get("restart") is True else 1)' 2>/dev/null
+            rm -rf _req && mkdir _req && : > _req/out || return 1
+            git show "$OPS_SEEN:ops/request.json" > _req/request.json 2>/dev/null || return 1
+            if ! WORKFLOW=live FIELDS='drill reset minutes runner restart' GITHUB_OUTPUT=_req/out GITHUB_STEP_SUMMARY=/dev/null \
+                 python3 ops/check_request.py _req/request.json > _req/log 2>&1; then
+              line=$(tail -n 1 _req/log | cut -c1-240)
+              line=${line#::error::}
+              echo "::warning::ops-control: a request the requested run will refuse (${line}); this run goes on"
+              echo "- $(date -u +%H:%M) UTC: a request on ops-control not taken, the requested run will refuse it: \`${line}\`" >> "$GITHUB_STEP_SUMMARY"
+              return 1
+            fi
+            while IFS='=' read -r k v; do
+              case "$k" in
+                run) run=$v ;; restart) restart=$v ;; drill) drill=$v ;; reset) reset=$v ;; minutes) minutes=$v ;;
+              esac
+            done < _req/out
+            # another workflow's request, or a live one without restart: it does not concern this run
+            [ "$run" = true ] && [ "$restart" = true ] || return 1
+            # the guard's drill rule (DRILL_BAN_S, DRILL_BACK_S: the guard's; unset, every drill is refused). Without
+            # minutes a drill gets 20 (345 only on 27–29.10, when every drill is refused anyway)
+            now_s=${NOW_S:-$(date +%s)}
+            if [ "$drill" = true ] && [ "$reset" != true ] \
+               && [ $(( now_s + 600 + (${minutes:-20} + 15) * 60 )) -ge "${DRILL_BAN_S:-0}" ] && [ "$now_s" -lt "${DRILL_BACK_S:-4102444800}" ]; then
+              echo "::warning::ops-control: a drill restart that would run into the poll ban (24.10 00:00 Israel time; the requested run's guard refuses it); this run goes on"
+              echo "- $(date -u +%H:%M) UTC: a drill restart on ops-control not taken (the poll ban)" >> "$GITHUB_STEP_SUMMARY"
+              return 1
+            fi
           }
           if [ "$RESET" = true ]; then reset_live; exit $?; fi
           crashes=0

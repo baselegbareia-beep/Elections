@@ -62,71 +62,14 @@ jobs:
           FIELDS: ''
         run: |
           # A push to the ops-control branch is the operator's Run workflow: the session's token can push but not
-          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). A request names one workflow (WORKFLOW is this
-          # one's name); the others end here, quietly (run=false). Its fields (FIELDS: the dispatch inputs) are
-          # checked as tightly as Run workflow checks them; a request that does not parse, names no known workflow,
-          # or has a field this workflow does not take, goes red. Other events: run=true, nothing read.
-          # The same block in live.yml, discover.yml, net-check.yml and daily.yml (pipeline/test_live.py runs it).
+          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). ops/check_request.py goes on (run=true) only for
+          # a request that names this workflow (WORKFLOW), its fields (FIELDS: the dispatch inputs) checked as tightly
+          # as Run workflow checks them; a request for another workflow ends here, quietly (run=false); one that does
+          # not parse, names no known workflow, or has a field or value this workflow does not take, goes red. Other
+          # events: run=true, nothing read. The same step in live.yml, discover.yml, net-check.yml and daily.yml;
+          # live.yml's loop runs the same check on a restart request (pipeline/test_live.py runs both).
           if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
-          python3 - ops/request.json <<'PY'
-          import json, os, re, sys
-          me, fields = os.environ["WORKFLOW"], os.environ.get("FIELDS", "").split()
-          WORKFLOWS = ("live", "discover", "net-check", "daily", "none")     # none: the placeholder on main
-          def safe(x):          # request text in a log line: no newlines, no workflow commands
-              return re.sub(r"[^\w .,:/=+()'\"\[\]-]", "?", str(x))[:80]
-          def fail(msg):
-              print(f"::error::ops/request.json: {msg}")
-              sys.exit(1)
-          def flag(v):
-              return str(v).lower() if isinstance(v, bool) else None
-          def whole(v):         # whole minutes, as Run workflow's minutes (the feed's guard checks them again)
-              if isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 9999:
-                  return str(v)
-              return str(int(v)) if isinstance(v, str) and re.fullmatch(r"[0-9]{1,4}", v) else None
-          def label(v):         # a runner label: ubuntu-latest, self-hosted
-              return v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,62}", v) else None
-          def mode(v):
-              return v if isinstance(v, str) and v in ("auto", "full", "quick") else None
-          def urls(v):          # addresses for the scan: a list, or one string separated by spaces
-              v = v.split() if isinstance(v, str) else v
-              ok = isinstance(v, list) and 0 < len(v) <= 20 and all(
-                  isinstance(u, str) and re.fullmatch(r"https?://[^\s\"'`<>\\]{1,500}", u) for u in v)
-              return " ".join(v) if ok else None
-          CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode,
-                    "urls": urls}
-          try:
-              with open(sys.argv[1], encoding="utf-8") as f:
-                  req = json.load(f)
-          except FileNotFoundError:
-              fail("not on this commit: make ops-control from origin/main (docs/ELECTION_DAY.md)")
-          except (ValueError, OSError) as exc:
-              fail(f"does not parse: {safe(exc)}")
-          if not isinstance(req, dict):
-              fail("not a JSON object")
-          wf, rid = req.get("workflow"), safe(req.get("id", "-"))
-          if wf not in WORKFLOWS:
-              fail(f"workflow is {safe(wf)!r}, not one of {', '.join(WORKFLOWS)}")
-          out = {"run": "false"}
-          if wf != me:
-              print(f"request {rid} is for {wf}, not {me}: nothing to do")
-          else:
-              extra = [safe(k) for k in req if k not in ("workflow", "id") and k not in fields]
-              if extra:
-                  fail(f"{me} takes {', '.join(fields) or 'no fields'} (besides workflow and id), not {', '.join(extra)}")
-              out["run"] = "true"
-              for k in fields:
-                  if k in req:
-                      v = CHECKS[k](req[k])
-                      if v is None:
-                          fail(f"{k}: {safe(json.dumps(req[k]))} is not a valid value")
-                      out[k] = v
-              said = " ".join(f"{k}={v}" for k, v in out.items() if k != "run") or "no fields"
-              print(f"request {rid}: {me} {said}")
-              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
-                  f.write(f"Request {rid} (ops/request.json on ops-control): {me} {said}\n")
-          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
-              f.writelines(f"{k}={v}\n" for k, v in out.items())
-          PY
+          python3 ops/check_request.py ops/request.json
       - name: Poll-ban guard
         id: guard
         if: steps.request.outputs.run == 'true'
