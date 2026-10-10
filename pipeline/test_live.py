@@ -59,9 +59,10 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      request through live.yml's guard into the poll ban and a daily request through the ban guard, the groups and
      write targets (main, ops-reports; never the triggering branch), a run from ops-control taking live_input/
      from main, and the "restart" request that ends a running loop, only for a request the requested run will
-     take (the same request check, then its guard's drill rule); the runbook's request command, also when the
-     forced push is refused; and 11b again as the drill's smoke test runs it, in a checkout whose
-     ops/request.json is the drill request.
+     take (the same request check, then its guard's drill rule), and only once that run's request job has
+     finished (the loop run whole against a stand-in for the runs API), or 3 minutes on; the runbook's request
+     command, also when the forced push is refused; and 11b again as the drill's smoke test runs it, in a checkout
+     whose ops/request.json is the drill request.
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
@@ -81,6 +82,7 @@ import tempfile
 import threading
 import time
 import types
+import urllib.parse
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import live_fetch as LF  # noqa: E402
@@ -311,6 +313,30 @@ class Api(http.server.BaseHTTPRequestHandler):
         pass
 
 
+class RunsApi(Api):
+    """A stand-in for the workflow-runs API that live.yml's loop asks after a restart request (requested_run_ready):
+    GET /repos/o/r/actions/runs, filtered by event, branch and head_sha as GitHub filters them, and
+    /repos/o/r/actions/runs/{id}/jobs. runs: the run objects; jobs: {run id: [(status, conclusion), ...]}, one state
+    per call, the last one repeating; code: a status other than 200 fails every call."""
+    runs, jobs, code, calls = [], {}, 200, []
+
+    def do_GET(self):
+        url = urllib.parse.urlsplit(self.path)
+        q = dict(urllib.parse.parse_qsl(url.query))
+        self.calls.append((url.path, q, self.headers.get("Authorization")))
+        m = re.fullmatch(r"/repos/o/r/actions/runs(?:/(\d+)/jobs)?", url.path)
+        if self.code != 200 or not m or (m.group(1) and int(m.group(1)) not in self.jobs):
+            return self._json(self.code if self.code != 200 else 404, {"message": "boom" if self.code != 200 else "Not Found"})
+        if m.group(1):
+            states = self.jobs[int(m.group(1))]
+            status, conclusion = states.pop(0) if len(states) > 1 else states[0]
+            return self._json(200, {"total_count": 2, "jobs": [{"name": "request", "status": status, "conclusion": conclusion},
+                                                               {"name": "feed", "status": "queued", "conclusion": None}]})
+        runs = [r for r in self.runs if all(q.get(k, r[f]) == r[f] for k, f in (("event", "event"), ("branch", "head_branch"),
+                                                                                 ("head_sha", "head_sha")))]
+        self._json(200, {"total_count": len(runs), "workflow_runs": runs})
+
+
 def load_yaml(path):
     """A workflow file as a dict: PyYAML when installed, else Ruby's YAML (on GitHub's runners), else None."""
     try:
@@ -417,7 +443,8 @@ def ops_control(docs, wtmp):
     live.yml's drill guard and daily.yml's poll-ban guard; the working jobs keep their concurrency groups, and a
     request for another workflow can never take a group's pending slot; everything is written to main or
     ops-reports, never to the triggering branch; a run that ops-control started reads live_input/ and
-    live_config.json from main; and a later {"restart": true} request ends a running loop (the stand-in for Cancel)."""
+    live_config.json from main; and a later {"restart": true} request ends a running loop (the stand-in for Cancel),
+    once the run it started has finished its request job (so that its feed job is pending in the group)."""
     print("11b. ops-control: the request step in the four workflows, its guards, groups, write targets and restart")
     steps = {}
     for wf, (name, fields) in OPS_REQUESTS.items():
@@ -650,10 +677,18 @@ def ops_control(docs, wtmp):
     check(rc == 0 and outs.get("OPS_SEEN") == "off" and "::warning::" in log,
           f"inputs step where git cannot reach the remote: a warning, OPS_SEEN={outs.get('OPS_SEEN')} (no restart possible)")
 
-    # restart: a {"workflow": "live", "restart": true} pushed after the run began ends the loop; nothing else does
+    # restart: a {"workflow": "live", "restart": true} pushed after the run began ends the loop; nothing else does.
+    # restart_requested says whether the tip is such a request; the loop then stops once the requested run is ready
+    # (requested_run_ready, the end-to-end cases below)
     m = re.search(r"^restart_requested\(\) \{\n.*?^\}\n", loop, re.S | re.M)
-    check(m and loop.index("restart_requested()") < loop.index("while [") and re.search(r"if restart_requested; then\n.*?break", loop, re.S),
-          "live.yml: the loop asks restart_requested at every pass and stops")
+    body_ = loop.split("while [", 1)[-1]
+    check(m and re.search(r"^requested_run_ready\(\) \{\n.*?^\}\n", loop, re.S | re.M)
+          and loop.index("restart_requested()") < loop.index("while [") and loop.index("requested_run_ready()") < loop.index("while [")
+          and "restart_requested; then" in body_ and "requested_run_ready; then" in body_,
+          "live.yml: the loop asks restart_requested at every pass, then waits for the requested run (requested_run_ready)")
+    lperm = feed.get("permissions") or docs["live.yml"].get("permissions") or {}
+    check(lperm.get("actions") in ("read", "write") and "GH_TOKEN" in fenv,
+          f"live.yml: the feed job's token can read the runs API (actions: {lperm.get('actions')}; GH_TOKEN in its env)")
     # ... and only for a request the requested run will carry out: the request job's own check, then the guard's
     check(m and f"FIELDS='{steps['live.yml']['env']['FIELDS']}'" in m.group(0) and "python3 ops/check_request.py " in m.group(0)
           and "GITHUB_OUTPUT=_req/out" in m.group(0),
@@ -693,7 +728,8 @@ def ops_control(docs, wtmp):
         new_tip = request(body) if body else sh(["git", "rev-parse", "HEAD"], ops_wt)
         stop, after, _ = restart({"start": t_run, "same": new_tip, "off": "off", "none": "none"}[seen])
         check(stop == want and (seen == "off" or after == new_tip),
-              f"restart check, {body or 'the request that started the run'} (seen: {seen}): restart={stop} (want {want}), seen {str(after)[:8]}")
+              f"restart check, {body or 'the request that started the run'} (seen: {seen}): restart requested={stop} (want {want}), "
+              f"seen {str(after)[:8]}")
 
     # a restart request the requested run would refuse leaves the active run going (a warning; the tip is noted, so
     # it is not read again): a bad field or value (its request job is red), a drill into the poll ban (its guard)
@@ -719,10 +755,90 @@ def ops_control(docs, wtmp):
         stop, after, log = restart(t_run, now=now, env=env)
         agrees = env is not None or stop == taken(last, now)
         check(stop == want and agrees and after == new_tip and (stop or "::warning::ops-control" in log),
-              f"restart check, {last} at {now:%d.%m %H:%M} ({what}): restart={stop} (want {want}; the requested run's "
-              f"request step and guard agree: {agrees}), seen {str(after)[:8]} {' | '.join(log.strip().splitlines())[-110:]}")
+              f"restart check, {last} at {now:%d.%m %H:%M} ({what}): restart requested={stop} (want {want}; the requested "
+              f"run's request step and guard agree: {agrees}), seen {str(after)[:8]} {' | '.join(log.strip().splitlines())[-110:]}")
     stop, _, _ = restart(t_run, lost)
     check(not stop, "restart check where git cannot reach the remote: no restart")
+
+    # The deferred stop: the requested run takes over only if its feed job is pending in the live-feed group when the
+    # active run ends, and it joins the group only once its request job has finished. So after a restart request the
+    # loop goes on (its passes keep publishing) and asks the runs API at every pass: it stops once the request job of
+    # the live.yml run that the push started is completed with success (then 10 s more), or 3 minutes after it saw
+    # the request (a warning; an API failure counts as not finished). The loop step run whole, in the checkout of a
+    # run that ops-control started, with live_fetch.py, sleep and the clock stubbed, against a stand-in for the API
+    rtip = request('{"workflow": "live", "restart": true, "minutes": 345}')
+    stub = os.path.join(wtmp, "loop_stub")
+    clock, stub_log = os.path.join(stub, "clock"), os.path.join(stub, "log")
+    write(os.path.join(stub, "python3"), '#!/bin/sh\nif [ "$1" = pipeline/live_fetch.py ]; then echo "live_fetch $*" >> "$STUB_LOG"; '
+                                         f'printf "%s\\n" "$FAKE_LINE"; exit 0; fi\nexec "{sys.executable}" "$@"\n')
+    write(os.path.join(stub, "sleep"), '#!/bin/sh\necho "sleep $1" >> "$STUB_LOG"\nt=$(cat "$FAKE_CLOCK")\necho $((t + $1)) > "$FAKE_CLOCK"\n')
+    write(os.path.join(stub, "date"), f'#!/bin/sh\nif [ "$1" = +%s ]; then cat "$FAKE_CLOCK"; exit 0; fi\nexec "{shutil.which("date")}" "$@"\n')
+    for n in ("python3", "sleep", "date"):
+        os.chmod(os.path.join(stub, n), 0o755)
+    api_srv = http.server.HTTPServer(("127.0.0.1", 0), RunsApi)
+    threading.Thread(target=api_srv.serve_forever, daemon=True).start()
+    t0 = int(EVENING.timestamp())
+
+    def loop_run(seen, runs, jobs, code=200, minutes=10):
+        """The loop step from the clock's t0 with OPS_SEEN = seen: (exit code, log, live_fetch.py passes, sleeps,
+        seconds on the clock, the API's calls)."""
+        RunsApi.runs, RunsApi.jobs, RunsApi.code, RunsApi.calls = runs, jobs, code, []
+        write(clock, str(t0))
+        write(stub_log, "")
+        rc_, _, log_ = run_block(loop, {"OPS_SEEN": seen, "NOW_S": str(t0), **drill_env, "DRILL": "false", "RESET": "false",
+                                        "MINUTES": str(minutes), "PUB_ARGS": "", "INPUT_REF": "main", "GH_TOKEN": "test-token",
+                                        "GITHUB_REPOSITORY": "o/r", "GITHUB_API_URL": f"http://127.0.0.1:{api_srv.server_address[1]}",
+                                        "FAKE_CLOCK": clock, "STUB_LOG": stub_log,
+                                        "FAKE_LINE": json.dumps({"changed": False, "published": "unchanged", "errors": []}),
+                                        "PATH": stub + os.pathsep + os.environ.get("PATH", "")}, run_dir)
+        lines = open(stub_log).read().splitlines()
+        passes = [ln for ln in lines if ln.startswith("live_fetch ")]
+        return (rc_, log_, sum("--once" in ln for ln in passes) if passes and "--flush" in passes[-1] else -1,
+                [int(ln.split()[1]) for ln in lines if ln.startswith("sleep ")], int(open(clock).read()) - t0, list(RunsApi.calls))
+
+    def run_obj(i, path, sha=rtip):
+        return {"id": i, "name": path, "path": f".github/workflows/{path}", "event": "push", "head_branch": "ops-control", "head_sha": sha}
+    done = [("completed", "success")]
+    # the same push starts the other three workflows too, whose request jobs finish at once (a request for live)
+    others = [run_obj(11, "discover.yml"), run_obj(12, "net-check.yml"), run_obj(13, "daily.yml")]
+    ojobs = {11: done, 12: done, 13: done}
+    try:
+        for what, seen, runs, jobs, code, minutes, want in (
+                ("the request job finishes at the third look", t_run, others + [run_obj(21, "live.yml"), run_obj(22, "live.yml", "0" * 40)],
+                 {**ojobs, 21: [("queued", None), ("in_progress", None), ("completed", "success")], 22: done}, 200, 10,
+                 ("ready", 2, [45, 45, 10], 100)),
+                ("finished when the loop sees the request (a path with its ref)", t_run, [run_obj(23, "live.yml@refs/heads/ops-control")] + others,
+                 {**ojobs, 23: done}, 200, 10, ("ready", 0, [10], 10)),
+                ("the API fails (HTTP 500)", t_run, [], {}, 500, 10, ("the runs API failed", 4, [45] * 4, 180)),
+                ("the request job failed", t_run, others + [run_obj(24, "live.yml")], {**ojobs, 24: [("completed", "failure")]}, 200, 10,
+                 ("completed/failure", 4, [45] * 4, 180)),
+                ("no live.yml run, only the other workflows'", t_run, others, ojobs, 200, 10, ("no live.yml run", 4, [45] * 4, 180)),
+                ("the jobs API fails", t_run, others + [run_obj(25, "live.yml")], ojobs, 200, 10, ("the jobs API failed", 4, [45] * 4, 180)),
+                ("no restart request (the tip the run began with)", rtip, others + [run_obj(26, "live.yml")], {**ojobs, 26: done}, 200, 3,
+                 ("end", 4, [45] * 4, 180))):
+            rc, log, passes, sleeps, secs, calls = loop_run(seen, runs, jobs, code, minutes)
+            how, n_pass, n_sleeps, n_secs = want
+            said = log.count("ops-control: restart requested")
+            if how == "ready":
+                ok = "stopping, the requested run takes over" in log and "::warning::" not in log and said == 1
+            elif how == "end":
+                ok = said == 0 and not calls and "stopping" not in log
+            else:
+                ok = (said == 1 and "::warning::ops-control: the requested run's request job has not finished" in log
+                      and f"({how}" in log)
+            # one look at the runs per pass (and one more at the stop): the request's commit, live.yml's runs only
+            run_calls = [c for c in calls if c[0] == "/repos/o/r/actions/runs"]
+            asked = (all(c[1] == {"event": "push", "branch": "ops-control", "head_sha": rtip} for c in run_calls)
+                     and all(c[2] == "Bearer test-token" for c in calls))
+            job_calls = {c[0].split("/")[-2] for c in calls if c[0].endswith("/jobs")}
+            right_jobs = job_calls <= {str(r["id"]) for r in runs if r["path"].split("@")[0].endswith("/live.yml") and r["head_sha"] == rtip}
+            check(rc == 0 and ok and passes == n_pass and sleeps == n_sleeps and secs == n_secs
+                  and (how == "end" or (len(run_calls) == n_pass + 1 and asked and right_jobs)),
+                  f"restart, the loop end to end, {what}: exit {rc}, {passes} passes (want {n_pass}), sleeps {sleeps} "
+                  f"(want {n_sleeps}), stopped after {secs} s (want {n_secs}), {len(run_calls)} runs-API calls, jobs asked of "
+                  f"{sorted(job_calls)}; {' | '.join(ln for ln in log.splitlines() if 'ops-control' in ln)[-200:]}")
+    finally:
+        api_srv.shutdown()
 
     # the request command when the forced push is refused (a ruleset, or a token without the workflows permission for
     # main's workflow changes): it deletes ops-control and pushes it anew

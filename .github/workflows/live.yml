@@ -27,7 +27,8 @@
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
 # A running loop is replaced only when it ends: to switch at once, cancel the active run (the owner), or push a
 # request with "restart": true (below), which the loop sees at its next pass; it stops only for a request that the
-# requested run will carry out (the same request check, ops/check_request.py, and the guard's drill rule).
+# requested run will carry out (the same request check, ops/check_request.py, and the guard's drill rule), and only
+# once that run's request job has finished, so that its feed job is pending in the group (3 minutes at most).
 # Requests: the election-day operator (a Claude session) can push but cannot dispatch or cancel runs (403), so a
 # push to the ops-control branch that changes ops/request.json stands in for Run workflow, e.g.
 # {"workflow": "live", "drill": true, "minutes": 40, "id": "…"} (docs/ELECTION_DAY.md, "בקשות דרך ops-control").
@@ -278,12 +279,12 @@ jobs:
             fi
           }
           # Cancel run for the operator, whose token cannot cancel: a {"workflow": "live", "restart": true} request
-          # pushed to ops-control after this run began (OPS_SEEN: the tip then) ends it at its next pass, and the run
-          # that request started, pending in the live-feed group, takes over at once. Only when that run will carry
-          # the request out: the same check as its request job (ops/check_request.py: a bad field or value there
-          # makes it red and skips its feed), then its guard's drill rule (a drill into the poll ban is refused; 10
-          # minutes added for this run's last publish and that run's start). A request it would refuse leaves this
-          # run going, with a warning. Any failure here: no restart.
+          # pushed to ops-control after this run began (OPS_SEEN: the tip then) is seen at the loop's next pass, and
+          # the run that request started takes over once this one ends (requested_run_ready, below). Only when that
+          # run will carry the request out: the same check as its request job (ops/check_request.py: a bad field or
+          # value there makes it red and skips its feed), then its guard's drill rule (a drill into the poll ban is
+          # refused; 10 minutes added for this run's last publish and that run's start). A request it would refuse
+          # leaves this run going, with a warning. Any failure here: no restart.
           restart_requested() {
             local out tip k v line run='' restart='' drill='' reset='' minutes='' now_s
             [ "${OPS_SEEN:-off}" != off ] || return 1
@@ -319,8 +320,40 @@ jobs:
               return 1
             fi
           }
+          # The requested run takes over only if its feed job is pending in the live-feed group when this run ends,
+          # and that job joins the group only once the run's request job has finished (20–90 s after the push: a
+          # hosted runner, the checkout of ops/, the check). Ending sooner lets a run already pending in the group
+          # start instead (27–29.10: a scheduled one, a cron every 20 minutes), and the request is lost. So after a
+          # restart request the loop goes on, and at every pass asks the API (GH_TOKEN; actions: read) for the
+          # live.yml run that the push of OPS_SEEN started, and its jobs: ready when the job "request" is completed
+          # with success. Any API failure: not ready (REQ_STATE says why), and the loop stops anyway 3 minutes after
+          # it saw the request
+          requested_run_ready() {
+            local api ids id
+            api="${GITHUB_API_URL:-https://api.github.com}/repos/$GITHUB_REPOSITORY/actions/runs"
+            REQ_STATE='the runs API failed'
+            # the push's runs (every workflow that ops/request.json starts): live.yml's, by path (path@ref also)
+            ids=$(curl -sSf -m 20 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                    "$api?event=push&branch=ops-control&head_sha=$OPS_SEEN" 2>/dev/null | python3 -c '
+          import json, sys
+          runs = json.load(sys.stdin).get("workflow_runs") or []
+          print(" ".join(str(r["id"]) for r in runs if r.get("head_sha") == sys.argv[1]
+                         and str(r.get("path") or "").split("@")[0] == ".github/workflows/live.yml"))' "$OPS_SEEN" 2>/dev/null) || return 1
+            REQ_STATE='no live.yml run for the request yet'
+            for id in $ids; do
+              REQ_STATE=$(curl -sSf -m 20 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                            "$api/$id/jobs" 2>/dev/null | python3 -c '
+          import json, sys
+          job = [j for j in json.load(sys.stdin).get("jobs") or [] if j.get("name") == "request"]
+          print("%s/%s" % (job[0].get("status"), job[0].get("conclusion")) if job else "no request job")' 2>/dev/null) \
+                || REQ_STATE='the jobs API failed'
+              if [ "$REQ_STATE" = completed/success ]; then return 0; fi
+            done
+            return 1
+          }
           if [ "$RESET" = true ]; then reset_live; exit $?; fi
           crashes=0
+          restart_at=''   # when the loop saw a restart request; from then on it waits for the requested run
           end=$(( $(date +%s) + MINUTES * 60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
             # manual inputs and config edits made on GitHub, from main also when a push to ops-control started this
@@ -330,10 +363,22 @@ jobs:
             if python3 -c 'import json,sys; sys.exit(0 if json.load(open("pipeline/live_config.json")).get("github_feed", True) is False else 1)' 2>/dev/null; then
               echo 'live_config.json: "github_feed": false, stopping (the laptop takes over)'; break
             fi
-            if restart_requested; then
-              echo "ops-control: restart requested ($(git log -1 --format=%s "$OPS_SEEN" 2>/dev/null | cut -c1-120)); stopping, the requested run takes over"
-              echo "- $(date -u +%H:%M) UTC: ended by a restart request on ops-control" >> "$GITHUB_STEP_SUMMARY"
-              break
+            if [ -z "$restart_at" ] && restart_requested; then
+              restart_at=$(date +%s)
+              echo "ops-control: restart requested ($(git log -1 --format=%s "$OPS_SEEN" 2>/dev/null | cut -c1-120)); this run stops once the requested run's request job has finished (3 minutes at most)"
+            fi
+            if [ -n "$restart_at" ]; then
+              if requested_run_ready; then
+                sleep 10   # its feed job joins the live-feed group right after the request job
+                echo "ops-control: the requested run's request job has finished; stopping, the requested run takes over"
+                echo "- $(date -u +%H:%M) UTC: ended by a restart request on ops-control" >> "$GITHUB_STEP_SUMMARY"
+                break
+              elif [ $(( $(date +%s) - restart_at )) -ge 180 ]; then
+                echo "::warning::ops-control: the requested run's request job has not finished with success within 3 minutes ($REQ_STATE); stopping anyway: check that the run after this one is the requested one (docs/ELECTION_DAY.md)"
+                echo "- $(date -u +%H:%M) UTC: ended by a restart request on ops-control, without seeing the requested run's request job finish ($REQ_STATE)" >> "$GITHUB_STEP_SUMMARY"
+                break
+              fi
+              echo "ops-control: waiting for the requested run's request job ($REQ_STATE)"
             fi
             # one pass, then live_fetch.publish_step publishes when due (branch mode: every publish_every_min
             # minutes, the first results / exit polls at once) and has the page rebuilt
