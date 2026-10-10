@@ -29,9 +29,14 @@ election-night models adapted to Israel's single national constituency):
   counted localities within each stratum, plus envelope noise.
 
 backtest() replays a past election with the one before it as the baseline, in
-simulated counting orders, and measures the error at each stage of the count.
-The noise constants were tuned on the 2022 backtest (calibration); the 2021
-backtest and the real 2021 counting order (build_replay.py) are hold-out.
+simulated counting orders (rough sketches of a night, see counting_order), and
+measures the error at each stage of the count. The noise constants came from a
+sweep over both simulated backtests, 2022 and 2021 (CALIBRATED_ON); the real
+2021 counting order (build_replay.py, accuracy_real) is the hold-out. The sweep
+predates the LM-1..6 fixes and on the corrected model the 80% bands over-cover
+(the backtests put the result inside them 93-100% of the time); the constants
+are kept as they are, since too wide is the safe side with three new lists and a
+four-year-old baseline.
 
 Run: python3 pipeline/live_model.py backtest --base K24 --cur K25
      python3 pipeline/live_model.py prior      (the 2026 prior, as the page computes it)
@@ -44,6 +49,7 @@ import json
 import math
 import os
 import random
+import statistics
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -80,15 +86,17 @@ STRATUM_SD = 0.10      # stratum random effect, scaled by how much the stratum l
 SYS_SD = 0.07          # shared shift of the Netanyahu camp in the uncounted vote (log scale, at 0% counted)
 SYS_SD_ARAB = 0.12     # shared shift of the Arab lists in the uncounted vote
 THIN_WIDEN = 2.0       # extra shared error when the uncounted vote sits in strata with almost nothing counted
+                       # (scaled by the national count's weight: before anything is counted the prior's own error is the whole story, LM-A)
 LIST_SD = 0.12         # independent error of each list in the uncounted vote (log scale, at 0% counted)
 LIST_NEW = 1.8         # multiplier for lists without a clean predecessor
 # Lists without a predecessor get this share of their national prior in Arab localities until those are
-# counted. Assumption from 2021: New Hope took 0.18x its national share in Arab localities but 0.95x in
-# Druze localities, so the factor applies to the Arab group only (LM-3).
+# counted, and correspondingly more elsewhere so that the national prior is kept (LM-D). Assumption from
+# 2021: New Hope took 0.18x its national share in Arab localities but 0.95x in Druze localities, so the
+# factor applies to the Arab group only (LM-3).
 ARAB_NEW = 0.2
 ENV_DONE = 0.97        # counted envelopes at this share of the CEC's announced total: the count is complete
 ENV_BLEND_K = 150000   # pseudo-votes: the envelope mix moves from the baseline to the counted envelopes
-ENV_SIZE_SD = 0.25     # relative uncertainty of the envelope total before it is announced
+ENV_SIZE_SD = 0.25     # relative uncertainty of the envelope total before it is announced (the total is at least what is counted, LM-C)
 ENV_SHOCK = 1.0        # scale of the camp and list errors applied to the envelope mix
 GROWTH_CAP = (0.95, 1.15)   # per-stratum register growth relative to the nation, K21 -> baseline
 ARAB_GROUP = {"negev": "arab_negev", "north_bedouin": "arab_north", "galilee": "arab_north",
@@ -183,6 +191,15 @@ class Baseline:
         self.growth = stratum_growth(self, src) or STRATUM_GROWTH.get(e, {})
 
 
+def env_total(ratio, q, sd=ENV_SIZE_SD):
+    """Quantile q of the envelope total relative to its baseline estimate, N(1, sd) given that the
+    total is at least `ratio` x the estimate (what is already counted, LM-C). Beyond the normal's
+    reach the total is taken as what is counted."""
+    nd = statistics.NormalDist(1.0, sd)
+    lo = nd.cdf(ratio)
+    return max(ratio, nd.inv_cdf(min(1 - 1e-9, max(1e-9, lo + (1 - lo) * q))))
+
+
 def base_share(unit, preds):
     """Baseline share of the predecessor lists in a unit; None for a new list."""
     if preds is None or not unit["valid"]:
@@ -215,6 +232,8 @@ class Projector:
         nv = sum(L["valid"] for L in base.loc.values())
         self.base_nat = {j: (sum(self.bshare[c][j] * L["valid"] for c, L in base.loc.items()) / nv
                              if self.preds[j] is not None else None) for j in self.lists}
+        # share of the baseline locality vote cast in Arab localities (ARAB_NEW, LM-D)
+        self.arab_share = sum(L["valid"] for c, L in base.loc.items() if base.group[c] == "arab") / nv
         # a predecessor that is not a baseline list, or has no baseline votes, would project the list at
         # zero everywhere it is not yet counted (LM-1): fail loudly instead
         for j in cur_lists:
@@ -294,9 +313,13 @@ class Projector:
         N = level(st.get("N"), prior, K_LEVEL["N"], 0)
         # Arab and Druze localities move on their own (turnout and Arab-list splits), so with little
         # counted there they lean on the pre-election prior rather than on the Jewish majority's count.
-        # New lists (no predecessor) are assumed to draw far less in Arab localities (ARAB_NEW).
-        prior_arab = {**prior, "r": {j: v * ARAB_NEW if self.preds[j] is None else v for j, v in prior["r"].items()}}
-        groups = {g: level(st.get("G:" + g), prior_arab if g == "arab" else prior if g == "druze" else N,
+        # New lists (no predecessor) are assumed to draw far less in Arab localities (ARAB_NEW) and
+        # correspondingly more everywhere else, so that their national prior is preserved (LM-D).
+        a = self.arab_share
+        new = lambda f: {**prior, "r": {j: v * f if self.preds[j] is None else v for j, v in prior["r"].items()}}  # noqa: E731
+        prior_arab, prior_rest = new(ARAB_NEW), new((1 - ARAB_NEW * a) / (1 - a))
+        N_rest = level(st.get("N"), prior_rest, K_LEVEL["N"], 0)
+        groups = {g: level(st.get("G:" + g), prior_arab if g == "arab" else prior_rest if g == "druze" else N_rest,
                            K_LEVEL["G"], STRATUM_SD) for g in sorted(set(B.group.values()))}
         strata = {}
         for c in B.loc:
@@ -312,33 +335,37 @@ class Projector:
                 tot[j] += C["votes"].get(j, 0)
         return tot
 
-    def estimate(self, counted, codes, env_counted=None, rng=None):
-        """Projected votes still to come per list: (uncounted boxes part, envelopes part, envelope info).
-
-        The envelope info is None without baseline envelopes, else {"expected": total expected,
-        "mix": share per list of the envelopes still to come}, for the size draws in run()."""
-        B = self.B
-        st = self.stats(counted, codes)
-        N, strata = self.levels(st, rng)
-        boxes = collections.Counter()
-        # Uncounted voters per locality, scaled so that together they equal the register minus
-        # everything counted: once every box is in, nothing is left to project.
+    def remainder(self, counted):
+        """Uncounted voters per baseline locality (expected minus counted), scaled so that together
+        they equal the register minus everything counted: once every box is in, nothing is left to
+        project. The same split gives make_frame its sector shares (LM-G)."""
         rems = {}
-        for c, L in B.loc.items():
+        for c, L in self.B.loc.items():
             C = counted.get(c)
             r_ = self.expected(c) - (C["elig"] if C else 0)
             if r_ > 0 and L["elig"] and L["valid"]:
                 rems[c] = r_
         counted_elig = sum(C["elig"] for C in counted.values())
-        register = sum(L["elig"] for L in B.loc.values()) * self.g
+        register = sum(L["elig"] for L in self.B.loc.values()) * self.g
         tot_rem = sum(rems.values())
         scale = max(0.0, register - counted_elig) / tot_rem if tot_rem > 0 else 0.0
-        for c, L in B.loc.items():
-            if c not in rems:
-                continue
-            C = counted.get(c)
+        return {c: r * scale for c, r in rems.items()}
+
+    def estimate(self, counted, codes, env_counted=None, rng=None, rems=None):
+        """Projected votes still to come per list: (uncounted boxes part, envelopes part, envelope info).
+
+        The envelope info is None without baseline envelopes, else {"expected": total expected,
+        "mix": share per list of the envelopes still to come}, for the size draws in run().
+        rems: remainder(counted), when the caller has it already."""
+        B = self.B
+        st = self.stats(counted, codes)
+        N, strata = self.levels(st, rng)
+        boxes = collections.Counter()
+        if rems is None:
+            rems = self.remainder(counted)
+        for c, rem in rems.items():
+            L, C = B.loc[c], counted.get(c)
             E = self.expected(c)
-            rem = rems[c] * scale
             if C and C["elig"] >= OWN_MIN * E and C["valid"]:
                 k = rem / C["elig"]
                 for j in self.lists:
@@ -352,18 +379,21 @@ class Projector:
                 boxes[j] += valid_r * sh[j] / s
         # double envelopes still to come: expected total from the baseline (or the CEC's announced
         # total), minus what is counted. The count is complete only against an announced total;
-        # the baseline estimate missed 2021 by a third (LM-2). Their mix moves from the baseline mix
-        # (scaled by each list's national ratio) to the counted envelopes' mix as those come in:
-        # the first envelope batches are not representative.
+        # the baseline estimate missed 2021 by a third (LM-2), so without one the total is taken as
+        # at least what is counted (the median of the size draw in run(), LM-C) and the remainder
+        # never closes. Their mix moves from the baseline mix (scaled by each list's national ratio)
+        # to the counted envelopes' mix as those come in: the first envelope batches are not
+        # representative.
         env, info = collections.Counter(), None
         have = env_counted["valid"] if env_counted else 0
         if B.env["valid"]:
             expected = self.env_override or B.env["valid"] * self.g * N["t"]
             if rng is None:
                 self.env_expected = expected
-            rem = max(0.0, expected - have)
-            if self.env_override and have >= ENV_DONE * self.env_override:
-                rem = 0.0
+            if self.env_override:
+                rem = 0.0 if have >= ENV_DONE * self.env_override else max(0.0, expected - have)
+            else:
+                rem = expected * env_total(have / expected, 0.5) - have
             sh = {j: N["r"][j] * self.benv[j] if self.preds[j] is not None else N["r"][j] for j in self.lists}
             s = sum(sh.values()) or 1
             w = have / (have + ENV_BLEND_K)
@@ -400,7 +430,8 @@ class Projector:
         if env_counted:
             for j in self.lists:
                 have[j] += env_counted["votes"].get(j, 0)
-        boxes, env, _ = self.estimate(counted, codes, env_counted)
+        rems = self.remainder(counted)
+        boxes, env, _ = self.estimate(counted, codes, env_counted, rems=rems)
         point = {j: have[j] + boxes[j] + env[j] for j in self.lists}
         rng = random.Random(seed)
         by_s = collections.defaultdict(list)
@@ -408,30 +439,36 @@ class Projector:
             by_s[self.B.stratum[c]].append(c)
         left = sum(boxes.values()) / max(1.0, sum(point.values()))   # share of the vote still projected
         # share of the uncounted electorate in strata with too little counted to stand on their own:
-        # those estimates are borrowed from other places, so the shared error is widened
+        # those estimates are borrowed from other places, so the shared error is widened, in step with
+        # the national count's weight: with nothing counted the estimate is the prior itself, whose
+        # own error (PRIOR_SD) is already in the draws (LM-A)
         st = self.stats(counted, codes)
         rem_s, thin = collections.Counter(), 0.0
-        for c in self.B.loc:
-            C = counted.get(c)
-            r_ = max(0.0, self.expected(c) - (C["elig"] if C else 0))
+        for c, r_ in rems.items():
             rem_s[self.B.stratum[c]] += r_          # only the distribution across strata matters here
         tot_rem = sum(rem_s.values()) or 1.0
         for k, v in rem_s.items():
             if st[k]["valid"] < K_LEVEL["S"]:
                 thin += v / tot_rem
-        scale = left ** 0.5 * (1 + THIN_WIDEN * thin)
-        self.last_diag = {"left": round(left, 3), "thin": round(thin, 3), "scale": round(scale, 3)}
+        w_n = st["N"]["valid"] / (st["N"]["valid"] + K_LEVEL["N"])
+        scale = left ** 0.5 * (1 + THIN_WIDEN * thin * w_n)
+        self.last_diag = {"left": round(left, 3), "thin": round(thin, 3), "w_n": round(w_n, 3), "scale": round(scale, 3)}
         env_done = bool(self.env_override) and env_have >= ENV_DONE * self.env_override
         sims = []
         for _ in range(n_boot):
             sample = [rng.choice(v) for v in by_s.values() for _ in v]
-            b, e, info = self.estimate(counted, sample, env_counted, rng)
+            b, e, info = self.estimate(counted, sample, env_counted, rng, rems=rems)
             b = self.shock(b, rng, scale)
             if info and not env_done:
                 # the envelope total is uncertain until the CEC announces it (5.5%–9.7% of voters in
                 # 2019–2022; the 2021 total was 37% above the baseline estimate): draw the total, and
-                # what is still to come is the drawn total minus the counted envelopes
-                f_ = max(0.0, rng.gauss(1, 0.05 if self.env_override else ENV_SIZE_SD))
+                # what is still to come is the drawn total minus the counted envelopes. Without an
+                # announced total the draw is conditional on the total being at least what is
+                # counted, so the band stays open past the baseline estimate (LM-C).
+                if self.env_override:
+                    f_ = max(0.0, rng.gauss(1, 0.05))
+                else:
+                    f_ = env_total(env_have / info["expected"], rng.random())
                 rem = max(0.0, info["expected"] * f_ - env_have)
                 e = self.shock({j: rem * v for j, v in info["mix"].items()}, rng, ENV_SHOCK)
             sims.append({j: have[j] + b[j] + e[j] for j in self.lists})
@@ -550,29 +587,28 @@ def counting_order(rows, scheme, rng, base):
         late = {c for c in locs if base.group.get(c) in ("arab", "druze") or base.stratum.get(c) == "haredi"}
         locs = [c for c in locs if c not in late] + [c for c in locs if c in late]
     elif scheme == "spread":
-        # shaped like the real 2021 count (LM-5): 150+ localities open at once, a locality's boxes in
-        # no particular order, Haredi localities early, big cities opening late and trickling in
-        for rs in by_loc.values():
-            rng.shuffle(rs)
-        start, rate = {}, {}
+        # shaped like the real 2021 count (LM-5, LM-F), as a timeline: a locality opens at a start time
+        # and its boxes come in at random moments over a duration, so 150-200 localities are partly
+        # counted through most of the night. A third of the localities open by 11% counted and two
+        # thirds by 47%; tiny localities close quickly, towns trickle for half the night, big cities
+        # open late and trickle until about 80%; Haredi localities (Bnei Brak and Beit Shemesh
+        # included, so the size rule comes first) open earlier. Fitted to the 2021 snapshots (four
+        # seeds): Haredi 0.14/0.58/0.80 of its voters counted at 11/32/70% (real 0.20/0.55/0.93),
+        # Arab and Druze 0.15/0.30/0.55 (real 0.09/0.32/0.65), Tel Aviv 0.57-0.83 at 70% (real 0.82),
+        # 150-195 partly counted localities up to 70% (real 160-210). A rough sketch, like the other
+        # schemes; the real 2021 order (build_replay) is the honest benchmark.
+        timed = []
         for c, rs in by_loc.items():
-            el, s = sum(r["elig"] for r in rs), rng.random()
-            if base.stratum.get(c) == "haredi":
-                s *= 0.5
+            el, u, v = sum(r["elig"] for r in rs), rng.random(), rng.random()
+            s, dur = u * u, 0.7 * v if len(rs) <= 5 else 0.5 + 0.4 * v
             if el >= 40000:
-                s, rate[c] = 0.3 + 0.5 * s, 0.15
-            else:
-                rate[c] = 0.6 if el >= 5000 else 1.0
-            start[c] = s
-        queue, active, out, n = sorted(by_loc, key=lambda c: start[c]), [], [], len(boxes)
-        while len(out) < n:
-            while queue and (len(active) < 150 or start[queue[0]] <= len(out) / n):
-                active.append(queue.pop(0))
-            c = rng.choices(active, weights=[rate[x] for x in active])[0]
-            out.append(by_loc[c].pop())
-            if not by_loc[c]:
-                active.remove(c)
-        return out
+                s, dur = 0.1 + 0.4 * u, max(0.05, 0.8 + 0.1 * v - s)
+            if base.stratum.get(c) == "haredi":
+                s *= 0.7
+            for r in rs:
+                timed.append((s + dur * rng.random(), rng.random(), r))
+        timed.sort(key=lambda x: x[:2])
+        return [r for _, _, r in timed]
     out = []
     # localities report box by box, interleaved with the next few localities
     window = collections.deque()
@@ -628,8 +664,11 @@ def backtest(base_e, cur_e, src, core, schemes, n_orders, n_boot, checkpoints, s
 
 
 SCHEMES = ["random", "locality", "small_first", "arab_haredi_late", "spread"]
-CALIBRATED_ON = ("K25", "K24")   # the noise constants came from a sweep over both simulated backtests;
-                                 # the real 2021 counting order (build_replay accuracy_real) is the hold-out
+# The noise constants came from a sweep over both simulated backtests (so both read 'calibration' in
+# build_replay's accuracy_roles); the real 2021 counting order (accuracy_real) is the hold-out. The
+# sweep was not redone after the LM-1..6 fixes: the bands now over-cover, which is kept on purpose
+# (see the module docstring).
+CALIBRATED_ON = ("K25", "K24")
 
 
 def main():
@@ -699,12 +738,16 @@ def make_frame(proj, counted, env_counted, meta, n_boot=200, seed=7, final=None)
     expected = sum(L["elig"] for L in B.loc.values()) * proj.g
     counted_seats = proj.seats(cv) if tot["valid"] else {j: 0 for j in lists}
     # turnout in the counted part, against the same localities last time; the share counted is
-    # against the sector's expected register (baseline x growth), so it is an estimate: capped at 1
+    # against the sector's counted voters plus its part of what the projection still expects
+    # nationally (the register minus everything counted, split as in Projector.remainder), so the
+    # sectors add up to the register and all reach 100% with the headline share (LM-G); still an
+    # estimate, so capped at 1
+    rems = proj.remainder(counted)
     groups = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "base_t": 0.0, "exp": 0.0})
     for c, L in B.loc.items():
         gname = "haredi" if B.stratum[c] == "haredi" else B.group[c]
-        groups[gname]["exp"] += proj.expected(c)
         C = counted.get(c)
+        groups[gname]["exp"] += (C["elig"] if C else 0) + rems.get(c, 0.0)
         if C and L["elig"]:
             groups[gname]["elig"] += C["elig"]
             groups[gname]["voters"] += C["voters"]
