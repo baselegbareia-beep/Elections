@@ -4,6 +4,10 @@
 # discover.py) do not feed site/data, so editing them on election day does not start this 3–5-minute
 # job; neither do the feed's commits to site/live/ or the daily poll update (outside pipeline/, and
 # pushed with GITHUB_TOKEN, which starts no workflow).
+# Two jobs (WF-1 of round 3): "rebuild" reads third-party files (the 2026 poll table polls-data.js among them;
+# build_polls.py parses it as JSON and never runs it) with read-only permissions and no git credentials left in
+# its checkout; "store" (manual runs only) commits the official CEC files that "rebuild" fetched, never runs
+# build_polls.py, and hands the token to its push alone.
 name: Official data check
 
 on:
@@ -21,13 +25,21 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read     # each job states its own; only "store" writes
+
+defaults:
+  run:
+    shell: bash      # -eo pipefail: a failed rebuild piped into tee fails the step (WF-10)
 
 jobs:
   rebuild:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
@@ -67,22 +79,48 @@ jobs:
             data/raw/fetch_log.json
             build_report.txt
           retention-days: 30
+
+  store:
+    # manual runs only: the official CEC files the rebuild job fetched, into data/official. Never runs
+    # build_polls.py or anything else of a third party's; the token reaches only the push.
+    needs: rebuild
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@v6
+        with:
+          name: official-cec-files
+          path: ${{ runner.temp }}/official
       - name: Store the official files in the repository (data/official)
-        if: github.event_name == 'workflow_dispatch'
+        env:
+          FETCHED: ${{ runner.temp }}/official
+          GH_TOKEN: ${{ github.token }}
         run: |
           mkdir -p data/official
-          cp data/raw/official/*.csv data/official/ 2>/dev/null || true
-          python3 - <<'PY'
-          import json
-          log = [r for r in json.load(open('data/raw/fetch_log.json')) if 'bechirot' in r['url']]
+          # only the CEC ballot files (kNN_expb.csv / kNN_expc.csv) and their fetch log entries
+          for f in "$FETCHED"/data/raw/official/k[0-9][0-9]_exp[bc].csv; do
+            if [ -f "$f" ]; then cp "$f" data/official/; fi
+          done
+          python3 - "$FETCHED/data/raw/fetch_log.json" <<'PY'
+          import json, sys
+          log = [r for r in json.load(open(sys.argv[1])) if 'bechirot' in r['url']]
           for r in log:   # the stored copies live in data/official/
               r['path'] = r['path'].replace('data/raw/official/', 'data/official/')
           json.dump(log, open('data/official/fetch_log.json', 'w'), indent=1)
           PY
-          git checkout -- site/data   # drop the rebuilt copies; only the official inputs are stored
           git add data/official
           if git diff --cached --quiet; then echo 'official files unchanged'; exit 0; fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git commit -m 'Store official CEC ballot files fetched from media2X.bechirot.gov.il'
-          git pull --rebase origin "$GITHUB_REF_NAME" && git push origin "HEAD:$GITHUB_REF_NAME"
+          # the checkout kept no credentials: the token goes to these git calls only, as a header
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          gitauth() { git -c "http.extraheader=AUTHORIZATION: basic $auth" "$@"; }
+          gitauth pull --rebase origin "$GITHUB_REF_NAME" && gitauth push origin "HEAD:$GITHUB_REF_NAME"

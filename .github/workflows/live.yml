@@ -5,7 +5,7 @@
 #                with GITHUB_TOKEN are documented as not starting one), at most once every publish_every_min
 #                minutes (pipeline/live_config.json, default 8: branch builds have a soft limit of 10 an hour and
 #                the operator's pushes to main count too); the first results file and the first exit polls after
-#                22:00 go out at once.
+#                22:00 go out at once. The cadence carries over from one run to the next (live_fetch.seed).
 #   Actions mode ("GitHub Actions"): the files go to the live-data branch and pages.yml is dispatched.
 #   unknown      (the check failed): branch mode, which works under both settings, plus a warning.
 # The live folder has one writer at a time: this workflow or the laptop fallback (live_fetch.py --publish);
@@ -18,7 +18,10 @@
 # Israel is UTC+2 from 25.10.2026: polls open 07:00 = 05:00 UTC, close 22:00 = 20:00 UTC.
 # Coverage: 27–29.10 continuous (345-minute runs chain every 20 minutes: the regular count ends
 # 28.10 noon, the double envelopes are counted 28.10 evening to 29.10); 30.10–4.11 a 20-minute run
-# every hour until the final file (published up to 4.11).
+# every hour until the final file (published up to 4.11). Cron has no year: a scheduled run outside 2026
+# does nothing (the first step), so the workflow does not wake up again next October.
+# Builds: a feed with nothing new but timestamps publishes only every 30 minutes (60 from 28.10 12:00), so
+# quiet hours cost about two Pages builds an hour, not seven (live_fetch.quiet_every).
 # Switches: repository variable LIVE_RUNNER=self-hosted moves every run (scheduled ones too) to the
 # runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
@@ -37,7 +40,7 @@ on:
         description: 'How long this run keeps polling (hosted jobs stop at 6 h; default 345 on 27–29.10, 20 later; a drill: 40)'
         default: ''
       drill:
-        description: 'Rehearsal: the 2022 file (media25, else data/official) counted progressively; the page says "תרגול"; cleaned up at the end. Refused from 24.10 00:00 to 27.10 22:00'
+        description: 'Rehearsal: the 2022 file (media25, else data/official) counted progressively; the page says "תרגול"; cleaned up at the end. Refused if it would still run (plus 15 minutes) at 24.10 00:00, and from then until 6.11'
         type: boolean
         default: false
       reset:
@@ -73,25 +76,48 @@ jobs:
       # requests none); repository variable LIVE_BUILD_WAIT, e.g. 45 if the drill shows two builds per publish
       LIVE_BUILD_WAIT: ${{ vars.LIVE_BUILD_WAIT || '15' }}
     steps:
-      - uses: actions/checkout@v6
-      - uses: actions/setup-python@v7
-        if: runner.environment == 'github-hosted'   # a self-hosted runner uses its own python3 (>= 3.9 with numpy)
-        with:
-          python-version: '3.12'
-      - run: python3 -c 'import numpy' 2>/dev/null || python3 -m pip install -q numpy || python3 -m pip install -q --user --break-system-packages numpy
-      - name: Minutes for this run, the drill guard, and the publishing path
+      - name: Election window, minutes for this run, and the drill guard
+        id: guard
         run: |
-          if [ -z "$MINUTES" ]; then
-            case "$(TZ=Asia/Jerusalem date +%d.%m)" in 27.10|28.10|29.10) MINUTES=345 ;; *) MINUTES=20 ;; esac
+          # NOW_S (a Unix time) stands in for the clock in pipeline/test_live.py; GNU date reads it with -d, BSD
+          # date (a macOS self-hosted runner) with -r
+          now_s=${NOW_S:-$(date +%s)}
+          ildate() { TZ=Asia/Jerusalem date -d "@$now_s" "$1" 2>/dev/null || TZ=Asia/Jerusalem date -r "$now_s" "$1"; }
+          # cron has no year: outside 2026 a scheduled run does nothing (no heartbeat commits to main next October)
+          if [ "$GITHUB_EVENT_NAME" = schedule ] && [ "$(ildate +%Y)" != 2026 ]; then
+            echo "off=true" >> "$GITHUB_OUTPUT"
+            echo "outside the 2026 election: nothing to do" | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
           fi
+          if [ -z "$MINUTES" ]; then
+            case "$(ildate +%d.%m)" in 27.10|28.10|29.10) MINUTES=345 ;; *) MINUTES=20 ;; esac
+          fi
+          case "$MINUTES" in ''|*[!0-9]*) echo "::error::minutes must be a whole number of minutes, not '$MINUTES'"; exit 1 ;; esac
+          MINUTES=$((10#$MINUTES))
           echo "MINUTES=$MINUTES" >> "$GITHUB_ENV"
-          # a rehearsal puts a full poll-based projection on the public page: not during the poll ban (from 24.10
-          # 00:00) and not while the polls are open on 27.10 (PAGE-7)
-          now=$(TZ=Asia/Jerusalem date +%m%d%H)
-          if [ "$DRILL" = true ] && [ "$((10#$now))" -ge 102400 ] && [ "$((10#$now))" -lt 102722 ]; then
-            echo '::error::no drill between 24.10 00:00 and 27.10 22:00 Israel time: the page would show a rehearsal projection during the poll ban and the vote'
+          # a rehearsal puts a full poll-based projection on the public page, and its reset at the end puts the
+          # placeholder back. Refused when it would still run (plus 15 minutes for the reset and its build) at the
+          # start of the poll ban, 24.10 00:00 Israel time, and from then until 6.11 00:00: it must not show during
+          # the ban or the vote, nor overwrite (and its reset delete) the real night's files (WF-2; live_fetch.py
+          # applies the same rule, and its --seed refuses a drill over real files)
+          ban=1792789200    # 24.10.2026 00:00 Israel time (23.10 21:00 UTC)
+          back=1793916000   # 6.11.2026 00:00 Israel time (5.11 22:00 UTC)
+          if [ "$DRILL" = true ] && [ "$RESET" != true ] && [ $(( now_s + (MINUTES + 15) * 60 )) -ge "$ban" ] && [ "$now_s" -lt "$back" ]; then
+            echo "::error::no drill that runs into 24.10 00:00 Israel time (the poll ban: $MINUTES minutes from $(ildate '+%d.%m %H:%M'), plus 15 for the reset), nor from then until 6.11: the page would show a rehearsal projection during the ban or the vote, or the drill would overwrite the real files"
             exit 1
           fi
+          echo "minutes=$MINUTES drill=$DRILL"
+      - uses: actions/checkout@v6
+        if: steps.guard.outputs.off != 'true'
+      - uses: actions/setup-python@v7
+        if: steps.guard.outputs.off != 'true' && runner.environment == 'github-hosted'   # a self-hosted runner uses its own python3 (>= 3.9 with numpy)
+        with:
+          python-version: '3.12'
+      - if: steps.guard.outputs.off != 'true'
+        run: python3 -c 'import numpy' 2>/dev/null || python3 -m pip install -q numpy || python3 -m pip install -q --user --break-system-packages numpy
+      - name: The publishing path
+        if: steps.guard.outputs.off != 'true'
+        run: |
           # Which Pages source is configured? "legacy" = Deploy from a branch -> branch mode (site/live/ on the
           # branch Pages serves); "workflow" = GitHub Actions -> the live-data branch; anything else = the check
           # itself failed (API, token, network): branch mode, which reaches the page under both settings
@@ -127,18 +153,25 @@ jobs:
           } >> "$GITHUB_ENV"
           echo "minutes=$MINUTES pages_source=$src publish_mode=$mode branch=$pbranch drill=$DRILL reset=$RESET runner=$RUNNER_NAME ($RUNNER_OS)"
       - name: Prepare the publishing worktree and seed this run from the published files
+        if: steps.guard.outputs.off != 'true'
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           rm -rf lm ld _live _probe; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
-          # history, last good files and state from the published folder, except a rehearsal's (OPS-3)
+          # history, last good files, state and the publishing cadence from the published folder, except a
+          # rehearsal's (OPS-3); a drill is refused here while the published files are the real election's (WF-2)
+          seed=(--out _live --seed)
+          if [ "$DRILL" = true ] && [ "$RESET" != true ]; then seed+=(--drill --minutes "$MINUTES"); fi
           # shellcheck disable=SC2086
-          python3 pipeline/live_fetch.py --out _live --seed $PUB_ARGS
+          python3 pipeline/live_fetch.py "${seed[@]}" $PUB_ARGS
           ls -la _live
       - name: Smoke test (drill only)
-        if: env.DRILL == 'true'
+        if: steps.guard.outputs.off != 'true' && env.DRILL == 'true'
+        env:
+          HEALTH_GATE: '1'   # the code's health only: main's site/live/ need not be the placeholder here (WF-4)
         run: python3 pipeline/test_live.py
       - name: One unpublished pass (does the script run here, and does this runner reach media26?)
+        if: steps.guard.outputs.off != 'true'
         run: |
           # a crash here (a bad file on main, numpy missing) makes the run red before the loop, not a silent green run (WF-2)
           out=$(python3 pipeline/live_fetch.py --out _probe --once 2>&1) || true
@@ -146,6 +179,7 @@ jobs:
           printf '%s\n' "$out" | tail -n 1 \
             | python3 -c 'import json,sys; s=json.load(sys.stdin); print("ok: results_state", s.get("results_state"), "probe", s.get("results_probe"), "publish_mode", s.get("publish_mode"), "errors", s.get("errors"))'
       - name: Poll the elections committee and publish
+        if: steps.guard.outputs.off != 'true'
         run: |
           # the placeholder back on the page; the run goes red unless it was published (or was there already) and,
           # when pushed, the Pages build was asked for
@@ -196,14 +230,19 @@ jobs:
               echo "::error::live_fetch.py crashed ($crashes in a row): ${last:0:300}"
               echo "- $(date -u +%H:%M) UTC: live_fetch.py crashed ($crashes in a row): \`${last:0:200}\`" >> "$GITHUB_STEP_SUMMARY"
               if [ "$crashes" -ge 3 ]; then
-                # shellcheck disable=SC2086
-                python3 pipeline/live_fetch.py --out _live --flush $PUB_ARGS || true
+                if [ "$DRILL" = true ]; then   # a drill that cannot go on still leaves the page as it found it
+                  reset_live || true
+                else
+                  # shellcheck disable=SC2086
+                  python3 pipeline/live_fetch.py --out _live --flush $PUB_ARGS || true
+                fi
                 exit 1
               fi
             fi
             sleep 45
           done
-          # what the cadence held back goes out now, so the next run starts from it
+          # what the cadence held back goes out now, so the next run starts from it (timestamps alone wait: the
+          # cadence carries over, and the next run publishes them when due)
           # shellcheck disable=SC2086
           python3 pipeline/live_fetch.py --out _live --flush $PUB_ARGS || echo '::warning::the final publish failed; the next run publishes again'
           if [ "$DRILL" = true ]; then   # the page returns to its pre-election state
