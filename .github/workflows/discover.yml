@@ -1,0 +1,77 @@
+# Finds where the CEC publishes the 2026 files (results by ballot box and by locality, the per-station
+# turnout ordered on 16.8.2026, double envelopes, the national hourly turnout page) and what each holds.
+# GitHub's runners reach the CEC hosts; the build container does not. The report goes to the ops-reports
+# branch (reports/latest.md, reports/discover-YYYYMMDD-HHMM.*, Israel time), never to main: Pages builds
+# from main. How to read it and what to do: docs/FILE_DISCOVERY.md.
+name: Find the election files
+
+on:
+  schedule:
+    # cron is UTC; Israel is UTC+3 until 24.10 and UTC+2 from 25.10
+    - cron: '43 5 15-26 10 *'        # daily 15–26.10 at 08:43 (07:43 from 25.10)
+    - cron: '7,27,47 4-20 27 10 *'   # 27.10 every 20 minutes, 06:07–22:47 (the :07 run of each hour is a full one)
+    - cron: '7 21 27 10 *'           # 27.10 23:07
+    - cron: '13 22-23 27 10 *'       # hourly: 28.10 00:13 and 01:13
+    - cron: '13 * 28 10 *'           #         28.10 02:13 – 29.10 01:13
+    - cron: '13 0-21 29 10 *'        #         29.10 02:13 – 23:13
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'full = every guessed name too; quick = known files, what the pages link to, and what answered last time; auto = full, except two of the three runs an hour on 27.10'
+        type: choice
+        options: [auto, full, quick]
+        default: auto
+      urls:
+        description: 'Extra URLs to check, separated by spaces (e.g. an address named in a CEC announcement)'
+        type: string
+        default: ''
+      runner:
+        description: 'Runner label, e.g. self-hosted (empty = the repository variable DISCOVER_RUNNER, else ubuntu-latest)'
+        type: string
+        default: ''
+
+permissions:
+  contents: write        # pushes to the ops-reports branch only
+
+concurrency:
+  group: discover
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    # a separate variable from LIVE_RUNNER: a self-hosted runner busy with the 345-minute live feed would
+    # leave these runs queued behind it
+    runs-on: ${{ github.event.inputs.runner || vars.DISCOVER_RUNNER || 'ubuntu-latest' }}
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
+        if: runner.environment == 'github-hosted'
+        with:
+          python-version: '3.12'
+      - name: numpy (lets the report run the feed's own reader on result files)
+        run: python3 -m pip install -q numpy || echo '::warning::numpy not installed; the reader check is skipped'
+      - name: Probe the CEC hosts and push the report to ops-reports
+        env:
+          MODE: ${{ github.event.inputs.mode || 'auto' }}
+          URLS: ${{ github.event.inputs.urls }}
+        run: |
+          set -f          # split the input on spaces, never expand it as a file pattern
+          extra=()
+          for u in $URLS; do
+            case "$u" in https://*|http://*) extra+=(--url "$u") ;; *) echo "::warning::ignored (not a URL): $u" ;; esac
+          done
+          python3 pipeline/discover.py --mode "$MODE" --out "$RUNNER_TEMP/discover" --push \
+            --summary "$GITHUB_STEP_SUMMARY" "${extra[@]}"
+          {
+            echo
+            echo "Full report: https://github.com/$GITHUB_REPOSITORY/blob/ops-reports/reports/latest.md"
+          } >> "$GITHUB_STEP_SUMMARY"
+      - name: Keep the report with the run (also when the push failed)
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: discover-report
+          path: ${{ runner.temp }}/discover/
+          retention-days: 14
+          if-no-files-found: ignore
