@@ -9,7 +9,8 @@ import os
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "site", "src")
 JS_ORDER = ["core.js", "overview.js", "polls.js", "coalition.js", "arab.js", "results.js",
-            "sectors.js", "accuracy.js", "method.js", "plan.js", "live.js", "main.js"]
+            "sectors.js", "accuracy.js", "method.js", "plan.js", "live.js", "arab_day.js", "main.js"]
+CSS_ORDER = ["styles.css", "arab_day.css"]   # arab_day.css: the Arab-society section of the election-day tab
 
 
 def read(*p):
@@ -19,7 +20,7 @@ def read(*p):
 
 def main():
     tpl = read("index.html")
-    css = read("styles.css")
+    css = "\n".join(read(name) for name in CSS_ORDER if os.path.exists(os.path.join(SRC, name)))
     js = "\n".join(read("js", name) for name in JS_ORDER if os.path.exists(os.path.join(SRC, "js", name)))
     body = tpl.replace("/*STYLES*/", css).replace("/*SCRIPTS*/", js)
     with open(os.path.join(ROOT, "site", "artifact.html"), "w", encoding="utf-8") as f:
