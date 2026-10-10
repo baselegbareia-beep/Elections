@@ -45,7 +45,7 @@ function renderPolls() {
     <div class="card c12">
       <h3>כל הסקרים</h3>
       <p class="sub">מהחדש לישן. ⎙ מסמן סקר שנמצא לו קובץ דיווח רשמי לוועדת הבחירות, לפי חוק הבחירות (דרכי תעמולה).</p>
-      <div class="controls"><span class="ctl-label">סוקר</span><select id="pl-house-sel"><option value="all">כל הסוקרים</option>${houses.map(h => `<option value="${esc(h)}" ${S.pollHouse === h ? 'selected' : ''}>${esc(polls.find(p => p.house === h).house_he)}</option>`).join('')}</select></div>
+      <div class="controls"><label class="ctl-label" for="pl-house-sel">סוקר</label><select id="pl-house-sel"><option value="all">כל הסוקרים</option>${houses.map(h => `<option value="${esc(h)}" ${S.pollHouse === h ? 'selected' : ''}>${esc(polls.find(p => p.house === h).house_he)}</option>`).join('')}</select></div>
       <div class="tbl-wrap scroll-y" id="pl-table"></div>
       <p class="foot">${esc(S.polls.source)}.</p>
     </div>
@@ -101,7 +101,7 @@ function placeLabels(items, minGap, lo, hi) {
 function drawTrend() {
   const el = $('#pl-trend'); const { polls, parties } = S.polls;
   const W = widthOf(el), H = 380, M = { t: 24, r: W < 560 ? 64 : 120, b: 28, l: 34 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'מנדטים לפי רשימה לאורך זמן: הממוצע והסקרים הבודדים');
   const x = timeScale(W, M);
   const sel = parties.filter(p => S.trendParties.has(p.id));
   const maxY = Math.max(10, d3.max(sel, p => d3.max(polls, q => q.seats[p.id] || 0)) || 10) + 2;
@@ -153,7 +153,7 @@ function pollBlocs(q, blocs = currentBlocs()) {
 function drawBlocTrend() {
   const el = $('#pl-blocs'); const { polls } = S.polls;
   const W = widthOf(el), H = 300, M = { t: 24, r: 46, b: 28, l: 34 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'הגושים בסקרים לאורך זמן');
   const x = timeScale(W, M);
   const y = d3.scaleLinear().domain([0, 70]).range([H - M.b, M.t]);
   [0, 20, 40, 61].forEach(v => {
@@ -182,7 +182,7 @@ function drawHouse() {
   const cols = parties.filter(p => d3.mean(polls, q => q.seats[p.id] || 0) >= 3);
   const W = widthOf(el, 480), LW = W < 560 ? 92 : 150, cw = Math.max(14, (W - LW) / cols.length), rh = 26, M = { t: Math.ceil(14 + Math.sin(50 * Math.PI / 180) * d3.max(cols, p => textWidth(p.name, 11.5))), l: 0 };
   const H = M.t + rh * houses.length + 6;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'הטיית סוקרים: הסטייה הקבועה של כל סוקר מהממוצע, לפי רשימה');
   // diverging pair that is not a bloc colour: brown = fewer seats than average, violet = more
   const color = d3.scaleLinear().domain([-3, 0, 3]).range(['#b45f06', cssVar('--surface-2') || '#eee', '#5b5bd6']).interpolate(d3.interpolateLab).clamp(true);
   cols.forEach((p, j) => {

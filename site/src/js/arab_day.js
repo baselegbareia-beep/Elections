@@ -44,9 +44,12 @@ const adWidth = (el, min = 120) => Math.max(min, Math.round(el.getBoundingClient
 // a mixed city's entry is its Arab polling stations, not the (mostly Jewish) city: named so in every sentence,
 // tooltip and table row ('לוד (הקלפיות הערביות)')
 const AD_MIXED = 'הקלפיות הערביות';
-const adCity = b => b.city || String(b.name || '').replace(/\s*\([^)]*\)\s*$/, '');
-const adName = b => b.kind === 'mixed_arab' ? `${adCity(b)} (${AD_MIXED})` : b.name;
-const adNameHTML = b => b.kind === 'mixed_arab' ? `<span class="ad-nm">${esc(adCity(b))}</span> <span class="ad-nm-sub">(${AD_MIXED})</span>` : `<span class="ad-nm">${esc(b.name)}</span>`;
+// the CEC's locality names carry a stray space on one side of a hyphen ('תל אביב -יפו', 'אל -עריאן'); a hyphen
+// spaced on both sides is the official spelling ('שבלי - אום אל-גנם') and stays
+const adClean = s => String(s || '').replace(/(\S) -(?=\S)/g, '$1-').replace(/(\S)- (?=\S)/g, '$1-');
+const adCity = b => adClean(b.city || String(b.name || '').replace(/\s*\([^)]*\)\s*$/, ''));
+const adName = b => b.kind === 'mixed_arab' ? `${adCity(b)} (${AD_MIXED})` : adClean(b.name);
+const adNameHTML = b => b.kind === 'mixed_arab' ? `<span class="ad-nm">${esc(adCity(b))}</span> <span class="ad-nm-sub">(${AD_MIXED})</span>` : `<span class="ad-nm">${esc(adClean(b.name))}</span>`;
 // 'עד 14:00'; a release stamped at or after 22:00 counts the whole day
 const adUntil = h => h != null && h >= 22 ? 'עד סגירת הקלפיות' : `עד <span class="num">${adHHMM(h)}</span>`;
 
@@ -147,7 +150,7 @@ async function drawArabDay(el) {
   const D = adData();
   // redraw only when the data or a clock gate changed, so a refresh tick keeps the reader's sort, search and scroll
   const sig = JSON.stringify([D.mode, adRel(D.cur), D.cur && D.cur.released, D.cur && D.cur.total && D.cur.total.voters,
-    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed()]);
+    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed(), adAfter()]);
   if (el.dataset.adSig === sig && el.querySelector('.ad-grid')) return;
   el.dataset.adSig = sig;
   AD.D = D;
@@ -192,9 +195,12 @@ function adMarkup(D) {
   } else if (wait) {
     bar = '<span class="live-chip demo">יום הבחירות</span><span class="live-text">ממתינים לפרסום הראשון של שיעור ההצבעה לפי קלפי. ועדת הבחירות הודיעה שתפרסם אותו לפחות ארבע פעמים במהלך היום. עד אז מוצגים כאן נתוני 2022 של כל יישוב, ואפשר לסמן יישובים למעקב.</span>';
   } else {
-    // seen_he: when the feed first saw this release's file (turnout.json's updated_he moves with every pass)
-    const seen = D.cur.seen_he && String(D.cur.seen_he).slice(0, 5) !== rel ? String(D.cur.seen_he) : '';
-    bar = `${D.drill ? '<span class="live-chip demo">תרגול</span>' : '<span class="live-chip on">חי</span>'}<span class="live-text">${D.drill ? 'תרגול על קובץ לדוגמה. ' : ''}נתוני ועדת הבחירות לכל קלפי, הפרסום של <b class="num">${rel}</b>${seen ? ` (הקובץ הגיע ב-<span class="num">${esc(seen)}</span>)` : ''}. ${esc(adNext(D))}</span>`;
+    // seen_he: when the feed first saw this release's file (turnout.json's updated_he moves with every pass); the
+    // feed's he_time adds '(27.10)' on another day, which reads as one clause here, not nested parentheses
+    const seen = D.cur.seen_he && String(D.cur.seen_he).slice(0, 5) !== rel ? String(D.cur.seen_he).trim() : '';
+    const sm = /^(\d{1,2}:\d\d)\s*\(([^)]*)\)$/.exec(seen);
+    const seenHTML = sm ? `<span class="num">${esc(sm[1])}</span>, <span class="num">${esc(sm[2])}</span>` : `<span class="num">${esc(seen)}</span>`;
+    bar = `${D.drill ? '<span class="live-chip demo">תרגול</span>' : liveChip((S.liveTurnout || {}).updated_at, 'יום הבחירות')}<span class="live-text">${D.drill ? 'תרגול על קובץ לדוגמה. ' : ''}נתוני ועדת הבחירות לכל קלפי, הפרסום של <b class="num">${rel}</b>${seen ? ` (הקובץ הגיע ב-${seenHTML})` : ''}. ${esc(adNext(D))}</span>`;
   }
   const head = `<h2 class="lv-h2">החברה הערבית: ההצבעה יישוב אחר יישוב</h2>
     <p class="ad-lede">שיעור ההצבעה הרשמי בכל יישוב ערבי ודרוזי ובקלפיות הערביות של הערים המעורבות, מכל פרסום של ועדת הבחירות לפי קלפי, מול אותן קלפיות ב-2022. רק השתתפות: הדף אינו מתרגם את הנתונים האלה לקולות, למנדטים או לסיכויים לעבור את אחוז החסימה.</p>
@@ -285,6 +291,11 @@ function adHeadline(D, tag) {
   const curveNote = [est.length ? `מרכז אקורד (האוניברסיטה העברית) העריך ${heJoin(est.map(val))}` : '',
     rep.length ? `${heJoin(rep.map(val))} ${rep.length > 1 ? 'דווחו' : 'דווח'} בלי ייחוס` : '',
     `השעות האחרות משוחזרות במודל, והסוף (${fmt1(C.arab[C.arab.length - 1])}% ביישובים הערביים והדרוזיים) רשמי`].filter(Boolean).join('; ');
+  // the section's 2022 figure covers the same stations as the release, the mixed cities' Arab stations included, so it
+  // differs from the Arab and Druze localities' figure the overview and the Arab tab quote under the same name
+  const ad22 = C.arab[C.arab.length - 1], mixedIn = !!((D.cur.kinds || {}).mixed_arab || {}).stations || D.mode === 'demo';
+  const scope = t22 != null && ad22 != null && Math.abs(100 * t22 - ad22) >= 0.05
+    ? ` (${mixedIn ? 'כולל הקלפיות הערביות בערים המעורבות; ביישובים הערביים והדרוזיים בלבד' : 'בקלפיות שבפרסום; בכל היישובים הערביים והדרוזיים'} <span class="num">${fmt1(ad22)}%</span>)` : '';
   const rows = adBulletRows(D);
   const tiles = [
     [adP(T.pace, 0), 'ממספר המצביעים של 2022', 'כבר הצביעו, באותן קלפיות. 100%: כמספר המצביעים בהן ב-2022'],
@@ -297,7 +308,7 @@ function adHeadline(D, tag) {
       <div class="ad-hero">
         <span class="eyebrow">הצביעו ${adUntil(h)}${h != null && h > 22.01 ? ` (הפרסום של <span class="num">${rel}</span>)` : ''}${D.mode === 'demo' ? ' (מדומה)' : ''}</span>
         <span class="ad-hero-v num">${T.turnout == null && T.pace != null ? adP(T.pace, 0) : adP(T.turnout)}</span>${T.turnout == null && T.pace != null ? '<span class="ad-hero-d">ממספר המצביעים של 2022 באותן קלפיות (בפרסום הזה אין מספרי בעלי זכות בחירה, ולכן אין שיעור הצבעה)</span>' : ''}
-        <span class="ad-hero-d">${dExp != null ? `<b class="num">${adSigned(dExp)}</b> נקודות מול 2022 באותה שעה, באותן קלפיות (אומדן: ${adP(exp)}). ` : ''}בסוף היום ב-2022: <b class="num">${adP(t22)}</b>.</span>
+        <span class="ad-hero-d">${dExp != null ? `<b class="num">${adSigned(dExp)}</b> נקודות מול 2022 באותה שעה, באותן קלפיות (אומדן: ${adP(exp)}). ` : ''}בסוף היום ב-2022: <b class="num">${adP(t22)}</b>${scope}.</span>
         <div class="chart ad-bullet" id="ad-bullet" aria-describedby="ad-bullet-tbl"></div>
         <div class="legend"><span><i style="background:var(--arab)"></i>עד שעת הפרסום</span><span><i class="ad-k-tick"></i>2022 באותה שעה</span><span><i class="ad-k-dash"></i>2022, סוף היום</span>${PF ? '<span><i class="ad-k-wash"></i>טווח גס לסוף היום</span>' : ''}</div>
         ${rows.length ? `<details class="lv-table" id="ad-bullet-tbl"><summary>הנתונים בטבלה</summary><div class="tbl-wrap"><table class="t"><thead><tr><th>שיעור ההצבעה</th><th class="n">עד ${rel}</th><th class="n">2022 באותה שעה</th><th class="n">2022, סוף היום</th><th class="n">טווח גס לסוף היום</th></tr></thead><tbody>${

@@ -121,7 +121,7 @@ function drawNational() {
 
 function drawSeatStrip(el, ev) {
   const W = widthOf(el), H = 46;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, `חלוקת המנדטים, ${ev.label}`);
   const ps = ev.parties.filter(p => p.seats > 0);
   const x = d3.scaleLinear().domain([0, 120]).range([W, 0]);
   let acc = 0;
@@ -281,7 +281,7 @@ function famShares(l, eid) {
 }
 function drawLocTrend(el, l) {
   const W = widthOf(el, 560), H = 250, M = { t: 14, r: 120, b: 26, l: 36 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, `${l.name}: ההצבעה לפי משפחה פוליטית בחמש מערכות הבחירות`);
   const shares = Object.fromEntries(ELS.map(e => [e, famShares(l, e)]));
   const fams = new Set(); ELS.forEach(e => { if (shares[e]) Object.entries(shares[e]).forEach(([f, s]) => { if (s >= 0.08 && f !== 'other') fams.add(f); }); });
   const famList = [...fams].sort((a, b) => d3.max(ELS, e => shares[e]?.[b] || 0) - d3.max(ELS, e => shares[e]?.[a] || 0)).slice(0, 6);

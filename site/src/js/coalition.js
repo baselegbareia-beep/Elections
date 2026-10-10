@@ -27,9 +27,11 @@ function renderCoalition() {
   ensureSims();
   const blocs = currentBlocs();
   if (!S.coalition) S.coalition = new Set(S.polls.parties.filter(p => blocs[p.id] === 'coal').map(p => p.id));
+  const closed = ilStamp(ilNow()) >= POLLS_CLOSE;
   root.innerHTML = `
+  ${closed ? postCloseNote(S.polls.polls[S.polls.polls.length - 1].date) : ''}
   <div class="section-head"><div>
-    <span class="eyebrow">בונה קואליציה · מחולל תרחישים</span>
+    <span class="eyebrow">בונה קואליציה · מחולל תרחישים${closed ? ' · לפי הסקרים שלפני הבחירות' : ''}</span>
     <h2>הדרך ל-61</h2>
     <p>לחצו על רשימות כדי להכניס או להוציא אותן מהקואליציה. המנדטים מחושבים מממוצע הסקרים בשיטת בדר-עופר עם אחוז החסימה. שני המחוונים משנים את ההנחות ומחשבים מחדש את כל 120 המושבים.</p>
   </div></div>
@@ -120,8 +122,11 @@ function drawCoalition() {
   $('#cb-total').textContent = total;
   $('#cb-status').innerHTML = total >= 61 ? `<span class="status ok">${ICON_OK}רוב של ${total}</span>` : `<span class="status no">${ICON_NO}${61 - total === 1 ? 'חסר מנדט אחד לרוב' : `חסרים ${61 - total} לרוב`}</span>`;
   const sim = simSummary(S.sims, [...S.coalition]);
+  // after the polls close the odds are the pre-election average's, in the past tense (the count is on the live tab)
+  const closed = ilStamp(ilNow()) >= POLLS_CLOSE;
   $('#cb-sub').innerHTML = baseline
-    ? `מנדטים לפי ממוצע הסקרים. בסימולציות, ההרכב הזה מגיע ל-61 ב-${N(pct(100 * sim.p61, 0))} מהמקרים (80% מהתרחישים: ${N(sim.q10)}–${N(sim.q90)}).`
+    ? closed ? `מנדטים לפי ממוצע הסקרים שלפני הבחירות. בסימולציות שלפני הבחירות הגיע ההרכב הזה ל-61 ב-${N(pct(100 * sim.p61, 0))} מהמקרים (80% מהתרחישים: ${N(sim.q10)}–${N(sim.q90)}).`
+      : `מנדטים לפי ממוצע הסקרים. בסימולציות, ההרכב הזה מגיע ל-61 ב-${N(pct(100 * sim.p61, 0))} מהמקרים (80% מהתרחישים: ${N(sim.q10)}–${N(sim.q90)}).`
     : `תרחיש: שיעור הצבעה ערבי ${N(pct(S.scn.arabT, 0))}${S.scn.swing ? `, תזוזה של ${N(fmt1(Math.abs(S.scn.swing)))} נק׳ ${S.scn.swing > 0 ? 'לגוש נתניהו' : 'לאופוזיציה'}` : ''}. ההסתברות מחושבת רק לממוצע עצמו.`;
   const parties = S.polls.parties.filter(p => (seats[p.id] || 0) > 0 || S.avg.avg[p.id] > 1);
   $('#cb-chips').innerHTML = parties.map(p => `<button type="button" class="slip" data-id="${esc(p.id)}" aria-pressed="${inC(p.id)}"><i class="dot" style="background:${party26Color(p)}"></i><b class="let">${esc(p.letters)}</b><span class="nm">${esc(p.name)}</span><span class="num" style="font-weight:600">${seats[p.id] || 0}</span></button>`).join('');
@@ -145,7 +150,7 @@ function hemicycleLayout(n = 120, rows = 6) {
 }
 function drawHemicycle(el, seats) {
   const W = widthOf(el, 640), H = Math.round(W * 0.52) + 22;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, '120 המושבים לפי ממוצע הסקרים; הרשימות שבקואליציה שבחרתם מודגשות');
   const pts = hemicycleLayout();
   const R = W * 0.47, cx = W / 2, cy = H - 12;
   const seatR = Math.max(3, R * 0.028);
@@ -169,8 +174,19 @@ function drawHemicycle(el, seats) {
 
 function drawCurve() {
   const el = $('#sc-curve');
-  const W = widthOf(el), H = 280, M = { t: 26, r: 24, b: 34, l: 40 };
-  const svg = svgEl(el, W, H);
+  const W = widthOf(el), M = { t: 26, r: 24, b: 34, l: 40 };
+  const x = d3.scaleLinear().domain([35, 75]).range([M.l, W - M.r]);
+  // the five elections' labels on top; one that would touch the label before it (44.6% and 49.2% are about 30 px apart
+  // at phone width) goes up a row
+  const els = ['K21', 'K22', 'K23', 'K24', 'K25'].map(eid => {
+    const T = rate(eid, 'arab_std'), text = W < 560 ? `ה-${E(eid).n}` : E(eid).short;
+    return { eid, T, text, x: x(T), w: textWidth(text, 11.5) };
+  }).sort((a, b) => a.x - b.x);
+  const edge = [-Infinity, -Infinity];   // the right end of the last label placed in each row (labels go left to right)
+  els.forEach(l => { l.row = l.x - l.w / 2 >= edge[0] + 8 ? 0 : 1; edge[l.row] = l.x + l.w / 2; });
+  if (els.some(l => l.row)) M.t = 40;
+  const H = 280 + M.t - 26;
+  const svg = svgEl(el, W, H, 'מנדטי הקואליציה שבחרתם ומנדטי הרשימות הערביות לפי שיעור ההצבעה בחברה הערבית');
   const Ts = d3.range(35, 75.5, 1);
   const blocs = currentBlocs();
   const arabIds = S.polls.parties.filter(p => blocs[p.id] === 'arab').map(p => p.id);
@@ -178,25 +194,32 @@ function drawCurve() {
     const s = baderOfer(scenarioShares(T, S.scn.swing), { agreements: SIM.agreements });
     return { T, coal: sum([...S.coalition].map(id => s[id] || 0)), arab: sum(arabIds.map(id => s[id] || 0)) };
   });
-  const x = d3.scaleLinear().domain([35, 75]).range([M.l, W - M.r]);
   const y = d3.scaleLinear().domain([0, Math.max(70, d3.max(pts, p => p.coal) + 4)]).range([H - M.b, M.t]);
   [0, 20, 40, 61].forEach(v => {
     svg.append('line').attr('class', v === 61 ? 'ref-line' : 'gridline').attr('x1', M.l).attr('x2', W - M.r).attr('y1', y(v)).attr('y2', y(v));
     svg.append('text').attr('class', v === 61 ? 'ref-text' : 'lbl').attr('x', M.l - 8).attr('y', y(v)).attr('dy', '.32em').attr('text-anchor', 'start').text(v);
   });
   [40, 50, 60, 70].forEach(v => svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 12).attr('text-anchor', 'middle').text(v + '%'));
-  ['K21', 'K22', 'K23', 'K24', 'K25'].forEach(eid => {
-    const T = rate(eid, 'arab_std'); const xx = x(T);
-    svg.append('line').attr('x1', xx).attr('x2', xx).attr('y1', M.t).attr('y2', H - M.b).attr('stroke', 'var(--arab)').attr('stroke-dasharray', '2 3').attr('opacity', .8);
-    svg.append('text').attr('class', 'lbl').attr('x', xx).attr('y', M.t - 8).attr('text-anchor', 'middle').text(W < 560 ? `ה-${E(eid).n}` : E(eid).short);
+  els.forEach(l => {
+    svg.append('line').attr('x1', l.x).attr('x2', l.x).attr('y1', M.t - (l.row ? 14 : 0)).attr('y2', H - M.b).attr('stroke', 'var(--arab)').attr('stroke-dasharray', '2 3').attr('opacity', .8);
+    svg.append('text').attr('class', 'lbl').attr('x', l.x).attr('y', M.t - 8 - (l.row ? 14 : 0)).attr('text-anchor', 'middle').text(l.text);
   });
   const stepLine = key => d3.line().x(d => x(d.T)).y(d => y(d[key])).curve(d3.curveStepAfter)(pts);
   svg.append('path').attr('d', stepLine('arab')).attr('fill', 'none').attr('stroke', 'var(--arab)').attr('stroke-width', 2.5);
   svg.append('path').attr('d', stepLine('coal')).attr('fill', 'none').attr('stroke', 'var(--ink)').attr('stroke-width', 2.5);
   const cur = pts.find(p => p.T === Math.round(S.scn.arabT)) || pts[18];
   svg.append('circle').attr('cx', x(cur.T)).attr('cy', y(cur.coal)).attr('r', 5).attr('fill', 'var(--marker)').attr('stroke', 'var(--ink)');
-  svg.append('text').attr('class', 'lbl-strong').attr('x', x(75) - 2).attr('y', y(pts[pts.length - 1].coal) - 8).attr('text-anchor', 'start').text('הקואליציה שבחרתם');
-  svg.append('text').attr('class', 'lbl-strong').attr('x', x(75) - 2).attr('y', y(pts[pts.length - 1].arab) - 8).attr('text-anchor', 'start').style('fill', 'var(--ink)').text('הרשימות הערביות');
+  // each line's name at the right end, above the line's highest point under the label (not across a step), with a
+  // halo; the Arab lists' name goes under its line when the two names would meet
+  const lineLabel = (key, text) => {
+    const w = textWidth(text, 12.5, 600), T0 = x.invert(x(75) - 2 - w);
+    const span = pts.filter(p => p.T >= Math.floor(T0)), hi = d3.max(span, p => p[key]), lo = d3.min(span, p => p[key]);
+    return { text, up: Math.max(M.t + 10, y(hi) - 9), down: y(lo) + 17 };
+  };
+  const lc = lineLabel('coal', 'הקואליציה שבחרתם'), la = lineLabel('arab', 'הרשימות הערביות');
+  const ya = Math.abs(la.up - lc.up) < 15 ? la.down : la.up;
+  svg.append('text').attr('class', 'lbl-strong halo').style('font-size', '12.5px').attr('x', x(75) - 2).attr('y', lc.up).attr('text-anchor', 'start').text(lc.text);
+  svg.append('text').attr('class', 'lbl-strong halo').style('font-size', '12.5px').attr('x', x(75) - 2).attr('y', ya).attr('text-anchor', 'start').style('fill', 'var(--ink)').text(la.text);
   svg.append('rect').attr('x', M.l).attr('y', M.t).attr('width', W - M.l - M.r).attr('height', H - M.t - M.b).attr('fill', 'transparent')
     .on('mousemove', ev => { const [mx] = d3.pointer(ev); const T = Math.round(x.invert(mx)); const p = pts.find(q => q.T === T); if (!p) return;
       tt.show(`<h4>הצבעה ערבית ${T}%</h4>${ttRows([['הקואליציה שבחרתם', p.coal], ['הרשימות הערביות', p.arab, cssVar('--arab')]])}`, ev); })

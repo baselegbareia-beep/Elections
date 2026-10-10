@@ -94,7 +94,7 @@ function electionX(W, M) { return d3.scalePoint().domain(ELS).range([M.l, W - M.
 
 function drawSectorTurnout(el) {
   const W = widthOf(el), H = 310, M = { t: 30, r: 28, b: 40, l: 36 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'שיעור ההצבעה לפי מגזר בחמש מערכות הבחירות');
   const x = electionX(W, M);
   const y = d3.scaleLinear().domain([30, 80]).range([H - M.b, M.t]);
   [30, 40, 50, 60, 70, 80].forEach(v => {
@@ -135,7 +135,7 @@ function drawSectorTurnout(el) {
 
 function drawArabSeats(el) {
   const W = widthOf(el, 480), H = 300, M = { t: 18, r: 12, b: 40, l: 12 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'מנדטי הרשימות הערביות בכל מערכת בחירות ולפי ממוצע הסקרים של 2026');
   const cols = [...ELS, 'K26'];
   const x = d3.scaleBand().domain(cols).range([M.l, W - M.r]).padding(0.28);   // chronological left to right, like the other charts
   const y = d3.scaleLinear().domain([0, 16]).range([H - M.b, M.t]);
@@ -166,7 +166,7 @@ function drawArabSeats(el) {
 function drawArabComposition(el) {
   const W = widthOf(el), rowH = 40, M = { t: 6, r: 96, b: 6, l: 8 };
   const H = M.t + M.b + rowH * ELS.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'למי הצביעו בקלפיות הערביות בכל מערכת בחירות');
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
   ELS.forEach((e, i) => {
     const s = E(e).sectors.arab, yy = M.t + i * rowH;
@@ -195,7 +195,7 @@ function drawArabRegions(el) {
   const regs = ['negev', 'north_bedouin', 'wadi_ara', 'triangle_south', 'nazareth', 'galilee', 'christian', 'mixed_town', 'jerusalem', 'mixed'];
   const W = widthOf(el), rowH = 40, M = { t: W >= 560 ? 24 : 6, r: W >= 560 ? Math.max(168, d3.max(regs, k => textWidth(S.core.arab_regions[k] || '', 12.5, 600)) + 10) : 112, b: 8, l: W >= 560 ? 64 : Math.ceil(textWidth('100%', 22, 700)) + 12 };
   const H = M.t + M.b + rowH * regs.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, `השתתפות והצבעה בחברה הערבית לפי אזור, ${ev.short}`);
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
   if (W >= 560) {
     svg.append('text').attr('class', 'lbl').attr('x', M.l - 8).attr('y', 12).attr('text-anchor', 'start').text('השתתפות');
@@ -229,7 +229,7 @@ function drawArabRegions(el) {
 function drawArabPolls(el) {
   const endW = d3.max(S.polls.parties.filter(p => p.bloc === 'arab'), p => textWidth(`${p.name} 00.0`, 12.5, 600)) + 14;
   const W = widthOf(el, 480), H = 230, M = { t: 16, r: Math.min(Math.max(150, endW), W * 0.5), b: 26, l: 28 };
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'הרשימות הערביות בסקרי 2026: מנדטים לאורך זמן');
   const { polls, parties } = S.polls;
   const x = d3.scaleUtc().domain([d3.timeDay.offset(toDate(polls[0].date), -2), d3.timeDay.offset(latestDate(), 2)]).range([M.l, W - M.r]);
   const y = d3.scaleLinear().domain([0, 12]).range([H - M.b, M.t]);
@@ -260,7 +260,7 @@ function drawSankey(el) {
   const t = arabTransfer(S.pairIdx);
   if (!t) { el.innerHTML = '<p class="empty">אין אומדן מעברי קולות.</p>'; return; }
   const W = widthOf(el), H = 420, M = { t: 28, r: 8, b: 8, l: 8 }, nodeW = 14, gap = 8;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'מעברי קולות בקלפיות הערביות בין שתי מערכות בחירות (אומדן)');
   const label = (eid, id) => id === 'abstain' ? 'לא הצביעו' : id === 'other' ? 'אחרות ופסולים' : partyName(eid, id);
   const color = (eid, id) => id === 'abstain' ? 'var(--rule-strong)' : id === 'other' ? 'var(--muted)' : famColor(famOf(eid, id));
   const total = sum(t.src_mass);
@@ -323,7 +323,7 @@ function drawMixed(el) {
 function drawDruze(el) {
   const W = widthOf(el, 480), rowH = 34, M = { t: 4, r: 70, b: 4, l: 4 };
   const H = M.t + M.b + rowH * ELS.length;
-  const svg = svgEl(el, W, H);
+  const svg = svgEl(el, W, H, 'הצבעה ביישובים הדרוזיים בכל מערכת בחירות');
   const x = d3.scaleLinear().domain([0, 1]).range([W - M.r, M.l]);
   const famsSeen = new Map();
   ELS.forEach((e, i) => {
