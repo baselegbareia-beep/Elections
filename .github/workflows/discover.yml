@@ -5,6 +5,8 @@
 # from main. The bytes of every candidate turnout / results file go with it (reports/files/<stamp>/, up to
 # 8 MB each, each version once), so a release the feed cannot read can be converted by someone who cannot
 # reach gov.il. How to read it and what to do: docs/FILE_DISCOVERY.md.
+# GitHub fires the crons, and offers Run workflow, only for a workflow on the default branch (main): this file
+# must be on main before the first run (15.10 08:43 Israel time).
 name: Find the election files
 
 on:
@@ -42,7 +44,10 @@ concurrency:
 jobs:
   discover:
     # a separate variable from LIVE_RUNNER: a self-hosted runner busy with the 345-minute live feed would
-    # leave these runs queued behind it
+    # leave these runs queued behind it. No automatic fallback: if that machine is offline, a run waits queued
+    # (up to 24 h) and holds the `discover` concurrency group, so every later run, a hosted dispatch included,
+    # waits behind it. Delete DISCOVER_RUNNER, cancel the queued run, then dispatch with runner=ubuntu-latest
+    # (docs/FILE_DISCOVERY.md, "כששרתי GitHub נחסמים").
     runs-on: ${{ github.event.inputs.runner || vars.DISCOVER_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 25
     steps:
