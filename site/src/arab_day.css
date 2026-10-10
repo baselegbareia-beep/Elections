@@ -1,10 +1,13 @@
 /* ---------- election day: the Arab society, locality by locality (js/arab_day.js) ----------
-   Ra'am-led and Joint-List-led localities (2022) take two hues of the site palette that clear the
-   all-pairs colour-blind checks in both themes (green #008300 / violet #6250d6, dark #9085e9);
-   localities where another list led stay grey and are drawn hollow, so colour is never the only cue. */
-:root { --ad-raam: #008300; --ad-joint: #6250d6; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ad-raam: #008300; --ad-joint: #9085e9; } }
-:root[data-theme="dark"] { --ad-raam: #008300; --ad-joint: #9085e9; }
+   Ra'am-led and Joint-List-led localities (2022) take green #008300 and raspberry #b4237a (dark #e0559f): the
+   pair clears the colour-blind and normal-vision checks in both themes (validate_palette, all pairs, with
+   --jewish), and the Joint List no longer borrows the violet that means Jewish localities on the other tabs.
+   Localities where another list led stay grey and are drawn hollow, so colour is never the only cue. The
+   section's own 2026 figures keep --arab (the bullet, the region lines) in cards without party colours; the
+   table, which shows the leader's swatch, draws its turnout bars in ink. */
+:root { --ad-raam: #008300; --ad-joint: #b4237a; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --ad-raam: #008300; --ad-joint: #e0559f; } }
+:root[data-theme="dark"] { --ad-raam: #008300; --ad-joint: #e0559f; }
 
 .ad-lede { margin: -4px 0 14px; color: var(--ink-2); max-width: 80ch; font-size: var(--t-sm); text-wrap: pretty; }
 .ad-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
@@ -89,6 +92,7 @@ th[aria-sort="ascending"] .ad-sort i, th[aria-sort="descending"] .ad-sort i { op
 .ad-star[aria-pressed="true"] { color: var(--ink); }
 .ad-star[aria-pressed="true"] svg path { fill: var(--marker); }
 .ad-nm { font-weight: 500; }
+.ad-nm-sub { font-size: var(--t-xs); color: var(--ink-2); white-space: nowrap; }
 .ad-tbl .badge { margin-inline-start: 6px; font-size: 10.5px; padding: 0 6px; }
 table.t.sticky1.ad-tbl tr.hl td:first-child { background: color-mix(in srgb, var(--marker) 18%, var(--surface)); }
 table.t.ad-tbl tr.ad-pin-last td { border-bottom: 2px solid var(--rule-strong); }
@@ -96,8 +100,7 @@ table.t.ad-tbl tr.ad-pin-last td { border-bottom: 2px solid var(--rule-strong); 
 .ad-sw { display: inline-block; width: 9px; height: 9px; border-radius: 50%; flex: none; }
 .ad-sw.other { background: var(--surface); box-shadow: inset 0 0 0 1.5px var(--muted); }
 .ad-mb { position: relative; display: inline-block; width: 52px; height: 8px; border-radius: 2px; background: var(--surface-2); box-shadow: inset 0 0 0 1px var(--rule); vertical-align: middle; margin-inline-start: 7px; }
-.ad-mb i { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: 2px; background: var(--arab); }
-.ad-mb.pace i { background: var(--ink-2); }
+.ad-mb i { position: absolute; inset-block: 0; inset-inline-start: 0; border-radius: 2px; background: var(--ink-2); }
 .ad-mb b { position: absolute; top: -3px; bottom: -3px; width: 2px; margin-inline-start: -1px; background: var(--ink); border-radius: 1px; }
 .ad-sm-only { display: none; }
 @media (max-width: 560px) {
@@ -107,6 +110,10 @@ table.t.ad-tbl tr.ad-pin-last td { border-bottom: 2px solid var(--rule-strong); 
   .ad-tbl td:first-child { white-space: normal; min-width: 104px; line-height: 1.3; }
   .ad-tbl td:first-child .badge { margin-inline-start: 0; }
 }
+
+/* the map */
+.ad-map { margin: 4px auto 0; max-width: 520px; }   /* a full-width card (below 1080 px) would make it twice the screen tall */
+.legend .ad-map-ramp { display: inline-block; width: 110px; height: 10px; border-radius: 2px; vertical-align: -1px; }
 
 /* svg labels that sit over reference lines */
 .ad-halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
