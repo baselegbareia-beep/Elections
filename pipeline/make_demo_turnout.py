@@ -8,6 +8,8 @@ and is neither a result nor a forecast. Seeded, so the output is the same on eve
 
     python3 pipeline/make_demo_turnout.py                 # site/data/arab_day_demo.json (10:00, 14:00, 18:00, 21:00)
     python3 pipeline/make_demo_turnout.py --csv DIR       # also DIR/turnout_HHMM.csv per release (expb.csv layout)
+    python3 pipeline/make_demo_turnout.py --csv F.csv [--at 14:00]   # one release in F.csv, nothing else
+                                                          # (with --out also the demo JSON there)
     python3 pipeline/make_demo_turnout.py --check         # the unit checks of pipeline/arab_turnout.py
 """
 import argparse
@@ -90,7 +92,9 @@ def build(base, times=TIMES, csv_dir=None):
 
 
 def check(base):
-    """Unit checks: shares, leaders, a 100% release equals 2022, monotone releases, projections, CSV round trip."""
+    """Unit checks: shares, leaders, a 100% release equals 2022, monotone releases, projections; partial, split,
+    renumbered, absent, blank, duplicate and impossible stations; the same-hour 2022 curve; the history entry; CSV
+    round trip; the official 2022 file and the 2021 file read as releases."""
     fails = []
 
     def ok(cond, what):
@@ -149,10 +153,10 @@ def check(base):
             print(f"       {d['as_of']}: turnout {d['total']['turnout']:.3f} pace {d['total']['pace']:.3f} "
                   f"on_track {d['total']['on_track']:.3f} projected {p['lo']:.3f}-{p['mid']:.3f}-{p['hi']:.3f} "
                   f"ratio_to_national {d['total']['ratio_to_national']:.3f}")
-    final_std = t["turnout22"]
+    final = t["turnout22"]          # the section: Arab and Druze localities and the mixed cities' Arab stations
     at21 = demo[6]["total"]["projected_final"]
-    ok(abs(at21["mid"] - 0.532) < 0.03 and at21["lo"] <= final_std <= at21["hi"],
-       f"projected final at 21:00 {at21['mid']:.3f} within 3 points of 53.2%, range holds the 2022 final {final_std:.3f}")
+    ok(abs(at21["mid"] - final) < 0.03 and at21["lo"] <= final <= at21["hi"],
+       f"projected final at 21:00 {at21['mid']:.3f} within 3 points of the 2022 final {final:.3f}, and in its range")
     ok(all(p["lo"] <= p["mid"] <= p["hi"] for p in (d["total"]["projected_final"] for d in demo)), "lo <= mid <= hi")
     ok(AT.arab_section(synthetic_rows(base, "09:00"), base, released="09:00")["total"]["projected_final"] is None,
        "no projection before 10:00")
@@ -165,15 +169,15 @@ def check(base):
     noelig = at22([{**r, "elig": None} for r in rows])["total"]
     ok(noelig["turnout"] is None and noelig["projected_final"]["basis"] == "pace"
        and abs(noelig["projected_final"]["mid"] - t["turnout22"]) < 1e-3, "no eligible counts: projected from pace")
-    sub = [{**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.7"} if r["code"] == 4000 else r for r in rows]
+    sub = [{**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.7{i}"} if r["code"] == 4000 else r for i, r in enumerate(rows)]
     ok(at22(sub)["kinds"]["mixed_arab"]["pace"] == 1.0,
        "mixed-city stations matched by station number when sub-station numbers change")
     naz = [r for r in rows if r["code"] == 7300]
     split = [r for r in rows if r["code"] != 7300]
-    for r in naz:                   # every Nazareth station split in two, with new sub-station numbers
+    for i, r in enumerate(naz):     # every Nazareth station split in two, with new sub-station numbers
         v1 = r["voters"] // 2
-        split += [{**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.8", "voters": v1, "elig": r["elig"] // 2},
-                  {**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.9", "voters": r["voters"] - v1,
+        split += [{**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.8{i}", "voters": v1, "elig": r["elig"] // 2},
+                  {**r, "kalpi": f"{AT.kalpi_base(r['kalpi'])}.9{i}", "voters": r["voters"] - v1,
                    "elig": r["elig"] - r["elig"] // 2}]
     ns = loc(at22(split), "7300")
     ok(ns["pace"] == 1.0 and ns["coverage"] == 1.0 and ns["stations"] == 2 * len(naz),
@@ -192,6 +196,65 @@ def check(base):
     ns = loc(sec, "7300")
     ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0 and sec["checks"].get("no figure", 0) >= 1,
        "a station without a figure (blank) is left out, not read as zero voters")
+    # a station split under its own number (N -> N and a new N.1) in a locality compared station by station
+    idx = AT._index(base)
+    b1 = next(b for b in sorted(idx["groups"]["7300"]) if len(idx["subs"][(7300, b)]) == 1 and b != last)
+
+    def split_n(rs, blank_new=False):
+        out = []
+        for r in rs:
+            if r["code"] == 7300 and AT.kalpi_base(r["kalpi"]) == b1:
+                v1, e1 = round(0.7 * r["voters"]), round(0.7 * r["elig"])
+                out += [{**r, "voters": v1, "elig": e1},
+                        {**r, "kalpi": f"{b1}.1", "voters": "" if blank_new else r["voters"] - v1,
+                         "elig": r["elig"] - e1}]
+            else:
+                out.append(r)
+        return out
+    sec = at22(split_n(gone))
+    ns = loc(sec, "7300")
+    ok(ns["pace"] == 1.0 and ns["coverage"] < 1.0 and sec["checks"].get("split station") == 1
+       and not sec["checks"].get("register changed"),
+       f"station {b1} split into {b1} (70%) and a new {b1}.1: compared as one block, nothing dropped "
+       f"(pace {ns['pace']}, checks {sec['checks']})")
+    sec = at22(split_n(gone, blank_new=True))
+    ns = loc(sec, "7300")
+    ok(ns["pace"] == 1.0 and sec["checks"].get("unplaced station") == 1 and not sec["checks"].get("split station"),
+       f"the new {b1}.1 without a figure yet: {b1} is not compared alone (left out and counted as unplaced)")
+    # stations absent from the file (not blank) while the register grew 8% and new stations were added: the counts
+    # pass, so only the 2022 station numbers show that the locality is not whole
+    grow = [{**r, "elig": round(1.08 * r["elig"])} if r["code"] == 7300 else r for r in gone]
+    extra = [{"code": 7300, "kalpi": str(900 + i), "elig": 600, "voters": 300} for i in range(6)]
+    x7300 = next(x for x in L if x["key"] == "7300")
+    n_naz = sum(1 for r in grow if r["code"] == 7300) + len(extra)
+    sec = at22(grow + extra)
+    ns = loc(sec, "7300")
+    ok(n_naz >= x7300["stations22"] and ns["elig"] >= x7300["elig22"] and ns["pace"] == 1.0
+       and ns["coverage"] < 1.0 and sec["checks"].get("new station") == len(extra),
+       f"a 2022 station group absent from the file is not hidden by new stations: compared station by station "
+       f"(pace {ns['pace']}, coverage {ns['coverage']}; {n_naz} stations, {ns['elig']:,} eligible against "
+       f"{x7300['stations22']} and {x7300['elig22']:,} in 2022)")
+    whole = [{**r, "elig": round(1.08 * r["elig"])} if r["code"] == 7300 else r for r in rows] + extra
+    ns = loc(at22(whole), "7300")
+    ok(ns["coverage"] == 1.0 and ns["pace"] == round((x7300["voters22"] + 300 * len(extra)) / x7300["voters22"], 3),
+       "the same with every 2022 station there: the whole locality, new stations included")
+    renum = [{**r, "kalpi": str(1000 + i)} if r["code"] == 7300 else r for i, r in enumerate(rows)]
+    ns = loc(at22(renum), "7300")
+    ok(ns["pace"] == 1.0 and ns["coverage"] == 1.0 if AT.RENUMBERED else ns["pace"] is None,
+       "every station renumbered (no 2022 number left): compared whole by the counts"
+       if AT.RENUMBERED else "every station renumbered: nothing to compare (RENUMBERED = 0: numbers only)")
+    first = next(r for r in renum if r["code"] == 7300)
+    sec = at22([r for r in renum if r is not first])
+    ns = loc(sec, "7300")
+    ok(ns["pace"] is None and ns["coverage"] == 0.0 and sec["checks"].get("new station") == len(naz) - 1,
+       "renumbered and a station short: nothing to compare, every station counted as new")
+    dup = at22(rows + [naz[0]])
+    ok(dup["checks"].get("duplicate row") == 1 and dup["total"] == full["total"],
+       "a second row for the same station is dropped and counted")
+    late = AT.arab_section(rows, base, released="22:40")
+    ok(late["as_of"] == "22:00" and late["released"] == "22:40"
+       and late["total"]["projected_final"]["mid"] == t["turnout22"],
+       "a release labelled after the polls closed (22:40) is read as 22:00")
     newst = rows + [{"code": 4000, "kalpi": "9999", "elig": 500, "voters": 100}]
     ok(at22(newst)["checks"].get("unclassified") == 1,
        "a new mixed-city station is reported as unclassified")
@@ -233,38 +296,97 @@ def check(base):
         for r in rows21:
             if str(r["code"]).isdigit() and str(r["voters"]).isdigit():
                 v21[r["code"]] = v21.get(r["code"], 0) + int(r["voters"])
+        got = {x["key"]: x for x in sec["localities"]}
         for kind in ("arab", "druze"):
-            xs = [x for x in L if x["kind"] == kind]
+            # Kisra-Sumei aside: a local boycott in 2022 left two of its stations with 37 and 67 voters, beyond the
+            # pace cap, so its renumbered stations hardly match (pace 1.28 against 1.87 true)
+            xs = [x for x in L if x["kind"] == kind and x["key"] != "1296" and x["key"] in got]
             truth = sum(v21.get(x["key"], 0) for x in xs) / sum(x["voters22"] for x in xs)
-            got = sec["kinds"][kind]["pace"]
-            ok(abs(got - truth) < 0.02, f"2021 file as a release: {kind} pace {got} vs 2021/2022 voters {truth:.3f}")
+            th = {x["key"]: got[x["key"]]["coverage"] * x["voters22"] for x in xs if got[x["key"]]["pace"] is not None}
+            pace = sum(got[k]["pace"] * w for k, w in th.items()) / sum(th.values())
+            ok(abs(pace - truth) < 0.02,
+               f"2021 file as a release: {kind} pace {pace:.3f} vs 2021/2022 voters {truth:.3f} (Kisra-Sumei aside)")
+        rn, small = [], []
+        for x in L:
+            if x["kind"] == "mixed_arab" or x["key"] not in got:
+                continue
+            mine = [r for r in rows21 if r["code"] == x["key"]]
+            nums = {AT.kalpi_base(AT.kalpi_id(r["kalpi"])) for r in mine}
+            if len(nums & idx["groups"][x["key"]]) < AT.RENUMBERED * len(idx["groups"][x["key"]]):
+                el = sum(int(r["elig"]) for r in mine if str(r["elig"]).isdigit())
+                (rn if len(mine) >= x["stations22"] or el >= x["elig22"] else small).append(x)
+        ok(not AT.RENUMBERED or rn and all(got[x["key"]]["coverage"] == 1.0
+                      and abs(got[x["key"]]["pace"] - v21.get(x["key"], 0) / x["voters22"]) < 6e-4 for x in rn)
+           and all(got[x["key"]]["coverage"] < 1.0 for x in small),
+           f"2021 file: of the {len(rn) + len(small)} renumbered localities (fewer than half of the 2022 numbers), the "
+           f"{len(rn)} with as many stations as in 2022 compare whole, exactly; the {len(small)} with fewer do not")
+    # 2022 at the same hour, on the same stations: a release shaped exactly like 2022 sits on it at every hour
+    C = base["curve"]
+    ok(C["section"][-1] == round(100 * t["turnout22"], 1)
+       and C["mixed_arab"][-1] == round(100 * base["kinds"]["mixed_arab"]["turnout22"], 1)
+       and all(m <= s <= a for m, s, a in zip(C["mixed_arab"], C["section"], C["arab"])),
+       f"base curves: section {C['section'][-1]}% and mixed-city Arab stations {C['mixed_arab'][-1]}% at 22:00, "
+       f"the section between them and the Arab and Druze localities' {C['arab'][-1]}% at every hour")
+    worst = 0.0
+    for hh in ("10:00", "14:00", "18:00", "21:00"):
+        s0 = AT.arab_section(synthetic_rows(base, hh, noise=False), base, released=hh)
+        for m in [s0["total"], *s0["kinds"].values(), *s0["groups"].values(), *s0["regions"].values()]:
+            worst = max(worst, abs(m["turnout"] - m["curve22"]))
+    ok(worst < 1e-3, f"a release shaped like 2022: turnout = curve22 for the total, every kind, group and region "
+                     f"(largest gap {worst:.5f})")
+    ok(full["total"]["curve22"] == full["total"]["turnout22"] == t["turnout22"]
+       and all(k["curve22"] == k["turnout22"] for k in full["kinds"].values()), "curve22 at 22:00 is the 2022 final")
+    s14 = demo[hours.index("14:00")]
+    ok(s14["total"]["curve22"] < C["arab"][C["hours"].index("14:00")] / 100,
+       f"the total's curve22 at 14:00 ({s14['total']['curve22']}) is below the Arab and Druze localities' curve "
+       f"({C['arab'][C['hours'].index('14:00')]}%): it holds the mixed cities' Arab stations")
     sec = demo[2]
     h = AT.history_entry(sec)
-    ok(len(json.dumps(h)) < 1500 and h["total"]["turnout"] == sec["total"]["turnout"], "history entry is compact")
+    size = len(json.dumps(h, ensure_ascii=False, separators=(",", ":")))
+    ok(size < 8000 and h["total"]["turnout"] == sec["total"]["turnout"]
+       and h["total"]["curve22"] == sec["total"]["curve22"]
+       and h["kinds"] == {k: {"turnout": v["turnout"], "pace": v["pace"]} for k, v in sec["kinds"].items()}
+       and h["localities"] == {x["key"]: [x["turnout"], x["pace"]] for x in sec["localities"]},
+       f"history entry: total, groups, regions, kinds and every locality as [turnout, pace], {size:,} bytes")
     print("FAILED: " + "; ".join(fails) if fails else "all arab_turnout checks passed")
     return not fails
 
 
-def main():
+def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("--out", default=OUT)
-    ap.add_argument("--csv", help="also write the synthetic per-station CSV of each release into this folder")
+    ap.add_argument("--out", help=f"the demo JSON (default {os.path.relpath(OUT, ROOT)}; "
+                                  "with --csv F.csv written only when given)")
+    ap.add_argument("--csv", help="a folder: also write the synthetic per-station CSV of each release there "
+                                  "(turnout_HHMM.csv); a path ending in .csv: write one release there (--at) and "
+                                  "nothing else unless --out is given")
+    ap.add_argument("--at", default="14:00", help="the release written by --csv F.csv (default 14:00)")
     ap.add_argument("--check", action="store_true", help="run the unit checks instead of writing the demo")
-    a = ap.parse_args()
+    a = ap.parse_args(argv)
     base = AT.load_base()
     if a.check:
         sys.exit(0 if check(base) else 1)
-    if a.csv:
+    if a.csv and a.csv.lower().endswith(".csv"):
+        if AT.hour(a.at) is None:
+            ap.error(f"--at: not a time: {a.at!r}")
+        if os.path.dirname(os.path.abspath(a.csv)):
+            os.makedirs(os.path.dirname(os.path.abspath(a.csv)), exist_ok=True)
+        write_csv(synthetic_rows(base, a.at), a.csv)
+        print(f"wrote {a.csv}: the synthetic release of {a.at}")
+        if not a.out:
+            return
+        a.csv = None
+    elif a.csv:
         os.makedirs(a.csv, exist_ok=True)
+    out = a.out or OUT
     doc = build(base, csv_dir=a.csv)
-    with open(a.out, "w", encoding="utf-8") as f:
+    with open(out, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, separators=(",", ":"))
     for r in doc["releases"]:
         t, p = r["total"], r["total"]["projected_final"]
         print(f"{r['as_of']}: turnout {t['turnout']:.1%} (national {r['national']:.1%}), pace {t['pace']:.3f}, "
               f"raam-led {r['groups']['raam']['turnout']:.1%}, joint-led {r['groups']['joint']['turnout']:.1%}, "
               f"projected {p['lo']:.1%}-{p['mid']:.1%}-{p['hi']:.1%}" if p else "")
-    print(f"wrote {a.out}: {len(doc['releases'])} releases, {os.path.getsize(a.out):,} bytes")
+    print(f"wrote {out}: {len(doc['releases'])} releases, {os.path.getsize(out):,} bytes")
 
 
 if __name__ == "__main__":

@@ -29,7 +29,10 @@ that run together in 2026 as the Joint List (live_model.BASE_MAP); other22 = eve
 larger of raam22 and joint22, or "other" when a single non-Arab list beat both (most Druze localities);
 margin22 is the leader's lead over the next of the three (Ra'am, the Joint List, the top non-Arab list).
 
-The hourly Arab curve and the projection range are documented in pipeline/arab_turnout.py.
+The hourly Arab curve and the projection range are documented in pipeline/arab_turnout.py. The curve is of the
+Arab and Druze localities (its end, 53.2%, is their official final); the Arab stations of mixed cities have no
+hourly figures of their own and are given the same timing on their own 2022 final ("mixed_arab"), and the whole
+section is the two weighted by their 2022 voters ("section"). The Druze localities, too, follow the Arab timing.
 
 Run: python3 pipeline/build_arab_day.py [--out site/data/arab_day_2022.json]
 """
@@ -67,9 +70,11 @@ NOTE_HE = ("בסיס 2022 לשיעור ההצבעה בחברה הערבית בי
            "מרכז אקורד (האוניברסיטה העברית) ל-14:00 (17%), ל-16:00 (23%) ול-20:00 (44%), 30% ל-18:00 שפורסם בלי "
            "ייחוס, והשיעור הסופי הרשמי, 53.2%; שעות הבוקר חושבו מהיחס לשיעור הארצי. ההערכה לסוף היום מחלקת את "
            "שיעור ההצבעה עד שעה מסוימת בחלק מכלל מצביעי היום שהצביעו עד אותה שעה ב-2022, ולכן מניחה שדפוס "
-           "ההצבעה המאוחרת של 2022 יחזור (ב-2022 הצביע כשישית מהמצביעים אחרי 20:00). הטווח הוא הערכה גסה "
-           "(כ-80%): פי שניים מהפיזור של העקומה הארצית בבחירות 2013–2022. נתוני השתתפות בלבד: שום דבר כאן אינו "
-           "מתורגם לקולות או למנדטים.")
+           "ההצבעה המאוחרת של 2022 יחזור (ב-2022 הצביע כשישית מהמצביעים אחרי 20:00). לקלפיות הערביות בערים "
+           "המעורבות וליישובים הדרוזיים אין נתוני שעות משלהם, ולכן גם אצלם ההשוואה ל-2022 באותה שעה, הקצב הצפוי "
+           "והטווח לסוף היום מחושבים לפי העיתוי המשוער של החברה הערבית, על השיעור הסופי שלהם ב-2022. הטווח הוא "
+           "הערכה גסה (כ-80%): פי שניים מהפיזור של העקומה הארצית בבחירות 2013–2022. נתוני השתתפות בלבד: שום דבר "
+           "כאן אינו מתורגם לקולות או למנדטים.")
 WATCH = 10               # the largest Arab localities flagged for the page
 
 
@@ -234,6 +239,20 @@ def main():
     std = [x for x in entries if x["kind"] != "mixed_arab"]
     std_t = sum(x["voters22"] for x in std) / sum(x["elig22"] for x in std)
     curve = build_curve(ref)
+    # the 2022 curve of each part and of the whole section, so that a release is compared like with like: the Arab
+    # and Druze localities follow the curve itself; the Arab stations of mixed cities take the same timing (no hourly
+    # figures of their own) on their own final; the section is the two weighted by their 2022 voters
+    shares = {"arab_druze": curve["arab_share"], "mixed_arab": curve["arab_share"]}
+    v22 = {"arab_druze": sum(x["voters22"] for x in std), "mixed_arab": kinds.get("mixed_arab", {}).get("voters22", 0)}
+    w = {k: v / sum(v22.values()) for k, v in v22.items()}
+    section_share = [sum(w[k] * shares[k][i] for k in w) for i in range(len(curve["hours"]))]
+    if "mixed_arab" in kinds:
+        curve["mixed_arab"] = [round(100 * s * kinds["mixed_arab"]["turnout22"], 1) for s in shares["mixed_arab"]]
+    curve["section"] = [round(100 * s * total["turnout22"], 1) for s in section_share]
+    curve["section_weights"] = {k: round(v, 4) for k, v in w.items()}
+    curve["units"] = ("percent of eligible voters (turnout so far): arab = the Arab and Druze localities, mixed_arab = "
+                      "the Arab stations of mixed cities, section = both, national = the whole country; arab_share = "
+                      "share of the day's final turnout")
     for k, name in REGION_NAMES.items():
         if k in regions:
             regions[k]["name"] = name
@@ -259,8 +278,11 @@ def main():
                    "53.2%, with the morning modelled; a projected final from a release at hour h divides turnout so "
                    "far by the 2022 share of the day's turnout cast by h, with a rough 80% range that is twice the "
                    "spread of the national curve across 2013-2022. It assumes 2026 keeps the 2022 Arab timing, which "
-                   "is the main uncertainty (a sixth of the 2022 Arab vote came after 20:00). Turnout only: nothing "
-                   "here is translated into votes or seats. Details: pipeline/arab_turnout.py."),
+                   "is the main uncertainty (a sixth of the 2022 Arab vote came after 20:00). The Druze localities "
+                   "and the Arab stations of mixed cities have no hourly figures of their own and are given the same "
+                   "timing on their own 2022 final, for the same-hour comparison, on_track and the range alike "
+                   "(curve.mixed_arab; curve.section is the whole section, the two weighted by 2022 voters). Turnout "
+                   "only: nothing here is translated into votes or seats. Details: pipeline/arab_turnout.py."),
         "units": {"turnout": "fraction", "shares": "fraction of valid votes", "curve": "percent"},
         "region_names": REGION_NAMES, "kind_names": KIND_NAMES, "group_names": GROUP_NAMES, "group_short": GROUP_SHORT,
         "sub_names": subnames,
@@ -295,6 +317,9 @@ def report(doc):
     c = doc["curve"]
     print("curve: " + ", ".join(f"{h} {a}%/{n}% ({k}, f={s:.3f}, sigma={g:.3f})" for h, a, n, k, s, g in
                                 zip(c["hours"], c["arab"], c["national"], c["arab_kind"], c["arab_share"], c["sigma"])))
+    print("section curve: " + ", ".join(f"{h} {s}% (mixed-city Arab stations {m}%)" for h, s, m in
+                                        zip(c["hours"], c["section"], c.get("mixed_arab", c["section"])))
+          + f"; weights {c['section_weights']}")
 
 
 if __name__ == "__main__":
