@@ -20,23 +20,29 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      a typo in an hour or a figure is reported, not dropped silently (DOC-7);
      exit polls appear only after 22:00 and disappear when the input is removed (OPS-14);
      the 2022-vote-weighted lean is omitted during voting hours;
+  6b. per-station releases: live_config column_aliases reach the reader, a semicolon file, a percentage
+     column instead of voters, and blank / '-' / 0 figures left out of the national turnout (arab_turnout's rule);
   7. a drill is marked, and a real run discards its files (OPS-3);
   8. the Actions-mode publisher's reset cycle survives another writer on live-data (OPS-1), and the
      laptop takes live_input/ and live_config.json from origin/main every pass (DOC-2);
   8c. branch mode (the owner's Pages setting): site/live/ is committed to main and nothing else, the
      operator's commits on main are kept, a push rejected by a concurrent writer is redone (no rebase);
-  8d. the cadence (publish_every_min) and the first results / exit polls at once; the Pages build request
-     against a mock API (POST /pages/builds, skipped when the push started a build; retried after a
-     failure), the Actions-mode dispatch of pages.yml, and the Pages-source auto-detection;
+  8d. the cadence (publish_every_min) and the first results / exit polls at once, also after a failed push;
+     the Pages build request against a mock API (POST /pages/builds, skipped when the push started a build;
+     retried after a failure), the Actions-mode dispatch of pages.yml, and the Pages-source auto-detection;
   8e. seeding a run (never from a drill), the reset to the placeholder, and one end-to-end pass of
      live_fetch.py --publish; status.json carries heartbeat_s and publish_mode;
   9. pipeline/live_config.json still holds the 7,340,000 placeholder after 25.10 (LM-B);
  10. the Arab-society section in turnout.json during voting hours: "arab" and "arab_history" (one entry
-     per release, the last 8) through a stand-in pipeline/arab_turnout.py, a failure keeps the last
-     section, a failed station fetch keeps the last release; then the real module on a synthetic
-     per-station release (pipeline/make_demo_turnout.py's when it can write one), if both are present;
- 11. the workflows: bash -n on every run: block, the daily poll-ban guard on dates around the ban, and
-     the push filters (site/live/** starts no workflow).
+     per release, the last 8, with "localities" and "kinds") through a stand-in pipeline/arab_turnout.py,
+     a failure keeps the last section, a failed station fetch keeps the last release; the release time:
+     sectors_time labels only the release it was set for (a stale one is reported), a release first seen
+     after 22:00 is 22:00, another day's releases leave arab_history; then, if both are present, the real
+     module on pipeline/make_demo_turnout.py's 14:00 release (its --check unit checks too, and
+     site/data/arab_day_demo.json left alone) and on a release with blank figures (the same national turnout);
+ 11. the workflows: bash -n on every run: block, the daily poll-ban guard on dates around the ban, the
+     daily job split (polls-data.js runs without a token; the poll-table check on good and broken tables),
+     live.yml's reset going red when not published, and the push filters (site/live/** starts no workflow).
 The drill in live.yml and the daily poll update run this first. Runtime about two to three minutes."""
 import contextlib
 import datetime as dt
@@ -223,6 +229,23 @@ def station_release(src, f, name, seed=0):
     return write(os.path.join(TMP, name), "﻿" + "\n".join(out) + "\n")
 
 
+def rework_release(src, name, header=None, delim=",", cells=None):
+    """A per-station release (station_release's layout) rewritten: another header (a list), another delimiter,
+    or each data row's cells through cells(i, [code, name, kalpi, elig, voters]) -> list."""
+    lines = open(src, encoding="utf-8-sig").read().splitlines()
+    out = [delim.join(header or lines[0].split(","))]
+    for i, ln in enumerate(lines[1:]):
+        c = ln.split(",")
+        out.append(delim.join(cells(i, c) if cells else c))
+    return write(os.path.join(TMP, name), "﻿" + "\n".join(out) + "\n")
+
+
+def blank_some(i, c):
+    """Every 5th station without a figure yet, every 50th written '-', every 97th with 0 voters."""
+    v = "" if i % 5 == 0 else "-" if i % 50 == 1 else "0" if i % 97 == 2 else c[4]
+    return c[:4] + [v]
+
+
 class Api(http.server.BaseHTTPRequestHandler):
     """A stand-in for the GitHub REST API: the Pages source, the latest Pages build, build requests and
     workflow dispatches. latest = "tip" answers with the commit at the tip of origin's main (the push
@@ -300,10 +323,11 @@ def path_filter(patterns, path):
 
 
 def run_block(script, env, cwd):
-    """A workflow run: block under bash -e with the given environment (GITHUB_OUTPUT and friends set)."""
-    out_file = os.path.join(cwd, "gh_output")
+    """A workflow run: block under bash -e with the given environment (GITHUB_OUTPUT and friends set, in the
+    scratch folder: cwd may be the repository)."""
+    out_file = os.path.join(TMP, "gh_output")
     open(out_file, "w").close()
-    full = {**os.environ, "GITHUB_OUTPUT": out_file, "GITHUB_STEP_SUMMARY": os.path.join(cwd, "gh_summary"), **env}
+    full = {**os.environ, "GITHUB_OUTPUT": out_file, "GITHUB_STEP_SUMMARY": os.path.join(TMP, "gh_summary"), **env}
     r = subprocess.run(["bash", "-e", "-c", script], cwd=cwd, env=full, capture_output=True, text=True)
     outputs = dict(ln.split("=", 1) for ln in open(out_file).read().splitlines() if "=" in ln)
     return r.returncode, outputs, r.stdout + r.stderr
@@ -507,6 +531,44 @@ def main():
     st = run("--out", o6, "--config", write(os.path.join(TMP, "broken.json"), "{ nope"), "--as", "K25", "--inputs", inputs, now=NIGHT)
     check(any(e.startswith("config:") for e in st["errors"]) and st["results_state"] in ("waiting", "ok"), f"broken config reported, pass completed: {st['errors']}")
 
+    print("6b. per-station releases: column_aliases, another delimiter, a percentage column, blank figures")
+    rel = station_release(k25_30, 0.3, "rel30.csv", seed=3)
+    rows0, _ = LF.station_rows(open(rel, "rb").read())
+    alias = {"locality": "סמל ישוב", "box": "קלפי", "registered": "בזב", "voted": "מצביעים"}
+    ren = rework_release(rel, "rel_renamed.csv", header=["locality", "name", "box", "registered", "voted"])
+    try:
+        LF.station_rows(open(ren, "rb").read())
+        check(False, "renamed headers without column_aliases should be refused")
+    except ValueError as exc:
+        check("unknown columns" in str(exc), f"renamed headers without column_aliases: refused ({str(exc)[:60]})")
+    check(LF.station_rows(open(ren, "rb").read(), alias)[0] == rows0, "the same release under other names, read with column_aliases")
+    check(LF.station_rows(open(rework_release(rel, "rel_semi.csv", delim=";"), "rb").read())[0] == rows0, "a semicolon-separated release")
+    pct = rework_release(rel, "rel_pct.csv", header=["סמל יישוב", "שם יישוב", "מספר קלפי", "בעלי זכות בחירה", "אחוז הצבעה"],
+                         cells=lambda i, c: c[:4] + [f"{100 * int(c[4]) / int(c[3]):.2f}%" if int(c[3] or 0) else ""])
+    rows, _ = LF.station_rows(open(pct, "rb").read())
+    check(len(rows) == len(rows0) and all(a["code"] == b["code"] and a["kalpi"] == b["kalpi"] and a["elig"] == b["elig"]
+                                          and (a["voters"] is None if not b["elig"] else abs(a["voters"] - b["voters"]) <= 1)
+                                          for a, b in zip(rows, rows0)), "a turnout percentage instead of voters: voters = % x eligible")
+    Server.bodies["/rel_renamed.csv"] = open(ren, "rb").read()
+    o6b = os.path.join(TMP, "o6b")
+    st = run("--out", o6b, "--config", cfg_file("c6b1.json", results_url=base + "/nothing", station_turnout_url=base + "/rel_renamed.csv",
+                                                 column_aliases=alias), "--as", "K25", "--inputs", inputs, now=EVENING)
+    T = load(o6b, "turnout.json")
+    check(T.get("sectors") and "station_error" not in T, f"live_config column_aliases reach the feed's per-station reader: {T.get('station_error')}")
+    blank = rework_release(rel, "rel_blank.csv", cells=blank_some)
+    Server.bodies["/rel_blank.csv"] = open(blank, "rb").read()
+    st = run("--out", o6b, "--config", cfg_file("c6b2.json", results_url=base + "/nothing", station_turnout_url=base + "/rel_blank.csv"),
+             "--as", "K25", "--inputs", inputs, now=EVENING)
+    T = load(o6b, "turnout.json")
+    rows, _ = LF.station_rows(open(blank, "rb").read())
+    rep = [r for r in rows if r["voters"] and r["elig"]]
+    want = round(sum(r["voters"] for r in rep) / sum(r["elig"] for r in rep), 4)
+    n_none, n_zero = sum(r["voters"] is None for r in rows), sum(r["voters"] == 0 for r in rows)
+    ex = T.get("sectors_excluded") or {}
+    check(n_none and n_zero and T.get("stations_national") == want and ex.get("no figure") == n_none and ex.get("zero voters") == n_zero,
+          f"blank, '-' and 0 figures are not reported yet: out of the national turnout {T.get('stations_national')} (want {want}), "
+          f"excluded {ex}")
+
     print("7. drill is marked and discarded by a real run")
     o7 = os.path.join(TMP, "o7")
     st = run("--out", o7, "--drill", "--results-file", K25, "--drill-fraction", "0.5", "--inputs", inputs, now=EVENING)
@@ -684,6 +746,28 @@ def main():
         LF.CHANGED[:] = []
         res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 320 + 480)
         check(res.get("published") == "pushed", f"8 minutes after the last publish: published ({res})")
+        # a first exit-polls file whose push is rejected every time is retried at the next pass, not after the cadence
+        sh(["git", "rm", "-q", "site/live/exit_polls.json"], wt)
+        sh(["git", "commit", "-q", "-m", "retracted"], wt)
+        sh(["git", "push", "-q", "origin", "HEAD:main"], wt)
+        LF.CHANGED[:] = ["exit_polls.json"]
+        real_sleep = time.sleep
+
+        def refusing_git(*args, **kw):
+            if args[:1] == ("push",):
+                return subprocess.CompletedProcess(args, 1, "", "rejected")
+            return real_git(*args, **kw)
+        LF.git, time.sleep = refusing_git, (lambda s: None)
+        try:
+            res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 850)
+        finally:
+            LF.git, time.sleep = real_git, real_sleep
+        check(res.get("published") == "push failed" and not os.path.exists(os.path.join(wt, "site", "live", "exit_polls.json")),
+              f"every push rejected: 'push failed', the worktree back at the published tip ({res.get('published')})")
+        LF.CHANGED[:] = []
+        res = LF.publish_step(oc, "branch", 8, wt, "main", repo=repo, now=T0 + 860)
+        check(res.get("published", "").startswith("pushed (exit_polls.json: first"),
+              f"the next pass, 1 minute after the last publish: the first exit polls go out at once ({res.get('published')})")
         res = LF.publish_step(oc, "branch", 5, wt, "main", repo=repo, now=T0 + 1000, now_publish=True)
         check("published" not in res, f"--flush with nothing pending does nothing: {res}")
         # Actions mode: live-data every changed pass, pages.yml dispatched
@@ -768,11 +852,14 @@ def main():
     def fake_section(rows, base, national_turnout=None, released=None):   # a stand-in with the contract's shape
         rows = list(rows)
         seen.append({"rows": rows, "base": base, "national": national_turnout, "released": released})
-        v, e = sum(r["voters"] for r in rows if r["code"] in ARAB_CODES), sum(r["elig"] or 0 for r in rows if r["code"] in ARAB_CODES)
+        ar = [r for r in rows if r["code"] in ARAB_CODES and r["voters"]]
+        v, e = sum(r["voters"] for r in ar), sum(r["elig"] or 0 for r in ar)
         t = round(v / e, 4) if e else None
         grp = {"voters": v, "elig": e, "turnout": t, "pace": 0.5, "localities": 2}
-        return {"released": released, "localities": [{"key": "1", "voters": v, "elig": e, "turnout": t, "pace": 0.5, "stations": 3, "coverage": 1.0}],
-                "groups": {"raam": grp, "joint": grp, "other": grp}, "regions": {"negev": grp, "triangle": grp}, "kinds": {"arab": grp},
+        return {"released": released, "localities": [{"key": "1", "voters": v, "elig": e, "turnout": t, "pace": 0.5, "stations": 3, "coverage": 1.0},
+                                                     {"key": "2", "voters": 9, "elig": 30, "turnout": 0.3, "pace": 0.61234, "stations": 1, "coverage": 1.0}],
+                "groups": {"raam": grp, "joint": grp, "other": grp}, "regions": {"negev": grp, "triangle": grp},
+                "kinds": {"arab": grp, "druze": {**grp, "turnout": 0.31234}},
                 "total": {**grp, "ratio_to_national": 0.8, "projected_final": {"lo": 0.4, "mid": 0.5, "hi": 0.6}}}
     real_at, real_err, real_base = LF.AT, LF.AT_ERR, LF.ARAB_BASE
     core = json.load(open(os.path.join(ROOT, "site", "data", "core.json"), encoding="utf-8"))
@@ -797,8 +884,13 @@ def main():
         check(seen[-1]["national"] == T.get("stations_national") and seen[-1]["released"] == T.get("sectors_time") == "10:00"
               and seen[-1]["base"] == {"localities": [], "note": "stand-in"}, "national turnout of the same release, its time and the 2022 base passed in")
         h = T.get("arab_history") or []
-        check(len(h) == 1 and set(h[0]) == {"released", "total", "groups", "regions"} and set(h[0]["total"]) == {"turnout", "pace"}
-              and set(h[0]["groups"]) == {"raam", "joint", "other"}, f"arab_history: one compact entry: {h[:1]}")
+        check(len(h) == 1 and set(h[0]) == {"released", "total", "groups", "regions", "kinds", "localities"}
+              and set(h[0]["total"]) == {"turnout", "pace"} and set(h[0]["groups"]) == {"raam", "joint", "other"},
+              f"arab_history: one compact entry: {str(h[:1])[:300]}")
+        check(h and h[0]["localities"] == {"1": [T["arab"]["localities"][0]["turnout"], 0.5], "2": [0.3, 0.612]}
+              and h[0]["kinds"]["druze"] == {"turnout": 0.3123, "pace": 0.5},
+              f"the entry carries every locality as [turnout, pace] and the kinds, rounded (change column, Druze panel): "
+              f"{h and h[0]['localities']}, {h and h[0]['kinds'].get('druze')}")
         check("lean" not in T, "the bloc lean stays withheld during voting")
         st = day_pass("/st0.csv", 5)
         check("turnout.json" not in st["changed"] and len(load(o10, "turnout.json")["arab_history"]) == 1,
@@ -821,6 +913,57 @@ def main():
         T2 = load(o10, "turnout.json")
         check(any(e.startswith("arab: ZeroDivisionError") for e in st["errors"]) and T2.get("arab") == T["arab"] and T2.get("sectors"),
               f"a failing section is reported and the last one kept; sectors unaffected: {st['errors']}")
+
+        # the release time: sectors_time names only the release it was set for
+        LF.AT = types.SimpleNamespace(arab_section=fake_section)
+        o10s = os.path.join(TMP, "o10s")
+
+        def rel_pass(out, path, when, sectors_time=None):
+            write(os.path.join(inputs, "turnout.json"), {"national": {"10:00": 15.2}, **({"sectors_time": sectors_time} if sectors_time else {})})
+            st = run("--out", out, "--config", cfg_file("c10s.json", results_url=base + "/nothing", station_turnout_url=base + path),
+                     "--as", "K25", "--inputs", inputs, now=when)
+            T = load(out, "turnout.json")
+            errs = [e for e in st["errors"] if "sectors_time" in e]
+            return T, [x["released"] for x in T.get("arab_history") or []], errs
+
+        def at(d, hh, mm):
+            return dt.datetime(2026, 10, d, hh, mm, tzinfo=IL)
+        T, rels, errs = rel_pass(o10s, "/st0.csv", at(27, 10, 40))
+        check(T["sectors_time"] == T["arab"]["released"] == "10:40" and rels == ["10:40"] and not errs,
+              f"no sectors_time: the release is labelled when first seen (10:40): {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st0.csv", at(27, 10, 50), "10:00")
+        check(T["sectors_time"] == "10:00" and rels == ["10:00"] and not errs and T["arab"].get("seen_he") == "10:40",
+              f"sectors_time 10:00 set for it: relabelled, its history entry replaced, first seen 10:40 kept as seen_he: {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st1.csv", at(27, 14, 45), "10:00")
+        check(T["sectors_time"] == "14:45" and rels == ["10:00", "14:45"] and errs and "earlier" in errs[0],
+              f"the next release with sectors_time unchanged: not 10:00 again but 14:45, and reported: {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st1.csv", at(27, 14, 55), "14:00")
+        check(T["sectors_time"] == T["arab"]["released"] == "14:00" and rels == ["10:00", "14:00"] and not errs,
+              f"sectors_time 14:00 for it: relabelled in place: {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st1.csv", at(27, 15, 0), "18:00")
+        check(T["sectors_time"] == "14:00" and rels == ["10:00", "14:00"] and errs and "waits" in errs[0],
+              f"sectors_time 18:00 typed ahead of its file: the 14:00 release keeps its time, reported: {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st2.csv", at(27, 18, 40), "18:00")
+        check(T["sectors_time"] == "18:00" and rels == ["10:00", "14:00", "18:00"] and not errs,
+              f"its file arrives at 18:40: labelled 18:00: {rels} {errs}")
+        T, rels, errs = rel_pass(o10s, "/st3.csv", at(27, 22, 40))
+        check(T["sectors_time"] == T["arab"]["released"] == "22:00" and T["arab"].get("seen_he") == "22:40" and rels[-1] == "22:00",
+              f"sectors_time removed, a release first seen at 22:40: labelled 22:00, seen_he 22:40: {rels}")
+        T, rels, errs = rel_pass(o10s, "/st4.csv", at(27, 23, 10))
+        check(rels == ["10:00", "14:00", "18:00", "22:00"] and T["sectors_sha256"] == LF.hashlib.sha256(Server.bodies["/st4.csv"]).hexdigest(),
+              f"a corrected file after 22:00 replaces the 22:00 entry: {rels}")
+        check(all("sha" not in x for x in T["arab_history"]), "the history's file keys stay in state.json, not in turnout.json")
+        o10d = os.path.join(TMP, "o10d")
+        T, rels, errs = rel_pass(o10d, "/st5.csv", at(26, 15, 0))
+        T, rels, errs = rel_pass(o10d, "/st6.csv", at(27, 10, 30))
+        check(rels == ["10:30"], f"a test release on 26.10 does not stay in the 27.10 history: {rels}")
+        rel_pass(o10d, "/st6.csv", at(27, 10, 35), "10:00")
+        T, rels, errs = rel_pass(o10d, "/st7.csv", at(27, 10, 50), "10:00")       # a corrected 10:00 file
+        rel_pass(o10d, "/st7.csv", at(27, 10, 55))                                 # sectors_time removed ...
+        T, rels, errs = rel_pass(o10d, "/st7.csv", at(27, 11, 0), "10:00")       # ... and set again
+        check(rels == ["10:00"] and T["sectors_time"] == "10:00" and not errs
+              and T["sectors_sha256"] == LF.hashlib.sha256(Server.bodies["/st7.csv"]).hexdigest(),
+              f"a corrected file relabelled with the earlier file's time replaces it, the time appears once: {rels} {errs}")
         LF.AT = None
         o10b = os.path.join(TMP, "o10b")
         run("--out", o10b, "--config", cfg_file("c10b.json", results_url=base + "/nothing", station_turnout_url=base + "/st0.csv"),
@@ -838,23 +981,61 @@ def main():
     else:
         csv_path, how = os.path.join(TMP, "demo_release.csv"), "synthetic (2022 voters x 0.45)"
         demo = os.path.join(ROOT, "pipeline", "make_demo_turnout.py")
+        demo_json = os.path.join(ROOT, "site", "data", "arab_day_demo.json")
+        before = open(demo_json, "rb").read() if os.path.exists(demo_json) else None
         if os.path.exists(demo):
-            h = subprocess.run([sys.executable, demo, "--help"], capture_output=True, text=True)
-            if "--csv" in h.stdout:
-                r = subprocess.run([sys.executable, demo, "--csv", csv_path], capture_output=True, text=True, cwd=ROOT)
-                if r.returncode == 0 and os.path.exists(csv_path):
-                    how = "pipeline/make_demo_turnout.py --csv"
+            r = subprocess.run([sys.executable, demo, "--check"], capture_output=True, text=True, cwd=ROOT)
+            last = (r.stdout.strip().splitlines() or [r.stderr.strip()[-200:]])[-1]
+            check(r.returncode == 0, f"pipeline/make_demo_turnout.py --check (the arab_turnout unit checks): {last}")
+            # its CLI: --csv is a folder of turnout_HHMM.csv files; --out keeps site/data/arab_day_demo.json untouched
+            cdir = os.path.join(TMP, "demo_csv")
+            r = subprocess.run([sys.executable, demo, "--out", os.path.join(TMP, "demo.json"), "--csv", cdir],
+                               capture_output=True, text=True, cwd=ROOT)
+            got = sorted(glob.glob(os.path.join(cdir, "*.csv"))) if os.path.isdir(cdir) else [cdir] if os.path.isfile(cdir) else []
+            pick = next((p for p in got if os.path.basename(p) == "turnout_1400.csv"), got[-1] if got else None)
+            if r.returncode == 0 and pick:
+                shutil.copy(pick, csv_path)
+                how = f"pipeline/make_demo_turnout.py --csv ({os.path.basename(pick)})"
+            check(r.returncode == 0 and pick, f"make_demo_turnout.py --out <tmp> --csv <folder> wrote {[os.path.basename(p) for p in got]}: "
+                                              f"{(r.stderr or '').strip()[-200:]}")
+            check(before is None or open(demo_json, "rb").read() == before, "site/data/arab_day_demo.json left alone by the test")
         if not os.path.exists(csv_path):
             shutil.copy(station_release(k25_30, 0.45, "demo45.csv"), csv_path)
         Server.bodies["/demo.csv"] = open(csv_path, "rb").read()
         o10c = os.path.join(TMP, "o10c")
+        write(os.path.join(inputs, "turnout.json"), {"national": {"10:00": 15.2, "12:00": 27.9, "14:00": 38.4}, "sectors_time": "14:00"})
         st = run("--out", o10c, "--config", cfg_file("c10c.json", results_url=base + "/nothing", station_turnout_url=base + "/demo.csv"),
-                 "--as", "K25", "--inputs", inputs, now=EVENING)
-        A = (load(o10c, "turnout.json") or {}).get("arab") or {}
+                 "--as", "K25", "--inputs", inputs, now=dt.datetime(2026, 10, 27, 14, 40, tzinfo=IL))
+        T = load(o10c, "turnout.json") or {}
+        A = T.get("arab") or {}
         tot = A.get("total") or {}
         check(set(A) >= {"released", "localities", "groups", "regions", "kinds", "total"} and tot.get("turnout") is not None
-              and set((tot.get("projected_final") or {})) >= {"lo", "mid", "hi"} and set(A["groups"]) <= {"raam", "joint", "other"},
-              f"the real section on a {how} release: total turnout {tot.get('turnout')}, pace {tot.get('pace')}; errors={st['errors']}")
+              and A.get("released") == "14:00" and set((tot.get("projected_final") or {})) >= {"lo", "mid", "hi"}
+              and set(A["groups"]) <= {"raam", "joint", "other"},
+              f"the real section on a {how} release, labelled 14:00 by sectors_time: total turnout {tot.get('turnout')}, "
+              f"pace {tot.get('pace')}; errors={st['errors']}")
+        h = (T.get("arab_history") or [{}])[-1]
+        locs = {x["key"]: [x["turnout"], x["pace"]] for x in A.get("localities") or []}
+        check(set(h) >= {"released", "as_of", "national", "total", "groups", "regions", "kinds", "localities"}
+              and "projected_final" in h.get("total", {}) and h.get("localities") == locs and len(locs) > 100
+              and h["kinds"] == {k: {"turnout": v["turnout"], "pace": v["pace"]} for k, v in A["kinds"].items()}
+              and len(json.dumps(h, ensure_ascii=False, separators=(",", ":"))) < 8000,
+              f"the history entry: arab_turnout.history_entry plus {len(h.get('localities') or {})} localities and the kinds, "
+              f"{len(json.dumps(h, separators=(',', ':')))} bytes")
+        # blank figures: the national turnout handed to the section is the one it computes itself from the same rows
+        blank = rework_release(csv_path, "demo_blank.csv", cells=blank_some)
+        Server.bodies["/demo_blank.csv"] = open(blank, "rb").read()
+        st = run("--out", o10c, "--config", cfg_file("c10c2.json", results_url=base + "/nothing", station_turnout_url=base + "/demo_blank.csv"),
+                 "--as", "K25", "--inputs", inputs, now=dt.datetime(2026, 10, 27, 14, 50, tzinfo=IL))
+        T = load(o10c, "turnout.json") or {}
+        B = T.get("arab") or {}
+        own = real_at.arab_section(real_at.read_station_csv(open(blank, "rb").read()), real_at.load_base(), released="14:00")
+        check(B.get("national") is not None and B.get("national") == T.get("stations_national") == own["national"]
+              and abs((B.get("total") or {}).get("ratio_to_national", 9) - own["total"]["ratio_to_national"]) <= 0.002,
+              f"blank / '-' / 0 figures: the feed's national {T.get('stations_national')} = the section's {B.get('national')} = "
+              f"arab_turnout's own {own['national']}")
+        check(B.get("released") == "14:50" and any("earlier" in e for e in st["errors"]),
+              f"a new file with sectors_time 14:00 still in place is not labelled 14:00 again: {B.get('released')}")
 
         def keys(o):
             return set(o) | set().union(*(keys(v) for v in o.values())) if isinstance(o, dict) else \
@@ -862,7 +1043,7 @@ def main():
         bad = {k for k in keys(A) if any(w in k for w in ("seat", "threshold", "vote_share", "raam22", "joint22"))}
         check(not bad, f"no party votes, seats or threshold figures in the section: {sorted(bad)}")
 
-    print("11. the workflows: bash -n, the daily poll-ban guard, the push filters")
+    print("11. the workflows: bash -n, the daily poll-ban guard and job split, the live reset, the push filters")
     wf_dir = os.path.join(ROOT, ".github", "workflows")
     docs = {os.path.basename(p): load_yaml(p) for p in sorted(glob.glob(os.path.join(wf_dir, "*.yml")))}
     if any(d is None for d in docs.values()):
@@ -911,7 +1092,78 @@ def main():
         check(path_filter(push_paths(docs["pages.yml"]), "site/src/js/live.js"), "pages.yml still runs for site/src changes")
         live_perm = docs["live.yml"].get("permissions") or {}
         check(live_perm.get("pages") == "write" and live_perm.get("contents") == "write", f"live.yml permissions: {live_perm}")
-        check((daily.get("permissions") or {}).get("pages") == "write", "daily.yml may request a Pages build")
+        feed_env = ((docs["live.yml"].get("jobs") or {}).get("feed") or {}).get("env") or {}
+        check("vars.LIVE_BUILD_WAIT" in str(feed_env.get("LIVE_BUILD_WAIT")), f"live.yml: LIVE_BUILD_WAIT from a repository variable: {feed_env.get('LIVE_BUILD_WAIT')}")
+
+        # daily.yml: the third-party polls-data.js runs in a job with nothing to steal; the job that writes never runs it
+        jobs = daily.get("jobs") or {}
+
+        def has_token(job):
+            text = json.dumps(job)
+            return any(w in text for w in ("github.token", "secrets.", "GH_TOKEN", "GITHUB_TOKEN"))
+
+        def checkout(job):
+            return next((s for s in job.get("steps") or [] if str(s.get("uses", "")).startswith("actions/checkout")), {})
+        runs_js = re.compile(r"pipeline/build_polls\.py\s+--src|polls-data\.js|\bnode\b")   # running it, not naming the module
+        js_jobs = [j for j, d in jobs.items() if any(re.search(r"pipeline/build_polls\.py\s+--src", s.get("run") or "")
+                                                     for s in d.get("steps") or [])]
+        bj = jobs[js_jobs[0]] if len(js_jobs) == 1 else {}
+        check(len(js_jobs) == 1 and bj.get("permissions") == {"contents": "read"} and not has_token(bj)
+              and (checkout(bj).get("with") or {}).get("persist-credentials") is False
+              and any(str(s.get("uses", "")).startswith("actions/upload-artifact") for s in bj.get("steps") or []),
+              f"daily.yml: polls-data.js runs in one job ({js_jobs}) with contents: read, no token, no stored git credentials, "
+              "and leaves it as an artifact")
+        writers = [j for j, d in jobs.items() if any(v == "write" for v in (d.get("permissions") or {}).values())]
+        cj = jobs[writers[0]] if len(writers) == 1 else {}
+        steps = cj.get("steps") or []
+        ids = [s.get("id") for s in steps]
+        runs = " ".join(s.get("run") or "" for s in cj.get("steps") or [])
+        check(len(writers) == 1 and writers != js_jobs and not runs_js.search(runs)
+              and all(v != "write" for v in (daily.get("permissions") or {}).values()),
+              f"daily.yml: one job writes ({writers}), and it never runs polls-data.js; the workflow default is read-only")
+        check([s.get("id") for s in steps if "GH_TOKEN" in (s.get("env") or {})] == ["push", "pages"] and "GH_TOKEN" not in (cj.get("env") or {})
+              and (checkout(cj).get("with") or {}).get("persist-credentials") is False
+              and all(k in ids for k in ("validate", "build", "health", "push"))
+              and ids.index("validate") < ids.index("build") < ids.index("health") < ids.index("push"),
+              f"daily.yml: the token only in the push and build-request steps; validate, build, health check, push in that order: {ids}")
+        val = next((s["run"] for s in steps if s.get("id") == "validate"), "")
+        good = json.load(open(os.path.join(ROOT, "site", "data", "polls_2026.json"), encoding="utf-8"))
+
+        def broken(fn):
+            d = json.loads(json.dumps(good))
+            fn(d)
+            return d
+        tables = {
+            "the committed polls_2026.json": (good, 0),
+            "seats adding up to 121": (broken(lambda d: d["polls"][0]["seats"].update(Likud=d["polls"][0]["seats"]["Likud"] + 1)), 1),
+            "markup in a pollster name": (broken(lambda d: d["polls"][1].update(pollster="x</script><script>alert(1)</script>")), 1),
+            "an extra field": (broken(lambda d: d["polls"][2].update(evil=1)), 1),
+            "a changed party": (broken(lambda d: d["parties"][0].update(color="red")), 1),
+            "a javascript: filing link": (broken(lambda d: d["polls"][3].update(filing="javascript:alert(1)")), 1),
+            "n as text": (broken(lambda d: d["polls"][4].update(n="500")), 1),
+            "no polls": (broken(lambda d: d.update(polls=[])), 1),
+            "NaN": ('{"parties": NaN, "polls": [], "dropped": [], "source": ""}', 1),
+        }
+        for what, (table, code) in tables.items():
+            p = write(os.path.join(TMP, "wf", "polls_check.json"), table if isinstance(table, str) else json.dumps(table, ensure_ascii=False))
+            rc, _, log = run_block(val, {"POLLS": p}, ROOT)
+            check(rc == code, f"daily poll-table check, {what}: exit {rc} (want {code}) {log.strip().splitlines()[-1][:120] if log.strip() else ''}")
+
+        # live.yml: a reset that was not published, or whose rebuild request failed, makes the run red
+        live_run = next((s["run"] for _, s in workflow_steps(docs["live.yml"]) if "--reset-live" in (s.get("run") or "")), "")
+        stub = os.path.join(TMP, "stub")
+        os.makedirs(stub, exist_ok=True)
+        write(os.path.join(stub, "python3"), '#!/bin/sh\nif [ "$1" = pipeline/live_fetch.py ]; then printf "%s\\n" "$FAKE_LINE"; exit 0; fi\n'
+                                             f'exec "{sys.executable}" "$@"\n')
+        os.chmod(os.path.join(stub, "python3"), 0o755)
+        for line, code in ((json.dumps({"published": "pushed", "build": "Pages build requested (queued)"}), 0),
+                           (json.dumps({"build": None}), 0),
+                           (json.dumps({"published": "push failed"}), 1),
+                           (json.dumps({"published": "pushed", "build": "Pages build request failed (500)"}), 1),
+                           ("Traceback (most recent call last):", 1)):
+            rc, _, log = run_block(live_run, {"RESET": "true", "PUB_ARGS": "", "FAKE_LINE": line,
+                                              "PATH": stub + os.pathsep + os.environ.get("PATH", "")}, wtmp)
+            check(rc == code, f"live.yml reset, {line[:60]}: exit {rc} (want {code})")
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")

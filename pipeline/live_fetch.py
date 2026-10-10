@@ -27,7 +27,9 @@ Outputs (next to the page; the JSON contract is in the lead's ARCH_V2/V3 notes)
   live/results.json   counted totals + projection frame (pipeline/live_model.make_frame);
                       updated_he is the time the CEC file last changed, not the time of the check
   live/turnout.json   national hourly series, sector turnout from per-station data, "arab" and
-                      "arab_history" (one entry per per-station release, the last 8)
+                      "arab_history" (one entry per per-station release, the last 8, with every
+                      locality's and kind's turnout and pace); a release's time is sectors_time from
+                      live_input/turnout.json for the file it was set for, else when first seen
   live/exit_polls.json, live/status.json, live/history.json (projection over the night)
   live/state.json     persisted state keyed by source: last accepted sha256, stations, last valid
                       inputs and config, probe times. State from another source is ignored.
@@ -66,7 +68,7 @@ import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import live_model as LM  # noqa: E402
-from build_data import load_election, read_expb  # noqa: E402
+from build_data import HEADER_ALIASES, load_election, read_expb  # noqa: E402
 
 ROOT = LM.ROOT
 try:                                    # the Arab-society election-day section; optional: absent = skipped
@@ -586,18 +588,17 @@ def turnout_pass(E, cfg, out, state, status, inputs):
         try:
             data = read_source(url)
             sha = hashlib.sha256(data).hexdigest()
-            if state.get("station_sha") != sha:   # a new release is stamped once, when first seen (not every pass)
-                state["station_sha"], state["station_seen"] = sha, now_il().strftime("%H:%M")
-            rows, excluded = station_rows(data)
+            released = release_time(manual, state, sha, election_day, status["errors"])
+            rows, excluded = station_rows(data, cfg.get("column_aliases") or None)
             st = station_turnout(E, rows, excluded)
-            released = str(manual.get("sectors_time") or state.get("station_seen") or now_il().strftime("%H:%M"))
             if st["sectors"]:
                 doc.update({"sectors": st["sectors"], "stations_national": st["national"], "sectors_time": released,
                             "sectors_coverage": st["coverage"], "sectors_excluded": st["excluded"], "sectors_sha256": sha})
                 # the 2022-vote-weighted pace is an open question for the CEC legal adviser: not during voting
                 if lean_ok:
                     doc["lean"] = st["lean"]
-            arab_pass(rows, st["national"], released, doc, old, state, status["errors"])
+            # the national turnout of the same rows under the same rule (blank = not reported), see station_turnout
+            arab_pass(rows, st["national"], released, sha, doc, old, state, status["errors"])
         except Exception as exc:
             doc["station_error"] = f"{exc.__class__.__name__}: {exc}"[:200]
             # the CEC file comes and goes: the last release read stays on the page
@@ -610,36 +611,116 @@ def turnout_pass(E, cfg, out, state, status, inputs):
 
 STATION_KEYS = ("sectors", "stations_national", "sectors_time", "sectors_coverage", "sectors_excluded",
                 "sectors_sha256", "arab", "arab_history")
+SECTORS_FIT = (10, 180)   # minutes: a sectors_time fits a release first seen up to 10 minutes before it to 3 hours after
 
 
-def station_rows(data):
+def _minutes(hhmm):
+    h, m = str(hhmm).split(":")[:2]
+    return int(h) * 60 + int(m)
+
+
+def release_time(manual, state, sha, election_day, errors):
+    """The time a per-station release refers to, 'HH:MM': the "released" of the sector turnout and of the Arab
+    section (arab_turnout projects from it, so it should be the CEC's cutoff, not the download time).
+    A new release (a new SHA-256) is stamped once, when first seen; one first seen after the polls close is
+    stamped 22:00, the latest time its figures can refer to. The operator's sectors_time (live_input/turnout.json,
+    the cutoff the CEC states) replaces the stamp, but only for the release it was set for: it binds to the
+    release it fits (first seen from 10 minutes before it to 3 hours after it) and never labels a later one.
+    A sectors_time left over from an earlier release is reported and the stamp is used; one that fits no release
+    yet (typed ahead of its file) is reported, the current release keeps the time it had, and it binds when the
+    file arrives. A new release of another day than the last one (a test file before election day) starts
+    arab_history afresh."""
+    now = now_il()
+    if state.get("station_sha") != sha:
+        closed = now >= closing(election_day)
+        day = (election_day if closed else now.date()).isoformat()
+        if state.get("station_day") != day:
+            state["arab_history"] = []
+        state.update(station_sha=sha, station_seen="22:00" if closed else now.strftime("%H:%M"), station_day=day,
+                     station_seen_at=now.isoformat())
+    seen = state.get("station_seen") or now.strftime("%H:%M")
+    s = manual.get("sectors_time")
+    if s is None or str(s).strip() == "":
+        state.pop("sectors_bind", None)
+        return seen
+    bind = state.get("sectors_bind") or {}
+    mine = bind.get("time") if bind.get("sha") == sha else None    # the time this release was given, if any
+    s = str(s).strip()
+    if not HOUR_RE.match(s):
+        errors.append(f"turnout: sectors_time {json.dumps(s, ensure_ascii=False)} is not HH:MM; the per-station release "
+                      f"is labelled {mine or seen}"[:200])
+        return mine or seen
+    if s == bind.get("time"):
+        if mine:
+            return s
+        errors.append(f"turnout: sectors_time {s} was set for an earlier per-station release; this one is labelled {seen}, "
+                      "when it was first seen: set the CEC's time for it, or remove sectors_time"[:200])
+        return seen
+    if -SECTORS_FIT[0] <= _minutes(seen) - _minutes(s) <= SECTORS_FIT[1]:
+        state["sectors_bind"] = {"time": s, "sha": sha}      # a new time for this release (or a corrected one)
+        return s
+    errors.append(f"turnout: sectors_time {s} does not fit the per-station release first seen at {seen} (it can be up to "
+                  f"3 hours earlier, not later); it waits for the next release, this one stays {mine or seen}"[:200])
+    return mine or seen
+
+
+# per-station turnout headers read without an alias, by role (the names arab_turnout.read_station_csv takes);
+# build_data.HEADER_ALIASES and live_config.json column_aliases map other spellings onto them
+STATION_COLS = {"code": ("סמל ישוב", "סמל יישוב", "קוד ישוב", "קוד יישוב"),
+                "kalpi": ("קלפי", "מספר קלפי", "מס' קלפי", "מס קלפי", "סמל קלפי"),
+                "elig": ("בזב", 'בז"ב', "בעלי זכות בחירה", "בעלי זכות"),
+                "voters": ("מצביעים", "הצביעו", "מספר מצביעים", "מצביעים עד כה"),
+                "pct": ("אחוז הצבעה", "שיעור הצבעה", "אחוז")}
+
+
+def _cell(rec, i):
+    """A number cell: None when blank or '-' (not reported yet), else the number; ValueError if unreadable."""
+    s = rec[i].strip() if i is not None else ""
+    return None if s in ("", "-") else float(s.rstrip("%"))
+
+
+def station_rows(data, column_aliases=None):
     """A per-station turnout release -> rows [{"code", "kalpi", "elig" (None without a בזב column), "voters"}]
     and a count of the rows left out, by reason. The CEC format is not known in advance, so columns are
-    found by their Hebrew names (as in expb.csv: סמל ישוב, קלפי, בזב, מצביעים)."""
+    found by their Hebrew names (as in expb.csv: סמל ישוב, קלפי, בזב, מצביעים, and the variants in
+    STATION_COLS), after build_data.HEADER_ALIASES and live_config.json column_aliases ({"their name":
+    "expected name"}); the delimiter is a comma, semicolon, tab or '|', whichever the header uses; a file with
+    a turnout percentage and no voter count gives voters = percentage x eligible. A blank or '-' voters cell
+    is a station not reported yet: voters None (not 0), as arab_turnout reads it."""
     try:
         text = data.decode("utf-8-sig")
     except UnicodeDecodeError:
         text = data.decode("cp1255", "replace")
-    rd = csv.reader(io.StringIO(text))
-    header = [h.strip() for h in next(rd, [])]
+    text = text.lstrip("\ufeff")
+    first = next((ln for ln in text.splitlines() if ln.strip()), "")
+    delim = max(",;\t|", key=first.count)
+    rd = csv.reader(io.StringIO(text), delimiter=delim if first.count(delim) else ",")
+    aliases = {**HEADER_ALIASES, **(column_aliases or {})}
+    header = [aliases.get(h.strip(), h.strip()) for h in next((r for r in rd if any(c.strip() for c in r)), [])]
 
-    def col(*names):
-        return next((header.index(n) for n in names if n in header), None)
-    ic, ik = col("סמל ישוב", "סמל יישוב"), col("קלפי", "מספר קלפי")
-    ie, iv = col("בזב", "בעלי זכות בחירה"), col("מצביעים", "הצביעו")
-    if None in (ic, ik, iv):
+    def col(role):
+        return next((header.index(n) for n in STATION_COLS[role] if n in header), None)
+    ic, ik, ie, iv, ip = (col(k) for k in ("code", "kalpi", "elig", "voters", "pct"))
+    if ic is None or ik is None or (iv is None and (ip is None or ie is None)):
         raise ValueError(f"unknown columns: {header[:12]}")
     rows, excluded = [], collections.Counter()
     for rec in rd:
         if not any(c.strip() for c in rec):
             continue
         try:
-            code, kalpi, voters = int(float(rec[ic])), rec[ik].strip(), int(float(rec[iv] or 0))
-            elig = int(float(rec[ie] or 0)) if ie is not None else None
+            code, kalpi = int(float(rec[ic])), rec[ik].strip()
+            e = _cell(rec, ie)
+            elig = int(e) if e is not None else None
+            if iv is not None:
+                v = _cell(rec, iv)
+                voters = int(v) if v is not None else None
+            else:                                  # a turnout percentage only
+                p = _cell(rec, ip)
+                voters = round(p / 100 * elig) if (p is not None and elig) else None
         except (ValueError, IndexError):
             excluded["unreadable"] += 1
             continue
-        if elig and voters > elig * 1.02:
+        if elig and voters and voters > elig * 1.02:
             excluded["more voters than eligible"] += 1
             continue
         rows.append({"code": code, "kalpi": kalpi, "elig": elig, "voters": voters})
@@ -654,13 +735,19 @@ def station_turnout(E, rows, excluded=None):
     The lean-weighted signal weights each station's pace by its 2022 votes for each bloc: are the
     stations that voted for the Netanyahu bloc, the Jewish opposition or the Arab lists in 2022
     turning out faster or slower than then? Stations that cannot be matched to 2022 or whose pace
-    is implausible (>2.0, usually a renumbered station) are left out of pace and counted."""
+    is implausible (>2.0, usually a renumbered station) are left out of pace and counted.
+    A station with a blank figure or 0 voters has not reported yet: it is left out of every sum, the national
+    turnout's numerator and denominator included (arab_turnout's rule, so the "national" returned here is
+    the figure arab_section computes from the same rows), and counted under "no figure" / "zero voters"."""
     agg = collections.defaultdict(lambda: {"elig": 0, "voters": 0, "stations": 0, "now": 0, "then": 0})
     lean = collections.defaultdict(lambda: [0.0, 0.0])           # bloc -> [Σ pace×votes22, Σ votes22]
     nat = {"elig": 0, "voters": 0}
     excluded = collections.Counter(excluded or {})
     for r in rows:
         code, kalpi, voters, elig = r["code"], r["kalpi"], r["voters"], r["elig"] or 0
+        if not voters or voters < 0:              # not reported yet (no station had 0 voters in 2022)
+            excluded["no figure" if voters is None else "zero voters"] += 1
+            continue
         key = (code, kalpi) if (code, kalpi) in E.station22 else (code, kalpi.split(".")[0])
         sec = E.station_sector.get(key, "jewish")
         a = agg[sec]
@@ -703,12 +790,39 @@ def station_turnout(E, rows, excluded=None):
 _arab_base = {}
 
 
-def arab_pass(rows, national, released, doc, old, state, errors):
+def _rnd(x, n):
+    return round(x, n) if isinstance(x, (int, float)) and not isinstance(x, bool) else None
+
+
+def history_entry(sec, released):
+    """The compact turnout.json arab_history record of one release: arab_turnout.history_entry (released, as_of,
+    national, total turnout / pace / projected_final, groups and regions: turnout and pace) when the module has
+    it, plus "kinds" {kind: {turnout, pace}} (the Druze panel) and "localities" {key: [turnout, pace]} (the
+    page's change since the previous release), rounded as in the section (turnout 4 places, pace 3), so a reader
+    who opens the page late still sees the day's earlier releases."""
+    def tp(d):
+        return {"turnout": _rnd((d or {}).get("turnout"), 4), "pace": _rnd((d or {}).get("pace"), 3)}
+    if hasattr(AT, "history_entry"):
+        entry = dict(AT.history_entry(sec))
+    else:
+        entry = {"released": sec.get("released"), "total": tp(sec.get("total")),
+                 "groups": {k: tp(v) for k, v in (sec.get("groups") or {}).items()},
+                 "regions": {k: tp(v) for k, v in (sec.get("regions") or {}).items()}}
+    entry["released"] = entry.get("released") or released
+    entry["kinds"] = {k: tp(v) for k, v in (sec.get("kinds") or {}).items()}
+    entry["localities"] = {str(x["key"]): [_rnd(x.get("turnout"), 4), _rnd(x.get("pace"), 3)]
+                           for x in sec.get("localities") or [] if isinstance(x, dict) and x.get("key") is not None}
+    return entry
+
+
+def arab_pass(rows, national, released, sha, doc, old, state, errors):
     """The Arab-society section (pipeline/arab_turnout.py; ARCH_V3 §2): the official per-station turnout
     by locality, by the list that led there in 2022 (Ra'am / Joint List), by region and by kind, shown
     during voting hours too. It carries no party votes, seats or threshold figures. turnout.json gets
-    "arab" (this release) and "arab_history" (one compact entry per release, the last 8, kept in state).
-    A missing module or base file skips the section; a failure keeps the last one and is reported."""
+    "arab" (this release, with "seen_he": when the feed first saw its file) and "arab_history" (one
+    compact entry per release, history_entry, the last 8, kept in state with the file's SHA-256 so a
+    relabelled release replaces its entry). A missing module or base file skips the section; a failure
+    keeps the last one and is reported."""
     if AT is None or not os.path.exists(ARAB_BASE):
         if AT_ERR:
             errors.append(f"arab: {AT_ERR}"[:200])
@@ -717,24 +831,26 @@ def arab_pass(rows, national, released, doc, old, state, errors):
         if "base" not in _arab_base:
             _arab_base["base"] = json.load(open(ARAB_BASE, encoding="utf-8"))
         sec = AT.arab_section(rows, _arab_base["base"], national_turnout=national, released=released)
+        entry = history_entry(sec, released)
     except Exception as exc:
         errors.append(f"arab: {exc.__class__.__name__}: {exc}"[:200])
         doc.update({k: old[k] for k in ("arab", "arab_history") if k in old})
         return
-
-    def tp(d):
-        return {"turnout": (d or {}).get("turnout"), "pace": (d or {}).get("pace")}
-    entry = {"released": sec.get("released") or released, "total": tp(sec.get("total")),
-             "groups": {k: tp(v) for k, v in (sec.get("groups") or {}).items()},
-             "regions": {k: tp(v) for k, v in (sec.get("regions") or {}).items()}}
+    if state.get("station_seen_at"):
+        sec["seen_he"] = he_time(dt.datetime.fromisoformat(state["station_seen_at"]))
+    entry["sha"] = sha[:12]
     hist = [h for h in state.get("arab_history") or [] if isinstance(h, dict)]
-    i = next((i for i, h in enumerate(hist) if h.get("released") == entry["released"]), None)
-    if i is None:
+    # the same file again (relabelled by sectors_time) or another file with the same time (a corrected file):
+    # this entry takes the first one's place and the others go, so a time appears once
+    same = [i for i, h in enumerate(hist) if h.get("sha") == entry["sha"] or h.get("released") == entry["released"]]
+    if same:
+        hist[same[0]] = entry
+        hist = [h for i, h in enumerate(hist) if i not in same[1:]]
+    else:
         hist.append(entry)
-    else:                                   # the same release again, or a corrected file with the same time
-        hist[i] = entry
     state["arab_history"] = hist[-ARAB_HISTORY:]
-    doc["arab"], doc["arab_history"] = sec, state["arab_history"]
+    doc["arab"] = sec
+    doc["arab_history"] = [{k: v for k, v in h.items() if k != "sha"} for h in state["arab_history"]]
 
 
 # ------------------------------------------------------------------ exit polls
@@ -856,6 +972,9 @@ def publish(out, mode="branch", wt=None, repo=ROOT, branch=None, who=""):
         if git("push", "-q", "origin", f"HEAD:{branch}", cwd=wt, check=False).returncode == 0:
             return "pushed", git("rev-parse", "HEAD", cwd=wt).stdout.strip()
         time.sleep(3 + 2 * attempt)               # someone else pushed in between: fetch, reset and copy again
+    # the worktree back to what is really published, so the next pass sees a first results / exit polls file as
+    # still unpublished and retries it at once instead of waiting for the cadence
+    git("reset", "-q", "--hard", f"origin/{branch}", cwd=wt, check=False)
     return "push failed", None
 
 
