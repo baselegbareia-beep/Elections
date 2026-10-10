@@ -13,8 +13,8 @@ reports to the ops-reports branch. It runs the same way from a laptop or a self-
 
 The raw bytes of every candidate turnout / results file (up to 8 MB each, each version once) are kept with
 the report: disc/files/<YYYYMMDD-HHMM>/<name>, and with --push reports/files/… on the ops-reports branch,
-so a release the feed cannot read (JSON, xlsx, another delimiter, percent only) can be converted by
-someone who cannot reach gov.il (--convert; docs/FILE_DISCOVERY.md §3).
+so a release the feed's reader fails on (JSON, xlsx, other header names, figures written as 45.3% or 1,234)
+can be converted by someone who cannot reach gov.il (--convert; docs/FILE_DISCOVERY.md §3).
 
 What it probes. mode full: everything below. mode quick: the known files, the pages and what they
 link to, and every URL that answered in the previous report.
@@ -37,9 +37,11 @@ every other host; --candidates FILE replaces the built-in lists (each key option
     {"seeds": [pages to harvest], "probe": [URLs], "enumerate": false, "allow_hosts": ["gov.il"], "control": URL}
 
 Exit status 0 whatever the network answers; non-zero only when the script itself fails, or when
---push could not deliver the report (3).
+--push could not deliver the report (3). --convert exits 1 when the feed's reader fails on its output, or when
+it writes nothing: no station rows, no station with a figure, or more than 1% of a figure column unreadable.
 """
 import argparse
+import ast
 import collections
 import concurrent.futures as cf
 import csv
@@ -51,6 +53,7 @@ import http.client
 import inspect
 import io
 import json
+import math
 import os
 import platform
 import re
@@ -126,14 +129,16 @@ except Exception as _exc:                      # noqa: BLE001
     OFFICIAL_META = {"סמל ועדה", "ברזל", "שם ישוב", "סמל ישוב", "קלפי", "מספר קלפי", "ריכוז", "שופט",
                      "בזב", "מצביעים", "פסולים", "כשרים", "ת. עדכון", "סמל קלפי", ""}
 EXPECT = {"code": "סמל ישוב", "name": "שם ישוב", "station": "קלפי", "eligible": "בזב", "voters": "מצביעים",
-          "invalid": "פסולים", "valid": "כשרים"}
-# names each reader takes without an alias: read_expb (results) and live_fetch.station_rows (per-station turnout)
+          "invalid": "פסולים", "valid": "כשרים", "percent": "אחוז הצבעה"}
+# names each reader takes without an alias: read_expb (results) and live_fetch.station_rows (per-station turnout;
+# station_names() reads them from live_fetch.py, STATION_OK is the fallback: the names at ebb3201)
 RESULTS_OK = {"code": {"סמל ישוב", *[k for k, v in HEADER_ALIASES.items() if v == "סמל ישוב"]},
               "name": {"שם ישוב", *[k for k, v in HEADER_ALIASES.items() if v == "שם ישוב"]},
               "station": {"קלפי", "מספר קלפי"}, "eligible": {"בזב", *[k for k, v in HEADER_ALIASES.items() if v == "בזב"]},
               "voters": {"מצביעים"}, "invalid": {"פסולים"}, "valid": {"כשרים"}}
 STATION_OK = {"code": {"סמל ישוב", "סמל יישוב"}, "station": {"קלפי", "מספר קלפי"}, "voters": {"מצביעים", "הצביעו"},
               "eligible": {"בזב", "בעלי זכות בחירה"}}
+LIVE_FETCH = os.path.join(ROOT, "pipeline", "live_fetch.py")
 SYN = {   # header spellings by role, matched after norm(); guesses beyond the 2019–2022 names
     "code": ["סמל ישוב", "קוד ישוב", "סמל הישוב", "מספר ישוב", "סמל רשות", "city_code", "citycode", "locality_code",
              "locality_id", "settlement_code", "semel_yeshuv", "yeshuv_code"],
@@ -202,23 +207,95 @@ def ref():
     except Exception:
         arab = set()
     _REF.update(l26=l26, l22=l22, st22=st22, st22n={(c, k.split(".")[0]) for c, k in st22}, arab=arab,
-                station_aliases=station_alias_support())
+                station_aliases=station_alias_support(), station_names=station_names())
     return _REF
+
+
+def from_source(path, wanted, ns):
+    """The top-level functions and literal constants `wanted` of a module, with the ones they use, compiled from its
+    source into the namespace `ns` (which supplies the imports), without importing the module: live_fetch imports
+    numpy, and its per-station reader needs only the standard library. KeyError when one of `wanted` is not there."""
+    tree = ast.parse(open(path, encoding="utf-8").read())
+    defs = {n.name: n for n in tree.body if isinstance(n, ast.FunctionDef)}
+    for n in tree.body:
+        if isinstance(n, ast.Assign) and len(n.targets) == 1 and isinstance(n.targets[0], ast.Name):
+            try:
+                ast.literal_eval(n.value)
+                defs.setdefault(n.targets[0].id, n)
+            except Exception:                       # noqa: BLE001 - not a literal (re.compile …): not taken
+                pass
+    take, todo = {}, list(wanted)
+    while todo:
+        name = todo.pop()
+        if name in take or (name in ns and name not in wanted):
+            continue
+        if name not in defs:
+            if name in wanted:
+                raise KeyError(f"{name} not in {os.path.basename(path)}")
+            continue
+        take[name] = defs[name]
+        todo += [x.id for x in ast.walk(defs[name]) if isinstance(x, ast.Name)]
+    exec(compile(ast.Module(body=sorted(take.values(), key=lambda n: n.lineno), type_ignores=[]), path, "exec"), ns)
+    return ns
 
 
 _STATION = {}
 
 
 def station_reader():
-    """live_fetch.station_rows, the feed's own per-station reader (imported on first use: it needs numpy).
-    (None, why) when it cannot be imported; the check then emulates it (comma-separated, fixed names)."""
+    """The feed's own per-station reader: live_fetch.station_rows, behind live_fetch.check_body as turnout_pass reads
+    a release (read_source). Imported when it can be (live_fetch needs numpy); otherwise the same functions compiled
+    from live_fetch.py's source. (None, why) when neither works: the check then says it was not run."""
     if not _STATION:
         try:
             import live_fetch
-            _STATION.update(fn=live_fetch.station_rows, err="")
+            _STATION.update(fn=live_fetch.station_rows, body=getattr(live_fetch, "check_body", None),
+                            name="live_fetch.station_rows", err="")
         except Exception as exc:                # noqa: BLE001
-            _STATION.update(fn=None, err=f"{exc.__class__.__name__}: {exc}"[:160])
+            err = f"{exc.__class__.__name__}: {exc}"[:120]
+            try:
+                ns = from_source(LIVE_FETCH, ("station_rows",), {"csv": csv, "io": io, "collections": collections,
+                                                                 "re": re, "json": json, "HEADER_ALIASES": HEADER_ALIASES})
+                try:
+                    from_source(LIVE_FETCH, ("check_body",), ns)
+                except KeyError:
+                    pass
+                _STATION.update(fn=ns["station_rows"], body=ns.get("check_body"), err="",
+                                name=f"live_fetch.station_rows, compiled from its source (live_fetch not importable: {err})")
+            except Exception as exc2:           # noqa: BLE001
+                _STATION.update(fn=None, body=None, name="", err=f"{err}; from source: {exc2.__class__.__name__}: {exc2}"[:200])
     return _STATION["fn"], _STATION["err"]
+
+
+def read_stations(body, aliases=None):
+    """(rows, excluded) as the feed reads a per-station release: check_body, then station_rows with column_aliases
+    when it takes them. Raises what they raise."""
+    fn, err = station_reader()
+    if fn is None:
+        raise RuntimeError(f"live_fetch.station_rows not loaded: {err}")
+    if _STATION.get("body"):
+        body = _STATION["body"](body)
+    param = _alias_param(fn)
+    res = fn(body, **({param: aliases} if aliases and param else {}))
+    rows, excluded = res if isinstance(res, tuple) else (res, {})
+    return rows, dict(excluded or {})
+
+
+def station_names():
+    """{role: the header names live_fetch.station_rows finds without an alias}: its STATION_COLS, read from
+    live_fetch.py, and the build_data.HEADER_ALIASES spellings it maps onto them first. STATION_OK (the names at
+    ebb3201, no percentage) when live_fetch.py has no STATION_COLS."""
+    try:
+        cols = from_source(LIVE_FETCH, ("STATION_COLS",), {})["STATION_COLS"]
+    except Exception:                               # noqa: BLE001
+        return STATION_OK
+    role = {"code": "code", "kalpi": "station", "elig": "eligible", "voters": "voters", "pct": "percent"}
+    out = {role[k]: set(v) for k, v in cols.items() if k in role}
+    for theirs, ours in HEADER_ALIASES.items():
+        for names in out.values():
+            if ours in names:
+                names.add(theirs)
+    return out if {"code", "station", "voters"} <= out.keys() else STATION_OK
 
 
 def _alias_param(fn):
@@ -234,7 +311,7 @@ def station_alias_support():
     Either station_rows takes the aliases as a parameter and turnout_pass hands it column_aliases, or the
     function that parses the header (station_rows; station_turnout before r5/feed) reads column_aliases."""
     try:
-        src = open(os.path.join(ROOT, "pipeline", "live_fetch.py"), encoding="utf-8").read()
+        src = open(LIVE_FETCH, encoding="utf-8").read()
     except OSError:
         return False
 
@@ -469,7 +546,8 @@ def json_table(obj):
     if not best:
         return None
     header = list(best[0].keys())
-    return {"format": "json", "header": header, "rows": [[str(d.get(k, "")) for k in header] for d in best if isinstance(d, dict)]}
+    return {"format": "json", "header": header,               # null is a blank cell (not reported), not "None"
+            "rows": [["" if d.get(k) is None else str(d[k]) for k in header] for d in best if isinstance(d, dict)]}
 
 
 def hourly_figures(text):
@@ -487,11 +565,37 @@ def hourly_figures(text):
     return out, ctx
 
 
-def num(x):
+DIGITS = str.maketrans("٠١٢٣٤٥٦٧٨٩۰۱۲۳۴۵۶۷۸۹", "01234567890123456789")     # Arabic-Indic and Persian digits
+MARKS = re.compile("[\u200e\u200f\u061c\u202a-\u202e\u2066-\u2069\ufeff]")   # direction marks in Hebrew/Arabic exports
+COMMA_GROUPS = re.compile(r"[+-]?\d{1,3}(?:,\d{3})+")
+SPACE_GROUPS = re.compile(r"[+-]?\d{1,3}(?: \d{3})+(?:\.\d+)?")
+
+
+def clean(x):
+    return MARKS.sub("", str(x)).strip()
+
+
+def num(x, percent=False):
+    """A number cell as an export writes it -> float; None when blank or not a number. Reads a percent sign (45.3%,
+    ٪), thousands separators (1,234; 1 234 with a space, NBSP or thin space; ١٬٢٣٤), a decimal comma (45,3; in a
+    percentage a comma is always the decimal point, as no percentage has thousands), Arabic-Indic and Persian digits,
+    the Arabic decimal separator and the direction marks around a figure. "1,234" outside a percentage is 1234."""
+    s = clean(x).translate(DIGITS).replace("\u066b", ".").replace("\u2212", "-")
+    s = re.sub(r"^[%\u066a]\s*|\s*[%\u066a]$", "", s)
+    s = re.sub(r"[\s\u066c']+", " ", s).strip()
+    if "," in s and "." in s:                       # 1,234.5 or 1.234,5: the later one is the decimal point
+        s = s.replace(",", "") if s.rfind(".") > s.rfind(",") else s.replace(".", "").replace(",", ".")
+    elif "," in s:
+        s = s.replace(",", "") if not percent and COMMA_GROUPS.fullmatch(s) else s.replace(",", ".") if s.count(",") == 1 else s
+    if " " in s:
+        if not SPACE_GROUPS.fullmatch(s):
+            return None
+        s = s.replace(" ", "")
     try:
-        return float(str(x).replace(",", "").strip() or 0)
+        v = float(s)
     except ValueError:
         return None
+    return v if math.isfinite(v) else None
 
 
 # ------------------------------------------------------------------ classifying a table
@@ -578,24 +682,31 @@ def describe_table(e, tab, body):
         elif env:
             notes.append(f"{env} double-envelope rows (סמל ישוב 9999)")
     elif cls == "turnout-station":
-        if "voters" not in roles and "percent" in roles:
-            notes.append("turnout % but no voters column: the feed needs voters; --convert computes voters = % × eligible")
-        if "eligible" not in roles:
+        R = ref()
+        names, alias_ok = R["station_names"], R["station_aliases"]
+        by_pct = "voters" not in roles and "percent" in roles and "percent" in names   # voters = % × eligible
+        need = {r: names[r] for r in ("code", "station", "percent" if by_pct else "voters", "eligible")}
+        if "eligible" not in roles and not by_pct:
             notes.append("no eligible-voters column: the feed computes pace against 2022, not turnout %")
-        e["aliases"], e["missing"] = aliases_for(header, roles, STATION_OK, optional=("eligible",))
+        e["aliases"], e["missing"] = aliases_for(header, roles, need, optional=() if by_pct else ("eligible",))
         e["fits"] = "station_turnout_url"
-        alias_ok = ref()["station_aliases"]
         if e["aliases"] and not alias_ok and tab["format"] == "csv":
             notes.append("the per-station turnout reader (live_fetch.station_rows) does not apply column_aliases yet: "
                          "convert the file to live_input/stations.csv (--convert), or add alias support")
-        blocking = list(e["missing"]) + ([v for v in e["aliases"].values() if v != EXPECT["eligible"]] if not alias_ok else [])
-        e["reader"] = station_check(body, tab, e["aliases"] if alias_ok else {}, blocking)
-        if tab["format"] != "csv":
-            notes.append(f"{tab['format']}: the feed reads CSV only (live_fetch.fetch refuses JSON); "
-                         "convert the stored copy to live_input/stations.csv (--convert)")
-        elif tab.get("delimiter") != ",":
-            notes.append(f"delimiter {tab['delimiter']!r}: the feed reads comma-separated files only; "
-                         "convert the stored copy to live_input/stations.csv (--convert)")
+        rd = e["reader"] = station_check(body, e["aliases"] if alias_ok else {})
+        pv = [] if "voters" in roles else [x for x in (num(val(rec, "percent"), percent=True) for rec in rows) if x is not None]
+        if rd["ok"] and pv and max(pv) <= 1 and rd.get("turnout") is not None and rd["turnout"] < 0.02:
+            rd.update(ok=False, error=f"every turnout % in the file is at most 1 (fractions?), and the reader made a "
+                                      f"turnout of {rd['turnout']:.2%} of them")
+        # what the feed takes is whatever its reader does: these notes follow the reader's result, never a rule kept here
+        if rd["ok"] is False:
+            err = printable(rd["error"], 90) + ("…" if len(rd["error"]) > 90 else "")     # in full: reader.error
+            notes.append(f"the feed's reader fails on this {tab['format']} file ({err})" +
+                         (f"; columns not found: {', '.join(e['missing'])}" if e["missing"] else "") +
+                         "; convert the stored copy to live_input/stations.csv (--convert)")
+        elif rd["ok"] is None:
+            notes.append(f"the feed's reader was not run ({rd['error']}); convert the stored copy (--convert) and "
+                         "check its feed_reader line, or run the report where live_fetch loads")
         e["release"] = release_hint(e)
     elif cls == "turnout-locality":
         e["fits"] = "none (by locality: the feed reads stations); usable by hand"
@@ -618,30 +729,30 @@ def aliases_for(header, roles, need, optional=()):
     return aliases, missing
 
 
-def station_check(body, tab, aliases, blocking):
-    """Run the feed's own per-station reader (live_fetch.station_rows: csv.reader with commas, columns found
-    by name) on the file, as reader_check does for results. Without it (no numpy), emulate it: comma-separated
-    and every required column under a name it accepts (`blocking`: the expected names missing or renamed)."""
-    name = "live_fetch.station_rows"
-    if tab["format"] != "csv":
-        return {"ok": False, "reader": name, "error": f"{tab['format']}: the feed reads CSV only"}
+def station_check(body, aliases):
+    """Run the feed's own per-station reader on the file's bytes, whatever their format, as turnout_pass reads a
+    release (read_stations: check_body, then station_rows with the suggested column_aliases when it applies them),
+    as reader_check does for results. ok None when the reader could not be loaded or compiled: then nothing is
+    assumed about what it takes. "turnout" is Σ voters / Σ eligible over the rows it read with both."""
     fn, err = station_reader()
     if fn is None:
-        why = ("missing or renamed columns: " + ", ".join(blocking) if blocking else
-               f"delimiter {tab['delimiter']!r}: the feed splits on commas" if tab.get("delimiter") != "," else "")
-        return {"ok": not why, "reader": f"emulated ({name} not loaded: {err})", **({"error": why} if why else {})}
-    kw, param = {}, _alias_param(fn)
-    if aliases and param:
-        kw[param] = aliases
+        return {"ok": None, "reader": "not run", "error": f"not checked: live_fetch.station_rows not loaded ({err})"[:240]}
+    name = _STATION["name"]
     try:
-        res = fn(body, **kw)
-        rows, excluded = res if isinstance(res, tuple) else (res, {})
+        rows, excluded = read_stations(body, aliases)
+    except NameError as exc:                        # compiled from source without something it needs
+        return {"ok": None, "reader": name, "error": f"not checked: {exc}"[:200]}
     except Exception as exc:                        # noqa: BLE001
         return {"ok": False, "reader": name, "error": f"{exc.__class__.__name__}: {exc}"[:200]}
-    excluded = dict(excluded or {})
     out = {"reader": name, "rows": len(rows), "excluded": excluded}
-    if not rows or excluded.get("unreadable", 0) > len(rows):
-        return {"ok": False, **out, "error": "no readable rows" if not rows else "most rows unreadable"}
+    ve = [(r.get("voters"), r.get("elig")) for r in rows if isinstance(r, dict)]
+    ve = [(v, el) for v, el in ve if isinstance(v, (int, float)) and isinstance(el, (int, float)) and el > 0]
+    if ve:
+        out["turnout"] = round(sum(v for v, _ in ve) / sum(el for _, el in ve), 4)
+    bad = excluded.get("unreadable", 0)
+    if not rows or bad > UNREADABLE_MAX * (len(rows) + bad):
+        return {"ok": False, **out, "error": (f"{bad} of {len(rows) + bad} rows unreadable (a figure it cannot parse: the "
+                                              "feed leaves the row out)") if bad else "no rows"}
     return {"ok": True, **out}
 
 
@@ -1242,6 +1353,8 @@ STORE_MAX = 8_000_000                   # bytes per stored file
 STORE_RUN_MAX = 40_000_000              # bytes stored per run
 RESULTS_EVERY = dt.timedelta(hours=3)   # a results file that keeps changing is stored at most this often
 STATIONS_HEADER = ["סמל ישוב", "שם ישוב", "קלפי", "בזב", "מצביעים"]   # live_input/stations.csv (live_input/README.md)
+UNREADABLE_MAX = 0.01                   # share of a figure column that may be unreadable before --convert (and the check) stop
+NOT_REPORTED = {"", "-", "–", "—", "\u2212"}  # a figure cell of a station that has not reported yet
 
 
 def safe_name(url, sha, e):
@@ -1298,11 +1411,15 @@ def store_files(results, kept, prev, now, closed, out, stamp, max_bytes=STORE_MA
     return files, index
 
 
-def convert(src, dest, maps=()):
-    """A per-station turnout release in a format the feed does not read (another delimiter, xlsx, JSON, percent
-    only, other header names) -> the CSV live_fetch.station_rows reads: סמל ישוב,שם ישוב,קלפי,בזב,מצביעים in
+def convert(src, dest, maps=(), blanks=()):
+    """A per-station turnout release the feed's reader fails on (xlsx, JSON, UTF-16, other header names, figures
+    written as 45.3% or 1,234 …) -> the CSV live_fetch.station_rows reads: סמל ישוב,שם ישוב,קלפי,בזב,מצביעים in
     UTF-8, one row per station; a station without a figure keeps a blank מצביעים. --map ROLE=HEADER names a
-    column the report did not recognise (roles: code, name, station, eligible, voters, percent, time)."""
+    column the report did not recognise (roles: code, name, station, eligible, voters, percent, time).
+    Figures are read by num() (percent signs, thousands separators, a decimal comma, Arabic-Indic digits). A blank,
+    '-' or a --blank TEXT is a station not reported yet; any other cell that is still not a number is counted, and
+    when more than 1% of the stations' voters (or percent, or eligible) cells are, or no station has a figure,
+    nothing is written and the exit status is 1: such a cell would otherwise read as 'not reported yet'."""
     body = open(src, "rb").read()
     kind = sniff(body, "", src)
     text, _ = decode(body)
@@ -1326,15 +1443,33 @@ def convert(src, dest, maps=()):
         raise SystemExit(f"{src}: need columns for code, station and voters (or percent and eligible); found {roles}; "
                          f"header {header[:20]}; name the missing ones with --map ROLE=HEADER")
     idx = {r: header.index(h) for r, h in roles.items()}
+    blank = NOT_REPORTED | {clean(b) for b in blanks}
+    vcol = "voters" if "voters" in roles else "percent"
+    bad = {vcol: collections.Counter(), "eligible": collections.Counter()}     # unreadable cells by column, by text
 
     def get(rec, r):
         i = idx.get(r)
         return str(rec[i]).strip() if i is not None and i < len(rec) else ""
-    pct = [num(get(rec, "percent")) or 0 for rec in tab["rows"]] if "voters" not in roles else []
-    scale = 1 if pct and max(pct) <= 1 else 100      # a fraction or a percentage
+
+    def figure(rec, r):
+        """The cell as a number: None for a blank (not reported yet), and for a cell that is not a number, a
+        negative one, a count with a fraction or a percentage over 100, which is also counted in `bad`."""
+        s = get(rec, r)
+        if clean(s) in blank:
+            return None
+        v = num(s, percent=r == "percent")
+        if v is not None and v >= 0 and (v <= 100 if r == "percent" else abs(v - round(v)) < 0.01):
+            return v
+        bad[r][s] += 1
+        return None
+    cells = [get(rec, "percent") for rec in tab["rows"]] if vcol == "percent" else []
+    pv = [x for x in (num(s, percent=True) for s in cells if clean(s) not in blank) if x is not None]
+    # a fraction (0.453) or a percentage (45.3, 45.3%): a cell written with a percent sign is a percentage
+    scale = 1 if pv and max(pv) <= 1 and not any(re.search("[%\u066a]", s) for s in cells) else 100
     out, skipped, times = [], collections.Counter(), []
     for rec in tab["rows"]:
-        code, kalpi = num(get(rec, "code")), re.sub(r"^(\d+)\.0$", r"\1", get(rec, "station"))
+        code = num(get(rec, "code"))
+        kalpi = re.sub(r"^(\d+)\.0$", r"\1", clean(get(rec, "station")).translate(DIGITS).replace("\u066b", "."))
         if not get(rec, "code") or code is None or code != int(code) or code <= 0:
             skipped["no locality code (a total or a note)"] += 1
             continue
@@ -1344,15 +1479,40 @@ def convert(src, dest, maps=()):
         if not kalpi:
             skipped["no station number"] += 1
             continue
-        elig = num(get(rec, "eligible")) if get(rec, "eligible") else None
-        if "voters" in roles:
-            v = num(get(rec, "voters")) if get(rec, "voters") not in ("", "-") else None
+        elig = figure(rec, "eligible")
+        if vcol == "voters":
+            v = figure(rec, "voters")
         else:
-            p = num(get(rec, "percent")) if get(rec, "percent") not in ("", "-") else None
+            p = figure(rec, "percent")
+            if p is not None and elig is None and clean(get(rec, "eligible")) in blank:
+                bad["eligible"]["(blank, next to a turnout %)"] += 1       # voters = % × eligible cannot be computed
             v = p * elig / scale if p is not None and elig else None
         if get(rec, "time"):
             times.append(get(rec, "time"))
-        out.append([int(code), get(rec, "name"), kalpi, "" if elig is None else int(elig), "" if v is None else int(round(v))])
+        out.append([int(code), get(rec, "name"), kalpi, "" if elig is None else int(round(elig)),
+                    "" if v is None else int(round(v))])
+    n, figures = len(out), sum(r[4] != "" for r in out)
+    unreadable = {r: {"cells": sum(c.values()), "examples": dict(c.most_common(5))} for r, c in bad.items() if c}
+    over = [r for r, u in unreadable.items() if u["cells"] > UNREADABLE_MAX * n]
+    rel = release_hint({"url": src, "table": {"data_time": max(times) if times else None}})
+    summary = {"rows": n, "skipped": dict(skipped), "columns": roles, "voters_from_percent": vcol == "percent",
+               "blank_voters": n - figures, "unreadable": unreadable, "notes": notes, "release": rel}
+    if not n or over or not figures:                # stop before writing: never a file that reads as "not reported"
+        if not n:
+            why = "no station rows: every row lacks a locality code or a station number"
+            fix = "Name the columns with --map ROLE=HEADER."
+        elif over:
+            why = "; ".join(f"{unreadable[r]['cells']} of {n} {r} cells ({unreadable[r]['cells'] / n:.1%}) are not numbers "
+                            f"it can read (more than {UNREADABLE_MAX:.0%}), e.g. " + ", ".join(
+                                f"{s!r} x{k}" for s, k in unreadable[r]["examples"].items()) for r in over)
+            fix = ("Each would become a blank, which the feed reads as 'not reported yet'. If it is the wrong column, name "
+                   "the right one with --map ROLE=HEADER; if a text does mean 'not reported yet', pass --blank TEXT.")
+        else:
+            why = f"no station has a voters figure: every {roles[vcol]!r} cell is blank"
+            fix = f"Is this the release itself, and the right column (--map {vcol}=HEADER)?"
+        print(json.dumps({"wrote": None, **summary, "error": why}, ensure_ascii=False))
+        print(f"{src}: {why}. Nothing was written. {fix}", file=sys.stderr)
+        return 1
     os.makedirs(os.path.dirname(os.path.abspath(dest)), exist_ok=True)
     with open(dest, "w", encoding="utf-8", newline="") as f:
         csv.writer(f).writerows([STATIONS_HEADER] + out)
@@ -1360,14 +1520,14 @@ def convert(src, dest, maps=()):
     check = {"ok": None, "error": f"live_fetch not loaded: {err}"}
     if fn:
         try:
-            rows, excluded = fn(open(dest, "rb").read())
-            check = {"ok": bool(rows), "rows": len(rows), "excluded": dict(excluded)}
+            rows, excluded = read_stations(open(dest, "rb").read())
+            check = {"ok": bool(rows), "reader": _STATION["name"], "rows": len(rows), "excluded": excluded}
         except Exception as exc:                    # noqa: BLE001
             check = {"ok": False, "error": f"{exc.__class__.__name__}: {exc}"[:200]}
-    rel = release_hint({"url": src, "table": {"data_time": max(times) if times else None}})
-    print(json.dumps({"wrote": dest, "rows": len(out), "skipped": dict(skipped), "columns": roles,
-                      "voters_from_percent": "voters" not in roles, "blank_voters": sum(r[4] == "" for r in out),
-                      "notes": notes, "release": rel, "feed_reader": check}, ensure_ascii=False))
+    print(json.dumps({"wrote": dest, **summary, "feed_reader": check}, ensure_ascii=False))
+    for r, u in unreadable.items():
+        print(f"warning: {u['cells']} {r} cells are not numbers and were left blank (not reported): "
+              + ", ".join(f"{s!r} x{k}" for s, k in u["examples"].items()), file=sys.stderr)
     print("Next, in ONE commit to main: this file as live_input/stations.csv, \"station_turnout_url\": "
           "\"live_input/stations.csv\" in pipeline/live_config.json (once), and \"sectors_time\": \"HH:MM\" (the CEC's "
           "cut-off for this release) in live_input/turnout.json.", file=sys.stderr)
@@ -1404,10 +1564,12 @@ def main():
     ap.add_argument("--convert", metavar="FILE", help="convert a stored per-station turnout release for the feed, and stop")
     ap.add_argument("--convert-out", default=os.path.join(ROOT, "live_input", "stations.csv"), help="where --convert writes")
     ap.add_argument("--map", action="append", default=[], metavar="ROLE=HEADER", help="--convert: a column it did not recognise")
+    ap.add_argument("--blank", action="append", default=[], metavar="TEXT",
+                    help="--convert: a cell text that means 'not reported yet' (besides a blank cell and '-')")
     ap.add_argument("--now", help=argparse.SUPPRESS)       # testing: pretend it is this Israel time, e.g. 2026-10-27T14:30
     a = ap.parse_args()
     if a.convert:
-        return convert(a.convert, a.convert_out, a.map)
+        return convert(a.convert, a.convert_out, a.map, a.blank)
 
     now = (dt.datetime.fromisoformat(a.now).replace(tzinfo=IL) if a.now else dt.datetime.now(dt.timezone.utc).astimezone(IL))
     try:
