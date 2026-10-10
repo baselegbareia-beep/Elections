@@ -24,7 +24,7 @@ function showTab(tab, { push = true } = {}) {
       && !(tab === 'live' && inElectionWindow());
     ban.hidden = !on; if (on) ban.textContent = BAN_NOTICE;
   }
-  if (push) { try { history.replaceState(null, '', '#' + tab); } catch (e) { /* sandboxed */ } }
+  if (push) { try { history.replaceState(null, '', '#' + (tab === 'live' && S.ops ? 'live-ops' : tab)); } catch (e) { /* sandboxed */ } }
   const btn = $(`.tab[data-tab="${tab}"]`); if (btn) btn.scrollIntoView({ block: 'nearest', inline: 'nearest' });
   tt.hide();
 }
@@ -66,9 +66,11 @@ async function boot() {
     const a = e.target.closest('[data-goto]'); if (!a) return;
     e.preventDefault(); showTab(a.dataset.goto); window.scrollTo({ top: 0, behavior: 'smooth' });
   });
-  const h = (location.hash || '').replace('#', '');
+  let h = (location.hash || '').replace('#', '');
+  // '#live-ops': the election-day tab with the feed's own diagnostics (for the operator, PAGE-5)
+  if (h === 'live-ops') { S.ops = true; h = 'live'; }
   const t = ilStamp(ilNow());
-  const dflt = t >= ELECTION_DAY[0] && t < ELECTION_DAY[1] ? 'live' : 'overview';
+  const dflt = t >= ELECTION_DAY[0] && t < LANDING_LIVE_UNTIL ? 'live' : 'overview';
   showTab(RENDER[h] ? h : dflt, { push: false });
   // label gutters are measured on canvas; redraw once the web fonts are in
   if (document.fonts && document.fonts.status !== 'loaded') document.fonts.ready.then(rerenderAll);

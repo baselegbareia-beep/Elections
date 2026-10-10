@@ -8,6 +8,7 @@ const S = {               // app state
   adjustHouse: true, halfLife: 10,
   coalition: null, pairIdx: 3, sectorElection: 'K25', arabRegEl: 'K25', arabMixEl: 'K25',
   sims: null,
+  ops: false,             // '#live-ops' in the address: the election-day tab shows the feed's diagnostics
 };
 const HE = new Intl.NumberFormat('he-IL');
 const fmt = n => n == null || isNaN(n) ? '—' : HE.format(Math.round(n));
@@ -32,7 +33,10 @@ const inElectionWindow = () => { const t = ilStamp(ilNow()); return t >= ELECTIO
 const votingHours = () => { const t = ilStamp(ilNow()); return t >= 202610270700 && t < POLLS_CLOSE; };
 // Polls published before the blackout may be shown during it only with this notice (statutory wording).
 const BAN_NOTICE = 'הסקרים בדף זה פורסמו לפני תחילת התקופה שבה אסור לפרסם סקרי בחירות (מסוף יום שישי, 23.10, עד סגירת הקלפיות). הסקרים אינם עדכניים, ואין ללמוד מהם על דפוסי הצבעה או עמדות של הציבור ביום הפרסום.';
-const ELECTION_DAY = [202610270600, 202610281200];   // the site opens on the election-day tab
+const ELECTION_DAY = [202610270600, 202610281200];   // election day and night: the wait card and the feed's stale note
+// The site opens on the election-day tab from 27.10 06:00 until the official result is out (published by 4.11;
+// the double envelopes are counted 28–30.10), not on the frozen poll average (PAGE-3).
+const LANDING_LIVE_UNTIL = 202611060000;
 
 function isDark() {
   const t = document.documentElement.getAttribute('data-theme');

@@ -324,3 +324,11 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 .lv-table { margin-top: 8px; }
 .lv-table summary { cursor: pointer; font-size: var(--t-xs); color: var(--ink-2); }
 .lv-table table { margin-top: 8px; }
+.lv-rel { display: block; font-size: 11.5px; font-weight: 400; color: var(--muted); }
+#lv-arab:not(:empty) { margin-top: 18px; }   /* the Arab-society section of the day (arab_day.js) */
+/* '#live-ops': the feed's diagnostics, one per line, each in its own direction (Python errors are English) */
+.lv-notes .lv-ops { display: block; margin-top: 4px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+.lv-notes .lv-ops bdi { display: block; unicode-bidi: plaintext; }
+/* exit polls at phone width: the channels scroll under the sticky list column; while more of them lie beyond
+   the far (left) edge it fades out, as the tab strip does (scrollHint in live.js sets .more) */
+.lv-scroll.more { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px); mask-image: linear-gradient(to right, transparent 0, #000 32px); }
