@@ -52,7 +52,13 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      the daily rebuild request retried and red when it keeps failing, build_polls.py reading polls-data.js as
      data only (WF-1), official-data.yml's split (no write token where polls-data.js is read), live.yml's
      year, minutes and drill guard, its reset going red when not published, and the push filters (site/live/**
-     starts no workflow).
+     starts no workflow);
+ 11b. the operator's requests on the ops-control branch (ops/request.json, the stand-in for Run workflow and
+     Cancel run): the request step of live.yml, discover.yml, net-check.yml and daily.yml run on sample requests
+     (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red), a drill
+     request through live.yml's guard into the poll ban and a daily request through the ban guard, the groups and
+     write targets (main, ops-reports; never the triggering branch), a run from ops-control taking live_input/
+     from main, and the "restart" request that ends a running loop.
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the one check of the
 repository's own state (site/live/status.json is the placeholder) is skipped. Runtime about three minutes."""
 import contextlib
@@ -352,6 +358,264 @@ def run_block(script, env, cwd):
     r = subprocess.run(["bash", "-e", "-c", script], cwd=cwd, env=full, capture_output=True, text=True)
     outputs = dict(ln.split("=", 1) for ln in (open(out_file).read() + open(env_file).read()).splitlines() if "=" in ln)
     return r.returncode, outputs, r.stdout + r.stderr
+
+
+# the workflows a push of ops/request.json to ops-control starts: (the name a request gives it, the fields it takes)
+OPS_REQUESTS = {"live.yml": ("live", "drill reset minutes runner restart"), "discover.yml": ("discover", "mode urls runner"),
+                "net-check.yml": ("net-check", ""), "daily.yml": ("daily", "")}
+
+
+def ops_control(docs, wtmp):
+    """11b. The operator's requests (docs/ELECTION_DAY.md, "בקשות דרך ops-control"): the session's token can push but
+    not dispatch or cancel, so a push of ops/request.json to the ops-control branch stands in for Run workflow. Every
+    one of the four workflows reads it in the same step and goes on only when the request names it, its fields
+    checked as the dispatch inputs are (the step itself, run here on sample requests); the request's outputs reach
+    live.yml's drill guard and daily.yml's poll-ban guard; the working jobs keep their concurrency groups, and a
+    request for another workflow can never take a group's pending slot; everything is written to main or
+    ops-reports, never to the triggering branch; a run that ops-control started reads live_input/ and
+    live_config.json from main; and a later {"restart": true} request ends a running loop (the stand-in for Cancel)."""
+    print("11b. ops-control: the request step in the four workflows, its guards, groups, write targets and restart")
+    steps = {}
+    for wf, (name, fields) in OPS_REQUESTS.items():
+        doc = docs[wf]
+        on = doc.get("on", doc.get(True)) or {}
+        check(on.get("push") == {"branches": ["ops-control"], "paths": ["ops/request.json"]} and "workflow_dispatch" in on,
+              f"{wf}: started by a push of ops/request.json to ops-control (only), and by dispatch: {on.get('push')}")
+        found = [(job, s_) for job, s_ in workflow_steps(doc) if s_.get("id") == "request"]
+        job, st = found[0] if len(found) == 1 else ("", {})
+        env = st.get("env") or {}
+        check(len(found) == 1 and env.get("WORKFLOW") == name and str(env.get("FIELDS") or "") == fields,
+              f"{wf}: one request step, WORKFLOW={env.get('WORKFLOW')!r} FIELDS={env.get('FIELDS')!r} (want {name!r}, {fields!r})")
+        jsteps = ((doc.get("jobs") or {}).get(job) or {}).get("steps") or []
+        co = jsteps[0] if jsteps else {}
+        check(len(jsteps) > 1 and jsteps[1] is st and str(co.get("uses", "")).startswith("actions/checkout")
+              and (co.get("with") or {}).get("sparse-checkout") == "ops" and (co.get("with") or {}).get("persist-credentials") is False
+              and ((doc["jobs"][job].get("permissions") or doc.get("permissions")) == {"contents": "read"}),
+              f"{wf}: the request is read first, from a checkout of ops/ without stored credentials, in a read-only job ({job})")
+        steps[wf] = st
+    check(len({st.get("run") for st in steps.values()}) == 1, "the request step is the same block in the four workflows")
+    for wf in ("pages.yml", "official-data.yml"):
+        on = docs[wf].get("on", docs[wf].get(True)) or {}
+        check((on.get("push") or {}).get("branches") == ["main"], f"{wf}: pushes to main only (a request starts nothing else)")
+    main_req = json.load(open(os.path.join(ROOT, "ops", "request.json"), encoding="utf-8"))
+    check(main_req.get("workflow") == "none", f"ops/request.json on main names no workflow: {main_req}")
+
+    # the step on sample requests: {workflow file: (exit code, outputs)}; a workflow not named: exit 0 and run=false
+    rdir = os.path.join(wtmp, "ops_request")
+    os.makedirs(os.path.join(rdir, "ops"), exist_ok=True)
+    red = {wf: (1, {}) for wf in OPS_REQUESTS}
+    cases = [
+        (json.dumps(main_req), {}),
+        ('{"workflow": "live", "drill": true, "minutes": 15, "id": "drill-1"}', {"live.yml": (0, {"drill": "true", "minutes": "15"})}),
+        ('{"workflow": "live", "reset": true, "id": "r"}', {"live.yml": (0, {"reset": "true"})}),
+        ('{"workflow": "live", "minutes": 345, "runner": "ubuntu-latest", "id": "x"}',
+         {"live.yml": (0, {"minutes": "345", "runner": "ubuntu-latest"})}),
+        ('{"workflow": "live", "restart": true, "minutes": "0345", "runner": "self-hosted"}',
+         {"live.yml": (0, {"restart": "true", "minutes": "345", "runner": "self-hosted"})}),
+        ('{"workflow": "live", "drill": false, "reset": false}', {"live.yml": (0, {"drill": "false", "reset": "false"})}),
+        ('{"workflow": "discover", "id": 7}', {"discover.yml": (0, {})}),
+        ('{"workflow": "discover", "mode": "full", "urls": ["https://a.gov.il/x.csv", "https://b.gov.il/"], "runner": "ubuntu-latest"}',
+         {"discover.yml": (0, {"mode": "full", "urls": "https://a.gov.il/x.csv https://b.gov.il/", "runner": "ubuntu-latest"})}),
+        ('{"workflow": "discover", "mode": "quick", "urls": "https://a.gov.il/1  https://a.gov.il/2"}',
+         {"discover.yml": (0, {"mode": "quick", "urls": "https://a.gov.il/1 https://a.gov.il/2"})}),
+        ('{"workflow": "net-check", "id": "n1"}', {"net-check.yml": (0, {})}),
+        ('{"workflow": "daily", "id": "p1"}', {"daily.yml": (0, {})}),
+        # red in the workflow it names (a bad field, as Run workflow would refuse it), quiet in the others
+        ('{"workflow": "live", "drill": "true"}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "minutes": "4o"}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "minutes": 15.5}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "minutes": -5}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "minute": 15}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "runner": "self-hosted\\nrun=true"}', {"live.yml": (1, {})}),
+        ('{"workflow": "live", "mode": "full"}', {"live.yml": (1, {})}),
+        ('{"workflow": "discover", "mode": "fast"}', {"discover.yml": (1, {})}),
+        ('{"workflow": "discover", "urls": "https://a.gov.il/x\\nrun=true"}', {"discover.yml": (1, {})}),
+        ('{"workflow": "discover", "urls": "ftp://a.gov.il/x"}', {"discover.yml": (1, {})}),
+        ('{"workflow": "discover", "drill": true}', {"discover.yml": (1, {})}),
+        ('{"workflow": "daily", "drill": true}', {"daily.yml": (1, {})}),
+        ('{"workflow": "net-check", "runner": "self-hosted"}', {"net-check.yml": (1, {})}),
+        # no request at all: red everywhere
+        ('{"workflow": "lve"}', red), ('{"drill": true}', red), ('not json', red), ('["live"]', red), (None, red),
+    ]
+    req_path = os.path.join(rdir, "ops", "request.json")
+    for body, want in cases:
+        if body is None:
+            if os.path.exists(req_path):
+                os.remove(req_path)
+        else:
+            write(req_path, body)
+        for wf, st in steps.items():
+            code, outs_want = want.get(wf, (0, None))
+            outs_want = {"run": "false"} if outs_want is None else ({"run": "true", **outs_want} if code == 0 else {})
+            rc, outs, log = run_block(st["run"], {**st["env"], "GITHUB_EVENT_NAME": "push"}, rdir)
+            check(rc == code and (outs == outs_want if code == 0 else outs.get("run") != "true"),
+                  f"request {str(body)[:70]} in {wf}: exit {rc}, {outs} (want {code}, {outs_want}) {log.strip()[-90:]}")
+    for wf, st in steps.items():                   # schedule and dispatch: nothing is read, the run goes on
+        rc, outs, _ = run_block(st["run"], {**st["env"], "GITHUB_EVENT_NAME": "schedule"}, rdir)
+        check(rc == 0 and outs == {"run": "true"}, f"{wf}: a scheduled run passes the request step: {rc} {outs}")
+
+    # the working jobs: run only for their own request, its fields mapped onto the dispatch inputs, same groups
+    for wf in OPS_REQUESTS:
+        check(not docs[wf].get("concurrency"), f"{wf}: no workflow-level group (a request for another workflow would take its pending slot)")
+    jl = docs["live.yml"]["jobs"]
+    feed, fenv = jl.get("feed") or {}, (jl.get("feed") or {}).get("env") or {}
+    fif, fconc = str(feed.get("if", "")), feed.get("concurrency") or {}
+    check(jl.get("request", {}).get("if") == "github.event_name == 'push'" and feed.get("needs") == "request"
+          and "!cancelled()" in fif and "needs.request.outputs.run == 'true'" in fif and "vars.LIVE_FEED_OFF" in fif,
+          f"live.yml: the request job only on a push; the feed after it, for a live request or as before: {fif}")
+    check("needs.request.outputs.drill == 'true'" in fenv.get("DRILL", "") and "inputs.drill == true" in fenv.get("DRILL", "")
+          and "needs.request.outputs.reset == 'true'" in fenv.get("RESET", "") and "inputs.reset == true" in fenv.get("RESET", "")
+          and "needs.request.outputs.minutes" in fenv.get("MINUTES", "") and "inputs.minutes" in fenv.get("MINUTES", "")
+          and str(feed.get("runs-on", "")).startswith("${{ needs.request.outputs.runner || inputs.runner || vars.LIVE_RUNNER"),
+          f"live.yml: the request's drill, reset, minutes and runner in place of the dispatch inputs: {fenv} {feed.get('runs-on')}")
+    check("&& 'live-feed' ||" in str(fconc.get("group")) and "needs.request.outputs.run == 'true'" in str(fconc.get("group"))
+          and fconc.get("cancel-in-progress") is False, f"live.yml: the feed job in live-feed (a skipped job in a group of its own): {fconc}")
+    jd = docs["discover.yml"]["jobs"]
+    disc = jd.get("discover") or {}
+    denv = next((s_.get("env") or {} for s_ in disc.get("steps") or [] if "discover.py" in (s_.get("run") or "")), {})
+    check(jd.get("request", {}).get("if") == "github.event_name == 'push'" and disc.get("needs") == "request"
+          and "needs.request.outputs.run == 'true'" in str(disc.get("if")) and "!cancelled()" in str(disc.get("if"))
+          and "&& 'discover' ||" in str((disc.get("concurrency") or {}).get("group"))
+          and str(disc.get("runs-on", "")).startswith("${{ needs.request.outputs.runner || github.event.inputs.runner")
+          and denv.get("MODE", "").startswith("${{ needs.request.outputs.mode || github.event.inputs.mode")
+          and denv.get("URLS", "").startswith("${{ needs.request.outputs.urls || github.event.inputs.urls"),
+          f"discover.yml: the scan runs for its own request, mode / urls / runner from it, in the discover group: {disc.get('if')} {denv}")
+    dj = docs["daily.yml"]["jobs"]
+    dguard = next((s_ for s_ in dj["guard"]["steps"] if s_.get("id") == "guard"), {})
+    check(dguard.get("if") == "steps.request.outputs.run == 'true'" and "github.event_name" in json.dumps(dguard.get("env"))
+          and "&& 'daily-polls' ||" in str((dj["commit"].get("concurrency") or {}).get("group")),
+          "daily.yml: the poll-ban guard runs for a daily request (event push, refused like a manual run); the push in daily-polls")
+    nprobe = next((s_ for s_ in docs["net-check.yml"]["jobs"]["net-check"]["steps"] if "curl" in (s_.get("run") or "")), {})
+    check(nprobe.get("if") == "steps.request.outputs.run == 'true'", "net-check.yml: the probes run for a net-check request only")
+
+    # a drill request reaches live.yml's guard as the dispatch input does: refused into the poll ban
+    lguard = next((s_["run"] for s_ in feed.get("steps") or [] if s_.get("id") == "guard"), "")
+    for body, when, code in (('{"workflow": "live", "drill": true, "minutes": 40}', dt.datetime(2026, 10, 23, 22, 0, tzinfo=IL), 0),
+                             ('{"workflow": "live", "drill": true, "minutes": 40}', dt.datetime(2026, 10, 23, 23, 10, tzinfo=IL), 1),
+                             ('{"workflow": "live", "drill": true}', dt.datetime(2026, 10, 27, 12, 0, tzinfo=IL), 1),
+                             ('{"workflow": "live", "drill": true, "reset": true}', dt.datetime(2026, 10, 27, 23, 0, tzinfo=IL), 0),
+                             ('{"workflow": "live", "minutes": 345}', dt.datetime(2026, 10, 27, 19, 30, tzinfo=IL), 0)):
+        write(req_path, body)
+        _, outs, _ = run_block(steps["live.yml"]["run"], {**steps["live.yml"]["env"], "GITHUB_EVENT_NAME": "push"}, rdir)
+        rc, gouts, log = run_block(lguard, {"NOW_S": str(int(when.timestamp())), "GITHUB_EVENT_NAME": "push",
+                                            "DRILL": str(outs.get("drill") == "true").lower(), "RESET": str(outs.get("reset") == "true").lower(),
+                                            "MINUTES": outs.get("minutes", "")}, rdir)
+        check(rc == code and (code or gouts.get("MINUTES") == (outs.get("minutes") or "345")),
+              f"request {body} at {when:%d.%m %H:%M} through live.yml's guard: exit {rc} (want {code}) {gouts.get('MINUTES')} {log.strip()[-80:]}")
+
+    # writes: main (live.yml: the Pages branch; daily.yml: BRANCH) and ops-reports, never the triggering branch
+    for wf in ("live.yml", "daily.yml", "discover.yml"):
+        refs = [s_.get("name") or s_.get("id") for _, s_ in workflow_steps(docs[wf])
+                if re.search(r"GITHUB_REF\b|GITHUB_REF_NAME|github\.ref\b|github\.ref_name|GITHUB_HEAD_REF", json.dumps(s_))]
+        check(not refs, f"{wf}: no step uses the triggering ref: {refs}")
+    check(fenv.get("INPUT_REF", "").startswith("${{ github.event_name == 'push' && (github.event.repository.default_branch || 'main')")
+          and "DEFAULT_BRANCH" in fenv, f"live.yml: inputs from the default branch on a push: {fenv.get('INPUT_REF')}")
+    pub = next((s_["run"] for s_ in feed.get("steps") or [] if "PUB_ARGS=" in (s_.get("run") or "")), "")
+    check("--branch $pbranch" in pub and "--ref $DEFAULT_BRANCH" in pub and "[ \"$pbranch\" = - ] && pbranch=$DEFAULT_BRANCH" in pub,
+          "live.yml: publishes to the Pages branch (else the default branch), pages.yml dispatched on the default branch")
+    loop = next((s_["run"] for s_ in feed.get("steps") or [] if "while [" in (s_.get("run") or "")), "")
+    check('git checkout -q --no-overlay "origin/$INPUT_REF" -- live_input pipeline/live_config.json' in loop,
+          "live.yml: every pass takes live_input/ and live_config.json from origin/$INPUT_REF")
+    check(all(((dj[j].get("steps") or [{}])[0].get("with") or {}).get("ref") == "${{ github.event.repository.default_branch || 'main' }}"
+              for j in ("build", "commit")) and dj["commit"].get("env", {}).get("BRANCH") == "${{ github.event.repository.default_branch || 'main' }}",
+          "daily.yml: builds from main and pushes to main (BRANCH)")
+    check(re.search(r'add_argument\("--branch", default="ops-reports"\)', open(os.path.join(ROOT, "pipeline", "discover.py"), encoding="utf-8").read())
+          and "--branch" not in json.dumps(disc.get("steps")), "discover.yml: the report goes to ops-reports (discover.py's default)")
+
+    # the runbook's request command (docs/ELECTION_DAY.md), run as written against a scratch origin: ops-control
+    # afresh from origin/main, the request with an id, a forced push
+    runbook = open(os.path.join(ROOT, "docs", "ELECTION_DAY.md"), encoding="utf-8").read()
+    block = re.search(r"```bash\n(REQ='[^\n]*'\ngit -C \.\./ops fetch.*?)```", runbook, re.S)
+    check(block and "checkout -q -f -B ops-control origin/main" in block.group(1) and "push -qf origin ops-control" in block.group(1),
+          "docs/ELECTION_DAY.md: the request command makes ops-control from origin/main and force-pushes it")
+    scan = re.search(r"```bash\n(REQ='[^\n]*'\ngit -C \.\./ops fetch.*?)```",
+                     open(os.path.join(ROOT, "docs", "FILE_DISCOVERY.md"), encoding="utf-8").read(), re.S)
+    check(block and scan and scan.group(1).split("\n", 1)[1] == block.group(1).split("\n", 1)[1]
+          and '"workflow": "discover"' in scan.group(1).split("\n", 1)[0],
+          "docs/FILE_DISCOVERY.md: the same request command, with a discover request")
+    origin = os.path.join(wtmp, "ops_origin.git")
+    sh(["git", "init", "-q", "--bare", "-b", "main", origin], wtmp)
+    editor = os.path.join(wtmp, "ops_editor")             # edits to main (the operator's ../op)
+    sess = os.path.join(wtmp, "ops_session")              # the session's checkout; ../ops is its request worktree
+    ops_wt = os.path.join(wtmp, "ops")
+    for d in (editor, sess):
+        sh(["git", "clone", "-q", origin, d], wtmp)
+        for k, v in (("user.email", "op@example.com"), ("user.name", "operator")):
+            sh(["git", "config", k, v], d)
+    write(os.path.join(editor, "live_input", "turnout.json"), '{"national": {"10:00": 15.2}}')
+    write(os.path.join(editor, "pipeline", "live_config.json"), '{"github_feed": true}')
+    write(os.path.join(editor, "ops", "request.json"), json.dumps(main_req))
+    sh(["git", "add", "-A"], editor)
+    sh(["git", "commit", "-q", "-m", "main"], editor)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+    sh(["bash", "-c", "git fetch -q origin main && git worktree add -q --detach ../ops origin/main"], sess)
+
+    def request(body, stray=False):
+        """One request with the runbook's command; the new ops-control tip."""
+        script = re.sub(r"^REQ='[^\n]*'", lambda _: f"REQ='{body}'", block.group(1) if block else "false", count=1)
+        r = subprocess.run(["bash", "-c", script], cwd=sess, capture_output=True, text=True)
+        check(r.returncode == 0 and json.load(open(os.path.join(ops_wt, "ops", "request.json"))).get("id"),
+              f"the runbook's request command for {body}: exit {r.returncode} {r.stderr.strip()[-120:]}")
+        if stray:                                         # a stale input on the branch must not reach the feed
+            write(os.path.join(ops_wt, "live_input", "turnout.json"), '{"national": {"10:00": 99}}')
+            write(os.path.join(ops_wt, "live_input", "stray.json"), "{}")
+            sh(["git", "add", "-A"], ops_wt)
+            sh(["git", "commit", "-q", "-m", "stray inputs"], ops_wt)
+            sh(["git", "push", "-q", "-f", "origin", "ops-control"], ops_wt)
+        return sh(["git", "rev-parse", "HEAD"], ops_wt)
+
+    inputs_step = next((s_["run"] for s_ in feed.get("steps") or [] if s_.get("id") == "inputs"), "")
+    check(inputs_step and [s_.get("id") for s_ in feed.get("steps") or []].index("inputs") == 2,
+          "live.yml: the inputs step comes right after the checkout")
+    run_dir = os.path.join(wtmp, "ops_run")
+    rc, outs, _ = run_block(inputs_step, {"INPUT_REF": "main"}, editor)     # no ops-control yet
+    check(rc == 0 and outs.get("OPS_SEEN") == "none", f"inputs step without ops-control: OPS_SEEN={outs.get('OPS_SEEN')}")
+    tip = request('{"workflow": "live", "minutes": 345, "id": "1"}', stray=True)
+    sh(["git", "clone", "-q", "-b", "ops-control", origin, run_dir], wtmp)   # the checkout of the run that push started
+    lost = os.path.join(wtmp, "ops_lost")                                   # one whose remote cannot be reached
+    sh(["git", "clone", "-q", "-b", "ops-control", origin, lost], wtmp)
+    sh(["git", "remote", "set-url", "origin", os.path.join(wtmp, "missing.git")], lost)
+    sh(["git", "pull", "-q", "--ff-only", "origin", "main"], editor)        # the operator edits main meanwhile
+    write(os.path.join(editor, "live_input", "turnout.json"), '{"national": {"10:00": 15.2, "12:00": 27.9}}')
+    write(os.path.join(editor, "live_input", "exit_polls.json"), "{}")
+    sh(["git", "add", "-A"], editor)
+    sh(["git", "commit", "-q", "-m", "turnout 12:00"], editor)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+    rc, outs, log = run_block(inputs_step, {"INPUT_REF": "main"}, run_dir)
+    got = json.load(open(os.path.join(run_dir, "live_input", "turnout.json")))
+    check(rc == 0 and got == {"national": {"10:00": 15.2, "12:00": 27.9}} and not os.path.exists(os.path.join(run_dir, "live_input", "stray.json"))
+          and os.path.exists(os.path.join(run_dir, "live_input", "exit_polls.json")) and outs.get("OPS_SEEN") == tip,
+          f"a run from ops-control takes live_input/ from origin/main (not the branch) and notes the tip: {got} {outs} {log.strip()[-120:]}")
+    rc, outs, log = run_block(inputs_step, {"INPUT_REF": "main"}, lost)
+    check(rc == 0 and outs.get("OPS_SEEN") == "off" and "::warning::" in log,
+          f"inputs step where git cannot reach the remote: a warning, OPS_SEEN={outs.get('OPS_SEEN')} (no restart possible)")
+
+    # restart: a {"workflow": "live", "restart": true} pushed after the run began ends the loop; nothing else does
+    m = re.search(r"^restart_requested\(\) \{\n.*?^\}\n", loop, re.S | re.M)
+    check(m and loop.index("restart_requested()") < loop.index("while [") and re.search(r"if restart_requested; then\n.*?break", loop, re.S),
+          "live.yml: the loop asks restart_requested at every pass and stops")
+
+    def restart(seen, cwd=run_dir):
+        rc_, outs_, log_ = run_block((m.group(0) if m else "restart_requested() { return 1; }\n")
+                                     + 'if restart_requested; then echo "restart=yes"; else echo "restart=no"; fi\n'
+                                     + 'echo "seen=$OPS_SEEN" >> "$GITHUB_OUTPUT"\n', {"OPS_SEEN": seen}, cwd)
+        return rc_ == 0 and "restart=yes" in log_, outs_.get("seen")
+
+    t_run = tip
+    for body, seen, want in (('{"workflow": "live", "restart": true, "id": "2"}', "start", True),
+                             (None, "same", False),
+                             ('{"workflow": "live", "restart": true, "id": "3"}', "off", False),
+                             ('{"workflow": "discover", "id": "4"}', "start", False),
+                             ('{"workflow": "live", "minutes": 345, "id": "5"}', "start", False),
+                             ('{"workflow": "live", "restart": "true", "id": "6"}', "start", False),
+                             ('{"workflow": "net-check", "restart": true, "id": "7"}', "start", False),
+                             ('{"workflow": "live", "restart": true, "reset": true, "id": "8"}', "none", True)):
+        new_tip = request(body) if body else sh(["git", "rev-parse", "HEAD"], ops_wt)
+        stop, after = restart({"start": t_run, "same": new_tip, "off": "off", "none": "none"}[seen])
+        check(stop == want and (seen == "off" or after == new_tip),
+              f"restart check, {body or 'the request that started the run'} (seen: {seen}): restart={stop} (want {want}), seen {str(after)[:8]}")
+    stop, _ = restart(t_run, lost)
+    check(not stop, "restart check where git cannot reach the remote: no restart")
 
 
 # ---------------------------------------------------------------- tests
@@ -1260,6 +1524,9 @@ def main():
             ("202610272159", "workflow_dispatch", 1, "false"), ("202610272200", "workflow_dispatch", 0, "true"),
             ("202610272200", "schedule", 0, "false"), ("202610091200", "schedule", 0, "false"),
             ("202710150723", "schedule", 0, "false"),
+            # a request on ops-control (event push) is refused like a manual run
+            ("202610151200", "push", 0, "true"), ("202610232330", "push", 1, "false"), ("202610261200", "push", 1, "false"),
+            ("202610272200", "push", 0, "true"),
         ]
         for now_il, event, code, go in cases:
             rc, outs, log = run_block(guard, {"NOW_IL": now_il, "EVENT": event}, wtmp)
@@ -1270,7 +1537,9 @@ def main():
             rc, _, _ = run_block(push_guard, {"NOW_IL": now_il}, wtmp)
             check(rc == code, f"push-time guard at {now_il}: exit {rc} (want {code})")
         on_daily = daily.get("on", daily.get(True)) or {}
-        check("push" not in on_daily and set(on_daily) == {"schedule", "workflow_dispatch"}, f"daily.yml: schedule and dispatch only: {list(on_daily)}")
+        check(set(on_daily) == {"schedule", "workflow_dispatch", "push"}
+              and on_daily.get("push") == {"branches": ["ops-control"], "paths": ["ops/request.json"]},
+              f"daily.yml: schedule, dispatch, and pushes of ops/request.json to ops-control only: {on_daily.get('push')}")
         crons = [c["cron"] for c in on_daily.get("schedule", [])]
         check(crons and all(c.split()[0] not in ("0", "30") and c.split()[3] == "10" for c in crons), f"daily crons off the hour, in October: {crons}")
         for wf in ("pages.yml", "official-data.yml", "daily.yml", "net-check.yml", "live.yml"):
@@ -1425,6 +1694,7 @@ def main():
               "official-data.yml: run steps under bash -eo pipefail (a failed rebuild piped into tee fails, WF-10)")
         check(not any(re.search(r"\bnode\b", s_.get("run") or "") for wf in ("daily.yml", "official-data.yml")
                       for _, s_ in workflow_steps(docs[wf])), "no workflow runs node on polls-data.js")
+        ops_control(docs, wtmp)
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")

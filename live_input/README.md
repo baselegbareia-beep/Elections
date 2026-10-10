@@ -12,6 +12,13 @@ string of corrections. This holds for the laptop fallback too (`live_fetch.py --
 to edit locally instead). A file that does not parse is reported in `site/live/status.json` (`errors`) and the last
 valid version stays on the page.
 
+These files always go to `main`, never to the `ops-control` branch. That branch carries only `ops/request.json`, the
+operator's stand-in for Run workflow and Cancel run, since the session's token can push but not dispatch or cancel
+(a drill, a reset, a feed run, a restart, a discovery scan, the access check, the daily poll update: see "בקשות דרך
+ops-control" in [`docs/ELECTION_DAY.md`](../docs/ELECTION_DAY.md#ops-control)). A feed run started from `ops-control`
+still reads this folder and `pipeline/live_config.json` from `main`, before its first pass and at every pass, and
+publishes to `site/live/` on `main`, so an edit made here on `ops-control` reaches nothing.
+
 * `turnout.json` — the national cumulative turnout announced by the Central Elections Committee, as percentages:
   `{"national": {"10:00": 15.2, "12:00": 27.9}, "released": {"10:00": "10:40"}, "source": "הודעת ועדת הבחירות",
   "source_url": "https://...", "sectors_time": "14:00", "claims": [{"time": "16:00", "source": "...", "text": "..."}]}`.

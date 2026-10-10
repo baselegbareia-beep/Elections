@@ -25,7 +25,15 @@
 # Switches: repository variable LIVE_RUNNER=self-hosted moves every run (scheduled ones too) to the
 # runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
-# A running loop is replaced only when it ends: to switch at once, cancel the active run.
+# A running loop is replaced only when it ends: to switch at once, cancel the active run (the owner), or push a
+# request with "restart": true (below), which the loop sees at its next pass.
+# Requests: the election-day operator (a Claude session) can push but cannot dispatch or cancel runs (403), so a
+# push to the ops-control branch that changes ops/request.json stands in for Run workflow, e.g.
+# {"workflow": "live", "drill": true, "minutes": 40, "id": "…"} (docs/ELECTION_DAY.md, "בקשות דרך ops-control").
+# The job "request" reads it, and a request for another workflow ends there. Such a run uses the workflow file and
+# code of the pushed commit (the operator makes ops-control from origin/main each time), but reads live_input/ and
+# live_config.json from main (INPUT_REF) before the first pass and at every pass, and publishes to the Pages branch
+# (--branch: main, never the triggering branch). It shares the live-feed group with scheduled and manual runs.
 name: Election day live feed
 
 on:
@@ -34,6 +42,9 @@ on:
     - cron: '7,27,47 0-23 28,29 10 *'   # 28–29.10: the regular count ends, then the double envelopes, continuous
     - cron: '7 * 30,31 10 *'            # 30–31.10: a 20-minute run every hour, until the final file
     - cron: '7 * 1-4 11 *'              # 1–4.11: the same; the final result is published by 4.11
+  push:                                 # the operator's requests (above): ops-control only, never main
+    branches: [ops-control]
+    paths: ['ops/request.json']
   workflow_dispatch:
     inputs:
       minutes:
@@ -56,21 +67,123 @@ permissions:
   pages: write       # read the Pages source, and request a Pages build after each publish (branch mode)
   actions: write     # Actions mode: dispatch pages.yml with GITHUB_TOKEN (workflow_dispatch is the documented exception)
 
-concurrency:
-  group: live-feed
-  cancel-in-progress: false    # a new run waits for the current one, so coverage is continuous
-
 jobs:
+  request:
+    # a push to ops-control: ops/request.json in place of the dispatch inputs (scheduled and manual runs skip this)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      run: ${{ steps.request.outputs.run }}
+      drill: ${{ steps.request.outputs.drill }}
+      reset: ${{ steps.request.outputs.reset }}
+      minutes: ${{ steps.request.outputs.minutes }}
+      runner: ${{ steps.request.outputs.runner }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: ops
+          persist-credentials: false
+      - name: Read the request (ops/request.json on ops-control)
+        id: request
+        env:
+          WORKFLOW: live
+          FIELDS: 'drill reset minutes runner restart'
+        run: |
+          # A push to the ops-control branch is the operator's Run workflow: the session's token can push but not
+          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). A request names one workflow (WORKFLOW is this
+          # one's name); the others end here, quietly (run=false). Its fields (FIELDS: the dispatch inputs) are
+          # checked as tightly as Run workflow checks them; a request that does not parse, names no known workflow,
+          # or has a field this workflow does not take, goes red. Other events: run=true, nothing read.
+          # The same block in live.yml, discover.yml, net-check.yml and daily.yml (pipeline/test_live.py runs it).
+          if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
+          python3 - ops/request.json <<'PY'
+          import json, os, re, sys
+          me, fields = os.environ["WORKFLOW"], os.environ.get("FIELDS", "").split()
+          WORKFLOWS = ("live", "discover", "net-check", "daily", "none")     # none: the placeholder on main
+          def safe(x):          # request text in a log line: no newlines, no workflow commands
+              return re.sub(r"[^\w .,:/=+()'\"\[\]-]", "?", str(x))[:80]
+          def fail(msg):
+              print(f"::error::ops/request.json: {msg}")
+              sys.exit(1)
+          def flag(v):
+              return str(v).lower() if isinstance(v, bool) else None
+          def whole(v):         # whole minutes, as Run workflow's minutes (the feed's guard checks them again)
+              if isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 9999:
+                  return str(v)
+              return str(int(v)) if isinstance(v, str) and re.fullmatch(r"[0-9]{1,4}", v) else None
+          def label(v):         # a runner label: ubuntu-latest, self-hosted
+              return v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,62}", v) else None
+          def mode(v):
+              return v if isinstance(v, str) and v in ("auto", "full", "quick") else None
+          def urls(v):          # addresses for the scan: a list, or one string separated by spaces
+              v = v.split() if isinstance(v, str) else v
+              ok = isinstance(v, list) and 0 < len(v) <= 20 and all(
+                  isinstance(u, str) and re.fullmatch(r"https?://[^\s\"'`<>\\]{1,500}", u) for u in v)
+              return " ".join(v) if ok else None
+          CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode,
+                    "urls": urls}
+          try:
+              with open(sys.argv[1], encoding="utf-8") as f:
+                  req = json.load(f)
+          except FileNotFoundError:
+              fail("not on this commit: make ops-control from origin/main (docs/ELECTION_DAY.md)")
+          except (ValueError, OSError) as exc:
+              fail(f"does not parse: {safe(exc)}")
+          if not isinstance(req, dict):
+              fail("not a JSON object")
+          wf, rid = req.get("workflow"), safe(req.get("id", "-"))
+          if wf not in WORKFLOWS:
+              fail(f"workflow is {safe(wf)!r}, not one of {', '.join(WORKFLOWS)}")
+          out = {"run": "false"}
+          if wf != me:
+              print(f"request {rid} is for {wf}, not {me}: nothing to do")
+          else:
+              extra = [safe(k) for k in req if k not in ("workflow", "id") and k not in fields]
+              if extra:
+                  fail(f"{me} takes {', '.join(fields) or 'no fields'} (besides workflow and id), not {', '.join(extra)}")
+              out["run"] = "true"
+              for k in fields:
+                  if k in req:
+                      v = CHECKS[k](req[k])
+                      if v is None:
+                          fail(f"{k}: {safe(json.dumps(req[k]))} is not a valid value")
+                      out[k] = v
+              said = " ".join(f"{k}={v}" for k, v in out.items() if k != "run") or "no fields"
+              print(f"request {rid}: {me} {said}")
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+                  f.write(f"Request {rid} (ops/request.json on ops-control): {me} {said}\n")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.writelines(f"{k}={v}\n" for k, v in out.items())
+          PY
+
   feed:
-    if: github.event_name == 'workflow_dispatch' || vars.LIVE_FEED_OFF != 'true'
+    needs: request
+    # scheduled runs unless LIVE_FEED_OFF; manual runs always; a push to ops-control when its request is for live
+    # (as a manual run). !cancelled(): the request job is skipped on schedule and dispatch
+    if: >-
+      ${{ !cancelled() && (github.event_name == 'push' && needs.request.outputs.run == 'true'
+      || github.event_name != 'push' && (github.event_name == 'workflow_dispatch' || vars.LIVE_FEED_OFF != 'true')) }}
     # the CEC's 2026 CDN may refuse GitHub's cloud addresses; a self-hosted runner in Israel avoids that
-    runs-on: ${{ inputs.runner || vars.LIVE_RUNNER || 'ubuntu-latest' }}
+    runs-on: ${{ needs.request.outputs.runner || inputs.runner || vars.LIVE_RUNNER || 'ubuntu-latest' }}
     timeout-minutes: 355
+    concurrency:
+      # one group for every run that polls, scheduled, manual or requested: a new run waits for the current one, so
+      # coverage is continuous (one running, one pending; a newer pending run replaces the older). On the job, not
+      # the workflow: a push whose request is for another workflow skips this job, and has a group of its own, so
+      # it never replaces the run queued behind the active one
+      group: ${{ (github.event_name != 'push' || needs.request.outputs.run == 'true') && 'live-feed' || format('live-feed-skipped-{0}', github.run_id) }}
+      cancel-in-progress: false
     env:
-      DRILL: ${{ inputs.drill == true }}
-      RESET: ${{ inputs.reset == true }}
-      MINUTES: ${{ inputs.minutes }}
+      DRILL: ${{ inputs.drill == true || needs.request.outputs.drill == 'true' }}
+      RESET: ${{ inputs.reset == true || needs.request.outputs.reset == 'true' }}
+      MINUTES: ${{ needs.request.outputs.minutes || inputs.minutes }}
       DEFAULT_BRANCH: ${{ github.event.repository.default_branch || 'main' }}   # empty on schedule events
+      # where the operator's inputs come from: main for a run that a push to ops-control started (its checkout is
+      # that branch), else the branch the run is on (main, or the ref a manual run names)
+      INPUT_REF: ${{ github.event_name == 'push' && (github.event.repository.default_branch || 'main') || github.ref_name }}
       GH_TOKEN: ${{ github.token }}
       # seconds the feed waits after a push before asking whether the push itself started a Pages build (then it
       # requests none); repository variable LIVE_BUILD_WAIT, e.g. 45 if the drill shows two builds per publish
@@ -109,6 +222,26 @@ jobs:
           echo "minutes=$MINUTES drill=$DRILL"
       - uses: actions/checkout@v6
         if: steps.guard.outputs.off != 'true'
+      - name: The operator's inputs from main, and the ops-control tip
+        id: inputs
+        if: steps.guard.outputs.off != 'true'
+        run: |
+          # a run that a push to ops-control started has that branch's commit checked out: live_input/ and
+          # live_config.json come from INPUT_REF (main) all the same, here (for the seed and the probe pass) and at
+          # every pass of the loop
+          git fetch -q origin "+refs/heads/$INPUT_REF:refs/remotes/origin/$INPUT_REF" \
+            && git checkout -q --no-overlay "origin/$INPUT_REF" -- live_input pipeline/live_config.json \
+            || echo "::warning::live_input/ and live_config.json not taken from origin/$INPUT_REF; the loop tries again every pass"
+          # a {"workflow": "live", "restart": true} request pushed to ops-control after this point ends this run at
+          # the loop's next pass (restart_requested); off = the tip is unknown, and no request can end this run
+          if out=$(git ls-remote origin refs/heads/ops-control 2>/dev/null); then
+            tip=${out%%[[:space:]]*}
+            seen=${tip:-none}
+          else
+            seen=off
+          fi
+          echo "OPS_SEEN=$seen" >> "$GITHUB_ENV"
+          echo "inputs from origin/$INPUT_REF; ops-control tip: $seen"
       - uses: actions/setup-python@v7
         if: steps.guard.outputs.off != 'true' && runner.environment == 'github-hosted'   # a self-hosted runner uses its own python3 (>= 3.9 with numpy)
         with:
@@ -198,15 +331,37 @@ jobs:
               return 1
             fi
           }
+          # Cancel run for the operator, whose token cannot cancel: a {"workflow": "live", "restart": true} request
+          # pushed to ops-control after this run began (OPS_SEEN: the tip then) ends it at its next pass, and the run
+          # that request started, pending in the live-feed group, takes over at once. Any failure here: no restart.
+          restart_requested() {
+            local out tip
+            [ "${OPS_SEEN:-off}" != off ] || return 1
+            out=$(git ls-remote origin refs/heads/ops-control 2>/dev/null) || return 1
+            tip=${out%%[[:space:]]*}
+            if [ -z "$tip" ] || [ "$tip" = "$OPS_SEEN" ]; then return 1; fi
+            git fetch -q origin "+refs/heads/ops-control:refs/remotes/origin/ops-control" 2>/dev/null || return 1
+            OPS_SEEN=$(git rev-parse origin/ops-control) || return 1
+            git show "$OPS_SEEN:ops/request.json" 2>/dev/null | python3 -c '
+          import json, sys
+          r = json.load(sys.stdin)
+          sys.exit(0 if isinstance(r, dict) and r.get("workflow") == "live" and r.get("restart") is True else 1)' 2>/dev/null
+          }
           if [ "$RESET" = true ]; then reset_live; exit $?; fi
           crashes=0
           end=$(( $(date +%s) + MINUTES * 60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
-            # manual inputs and config edits made on GitHub; --no-overlay also removes a deleted file (OPS-14)
-            git fetch -q origin "+refs/heads/$GITHUB_REF_NAME:refs/remotes/origin/$GITHUB_REF_NAME" \
-              && git checkout -q --no-overlay "origin/$GITHUB_REF_NAME" -- live_input pipeline/live_config.json || true
+            # manual inputs and config edits made on GitHub, from main also when a push to ops-control started this
+            # run (INPUT_REF); --no-overlay also removes a deleted file (OPS-14)
+            git fetch -q origin "+refs/heads/$INPUT_REF:refs/remotes/origin/$INPUT_REF" \
+              && git checkout -q --no-overlay "origin/$INPUT_REF" -- live_input pipeline/live_config.json || true
             if python3 -c 'import json,sys; sys.exit(0 if json.load(open("pipeline/live_config.json")).get("github_feed", True) is False else 1)' 2>/dev/null; then
               echo 'live_config.json: "github_feed": false, stopping (the laptop takes over)'; break
+            fi
+            if restart_requested; then
+              echo "ops-control: restart requested ($(git log -1 --format=%s "$OPS_SEEN" 2>/dev/null | cut -c1-120)); stopping, the requested run takes over"
+              echo "- $(date -u +%H:%M) UTC: ended by a restart request on ops-control" >> "$GITHUB_STEP_SUMMARY"
+              break
             fi
             # one pass, then live_fetch.publish_step publishes when due (branch mode: every publish_every_min
             # minutes, the first results / exit polls at once) and has the page rebuilt

@@ -2,22 +2,108 @@
 # Runs daily 20–27.10 (08:17 Israel time until 24.10, 07:17 from 25.10) and on demand; the summary table
 # is in the run's summary page. On 9.10.2026 media26 (CloudFront) answered 404 to GitHub runners while
 # serving other networks, so if the 2026 files stay unreachable from here, the feed moves to a self-hosted
-# runner in Israel (docs/ELECTION_DAY.md). It has no permissions, so the yearly repeat of its cron is harmless.
+# runner in Israel (docs/ELECTION_DAY.md). It can only read the repository (for the request below), so the yearly
+# repeat of its cron is harmless.
+# Requests: the election-day operator (a Claude session) can push but cannot dispatch (403), so a push to the
+# ops-control branch with {"workflow": "net-check", "id": "…"} in ops/request.json stands in for Run workflow
+# (docs/ELECTION_DAY.md, "בקשות דרך ops-control"); a request for another workflow ends at the first steps.
 name: Check access to the elections committee
 
 on:
   schedule:
     - cron: '17 5 20-27 10 *'   # 05:17 UTC: 08:17 Israel time until 24.10 (UTC+3), 07:17 from 25.10 (UTC+2); daily 20–27.10
+  push:                         # the operator's requests (above): ops-control only, never main
+    branches: [ops-control]
+    paths: ['ops/request.json']
   workflow_dispatch:
 
-permissions: {}
+permissions:
+  contents: read                # the request file (a push to ops-control); nothing is written
 
 jobs:
   net-check:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v6         # the request only (a push to ops-control)
+        if: github.event_name == 'push'
+        with:
+          sparse-checkout: ops
+          persist-credentials: false
+      - name: Read the request (ops/request.json on ops-control)
+        id: request
+        env:
+          WORKFLOW: net-check
+          FIELDS: ''
+        run: |
+          # A push to the ops-control branch is the operator's Run workflow: the session's token can push but not
+          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). A request names one workflow (WORKFLOW is this
+          # one's name); the others end here, quietly (run=false). Its fields (FIELDS: the dispatch inputs) are
+          # checked as tightly as Run workflow checks them; a request that does not parse, names no known workflow,
+          # or has a field this workflow does not take, goes red. Other events: run=true, nothing read.
+          # The same block in live.yml, discover.yml, net-check.yml and daily.yml (pipeline/test_live.py runs it).
+          if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
+          python3 - ops/request.json <<'PY'
+          import json, os, re, sys
+          me, fields = os.environ["WORKFLOW"], os.environ.get("FIELDS", "").split()
+          WORKFLOWS = ("live", "discover", "net-check", "daily", "none")     # none: the placeholder on main
+          def safe(x):          # request text in a log line: no newlines, no workflow commands
+              return re.sub(r"[^\w .,:/=+()'\"\[\]-]", "?", str(x))[:80]
+          def fail(msg):
+              print(f"::error::ops/request.json: {msg}")
+              sys.exit(1)
+          def flag(v):
+              return str(v).lower() if isinstance(v, bool) else None
+          def whole(v):         # whole minutes, as Run workflow's minutes (the feed's guard checks them again)
+              if isinstance(v, int) and not isinstance(v, bool) and 0 <= v <= 9999:
+                  return str(v)
+              return str(int(v)) if isinstance(v, str) and re.fullmatch(r"[0-9]{1,4}", v) else None
+          def label(v):         # a runner label: ubuntu-latest, self-hosted
+              return v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9][A-Za-z0-9_.-]{0,62}", v) else None
+          def mode(v):
+              return v if isinstance(v, str) and v in ("auto", "full", "quick") else None
+          def urls(v):          # addresses for the scan: a list, or one string separated by spaces
+              v = v.split() if isinstance(v, str) else v
+              ok = isinstance(v, list) and 0 < len(v) <= 20 and all(
+                  isinstance(u, str) and re.fullmatch(r"https?://[^\s\"'`<>\\]{1,500}", u) for u in v)
+              return " ".join(v) if ok else None
+          CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode,
+                    "urls": urls}
+          try:
+              with open(sys.argv[1], encoding="utf-8") as f:
+                  req = json.load(f)
+          except FileNotFoundError:
+              fail("not on this commit: make ops-control from origin/main (docs/ELECTION_DAY.md)")
+          except (ValueError, OSError) as exc:
+              fail(f"does not parse: {safe(exc)}")
+          if not isinstance(req, dict):
+              fail("not a JSON object")
+          wf, rid = req.get("workflow"), safe(req.get("id", "-"))
+          if wf not in WORKFLOWS:
+              fail(f"workflow is {safe(wf)!r}, not one of {', '.join(WORKFLOWS)}")
+          out = {"run": "false"}
+          if wf != me:
+              print(f"request {rid} is for {wf}, not {me}: nothing to do")
+          else:
+              extra = [safe(k) for k in req if k not in ("workflow", "id") and k not in fields]
+              if extra:
+                  fail(f"{me} takes {', '.join(fields) or 'no fields'} (besides workflow and id), not {', '.join(extra)}")
+              out["run"] = "true"
+              for k in fields:
+                  if k in req:
+                      v = CHECKS[k](req[k])
+                      if v is None:
+                          fail(f"{k}: {safe(json.dumps(req[k]))} is not a valid value")
+                      out[k] = v
+              said = " ".join(f"{k}={v}" for k, v in out.items() if k != "run") or "no fields"
+              print(f"request {rid}: {me} {said}")
+              with open(os.environ["GITHUB_STEP_SUMMARY"], "a", encoding="utf-8") as f:
+                  f.write(f"Request {rid} (ops/request.json on ops-control): {me} {said}\n")
+          with open(os.environ["GITHUB_OUTPUT"], "a", encoding="utf-8") as f:
+              f.writelines(f"{k}={v}\n" for k, v in out.items())
+          PY
       - name: Probe official hosts
+        if: steps.request.outputs.run == 'true'
         run: |
           UA='Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36'
           {
