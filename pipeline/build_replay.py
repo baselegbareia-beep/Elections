@@ -9,9 +9,13 @@
 2. 2022, simulated counting order: the official 2022 ballot results in a
    simulated order (smaller localities somewhat earlier); labelled as such.
 3. Accuracy: projection error by share counted, from backtests over several
-   simulated orders (2022 and 2021) and along the real 2021 order. The model's
-   noise constants are tuned on the 2022 backtest; 2021 (simulated and real) is
-   hold-out, and the output says which is which (accuracy_roles).
+   simulated orders (2022 and 2021; rough sketches of a night) and along the
+   real 2021 order. The model's noise constants came from a sweep over both
+   simulated backtests (live_model.CALIBRATED_ON), so both read 'calibration'
+   in accuracy_roles; the real 2021 order (accuracy_real) is the hold-out.
+   The sweep predates the LM-1..6 model fixes and the bands now over-cover
+   (accuracy[*].cover80 is 0.93-1.00 for nominal 80% bands); that is kept on
+   purpose, and accuracy_note says so for the page.
 
 Run: python3 pipeline/build_replay.py [--out site/data/replay_night.json]
 """
@@ -113,7 +117,7 @@ def replay_simulated(core, src, n_boot):
     print(f"2022 simulated: {len(frames)} frames")
     return {"election": "K25", "baseline": "K24", "simulated_order": True,
             "label": "ליל הבחירות 2022 · סדר ספירה מדומה", "frames": frames, "exit_polls": EXIT_POLLS["K25"],
-            "note": "תוצאות 2022 הרשמיות ברמת הקלפי, בסדר ספירה מדומה; בסיס 2021; ממוצע הסקרים של השבוע האחרון כנקודת מוצא."}
+            "note": "תוצאות 2022 הרשמיות ברמת הקלפי, בסדר ספירה מדומה (קירוב גס ללילה אמיתי); בסיס 2021; ממוצע הסקרים של השבוע האחרון כנקודת מוצא."}
 
 
 def snapshot_commits():
@@ -171,10 +175,15 @@ def replay_real(core, src, n_boot):
 
 
 # The projection's noise constants were set on the two simulated backtests (2021 and 2022); the real
-# 2021 counting order (accuracy_real) was never used to tune them, so it is the clean hold-out.
+# 2021 counting order (accuracy_real) was never used to tune them, so it is the clean hold-out. The
+# sweep was not redone after the model fixes: the nominal 80% bands over-cover (cover80 0.93-1.00),
+# which is the safe side with three new lists and a four-year-old baseline (LM-E). The page shows
+# accuracy_note next to the backtest card.
 ACCURACY_ROLES = {e: ("calibration" if e in LM.CALIBRATED_ON else "holdout") for e in ("K25", "K24")}
-ACCURACY_NOTE = ("קבועי אי-הוודאות של המודל נקבעו על השחזורים המדומים של 2021 ו-2022; ליל 2021 בסדר הספירה "
-                 "האמיתי לא שימש לכיול, ולכן הוא המבחן הנקי.")
+ACCURACY_NOTE = ("קבועי אי-הוודאות של המודל נקבעו על השחזורים המדומים של 2021 ו-2022 (סדרי ספירה מדומים, קירוב גס "
+                 "ללילה אמיתי); ליל 2021 בסדר הספירה האמיתי לא שימש לכיול, ולכן הוא המבחן הנקי. בבדיקות לאחור "
+                 "הטווח של 80% כלל את התוצאה ב-93%–100% מהמקרים, כלומר הוא רחב מהנדרש; זה הצד הבטוח כשיש שלוש "
+                 "רשימות חדשות ובסיס בן ארבע שנים, ולכן הקבועים נשארו כפי שהם.")
 
 
 def backtest_accuracy(core, src, orders):
