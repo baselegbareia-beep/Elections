@@ -1,0 +1,175 @@
+# Daily poll update until the poll-publication ban (the owner's decision of 10.10, ARCH_V3 §4).
+# Twice a day (and on demand) it fetches the 2026 poll table, polls-data.js (pipeline/fetch_sources.py
+# POLLS_2026), rebuilds site/data/polls_2026.json and the page (pipeline/build_polls.py, build_site.py), runs
+# the election-day feed's smoke test (pipeline/test_live.py) as a health check, and commits the three built
+# files to main only when they changed and the check passed.
+# Never from Sat 24.10 00:00 to Tue 27.10 22:00 Israel time (Elections (Propaganda) Law §16ה(ח)): the guard
+# job refuses (a manual run goes red), and the push step checks the clock again right before pushing.
+# The commit is pushed with GITHUB_TOKEN, which starts no other workflow (no cascade: pages.yml and
+# official-data.yml stay quiet), so the page is rebuilt explicitly: a Pages build request in branch mode
+# (the current setting), a dispatch of pages.yml under GitHub Actions (live_fetch.py --request-build).
+# Crons are UTC (Israel is UTC+3 until 25.10); the year is checked by the guard (cron has none).
+name: Daily poll update
+
+on:
+  schedule:
+    - cron: '23 4,16 10-23 10 *'   # 07:23 and 19:23 Israel time, 10–23.10.2026
+    - cron: '41 17 23 10 *'        # Fri 23.10, 20:41 Israel time: the Friday-evening polls, the last before the ban
+  workflow_dispatch:
+
+permissions:
+  contents: write   # commit to main
+  pages: write      # read the Pages source, request a Pages build (branch mode)
+  actions: write    # dispatch pages.yml (Actions mode)
+
+concurrency:
+  group: daily-polls
+  cancel-in-progress: false
+
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      go: ${{ steps.guard.outputs.go }}
+    steps:
+      - name: Poll-ban guard
+        id: guard
+        env:
+          EVENT: ${{ github.event_name }}
+        run: |
+          # §16ה(ח): no poll may be published from Sat 24.10 00:00 until the polls close, Tue 27.10 22:00 Israel
+          # time. NOW_IL (YYYYmmddHHMM, Israel time) stands in for the clock in pipeline/test_live.py.
+          now=${NOW_IL:-$(TZ=Asia/Jerusalem date +%Y%m%d%H%M)}
+          if [ "$now" -ge 202610240000 ] && [ "$now" -lt 202610272200 ]; then
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "## Refused: poll-publication ban (24.10 00:00 to 27.10 22:00 Israel time), no poll update" >> "$GITHUB_STEP_SUMMARY"
+            if [ "$EVENT" = schedule ]; then echo "::warning::poll-publication ban: no poll update"; exit 0; fi
+            echo "::error::poll-publication ban (§16ה(ח)) from 24.10 00:00 to 27.10 22:00 Israel time: no poll update"
+            exit 1
+          fi
+          if [ "$EVENT" = schedule ] && { [ "$now" -lt 202610100000 ] || [ "$now" -ge 202610240000 ]; }; then
+            echo "go=false" >> "$GITHUB_OUTPUT"
+            echo "outside the 2026 schedule (10–23.10.2026): nothing to do" | tee -a "$GITHUB_STEP_SUMMARY"
+            exit 0
+          fi
+          echo "go=true" >> "$GITHUB_OUTPUT"
+          echo "Israel time $now: updating"
+
+  update:
+    needs: guard
+    if: needs.guard.outputs.go == 'true'
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      GH_TOKEN: ${{ github.token }}
+      BRANCH: ${{ github.event.repository.default_branch || 'main' }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event.repository.default_branch || 'main' }}
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - run: python3 -m pip install -q numpy
+      - name: Fetch the 2026 poll table (polls-data.js)
+        run: |
+          mkdir -p data/raw
+          python3 - <<'PY'
+          import sys
+          sys.path.insert(0, "pipeline")
+          import fetch_sources as F
+          data = F.get(F.POLLS_2026)
+          if b"BASE_POLLS_DATA" not in data[:4000] or len(data) < 20000:
+              sys.exit(f"polls-data.js does not look like the poll table ({len(data)} bytes); nothing changed")
+          open("data/raw/polls-data.js", "wb").write(data)
+          print(F.POLLS_2026, len(data), "bytes")
+          PY
+      - name: Rebuild the poll data and the page
+        id: build
+        run: |
+          count() { python3 -c 'import json; d=json.load(open("site/data/polls_2026.json")); print(len(d["polls"]), max((p["date"] for p in d["polls"]), default="-"))'; }
+          read -r old _ <<< "$(count)"
+          python3 pipeline/build_polls.py --src data/raw/polls-data.js | cut -c1-300
+          python3 pipeline/build_site.py
+          read -r new latest <<< "$(count)"
+          { echo "old=$old"; echo "new=$new"; echo "latest=$latest"; } >> "$GITHUB_OUTPUT"
+          echo "polls: $old -> $new, newest $latest"
+          # polls only get added; a table that lost more than two is a broken source, not news
+          if [ "$new" -lt $(( old - 2 )) ]; then
+            echo "::error::the poll table shrank from $old to $new polls: not committing (check the source, polls-data.js)"
+            exit 1
+          fi
+          git status --short -- site/data/polls_2026.json site/index.html site/artifact.html
+      - name: Health check (the election-day feed's smoke test on the new polls)
+        id: health
+        run: python3 pipeline/test_live.py
+      - name: Commit and push to main (only when something changed)
+        id: push
+        env:
+          NEW: ${{ steps.build.outputs.new }}
+        run: |
+          now=${NOW_IL:-$(TZ=Asia/Jerusalem date +%Y%m%d%H%M)}
+          if [ "$now" -ge 202610240000 ] && [ "$now" -lt 202610272200 ]; then
+            echo "::error::poll-publication ban (§16ה(ח)) began during this run: not pushing"
+            exit 1
+          fi
+          # (end of the ban guard)
+          files="site/data/polls_2026.json site/index.html site/artifact.html"
+          # shellcheck disable=SC2086
+          if git diff --quiet -- $files; then echo "changed=false" >> "$GITHUB_OUTPUT"; echo 'no change: nothing committed'; exit 0; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          msg="Daily poll update $(TZ=Asia/Jerusalem date '+%d.%m %H:%M') ($NEW polls)"
+          # shellcheck disable=SC2086
+          git add -- $files && git commit -q -m "$msg"
+          for i in 1 2 3; do
+            if git push -q origin "HEAD:$BRANCH"; then
+              { echo "changed=true"; echo "sha=$(git rev-parse HEAD)"; } >> "$GITHUB_OUTPUT"
+              echo "pushed $(git rev-parse --short HEAD)"; exit 0
+            fi
+            # main moved meanwhile (the operator, a drill): rebuild on its tip and try again
+            echo "push rejected ($i); rebuilding on the new tip"
+            sleep 5
+            git fetch -q origin "+refs/heads/$BRANCH:refs/remotes/origin/$BRANCH" && git reset -q --hard "origin/$BRANCH"
+            python3 pipeline/build_polls.py --src data/raw/polls-data.js > /dev/null
+            python3 pipeline/build_site.py > /dev/null
+            # shellcheck disable=SC2086
+            if git diff --quiet -- $files; then echo "changed=false" >> "$GITHUB_OUTPUT"; echo 'main already has it'; exit 0; fi
+            # shellcheck disable=SC2086
+            git add -- $files && git commit -q -m "$msg"
+          done
+          echo "::error::could not push to $BRANCH"; exit 1
+      - name: Rebuild the page on GitHub Pages
+        id: pages
+        if: steps.push.outputs.changed == 'true'
+        env:
+          SHA: ${{ steps.push.outputs.sha }}
+        run: |
+          out=$(python3 pipeline/live_fetch.py --out _rb --request-build --mode auto --sha "$SHA" 2>&1 | tail -n 1)
+          echo "$out"
+          label=$(printf '%s' "$out" | python3 -c 'import json,sys; d=json.load(sys.stdin); print(("" if d.get("ok") else "FAILED: ") + str(d.get("build")))' 2>/dev/null || echo "FAILED: $out")
+          echo "label=${label:0:200}" >> "$GITHUB_OUTPUT"
+          case "$label" in FAILED*) echo "::warning::the page was not rebuilt ($label): it updates with the next push to main" ;; esac
+      - name: Summary
+        if: always()
+        env:
+          OLD: ${{ steps.build.outputs.old }}
+          NEW: ${{ steps.build.outputs.new }}
+          LATEST: ${{ steps.build.outputs.latest }}
+          HEALTH: ${{ steps.health.outcome }}
+          CHANGED: ${{ steps.push.outputs.changed }}
+          SHA: ${{ steps.push.outputs.sha }}
+          BUILD: ${{ steps.pages.outputs.label }}
+        run: |
+          {
+            echo "## Daily poll update, $(TZ=Asia/Jerusalem date '+%d.%m %H:%M') Israel time"
+            echo
+            echo "| | |"
+            echo "|---|---|"
+            echo "| polls (before → after) | ${OLD:-?} → ${NEW:-?} |"
+            echo "| newest poll | ${LATEST:--} |"
+            echo "| health check (pipeline/test_live.py) | ${HEALTH:-not run} |"
+            echo "| committed to main | ${CHANGED:-no} ${SHA:0:7} |"
+            echo "| page rebuild | ${BUILD:--} |"
+          } >> "$GITHUB_STEP_SUMMARY"

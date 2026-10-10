@@ -6,6 +6,7 @@
   "station_turnout_url": null,
   "eligible": 7340000,
   "github_feed": true,
+  "publish_every_min": 8,
   "lean_during_voting": false,
   "projection_paused": false,
   "pause_reason": "",
@@ -18,8 +19,9 @@
     "column_aliases": "Election-night fix for renamed headers: {\"their name\": \"expected name\"}, e.g. {\"מס' קלפי\": \"קלפי\"}. Expected: סמל ישוב, שם ישוב, קלפי (or מספר קלפי), בזב, מצביעים, פסולים, כשרים. The yod spellings סמל יישוב / שם יישוב and בעלי זכות בחירה are already accepted.",
     "results_url": "Same path as 2019–2022 (media2X.bechirot.gov.il/files/expb.csv). On 9.10.2026 it answered 404 to GitHub's runners while a third party saw a placeholder file from other networks (5.10): the files may not be up yet, or GitHub's cloud addresses may be blocked. Nothing is fetched from it before 27.10 22:00 Israel time; until then it is only probed (status.results_probe).",
     "drill_url": "The 2022 file used by a rehearsal (falls back to data/official/k25_expb.csv).",
-    "station_turnout_url": "Set to the CEC per-station turnout file once its address is known. Status: chair's decision of 16.8.2026 (at least four publications per regular polling station); the High Court (בג״ץ 60697-08-26, 17.9.2026) vacated the plenum's 6.9 decision and left the ban on identified reporting; per Walla, JNS and Channel 12 (every four hours) the aggregate per-station publication stands. As of 9.10 no times, URL or format were published.",
+    "station_turnout_url": "Set to the CEC per-station turnout file once its address is known. Status: chair's decision of 16.8.2026 (at least four publications per regular polling station); the High Court (בג״ץ 60697-08-26, 17.9.2026) vacated the plenum's 6.9 decision and left the ban on identified reporting; per Walla, JNS and Channel 12 (every four hours) the aggregate per-station publication stands. As of 9.10 no times, URL or format were published. A path in the repository (e.g. live_input/stations.csv, a copy the operator committed) is read the same way. Each new release (a new file) feeds the sector turnout and the Arab-society section; its time is the time it was first seen, or sectors_time in live_input/turnout.json.",
     "github_feed": "Set to false to stop the GitHub Actions loop (it re-reads this file every pass) so a laptop or self-hosted run can take over without touching repository settings.",
+    "publish_every_min": "Branch mode (Pages deploys from main, the current setting): the feed commits site/live/ to main and asks Pages for a build at most once every this many minutes (1-60), because branch builds have a soft limit of 10 an hour and every push to main (the operator's too) is a build. The first results file and the first exit polls after 22:00 go out at once. status.json heartbeat_s follows it. Ignored in Actions mode (no build limit there).",
     "lean_during_voting": "The 2022-vote-weighted turnout pace by bloc is published during voting hours only when true (pending the CEC legal adviser); after 22:00 always.",
     "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page. Acts at the next pass on the last accepted file, even while the CEC file is unchanged or rejected.",
     "envelopes_expected": "Valid votes expected in double envelopes. Set ONLY from an official CEC statement (acting DG Dean Livne reportedly expects 600–700k envelopes; 2022 had 462,807 voters, 458,714 valid); otherwise it is estimated from 2022 and the count is never marked complete. Acts at the next pass, like projection_paused."
