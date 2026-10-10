@@ -15,7 +15,11 @@ function showTab(tab, { push = true } = {}) {
     const fail = err => { console.error(err); rendered.delete(tab); $(`#tab-${tab}`).innerHTML = `<p class="empty">טעינת המדור נכשלה. <button type="button" class="slip" data-goto="${tab}">ניסיון נוסף</button></p>`; };
     rendered.add(tab);
     try { const r = RENDER[tab](); if (r && r.catch) r.catch(fail); } catch (err) { fail(err); }
+  } else if (tab === 'live' && S.liveBlocsStale && typeof redrawLiveBlocs === 'function') {
+    // a coalition-calculator edit since the live tab was drawn: its blocs follow the new assignment (PAGE-6)
+    try { redrawLiveBlocs(); } catch (err) { console.error(err); }
   }
+  if (tab === 'live') S.liveBlocsStale = false;
   const ban = $('#ban-note');
   // every tab that shows polls, including the past exit polls and the poll-average starting point on the live tab
   // (on election day the live tab shows no polls before 22:00, so it gets no notice then)

@@ -228,14 +228,17 @@ function feedNotes() {
   else if (inElectionWindow() && age != null && age > 2 * beat + 3) out.push(`<span class="lv-warn">העדכון האחרון מהמערכת התקבל ב-${esc(st.updated_he || '')} (לפני ${ago(age)}).</span>`);
   const resErr = errs.find(e => /^results:/.test(e));
   if (pollsClosed() && st.results_state === 'waiting' && resErr) {
+    // only a 404 says the CEC has not published; a 403 is usually the CEC's firewall refusing GitHub's runners,
+    // and a network error says nothing about the file, so those get a neutral line
     out.push(S.live && S.live.mode === 'live' ? 'הבדיקה האחרונה של קובץ ועדת הבחירות לא הצליחה; מוצגים הנתונים האחרונים שהתקבלו.'
-      : /\b40[34]\b/.test(resErr) ? 'קובץ התוצאות של ועדת הבחירות עדיין לא פורסם.'
+      : /\b404\b/.test(resErr) ? 'קובץ התוצאות של ועדת הבחירות עדיין לא פורסם.'
+      : /HTTP|URLError|[Tt]imeout|timed out|Connection|SSL|socket|\b[45]\d\d\b/.test(resErr) ? 'התוצאות הראשונות של ועדת הבחירות עדיין לא הגיעו לדף.'
       : 'קובץ התוצאות של ועדת הבחירות עדיין ריק או שאי אפשר לקרוא אותו; הספירה תוצג עם הקובץ התקין הראשון.');
   }
   if (st.pages_source === 'legacy') out.push(S.ops ? '<span class="lv-ops">pages_source=legacy בלי publish_mode=branch: הפיד מפרסם לענף live-data, והאתר מוגש מהענף main; הנתונים החיים לא יגיעו לדף.</span>'
     : 'ייתכן שהנתונים כאן אינם העדכניים: הגדרת הפרסום של האתר אינה תואמת את הפיד.');
   if (S.ops) {
-    const T = S.liveTurnout || {}, ops = [`publish_mode=${esc(st.publish_mode || '—')}, heartbeat_s=${esc(st.heartbeat_s ?? '—')}, results_state=${esc(st.results_state || '—')}, נבדק ${esc(st.checked_he || st.updated_he || '—')}${st.data_he ? `, נתונים ${esc(st.data_he)}` : ''}`];
+    const T = S.liveTurnout || {}, ops = [`publish_mode=${esc(st.publish_mode || '—')}${st.pages_source ? `, pages_source=${esc(st.pages_source)}` : ''}, heartbeat_s=${esc(st.heartbeat_s ?? '—')}, results_state=${esc(st.results_state || '—')}, נבדק ${esc(st.checked_he || st.updated_he || '—')}${st.data_he ? `, נתונים ${esc(st.data_he)}` : ''}`];
     if (st.results_probe && st.results_probe.http != null) ops.push(`בדיקת קובץ התוצאות באתר הוועדה: HTTP ${esc(st.results_probe.http)} ב-${esc(st.results_probe.at_he || '')}`);
     if (T.station_error) ops.push(`קלפיות: ${esc(String(T.station_error).slice(0, 160))}`);
     errs.forEach(e => ops.push(esc(e.slice(0, 200))));
@@ -332,11 +335,13 @@ function exitTable(E, F, past = false) {
   const meta = past ? [] : E.polls.map(p => `${esc(p.outlet)}: ${[
     item(p.commissioner, v => `בהזמנת ${esc(v)}`, 'המזמין לא פורסם'),
     item(p.pollster, v => `מכון ${esc(v)}`, 'המכון לא פורסם', true),
-    item(p.date, v => `מועד ${esc(v)}`, 'המועד לא פורסם'),
+    item(p.date, v => `מועד ${esc(v)}${p.time && !/^לא פורס/.test(String(p.time).trim()) ? ` ${esc(p.time)}` : ''}`, 'המועד לא פורסם'),
     item(p.population, v => `אוכלוסייה: ${esc(v)}`, 'האוכלוסייה לא פורסמה'),
     item(p.n_invited, v => `${num(v)} פונים`, 'מספר הפונים לא פורסם'),
     item(p.n, v => `${num(v)} משיבים`, 'מספר המשיבים לא פורסם', true),
-    item(p.moe, v => `טעות דגימה ±${esc(String(v).replace(/^[±+]/, ''))}`, 'טעות הדגימה לא פורסמה', true),
+    // a bare number is a percentage, as the channels state it ('±3.5%')
+    item(p.moe, v => `טעות דגימה ±${esc(String(v).trim().replace(/^[±+]/, ''))}${/^[±+]?\d+(\.\d+)?$/.test(String(v).trim()) ? '%' : ''}`, 'טעות הדגימה לא פורסמה', true),
+    item(p.questions, v => `נוסח השאלות: ${esc(v)}`, 'נוסח השאלות לא פורסם'),
     p.revised ? `עודכן ב-${esc(p.revised)}` : null].filter(Boolean).join(', ')}`);
   // the projection and the result sit next to the list name, so at phone width the channels scroll under the
   // sticky name column and the projection stays on screen (PAGE-2)
@@ -429,6 +434,12 @@ function drawLiveSeats(el, F) {
     lists.map(l => `<tr><td>${esc(l.name)}</td><td class="n"><b>${l.seats}</b></td>${F.paused ? '' : `<td class="n"><span class="num">${l.lo}–${l.hi}</span></td><td class="n">${l.seats_counted}</td><td class="n">${pct(l.pct_proj != null ? l.pct_proj : l.pct, 2)}</td><td class="n"><span class="num">${pPass(l.p_pass, share)}</span></td>`}</tr>`).join('')}</tbody></table></div></details>`);
 }
 
+// The live blocs follow the coalition calculator (PAGE-6): an edit made on its tab marks them stale
+// (invalidatePolls) and showTab redraws them on the way back to this tab.
+function redrawLiveBlocs() {
+  const el = $('#lv-blocs'), F0 = S.live && S.live.mode === 'live' ? liveFrame() : null;
+  if (el && F0) drawLiveBlocs(el, F0.paused ? countedOnly(F0) : F0);
+}
 function drawLiveBlocs(el, F) {
   const blocs = currentBlocs(), share = F.counted.share;
   // aggregate the projection by the coalition-calculator blocs when the lists are the 2026 lists: the frame keys

@@ -362,9 +362,12 @@ function fetchJSON(url) {
   return fetch(url).then(r => { if (!r.ok) throw new Error(`${url}: ${r.status}`); return r.json(); });
 }
 // Every tab that reads the poll average, the simulation or the bloc assignment.
+// The live tab keeps its frame (and the replay's place), but its blocs follow the calculator: marked stale here and
+// redrawn by showTab on the way back (PAGE-6).
 function invalidatePolls() {
   S.sims = null;
   ['overview', 'polls', 'coalition', 'arab', 'method'].forEach(t => { if (t !== S.tab) rendered.delete(t); });
+  S.liveBlocsStale = true;
 }
 // Date-only strings ('2022-11-01') are calendar dates: format them in UTC so no viewer sees the previous day.
 const dateHe = (s, opts = { day: 'numeric', month: 'long', year: 'numeric' }) => toDate(s).toLocaleDateString('he-IL', { ...opts, timeZone: 'UTC' });

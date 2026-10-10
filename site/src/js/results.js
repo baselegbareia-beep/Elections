@@ -257,7 +257,9 @@ async function drawLocality() {
       <div class="c6"><h3 style="font-size:var(--t-md)">תוצאות לפי קלפי · ${E(eid).short}</h3><p class="sub">לחצו על כותרת עמודה למיון.${l.sector === 'mixed' ? ' קלפיות שבהן לרשימות הערביות רוב מסומנות.' : ''}</p><div id="loc-ballots" class="tbl-wrap scroll-y"><p class="empty">טוען קלפיות…</p></div></div>
     </div>`;
   drawLocTrend($('#loc-trend'), l);
-  $('#loc-turn').innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${E(e).short}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
+  // five columns fit a phone only with the compact election names ('4/19'); the full ones would push the first off-screen
+  const lt = $('#loc-turn'), lw = lt.getBoundingClientRect().width, elName = e => lw && lw < 440 ? COMPACT[e] : E(e).short;
+  lt.innerHTML = `<table class="t" dir="ltr"><thead><tr>${ELS.map(e => `<th class="n">${elName(e)}</th>`).join('')}</tr></thead><tbody><tr>${ELS.map(e => { const x = locVotes(l, e); return `<td class="n">${x ? pct(100 * x.voters / x.elig) : '—'}</td>`; }).join('')}</tr></tbody></table>`;
   let b;
   try { b = await loadBallots(eid); } catch (err) {
     console.error(err);
