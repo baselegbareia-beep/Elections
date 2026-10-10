@@ -2,7 +2,8 @@
 
 Runs on GitHub Actions (.github/workflows/live.yml, one pass per loop iteration) or on any laptop:
 
-    python3 pipeline/live_fetch.py --out live --loop 60 --publish   # poll every 60 s and publish (laptop)
+    python3 pipeline/live_fetch.py --out live --loop 60 --publish   # laptop: poll every 60 s and publish until
+                                                                    # stopped (Ctrl-C); --minutes N stops after N
     python3 pipeline/live_fetch.py --out live --once                # one pass
     python3 pipeline/live_fetch.py --out /tmp/l --once --results-file data/official/k25_expb.csv --as K25
                                                                     # dry run on a past election
@@ -73,6 +74,9 @@ DEFAULT_CFG = {"election_day": "2026-10-27", "results_url": "https://media26.bec
 PROBE_EVERY = 600       # seconds between probes of the results URL before 22:00
 HEARTBEAT = 300         # status.json is rewritten at least this often even when nothing changed
 HOUR_RE = re.compile(r"^\d{2}:\d{2}$")
+PLACEHOLDER_ELIGIBLE = 7340000   # the pre-election estimate in live_config.json; the CEC's official figure replaces it (LM-B)
+REGISTER_SLACK = 0.99            # while the counted register exceeds the configured one, the share reads this, not "all counted"
+RESULTS_CACHE = ".results_last.csv"   # the last accepted CEC file, re-rendered when an operator switch changes (DOC-3)
 
 
 def now_il():
@@ -226,13 +230,13 @@ class Election2026:
         self.B = LM.Baseline(base_e, base_rows, core)
         # the ballot file's eligible voters per station add up to the whole register (envelope voters
         # are registered at their home station), so register growth scales every locality
-        base_elig = sum(L["elig"] for L in self.B.loc.values())
+        self.base_elig = sum(L["elig"] for L in self.B.loc.values())
         if self.dry:
             (_, cur_rows), _ = load_election(src, self.dry)
             self.eligible = sum(r["elig"] for r in cur_rows if not r["env"] and r["code"] is not None)
         else:
-            self.eligible = cfg.get("eligible") or round(base_elig * 1.081)
-        self.g = self.eligible / base_elig
+            self.eligible = cfg.get("eligible") or round(self.base_elig * 1.081)
+        self.g = self.eligible / self.base_elig
         self.lists = list(self.meta)
         camp = {j: m["bloc"] for j, m in self.meta.items()}
         self.proj = LM.Projector(self.B, self.lists, mapping, self.g, agreements, prior=prior, camp=camp)
@@ -257,6 +261,12 @@ class Election2026:
                 bv[bloc25.get(c, "opp")] += v
             self.station22[(code, kalpi)] = (voters, dict(bv), sec)
 
+    def set_register(self, cfg):
+        """The register size from the config, re-read every pass so an edit of `eligible` acts at the next pass."""
+        if not self.dry:
+            self.eligible = cfg.get("eligible") or round(self.base_elig * 1.081)
+        self.g = self.proj.g = self.eligible / self.base_elig
+
 
 def station_sector(loc_sector, code):
     if loc_sector == "arab":
@@ -277,13 +287,16 @@ def poll_prior(polls):
 
 
 # ------------------------------------------------------------------ results
-def results_pass(E, data, out, source_url, history, state):
+def results_pass(E, data, out, source_url, history, state, errors, restamp=True):
+    """Publish results.json from the file `data`. restamp=False re-renders a file already accepted
+    (an operator switch changed, DOC-3): the data time and the history stay as they were."""
     with tempfile.NamedTemporaryFile(suffix=".csv", delete=False) as tf:
         tf.write(data)
         path = tf.name
     checks = {}
-    try:
-        cols, rows = read_expb(path, strict=False, checks=checks)      # OPS-8: odd rows do not block the feed
+    try:   # OPS-8: odd rows do not block the feed; WF-1: live_config.json can drop or rename columns on the night
+        cols, rows = read_expb(path, strict=False, checks=checks, ignore_columns=E.cfg.get("ignore_columns") or (),
+                               column_aliases=E.cfg.get("column_aliases") or None)
     finally:
         os.unlink(path)
     # The CEC file was briefly empty during the 2020 and 2021 counts. Rows only ever get added,
@@ -308,6 +321,15 @@ def results_pass(E, data, out, source_url, history, state):
             LM.add_row(counted.setdefault(r["code"], LM.new_unit()), r, keep)
     unknown = [c for c in cols if c not in keep]
     E.proj.env_override = E.cfg.get("envelopes_expected") or None
+    # LM-B: the CEC file never lists the whole register, so a configured `eligible` that is too small is noticed only
+    # here: once more eligible voters are counted than configured, the page would say "all boxes counted" and the
+    # projection would drop the boxes still out. Scale the register for this pass so the share reads 0.99, and shout.
+    counted_elig = sum(C["elig"] for C in counted.values())
+    E.proj.g = E.g
+    if counted_elig > E.eligible:
+        E.proj.g = counted_elig / (REGISTER_SLACK * E.base_elig)
+        errors.append(f"register exceeded: {counted_elig:,} eligible voters counted > eligible {E.eligible:,} in "
+                      "live_config.json; set the CEC's official figure (the count is shown as 99% until then)")
     frame = LM.make_frame(E.proj, counted, env if (env and env["valid"]) else None, E.meta, n_boot=200)
     if E.cfg.get("projection_paused"):
         frame["paused"] = E.cfg.get("pause_reason") or "התחזית הושהתה על ידי המפעיל."
@@ -327,12 +349,21 @@ def results_pass(E, data, out, source_url, history, state):
         tv = sum(camp_v.values()) or 1
         frame["batch"] = {"stations": len(new), "by_sector": dict(by_sec),
                           "blocs": {b: round(v / tv, 3) for b, v in camp_v.items()}}
-    t = now_il()                               # the file changed: this is the data time
-    history.append({"t": t.strftime("%H:%M"), "counted": frame["counted"]["share"],
-                    "coal": frame["blocs"]["coal"]["seats"], "coal_lo": frame["blocs"]["coal"]["lo"],
-                    "coal_hi": frame["blocs"]["coal"]["hi"], "p61": frame["blocs"]["coal"]["p61"]})
+    elif not restamp:                              # same file again: the last batch stays on the page
+        old = read_json(os.path.join(out, "results.json"), {}) or {}
+        if (old.get("frame") or {}).get("batch"):
+            frame["batch"] = old["frame"]["batch"]
+    if restamp or not state.get("at"):
+        t = now_il()                           # the file changed: this is the data time
+        history.append({"t": t.strftime("%H:%M"), "counted": frame["counted"]["share"],
+                        "coal": frame["blocs"]["coal"]["seats"], "coal_lo": frame["blocs"]["coal"]["lo"],
+                        "coal_hi": frame["blocs"]["coal"]["hi"], "p61": frame["blocs"]["coal"]["p61"]})
+    else:
+        t = dt.datetime.fromisoformat(state["at"])   # same file, a switch changed: the data time stays
     acc = replay_accuracy()
     sha = hashlib.sha256(data).hexdigest()
+    with open(os.path.join(out, RESULTS_CACHE), "wb") as f:   # for a switch change while the file is unavailable
+        f.write(data)
     write_json(out, "results.json", {
         "election": E.dry or "K26", "updated_at": t.isoformat(), "updated_he": he_time(t),
         "source_url": source_url, "source_label": "ועדת הבחירות המרכזית · expb.csv",
@@ -417,9 +448,11 @@ def results_step(E, a, cfg, state, history, out, status):
     source = a.results_file or cfg.get("results_url") or DEFAULT_CFG["results_url"]
     src_key = [E.dry or "K26", "drill" if DRILL else source]
     if state.get("source") != src_key:            # OPS-11: state of another source or election is ignored
-        for k in ("sha256", "rows", "stations", "at", "data_he", "counted", "drill_start", "drill_fraction"):
+        for k in ("sha256", "rows", "stations", "at", "data_he", "counted", "drill_start", "drill_fraction", "switches"):
             state.pop(k, None)
         state["source"] = src_key
+        if os.path.exists(os.path.join(out, RESULTS_CACHE)):
+            os.remove(os.path.join(out, RESULTS_CACHE))
     election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
     if DRILL:
         data = drill_data(a, state, out)
@@ -436,13 +469,37 @@ def results_step(E, a, cfg, state, history, out, status):
     else:
         data = fetch(source)
     sha = hashlib.sha256(data).hexdigest()
+    sw = switches(cfg)
     if sha == state.get("sha256") and os.path.exists(os.path.join(out, "results.json")):
         status["results"] = {"counted": state.get("counted"), "sha256": sha}     # OPS-9: unchanged file
+        if state.get("switches") != sw:           # DOC-3: a switch changed: same file again, data time unchanged
+            results_pass(E, data, out, source, history, state, status["errors"], restamp=False)
     else:
-        frame = results_pass(E, data, out, source, history, state)
+        frame = results_pass(E, data, out, source, history, state, status["errors"])
         status["results"] = {"counted": frame["counted"]["share"], "sha256": sha}
+    state["switches"] = sw
     status["results_state"] = "ok"
     status["data_he"] = state.get("data_he")
+
+
+def switches(cfg):
+    """The config keys that act on an already published file (DOC-3; eligible for LM-B)."""
+    return [bool(cfg.get("projection_paused")), cfg.get("pause_reason") or "", cfg.get("envelopes_expected") or None,
+            cfg.get("eligible")]
+
+
+def switches_pass(E, cfg, out, history, state, status):
+    """DOC-3: projection_paused / pause_reason / envelopes_expected act on the last accepted file even
+    while the CEC file cannot be fetched or is being rejected (the case the switch is for)."""
+    sw, cache = switches(cfg), os.path.join(out, RESULTS_CACHE)
+    if state.get("switches") == sw or not os.path.exists(cache) or not os.path.exists(os.path.join(out, "results.json")):
+        return
+    try:
+        results_pass(E, open(cache, "rb").read(), out, (state.get("source") or ["", ""])[1], history, state,
+                     status["errors"], restamp=False)
+        state["switches"] = sw
+    except Exception as exc:
+        status["errors"].append(f"switches: {exc.__class__.__name__}: {exc}"[:200])
 
 
 def maybe_probe(url, state, status):
@@ -474,10 +531,17 @@ def turnout_pass(E, cfg, out, state, status, inputs):
         if manual is None:
             old = read_json(os.path.join(out, "turnout.json"), {}) or {}
             manual = {k: old[k] for k in ("national", "released", "source", "source_url", "claims") if k in old}
-    national = {}
-    for h, v in (manual.get("national") or {}).items():       # "10:00".."22:00", and "19:00" in 2022
-        if HOUR_RE.match(str(h)) and isinstance(v, (int, float)) and 0 <= v <= 100:
+    national, nat, ignored = {}, manual.get("national") or {}, []
+    if not isinstance(nat, dict):
+        status["errors"].append('turnout: "national" must be an object like {"10:00": 15.2}')
+        nat = {}
+    for h, v in nat.items():                      # "10:00".."22:00", and "19:00" in 2022
+        if HOUR_RE.match(str(h)) and isinstance(v, (int, float)) and not isinstance(v, bool) and 0 <= v <= 100:
             national[h] = v
+        else:
+            ignored.append(f"{h}: {json.dumps(v, ensure_ascii=False)}")
+    if ignored:                                   # DOC-7: a phone typo must not vanish silently
+        status["errors"].append(f"turnout: ignored {', '.join(ignored)} (the key must be HH:MM, the value a number 0-100)"[:200])
     doc = {"updated_at": now_il().isoformat(), "updated_he": he_time(now_il()), "national": national,
            "eligible": E.eligible, "claims": manual.get("claims", []) if closed else [],
            "source": str(manual.get("source", "") or "")}
@@ -651,6 +715,14 @@ def publish(out, branch="live-data", wt=None, repo=ROOT):
     return "push failed"
 
 
+def refresh_inputs(ref="main", repo=ROOT):
+    """Laptop mode (DOC-2): the manual inputs and the config are edited on GitHub, so before every
+    pass take live_input/ and pipeline/live_config.json from origin/<ref>, as the workflow does;
+    --no-overlay also removes a file deleted there (OPS-14). Local edits of those files are lost."""
+    git("fetch", "-q", "origin", ref, cwd=repo)
+    git("checkout", "-q", "--no-overlay", f"origin/{ref}", "--", "live_input", "pipeline/live_config.json", cwd=repo)
+
+
 _dispatch = {"last": 0.0, "warned": False}
 
 
@@ -693,16 +765,26 @@ def origin_repo(repo=ROOT):
 
 # ------------------------------------------------------------------ main
 def load_config(path, state, errors):
-    """The config, or the last valid copy when it does not parse (OPS-10)."""
+    """The config, or the last valid copy when it does not parse (OPS-10); an election_day or
+    eligible that does not parse falls back to the default and is reported (WF-2)."""
     try:
         cfg = json.load(open(path, encoding="utf-8"))
         if not isinstance(cfg, dict):
             raise ValueError("not a JSON object")
-        state["config"] = cfg
-        return cfg
     except Exception as exc:
         errors.append(f"config: {exc.__class__.__name__}: {exc}"[:200])
         return state.get("config") or dict(DEFAULT_CFG)
+    try:
+        dt.date.fromisoformat(str(cfg.get("election_day") or ""))
+    except ValueError:
+        errors.append(f"config: election_day {cfg.get('election_day')!r} is not YYYY-MM-DD; using {DEFAULT_CFG['election_day']}")
+        cfg["election_day"] = DEFAULT_CFG["election_day"]
+    e = cfg.get("eligible")
+    if e is not None and not (isinstance(e, (int, float)) and not isinstance(e, bool) and e > 0):
+        errors.append(f"config: eligible {e!r} is not a number; using the 2022 register x 1.081")
+        cfg["eligible"] = None
+    state["config"] = cfg
+    return cfg
 
 
 def main(argv=None):
@@ -712,19 +794,24 @@ def main(argv=None):
     ap.add_argument("--inputs", default=os.path.join(ROOT, "live_input"), help="folder of the manual inputs")
     ap.add_argument("--once", action="store_true")
     ap.add_argument("--loop", type=int, default=60, help="seconds between passes")
-    ap.add_argument("--minutes", type=float, default=345, help="stop after this many minutes (a drill reveals 2022 over them)")
+    ap.add_argument("--minutes", type=float, default=None,
+                    help="stop after this many minutes (default: run until stopped; a drill reveals 2022 over them, default 15)")
     ap.add_argument("--results-file", default="", help="read results from a local file (testing)")
     ap.add_argument("--as", dest="as_election", default=None, help="treat the file as this past election")
     ap.add_argument("--drill", action="store_true", help="rehearsal on the 2022 file, revealed progressively; every output is marked")
     ap.add_argument("--drill-url", default=DRILL_URL)
     ap.add_argument("--drill-fraction", type=float, default=None, help="drill: reveal this share of 2022 instead of following the clock")
     ap.add_argument("--publish", action="store_true", help="push live/*.json to the live-data branch and redeploy after every pass (laptop mode)")
-    ap.add_argument("--ref", default="main", help="branch of pages.yml to dispatch with --publish")
+    ap.add_argument("--ref", default="main", help="branch of pages.yml to dispatch with --publish, and to take the inputs from")
+    ap.add_argument("--no-refresh", action="store_true",
+                    help="--publish: keep the local live_input/ and live_config.json instead of taking them from origin/<ref> every pass")
     a = ap.parse_args(argv)
     global DRILL
     DRILL = a.drill
     if DRILL and not a.as_election:
         a.as_election = "K25"
+    if DRILL and a.minutes is None:
+        a.minutes = 15
     os.makedirs(a.out, exist_ok=True)
     state = read_json(os.path.join(a.out, STATE), {}) or {}
     boot_errors = []
@@ -738,13 +825,23 @@ def main(argv=None):
         t = now_il()
         status = {"updated_at": t.isoformat(), "updated_he": he_time(t), "checked_he": he_time(t),
                   "election": E.dry or "K26", "phase": "pre", "has_results": False, "has_turnout": False,
-                  "exit_polls": False, "results_state": "waiting", "errors": []}
+                  "exit_polls": False, "results_state": "waiting", "errors": [],
+                  "heartbeat_s": HEARTBEAT}   # the page's staleness threshold follows this (PAGE-1)
         if os.environ.get("PAGES_SOURCE"):
             status["pages_source"] = os.environ["PAGES_SOURCE"]
         if DRILL:
             status["drill"] = True
+        if a.publish and not a.no_refresh:
+            try:
+                refresh_inputs(a.ref)             # DOC-2: edits made on GitHub reach the laptop too
+            except Exception as exc:
+                status["errors"].append(f"refresh from origin/{a.ref}: {exc}"[:200])
         cfg = E.cfg = load_config(a.config, state, status["errors"])
         election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
+        E.set_register(cfg)
+        if not E.dry and cfg.get("eligible") == PLACEHOLDER_ELIGIBLE and t.date() >= election_day - dt.timedelta(days=2):
+            status["errors"].append("eligible in live_config.json is still the estimate 7,340,000: set the register size "
+                                    "the CEC published (בעלי זכות בחירה), docs/ELECTION_DAY.md הכנות 3")
         if discard_drill_output(a.out):
             status["errors"].append("discarded the files of a rehearsal")
             history = []
@@ -760,6 +857,7 @@ def main(argv=None):
         except Exception as exc:
             status["results_state"] = "waiting"
             status["errors"].append(f"results: {exc.__class__.__name__}: {exc}"[:200])
+            switches_pass(E, cfg, a.out, history, state, status)
         status["has_results"] = os.path.exists(os.path.join(a.out, "results.json"))
         if status["has_results"] and status.get("results") is None:
             status["data_he"] = state.get("data_he")
@@ -779,8 +877,8 @@ def main(argv=None):
             except Exception as exc:
                 status["errors"].append(f"publish: {exc}"[:200])
         print(json.dumps({**status, "changed": list(CHANGED)}, ensure_ascii=False), flush=True)
-        if a.once or (time.time() - start) / 60 > a.minutes:
-            break
+        if a.once or (a.minutes is not None and (time.time() - start) / 60 > a.minutes):
+            break                                 # DOC-1: without --minutes the laptop loop runs until stopped
         time.sleep(a.loop)
 
 

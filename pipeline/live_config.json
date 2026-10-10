@@ -10,14 +10,18 @@
   "projection_paused": false,
   "pause_reason": "",
   "envelopes_expected": null,
+  "ignore_columns": [],
+  "column_aliases": {},
   "notes": {
-    "eligible": "Replace with the official register size published by the CEC (בעלי זכות בחירה) before 25.10. 7,340,000 is an approximate pre-election figure; reports range up to ~7.56M.",
+    "eligible": "Replace with the official register size published by the CEC (בעלי זכות בחירה) before 25.10. 7,340,000 is an approximate pre-election figure; reports range up to ~7.56M. Read every pass: an edit acts within a minute. From 25.10 the feed reports an error while this is still 7,340,000, and on the night it reports 'register exceeded' if the counted בזב passes it.",
+    "ignore_columns": "Election-night fix for an unexpected column in the 2026 file: header names to treat as metadata, e.g. [\"סהכ\"]. The reader already ignores any header that is not 1-4 Hebrew letters, a column that is mostly not numbers, and one extra numeric column that explains a sum mismatch; checks.ignored_columns in results.json lists what was dropped.",
+    "column_aliases": "Election-night fix for renamed headers: {\"their name\": \"expected name\"}, e.g. {\"מס' קלפי\": \"קלפי\"}. Expected: סמל ישוב, שם ישוב, קלפי (or מספר קלפי), בזב, מצביעים, פסולים, כשרים. The yod spellings סמל יישוב / שם יישוב and בעלי זכות בחירה are already accepted.",
     "results_url": "Same path as 2019–2022 (media2X.bechirot.gov.il/files/expb.csv). On 9.10.2026 it answered 404 to GitHub's runners while a third party saw a placeholder file from other networks (5.10): the files may not be up yet, or GitHub's cloud addresses may be blocked. Nothing is fetched from it before 27.10 22:00 Israel time; until then it is only probed (status.results_probe).",
     "drill_url": "The 2022 file used by a rehearsal (falls back to data/official/k25_expb.csv).",
     "station_turnout_url": "Set to the CEC per-station turnout file once its address is known. Status: chair's decision of 16.8.2026 (at least four publications per regular polling station); the High Court (בג״ץ 60697-08-26, 17.9.2026) vacated the plenum's 6.9 decision and left the ban on identified reporting; per Walla, JNS and Channel 12 (every four hours) the aggregate per-station publication stands. As of 9.10 no times, URL or format were published.",
     "github_feed": "Set to false to stop the GitHub Actions loop (it re-reads this file every pass) so a laptop or self-hosted run can take over without touching repository settings.",
     "lean_during_voting": "The 2022-vote-weighted turnout pace by bloc is published during voting hours only when true (pending the CEC legal adviser); after 22:00 always.",
-    "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page.",
-    "envelopes_expected": "Valid votes expected in double envelopes. Set ONLY from an official CEC statement (acting DG Dean Livne reportedly expects 600–700k envelopes; 2022 had 462,807 voters, 458,714 valid); otherwise it is estimated from 2022 and the count is never marked complete."
+    "projection_paused": "Set to true to stop showing the projection (the count is still shown), e.g. if the CEC file looks inconsistent; pause_reason is shown on the page. Acts at the next pass on the last accepted file, even while the CEC file is unchanged or rejected.",
+    "envelopes_expected": "Valid votes expected in double envelopes. Set ONLY from an official CEC statement (acting DG Dean Livne reportedly expects 600–700k envelopes; 2022 had 462,807 voters, 458,714 valid); otherwise it is estimated from 2022 and the count is never marked complete. Acts at the next pass, like projection_paused."
   }
 }

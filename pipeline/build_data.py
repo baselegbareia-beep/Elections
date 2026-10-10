@@ -19,6 +19,7 @@ import csv
 import json
 import math
 import os
+import re
 import sys
 
 import numpy as np
@@ -85,18 +86,24 @@ ENVELOPE_CODES = {"9999", "99999"}
 
 
 REQUIRED_COLS = {"סמל ישוב", "שם ישוב", "בזב", "מצביעים", "פסולים", "כשרים"}
+# the modern spellings and long names a 2026 file may use for the 2019–2022 headers
+HEADER_ALIASES = {"סמל יישוב": "סמל ישוב", "שם יישוב": "שם ישוב", "בעלי זכות בחירה": "בזב"}
+LIST_HEADER = re.compile(r"[א-ת]{1,4}")   # a ballot-letter header (every 2019–2022 list is 1–3 Hebrew letters)
 
 
-def read_expb(path, strict=True, checks=None):
+def read_expb(path, strict=True, checks=None, ignore_columns=(), column_aliases=None):
     """Read an official CEC ballot file (expb.csv) as published at
     media2X.bechirot.gov.il/files/expb.csv: cp1255 for K21–K24, UTF-8 with BOM
     from K25. Returns the same structure as read_ballots().
 
-    strict=False is for the live feed: a row whose party votes do not add up to כשרים or that
-    cannot be parsed is skipped and counted instead of rejecting the whole file, a non-numeric
-    column (e.g. an update time added in 2026) is treated as metadata, and the file is rejected
-    only when more than max(5, 1%) of its rows are bad. `checks` (a dict) receives bad_rows and
-    ignored_columns."""
+    strict=False is for the live feed, whose 2026 layout is unknown until the file is up (WF-1):
+    a header that is not a ballot-letter token (1–4 Hebrew letters) is metadata whatever its
+    content, and so is a column whose values are mostly not numbers; a row whose party votes do
+    not add up to כשרים or that cannot be parsed is skipped and counted; when most rows fail the
+    sum check the read is retried once without the one column that explains the difference (a
+    total or a percentage); the file is rejected only when more than max(5, 1%) of its rows are
+    still bad. ignore_columns / column_aliases (live_config.json) are the election-night override.
+    `checks` (a dict) receives bad_rows and ignored_columns."""
     raw = open(path, "rb").read()
     # UTF-8 with BOM from 2022; windows-1255 before; some archived snapshots are plain UTF-8
     try:
@@ -104,19 +111,35 @@ def read_expb(path, strict=True, checks=None):
     except UnicodeDecodeError:
         text = raw.decode("cp1255")
     rd = csv.reader(text.splitlines())
-    header = [h.strip() for h in next(rd, [])]
+    aliases = {**HEADER_ALIASES, **(column_aliases or {})}
+    header = [aliases.get(h.strip(), h.strip()) for h in next(rd, [])]
     kalpi_col = "קלפי" if "קלפי" in header else "מספר קלפי"
     missing = sorted((REQUIRED_COLS | {kalpi_col}) - set(header))
     if missing:
         raise ValueError(f"{path}: not a ballot file, missing columns {missing}")
     party_cols = [h for h in header if h not in OFFICIAL_META]
     recs = [rec for rec in rd if rec and len(rec) >= len(header) - 1]   # skip blank or cut-off lines (live files can be mid-write)
-    ignored = []
+    ignored = [p for p in party_cols if p in set(ignore_columns or ())]
     if not strict and recs:
-        # a column that is not a number in the first row is metadata, whatever its name
-        first = dict(zip(header, recs[0]))
-        ignored = [p for p in party_cols if not _is_num(first.get(p))]
-        party_cols = [p for p in party_cols if p not in ignored]
+        sample = [dict(zip(header, rec)) for rec in recs[:20]]
+        ignored += [p for p in party_cols if p not in ignored
+                    and (not LIST_HEADER.fullmatch(p) or 2 * sum(_is_num(d.get(p)) for d in sample) < len(sample))]
+    party_cols = [p for p in party_cols if p not in ignored]
+    rows, bad = _expb_rows(path, header, recs, party_cols, kalpi_col, strict)
+    if not strict and 2 * bad > len(recs):
+        extra = _sum_column(header, recs, party_cols)   # one numeric column that is not a list (a total, a percentage)
+        if extra:
+            ignored.append(extra)
+            party_cols.remove(extra)
+            rows, bad = _expb_rows(path, header, recs, party_cols, kalpi_col, strict)
+    if bad > max(5, 0.01 * len(recs)):
+        raise ValueError(f"{path}: {bad} of {len(recs)} rows unreadable or inconsistent")
+    if checks is not None:
+        checks.update({"bad_rows": bad, "ignored_columns": ignored})
+    return party_cols, rows
+
+
+def _expb_rows(path, header, recs, party_cols, kalpi_col, strict):
     rows, bad = [], 0
     for rec in recs:
         d = dict(zip(header, rec))
@@ -138,11 +161,25 @@ def read_expb(path, strict=True, checks=None):
             bad += 1
             continue
         rows.append(row)
-    if bad > max(5, 0.01 * len(recs)):
-        raise ValueError(f"{path}: {bad} of {len(recs)} rows unreadable or inconsistent")
-    if checks is not None:
-        checks.update({"bad_rows": bad, "ignored_columns": ignored})
-    return party_cols, rows
+    return rows, bad
+
+
+def _sum_column(header, recs, party_cols):
+    """The one column whose value equals (party votes − כשרים) in every readable sampled row and is
+    not zero everywhere, i.e. an extra numeric column counted as a list by mistake; else None."""
+    hits, nonzero, n = collections.Counter(), set(), 0
+    for rec in recs[:200]:
+        d = dict(zip(header, rec))
+        try:
+            vals = {p: int(float(d[p] or 0)) for p in party_cols}
+            diff = sum(vals.values()) - int(float(d["כשרים"] or 0))
+        except ValueError:
+            continue
+        n += 1
+        hits.update(p for p, v in vals.items() if v == diff)
+        nonzero.update(p for p, v in vals.items() if v)
+    found = [p for p in party_cols if n and hits[p] == n and p in nonzero]
+    return found[0] if len(found) == 1 else None
 
 
 def _is_num(s):

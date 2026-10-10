@@ -65,24 +65,45 @@ jobs:
         id: source
         env:
           GH_TOKEN: ${{ github.token }}
+          DEPLOY_ANYWAY: ${{ vars.PAGES_DEPLOY_ANYWAY }}   # "true": deploy even when the check below cannot be made
         run: |
-          # "workflow" = Source: GitHub Actions; "legacy" = Deploy from a branch; empty = not enabled or no access
-          type=$(curl -sS -m 30 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" \
-                 | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("build_type") or "")' 2>/dev/null || true)
-          echo "Pages build_type: ${type:-unknown}"
-          if [ "$type" = "workflow" ]; then
-            echo "deploy=true" >> "$GITHUB_OUTPUT"
-            echo "Pages build_type: workflow (Source: GitHub Actions); deploying" >> "$GITHUB_STEP_SUMMARY"
-          else
-            echo "deploy=false" >> "$GITHUB_OUTPUT"
-            {
-              echo "## Pages deploys from a branch (build_type: ${type:-unknown}); nothing was deployed"
-              echo
-              echo "The site is served from main/site/. Switch **Settings → Pages → Build and deployment → Source** to"
-              echo "**GitHub Actions** before 27.10 for live election-night updates (docs/ELECTION_DAY.md)."
-            } >> "$GITHUB_STEP_SUMMARY"
-          fi
+          # "workflow" = Source: GitHub Actions (deploy); "legacy" = Deploy from a branch (build only, green);
+          # anything else = the check itself failed (API, token, network), not the setting: say so and go red (WF-3)
+          resp=$(curl -sS -m 30 -w '\n%{http_code}' -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" 2>/dev/null) || resp=$'\n000'
+          http=${resp##*$'\n'}
+          type=$(printf '%s' "${resp%$'\n'*}" | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("build_type") or "")' 2>/dev/null || true)
+          echo "Pages build_type: ${type:-unknown} (http=$http)"
+          case "$type" in
+            workflow)
+              echo "deploy=true" >> "$GITHUB_OUTPUT"
+              echo "Pages build_type: workflow (Source: GitHub Actions); deploying" >> "$GITHUB_STEP_SUMMARY" ;;
+            legacy)
+              echo "deploy=false" >> "$GITHUB_OUTPUT"
+              {
+                echo "## Pages deploys from a branch (build_type: legacy); nothing was deployed"
+                echo
+                echo "The site is served from main/site/. Switch **Settings → Pages → Build and deployment → Source** to"
+                echo "**GitHub Actions** before 27.10 for live election-night updates (docs/ELECTION_DAY.md)."
+              } >> "$GITHUB_STEP_SUMMARY" ;;
+            *)
+              if [ "$DEPLOY_ANYWAY" = true ]; then
+                echo "deploy=true" >> "$GITHUB_OUTPUT"
+                echo "::warning::the Pages source check failed (http=$http); deploying anyway (repository variable PAGES_DEPLOY_ANYWAY=true)"
+                echo "## :warning: The Pages source check failed (http=$http); deployed anyway (PAGES_DEPLOY_ANYWAY=true)" >> "$GITHUB_STEP_SUMMARY"
+              else
+                echo "deploy=false" >> "$GITHUB_OUTPUT"
+                echo "::error::the Pages source check failed (GET /repos/$GITHUB_REPOSITORY/pages: http=$http); nothing was deployed"
+                {
+                  echo "## :x: The Pages source check failed (http=$http); nothing was deployed"
+                  echo
+                  echo "This is the check itself (API, token or network), not the Pages setting; the feed's next dispatch tries"
+                  echo "again. If it keeps failing after the Source was switched to GitHub Actions, set the repository variable"
+                  echo "**PAGES_DEPLOY_ANYWAY** = \`true\` (Settings → Secrets and variables → Actions → Variables) to skip the check."
+                } >> "$GITHUB_STEP_SUMMARY"
+                exit 1
+              fi ;;
+          esac
       - uses: actions/upload-pages-artifact@v5
         if: steps.source.outputs.deploy == 'true'
         with:

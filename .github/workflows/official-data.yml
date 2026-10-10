@@ -1,11 +1,19 @@
 # Rebuilds every data file from the official CEC ballot files (media2X.bechirot.gov.il),
 # which GitHub's runners can reach, and checks the result against the committed site/data.
+# The election-day files (live_config.json, live_fetch.py, live_model.py, test_live.py) do not
+# feed site/data, so editing them on election day does not start this 3–5-minute job.
 name: Official data check
 
 on:
   push:
-    branches: [main, ccr-ecfe3046-hicnu4]
-    paths: ['pipeline/**', '.github/workflows/official-data.yml']
+    branches: [main]
+    paths:
+      - 'pipeline/**'
+      - '!pipeline/live_config.json'
+      - '!pipeline/live_fetch.py'
+      - '!pipeline/live_model.py'
+      - '!pipeline/test_live.py'
+      - '.github/workflows/official-data.yml'
   workflow_dispatch:
 
 permissions:
@@ -15,11 +23,11 @@ jobs:
   rebuild:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v6
+      - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
-      - run: pip install numpy
+      - run: python3 -m pip install numpy
       - name: Fetch sources (official CEC files first)
         run: |
           python3 pipeline/fetch_sources.py --out data/raw
@@ -47,7 +55,7 @@ jobs:
           else echo 'RESULT: differences found'; git diff --stat -- site/data; \
             for f in $(git diff --name-only -- site/data); do echo "## $f"; git show "HEAD:$f" > /tmp/old.json; \
               python3 pipeline/compare_json.py /tmp/old.json "$f" --max 30; done; fi
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v6
         with:
           name: official-cec-files
           path: |
@@ -56,7 +64,7 @@ jobs:
             build_report.txt
           retention-days: 30
       - name: Store the official files in the repository (data/official)
-        if: github.event_name == 'workflow_dispatch' || github.ref_name == 'ccr-ecfe3046-hicnu4'
+        if: github.event_name == 'workflow_dispatch'
         run: |
           mkdir -p data/official
           cp data/raw/official/*.csv data/official/ 2>/dev/null || true

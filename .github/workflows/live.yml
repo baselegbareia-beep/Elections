@@ -7,23 +7,28 @@
 # Scheduled runs fire only from the default branch (main). GitHub may delay runs queued on the hour,
 # so the crons sit off the hour; on election morning also start a run by hand as a backup.
 # Israel is UTC+2 from 25.10.2026: polls open 07:00 = 05:00 UTC, close 22:00 = 20:00 UTC.
+# Coverage: 27–29.10 continuous (345-minute runs chain every 20 minutes: the regular count ends
+# 28.10 noon, the double envelopes are counted 28.10 evening to 29.10); 30.10–4.11 a 20-minute run
+# every hour until the final file (published up to 4.11).
 # Switches: repository variable LIVE_RUNNER=self-hosted moves every run (scheduled ones too) to the
 # runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
+# A running loop is replaced only when it ends: to switch at once, cancel the active run.
 name: Election day live feed
 
 on:
   schedule:
-    - cron: '7,27,47 4-23 27 10 *'   # 27.10, 06:07–01:47 Israel time, every 20 min (345-minute runs chain)
-    - cron: '7,27,47 0-23 28 10 *'   # 28.10: the regular count ends, the double envelopes begin
-    - cron: '7 * 29,30 10 *'         # 29–30.10: hourly short runs for the envelopes and the final file
+    - cron: '7,27,47 4-23 27 10 *'      # 27.10, 06:07–01:47 Israel time, every 20 min (345-minute runs chain)
+    - cron: '7,27,47 0-23 28,29 10 *'   # 28–29.10: the regular count ends, then the double envelopes, continuous
+    - cron: '7 * 30,31 10 *'            # 30–31.10: a 20-minute run every hour, until the final file
+    - cron: '7 * 1-4 11 *'              # 1–4.11: the same; the final result is published by 4.11
   workflow_dispatch:
     inputs:
       minutes:
-        description: 'How long this run keeps polling (hosted jobs stop at 6 h; default 345 on 27–28.10, 20 later)'
+        description: 'How long this run keeps polling (hosted jobs stop at 6 h; default 345 on 27–29.10, 20 later)'
         default: ''
       drill:
-        description: 'Rehearsal: the 2022 file (media25, else data/official) counted progressively; the page says "תרגול"; cleaned up at the end'
+        description: 'Rehearsal: the 2022 file (media25, else data/official) counted progressively; the page says "תרגול"; cleaned up at the end. Refused from 24.10 00:00 to 27.10 22:00'
         type: boolean
         default: false
       reset:
@@ -58,34 +63,55 @@ jobs:
     steps:
       - uses: actions/checkout@v6
       - uses: actions/setup-python@v7
+        if: runner.environment == 'github-hosted'   # a self-hosted runner uses its own python3 (>= 3.9 with numpy)
         with:
           python-version: '3.12'
-      - run: pip install numpy
-      - name: Minutes for this run, and the Pages source
+      - run: python3 -c 'import numpy' 2>/dev/null || python3 -m pip install -q numpy || python3 -m pip install -q --user --break-system-packages numpy
+      - name: Minutes for this run, the drill guard, and the Pages source
         run: |
           if [ -z "$MINUTES" ]; then
-            case "$(TZ=Asia/Jerusalem date +%d.%m)" in 27.10|28.10) MINUTES=345 ;; *) MINUTES=20 ;; esac
+            case "$(TZ=Asia/Jerusalem date +%d.%m)" in 27.10|28.10|29.10) MINUTES=345 ;; *) MINUTES=20 ;; esac
           fi
           echo "MINUTES=$MINUTES" >> "$GITHUB_ENV"
-          # "workflow" = Source: GitHub Actions (live data reaches the page); "legacy" = branch mode (it does not)
-          src=$(curl -sS -m 30 -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
-                  "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" \
-                | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("build_type") or "")' 2>/dev/null || true)
-          echo "PAGES_SOURCE=${src:-unknown}" >> "$GITHUB_ENV"
-          echo "minutes=$MINUTES pages_source=${src:-unknown} drill=$DRILL reset=$RESET runner=$RUNNER_NAME ($RUNNER_OS)"
-          if [ "$src" != "workflow" ]; then
-            {
-              echo "## :warning: Pages Source is not GitHub Actions (build_type: ${src:-unknown})"
-              echo
-              echo "Live data is pushed to the live-data branch but **cannot reach the page** until Settings → Pages →"
-              echo "Build and deployment → Source is switched to **GitHub Actions** (docs/ELECTION_DAY.md)."
-            } >> "$GITHUB_STEP_SUMMARY"
+          # a rehearsal puts a full poll-based projection on the public page: not during the poll ban (from 24.10
+          # 00:00) and not while the polls are open on 27.10 (PAGE-7)
+          now=$(TZ=Asia/Jerusalem date +%m%d%H)
+          if [ "$DRILL" = true ] && [ "$((10#$now))" -ge 102400 ] && [ "$((10#$now))" -lt 102722 ]; then
+            echo '::error::no drill between 24.10 00:00 and 27.10 22:00 Israel time: the page would show a rehearsal projection during the poll ban and the vote'
+            exit 1
           fi
+          # Which Pages source is configured? "workflow" = GitHub Actions (live data reaches the page); "legacy" =
+          # branch mode (it does not); anything else = the check itself failed (API, token, network), not the setting
+          resp=$(curl -sS -m 30 -w '\n%{http_code}' -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
+                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pages" 2>/dev/null) || resp=$'\n000'
+          http=${resp##*$'\n'}
+          src=$(printf '%s' "${resp%$'\n'*}" | python3 -c 'import json,sys; print((json.load(sys.stdin) or {}).get("build_type") or "")' 2>/dev/null || true)
+          case "$src" in
+            workflow) ;;
+            legacy)
+              {
+                echo "## :warning: Pages Source is not GitHub Actions (build_type: legacy)"
+                echo
+                echo "The feed keeps writing to the live-data branch, but the page is **not redeployed** until Settings → Pages →"
+                echo "Build and deployment → Source is switched to **GitHub Actions** (docs/ELECTION_DAY.md, הכנות 1)."
+              } >> "$GITHUB_STEP_SUMMARY" ;;
+            *)
+              src=error
+              echo "::error::the Pages source check failed (GET /repos/$GITHUB_REPOSITORY/pages: http=$http); the feed runs on, each \"Publish site\" run checks again"
+              {
+                echo "## :x: The Pages source check failed (http=$http): pages_source=error"
+                echo
+                echo "This is the check itself (API, token or network), not the Pages setting. The feed runs on and every"
+                echo "\"Publish site\" run checks again; if those are red too, see docs/ELECTION_DAY.md (תקלות)."
+              } >> "$GITHUB_STEP_SUMMARY" ;;
+          esac
+          echo "PAGES_SOURCE=$src" >> "$GITHUB_ENV"
+          echo "minutes=$MINUTES pages_source=$src drill=$DRILL reset=$RESET runner=$RUNNER_NAME ($RUNNER_OS)"
       - name: Prepare the live-data worktree
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          rm -rf ld _live; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
+          rm -rf ld _live _probe; git worktree prune   # a reused self-hosted workspace keeps stale registrations (OPS-5)
           if git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data 2>/dev/null; then
             git worktree add -q --detach ld origin/live-data
           else
@@ -96,9 +122,14 @@ jobs:
             find ld -mindepth 1 -maxdepth 1 ! -name .git -exec rm -rf {} +
             mkdir -p ld/live && cp site/live/status.json ld/live/status.json
             git -C ld add -A && git -C ld commit -q -m 'live-data: placeholder'
-            git -C ld push -q origin HEAD:live-data || {   # someone created it first: take theirs
-              git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data
-              git -C ld reset -q --hard origin/live-data; }
+            if ! git -C ld push -q origin HEAD:live-data; then   # someone created it first: take theirs; else retry once
+              sleep 5
+              if git fetch -q --depth=1 origin +refs/heads/live-data:refs/remotes/origin/live-data; then
+                git -C ld reset -q --hard origin/live-data
+              else
+                git -C ld push -q origin HEAD:live-data || echo '::warning::could not create live-data yet; the first publish retries'
+              fi
+            fi
             git -C ld checkout -q --detach
           fi
           mkdir -p _live ld/live
@@ -109,12 +140,16 @@ jobs:
             cp ld/live/*.json _live/ 2>/dev/null || true
           fi
           ls -la _live
-      - name: Smoke test and 2026 probe (drill only)
+      - name: Smoke test (drill only)
         if: env.DRILL == 'true'
+        run: python3 pipeline/test_live.py
+      - name: One unpublished pass (does the script run here, and does this runner reach media26?)
         run: |
-          python3 pipeline/test_live.py
-          echo '--- one unpublished 2026 pass: does this runner reach media26? (results_probe below)'
-          python3 pipeline/live_fetch.py --out _probe --once | tail -n 1 | cut -c1-600
+          # a crash here (a bad file on main, numpy missing) makes the run red before the loop, not a silent green run (WF-2)
+          out=$(python3 pipeline/live_fetch.py --out _probe --once 2>&1) || true
+          printf '%s\n' "$out" | tail -n 4 | cut -c1-600
+          printf '%s\n' "$out" | tail -n 1 \
+            | python3 -c 'import json,sys; s=json.load(sys.stdin); print("ok: results_state", s.get("results_state"), "probe", s.get("results_probe"), "errors", s.get("errors"))'
       - name: Poll the elections committee and publish
         run: |
           publish_live() {   # feed-owned branch: fetch + reset --hard + copy + commit + push; never rebase (OPS-1)
@@ -139,9 +174,21 @@ jobs:
               -H "Authorization: Bearer $GH_TOKEN" -H "Accept: application/vnd.github+json" \
               "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/workflows/pages.yml/dispatches" \
               -d "{\"ref\":\"$DEFAULT_BRANCH\"}" || echo 000)
-            if [ "$code" = 204 ]; then echo "dispatched pages.yml on $DEFAULT_BRANCH"
-            else echo "::warning::dispatch of pages.yml failed (http=$code, ref=$DEFAULT_BRANCH): the page is not redeployed"; fi
-            last_dispatch=$(date +%s); pending=0
+            last_dispatch=$(date +%s)
+            if [ "$code" = 204 ]; then
+              echo "dispatched pages.yml on $DEFAULT_BRANCH"; pending=0; dfail=0
+            else   # pending stays set: the loop retries after 50 s (WF-6)
+              dfail=$(( dfail + 1 ))
+              if [ "$dfail" -lt 5 ]; then echo "::warning::dispatch of pages.yml failed (http=$code, ref=$DEFAULT_BRANCH); retrying"
+              elif [ "$dfail" -eq 5 ]; then echo "::error::dispatch of pages.yml keeps failing (http=$code, ref=$DEFAULT_BRANCH): the page is not redeployed; still retrying"
+              else echo "dispatch failed again (http=$code, $dfail in a row)"; fi
+            fi
+          }
+          flush() {   # a deferred redeploy, after the 50-second gap; one retry
+            local gap
+            gap=$(( $(date +%s) - last_dispatch )); [ "$gap" -lt 50 ] && sleep $(( 50 - gap ))
+            dispatch_pages
+            if [ "$pending" = 1 ]; then sleep 50; dispatch_pages; fi
           }
           reset_live() {   # live-data back to the placeholder, history dropped (after a drill, or to start over)
             git -C ld checkout -q --orphan "reset-$(date +%s)"
@@ -153,7 +200,7 @@ jobs:
             git -C ld checkout -q --detach
             rm -f _live/*.json; cp site/live/status.json _live/
           }
-          last_dispatch=0; pending=0; dirty=0
+          last_dispatch=0; pending=0; dirty=0; dfail=0; crashes=0
           if [ "$RESET" = true ]; then reset_live; dispatch_pages; exit 0; fi
           end=$(( $(date +%s) + MINUTES * 60 ))
           while [ "$(date +%s)" -lt "$end" ]; do
@@ -169,7 +216,18 @@ jobs:
               out=$(python3 pipeline/live_fetch.py --out _live --once 2>&1) || true
             fi
             printf '%s\n' "$out" | tail -n 4 | cut -c1-700
-            changed=$(printf '%s\n' "$out" | tail -n 1 | python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("changed", [])))' 2>/dev/null || echo 0)
+            last=$(printf '%s\n' "$out" | tail -n 1)
+            if changed=$(printf '%s\n' "$last" | python3 -c 'import json,sys; print(len(json.load(sys.stdin).get("changed", [])))' 2>/dev/null); then
+              crashes=0
+            else   # not the JSON status line: the script crashed (WF-2); three in a row make the run red, and the queued run starts afresh
+              crashes=$(( crashes + 1 )); changed=0
+              echo "::error::live_fetch.py crashed ($crashes in a row): ${last:0:300}"
+              echo "- $(date -u +%H:%M) UTC: live_fetch.py crashed ($crashes in a row): \`${last:0:200}\`" >> "$GITHUB_STEP_SUMMARY"
+              if [ "$crashes" -ge 3 ]; then
+                if [ "$pending" = 1 ]; then flush; fi
+                exit 1
+              fi
+            fi
             # a failed push stays dirty and is retried on the next pass, not only at the next change
             if [ "${changed:-0}" -gt 0 ]; then dirty=1; fi
             if [ "$dirty" = 1 ] && publish_live; then dirty=0; pending=1; fi
@@ -177,8 +235,5 @@ jobs:
             if [ "$pending" = 1 ] && [ $(( $(date +%s) - last_dispatch )) -ge 50 ]; then dispatch_pages; fi
             sleep 45
           done
-          flush() {   # a deferred redeploy, after the 50-second gap
-            gap=$(( $(date +%s) - last_dispatch )); [ "$gap" -lt 50 ] && sleep $(( 50 - gap )); dispatch_pages
-          }
           if [ "$pending" = 1 ]; then flush; fi
           if [ "$DRILL" = true ]; then reset_live; pending=1; flush; fi   # the page returns to its pre-election state

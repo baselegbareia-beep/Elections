@@ -6,15 +6,24 @@
 Runs single passes into a temporary folder and checks the JSON contract with the page:
   1. a 2022 dry run on 30% of data/official/k25_expb.csv publishes a valid results.json;
      a lenient read tolerates one inconsistent row and a non-numeric column (OPS-8);
+     an unknown 2026 layout: a numeric non-list column, a short total column, the yod spellings
+     סמל יישוב / שם יישוב, a '-' in the first row, and the live_config overrides (WF-1);
   2. header-only, BOM+HTML and JSON bodies from the results URL are rejected, no results.json (OPS-2);
-  3. an unchanged file (same SHA-256) is not republished (OPS-9);
+     an election_day or eligible that does not parse falls back and is reported (WF-2);
+  3. an unchanged file (same SHA-256) is not republished (OPS-9); a changed projection_paused /
+     envelopes_expected re-renders it without moving the data time (DOC-3);
   4. 2026 mode on a synthetic file with the 2026 ballot letters projects the 2026 lists;
+     a counted register above the configured one is reported and shown as 99% (LM-B);
   5. before 22:00 on election day nothing is fetched (a probe only), after 22:00 it is;
+     the switches act on the cached file while the CEC file is rejected (DOC-3);
   6. a broken live_input/turnout.json keeps the last good figures and reports the error (OPS-10);
+     a typo in an hour or a figure is reported, not dropped silently (DOC-7);
      exit polls appear only after 22:00 and disappear when the input is removed (OPS-14);
      the 2022-vote-weighted lean is omitted during voting hours;
   7. a drill is marked, and a real run discards its files (OPS-3);
-  8. the laptop publisher's reset cycle survives another writer on live-data (OPS-1).
+  8. the laptop publisher's reset cycle survives another writer on live-data (OPS-1), and the
+     laptop takes live_input/ and live_config.json from origin/main every pass (DOC-2);
+  9. pipeline/live_config.json still holds the 7,340,000 placeholder after 25.10 (LM-B).
 The drill in live.yml runs this first. Runtime about one to two minutes."""
 import contextlib
 import datetime as dt
@@ -33,6 +42,7 @@ import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import live_fetch as LF  # noqa: E402
+from build_data import read_expb  # noqa: E402
 
 ROOT = LF.ROOT
 K25 = os.path.join(ROOT, "data", "official", "k25_expb.csv")
@@ -97,6 +107,23 @@ def odd_k25(src):
             cells[i_valid] = str(int(cells[i_valid]) + 1)       # party votes no longer add up
         out.append(",".join(cells + ["22:31"]))
     return write(os.path.join(TMP, "k25_odd.csv"), "﻿" + "\n".join(out) + "\n")
+
+
+def variant(src, name, header=None, extra=None, cell=None):
+    """The subset with a renamed header (header: {old: new}), an extra column (extra: (name, fn(cells, hdr)))
+    or one cell changed (cell: (row index, column, value)). UTF-8 with BOM like the original."""
+    lines = open(src, encoding="utf-8-sig").read().splitlines()
+    hdr = lines[0].split(",")
+    out_hdr = [(header or {}).get(h, h) for h in hdr] + ([extra[0]] if extra else [])
+    out = [",".join(out_hdr)]
+    for n, ln in enumerate(lines[1:]):
+        cells = ln.split(",")
+        if cell and n == cell[0]:
+            cells[hdr.index(cell[1])] = cell[2]
+        if extra:
+            cells.append(str(extra[1](cells, hdr)))
+        out.append(",".join(cells))
+    return write(os.path.join(TMP, name), "﻿" + "\n".join(out) + "\n")
 
 
 def synthetic_k26(src):
@@ -199,6 +226,39 @@ def main():
     check(st["results_state"] == "ok" and res is not None, "file accepted")
     check(res and res["checks"]["bad_rows"] == 1 and res["checks"]["ignored_columns"] == ["שעת עדכון"], f"checks: {res and res['checks']}")
 
+    print("1c. an unknown 2026 layout (WF-1): the lenient reader on variants of the subset")
+    _, base_rows = read_expb(k25_30)
+    i_v = lambda cells, hdr: cells[hdr.index("כשרים")]   # noqa: E731
+    pct = lambda cells, hdr: round(100 * int(cells[hdr.index("מצביעים")]) / max(1, int(cells[hdr.index("בזב")])), 1)   # noqa: E731
+    cases = {
+        "num_col": (variant(k25_30, "num_col.csv", extra=("אחוז הצבעה", pct)), ["אחוז הצבעה"], 0),
+        "num_col_short": (variant(k25_30, "num_short.csv", extra=("סהכ", i_v)), ["סהכ"], 0),
+        "yod": (variant(k25_30, "yod.csv", header={"סמל ישוב": "סמל יישוב", "שם ישוב": "שם יישוב"}), [], 0),
+        "dash_first": (variant(k25_30, "dash.csv", cell=(0, "מחל", "-")), [], 1),
+    }
+    for name, (path, ignored, bad) in cases.items():
+        ck = {}
+        try:
+            cols, rows = read_expb(path, strict=False, checks=ck)
+            ok = ck == {"bad_rows": bad, "ignored_columns": ignored} and len(rows) == len(base_rows) - bad and len(cols) == len(_)
+            check(ok, f"{name}: accepted, checks={ck}, {len(rows)} rows, {len(cols)} lists")
+        except Exception as exc:
+            check(False, f"{name}: rejected: {exc}")
+    weird = variant(k25_30, "weird.csv", header={"קלפי": "מס' קלפי"}, extra=("זמן", lambda c, h: "22:31"))
+    try:
+        read_expb(weird, strict=False)
+        check(False, "weird: a renamed קלפי should be rejected without an alias")
+    except ValueError as exc:
+        check("missing columns" in str(exc), f"weird: rejected without an alias ({str(exc)[-60:]})")
+    ck = {}
+    cols, rows = read_expb(weird, strict=False, checks=ck, ignore_columns=["זמן"], column_aliases={"מס' קלפי": "קלפי"})
+    check(ck == {"bad_rows": 0, "ignored_columns": ["זמן"]} and len(rows) == len(base_rows), f"weird: accepted with the overrides, checks={ck}")
+    o1c = os.path.join(TMP, "o1c")
+    c1c = write(os.path.join(TMP, "c1c.json"), {"election_day": "2026-10-27", "ignore_columns": ["זמן"], "column_aliases": {"מס' קלפי": "קלפי"}})
+    st = run("--out", o1c, "--config", c1c, "--results-file", weird, "--as", "K25", "--inputs", inputs, now=NIGHT)
+    res = load(o1c, "results.json")
+    check(st["results_state"] == "ok" and res and res["checks"]["ignored_columns"] == ["זמן"], f"weird: the live_config overrides reach the reader; errors={st['errors']}")
+
     print("2. bad bodies from the results URL are rejected")
     hdr = open(k25_30, encoding="utf-8-sig").read().splitlines()[0]
     srv, base = serve({
@@ -215,12 +275,38 @@ def main():
         err = " ".join(st["errors"])
         check(st["results_state"] == "waiting" and load(o, "results.json") is None and why in err, f"{path}: rejected ({why}); errors={err[:80]}")
 
+    print("2b. a config whose election_day or eligible does not parse falls back and is reported (WF-2)")
+    o2b = os.path.join(TMP, "o2b")
+    c2b = write(os.path.join(TMP, "c2b.json"), {"election_day": "27.10.2026", "eligible": "7.3M", "results_url": base + "/k25_30.csv"})
+    st = run("--out", o2b, "--config", c2b, "--inputs", inputs, now=NIGHT)
+    err = " ".join(st["errors"])
+    check("config: election_day" in err and "config: eligible" in err, f"both reported: {err[:160]}")
+    check(st["results_state"] == "ok" and st["phase"] == "night", "the pass completed with the default election day")
+    check(st.get("heartbeat_s") == LF.HEARTBEAT, "status carries heartbeat_s (PAGE-1)")
+
     print("3. unchanged file is not republished")
     before = open(os.path.join(o1, "results.json"), "rb").read()
     st = run("--out", o1, "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=NIGHT)
     after = open(os.path.join(o1, "results.json"), "rb").read()
     check(before == after and st["results_state"] == "ok" and "results.json" not in st["changed"], f"results.json untouched, changed={st['changed']}")
     check(len(load(o1, "history.json")) == 1, "history has one entry")
+
+    print("3b. a changed switch re-renders the same file without moving the data time (DOC-3)")
+    res0 = json.loads(before)
+    later = NIGHT + dt.timedelta(minutes=50)      # still 27.10: updated_he carries a date only after midnight
+    c3 = cfg_file("c3.json", projection_paused=True, pause_reason="בדיקה")
+    st = run("--out", o1, "--config", c3, "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=later)
+    res = load(o1, "results.json")
+    check(res["frame"].get("paused") == "בדיקה" and "results.json" in st["changed"], f"paused published, changed={st['changed']}")
+    check(res["updated_at"] == res0["updated_at"] and st.get("data_he") == res0["updated_he"] and len(load(o1, "history.json")) == 1,
+          "data time and history unchanged")
+    check(res["frame"].get("batch") == res0["frame"].get("batch"), "the last batch stays")
+    st = run("--out", o1, "--config", c3, "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=later)
+    check("results.json" not in st["changed"], "same switches again: nothing rewritten")
+    st = run("--out", o1, "--config", cfg_file("c3b.json", envelopes_expected=500000), "--results-file", k25_30, "--as", "K25", "--inputs", inputs, now=later)
+    res = load(o1, "results.json")
+    check("paused" not in res["frame"] and res["frame"]["counted"]["env_override"] == 500000 and res["updated_at"] == res0["updated_at"],
+          "unpaused with an envelope total, data time still unchanged")
 
     print("4. 2026 mode on a synthetic 2026-lettered file")
     o4 = os.path.join(TMP, "o4")
@@ -231,6 +317,19 @@ def main():
     check(set(ids) <= set(LETTERS_2026) and len(ids) >= 12, f"frame lists are 2026 lists: {ids}")
     check(res and res["checks"]["unknown_lists"] == [], "every column maps to a 2026 list")
     check(res and sum(l["seats"] for l in res["frame"]["lists"]) == 120, "projected seats add up to 120")
+
+    print("4b. the register guard (LM-B): more eligible voters counted than configured")
+    o4b = os.path.join(TMP, "o4b")
+    st = run("--out", o4b, "--config", cfg_file("c4b.json", eligible=1500000), "--results-file", os.path.join(TMP, "k26.csv"), "--inputs", inputs, now=NIGHT)
+    res = load(o4b, "results.json")
+    check(res and res["frame"]["counted"]["share"] == LF.REGISTER_SLACK, f"share reads {res and res['frame']['counted']['share']}, not 'all counted'")
+    check(any(e.startswith("register exceeded") for e in st["errors"]), f"error reported: {st['errors']}")
+    st = run("--out", o4b, "--config", cfg_file("c4b2.json", eligible=7400000), "--results-file", os.path.join(TMP, "k26.csv"), "--inputs", inputs, now=NIGHT)
+    res = load(o4b, "results.json")
+    check(res["frame"]["counted"]["share"] < 0.5 and not any(e.startswith("register") for e in st["errors"]),
+          f"eligible corrected without a restart: share {res['frame']['counted']['share']}, errors={st['errors']}")
+    st = run("--out", o4b, "--config", cfg_file("c4b3.json", eligible=LF.PLACEHOLDER_ELIGIBLE), "--results-file", os.path.join(TMP, "k26.csv"), "--inputs", inputs, now=NIGHT)
+    check(any("7,340,000" in e for e in st["errors"]), f"the placeholder register is reported from 25.10: {st['errors']}")
 
     print("5. the 22:00 gate: no fetch before, fetch after")
     o5 = os.path.join(TMP, "o5")
@@ -243,6 +342,17 @@ def main():
     check(st["phase"] == "day", "phase day")
     st = run("--out", o5, "--config", c5, "--as", "K25", "--inputs", inputs, now=NIGHT)
     check(st["results_state"] == "ok" and load(o5, "results.json") is not None, "22:30: fetched and published")
+
+    print("5b. the switches act on the cached file while the CEC file is rejected (DOC-3)")
+    good = Server.bodies["/k25_30.csv"]
+    Server.bodies["/k25_30.csv"] = Server.bodies["/bom.html"]   # the same URL now answers with a maintenance page
+    c5b = cfg_file("c5b.json", results_url=base + "/k25_30.csv", projection_paused=True, pause_reason="הקובץ לא עקבי")
+    st = run("--out", o5, "--config", c5b, "--as", "K25", "--inputs", inputs, now=NIGHT)
+    res = load(o5, "results.json")
+    check(st["results_state"] == "waiting" and res["frame"].get("paused") == "הקובץ לא עקבי" and "results.json" in st["changed"],
+          f"rejected fetch, paused published from the cache; errors={st['errors']}")
+    check(os.path.exists(os.path.join(o5, LF.RESULTS_CACHE)) and not glob.glob(os.path.join(o5, "*.csv")), "the cache is a dotfile, not a published file")
+    Server.bodies["/k25_30.csv"] = good
 
     print("6. manual inputs: broken turnout.json, exit polls, lean during voting")
     o6 = os.path.join(TMP, "o6")
@@ -258,6 +368,11 @@ def main():
     T = load(o6, "turnout.json")
     check(st["has_turnout"] and T["national"].get("12:00") == 27.9, "broken turnout.json: last good figures kept")
     check(any(e.startswith("turnout:") for e in st["errors"]), f"error reported: {st['errors']}")
+    write(os.path.join(inputs, "turnout.json"), {"national": {"10:00": "15.2", "1200": 27.9, "14:00": 38.4, "16:00": True}})
+    st = run("--out", o6, "--config", c6, "--as", "K25", "--inputs", inputs, now=EVENING)
+    T = load(o6, "turnout.json")
+    err = next((e for e in st["errors"] if e.startswith("turnout: ignored")), "")
+    check(list(T["national"]) == ["14:00"] and all(s in err for s in ('10:00: "15.2"', "1200: 27.9", "16:00: true")), f"typos reported, not dropped silently (DOC-7): {err}")
     write(os.path.join(inputs, "turnout.json"), {"national": {"10:00": 15.2}})
     write(os.path.join(inputs, "exit_polls.json"), {"polls": [{"outlet": "כאן 11", "time": "22:00", "seats": {"מחל": 25}}]})
     st = run("--out", o6, "--config", c6, "--as", "K25", "--inputs", inputs, now=EVENING)
@@ -320,6 +435,33 @@ def main():
     r3 = LF.publish(o1, wt=os.path.join(repo, ".live-data"), repo=repo)
     check(r3 == "unchanged", f"nothing new: {r3}")
     check(len(sh(["git", "rev-list", "origin/live-data"], other).split()) == 4, "four commits on live-data (placeholder, laptop, workflow, laptop)")
+
+    print("8b. laptop mode takes live_input/ and live_config.json from origin/main every pass (DOC-2)")
+    editor = os.path.join(TMP, "editor")                 # the operator editing on GitHub
+    sh(["git", "clone", "-q", "-b", "main", origin, editor], TMP)
+    sh(["git", "config", "user.email", "e@example.com"], editor)
+    sh(["git", "config", "user.name", "editor"], editor)
+    write(os.path.join(editor, "live_input", "turnout.json"), {"national": {"10:00": 15.2}})
+    write(os.path.join(editor, "pipeline", "live_config.json"), {"election_day": "2026-10-27", "projection_paused": True})
+    sh(["git", "add", "-A"], editor)
+    sh(["git", "commit", "-q", "-m", "inputs"], editor)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+    write(os.path.join(repo, "live_input", "turnout.json"), {"national": {"10:00": 99}})   # a stale local copy
+    LF.refresh_inputs("main", repo=repo)
+    check(load(os.path.join(repo, "live_input"), "turnout.json") == {"national": {"10:00": 15.2}}
+          and load(os.path.join(repo, "pipeline"), "live_config.json").get("projection_paused") is True, "both files taken from origin/main")
+    sh(["git", "rm", "-q", "live_input/turnout.json"], editor)
+    sh(["git", "commit", "-q", "-m", "retract"], editor)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], editor)
+    LF.refresh_inputs("main", repo=repo)
+    check(not os.path.exists(os.path.join(repo, "live_input", "turnout.json")), "a file deleted on GitHub disappears locally (OPS-14)")
+
+    print("9. the register size in pipeline/live_config.json (LM-B)")
+    cfg = json.load(open(os.path.join(ROOT, "pipeline", "live_config.json"), encoding="utf-8"))
+    late = dt.date.today() >= dt.date(2026, 10, 25)
+    check(not (late and cfg.get("eligible") == LF.PLACEHOLDER_ELIGIBLE),
+          "eligible is still the 7,340,000 placeholder: set the CEC's official register size (docs/ELECTION_DAY.md, הכנות 3)")
+    check(cfg.get("ignore_columns") == [] and cfg.get("column_aliases") == {}, "ignore_columns / column_aliases present and empty")
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")
