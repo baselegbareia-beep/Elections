@@ -339,16 +339,22 @@ class RunsApi(Api):
 
 def load_yaml(path):
     """A workflow file as a dict: PyYAML when installed, else Ruby's YAML (on GitHub's runners), else None."""
+    def norm(d):   # YAML 1.1 reads the workflow key `on:` as a boolean (PyYAML: True; JSON via Ruby: "true")
+        if isinstance(d, dict) and "on" not in d:
+            for k in (True, "true"):
+                if k in d:
+                    d["on"] = d.pop(k)
+        return d
     try:
         import yaml
-        return yaml.safe_load(open(path, encoding="utf-8"))
+        return norm(yaml.safe_load(open(path, encoding="utf-8")))
     except ImportError:
         pass
     if shutil.which("ruby"):
         r = subprocess.run(["ruby", "-ryaml", "-rjson", "-e", "puts JSON.dump(YAML.load_file(ARGV[0]))", path],
                            capture_output=True, text=True)
         if r.returncode == 0:
-            return json.loads(r.stdout)
+            return norm(json.loads(r.stdout))
     return None
 
 
