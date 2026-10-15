@@ -1,4 +1,4 @@
-## CEC file discovery, 15.10 12:01 Israel time (full, github-hosted)
+## CEC file discovery, 15.10 13:17 Israel time (full, github-hosted)
 
 507 URLs probed, 98 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
@@ -12,6 +12,8 @@
 Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
+
+### Since 2026-10-15T12:01:32+03:00: 0 new, 0 changed, 0 gone
 
 ### Files and pages with data
 
@@ -34,18 +36,18 @@ Other candidates (in brackets: why not suggested, or what to check):
 | host | IPs | probed | answered | status codes | hint |
 |---|---|---|---|---|---|
 | analytics.egov.gov.il | 147.237.12.35 | 1 | 0 | {"no answer": 1} | URLError |
-| aws-e.data.gov.il | 13.226.53.101, 13.226.53.120, 13.226.53.129 | 17 | 17 | {"200": 17} |  |
+| aws-e.data.gov.il | 2600:9000:2073:1e00:17:f2b1:e000:93a1, 2600:9000:2073:2c00:17:f2b1:e000:93a1, 2600:9000:2… | 17 | 17 | {"200": 17} |  |
 | bechirot.gov.il | 147.237.12.28 | 34 | 23 | {"200": 23, "no answer": 11} | skipped; URLError |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | skipped; URLError |
-| data.gov.il | 3.170.185.105, 3.170.185.24, 3.170.185.59 | 2 | 2 | {"200": 2} |  |
-| e.data.gov.il | 13.226.53.101, 13.226.53.120, 13.226.53.129 | 17 | 17 | {"200": 17} |  |
+| data.gov.il | 18.238.96.112, 18.238.96.30, 18.238.96.38 | 2 | 2 | {"200": 2} |  |
+| e.data.gov.il | 2600:9000:2073:1e00:17:f2b1:e000:93a1, 2600:9000:2073:2c00:17:f2b1:e000:93a1, 2600:9000:2… | 17 | 17 | {"200": 17} |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} |  |
-| media26.bechirot.gov.il | 18.172.122.24, 18.172.122.43, 18.172.122.65 | 270 | 0 | {"404": 270} | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 18.238.96.100, 18.238.96.104, 18.238.96.54 | 270 | 0 | {"404": 270} | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} | URLError |
-| votes26.bechirot.gov.il | 13.226.53.120, 13.226.53.62, 13.226.53.70 | 55 | 0 | {"404": 55} | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 2600:9000:2137:5000:1e:5e2c:7e80:93a1, 2600:9000:2137:5600:1e:5e2c:7e80:93a1, 2600:9000:2… | 32 | 23 | {"200": 23, "no answer": 9} | URLError; skipped |
+| votes26.bechirot.gov.il | 18.238.96.100, 18.238.96.104, 18.238.96.54 | 55 | 0 | {"404": 55} | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 18.238.109.46, 18.238.109.75, 18.238.109.81 | 32 | 23 | {"200": 23, "no answer": 9} | URLError; skipped |
 | www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 17 | 15 | {"200": 15, "404": 2} | not found |
 
 ### Pages and scripts that answered
