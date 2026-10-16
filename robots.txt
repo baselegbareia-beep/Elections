@@ -1,0 +1,7 @@
+# Crawlers read robots.txt only at a host's root (https://baselegbareia-beep.github.io/robots.txt): this copy
+# documents the intent and names the sitemap; submit the sitemap in Google Search Console to have it read.
+User-agent: *
+Disallow: /Elections/site/artifact.html
+Allow: /
+
+Sitemap: https://baselegbareia-beep.github.io/Elections/sitemap.xml
