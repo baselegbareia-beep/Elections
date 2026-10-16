@@ -9,13 +9,15 @@ and English names only), so four public lists are combined, each pinned to a com
                 CBS code, with Arabic names (Hasadna's Open Budget project)
   gazetteer     FadiBadarni/israel-homicides data/gazetteer.json: Arab localities, Hebrew name + aliases -> Arabic
   oref          eladnava/pikud-haoref-api cities.json: the Home Front Command's alert areas, Hebrew -> Arabic
-  cbs-list      GuyStep/IsraelCities IsraelCities.csv: CBS code -> Arabic; some rows are shifted against the codes,
-                so a name from it is used only when it agrees with another list or spells the Hebrew name
+  cbs-list      GuyStep/IsraelCities IsraelCities.csv: CBS code -> Arabic; in runs of rows the Arabic column is
+                rotated against the codes, so a row whose Arabic name spells a nearby row's Hebrew name and not its
+                own is dropped (shifted()), and a name from it is used only when it spells the Hebrew name
 Every candidate must spell the Hebrew name (a consonant-skeleton comparison, see consistent()), which drops shifted
-rows and alert-area names of another place. Then a name more lists agree on beats a name fewer lists have, and ties go
-to the list that comes first in ORDER (per sector). OVERRIDES below settles the localities the lists disagree on (each
-row names the source whose spelling it keeps and why). A locality none of the lists names keeps its Hebrew name on
-the page. Standard library only; the downloads are cached under --cache (default: a folder in the system temp dir).
+rows and alert-area names of another place; a short name (one or two strong consonants) must match exactly. Then a
+name more lists agree on beats a name fewer lists have, and ties go to the list that comes first in ORDER (per sector).
+OVERRIDES below settles the localities the lists disagree on (each row names the source whose spelling it keeps and
+why). A locality none of the lists names keeps its Hebrew name on the page. Standard library only; the downloads are
+cached under --cache (default: a folder in the system temp dir).
 """
 import argparse, csv, difflib, io, json, os, re, sys, tempfile, urllib.request
 
@@ -34,6 +36,8 @@ ORDER = {'arab': ['gazetteer', 'open-budgets', 'oref', 'cbs-list'], 'druze': ['g
 # or the consistency check drops the right name (a CBS-list row that sits one row off, an Arabic name that is not a
 # transliteration of the Hebrew one).
 OVERRIDES = {
+    98: ('كفار ملال', 'cbs-list', 'the CBS list has it on the row of 510 (row 98 carries 512\'s كفر مصر); oref: كفر ملول'),
+    250: ('هزورع', 'oref', 'the Home Front Command\'s spelling, in its area יקנעם המושבה והזורע (CBS-list row 250 carries 307\'s هزورعيم)'),
     482: ('البعينة-نجيدات', 'open-budgets+oref', 'open-budgets has البعينة only, oref البعنة النجيدات (البعنة is another village)'),
     497: ('الطيبة الزعبية', 'cbs-list', 'the valley Taibe, told apart from Tayibe in the Triangle (2730)'),
     499: ('يافة الناصرة', 'gazetteer+oref+cbs-list', 'three lists agree; open-budgets transliterates the Hebrew (يفيع)'),
@@ -44,8 +48,11 @@ OVERRIDES = {
     530: ('عيلبون', 'cbs-list', 'the usual spelling (open-budgets: علابون)'),
     540: ('الريحانية', 'cbs-list', 'with the article and taa marbuta (oref: ريحانيه)'),
     547: ('طمرة الزعبية', 'cbs-list', 'Tamra in the valley, told apart from the city of Tamra (8900)'),
+    596: ('ملكيا', 'cbs-list', 'Malkiya, with k (oref: ملاخيا)'),
     913: ('الشبلي-أم الغنم', 'cbs-list', 'the usual spelling (open-budgets: شبلي-اوم الغنم)'),
     942: ('سواعد (حميرة)', 'cbs-list', 'keeps the qualifier the CBS name has'),
+    956: ('الهزيل', 'cbs-list', 'the CBS list has هزيل on the row of 307 (row 956 carries 1186\'s هوشعيا, Hoshaya); with the '
+                              'article, as the tribe is called (marefa.org/Rahat, mawdoo3); the qualifier (عشيرة) is added below'),
     978: ('كعبية-طباش-حجاجرة', 'cbs-list', 'the usual spelling (open-budgets: كعبيا)'),
     1063: ('معلوت-ترشيحا', 'cbs-list+oref', 'the joint town, not Tarshiha alone'),
     1105: ('بوريا (نفي عوفيد)', 'cbs-list', 'the check compares the Arabic name without its brackets, so it drops this one'),
@@ -82,26 +89,41 @@ AR_CLASS = {'ب': 'B', 'ف': 'B', 'پ': 'B', 'ڤ': 'B', 'ك': 'K', 'ق': 'K', '�
             'ژ': 'S', 'ل': 'L', 'م': 'M', 'ن': 'N', 'ر': 'R'}
 
 
-def he_skel(s):
+def he_skel(s, v=False):
     s = re.sub(r'\([^)]*\)', ' ', s).translate(HE_FINAL)
+    s = re.sub(r"ע[׳'`’]", 'ג', s)                             # an ayin with a geresh is ghayin (ע׳ג׳ר ~ غجر)
+    if v:
+        s = s.replace('וו', 'ב')                                # a double vav read as the consonant v (נווה ~ نافيه)
     s = re.sub(r"[׳'`’]", '', s)
     s = re.sub(r'(^|[\s\-־])(אל|א)[\s\-־]', r'\1', s)          # the Arabic article written in Hebrew
     return ''.join(HE_CLASS.get(c, '') for c in s)
 
 
-def ar_skel(s):
+def ar_skel(s, article=True):
     s = re.sub(r'\([^)]*\)', ' ', s)
     s = re.sub(r'[\u064B-\u0652\u0670\u0640]', '', s)
-    s = re.sub(r'(^|[\s\-–])ال', r'\1', s).replace('تس', 'ص')
+    if article:
+        s = re.sub(r'(^|[\s\-–])ال', r'\1', s)
+    s = s.replace('تس', 'ص')
     return ''.join(AR_CLASS.get(c, '') for c in s)
 
 
+def he_skels(he):
+    """the readings of a Hebrew name: a double vav as v (נווה) or as w (הוואשלה, an Arabic name written in Hebrew)"""
+    return {x for x in (he_skel(he), he_skel(he, v=True)) if x}
+
+
+def ar_skels(ar):
+    """the readings of an Arabic name: an initial ال as the article or as part of the name (العاد, Elad)"""
+    return {y for y in (ar_skel(ar), ar_skel(ar, article=False)) if y}
+
+
 def consistent(he, ar):
-    """does the Arabic name spell the Hebrew one? (weak letters dropped on both sides, so vowels do not count)"""
-    x, y = he_skel(he), ar_skel(ar)
-    if not x or not y:
-        return False
-    return x == y or difflib.SequenceMatcher(None, x, y).ratio() >= 0.6
+    """does the Arabic name spell the Hebrew one? (weak letters dropped on both sides, so vowels do not count) A
+    Hebrew name of one or two strong consonants must be spelled exactly: one letter more or less is already the name
+    of another place (הזורע SR, הזורעים SRM, הוזייל SL, הושעיה S)"""
+    xs, ys = he_skels(he), ar_skels(ar)
+    return bool(xs & ys) or any(len(x) > 2 and difflib.SequenceMatcher(None, x, y).ratio() >= 0.6 for x in xs for y in ys)
 
 
 def norm_ar(s):
@@ -112,7 +134,7 @@ def norm_ar(s):
 
 
 def norm_he(s):
-    s = re.sub(r"[׳'`’]", "'", s).replace('״', '"')
+    s = re.sub(r"[׳'`’]", "'", s).replace('״', '"').replace('יי', 'י')     # הודייה / הודיה
     return re.sub(r'[\s\-־]+', ' ', s).strip()
 
 
@@ -146,10 +168,28 @@ def load_sources(cache):
         if e.get('name_ar') and e.get('name') and e.get('id'):
             o.setdefault(norm_he(e['name']), e['name_ar'].strip())
     by_name['oref'] = o
-    rows = csv.DictReader(io.StringIO(fetch('cbs-list', cache)))
-    by_code['cbs-list'] = {int(r['symbol_number']): r['name_in_arabic'].strip() for r in rows
-                           if r['symbol_number'].strip().isdigit() and r['name_in_arabic'].strip()}
-    return by_code, by_name
+    rows = sorted((r for r in csv.DictReader(io.StringIO(fetch('cbs-list', cache)))
+                   if r['symbol_number'].strip().isdigit() and r['name_in_arabic'].strip()), key=lambda r: r['name_in_hebrew'].strip())
+    by_code['cbs-list'] = {int(r['symbol_number']): r['name_in_arabic'].strip() for i, r in enumerate(rows) if not shifted(rows, i)}
+    # every Arabic name of the list, the shifted ones too, for spelled_anywhere()
+    spare = [r['name_in_arabic'].strip() for r in rows]
+    return by_code, by_name, spare
+
+
+SHIFT = 5   # how many rows, in the list's Hebrew alphabetical order, a shifted Arabic name has been seen to move
+
+
+def shifted(rows, i):
+    """is row i of the CBS-code list (rows in Hebrew alphabetical order) one whose Arabic name is another row's? In
+    runs of rows the Arabic column is rotated against the Hebrew one (הודיה has הודיות's name, הוזייל הושעיה's, הזורע
+    הזורעים's, כפר מל"ל כפר מצר's), and a short name passes consistent() for its neighbour too, so a name that spells
+    exactly a nearby row's Hebrew name and not its own is dropped"""
+    r = rows[i]
+    ys = ar_skels(clean_ar(r['name_in_arabic']))
+    if not ys or he_skels(r['name_in_hebrew']) & ys:
+        return False
+    return any(he_skels(q['name_in_hebrew']) & ys for q in rows[max(0, i - SHIFT):i + SHIFT + 1]
+               if q['symbol_number'].strip() != r['symbol_number'].strip())
 
 
 def candidates(code, he, by_code, by_name, order):
@@ -199,10 +239,10 @@ def main():
     ap.add_argument('--report', help='write a TSV of every locality and its candidates')
     a = ap.parse_args()
     os.makedirs(a.cache, exist_ok=True)
-    by_code, by_name = load_sources(a.cache)
+    by_code, by_name, spare = load_sources(a.cache)
     core = json.load(open(os.path.join(ROOT, 'site', 'data', 'core.json'), encoding='utf-8'))
     index = {}
-    for v in list(by_code['cbs-list'].values()) + list(by_name['oref'].values()):
+    for v in spare + list(by_name['oref'].values()):
         index.setdefault(ar_skel(clean_ar(v)), []).append(clean_ar(v))
     names, src_of, report, counts = {}, {}, [], {}
     for l in core['localities']:

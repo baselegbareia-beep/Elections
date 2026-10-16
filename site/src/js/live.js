@@ -62,7 +62,7 @@ async function loadLive() {
   S.turnoutHistory = history;
   // a file that fails to load keeps its previous copy; one the feed no longer lists is dropped
   if (!turnout) S.liveTurnout = null; else if (turnout.ok) S.liveTurnout = turnout.data;
-  if (!exits) S.liveExit = null; else if (exits.ok) S.liveExit = exits.data;
+  if (!exits) S.liveExit = null; else if (exits.ok) S.liveExit = i18nExit(exits.data);
   let R = res && res.ok ? i18nLive(res.data) : null;
   if (res && !res.ok && S.live && S.live.mode === 'live') R = S.live;
   if (R && R.frame && !earlyResults(R)) {

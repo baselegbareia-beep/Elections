@@ -282,8 +282,9 @@ function voteSharesFromAverage(avg) {
 /* ---------- Monte Carlo ---------- */
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-// Surplus-vote agreements reported in the media (Sep–Oct 2026). The CEC publishes the official list after the 16 Oct filing deadline.
-const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List']];
+// The surplus-vote agreements filed by the 16 Oct 2026 deadline, as reported (pipeline/reference/lists_2026.json, with
+// the sources); pipeline/test_live.py 11c compares this copy with the feed's live_fetch.AGREEMENTS_2026.
+const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List'], ['Shas', 'UTJ']];
 /* Final-week poll average vs result, K21–K25 (final_polls.json): Netanyahu-bloc RMSE 2.4 seats,
    Arab lists 1.55 seats. With about 2.5 weeks left the spread is widened by half, to about 3.6 and
    2.3 seats; the factor is an assumption (no averages from 2.5 weeks out are in the data). The bloc spread comes only from the swing between the two Jewish camps and the
