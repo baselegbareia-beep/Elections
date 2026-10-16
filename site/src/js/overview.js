@@ -15,7 +15,7 @@ function ensureSims() {
 // From 27.10 22:00 the overview and the coalition calculator keep the frozen pre-election forecast: this note on top
 // says so and points to the count on the election-day tab.
 function postCloseNote(lastDate) {
-  return `<p class="post-note"><b>התחזית שלפני הבחירות</b> (סקרים עד ${dateHe(lastDate, { day: 'numeric', month: 'numeric' })}). התוצאות בלשונית <a href="#live" data-goto="live">יום הבחירות</a>.</p>`;
+  return `<p class="post-note">${t('<b>התחזית שלפני הבחירות</b> (סקרים עד {d}). התוצאות בלשונית <a href="#live" data-goto="live">יום הבחירות</a>.', { d: dateHe(lastDate, { day: 'numeric', month: 'numeric' }) })}</p>`;
 }
 function blocTotals(seats, blocs = currentBlocs()) {
   const t = { coal: 0, opp: 0, arab: 0 };
@@ -48,57 +48,58 @@ function renderOverview() {
   // once the polls close the page keeps the frozen pre-election forecast, said in the past tense and pointing to the
   // count, so a reader on 28.10 is not given odds that the count contradicts
   const closed = ilStamp(ilNow()) >= POLLS_CLOSE;
-  const chance = closed ? 'הסיכוי שנתן הממוצע ל-61' : 'סיכוי ל-61';
+  const chance = closed ? t('הסיכוי שנתן הממוצע ל-61') : t('סיכוי ל-61');
 
   root.innerHTML = `
   ${closed ? postCloseNote(last.date) : ''}
   <div class="section-head"><div>
-    <span class="eyebrow">${closed ? 'התחזית שלפני הבחירות · ' : ''}נכון ל-${dateHe(last.date)} · ${av.n} סקרים ב-28 הימים ${closed ? 'שלפני כן' : 'האחרונים'}</span>
-    <h2>${closed ? 'מה צפו הסקרים' : 'מי מגיע ל-61?'}</h2>
-    <p>ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, ומתוקן להטיה הקבועה של כל סוקר. ממנו ${closed ? 'נגזרו' : 'נגזרים'} ${fmt(sims.seats.length)} תרחישים של חלוקת מנדטים לפי שיטת בדר-עופר ואחוז החסימה.</p>
+    <span class="eyebrow">${closed ? t('התחזית שלפני הבחירות · ') : ''}${t(closed ? 'נכון ל-{d} · {n} סקרים ב-28 הימים שלפני כן' : 'נכון ל-{d} · {n} סקרים ב-28 הימים האחרונים', { d: dateHe(last.date), n: av.n })}</span>
+    <h2>${closed ? t('מה צפו הסקרים') : t('מי מגיע ל-61?')}</h2>
+    <p>${t(closed ? 'ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, ומתוקן להטיה הקבועה של כל סוקר. ממנו נגזרו {n} תרחישים של חלוקת מנדטים לפי שיטת בדר-עופר ואחוז החסימה.'
+      : 'ממוצע סקרים משוקלל לפי עדכניות וגודל מדגם, ומתוקן להטיה הקבועה של כל סוקר. ממנו נגזרים {n} תרחישים של חלוקת מנדטים לפי שיטת בדר-עופר ואחוז החסימה.', { n: fmt(sims.seats.length) })}</p>
   </div></div>
   <div class="grid">
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>גוש נתניהו</span><span class="v num">${seatNow.coal}</span><span class="p61"><b class="num">${pct(100 * coalSim.p61, 0)}</b> ${chance}</span><span class="d">מנדטים לפי ממוצע הסקרים; סכום הממוצעים ${fmt1(seatAvg.coal)}</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>האופוזיציה היהודית</span><span class="v num">${seatNow.opp}</span><span class="p61"><b class="num">${pct(100 * oppSim.p61, 0)}</b> ${chance} לבדה</span><span class="d">עם הרשימות הערביות: ${pct(100 * oppArab.p61, 0)} · סכום הממוצעים ${fmt1(seatAvg.opp)}</span></div>
-    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>הרשימה המשותפת ורע״ם</span><span class="v num">${seatNow.arab}</span><span class="p61"><b class="num">${pct(100 * kingmaker, 0)}</b> ${closed ? 'מהתרחישים שלפני הבחירות' : 'מהתרחישים'}: אף גוש בלעדיהן</span><span class="d">בכנסת ה-25: 10 מנדטים (רע״ם 5, חד״ש-תע״ל 5) · סכום הממוצעים ${fmt1(seatAvg.arab)}</span></div>
-    <div class="card c3 tile"><span class="l">שיעור ההצבעה בחברה הערבית, 2022</span><span class="v num">${pct(100 * arab25.voters / arab25.elig)}</span><span class="p61"><b class="num">${fmt1(100 * jew25.voters / jew25.elig - 100 * arab25.voters / arab25.elig)}</b> נקודות פחות מיהודים ואחרים</span><span class="d">ביישובים הערביים והדרוזיים; ${pct(100 * jew25.voters / jew25.elig)} בקרב יהודים ואחרים</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--coal)"></i>${t('גוש נתניהו')}</span><span class="v num">${seatNow.coal}</span><span class="p61"><b class="num">${pct(100 * coalSim.p61, 0)}</b> ${chance}</span><span class="d">${t('מנדטים לפי ממוצע הסקרים; סכום הממוצעים {v}', { v: fmt1(seatAvg.coal) })}</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--opp)"></i>${t('האופוזיציה היהודית')}</span><span class="v num">${seatNow.opp}</span><span class="p61"><b class="num">${pct(100 * oppSim.p61, 0)}</b> ${t('{c} לבדה', { c: chance })}</span><span class="d">${t('עם הרשימות הערביות: {p} · סכום הממוצעים {v}', { p: pct(100 * oppArab.p61, 0), v: fmt1(seatAvg.opp) })}</span></div>
+    <div class="card c3 tile"><span class="l"><i class="swatch" style="background:var(--arab)"></i>${t('הרשימה המשותפת ורע״ם')}</span><span class="v num">${seatNow.arab}</span><span class="p61"><b class="num">${pct(100 * kingmaker, 0)}</b> ${closed ? t('מהתרחישים שלפני הבחירות: אף גוש בלעדיהן') : t('מהתרחישים: אף גוש בלעדיהן')}</span><span class="d">${t('בכנסת ה-25: 10 מנדטים (רע״ם 5, חד״ש-תע״ל 5) · סכום הממוצעים {v}', { v: fmt1(seatAvg.arab) })}</span></div>
+    <div class="card c3 tile"><span class="l">${t('שיעור ההצבעה בחברה הערבית, 2022')}</span><span class="v num">${pct(100 * arab25.voters / arab25.elig)}</span><span class="p61"><b class="num">${fmt1(100 * jew25.voters / jew25.elig - 100 * arab25.voters / arab25.elig)}</b> ${t('נקודות פחות מיהודים ואחרים')}</span><span class="d">${t('ביישובים הערביים והדרוזיים; {p} בקרב יהודים ואחרים', { p: pct(100 * jew25.voters / jew25.elig) })}</span></div>
 
     <div class="card c12">
-      <div class="card-head"><div><h3>הכנסת לפי הממוצע</h3>
-      <p class="sub">120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.</p></div></div>
+      <div class="card-head"><div><h3>${t('הכנסת לפי הממוצע')}</h3>
+      <p class="sub">${t('120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.')}</p></div></div>
       <div class="chart" id="ov-strip"></div>
       <div class="legend" id="ov-strip-legend"></div>
     </div>
 
     <div class="card c7">
-      <h3>ממוצע הסקרים, לפי רשימה</h3>
-      <p class="sub">מנדטים בממוצע המשוקלל; הקו הדק מראה את הטווח בין הסקר הנמוך לגבוה ב-28 הימים האחרונים. אזור אחוז החסימה מסומן.</p>
+      <h3>${t('ממוצע הסקרים, לפי רשימה')}</h3>
+      <p class="sub">${t('מנדטים בממוצע המשוקלל; הקו הדק מראה את הטווח בין הסקר הנמוך לגבוה ב-28 הימים האחרונים. אזור אחוז החסימה מסומן.')}</p>
       <div class="chart" id="ov-bars"></div>
-      <p class="foot">המקור: ${S.polls.polls.length} סקרים שפורסמו מ-6 בספטמבר 2026 ואילך (אחרי סגירת הרשימות), ללא כפילויות. ${ilStamp(ilNow()) >= POLLS_CLOSE ? '<b>הממוצע קפוא מסוף יום שישי, 23.10 (תחילת איסור פרסום הסקרים).</b> התוצאות בלשונית <a href="#live" data-goto="live">"יום הבחירות"</a>.'
-        : ilStamp(ilNow()) >= POLL_BAN ? '<b>מסוף יום שישי, 23.10, אסור לפרסם סקרים חדשים עד סגירת הקלפיות, ולכן הממוצע קפוא.</b>' : 'החל מסוף יום שישי, 23.10, אסור לפרסם סקרים עד סגירת הקלפיות.'}</p>
+      <p class="foot">${t('המקור: {n} סקרים שפורסמו מ-6 בספטמבר 2026 ואילך (אחרי סגירת הרשימות), ללא כפילויות.', { n: S.polls.polls.length })} ${ilStamp(ilNow()) >= POLLS_CLOSE ? t('<b>הממוצע קפוא מסוף יום שישי, 23.10 (תחילת איסור פרסום הסקרים).</b> התוצאות בלשונית <a href="#live" data-goto="live">"יום הבחירות"</a>.')
+        : ilStamp(ilNow()) >= POLL_BAN ? t('<b>מסוף יום שישי, 23.10, אסור לפרסם סקרים חדשים עד סגירת הקלפיות, ולכן הממוצע קפוא.</b>') : t('החל מסוף יום שישי, 23.10, אסור לפרסם סקרים עד סגירת הקלפיות.')}</p>
     </div>
     <div class="card c5">
-      <h3>הגושים בתרחישים</h3>
-      <p class="sub">כמה מנדטים מקבל גוש נתניהו ב-${fmt(sims.seats.length)} סימולציות. כל עמודה היא מספר מנדטים אפשרי, גובהה הוא שכיחותו.</p>
+      <h3>${t('הגושים בתרחישים')}</h3>
+      <p class="sub">${t('כמה מנדטים מקבל גוש נתניהו ב-{n} סימולציות. כל עמודה היא מספר מנדטים אפשרי, גובהה הוא שכיחותו.', { n: fmt(sims.seats.length) })}</p>
       <div class="chart" id="ov-hist"></div>
-      <div class="legend"><span><i style="background:var(--coal)"></i>61 ומעלה (רוב)</span><span><i style="background:var(--rule-strong)"></i>פחות מ-61</span></div>
-      <p class="foot">מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי הפיזור הורחב בחצי. ההרחבה היא הנחה: אין בנתונים ממוצעים משבועיים לפני הבחירות. סטיית התקן של הגוש בתרחישים היא ${fmt1(d3.deviation(coalSim.tot))} מנדטים. 80% מהתרחישים: ${N(coalSim.q10)}–${N(coalSim.q90)} מנדטים.</p>
+      <div class="legend"><span><i style="background:var(--coal)"></i>${t('61 ומעלה (רוב)')}</span><span><i style="background:var(--rule-strong)"></i>${t('פחות מ-61')}</span></div>
+      <p class="foot">${t('מודל הדגמה. בשבוע שלפני הבחירות ב-2019–2022 טעה ממוצע הסקרים בגוש נתניהו ב-2.4 מנדטים בממוצע (שורש ממוצע הריבועים). כשנותרו כשבועיים וחצי הפיזור הורחב בחצי. ההרחבה היא הנחה: אין בנתונים ממוצעים משבועיים לפני הבחירות. סטיית התקן של הגוש בתרחישים היא {sd} מנדטים. 80% מהתרחישים: {lo}–{hi} מנדטים.', { sd: fmt1(d3.deviation(coalSim.tot)), lo: N(coalSim.q10), hi: N(coalSim.q90) })}</p>
     </div>
 
     <div class="card c5">
-      <h3>מעקב אחוז החסימה</h3>
-      <p class="sub">הסיכוי של כל רשימה לעבור 3.25% בתרחישים. אומדן הקולות לרשימות מתחת ל-3 מנדטים בממוצע נשען על האחוזים הגולמיים בקובצי הדיווח של הסוקרים, כשהם קיימים.</p>
+      <h3>${t('מעקב אחוז החסימה')}</h3>
+      <p class="sub">${t('הסיכוי של כל רשימה לעבור 3.25% בתרחישים. אומדן הקולות לרשימות מתחת ל-3 מנדטים בממוצע נשען על האחוזים הגולמיים בקובצי הדיווח של הסוקרים, כשהם קיימים.')}</p>
       <div id="ov-thr" class="tbl-wrap"></div>
     </div>
 
     <div class="card c7">
-      <h3>שלושה דברים שכדאי לדעת</h3>
+      <h3>${t('שלושה דברים שכדאי לדעת')}</h3>
       <ul class="callout-list" style="margin-top:12px">
-        <li><span class="n">1</span><p><b>השתתפות הערבים מכריעה את הגושים.</b> בין 2020 ל-2021 צנח שיעור ההצבעה בחברה הערבית מ-${pct(rate('K23', 'arab_std'))} ל-${pct(rate('K24', 'arab_std'))}. במחשבון הקואליציות אפשר לראות כמה מנדטים זז הגוש כשההשתתפות משתנה. <a href="#coalition" data-goto="coalition">למחשבון</a></p></li>
-        <li><span class="n">2</span><p><b>קולות שהולכים לפח.</b> ב-2022 לא עברו את אחוז החסימה מרצ (${fmt(k25.parties.find(p => p.id === 'מרצ').votes)} קולות) ובל״ד (${fmt(k25.parties.find(p => p.id === 'ד').votes)}). ${danger.length
-          ? `${closed ? 'לפי הסקרים שלפני הבחירות היו בסכנה' : 'השנה בסכנה'}: ${heList(danger.map(x => x.p.name))}.`
-          : passP.length ? `${closed ? 'לפי הסקרים שלפני הבחירות היו הכי קרובות לסף' : 'הכי קרובות לסף'}: ${heList(passP.slice(0, 3).map(x => x.p.name))}.` : ''} <a href="#polls" data-goto="polls">למגמות בסקרים</a></p></li>
-        <li><span class="n">3</span><p><b>הפילוג הערבי חזר בצורה חדשה.</b> חד״ש, תע״ל ובל״ד רצות יחד כ״הרשימה המשותפת״, ורע״ם לבדה. ועדת הבחירות פסלה את שתיהן ב-23.9.2026, ובית המשפט העליון ביטל את הפסילה פה אחד ב-2.10.2026. <a href="#arab" data-goto="arab">לעמוד החברה הערבית</a></p></li>
+        <li><span class="n">1</span><p>${t('<b>השתתפות הערבים מכריעה את הגושים.</b> בין 2020 ל-2021 צנח שיעור ההצבעה בחברה הערבית מ-{a} ל-{b}. במחשבון הקואליציות אפשר לראות כמה מנדטים זז הגוש כשההשתתפות משתנה. <a href="#coalition" data-goto="coalition">למחשבון</a>', { a: pct(rate('K23', 'arab_std')), b: pct(rate('K24', 'arab_std')) })}</p></li>
+        <li><span class="n">2</span><p>${t('<b>קולות שהולכים לפח.</b> ב-2022 לא עברו את אחוז החסימה מרצ ({m} קולות) ובל״ד ({b}).', { m: fmt(k25.parties.find(p => p.id === 'מרצ').votes), b: fmt(k25.parties.find(p => p.id === 'ד').votes) })} ${danger.length
+          ? t(closed ? 'לפי הסקרים שלפני הבחירות היו בסכנה: {l}.' : 'השנה בסכנה: {l}.', { l: heList(danger.map(x => x.p.name)) })
+          : passP.length ? t(closed ? 'לפי הסקרים שלפני הבחירות היו הכי קרובות לסף: {l}.' : 'הכי קרובות לסף: {l}.', { l: heList(passP.slice(0, 3).map(x => x.p.name)) }) : ''} ${t('<a href="#polls" data-goto="polls">למגמות בסקרים</a>')}</p></li>
+        <li><span class="n">3</span><p>${t('<b>הפילוג הערבי חזר בצורה חדשה.</b> חד״ש, תע״ל ובל״ד רצות יחד כ״הרשימה המשותפת״, ורע״ם לבדה. ועדת הבחירות פסלה את שתיהן ב-23.9.2026, ובית המשפט העליון ביטל את הפסילה פה אחד ב-2.10.2026. <a href="#arab" data-goto="arab">לעמוד החברה הערבית</a>')}</p></li>
       </ul>
     </div>
   </div>`;
@@ -106,12 +107,11 @@ function renderOverview() {
   drawSeatBars($('#ov-bars'), av);
   drawHistogram($('#ov-hist'), coalSim.tot);
   drawStrip($('#ov-strip'), S.seatsNow);
-  $('#ov-thr').innerHTML = passP.length ? `<table class="t wrap"><thead><tr><th>רשימה</th><th class="n hide-sm">אחוז הקולות (אומדן)</th><th class="n">סיכוי לעבור</th><th>הערכה</th></tr></thead><tbody>${
+  $('#ov-thr').innerHTML = passP.length ? `<table class="t wrap"><thead><tr><th>${t('רשימה')}</th><th class="n hide-sm">${t('אחוז הקולות (אומדן)')}</th><th class="n">${t('סיכוי לעבור')}</th><th>${t('הערכה')}</th></tr></thead><tbody>${
     passP.map(x => {
-      const maybe = '<span class="hide-sm">כנראה </span>';
-      const band = x.prob > 0.95 ? ['בטוחה', 'ok'] : x.prob > 0.68 ? [maybe + 'עוברת', 'ok'] : x.prob > 0.32 ? ['על הגדר', 'no'] : [maybe + 'בחוץ', 'no'];
+      const band = x.prob > 0.95 ? [t('בטוחה'), 'ok'] : x.prob > 0.68 ? [t('<span class="hide-sm">כנראה </span>עוברת'), 'ok'] : x.prob > 0.32 ? [t('על הגדר'), 'no'] : [t('<span class="hide-sm">כנראה </span>בחוץ'), 'no'];
       return `<tr><td>${slip(x.p.letters, x.p.name, party26Color(x.p))}</td><td class="n hide-sm">${pct(100 * S.shares[x.p.id])}</td><td class="n">${pct(100 * x.prob, 0)}</td><td><span class="status ${band[1]}">${band[1] === 'ok' ? ICON_OK : ICON_NO}${band[0]}</span></td></tr>`;
-    }).join('')}</tbody></table>` : '<p class="empty">כל הרשימות רחוקות מהסף.</p>';
+    }).join('')}</tbody></table>` : `<p class="empty">${t('כל הרשימות רחוקות מהסף.')}</p>`;
 }
 function rate(eid, sector) { const s = E(eid).sectors[sector]; return 100 * s.voters / s.elig; }
 
@@ -119,12 +119,12 @@ function drawSeatBars(el, av) {
   const parties = [...S.polls.parties].filter(p => av.hi[p.id] > 0 || av.avg[p.id] > 0.3).sort((a, b) => av.avg[b.id] - av.avg[a.id]);
   const W = widthOf(el), rowH = 30, M = { t: 22, r: 150, b: 14, l: 40 };
   const H = M.t + M.b + rowH * parties.length;
-  const svg = svgEl(el, W, H, 'ממוצע הסקרים לפי רשימה, עם הטווח בין הסקר הנמוך לגבוה');
+  const svg = svgEl(el, W, H, t('ממוצע הסקרים לפי רשימה, עם הטווח בין הסקר הנמוך לגבוה'));
   const maxV = Math.max(30, d3.max(parties, p => av.hi[p.id]));
   const x = d3.scaleLinear().domain([0, maxV]).range([W - M.r, M.l]);
   const y = (i) => M.t + i * rowH;
   svg.append('rect').attr('class', 'zone').attr('x', x(3.9)).attr('y', M.t - 6).attr('width', x(0) - x(3.9)).attr('height', H - M.t - M.b + 6);
-  svg.append('text').attr('class', 'lbl').attr('x', x(0)).attr('y', M.t - 10).attr('text-anchor', 'start').text('אזור אחוז החסימה');
+  svg.append('text').attr('class', 'lbl').attr('x', x(0)).attr('y', M.t - 10).attr('text-anchor', 'start').text(t('אזור אחוז החסימה'));
   [0, 10, 20, 30].filter(v => v <= maxV).forEach(v => {
     svg.append('line').attr('class', 'gridline').attr('x1', x(v)).attr('x2', x(v)).attr('y1', M.t - 4).attr('y2', H - M.b);
     svg.append('text').attr('class', 'lbl').attr('x', x(v)).attr('y', H - 3).attr('text-anchor', 'middle').text(v);
@@ -143,12 +143,12 @@ function drawSeatBars(el, av) {
     .text(d => fmt1(av.avg[d.id]));
   g.append('rect').attr('x', 0).attr('y', 0).attr('width', W).attr('height', rowH).attr('fill', 'transparent')
     .call(sel => bindTT(sel, d => `<h4>${esc(d.name)} <span class="slip"><b class="let">${esc(d.letters)}</b></span></h4>${ttRows([
-      ['בראשות', esc(d.leader)], ['ממוצע משוקלל', fmt1(av.avg[d.id])], ['טווח הסקרים', `${av.lo[d.id]}–${av.hi[d.id]}`], ['גוש (ברירת מחדל)', BLOC_NAME[d.bloc]]])}`));
+      [t('בראשות'), esc(d.leader)], [t('ממוצע משוקלל'), fmt1(av.avg[d.id])], [t('טווח הסקרים'), `${av.lo[d.id]}–${av.hi[d.id]}`], [t('גוש (ברירת מחדל)'), BLOC_NAME[d.bloc]]])}`));
 }
 
 function drawHistogram(el, totals) {
-  const W = widthOf(el, 480), H = 230, M = { t: 18, r: 12, b: 30, l: 12 };
-  const svg = svgEl(el, W, H, 'מספר המנדטים של גוש נתניהו בתרחישים');
+  const W = widthOf(el, 480), H = 230, M = { t: 18 + AR_PAD, r: 12, b: 30, l: 12 };
+  const svg = svgEl(el, W, H, t('מספר המנדטים של גוש נתניהו בתרחישים'));
   const counts = d3.rollup(totals, v => v.length, d => d);
   const xs = d3.range(d3.min(totals), d3.max(totals) + 1);
   const x = d3.scaleBand().domain(xs).range([M.l, W - M.r]).padding(0.12);  // more seats to the right, like the sliders
@@ -157,11 +157,11 @@ function drawHistogram(el, totals) {
     .attr('x', d => x(d)).attr('width', x.bandwidth()).attr('y', d => y(counts.get(d) || 0))
     .attr('height', d => H - M.b - y(counts.get(d) || 0)).attr('rx', Math.min(3, x.bandwidth() / 3))
     .attr('fill', d => d >= 61 ? 'var(--coal)' : 'var(--rule-strong)')
-    .call(sel => bindTT(sel, d => `<h4>${d} מנדטים</h4>${ttRows([['תרחישים', fmt(counts.get(d) || 0)], ['שיעור', pct(100 * (counts.get(d) || 0) / totals.length)]])}`));
+    .call(sel => bindTT(sel, d => `<h4>${t('{n} מנדטים', { n: d })}</h4>${ttRows([[t('תרחישים'), fmt(counts.get(d) || 0)], [t('שיעור'), pct(100 * (counts.get(d) || 0) / totals.length)]])}`));
   const x61 = x(61) !== undefined ? x(61) - (x.step() * x.padding()) / 2 : null;
   if (x61 != null) {
     svg.append('line').attr('class', 'ref-line').attr('x1', x61).attr('x2', x61).attr('y1', M.t - 6).attr('y2', H - M.b);
-    svg.append('text').attr('class', 'ref-text').attr('x', x61).attr('y', M.t - 9).attr('text-anchor', 'middle').text('רוב: 61');
+    svg.append('text').attr('class', 'ref-text').attr('x', x61).attr('y', M.t - 9).attr('text-anchor', 'middle').text(t('רוב: 61'));
   }
   xs.filter(v => v % 5 === 0).forEach(v => svg.append('text').attr('class', 'lbl').attr('x', x(v) + x.bandwidth() / 2).attr('y', H - 10).attr('text-anchor', 'middle').text(v));
 }
@@ -176,7 +176,7 @@ function drawStrip(el, seats) {
   const W = widthOf(el), rows = W < 560 ? 10 : 4, gap = 3;
   const cols = 120 / rows, size = Math.min(26, (W - gap * (cols - 1)) / cols), step = size + gap;
   const H = rows * step + 22;
-  const svg = svgEl(el, W, H, 'הכנסת לפי ממוצע הסקרים: 120 המושבים לפי גוש');
+  const svg = svgEl(el, W, H, t('הכנסת לפי ממוצע הסקרים: 120 המושבים לפי גוש'));
   const cells = [];
   parties.forEach(p => { for (let i = 0; i < seats[p.id]; i++) cells.push(p); });
   const colX = c => W - (c + 1) * step + gap;
@@ -184,7 +184,7 @@ function drawStrip(el, seats) {
   svg.selectAll('rect.seat').data(pos).join('rect').attr('class', 'seat')
     .attr('x', d => d.x).attr('y', d => d.y).attr('width', size).attr('height', size).attr('rx', Math.min(4, size / 5))
     .attr('fill', d => party26Color(d.p))
-    .call(sel => bindTT(sel, d => `<h4>${esc(d.p.name)}</h4>${ttRows([['מנדטים', seats[d.p.id]], ['גוש', BLOC_NAME[blocs[d.p.id]]]])}`));
+    .call(sel => bindTT(sel, d => `<h4>${esc(d.p.name)}</h4>${ttRows([[t('מנדטים'), seats[d.p.id]], [t('גוש'), BLOC_NAME[blocs[d.p.id]]]])}`));
   // bloc boundaries: a stepped channel in the surface colour between the last seat of one bloc and the first of the next
   const bottom = rows * step - gap;
   cells.forEach((p, i) => {

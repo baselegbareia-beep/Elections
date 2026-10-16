@@ -334,3 +334,31 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
 /* exit polls at phone width: the channels scroll under the sticky list column; while more of them lie beyond
    the far (left) edge it fades out, as the tab strip does (scrollHint in live.js sets .more) */
 .lv-scroll.more { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px); mask-image: linear-gradient(to right, transparent 0, #000 32px); }
+
+/* ---------- the language switch and the Arabic page (i18n.js) ---------- */
+.mast .wrap.lang-bar { display: flex; justify-content: flex-end; padding-block: 10px 0; margin-bottom: -14px; }
+.lang-sw { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 99px; overflow: hidden; background: var(--surface); font-size: var(--t-xs); }
+.lang-sw button { border: 0; background: none; padding: 3px 12px; cursor: pointer; color: var(--ink-2); line-height: 1.6; }
+.lang-sw button + button { border-inline-start: 1px solid var(--rule); }
+.lang-sw button:hover { color: var(--ink); }
+.lang-sw button[aria-pressed="true"] { background: var(--ink); color: var(--surface); font-weight: 600; cursor: default; }
+.lang-sw button[lang="ar"] { font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Tahoma, sans-serif; }
+/* Arabic: IBM Plex Sans Arabic for the text, Changa for the headings; numbers and ballot letters stay in Karantina */
+[lang="ar"] {
+  --font-ui: "IBM Plex Sans Arabic", "IBM Plex Sans Hebrew", "Noto Sans Arabic", "Segoe UI", Tahoma, system-ui, sans-serif;
+  --font-display: "Karantina", "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+}
+div[lang="ar"] { font-family: var(--font-ui); }
+[lang="ar"] .brand h1, [lang="ar"] .section-head h2, [lang="ar"] .lv-h2, [lang="ar"] .prose h3, [lang="ar"] .loc-head h3 {
+  font-family: "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif; letter-spacing: 0;
+}
+[lang="ar"] .brand h1 { font-size: 44px; line-height: 1; }
+[lang="ar"] .section-head h2 { font-size: 28px; line-height: 1.25; }
+[lang="ar"] .lv-h2 { font-size: 21px; line-height: 1.35; }
+[lang="ar"] .prose h3 { font-size: 20px; line-height: 1.3; }
+[lang="ar"] .loc-head h3 { font-size: 26px; line-height: 1.2; }
+[lang="ar"] .eyebrow, [lang="ar"] .ctl-label, [lang="ar"] .cd-lbl { letter-spacing: 0; }
+[lang="ar"] .cd-big.cd-word { font-family: "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif; font-size: 44px; line-height: 1.15; }
+@media (max-width: 720px) { [lang="ar"] .brand h1 { font-size: 36px; } [lang="ar"] .section-head h2 { font-size: 24px; } }
+/* the poll-ban notice on the Arabic page carries the statutory Hebrew wording under the Arabic */
+.ban-note .ban-he { display: block; margin-top: 6px; font-weight: 400; font-size: var(--t-xs); color: var(--ink-2); }

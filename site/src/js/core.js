@@ -54,7 +54,7 @@ function famColor(fam) {
 function party26Color(p) { return isDark() ? p.dark : p.color; }
 const blocVar = b => ({ coal: '--coal', nb: '--coal', opp: '--opp', arab: '--arab', out: '--muted', other: '--muted' }[b] || '--muted');
 const blocColor = b => cssVar(blocVar(b));
-const BLOC_NAME = { coal: 'גוש נתניהו', opp: 'האופוזיציה', arab: 'הרשימות הערביות', other: 'אחרות' };
+const BLOC_NAME = { coal: t('גוש נתניהו'), opp: t('האופוזיציה'), arab: t('הרשימות הערביות'), other: t('אחרות') };
 
 /* ---------- tooltip ---------- */
 const tt = {
@@ -125,7 +125,7 @@ function onFill(c, alpha = 1) {
 // Text width in px for gutter sizing (canvas measure, same UI font).
 const _ctx = document.createElement('canvas').getContext('2d');
 function textWidth(str, size = 12.5, weight = 400) {
-  _ctx.font = `${weight} ${size}px "IBM Plex Sans Hebrew", "Arial Hebrew", sans-serif`;
+  _ctx.font = `${weight} ${size}px ${CANVAS_FONT}`;
   return _ctx.measureText(String(str)).width;
 }
 // shorten a label with an ellipsis so it fits maxW pixels
@@ -343,7 +343,7 @@ function famOf(eid, letter) {
   const p = partyMeta(eid, letter); return p ? p.family : 'other';
 }
 function partyName(eid, letter) {
-  if (letter === 'other') return 'אחרות';
+  if (letter === 'other') return t('אחרות');
   const p = partyMeta(eid, letter); return p ? p.name : letter;
 }
 function locVotes(loc, eid) {
@@ -370,4 +370,6 @@ function invalidatePolls() {
   S.liveBlocsStale = true;
 }
 // Date-only strings ('2022-11-01') are calendar dates: format them in UTC so no viewer sees the previous day.
-const dateHe = (s, opts = { day: 'numeric', month: 'long', year: 'numeric' }) => toDate(s).toLocaleDateString('he-IL', { ...opts, timeZone: 'UTC' });
+// A month name follows the page's language (DATE_LOCALE); a day.month date is 27.10 in both.
+const dateHe = (s, opts = { day: 'numeric', month: 'long', year: 'numeric' }) =>
+  toDate(s).toLocaleDateString(/^(long|short)$/.test(opts.month) ? DATE_LOCALE : 'he-IL', { ...opts, timeZone: 'UTC' });
