@@ -1,8 +1,8 @@
 {
  "fetcher": "cbs",
- "started": "2026-10-16T22:27:54+00:00",
- "written": "2026-10-16T22:48:55+00:00",
- "finished": "2026-10-16T22:48:55+00:00",
+ "started": "2026-10-16T22:54:49+00:00",
+ "written": "2026-10-16T23:14:49+00:00",
+ "finished": "2026-10-16T23:14:49+00:00",
  "stage": "done",
  "deadline_s": 1200,
  "past_deadline": true,
@@ -10,12 +10,12 @@
   "python": "3.12.15",
   "host": "runnervm8k3b6"
  },
- "ok": 0,
- "failed": 21,
+ "ok": 61,
+ "failed": 1,
  "census_dashboards": {
-  "requests": 0,
-  "areas": 0,
-  "ok": 0,
+  "requests": 442,
+  "areas": 78,
+  "ok": 78,
   "stopped": "the deadline (--deadline)",
   "cities": [
    "3000",
@@ -28,7 +28,16 @@
    "1063",
    "8000"
   ],
-  "searched": [],
+  "searched": [
+   "3000",
+   "4000",
+   "5000",
+   "7600",
+   "8500",
+   "7000",
+   "1061",
+   "1063"
+  ],
   "priority_units": {
    "3000": 55,
    "4000": 19,
@@ -46,172 +55,1864 @@
   {
    "name": "ishuvim.json",
    "url": "https://www.cbs.gov.il/he/publications/_api/web/GetFolderByServerRelativeUrl('/he/publications/doclib/2019/ishuvim')/Files?$select=Name,ServerRelativeUrl,Length,TimeLastModified&$top=500",
-   "ok": false,
-   "path": null,
+   "ok": true,
+   "path": "listings/ishuvim.json",
    "note": null,
-   "error": "URLError: <urlopen error timed out>"
-  },
-  {
-   "name": "bycode2025.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2025.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "URLError: <urlopen error timed out>"
-  },
-  {
-   "name": "bycode2024.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2024.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "URLError: <urlopen error timed out>"
-  },
-  {
-   "name": "bycode2023.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2023.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "URLError: <urlopen error timed out>"
-  },
-  {
-   "name": "bycode2022.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2022.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 12967,
+   "sha256": "6c7bd725eafb2e2f6d4aa12a2e7982d036cbfea3b694d776b404317dd8a71580",
+   "content_type": "application/json;odata=nometadata;streaming=true;charset=utf-8",
+   "last_modified": "Fri, 16 Oct 2026 22:54:49 GMT"
   },
   {
    "name": "intro.pdf",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/intro.pdf",
-   "ok": false,
-   "path": null,
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2019/ishuvim/intro.pdf",
+   "ok": true,
+   "path": "files/intro.pdf",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 302077,
+   "sha256": "f45b920ff9e3110cf35b5f3c20e205e49b72492dbebba7eead290e763960c0c2",
+   "content_type": "application/pdf",
+   "last_modified": "Tue, 23 Dec 2025 13:22:40 GMT"
+  },
+  {
+   "name": "bycode2022.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2019/ishuvim/bycode2022.xlsx",
+   "ok": true,
+   "path": "files/bycode2022.xlsx",
+   "note": null,
+   "status": 200,
+   "bytes": 341988,
+   "sha256": "b58b54759d182fac4ca3a2d6d16d88bc3dbf19c222b673c923e7d6242eb930eb",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 14:45:15 GMT"
+  },
+  {
+   "name": "bycode2023araii.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2019/ishuvim/bycode2023araii.xlsx",
+   "ok": true,
+   "path": "files/bycode2023araii.xlsx",
+   "note": null,
+   "status": 200,
+   "bytes": 354064,
+   "sha256": "432fdb83700824d2656b5d847d6aec30228b55abd6c5cf5b179dabde45b0616b",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 18:10:35 GMT"
+  },
+  {
+   "name": "bycode2024.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2019/ishuvim/bycode2024.xlsx",
+   "ok": true,
+   "path": "files/bycode2024.xlsx",
+   "note": null,
+   "status": 200,
+   "bytes": 370654,
+   "sha256": "a021c6a151863ded624d2f674f9bbcf90ba9f3660c8d55aebe6526ff7f5d2ad0",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 14:14:53 GMT"
+  },
+  {
+   "name": "bycode2023Sofi.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2019/ishuvim/bycode2023Sofi.xlsx",
+   "ok": true,
+   "path": "files/bycode2023Sofi.xlsx",
+   "note": null,
+   "status": 200,
+   "bytes": 318412,
+   "sha256": "a372c2b45e62bc77bab83eb885c73eab0985d79f53b40853946146915e11a7a9",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 18:03:11 GMT"
   },
   {
    "name": "ckan_census2022.json",
    "url": "https://data.gov.il/api/3/action/package_show?id=3bd97fde-6cc3-456d-ab63-1caad16b2b6a",
-   "ok": false,
-   "path": null,
+   "ok": true,
+   "path": "listings/ckan_census2022.json",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 8244,
+   "sha256": "8899ac4184e0453a2b2eee17e99629c3d491b8bb2e77b96d697578a3ec42ea19",
+   "content_type": "application/json;charset=utf-8",
+   "last_modified": null
   },
   {
    "name": "ckan_localities.json",
    "url": "https://data.gov.il/api/3/action/package_show?id=d9b1e04c-426f-4e32-ba40-a1ad9d8748a7",
-   "ok": false,
-   "path": null,
+   "ok": true,
+   "path": "listings/ckan_localities.json",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 14274,
+   "sha256": "c8b22d6d85b1a7c4cc089e78645f61481c8149995070323a3a42e3c674f143e8",
+   "content_type": "application/json;charset=utf-8",
+   "last_modified": null
+  },
+  {
+   "name": "datagov_bycode2023.xlsx",
+   "url": "https://data.gov.il/dataset/d9b1e04c-426f-4e32-ba40-a1ad9d8748a7/resource/d47a54ff-87f0-44b3-b33a-f284c0c38e5a/download/bycode2023.xlsx",
+   "ok": true,
+   "path": "files/datagov_bycode2023.xlsx",
+   "note": "resource d47a54ff-87f0-44b3-b33a-f284c0c38e5a modified 2025-04-08T07:41:39.665786",
+   "status": 200,
+   "bytes": 343908,
+   "sha256": "8de160d5ebd3731f9e306c6a3cb029b0c9789908723cc94d0f5ba98513472927",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 08 Apr 2025 07:41:39 GMT"
+  },
+  {
+   "name": "datagov_bycode2022.xlsx",
+   "url": "https://data.gov.il/dataset/d9b1e04c-426f-4e32-ba40-a1ad9d8748a7/resource/199b15db-3bcb-470e-ba03-73364737e352/download/bycode2022.xlsx",
+   "ok": true,
+   "path": "files/datagov_bycode2022.xlsx",
+   "note": "resource 199b15db-3bcb-470e-ba03-73364737e352 modified 2025-04-08T07:57:11.231365",
+   "status": 200,
+   "bytes": 341989,
+   "sha256": "43ddfeaa9983c7a79fe4eccb421b61c6e8aeb43275d3d17f096bbbaf032c3925",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 08 Apr 2025 07:57:11 GMT"
   },
   {
    "name": "census2022_localities_statareas.csv",
    "url": "https://data.gov.il/dataset/3bd97fde-6cc3-456d-ab63-1caad16b2b6a/resource/9a9e085f-3bc8-41df-b15f-be0daaf99e30/download/selected-data-by-localities-and-statistical-areas-2022-census.csv",
-   "ok": false,
-   "path": null,
+   "ok": true,
+   "path": "files/census2022_localities_statareas.csv",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 949047,
+   "sha256": "9d04fca6f04b40aece6bf48baf137e011a1af3acf8e673d10b639635be10a4f1",
+   "content_type": "text/csv",
+   "last_modified": "Mon, 03 Jun 2024 05:07:43 GMT"
   },
   {
    "name": "geo_catalog.json",
    "url": "https://www.cbs.gov.il/he/publications/_api/web/GetFolderByServerRelativeUrl('/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA')/Files?$select=Name,ServerRelativeUrl,Length,TimeLastModified&$top=500",
-   "ok": false,
-   "path": null,
+   "ok": true,
+   "path": "listings/geo_catalog.json",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 88140,
+   "sha256": "c967c283b51bf8be448946d328eb88845e3563083690a7b603a3e8e0255b1bd1",
+   "content_type": "application/json;odata=nometadata;streaming=true;charset=utf-8",
+   "last_modified": "Fri, 16 Oct 2026 22:55:02 GMT"
   },
   {
-   "name": "k21_kalpi_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_April2019_stat2011.xlsx",
-   "ok": false,
-   "path": null,
+   "name": "geo_catalog_folders.json",
+   "url": "https://www.cbs.gov.il/he/publications/_api/web/GetFolderByServerRelativeUrl('/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA')/Folders?$select=Name,ServerRelativeUrl,ItemCount&$top=100",
+   "ok": true,
+   "path": "listings/geo_catalog_folders.json",
    "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
-  },
-  {
-   "name": "k22_kalpi_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_September2019_stat2011.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
-  },
-  {
-   "name": "k23_kalpi_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2020_stat2011.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
-  },
-  {
-   "name": "k24_kalpi_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2021_stat2011.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
-  },
-  {
-   "name": "k25_kalpi_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_November2022_stat2011.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
-  },
-  {
-   "name": "k25_kalpi_to_stat2011_readme.pdf",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_kalpi_November2022_stat2011.pdf",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "status": 200,
+   "bytes": 12,
+   "sha256": "99bcfca61a865fe7ac5bb675250de956e8e0fb175d59adac80bb2fb177154a2c",
+   "content_type": "application/json;odata=nometadata;streaming=true;charset=utf-8",
+   "last_modified": "Fri, 16 Oct 2026 22:55:03 GMT"
   },
   {
    "name": "k25_stable_kalpi.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_November2022.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_November2022.xlsx",
+   "ok": true,
+   "path": "files/k25_stable_kalpi.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_November2022.xlsx, modified 2026-07-29T10:41:36Z",
+   "status": 200,
+   "bytes": 239520,
+   "sha256": "67c3377a930584d1dcf1686a65c1259ec6ae0c2b4254cf4647d096318f739de4",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Sun, 27 Sep 2026 18:31:47 GMT"
   },
   {
-   "name": "k25_stable_kalpi_readme.pdf",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_Stable_kalp_November2022.pdf",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "name": "k25_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_November2022_stat2011.xlsx",
+   "ok": true,
+   "path": "files/k25_kalpi_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_November2022_stat2011.xlsx, modified 2026-07-29T10:41:26Z",
+   "status": 200,
+   "bytes": 329164,
+   "sha256": "2b78483f0e3f8999d346b9bc8561af36cf9ffb6838c43c9b9f726795c3bb4387",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 21:01:29 GMT"
   },
   {
-   "name": "stat2011_to_stat2022.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202011%20%D7%9C%D7%90%D7%A1%202022.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "name": "k25_kalpi_to_stat2011_readme.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_kalpi_November2022_stat2011.pdf",
+   "ok": true,
+   "path": "files/k25_kalpi_to_stat2011_readme.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/ReadMe_kalpi_November2022_stat2011.pdf, modified 2026-07-29T10:41:26Z",
+   "status": 200,
+   "bytes": 498037,
+   "sha256": "9157ae4c88ec44bfce3682a76215d566ad1d6934469ce3e60d56efbb8a1d74f4",
+   "content_type": "application/pdf",
+   "last_modified": "Wed, 29 Jul 2026 10:41:43 GMT"
+  },
+  {
+   "name": "k22_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_September2019_stat2011.xlsx",
+   "ok": true,
+   "path": "files/k22_kalpi_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_September2019_stat2011.xlsx, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 312967,
+   "sha256": "6f562be2eecde50dc7e65ed9195f0702d62e33bbb11e43cd6852029566a29fa3",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 10:15:59 GMT"
+  },
+  {
+   "name": "k21_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_April2019_stat2011.xlsx",
+   "ok": true,
+   "path": "files/k21_kalpi_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_April2019_stat2011.xlsx, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 341417,
+   "sha256": "9d3bcf308de1d885a4cc3d799cea6c1d532aa563c073db1fc71cbc92b74d7056",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 30 Sep 2026 10:56:54 GMT"
+  },
+  {
+   "name": "k24_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2021_stat2011.xlsx",
+   "ok": true,
+   "path": "files/k24_kalpi_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_March2021_stat2011.xlsx, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 350762,
+   "sha256": "cae1e105ac8c5313bbc51e487091073b1e4917df6b00ac438af6f4b4e8d96e2b",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 00:12:20 GMT"
+  },
+  {
+   "name": "k23_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2020_stat2011.xlsx",
+   "ok": true,
+   "path": "files/k23_kalpi_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_March2020_stat2011.xlsx, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 343614,
+   "sha256": "6b0f478d3c061c520f4e24bd18f92c89373a3944a264972409b5d7b82de01caf",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 00:16:24 GMT"
   },
   {
    "name": "stat2022_to_stat2011.xlsx",
-   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202022%20%D7%9C%D7%90%D7%A1%202011.xlsx",
-   "ok": false,
-   "path": null,
-   "note": null,
-   "error": "Stop: not asked: past the deadline (--deadline)"
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202022%20%D7%9C%D7%90%D7%A1%202011.xlsx",
+   "ok": true,
+   "path": "files/stat2022_to_stat2011.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/מפתח מעבר אס 2022 לאס 2011.xlsx, modified 2022-05-01T08:40:03Z",
+   "status": 200,
+   "bytes": 278388,
+   "sha256": "9a80fee5ac4775323a53b86f1f329a8ddce24c5e2ff271ded52fd2d583eead89",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 17:21:33 GMT"
+  },
+  {
+   "name": "stat2011_to_stat2022.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202011%20%D7%9C%D7%90%D7%A1%202022.xlsx",
+   "ok": true,
+   "path": "files/stat2011_to_stat2022.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/מפתח מעבר אס 2011 לאס 2022.xlsx, modified 2022-05-01T08:40:02Z",
+   "status": 200,
+   "bytes": 275973,
+   "sha256": "efe980c70a7bb91dcc54906aaa6b90260a35b75e68cc574c738282bed51a5734",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 23 Sep 2026 15:51:21 GMT"
+  },
+  {
+   "name": "Stable_kalpi_october_2026.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalpi_october_2026.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalpi_october_2026.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalpi_october_2026.xlsx, modified 2026-07-29T10:41:08Z",
+   "status": 200,
+   "bytes": 180650,
+   "sha256": "da9f62f6dc2257cffda4173da2764285a45aa4c236bf3a7ffd3a53d436535126",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 00:02:38 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_Kalpi_October2026.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_Stable_Kalpi_October2026.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_Kalpi_October2026.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/ReadMe_Stable_Kalpi_October2026.pdf, modified 2026-07-29T10:41:06Z",
+   "status": 200,
+   "bytes": 138243,
+   "sha256": "890f444247723e645822198838aeaccdf6f6784c90b1fa42162b342b42f0acee",
+   "content_type": "application/pdf",
+   "last_modified": "Wed, 29 Jul 2026 10:41:26 GMT"
+  },
+  {
+   "name": "ReadMe_Kalpi_October2026_Stat2022.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_Kalpi_October2026_Stat2022.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Kalpi_October2026_Stat2022.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/ReadMe_Kalpi_October2026_Stat2022.pdf, modified 2026-07-29T10:41:05Z",
+   "status": 200,
+   "bytes": 209015,
+   "sha256": "5826f717c98f284a76d979cfa3e8ac3f681f904b20324732b47c3a3b44b03120",
+   "content_type": "application/pdf",
+   "last_modified": "Wed, 29 Jul 2026 10:41:22 GMT"
+  },
+  {
+   "name": "kalpi_October2026_stat2022.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_October2026_stat2022.xlsx",
+   "ok": true,
+   "path": "files/kalpi_October2026_stat2022.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/kalpi_October2026_stat2022.xlsx, modified 2026-07-29T10:41:03Z",
+   "status": 200,
+   "bytes": 347862,
+   "sha256": "d984da021eb50c9a91e63d0cc50a78af73f3e0df2f9ccc1d898fb33ec2d702c8",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Sat, 26 Sep 2026 11:05:30 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_November2022_488b7180.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_November2022.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_November2022_488b7180.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_November2022.pdf, modified 2026-07-29T10:41:33Z",
+   "status": 200,
+   "bytes": 315152,
+   "sha256": "ba8507eb2a78c5b94981a25b0ee430be3949021d3dad5f9cc7815eaa9e328b1f",
+   "content_type": "application/pdf",
+   "last_modified": "Wed, 29 Jul 2026 10:41:48 GMT"
+  },
+  {
+   "name": "2011_198e9f0b.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%A8%D7%97%D7%95%D7%91%D7%95%D7%AA%20%D7%A2%D7%99%D7%A7%D7%A8%D7%99%D7%99%D7%9D%20%D7%95%D7%A9%D7%9B%D7%95%D7%A0%D7%95%D7%AA%20%D7%9C%D7%90%D7%A1%202011.xlsx",
+   "ok": true,
+   "path": "files/2011_198e9f0b.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/רחובות עיקריים ושכונות לאס 2011.xlsx, modified 2025-10-27T14:50:44Z",
+   "status": 200,
+   "bytes": 243785,
+   "sha256": "570af26e278b2fb62c6e5b5cf832d3c20e267dee522dcaa52661607f10c28c50",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Fri, 16 Oct 2026 22:55:22 GMT"
+  },
+  {
+   "name": "ReadMe_street_stat2022_2b0837f6.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8FReadMe_street_stat2022.pdf",
+   "ok": true,
+   "path": "files/ReadMe_street_stat2022_2b0837f6.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏‏‏‏‏‏‏ReadMe_street_stat2022.pdf, modified 2024-12-04T13:13:56Z",
+   "status": 200,
+   "bytes": 310574,
+   "sha256": "f314e14aff33dd409b03a9412fc1bf181ed50a56f1f204b5961fbae581f2f60d",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:24:52 GMT"
+  },
+  {
+   "name": "street_stat_2022_a62f738c.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8Fstreet_stat_2022.xlsx",
+   "ok": true,
+   "path": "files/street_stat_2022_a62f738c.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏street_stat_2022.xlsx, modified 2024-12-04T13:13:56Z",
+   "status": 200,
+   "bytes": 4108654,
+   "sha256": "aa079ce2528879de9ac24d5136b8f1c83915b2b499e96de6367c0479f11be2bc",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Sun, 27 Sep 2026 09:23:10 GMT"
+  },
+  {
+   "name": "kalpi2008_stat2008_bb51302e.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8Fkalpi2008_stat2008.xlsx",
+   "ok": true,
+   "path": "files/kalpi2008_stat2008_bb51302e.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏kalpi2008_stat2008.xlsx, modified 2024-08-07T09:29:32Z",
+   "status": 200,
+   "bytes": 450142,
+   "sha256": "0a0d39ffc80c94501939dcd6a35eee8cde3ca443e319ee3599fd5752766a07f0",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 12:17:19 GMT"
+  },
+  {
+   "name": "Kalpi2006_stat1995.xls",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Kalpi2006_stat1995.xls",
+   "ok": true,
+   "path": "files/Kalpi2006_stat1995.xls",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Kalpi2006_stat1995.xls, modified 2024-08-07T09:29:32Z",
+   "status": 200,
+   "bytes": 979456,
+   "sha256": "f9c9a78a2d6900eda66aca6cc94702efa2ef30fbd121b28a98b971b71dd9dac4",
+   "content_type": "application/vnd.ms-excel",
+   "last_modified": "Thu, 24 Sep 2026 12:07:24 GMT"
+  },
+  {
+   "name": "ReadMe_Kalpi2006_stat1995_5b6d8f3a.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Kalpi2006_stat1995.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Kalpi2006_stat1995_5b6d8f3a.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Kalpi2006_stat1995.pdf, modified 2024-08-07T09:29:32Z",
+   "status": 200,
+   "bytes": 556966,
+   "sha256": "c5fcab14128008766e37d4b25069fed5f617cbc6e81f35f79b0793725dcfd697",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:52:21 GMT"
+  },
+  {
+   "name": "Kalpi2002_stat1995_a603635c.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8F%E2%80%8F%E2%80%8FKalpi2002_stat1995.xlsx",
+   "ok": true,
+   "path": "files/Kalpi2002_stat1995_a603635c.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏‏‏Kalpi2002_stat1995.xlsx, modified 2024-08-07T09:29:32Z",
+   "status": 200,
+   "bytes": 285148,
+   "sha256": "c12e5f16788ebc9979200d04dad713747c6cb7108a8776ec00bb03115cc6f0e3",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 11:11:41 GMT"
+  },
+  {
+   "name": "ReadMe_Kalpi2002_stat1995_06c2cb5b.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Kalpi2002_stat1995.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Kalpi2002_stat1995_06c2cb5b.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Kalpi2002_stat1995.pdf, modified 2024-08-07T09:29:32Z",
+   "status": 200,
+   "bytes": 556949,
+   "sha256": "1675538dc515e5a0ec6fc32547f371231451be03229b9cd57f5777444a8f0681",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:53:22 GMT"
+  },
+  {
+   "name": "Stable_kalp_2013.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_2013.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalp_2013.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_2013.xlsx, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 223897,
+   "sha256": "18d8e505fc00732b7a32759fa9eb8581d13825552f031c814e37f3ff54b310f9",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Fri, 25 Sep 2026 18:22:24 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_September2019_ab3a5635.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_September2019.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_September2019_ab3a5635.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_September2019.pdf, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 310890,
+   "sha256": "6eaa9867e5e30d7c779c477c266bcf4cbdb756c17256382f7b705aa4e34e7ee1",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:43:03 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi2013_stat2011_2c8c639f.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi2013_stat2011.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi2013_stat2011_2c8c639f.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi2013_stat2011.pdf, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 569941,
+   "sha256": "9a0067fda6851a35b101b4e33a1f3de637c8c12c4bb70c597a119efec66405d6",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:49:52 GMT"
+  },
+  {
+   "name": "Stable_kalp_September2019.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_September2019.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalp_September2019.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_September2019.xlsx, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 204330,
+   "sha256": "a5626abdfd7afec62a1c3845126b3e8da0cce487f247cded81e33ab603925ce0",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 29 Sep 2026 08:26:49 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_2013_d9de5d59.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_2013.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_2013_d9de5d59.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_2013.pdf, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 575280,
+   "sha256": "1d6c55000eae78f510c94cd3abe1dad176d66707f6e3b4082bfad8af803de293",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:49:58 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi2008_stat2008_97884b3b.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi2008_stat2008.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi2008_stat2008_97884b3b.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi2008_stat2008.pdf, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 566313,
+   "sha256": "a430501b6559fbb4e9aaabf666a2915f7fc08dafb6e96daa5554eb11cba566fe",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:51:16 GMT"
+  },
+  {
+   "name": "kalpi2013_stat2011_f354a358.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8Fkalpi2013_stat2011.xlsx",
+   "ok": true,
+   "path": "files/kalpi2013_stat2011_f354a358.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏kalpi2013_stat2011.xlsx, modified 2024-08-07T09:29:31Z",
+   "status": 200,
+   "bytes": 344065,
+   "sha256": "d76f46ec1cc44e3f2ac1e49b028cedaf479535e7e8100031b9031e6bcf89350e",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 24 Sep 2026 12:18:52 GMT"
+  },
+  {
+   "name": "Stable_kalp_April2019.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_April2019.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalp_April2019.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_April2019.xlsx, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 205497,
+   "sha256": "deabe27a286b0b2568883c3bcea48be26769c33d32222e6d76d16a3fae399696",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Thu, 01 Oct 2026 10:25:02 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_March2020_87456d3b.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_March2020.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_March2020_87456d3b.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_March2020.pdf, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 315511,
+   "sha256": "b6c4676480aa0ba3fe53690fe49fae39dcf14b1d50d40d232d7abc9c38b36bc4",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:38:40 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi_September2019_stat2011_10f0f276.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi_September2019_stat2011.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi_September2019_stat2011_10f0f276.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi_September2019_stat2011.pdf, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 745180,
+   "sha256": "afaa5a225d471894576c30c2b56bf0b134c39aad35d66577400ef6a8141056bb",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:42:56 GMT"
+  },
+  {
+   "name": "Stable_kalp_March2020.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_March2020.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalp_March2020.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_March2020.xlsx, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 261463,
+   "sha256": "b981ae6fc255253f49cfbd337ae5e576d703cd58fb31848f7fbdf4baaef9d850",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 29 Sep 2026 08:26:50 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi_April2019_stat2011_ae8f8e1d.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi_April2019_stat2011.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi_April2019_stat2011_ae8f8e1d.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi_April2019_stat2011.pdf, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 501351,
+   "sha256": "74ebd7b343ab600c519f4b5a36c7ab1a2e6c99d3fac67e9355eb7f4245a87766",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:39:33 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_April2019_c37527b2.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_April2019.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_April2019_c37527b2.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_April2019.pdf, modified 2024-08-07T09:29:30Z",
+   "status": 200,
+   "bytes": 310133,
+   "sha256": "cd536616c64b68315ba1dd5d3ef3dc0712013f4619df91c9a47fe5ce24ac2d4d",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:39:38 GMT"
+  },
+  {
+   "name": "Stable_kalp_March2021.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_March2021.xlsx",
+   "ok": true,
+   "path": "files/Stable_kalp_March2021.xlsx",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/Stable_kalp_March2021.xlsx, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 255634,
+   "sha256": "cf6d1f57aa64726313076a53bba1d2df5006cacec8bc8a1a7ef0adb8d3d18ff2",
+   "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 29 Sep 2026 06:36:00 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi_March2020_stat2011_6cb13263.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi_March2020_stat2011.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi_March2020_stat2011_6cb13263.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi_March2020_stat2011.pdf, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 496240,
+   "sha256": "83c7abf3a280f4ed67dc079b5bc15b0c8c7ba12c5990e0412adfd8135ab9f4c6",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:37:41 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_2015_4d15dafb.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_2015.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_2015_4d15dafb.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_2015.pdf, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 306304,
+   "sha256": "1dd88e6243b0fa3a1ba492bafda06838589687f1136fc4283838ff40ee6cb365",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:30:03 GMT"
+  },
+  {
+   "name": "ReadMe_Stable_kalp_March2021_1444b16b.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_Stable_kalp_March2021.pdf",
+   "ok": true,
+   "path": "files/ReadMe_Stable_kalp_March2021_1444b16b.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_Stable_kalp_March2021.pdf, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 314107,
+   "sha256": "63b60818871fc256dd1931c29c2dca6eb24b948451a07b2a7dc2124f98a2b4f3",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:34:47 GMT"
+  },
+  {
+   "name": "ReadMe_kalpi_March2021_stat2011_19b6078f.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%E2%80%8F%E2%80%8FReadMe_kalpi_March2021_stat2011.pdf",
+   "ok": true,
+   "path": "files/ReadMe_kalpi_March2021_stat2011_19b6078f.pdf",
+   "note": "catalogue: /he/publications/DocLib/2022/קטלוג/1. יישובים וחלוקות גאוגרפיות/‏‏ReadMe_kalpi_March2021_stat2011.pdf, modified 2024-08-07T09:29:29Z",
+   "status": 200,
+   "bytes": 497412,
+   "sha256": "c126f62e165559d28f89bf153527fef2a2d5f7c457dd961008551b8c9c143bba",
+   "content_type": "application/pdf",
+   "last_modified": "Mon, 16 May 2022 08:34:07 GMT"
+  },
+  {
+   "name": "statisticalareas_demography2024.gdb.zip",
+   "url": "https://www.cbs.gov.il/he/publications/DocLib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/statisticalareas_demography2024.gdb.zip",
+   "ok": true,
+   "path": "files/statisticalareas_demography2024.gdb.zip",
+   "note": "newest statistical-area demography layer under the cap (2024)",
+   "status": 200,
+   "bytes": 9863658,
+   "sha256": "807f75ae2b17f0fb9808a003a5347e05a707329bd2e3b5c1c14c7c6784c0337d",
+   "content_type": "application/x-zip-compressed",
+   "last_modified": "Sun, 04 Oct 2026 13:56:49 GMT"
   },
   {
    "name": "census/religion_3000.json",
    "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
    "path": "census/religion_3000.json",
+   "ok": true,
+   "areas": 26,
+   "areas_with_data": 26,
+   "error": null
+  },
+  {
+   "name": "census/religion_4000.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_4000.json",
+   "ok": true,
+   "areas": 16,
+   "areas_with_data": 16,
+   "error": null
+  },
+  {
+   "name": "census/religion_5000.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_5000.json",
+   "ok": true,
+   "areas": 6,
+   "areas_with_data": 6,
+   "error": null
+  },
+  {
+   "name": "census/religion_7600.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_7600.json",
+   "ok": true,
+   "areas": 7,
+   "areas_with_data": 7,
+   "error": null
+  },
+  {
+   "name": "census/religion_8500.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_8500.json",
+   "ok": true,
+   "areas": 9,
+   "areas_with_data": 9,
+   "error": null
+  },
+  {
+   "name": "census/religion_7000.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_7000.json",
+   "ok": true,
+   "areas": 12,
+   "areas_with_data": 12,
+   "error": null
+  },
+  {
+   "name": "census/religion_1061.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_1061.json",
+   "ok": true,
+   "areas": 2,
+   "areas_with_data": 2,
+   "error": null
+  },
+  {
+   "name": "census/religion_1063.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_1063.json",
    "ok": false,
    "areas": 0,
    "areas_with_data": 0,
    "error": null
   }
  ],
- "geo_catalogue_not_taken": []
+ "geo_catalogue_not_taken": [
+  {
+   "name": "ReadMe_Setl2008_Households.pdf",
+   "bytes": 258074,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2019.xlsx",
+   "bytes": 3926944,
+   "modified": "2024-12-04T13:13:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Durable_Goods.pdf",
+   "bytes": 317184,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Workhours_Transport.pdf",
+   "bytes": 264269,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Occupations.pdf",
+   "bytes": 341211,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "land_use2003.gdb.zip",
+   "bytes": 144111955,
+   "modified": "2024-12-11T11:00:29Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme _demographic_project_2023.pdf",
+   "bytes": 158123,
+   "modified": "2026-10-04T13:27:28Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Origin.pdf",
+   "bytes": 251765,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2021.pdf",
+   "bytes": 310486,
+   "modified": "2024-12-04T13:13:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "statisticalareas_demography_2025.gdb.zip",
+   "bytes": 9859502,
+   "modified": "2026-10-04T13:27:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_rova_for_census2008.pdf",
+   "bytes": 305848,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Localities_2024.gdb.zip",
+   "bytes": 76307,
+   "modified": "2025-12-29T11:38:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_stat_area_2008.pdf",
+   "bytes": 354127,
+   "modified": "2023-03-27T07:27:26Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Mokdey_Taasuka.zip",
+   "bytes": 36371,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "שכבת אזורים סטטיסטיים 1995.zip",
+   "bytes": 3680984,
+   "modified": "2022-05-01T08:42:01Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_statistical_areas_2022.pdf",
+   "bytes": 133054,
+   "modified": "2024-04-17T07:04:13Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏‏‏‏‏ReadMe_street_stat2025.pdf",
+   "bytes": 153726,
+   "modified": "2026-02-24T07:34:23Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_demographic_project_2018.pdf",
+   "bytes": 420072,
+   "modified": "2024-12-04T13:12:10Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_city_stat_95.pdf",
+   "bytes": 353801,
+   "modified": "2023-03-27T07:12:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2020.xlsx",
+   "bytes": 3939529,
+   "modified": "2024-12-04T13:13:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏‏‏ReadMe_street_stat2023.pdf",
+   "bytes": 311627,
+   "modified": "2024-12-04T13:13:56Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Employee_Job.pdf",
+   "bytes": 248157,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_demographic_project_2020.pdf",
+   "bytes": 417371,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏readme_demographic_project_2012.pdf",
+   "bytes": 432059,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "natural_area2008.gdb.zip",
+   "bytes": 761391,
+   "modified": "2022-05-01T08:44:11Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme data census 2022 statistical areas 2022.pdf",
+   "bytes": 251423,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Occupations.pdf",
+   "bytes": 267327,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Disabilities.pdf",
+   "bytes": 319197,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏street_stat_2024.xlsx",
+   "bytes": 3708443,
+   "modified": "2026-02-23T12:53:57Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2016.pdf",
+   "bytes": 312721,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Pop_Sex_Age_Relig.pdf",
+   "bytes": 269297,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Housing.pdf",
+   "bytes": 380626,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "point_line_distance_November2023.gdb.zip",
+   "bytes": 71722,
+   "modified": "2024-12-11T11:13:01Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_demographic_project_2013.pdf",
+   "bytes": 411147,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Education.zip",
+   "bytes": 3627942,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2012.xlsx",
+   "bytes": 3739433,
+   "modified": "2024-12-04T13:13:51Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_point_line_distance_November2023.pdf",
+   "bytes": 116783,
+   "modified": "2024-12-11T11:13:01Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Commuting_TelAviv.zip",
+   "bytes": 36322,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "land_use2024.zip",
+   "bytes": 544990,
+   "modified": "2026-05-24T12:59:47Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "רחובות עיקריים ושכונות לאס 2008.xls",
+   "bytes": 489984,
+   "modified": "2022-05-01T08:41:30Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2020.pdf",
+   "bytes": 310579,
+   "modified": "2024-12-04T13:13:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Commuting_TelAviv.pdf",
+   "bytes": 417617,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Census_Comparisons.pdf",
+   "bytes": 312006,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2013.pdf",
+   "bytes": 311290,
+   "modified": "2024-12-04T13:13:51Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Marriage_Birth.pdf",
+   "bytes": 324506,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_rova2008_neighborhoods_streets_names.pdf",
+   "bytes": 304439,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Education.pdf",
+   "bytes": 279437,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Localities_2023.gdb.zip",
+   "bytes": 76335,
+   "modified": "2025-12-29T11:38:30Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Pop_Sex_Age_Relig.zip",
+   "bytes": 6358774,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Workhours_Transport.zip",
+   "bytes": 6334506,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_demographic_project_2014.pdf",
+   "bytes": 443168,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Education.pdf",
+   "bytes": 352854,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2015.pdf",
+   "bytes": 312106,
+   "modified": "2024-12-04T13:13:52Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Employee_Job.zip",
+   "bytes": 6300029,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2014.pdf",
+   "bytes": 311108,
+   "modified": "2024-12-04T13:13:52Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Ages65_Plus.pdf",
+   "bytes": 253971,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Readme_Kitey_Dereh_Points_November_2024.pdf",
+   "bytes": 114256,
+   "modified": "2024-12-11T11:09:44Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Commuting_Jerusalem.zip",
+   "bytes": 23683,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Origin.pdf",
+   "bytes": 325156,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "census_2022_setl_all_2021.gdb.zip",
+   "bytes": 216094,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Households.pdf",
+   "bytes": 333526,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_MokdeyTaasuka.pdf",
+   "bytes": 367413,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏readme_demographic_project_2019.pdf",
+   "bytes": 1261885,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Housing.zip",
+   "bytes": 6316171,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏readme_demographic_project_2016.pdf",
+   "bytes": 407346,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "buildingyears.zip",
+   "bytes": 31415,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "statisticalareas2011_socio2019.gdb.zip",
+   "bytes": 6962281,
+   "modified": "2024-12-04T13:12:49Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Employee_Job.zip",
+   "bytes": 3582983,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Industries.zip",
+   "bytes": 6493327,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Marriage_Birth.zip",
+   "bytes": 3580770,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2015.xls",
+   "bytes": 8098304,
+   "modified": "2024-12-04T13:13:53Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Commuting_BeerSheva.pdf",
+   "bytes": 438188,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "rova_for_census2008.zip",
+   "bytes": 318724,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "metropolin2008.gdb.zip",
+   "bytes": 399991,
+   "modified": "2022-05-01T08:47:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏street_stat_2023.xlsx",
+   "bytes": 3663458,
+   "modified": "2024-12-04T13:13:57Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Ages65_Plus.zip",
+   "bytes": 6284545,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Durable_Goods.zip",
+   "bytes": 3576967,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Points_Line_Distance_November_2024.gdb.zip",
+   "bytes": 88334,
+   "modified": "2024-12-11T11:12:10Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Readme_Localities_2023.pdf",
+   "bytes": 132375,
+   "modified": "2025-12-29T11:38:30Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_Stat2008_Ages65_plus.pdf",
+   "bytes": 325314,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Marriage_Birth.pdf",
+   "bytes": 251220,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏readme_demographic_project_2008.pdf",
+   "bytes": 401433,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_street_stat_2019.pdf",
+   "bytes": 312542,
+   "modified": "2024-12-04T13:13:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Commuting_Jerusalem.pdf",
+   "bytes": 439112,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Readme_Points_Line_Distance_November_2024.pdf",
+   "bytes": 116328,
+   "modified": "2024-12-11T11:12:10Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2017.xlsx",
+   "bytes": 3665892,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_natural_area2008.pdf",
+   "bytes": 300209,
+   "modified": "2023-03-21T08:45:26Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_land_use2024.pdf",
+   "bytes": 189655,
+   "modified": "2026-05-24T12:59:49Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "שכבת אזורים סטטיסטיים 2011.zip",
+   "bytes": 5995035,
+   "modified": "2026-02-09T08:33:55Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme  data census 2022 setl all 2021.pdf",
+   "bytes": 231462,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Households.zip",
+   "bytes": 6331563,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_metropolin1995.pdf",
+   "bytes": 416999,
+   "modified": "2023-03-27T06:33:24Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_buildingyears.pdf",
+   "bytes": 375575,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2014.xls",
+   "bytes": 8255488,
+   "modified": "2024-12-04T13:13:52Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_street_stat_2018.pdf",
+   "bytes": 312309,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏readme_metropolin2008.pdf",
+   "bytes": 364630,
+   "modified": "2023-04-24T07:23:56Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "שכבת אזורים סטטיסטיים 2008.zip",
+   "bytes": 6125126,
+   "modified": "2022-05-01T08:42:13Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "TatRova_for_census2008.zip",
+   "bytes": 795760,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_demographic_project_2017.pdf",
+   "bytes": 407611,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Ages65_Plus.zip",
+   "bytes": 3568152,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Employee_Job.pdf",
+   "bytes": 322215,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Civil_Labour_Force.zip",
+   "bytes": 3610767,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Industries.pdf",
+   "bytes": 366026,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Disabilities.pdf",
+   "bytes": 246930,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "census_2022_statistical_areas_2022.gdb.zip",
+   "bytes": 9233786,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Disabilities.zip",
+   "bytes": 6272996,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Industries.pdf",
+   "bytes": 291687,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_demographic_project_2015.pdf",
+   "bytes": 407181,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Occupations.zip",
+   "bytes": 6371596,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Civil_Labour_Force.pdf",
+   "bytes": 259664,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Disabilities.zip",
+   "bytes": 3574906,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏readme_demographic_project_2011.pdf",
+   "bytes": 423228,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏readme_demographic_project_2021.pdf",
+   "bytes": 436918,
+   "modified": "2024-12-04T13:12:10Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Durable_Goods.zip",
+   "bytes": 6272199,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Households.zip",
+   "bytes": 3582025,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Census_Comparisons.zip",
+   "bytes": 3737788,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Setl2008_Durable_Goods.pdf",
+   "bytes": 370188,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏TatRova2008_neighborhoods_streets_names.xls",
+   "bytes": 259072,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Origin.zip",
+   "bytes": 3588630,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Housing.zip",
+   "bytes": 3576505,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2013.xlsx",
+   "bytes": 4094774,
+   "modified": "2024-12-04T13:13:52Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "statistical_areas_2022.gdb.zip",
+   "bytes": 8745560,
+   "modified": "2022-05-01T08:42:31Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Marriage_Birth.zip",
+   "bytes": 6456005,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "natural_area2018.gdb.zip",
+   "bytes": 1623982,
+   "modified": "2022-05-01T08:44:30Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "conversionkey1995.xls",
+   "bytes": 457728,
+   "modified": "2022-05-01T08:36:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2016.xlsx",
+   "bytes": 3601043,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "land_use2014.zip",
+   "bytes": 29508006,
+   "modified": "2024-12-11T11:01:57Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏street_stat_2025.xlsx",
+   "bytes": 3899491,
+   "modified": "2026-02-24T11:16:24Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Housing.pdf",
+   "bytes": 327468,
+   "modified": "2024-08-07T09:33:20Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Workhours_Transport.pdf",
+   "bytes": 339130,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_Lamas_Census_Tracts_2011.pdf",
+   "bytes": 355173,
+   "modified": "2023-03-27T07:29:39Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme _demographic_project_2024.pdf",
+   "bytes": 145862,
+   "modified": "2026-10-04T13:27:22Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "land_use2021.zip",
+   "bytes": 573789,
+   "modified": "2026-05-24T12:59:38Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_demographic_project_2025.pdf",
+   "bytes": 145917,
+   "modified": "2026-10-04T13:27:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏readme_demographic_project_2022.pdf",
+   "bytes": 156090,
+   "modified": "2024-12-04T13:12:02Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "statisticalareas2011_socio2021.gdb.zip",
+   "bytes": 8545671,
+   "modified": "2024-12-04T13:12:49Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_kitey_dereh_point_November2023.pdf",
+   "bytes": 114539,
+   "modified": "2024-12-11T11:10:34Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Pop_Sex_Age_Relig.zip",
+   "bytes": 3628528,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_land_use2014g.pdf",
+   "bytes": 163115,
+   "modified": "2024-12-11T11:02:30Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "conversionkey2008.xls",
+   "bytes": 488448,
+   "modified": "2022-05-01T08:36:25Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏‏‏‏‏ReadMe_street_stat2024.pdf",
+   "bytes": 116521,
+   "modified": "2026-02-23T12:53:57Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_land_use2021e.pdf",
+   "bytes": 187745,
+   "modified": "2026-05-24T12:59:38Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Kitey_Dereh_Points_November_2024.gdb.zip",
+   "bytes": 159237,
+   "modified": "2024-12-11T11:09:44Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Civil_Labour_Force.zip",
+   "bytes": 6386683,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Workhours_Transport.zip",
+   "bytes": 3590271,
+   "modified": "2024-08-07T09:33:16Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Metropolin1995.zip",
+   "bytes": 225709,
+   "modified": "2022-05-01T08:46:04Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Civil_Labour_Force.pdf",
+   "bytes": 335957,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_statisticalareas2011_socio2019.pdf",
+   "bytes": 133266,
+   "modified": "2024-12-04T13:12:49Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Industries.zip",
+   "bytes": 3655070,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_statisticalareas2011_socio2021.pdf",
+   "bytes": 138276,
+   "modified": "2024-12-04T13:12:46Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Stat2008_Pop_Sex_Age_Relig.pdf",
+   "bytes": 341536,
+   "modified": "2024-08-07T09:33:14Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏‏‏readme_setl_2022.pdf",
+   "bytes": 130713,
+   "modified": "2024-12-11T10:58:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_TatRova2008_neighborhoods_streets_names.pdf",
+   "bytes": 304139,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏readme_TatRova_for_census2008.pdf",
+   "bytes": 306434,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2021.xlsx",
+   "bytes": 3932865,
+   "modified": "2024-12-04T13:13:56Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_land_use2003.pdf",
+   "bytes": 137346,
+   "modified": "2024-12-11T11:00:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Commuting_BeerSheva.zip",
+   "bytes": 25425,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2012.pdf",
+   "bytes": 310631,
+   "modified": "2024-12-04T13:13:51Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "kitey_dereh_point_November2023.gdb.zip",
+   "bytes": 147168,
+   "modified": "2024-12-11T11:10:34Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Readme_Localities_2024.pdf",
+   "bytes": 130256,
+   "modified": "2025-12-29T11:38:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "readme_natural_area2018.pdf",
+   "bytes": 300965,
+   "modified": "2023-03-21T09:00:27Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Education.zip",
+   "bytes": 6420354,
+   "modified": "2024-08-07T09:33:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "rova2008_neighborhoods_streets_names.xls",
+   "bytes": 192000,
+   "modified": "2024-08-07T09:33:15Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏‏‏ReadMe_street_stat_2017.pdf",
+   "bytes": 311674,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "street_stat_2018.xlsx",
+   "bytes": 3598114,
+   "modified": "2024-12-04T13:13:54Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "ReadMe_Commuting_Haifa.pdf",
+   "bytes": 440204,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Setl2008_Occupations.zip",
+   "bytes": 3611914,
+   "modified": "2024-08-07T09:33:17Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Commuting_Haifa.zip",
+   "bytes": 23195,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "setl_2022.gdb.zip",
+   "bytes": 68129,
+   "modified": "2024-12-11T10:58:19Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "Stat2008_Origin.zip",
+   "bytes": 6288801,
+   "modified": "2024-08-07T09:33:18Z",
+   "why": "the name is not a crosswalk's or an area key's (GEO_TAKE)"
+  },
+  {
+   "name": "‏‏ReadMe_kalpi2015_stat2011.pdf",
+   "bytes": 567270,
+   "modified": "2024-08-07T09:29:28Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "Stable_kalp_2015.xls",
+   "bytes": 638464,
+   "modified": "2024-08-07T09:29:28Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "kalpi2015_stat2011.xlsx",
+   "bytes": 335369,
+   "modified": "2024-08-07T09:29:28Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "רחובות עיקריים ושכונות לאס 2022.xlsx",
+   "bytes": 209050,
+   "modified": "2022-05-01T08:41:53Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "מפתח-מעבר-מאזורים-סטטיסטיים-2011-לאזורים-סטטיסטיים-2008.xlsx",
+   "bytes": 217845,
+   "modified": "2022-05-01T08:40:02Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "מפתח-מעבר-מאזורים-סטטיסטיים-2008-לאזורים-סטטיסטיים-2011.xlsx",
+   "bytes": 226385,
+   "modified": "2022-05-01T08:40:01Z",
+   "why": "beyond the first 40 files"
+  },
+  {
+   "name": "statisticalareas_demography2023.gdb.zip",
+   "bytes": 8943545,
+   "modified": "2026-10-04T13:27:27Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2022.gdb.zip",
+   "bytes": 8735231,
+   "modified": "2024-12-04T13:12:10Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2021.gdb.zip",
+   "bytes": 8720172,
+   "modified": "2024-12-04T13:12:10Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2020.gdb.zip",
+   "bytes": 8730587,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2019.gdb.zip",
+   "bytes": 7130563,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2018.gdb.zip",
+   "bytes": 7116102,
+   "modified": "2024-12-04T13:12:10Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2017.gdb.zip",
+   "bytes": 4685580,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2016.gdb.zip",
+   "bytes": 4796803,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2015.gdb.zip",
+   "bytes": 4688186,
+   "modified": "2024-12-04T13:12:09Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2014.gdb.zip",
+   "bytes": 3938631,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2013.gdb.zip",
+   "bytes": 3939597,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2012.gdb.zip",
+   "bytes": 3938754,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2011.gdb.zip",
+   "bytes": 7965772,
+   "modified": "2024-12-04T13:12:08Z",
+   "why": "an older demography layer"
+  },
+  {
+   "name": "statisticalareas_demography2008.gdb.zip",
+   "bytes": 6140243,
+   "modified": "2024-12-04T13:12:07Z",
+   "why": "an older demography layer"
+  }
+ ]
 }
