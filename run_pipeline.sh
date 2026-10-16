@@ -14,3 +14,5 @@ python3 pipeline/build_arab_day.py        # 2022 base of the election-day Arab-s
 python3 pipeline/make_demo_turnout.py     # its demo (synthetic releases); --check runs the unit checks
 python3 pipeline/build_replay.py
 python3 pipeline/build_site.py
+python3 pipeline/build_pages.py           # locality pages (site/l/), sitemaps, robots.txt; the share cards
+                                          # (site/og/) are rebuilt by hand: python3 pipeline/build_og.py
