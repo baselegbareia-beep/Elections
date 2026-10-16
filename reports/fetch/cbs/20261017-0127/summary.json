@@ -1,0 +1,217 @@
+{
+ "fetcher": "cbs",
+ "started": "2026-10-16T22:27:54+00:00",
+ "written": "2026-10-16T22:48:55+00:00",
+ "finished": "2026-10-16T22:48:55+00:00",
+ "stage": "done",
+ "deadline_s": 1200,
+ "past_deadline": true,
+ "runner": {
+  "python": "3.12.15",
+  "host": "runnervm8k3b6"
+ },
+ "ok": 0,
+ "failed": 21,
+ "census_dashboards": {
+  "requests": 0,
+  "areas": 0,
+  "ok": 0,
+  "stopped": "the deadline (--deadline)",
+  "cities": [
+   "3000",
+   "4000",
+   "5000",
+   "7600",
+   "8500",
+   "7000",
+   "1061",
+   "1063",
+   "8000"
+  ],
+  "searched": [],
+  "priority_units": {
+   "3000": 55,
+   "4000": 19,
+   "5000": 6,
+   "7600": 7,
+   "8500": 13,
+   "7000": 17,
+   "1061": 3,
+   "1063": 2,
+   "8000": 4
+  },
+  "priority_error": null
+ },
+ "items": [
+  {
+   "name": "ishuvim.json",
+   "url": "https://www.cbs.gov.il/he/publications/_api/web/GetFolderByServerRelativeUrl('/he/publications/doclib/2019/ishuvim')/Files?$select=Name,ServerRelativeUrl,Length,TimeLastModified&$top=500",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "URLError: <urlopen error timed out>"
+  },
+  {
+   "name": "bycode2025.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2025.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "URLError: <urlopen error timed out>"
+  },
+  {
+   "name": "bycode2024.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2024.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "URLError: <urlopen error timed out>"
+  },
+  {
+   "name": "bycode2023.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2023.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "URLError: <urlopen error timed out>"
+  },
+  {
+   "name": "bycode2022.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2022.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "intro.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/intro.pdf",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "ckan_census2022.json",
+   "url": "https://data.gov.il/api/3/action/package_show?id=3bd97fde-6cc3-456d-ab63-1caad16b2b6a",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "ckan_localities.json",
+   "url": "https://data.gov.il/api/3/action/package_show?id=d9b1e04c-426f-4e32-ba40-a1ad9d8748a7",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "census2022_localities_statareas.csv",
+   "url": "https://data.gov.il/dataset/3bd97fde-6cc3-456d-ab63-1caad16b2b6a/resource/9a9e085f-3bc8-41df-b15f-be0daaf99e30/download/selected-data-by-localities-and-statistical-areas-2022-census.csv",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "geo_catalog.json",
+   "url": "https://www.cbs.gov.il/he/publications/_api/web/GetFolderByServerRelativeUrl('/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA')/Files?$select=Name,ServerRelativeUrl,Length,TimeLastModified&$top=500",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k21_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_April2019_stat2011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k22_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_September2019_stat2011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k23_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2020_stat2011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k24_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_March2021_stat2011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k25_kalpi_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/kalpi_November2022_stat2011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k25_kalpi_to_stat2011_readme.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_kalpi_November2022_stat2011.pdf",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k25_stable_kalpi.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/Stable_kalp_November2022.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "k25_stable_kalpi_readme.pdf",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/ReadMe_Stable_kalp_November2022.pdf",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "stat2011_to_stat2022.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202011%20%D7%9C%D7%90%D7%A1%202022.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "stat2022_to_stat2011.xlsx",
+   "url": "https://www.cbs.gov.il/he/publications/doclib/2022/%D7%A7%D7%98%D7%9C%D7%95%D7%92/1.%20%D7%99%D7%99%D7%A9%D7%95%D7%91%D7%99%D7%9D%20%D7%95%D7%97%D7%9C%D7%95%D7%A7%D7%95%D7%AA%20%D7%92%D7%90%D7%95%D7%92%D7%A8%D7%A4%D7%99%D7%95%D7%AA/%D7%9E%D7%A4%D7%AA%D7%97%20%D7%9E%D7%A2%D7%91%D7%A8%20%D7%90%D7%A1%202022%20%D7%9C%D7%90%D7%A1%202011.xlsx",
+   "ok": false,
+   "path": null,
+   "note": null,
+   "error": "Stop: not asked: past the deadline (--deadline)"
+  },
+  {
+   "name": "census/religion_3000.json",
+   "url": "https://census.cbs.gov.il/he/partials/search/area?search=",
+   "path": "census/religion_3000.json",
+   "ok": false,
+   "areas": 0,
+   "areas_with_data": 0,
+   "error": null
+  }
+ ],
+ "geo_catalogue_not_taken": []
+}
