@@ -337,6 +337,34 @@ table.t.sticky1 th:first-child, table.t.sticky1 td:first-child { position: stick
    the far (left) edge it fades out, as the tab strip does (scrollHint in live.js sets .more) */
 .lv-scroll.more { -webkit-mask-image: linear-gradient(to right, transparent 0, #000 32px); mask-image: linear-gradient(to right, transparent 0, #000 32px); }
 
+/* ---------- the language switch and the Arabic page (i18n.js) ---------- */
+.mast .wrap.lang-bar { display: flex; justify-content: flex-end; padding-block: 10px 0; margin-bottom: -14px; }
+.lang-sw { display: inline-flex; border: 1px solid var(--rule-strong); border-radius: 99px; overflow: hidden; background: var(--surface); font-size: var(--t-xs); }
+.lang-sw button { border: 0; background: none; padding: 3px 12px; cursor: pointer; color: var(--ink-2); line-height: 1.6; }
+.lang-sw button + button { border-inline-start: 1px solid var(--rule); }
+.lang-sw button:hover { color: var(--ink); }
+.lang-sw button[aria-pressed="true"] { background: var(--ink); color: var(--surface); font-weight: 600; cursor: default; }
+.lang-sw button[lang="ar"] { font-family: "IBM Plex Sans Arabic", "Noto Sans Arabic", Tahoma, sans-serif; }
+/* Arabic: IBM Plex Sans Arabic for the text, Changa for the headings; numbers and ballot letters stay in Karantina */
+[lang="ar"] {
+  --font-ui: "IBM Plex Sans Arabic", "IBM Plex Sans Hebrew", "Noto Sans Arabic", "Segoe UI", Tahoma, system-ui, sans-serif;
+  --font-display: "Karantina", "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif;
+}
+div[lang="ar"] { font-family: var(--font-ui); }
+[lang="ar"] .brand h1, [lang="ar"] .section-head h2, [lang="ar"] .lv-h2, [lang="ar"] .prose h3, [lang="ar"] .loc-head h3 {
+  font-family: "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif; letter-spacing: 0;
+}
+[lang="ar"] .brand h1 { font-size: 44px; line-height: 1; }
+[lang="ar"] .section-head h2 { font-size: 28px; line-height: 1.25; }
+[lang="ar"] .lv-h2 { font-size: 21px; line-height: 1.35; }
+[lang="ar"] .prose h3 { font-size: 20px; line-height: 1.3; }
+[lang="ar"] .loc-head h3 { font-size: 26px; line-height: 1.2; }
+[lang="ar"] .eyebrow, [lang="ar"] .ctl-label, [lang="ar"] .cd-lbl { letter-spacing: 0; }
+[lang="ar"] .cd-big.cd-word { font-family: "Changa", "IBM Plex Sans Arabic", "Noto Sans Arabic", system-ui, sans-serif; font-size: 44px; line-height: 1.15; }
+@media (max-width: 720px) { [lang="ar"] .brand h1 { font-size: 36px; } [lang="ar"] .section-head h2 { font-size: 24px; } }
+/* the poll-ban notice on the Arabic page carries the statutory Hebrew wording under the Arabic */
+.ban-note .ban-he { display: block; margin-top: 6px; font-weight: 400; font-size: var(--t-xs); color: var(--ink-2); }
+
 /* ---------- locality pages (pipeline/build_pages.py) ---------- */
 .lp-mast .wrap { display: flex; align-items: center; justify-content: space-between; gap: 8px 18px; flex-wrap: wrap; padding-block: 12px; }
 .lp-brand { font: 700 40px/.85 var(--font-display); text-decoration: none; letter-spacing: .5px; white-space: nowrap; }
@@ -365,9 +393,16 @@ main.lp { padding-block: 22px 56px; }
 .lp-cta p { margin: 0; color: var(--muted); font-size: var(--t-sm); }
 table.t td.lp-lead, table.t td.lp-e { white-space: nowrap; }
 .lp-s { display: none; }
-@media (max-width: 560px) {   /* phones: the turnout table drops its count columns, election names go short ('4/19') */
-  .lp-w, .lp-l { display: none; }
+/* Narrow screens, in three steps: the leading list may wrap; the turnout table drops its count columns; on phones the
+   leading list's share goes under its name (at the start side), election names go short ('4/19') and the family
+   table's cells drop '%' (its header carries it). Both tables fit from 360 px; narrower, each scrolls in its .tbl-wrap
+   with the label column fixed (sticky1). */
+@media (max-width: 720px) { table.t td.lp-lead { white-space: normal; } }
+@media (max-width: 640px) { .lp-w { display: none; } }
+@media (max-width: 560px) {
+  .lp-l, .lp-pc { display: none; }
   .lp-s { display: inline; }
+  .lp-lead .num { display: block; width: fit-content; }
 }
 .lp-index { columns: 4 190px; column-gap: 28px; }
 .lp-index section { margin: 0 0 14px; }

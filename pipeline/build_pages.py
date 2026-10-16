@@ -10,9 +10,10 @@ Reads site/data/core.json (official CEC counts per locality, built by build_data
                              root sitemap is an index pointing to site/sitemap.xml)
 
 Nothing in the output depends on the clock, so a rebuild from the same core.json changes no file. The pages carry
-no script except the index's filter. District (מחוז) is shown when pipeline/reference/cbs_districts.json exists
-({"<code>": {"district": "...", "subdistrict": "..."}, "source": "https://..."}); the CBS / data.gov.il locality
-list is reachable only from GitHub's runners (pipeline/fetchers/cbs_localities.py).
+no script except the index's filter. District (מחוז) and sub-district (נפה) come from the CBS locality reference,
+pipeline/reference/cbs_localities.json (pipeline/build_cbs.py, from the CBS file bycode2024.xlsx); a locality the
+file lacks has no district chip (4 of core.json's: 3400 חברון, 3637 מעלה שומרון, and 3720 שערי תקווה and 3778
+עץ אפרים, which the CBS file lists merged as 3826 שער שומרון).
 
 Run: python3 pipeline/build_pages.py [--base https://.../site/]
 """
@@ -27,7 +28,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE = os.path.join(ROOT, "site")
 BASE = "https://baselegbareia-beep.github.io/Elections/site/"   # GitHub Pages, branch mode: main / (root)
 OG_LOCALITY = "og/locality.png"   # pipeline/build_og.py
-DISTRICTS = os.path.join(ROOT, "pipeline", "reference", "cbs_districts.json")
+CBS = os.path.join(ROOT, "pipeline", "reference", "cbs_localities.json")   # pipeline/build_cbs.py
 TRIBES_NOTE = "במפה שבדשבורד שבטי הנגב מוצגים יחד, כעיגול אחד."
 
 SECTOR = {   # the dashboard's own labels (results.js, drawLocality)
@@ -67,9 +68,16 @@ main.lp { padding-block: 22px 56px; }
 .lp-cta p { margin: 0; color: var(--muted); font-size: var(--t-sm); }
 table.t td.lp-lead, table.t td.lp-e { white-space: nowrap; }
 .lp-s { display: none; }
-@media (max-width: 560px) {   /* phones: the turnout table drops its count columns, election names go short ('4/19') */
-  .lp-w, .lp-l { display: none; }
+/* Narrow screens, in three steps: the leading list may wrap; the turnout table drops its count columns; on phones the
+   leading list's share goes under its name (at the start side), election names go short ('4/19') and the family
+   table's cells drop '%' (its header carries it). Both tables fit from 360 px; narrower, each scrolls in its .tbl-wrap
+   with the label column fixed (sticky1). */
+@media (max-width: 720px) { table.t td.lp-lead { white-space: normal; } }
+@media (max-width: 640px) { .lp-w { display: none; } }
+@media (max-width: 560px) {
+  .lp-l, .lp-pc { display: none; }
   .lp-s { display: inline; }
+  .lp-lead .num { display: block; width: fit-content; }
 }
 .lp-index { columns: 4 190px; column-gap: 28px; }
 .lp-index section { margin: 0 0 14px; }
@@ -91,6 +99,14 @@ def fmt(n):
 
 def pct(x, d=1):
     return f"{x:.{d}f}%"
+
+
+def pct_cell(x):   # the family table: phones hide the '%' (.lp-pc), the header carries it
+    return f'{x:.1f}<span class="lp-pc">%</span>'
+
+
+def el_name(C, e):   # 'נוב׳ 2022', on phones '11/22'
+    return f'<span class="lp-l">{esc(C.E[e]["short"])}</span><span class="lp-s">{C.compact(e)}</span>'
 
 
 def num(s):
@@ -174,7 +190,7 @@ def fam_shares(C, v, eid):
     return out
 
 
-def locality_page(C, loc, base, districts):
+def locality_page(C, loc, base, districts, dsrc):
     code, name = loc["code"], loc["name"]
     url = f"{base}l/{code}/"
     rows = {e: C.votes(loc, e) for e in C.els}
@@ -185,7 +201,7 @@ def locality_page(C, loc, base, districts):
     region = None
     if loc.get("region") and loc["sector"] != "mixed":
         region = C.core["arab_regions"].get(loc["region"]) or C.core["druze_regions"].get(loc["region"])
-    dist = districts.get(str(code)) if districts else None
+    dist = districts.get(str(code))
     first_short, last_short = C.E[C.els[0]]["short"], C.E[C.els[-1]]["short"]
 
     # ---- head
@@ -215,8 +231,10 @@ def locality_page(C, loc, base, districts):
     chips = [f'<span class="{"badge " + sec[1] if sec[1] else "badge"}">{esc(sec[0])}</span>'] if sec[0] else []
     if region:
         chips.append(f'<span class="badge">{esc(region)}</span>')
-    if dist and dist.get("district"):
-        chips.append(f'<span class="badge" title="מחוז לפי הלמ״ס">מחוז {esc(dist["district"])}</span>')
+    if dist:   # 'אזור יהודה ושומרון' is the file's name for district 7, not prefixed with מחוז
+        d_name = dist["district"] if dist["district"].startswith("אזור") else "מחוז " + dist["district"]
+        d_tip = (f"נפת {dist['subdistrict']}; " if dist.get("subdistrict") else "") + "לפי קובץ היישובים של הלמ״ס"
+        chips.append(f'<span class="badge" title="{esc(d_tip)}">{esc(d_name)}</span>')
     chips.append('<span class="badge off" title="תוצאות לפי קובצי הקלפיות של ועדת הבחירות המרכזית">תוצאות רשמיות</span>')
     if loc.get("ses"):
         chips.append(f'<span class="badge est" title="מקור משני: מדד חברתי-כלכלי של הלמ״ס">אשכול חברתי-כלכלי {loc["ses"]} מתוך 10 (למ״ס)</span>')
@@ -246,21 +264,22 @@ def locality_page(C, loc, base, districts):
         v = rows.get(e)
         if not v:
             # the same cells as a full row (the phone layout hides the same columns), the reason in the last one
-            trs.append(f'<tr><td class="lp-e">{esc(C.E[e]["short"])}</td><td class="n lp-w">—</td><td class="n lp-w">—</td>'
+            trs.append(f'<tr><td class="lp-e">{el_name(C, e)}</td><td class="n lp-w">—</td><td class="n lp-w">—</td>'
                        '<td class="n">—</td><td class="n">—</td><td class="n lp-w">—</td><td>אין קלפיות ליישוב</td></tr>')
             prev = None
             continue
         t = 100 * v["voters"] / v["elig"]
         d = signed_pp(t - prev) if prev is not None else "—"
         top = ranked(C, v, e)
-        lead = f'{esc(C.name(e, top[0][0]))} {num(pct(100 * top[0][1] / v["valid"]))}' if top else "—"
-        trs.append(f'<tr><td class="lp-e">{esc(C.E[e]["short"])}</td><td class="n lp-w">{fmt(v["elig"])}</td><td class="n lp-w">{fmt(v["voters"])}</td>'
+        # <wbr>: a phone may wrap 'העבודה-גשר-מרצ' at its hyphens (Unicode never breaks after a Hebrew letter + hyphen)
+        lead = f'{esc(C.name(e, top[0][0])).replace("-", "-<wbr>")} {num(pct(100 * top[0][1] / v["valid"]))}' if top else "—"
+        trs.append(f'<tr><td class="lp-e">{el_name(C, e)}</td><td class="n lp-w">{fmt(v["elig"])}</td><td class="n lp-w">{fmt(v["voters"])}</td>'
                    f'<td class="n"><b>{pct(t)}</b></td><td class="n">{d}</td><td class="n lp-w">{fmt(v["boxes"])}</td><td class="lp-lead">{lead}</td></tr>')
         prev = t
     turnout = f"""<section class="card">
 <h2>שיעור ההצבעה ב{count_f(len(C.els))} מערכות בחירות</h2>
 <p class="sub">המצביעים בקלפיות היישוב מתוך בעלי הזכות הרשומים בהן. השינוי בנקודות אחוז לעומת הבחירות הקודמות.</p>
-<div class="tbl-wrap"><table class="t">
+<div class="tbl-wrap"><table class="t sticky1">
 <thead><tr><th>בחירות</th><th class="n lp-w">בעלי זכות</th><th class="n lp-w">הצביעו</th><th class="n">שיעור הצבעה</th><th class="n">שינוי (נק׳)</th><th class="n lp-w">קלפיות</th><th>הרשימה המובילה</th></tr></thead>
 <tbody>{''.join(trs)}</tbody>
 </table></div>
@@ -280,14 +299,14 @@ def locality_page(C, loc, base, districts):
                 continue
             v = rows[e]
             a = sum(n for k, n in v["votes"].items() if k != "other" and C.parties[e].get(k, {}).get("bloc") == "arab")
-            cells.append(f'<td class="n">{pct(100 * a / v["valid"])}</td>')
+            cells.append(f'<td class="n">{pct_cell(100 * a / v["valid"])}</td>')
         fam_rows.append(f'<tr><td><b>כל הרשימות הערביות</b></td>{"".join(cells)}</tr>')
     for f in fam_list:
         fm = C.core["families"].get(f, C.core["families"]["other"])
         cells = []
         for e in C.els:
             ok = e in rows and C.ran(e, f)
-            cells.append(f'<td class="n">{pct(100 * shares[e].get(f, 0)) if ok else "—"}</td>')
+            cells.append(f'<td class="n">{pct_cell(100 * shares[e].get(f, 0)) if ok else "—"}</td>')
         fam_rows.append(f'<tr><td><span class="lp-dot {fam_class(f)}"></span>{esc(fm["name"])}</td>{"".join(cells)}</tr>')
     families = ""
     if fam_rows:
@@ -295,7 +314,7 @@ def locality_page(C, loc, base, districts):
 <h2>ההצבעה לפי משפחה פוליטית</h2>
 <p class="sub">שיעור הקולות הכשרים ביישוב. רשימות שהתמודדו בשמות שונים או באיחודים מקובצות למשפחה אחת, כמו בדשבורד; ״—״: המשפחה לא התמודדה באותן בחירות.</p>
 <div class="tbl-wrap"><table class="t sticky1">
-<thead><tr><th>משפחה</th>{''.join(f'<th class="n"><span class="lp-l">{esc(C.E[e]["short"])}</span><span class="lp-s">{C.compact(e)}</span></th>' for e in C.els)}</tr></thead>
+<thead><tr><th>משפחה<span class="lp-s"> (%)</span></th>{''.join(f'<th class="n">{el_name(C, e)}</th>' for e in C.els)}</tr></thead>
 <tbody>{''.join(fam_rows)}</tbody>
 </table></div>
 </section>"""
@@ -342,7 +361,7 @@ def locality_page(C, loc, base, districts):
 {by_el}
 <div class="lp-cta"><a class="lp-btn" href="../../#results">למפה ולתוצאות לפי קלפי בדשבורד</a>
 <p>בלשונית ״תוצאות ומפה״ חפשו ״{esc(name)}״ כדי לראות את התוצאה בכל קלפי ביישוב.</p></div>
-<p class="disclaimer">מקור: ועדת הבחירות המרכזית, קובצי ״תוצאות לפי קלפיות״ לכל מערכת בחירות ({src_links}); 2019 א׳ מעותק ציבורי של הקובץ הרשמי. הסכומים נבדקו מול הסיכומים הארציים הרשמיים. {('אשכול חברתי-כלכלי: הלמ״ס, מדד 2021, דרך עותק משני. ' if loc.get('ses') else '')}{district_src(dist)}השיטה והמקורות המלאים: <a href="../../#method">שיטה ומקורות</a>.</p>
+<p class="disclaimer">מקור: ועדת הבחירות המרכזית, קובצי ״תוצאות לפי קלפיות״ לכל מערכת בחירות ({src_links}); 2019 א׳ מעותק ציבורי של הקובץ הרשמי. הסכומים נבדקו מול הסיכומים הארציים הרשמיים. {('אשכול חברתי-כלכלי: הלמ״ס, מדד 2021, דרך עותק משני. ' if loc.get('ses') else '')}{district_src(dist, dsrc)}השיטה והמקורות המלאים: <a href="../../#method">שיטה ומקורות</a>.</p>
 </main>
 </body>
 </html>
@@ -350,14 +369,15 @@ def locality_page(C, loc, base, districts):
     return head + body
 
 
-def district_src(dist):
-    if not (dist and dist.get("district")):
+def district_src(dist, src):
+    """The disclaimer's sentence on the district: the CBS file (its official address), and whether the copy read was a mirror."""
+    if not dist:
         return ""
-    url = dist.get("source", "")
-    if not url.startswith("https://"):
-        return "מחוז: הלמ״ס. "
-    host = "data.gov.il" if "data.gov.il" in url else "הלמ״ס"
-    return f'מחוז: <a href="{esc(url)}">רשימת היישובים ({host})</a>. '
+    year = re.search(r"\d{4}", src.get("file", ""))
+    what = f"קובץ היישובים {year.group(0)} של הלמ״ס" if year else "קובץ היישובים של הלמ״ס"
+    url = src.get("official_url", "")
+    link = f'<a href="{esc(url)}">{what}</a>' if url.startswith("https://") else what
+    return f"מחוז: {link}{', מעותק ציבורי של הקובץ הרשמי' if src.get('copy') == 'mirror' else ''}. "
 
 
 def social(title, desc, url, img, alt):
@@ -467,6 +487,14 @@ def robots(base):
             f"Sitemap: {root_of(base)}sitemap.xml\n")
 
 
+def load_districts(path):
+    """{"<code>": {district, subdistrict}} from the CBS reference's rows, and its 'source' record."""
+    d = json.load(open(path, encoding="utf-8"))
+    ix = {k: d["fields"].index(k) for k in ("code", "district", "subdistrict")}
+    out = {str(r[ix["code"]]): {k: r[i] for k, i in ix.items() if k != "code"} for r in d["rows"] if r[ix["district"]]}
+    return out, d.get("source", {})
+
+
 def write(path, text):
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="\n") as f:
@@ -477,16 +505,12 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     ap.add_argument("--base", default=BASE, help="public address of site/ (with the trailing slash)")
     ap.add_argument("--core", default=os.path.join(SITE, "data", "core.json"))
-    ap.add_argument("--districts", default=DISTRICTS, help="optional {code: {district, subdistrict}} file")
+    ap.add_argument("--cbs", default=CBS, help="the CBS locality reference (pipeline/build_cbs.py): district, sub-district")
     args = ap.parse_args()
     base = args.base if args.base.endswith("/") else args.base + "/"
     core = json.load(open(args.core, encoding="utf-8"))
     C = Core(core)
-    districts = None
-    if args.districts and os.path.exists(args.districts):
-        d = json.load(open(args.districts, encoding="utf-8"))
-        src = d.get("source", "")
-        districts = {k: dict(v, source=src) for k, v in d.items() if isinstance(v, dict)}
+    districts, dsrc = load_districts(args.cbs)
     locs = core["localities"]
     codes = sorted(l["code"] for l in locs)
     assert len(set(codes)) == len(codes), "locality codes must be unique"
@@ -501,7 +525,7 @@ def main():
                 shutil.rmtree(p)
     total = 0
     for loc in locs:
-        page = locality_page(C, loc, base, districts)
+        page = locality_page(C, loc, base, districts, dsrc)
         write(os.path.join(out, str(loc["code"]), "index.html"), page)
         total += len(page.encode("utf-8"))
     idx = index_page(C, locs, base)
@@ -520,7 +544,7 @@ def main():
     write(os.path.join(ROOT, "robots.txt"), rb)
     print(f"{len(locs)} locality pages, {total:,} bytes ({total // max(1, len(locs)):,} per page); "
           f"index {len(idx.encode('utf-8')):,} bytes; l.css {len(css.encode('utf-8')):,} bytes; "
-          f"sitemap {len(codes) + 2} URLs; districts {'yes' if districts else 'no'}")
+          f"sitemap {len(codes) + 2} URLs; district for {sum(str(c) in districts for c in codes)} of {len(codes)}")
 
 
 if __name__ == "__main__":
