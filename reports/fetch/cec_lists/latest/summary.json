@@ -1,0 +1,1034 @@
+{
+ "fetcher": "cec_lists",
+ "started": "2026-10-16T21:02:16+00:00",
+ "finished": "2026-10-16T21:02:25+00:00",
+ "reference": "pipeline/reference/lists_2026.json",
+ "reference_error": null,
+ "content_api": "https://www.gov.il/ContentPageWebApi/api/content-pages",
+ "client_id_found": false,
+ "requests": 65,
+ "answered": 12,
+ "stored": [
+  "files/0a510b97-www.bechirot.gov.il_index.html",
+  "files/1e7231ba-data.gov.il_full-cadidates-list-21.xlsx",
+  "files/32e0171c-data.gov.il_full_candidates_list.xlsx",
+  "files/525f9260-data.gov.il_full_candidates_list-23.xlsx",
+  "files/5752d885-data.gov.il_package_search_rows_50_q.json",
+  "files/83b3a2e3-data.gov.il_full-cadidates-list-22.xlsx",
+  "files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx",
+  "files/d89e6aaf-data.gov.il_full-candidates-lists-20.xlsx",
+  "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+ ],
+ "index": {
+  "roster_pages_linked": 0,
+  "not_in_reference": [],
+  "not_linked": []
+ },
+ "lists": [
+  {
+   "letters": "רק",
+   "id": "Together",
+   "cec_key": "beyahad_list1",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "דרך",
+   "id": "Yashar",
+   "cec_key": "yashar_list_2",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "צדק",
+   "id": null,
+   "cec_key": "sharshar_list3",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ד",
+   "id": null,
+   "cec_key": "hashutafut-lekulam_iist",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "צף",
+   "id": null,
+   "cec_key": "pirates_list_5",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ך",
+   "id": "Amcha Yisrael",
+   "cec_key": "amcha-israel_list6",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "י",
+   "id": null,
+   "cec_key": "israel-tchila_list7",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ה",
+   "id": null,
+   "cec_key": "gan-eden_list_8",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "קה",
+   "id": null,
+   "cec_key": "kol-ha-nashim_list9",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "בד",
+   "id": null,
+   "cec_key": "beyachad-natzliah_list10",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ל",
+   "id": "Yisrael Beiteinu",
+   "cec_key": "israel-beitenu_list11",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "קץ",
+   "id": null,
+   "cec_key": "mishpat-tzedek_list12",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "נף",
+   "id": null,
+   "cec_key": "shama",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ב",
+   "id": "Otzma Yehudit",
+   "cec_key": "yehudit-meuhedet_list14",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "קך",
+   "id": null,
+   "cec_key": "seder-chadash_list15",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "די",
+   "id": "Reservists",
+   "cec_key": "hamiluimnikim-vehakalkalit_list16",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "אמת",
+   "id": "The Democrats",
+   "cec_key": "hademokratim_list17",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "עם",
+   "id": "Ra'am",
+   "cec_key": "raam_list18",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "שס",
+   "id": "Shas",
+   "cec_key": "shas_list19",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "זך",
+   "id": "Haredi Public",
+   "cec_key": "tzibur-charedi_list20",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "פה",
+   "id": null,
+   "cec_key": "miflegat-am-israelit_list21",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "זץ",
+   "id": null,
+   "cec_key": "brit-olam_list22",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "נקי",
+   "id": null,
+   "cec_key": "tikun_list23",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "יק",
+   "id": null,
+   "cec_key": "gush-tanachi_list24",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ז",
+   "id": null,
+   "cec_key": "betach_list25",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "בקר",
+   "id": null,
+   "cec_key": "orot_list26",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "נץ",
+   "id": null,
+   "cec_key": "demokratura_list27",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "נר",
+   "id": null,
+   "cec_key": "shachor_list28",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "מחל",
+   "id": "Likud",
+   "cec_key": "halikud-tikvahadasha_iist29",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "כן",
+   "id": "National Unity",
+   "cec_key": "kachol-lavan_list30",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ט",
+   "id": "Religious Zionism",
+   "cec_key": "tzionutdatit-zehut_list31",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "צבי",
+   "id": null,
+   "cec_key": "chozrim-leshorashim_list32",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "בי",
+   "id": null,
+   "cec_key": "tzomet-beit-israel_list33",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ק",
+   "id": null,
+   "cec_key": "tekuma_list34",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ודם",
+   "id": "Joint List",
+   "cec_key": "hareshima-hameshutefet_list35",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "רץ",
+   "id": null,
+   "cec_key": "machane-israel_list36",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ג",
+   "id": "UTJ",
+   "cec_key": "yahadut-degel_list37",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  },
+  {
+   "letters": "ני",
+   "id": null,
+   "cec_key": "noam_list38",
+   "status": 403,
+   "error": "HTTP 403",
+   "title": "",
+   "letters_on_page": [],
+   "letters_match": null,
+   "name_on_page": null
+  }
+ ],
+ "agreements": {
+  "seen": [],
+  "expected_seen": [],
+  "expected_not_seen": [
+   [
+    "ודם",
+    "עם"
+   ],
+   [
+    "ג",
+    "שס"
+   ],
+   [
+    "ט",
+    "מחל"
+   ],
+   [
+    "ל",
+    "רק"
+   ],
+   [
+    "אמת",
+    "דרך"
+   ]
+  ],
+  "not_expected": []
+ },
+ "urls": [
+  {
+   "url": "https://www.gov.il/ContentpageWebApi/client-config.js",
+   "why": "the content-pages API address and the site's public client id",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/candidates-lists-26?culture=he",
+   "why": "the CEC's lists page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-agreements-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-agreement-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-votes-agreements-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-votes-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/agreements-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/odafim-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/heskemei-odafim-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/heskemey-odafim-26?culture=he",
+   "why": "a likely name of the agreements page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/he/pages/candidates-lists-26",
+   "why": "the page itself (a gov.il page is a shell without the API)",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/he/departments/guides/candidates-lists-26",
+   "why": "the page itself (a gov.il page is a shell without the API)",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://bechirot.gov.il/",
+   "why": "the page itself (a gov.il page is a shell without the API)",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "last_modified": null,
+   "redirected_to": "https://www.bechirot.gov.il/home/",
+   "bytes": 15484,
+   "sha256": "0a510b97c5dc8b8653d348fb0f346c9bbf9a932ad535a42588dd13f39223b028",
+   "head": " <!DOCTYPE HTML> <html lang=\"he\" dir=\"rtl\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no",
+   "saved": "files/0a510b97-www.bechirot.gov.il_index.html"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/",
+   "why": "the page itself (a gov.il page is a shell without the API)",
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "last_modified": null,
+   "redirected_to": "https://www.bechirot.gov.il/home/",
+   "bytes": 15484,
+   "sha256": "0a510b97c5dc8b8653d348fb0f346c9bbf9a932ad535a42588dd13f39223b028",
+   "head": " <!DOCTYPE HTML> <html lang=\"he\" dir=\"rtl\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no",
+   "saved": "files/0a510b97-www.bechirot.gov.il_index.html"
+  },
+  {
+   "url": "https://votes26.bechirot.gov.il/",
+   "why": "the page itself (a gov.il page is a shell without the API)",
+   "status": 404,
+   "type": "text/html",
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" /> <meta name=\"view",
+   "error": "HTTP 404"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/beyahad_list1?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yashar_list_2?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/sharshar_list3?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hashutafut-lekulam_iist?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/pirates_list_5?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/amcha-israel_list6?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/israel-tchila_list7?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/gan-eden_list_8?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/kol-ha-nashim_list9?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/beyachad-natzliah_list10?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/israel-beitenu_list11?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/mishpat-tzedek_list12?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shama?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yehudit-meuhedet_list14?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/seder-chadash_list15?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hamiluimnikim-vehakalkalit_list16?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hademokratim_list17?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/raam_list18?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shas_list19?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzibur-charedi_list20?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/miflegat-am-israelit_list21?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/brit-olam_list22?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tikun_list23?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/gush-tanachi_list24?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/betach_list25?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/orot_list26?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/demokratura_list27?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shachor_list28?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/halikud-tikvahadasha_iist29?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/kachol-lavan_list30?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzionutdatit-zehut_list31?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/chozrim-leshorashim_list32?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzomet-beit-israel_list33?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tekuma_list34?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hareshima-hameshutefet_list35?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/machane-israel_list36?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yahadut-degel_list37?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/noam_list38?culture=he",
+   "why": "the list's roster page",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
+   "why": "the approved ballot slips",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
+   "error": "HTTP 403"
+  },
+  {
+   "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A2%D7%95%D7%93%D7%A4%D7%99%D7%9D",
+   "why": "data.gov.il catalogue",
+   "status": 200,
+   "type": "application/json;charset=utf-8",
+   "last_modified": null,
+   "bytes": 199,
+   "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
+   "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+  },
+  {
+   "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A8%D7%A9%D7%99%D7%9E%D7%95%D7%AA%20%D7%94%D7%9E%D7%95%D7%A2%D7%9E%D7%93%D7%99%D7%9D",
+   "why": "data.gov.il catalogue",
+   "status": 200,
+   "type": "application/json;charset=utf-8",
+   "last_modified": null,
+   "bytes": 11986,
+   "sha256": "5752d885a13e1c006ad430b9be30cab7be0b6cdab641b00f5ff5917dd7fa4c7f",
+   "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 1, \"facets\": {}, \"results\": [{\"author\": null, \"a",
+   "saved": "files/5752d885-data.gov.il_package_search_rows_50_q.json"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/9162e35c-8834-422c-9202-ed42faf4a9f9/download/full-candidates-lists-19.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Wed, 11 Dec 2024 14:21:22 GMT",
+   "bytes": 112345,
+   "sha256": "c69258e3c0e13e2282bb72dff9a862fbd3bf3f6301b7f94fb27aa3309d093cf0",
+   "head": "",
+   "saved": "files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/7099b732-303e-4431-bbed-0e47e937b5e8/download/full-candidates-lists-20.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 19 Nov 2024 08:52:46 GMT",
+   "bytes": 79462,
+   "sha256": "d89e6aaf5c9e3c1b931dc3049dedaeebe3ad6227fb3c704c36a5c037fd6133b9",
+   "head": "",
+   "saved": "files/d89e6aaf-data.gov.il_full-candidates-lists-20.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/597e0059-099e-4200-9131-b3ba645bc685/download/full-cadidates-list-21.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 19 Nov 2024 08:53:14 GMT",
+   "bytes": 104002,
+   "sha256": "1e7231ba212430edfecdbcabbf456092d4cdc5198669ae0e2c2135eb4cd5db79",
+   "head": "",
+   "saved": "files/1e7231ba-data.gov.il_full-cadidates-list-21.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/ae484c34-86a5-4dd7-8462-a22a366287cc/download/full-cadidates-list-22.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 19 Nov 2024 08:53:42 GMT",
+   "bytes": 87970,
+   "sha256": "83b3a2e378236258981b94523c755beb1266f09667f643d21fb17c6e5800510e",
+   "head": "",
+   "saved": "files/83b3a2e3-data.gov.il_full-cadidates-list-22.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/83d16550-75af-4c47-9f2c-dfeba4394fb1/download/full_candidates_list-23.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 19 Nov 2024 08:54:26 GMT",
+   "bytes": 84398,
+   "sha256": "525f9260cc04b734f70dfe8b19debd7dadc009d07d511cbd9f7c30614060eac7",
+   "head": "",
+   "saved": "files/525f9260-data.gov.il_full_candidates_list-23.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/0f07d5bf-5b8d-4c28-bf37-e69459ddb4ed/download/full_candidates_list.xlsx",
+   "why": "data.gov.il resource: רשימות המועמדים לכנסת - ועדת הבחירות המרכזית לכנסת candidate",
+   "status": 200,
+   "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+   "last_modified": "Tue, 19 Nov 2024 08:54:59 GMT",
+   "bytes": 103461,
+   "sha256": "32e0171c9fd04f94062c264db320ee1a1dbb5f79019419ff479086cdad3405c6",
+   "head": "",
+   "saved": "files/32e0171c-data.gov.il_full_candidates_list.xlsx"
+  },
+  {
+   "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26",
+   "why": "data.gov.il catalogue",
+   "status": 200,
+   "type": "application/json;charset=utf-8",
+   "last_modified": null,
+   "bytes": 199,
+   "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
+   "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+  },
+  {
+   "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=knesset%2026",
+   "why": "data.gov.il catalogue",
+   "status": 200,
+   "type": "application/json;charset=utf-8",
+   "last_modified": null,
+   "bytes": 199,
+   "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
+   "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+  }
+ ]
+}
