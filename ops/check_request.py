@@ -6,20 +6,22 @@ The session's token can push but not dispatch or cancel runs, so a push of ops/r
 for Run workflow (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). A request names one workflow; WORKFLOW is the name
 of the workflow asking, FIELDS the dispatch inputs it takes. Writes run=true and each field given, normalised, to
 GITHUB_OUTPUT when the request names WORKFLOW, and run=false (exit 0, quietly) when it names another one. Exit 1 with
-an ::error:: line when the request does not parse, names no known workflow, has a field WORKFLOW does not take, or a
-value that does not fit: the run goes red, as Run workflow would refuse it. Values cannot inject anything into
-GITHUB_OUTPUT or the log.
+an ::error:: line when the request does not parse, names no known workflow, has a field WORKFLOW does not take, lacks
+one it needs (REQUIRED), or has a value that does not fit: the run goes red, as Run workflow would refuse it. Values
+cannot inject anything into GITHUB_OUTPUT or the log.
 
-Run by the request step of live.yml, discover.yml, net-check.yml and daily.yml (the same step in all four), and by
-live.yml's loop on a later {"workflow": "live", "restart": true} request, so that a running feed stops only for a
-request its successor will take (pipeline/test_live.py, 11b). Python 3.9 or later (a self-hosted runner's own).
+Run by the request step of live.yml, discover.yml, net-check.yml, daily.yml and fetch.yml (the same step in all five),
+and by live.yml's loop on a later {"workflow": "live", "restart": true} request, so that a running feed stops only for
+a request its successor will take (pipeline/test_live.py, 11b). A fetch request must name the fetcher to run,
+{"workflow": "fetch", "what": "cec_lists"}: pipeline/fetchers/<what>.py (fetch.yml checks that the file exists). Python
+3.9 or later (a self-hosted runner's own).
 """
 import json
 import os
 import re
 import sys
 
-WORKFLOWS = ("live", "discover", "net-check", "daily", "none")     # none: the placeholder on main
+WORKFLOWS = ("live", "discover", "net-check", "daily", "fetch", "none")     # none: the placeholder on main
 RUNNERS = ("ubuntu-latest", "self-hosted")    # another label would leave the run waiting for a runner, holding its group
 
 
@@ -50,6 +52,10 @@ def mode(v):
     return v if isinstance(v, str) and v in ("auto", "full", "quick") else None
 
 
+def fetcher(v):       # a fetcher's name: pipeline/fetchers/<what>.py, never a path, an option or a private module
+    return v if isinstance(v, str) and re.fullmatch(r"[a-z0-9_]{1,40}", v) and not v.startswith("_") else None
+
+
 def urls(v):          # addresses for the scan: a list, or one string separated by spaces
     v = v.split() if isinstance(v, str) else v
     ok = isinstance(v, list) and 0 < len(v) <= 20 and all(
@@ -57,9 +63,12 @@ def urls(v):          # addresses for the scan: a list, or one string separated 
     return " ".join(v) if ok else None
 
 
-CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode, "urls": urls}
+CHECKS = {"drill": flag, "reset": flag, "restart": flag, "minutes": whole, "runner": label, "mode": mode, "urls": urls,
+          "what": fetcher}
 WANT = {"drill": "true or false", "reset": "true or false", "restart": "true or false", "minutes": "whole minutes",
-        "runner": " or ".join(RUNNERS), "mode": "auto, full or quick", "urls": "http(s) addresses"}
+        "runner": " or ".join(RUNNERS), "mode": "auto, full or quick", "urls": "http(s) addresses",
+        "what": "a fetcher's name: lower-case letters, digits and _ (pipeline/fetchers/<what>.py)"}
+REQUIRED = {"fetch": ("what",)}       # a request without these fields names nothing to run
 
 
 def main(path):
@@ -83,6 +92,9 @@ def main(path):
         extra = [safe(k) for k in req if k not in ("workflow", "id") and k not in fields]
         if extra:
             fail(f"{me} takes {', '.join(fields) or 'no fields'} (besides workflow and id), not {', '.join(extra)}")
+        missing = [k for k in REQUIRED.get(me, ()) if k not in req]
+        if missing:
+            fail(f"{me} needs {', '.join(missing)} ({'; '.join(WANT[k] for k in missing)})")
         out["run"] = "true"
         for k in fields:
             if k in req:

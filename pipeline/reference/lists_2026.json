@@ -1,0 +1,1085 @@
+{
+ "_about": "The 38 candidate lists the Central Elections Committee approved for the 26th Knesset (27.9.2026; the disqualification of Ra'am and the Joint List was overturned by the Supreme Court on 2.10.2026), their ballot letters, and the surplus-vote agreements reported by the 16.10.2026 filing deadline. Read by pipeline/test_live.py against build_polls.LETTERS_2026, live_fetch.AGREEMENTS_2026 and live_model.BASE_MAP['K26'], and by pipeline/fetchers/cec_lists.py, which fetches the CEC's own pages from a GitHub runner (the build container cannot reach gov.il) and compares them with this file.",
+ "verified_means": {
+  "letters": "the letters are those of the CEC table as captured by two independent GitHub mirrors (mirrors), and at least one news report on the approval names this list with these letters (letter_sources)",
+  "agreement": "the agreement (or, with agreement null, its absence) as reported in the news by noon 16.10.2026 (agreements, no_agreement); for the 15 modelled lists only",
+  "cec": "read on the CEC's own page or file by pipeline/fetchers/cec_lists.py; false for everything until the runner fetch is read (request {\"workflow\": \"fetch\", \"what\": \"cec_lists\"})"
+ },
+ "fields": {
+  "letters": "the ballot letters (the column header of the list in the CEC's results files)",
+  "id": "the list's id in build_polls.PARTIES_2026 (the 15 lists the site models), else null (counted as other)",
+  "cec_list_no": "the number in the CEC's index (submission order; the suffix of cec_key)",
+  "requested_letters": "the letters the list asked for, first choice first (the 19.9 index)",
+  "first_candidates": "the first two names on the submitted roster (the 19.9 capture)",
+  "agreement": "the letters of the surplus-vote partner, null for none (modelled lists only)"
+ },
+ "election": "K26",
+ "election_day": "2026-10-27",
+ "as_of": "2026-10-16",
+ "cec": {
+  "lists_page": "https://www.gov.il/he/pages/candidates-lists-26",
+  "approved_slips_pdf": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
+  "lists_approved": "2026-09-27",
+  "approval_sources": [
+   "https://www.zman.co.il/live/728050/",
+   "https://www.zman.co.il/live/727907/"
+  ],
+  "supreme_court": {
+   "date": "2026-10-02",
+   "ruling": "the disqualification of Ra'am and the Joint List overturned unanimously",
+   "sources": [
+    "https://www.timesofisrael.com/supreme-court-unanimously-overturns-election-panels-ban-on-arab-parties/",
+    "https://www.aljazeera.com/news/2026/10/2/israels-supreme-court-overturns-election-panel-ban-on-arab-parties"
+   ]
+  },
+  "agreements_deadline": "2026-10-16"
+ },
+ "mirrors": [
+  {
+   "url": "https://raw.githubusercontent.com/RavBogard/israelielection/main/data/ballot-directory.json",
+   "what": "the CEC's table of the 38 lists with one set of letters each, captured from the rendered gov.il page",
+   "captured": "2026-10-05",
+   "cec_updated": "2026-10-04",
+   "sha256": "ccda5f9a0c7fb6f68e6cf7e9ade58067546d922d5e126b816f791476c1587f4b"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/skad0/agree/main/data/elections/knesset-26-lists.json",
+   "what": "the CEC's index of the submitted lists (letters as requested, first choice first) and the 38 roster pages",
+   "captured": "2026-09-19",
+   "sha256": "fb4c416571e1888244d184ca5acb99e7c3b18acb588c2be88d5211c625012f60"
+  }
+ ],
+ "lists": [
+  {
+   "letters": "רק",
+   "id": "Together",
+   "cec_list_no": 1,
+   "official_name": "ביחד בראשות נפתלי בנט",
+   "requested_letters": "ב / רק",
+   "cec_key": "beyahad_list1",
+   "cec_url": "https://www.gov.il/he/pages/beyahad_list1",
+   "first_candidates": [
+    "בנט נפתלי",
+    "לפיד יאיר"
+   ],
+   "leader": "נפתלי בנט ויאיר לפיד",
+   "aliases": [
+    "ביחד בראשות נפתלי בנט",
+    "ביחד בראשות בנט"
+   ],
+   "agreement": "ל",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/",
+    "https://www.kikar.co.il/political-news/tm0nt3"
+   ]
+  },
+  {
+   "letters": "דרך",
+   "id": "Yashar",
+   "cec_list_no": 2,
+   "official_name": "ישר! עם איזנקוט לראשות הממשלה מאחדים את ישראל",
+   "requested_letters": "דרך",
+   "cec_key": "yashar_list_2",
+   "cec_url": "https://www.gov.il/he/pages/yashar_list_2",
+   "first_candidates": [
+    "איזנקוט גד",
+    "כהן יורם"
+   ],
+   "leader": "גדי איזנקוט",
+   "aliases": [
+    "ישר!",
+    "ישר עם איזנקוט"
+   ],
+   "agreement": "אמת",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/",
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.davar1.co.il/698869/"
+   ]
+  },
+  {
+   "letters": "צדק",
+   "id": null,
+   "cec_list_no": 3,
+   "official_name": "שרשר לאהבה ואחדות העם",
+   "requested_letters": "צדק",
+   "cec_key": "sharshar_list3",
+   "cec_url": "https://www.gov.il/he/pages/sharshar_list3",
+   "first_candidates": [
+    "שוילי איתן",
+    "שוילי תמר"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ד",
+   "id": null,
+   "cec_list_no": 4,
+   "official_name": "השותפות לכולם",
+   "requested_letters": "ד / דק",
+   "cec_key": "hashutafut-lekulam_iist",
+   "cec_url": "https://www.gov.il/he/pages/hashutafut-lekulam_iist",
+   "first_candidates": [
+    "אלקרינאוי, טלאל",
+    "אבו עאנם עבדאללה"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/"
+   ]
+  },
+  {
+   "letters": "צף",
+   "id": null,
+   "cec_list_no": 5,
+   "official_name": "הפיראטים – צפים לטוב",
+   "requested_letters": "צף / ף / ר / ףז",
+   "cec_key": "pirates_list_5",
+   "cec_url": "https://www.gov.il/he/pages/pirates_list_5",
+   "first_candidates": [
+    "שם טוב אוהד יעקב",
+    "כוזר ויסגרבר נועם"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/"
+   ]
+  },
+  {
+   "letters": "ך",
+   "id": "Amcha Yisrael",
+   "cec_list_no": 6,
+   "official_name": "עמך ישראל בראשות עופר וינטר",
+   "requested_letters": "ך",
+   "cec_key": "amcha-israel_list6",
+   "cec_url": "https://www.gov.il/he/pages/amcha-israel_list6",
+   "first_candidates": [
+    "ווינטר עופר",
+    "חדאד יוסף"
+   ],
+   "leader": "עופר וינטר",
+   "aliases": [
+    "עמך ישראל"
+   ],
+   "agreement": null,
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/727907/",
+    "https://www.ynet.co.il/news/article/s1ibdii5fe",
+    "https://www.ynet.co.il/news/article/hk11sxv300fl",
+    "https://www.kikar.co.il/political-news/tkzw79"
+   ]
+  },
+  {
+   "letters": "י",
+   "id": null,
+   "cec_list_no": 7,
+   "official_name": "ישראל תחילה בראשות שרן השכל",
+   "requested_letters": "י / ר",
+   "cec_key": "israel-tchila_list7",
+   "cec_url": "https://www.gov.il/he/pages/israel-tchila_list7",
+   "first_candidates": [
+    "השכל שרן מרים",
+    "דנינו רועי חיים"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/"
+   ]
+  },
+  {
+   "letters": "ה",
+   "id": null,
+   "cec_list_no": 8,
+   "official_name": "גן עדן בראשות ישוע ישראל בן דוד",
+   "requested_letters": "יה / ה",
+   "cec_key": "gan-eden_list_8",
+   "cec_url": "https://www.gov.il/he/pages/gan-eden_list_8",
+   "first_candidates": [
+    "בן דוד ישוע ישראל",
+    "בן יששכר יעקב"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.davar1.co.il/698869/"
+   ]
+  },
+  {
+   "letters": "קה",
+   "id": null,
+   "cec_list_no": 9,
+   "official_name": "קול הנשים",
+   "requested_letters": "קה / צח / נא",
+   "cec_key": "kol-ha-nashim_list9",
+   "cec_url": "https://www.gov.il/he/pages/kol-ha-nashim_list9",
+   "first_candidates": [
+    "ישראל שדמי עמיר",
+    "בוהדנה אמה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "בד",
+   "id": null,
+   "cec_list_no": 10,
+   "official_name": "מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד",
+   "requested_letters": "בד / בי / בנ / רץ",
+   "cec_key": "beyachad-natzliah_list10",
+   "cec_url": "https://www.gov.il/he/pages/beyachad-natzliah_list10",
+   "first_candidates": [
+    "שקד אבי",
+    "עטאונה נעים"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ל",
+   "id": "Yisrael Beiteinu",
+   "cec_list_no": 11,
+   "official_name": "ישראל ביתנו בראשות אביגדור ליברמן",
+   "requested_letters": "ל",
+   "cec_key": "israel-beitenu_list11",
+   "cec_url": "https://www.gov.il/he/pages/israel-beitenu_list11",
+   "first_candidates": [
+    "ליברמן אביגדור",
+    "בן שטרית רפאל"
+   ],
+   "leader": "אביגדור ליברמן",
+   "aliases": [
+    "ישראל ביתנו"
+   ],
+   "agreement": "רק",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kikar.co.il/political-news/tm0nt3"
+   ]
+  },
+  {
+   "letters": "קץ",
+   "id": null,
+   "cec_list_no": 12,
+   "official_name": "משפט צדק",
+   "requested_letters": "קץ",
+   "cec_key": "mishpat-tzedek_list12",
+   "cec_url": "https://www.gov.il/he/pages/mishpat-tzedek_list12",
+   "first_candidates": [
+    "עמיר רננה לריסה",
+    "עמיר גאולה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "נף",
+   "id": null,
+   "cec_list_no": 13,
+   "official_name": "שמע בראשות נפתלי גולדמן",
+   "requested_letters": "נף",
+   "cec_key": "shama",
+   "cec_url": "https://www.gov.il/he/pages/shama",
+   "first_candidates": [
+    "גולדמן נפתלי בורוך",
+    null
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ב",
+   "id": "Otzma Yehudit",
+   "cec_list_no": 14,
+   "official_name": "עוצמה יהודית בראשות איתמר בן גביר",
+   "requested_letters": "ב",
+   "cec_key": "yehudit-meuhedet_list14",
+   "cec_url": "https://www.gov.il/he/pages/yehudit-meuhedet_list14",
+   "first_candidates": [
+    "בן גביר איתמר",
+    "גוטליב רויטל טלי"
+   ],
+   "leader": "איתמר בן גביר",
+   "aliases": [
+    "עוצמה יהודית"
+   ],
+   "agreement": null,
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.ynet.co.il/news/elections2026/article/sjmed8uqgx",
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.israelnationalnews.com/news/433712",
+    "https://www.inn.co.il/news/707158"
+   ]
+  },
+  {
+   "letters": "קך",
+   "id": null,
+   "cec_list_no": 15,
+   "official_name": "סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות",
+   "requested_letters": "קך",
+   "cec_key": "seder-chadash_list15",
+   "cec_url": "https://www.gov.il/he/pages/seder-chadash_list15",
+   "first_candidates": [
+    "אופק אביטל חי",
+    "נאור לביא"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "די",
+   "id": "Reservists",
+   "cec_list_no": 16,
+   "official_name": "המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה",
+   "requested_letters": "די / צ / י",
+   "cec_key": "hamiluimnikim-vehakalkalit_list16",
+   "cec_url": "https://www.gov.il/he/pages/hamiluimnikim-vehakalkalit_list16",
+   "first_candidates": [
+    "הנדל יועז",
+    "זליכה ירון"
+   ],
+   "leader": "יועז הנדל וירון זליכה",
+   "aliases": [
+    "המילואימניקים"
+   ],
+   "agreement": null,
+   "leader_sources": [
+    "https://www.kipa.co.il/%D7%97%D7%93%D7%A9%D7%95%D7%AA/1231208-0/",
+    "https://www.idi.org.il/policy/parties-and-elections/parties/miluimniks/"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/727907/",
+    "https://www.ynet.co.il/news/article/s1ibdii5fe",
+    "https://www.walla.co.il/news/politics/383955473"
+   ]
+  },
+  {
+   "letters": "אמת",
+   "id": "The Democrats",
+   "cec_list_no": 17,
+   "official_name": "הדמוקרטים בראשות יאיר גולן",
+   "requested_letters": "אמת",
+   "cec_key": "hademokratim_list17",
+   "cec_url": "https://www.gov.il/he/pages/hademokratim_list17",
+   "first_candidates": [
+    "גולן יאיר",
+    "לזימי נעמה"
+   ],
+   "leader": "יאיר גולן",
+   "aliases": [
+    "הדמוקרטים"
+   ],
+   "agreement": "דרך",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/",
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.davar1.co.il/698869/",
+    "https://www.walla.co.il/news/politics/383955473"
+   ]
+  },
+  {
+   "letters": "עם",
+   "id": "Ra'am",
+   "cec_list_no": 18,
+   "official_name": "רע\"ם – הרשימה הערבית המאוחדת",
+   "requested_letters": "עם",
+   "cec_key": "raam_list18",
+   "cec_url": "https://www.gov.il/he/pages/raam_list18",
+   "first_candidates": [
+    "עבאס מנסור",
+    "סגלוביץ יואב"
+   ],
+   "leader": "מנסור עבאס",
+   "aliases": [
+    "רע\"ם",
+    "רע״ם",
+    "הרשימה הערבית המאוחדת"
+   ],
+   "agreement": "ודם",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/727907/",
+    "https://www.ynet.co.il/news/article/s1ibdii5fe",
+    "https://www.kan.org.il/content/kan-news/politic/1103572/"
+   ]
+  },
+  {
+   "letters": "שס",
+   "id": "Shas",
+   "cec_list_no": 19,
+   "official_name": "התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל",
+   "requested_letters": "שס",
+   "cec_key": "shas_list19",
+   "cec_url": "https://www.gov.il/he/pages/shas_list19",
+   "first_candidates": [
+    "דרעי אריה מכלוף",
+    "אזולאי ינון"
+   ],
+   "leader": "אריה דרעי",
+   "aliases": [
+    "ש\"ס",
+    "ש״ס",
+    "התאחדות הספרדים"
+   ],
+   "agreement": "ג",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.walla.co.il/news/politics/383955473"
+   ]
+  },
+  {
+   "letters": "זך",
+   "id": "Haredi Public",
+   "cec_list_no": 20,
+   "official_name": "הציבור החרדי בראשות מוטי ליטנר",
+   "requested_letters": "זך",
+   "cec_key": "tzibur-charedi_list20",
+   "cec_url": "https://www.gov.il/he/pages/tzibur-charedi_list20",
+   "first_candidates": [
+    "ליטנר פנחס מרדכי",
+    "פרדי אשר"
+   ],
+   "leader": "מוטי ליטנר",
+   "aliases": [
+    "הציבור החרדי"
+   ],
+   "agreement": null,
+   "leader_sources": [
+    "https://www.zman.co.il/live/727907/",
+    "https://www.ynet.co.il/news/article/s1ibdii5fe"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/727907/",
+    "https://www.ynet.co.il/news/article/s1ibdii5fe",
+    "https://www.kikar.co.il/political-news/tm0nt3"
+   ]
+  },
+  {
+   "letters": "פה",
+   "id": null,
+   "cec_list_no": 21,
+   "official_name": "אני ואתה מפלגת העם הישראלית",
+   "requested_letters": "פה / כן / יד / ה",
+   "cec_key": "miflegat-am-israelit_list21",
+   "cec_url": "https://www.gov.il/he/pages/miflegat-am-israelit_list21",
+   "first_candidates": [
+    "גלעדי אלון",
+    "גלעדי ז'ולסון מאיה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "זץ",
+   "id": null,
+   "cec_list_no": 22,
+   "official_name": "ברית עולם לגאולת ישראל",
+   "requested_letters": "זץ",
+   "cec_key": "brit-olam_list22",
+   "cec_url": "https://www.gov.il/he/pages/brit-olam_list22",
+   "first_candidates": [
+    "ליפשיץ עופר פינחס",
+    "סבו לב"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "נקי",
+   "id": null,
+   "cec_list_no": 23,
+   "official_name": "התיקון לשיטת הבחירות והממשל",
+   "requested_letters": "נקי",
+   "cec_key": "tikun_list23",
+   "cec_url": "https://www.gov.il/he/pages/tikun_list23",
+   "first_candidates": [
+    "סלמוביץ משה",
+    "קבלאן יארה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "יק",
+   "id": null,
+   "cec_list_no": 24,
+   "official_name": "גה\"ת – גוש התנ\"כי",
+   "requested_letters": "יק",
+   "cec_key": "gush-tanachi_list24",
+   "cec_url": "https://www.gov.il/he/pages/gush-tanachi_list24",
+   "first_candidates": [
+    "ליפקין דניס",
+    "קל ברכה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ז",
+   "id": null,
+   "cec_list_no": 25,
+   "official_name": "בטח – בטחון חברתי בראשות סמיון גרפמן",
+   "requested_letters": "ז",
+   "cec_key": "betach_list25",
+   "cec_url": "https://www.gov.il/he/pages/betach_list25",
+   "first_candidates": [
+    "גרפמן סמיון",
+    "חניס לובוב"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "בקר",
+   "id": null,
+   "cec_list_no": 26,
+   "official_name": "אורות השחר בראשות ניסים לוק",
+   "requested_letters": "בקר",
+   "cec_key": "orot_list26",
+   "cec_url": "https://www.gov.il/he/pages/orot_list26",
+   "first_candidates": [
+    "לוק נסים",
+    "הר שמש בניהו"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "נץ",
+   "id": null,
+   "cec_list_no": 27,
+   "official_name": "ביטחון אישי",
+   "requested_letters": "נץ",
+   "cec_key": "demokratura_list27",
+   "cec_url": "https://www.gov.il/he/pages/demokratura_list27",
+   "first_candidates": [
+    "טופצ'יאשוילי מיכאל",
+    "קיקוזשוילי גבריאל"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "נר",
+   "id": null,
+   "cec_list_no": 28,
+   "official_name": "צבע שחור – מגן עולם התורה",
+   "requested_letters": "נר",
+   "cec_key": "shachor_list28",
+   "cec_url": "https://www.gov.il/he/pages/shachor_list28",
+   "first_candidates": [
+    "באומרינד אליהו אליעזר",
+    "דגני דרור אליהו"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "מחל",
+   "id": "Likud",
+   "cec_list_no": 29,
+   "official_name": "הליכוד בהנהגת בנימין נתניהו לראשות הממשלה",
+   "requested_letters": "מחל",
+   "cec_key": "halikud-tikvahadasha_iist29",
+   "cec_url": "https://www.gov.il/he/pages/halikud-tikvahadasha_iist29",
+   "first_candidates": [
+    "נתניהו בנימין",
+    "כהן אליהו"
+   ],
+   "leader": "בנימין נתניהו",
+   "aliases": [
+    "הליכוד"
+   ],
+   "agreement": "ט",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.zman.co.il/live/728050/",
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.davar1.co.il/698869/",
+    "https://www.walla.co.il/news/politics/383955473"
+   ]
+  },
+  {
+   "letters": "כן",
+   "id": "National Unity",
+   "cec_list_no": 30,
+   "official_name": "כחול לבן בראשות בני גנץ",
+   "requested_letters": "כן",
+   "cec_key": "kachol-lavan_list30",
+   "cec_url": "https://www.gov.il/he/pages/kachol-lavan_list30",
+   "first_candidates": [
+    "גנץ בנימין",
+    "תמנו פנינה (פנחש)"
+   ],
+   "leader": "בני גנץ",
+   "aliases": [
+    "כחול לבן"
+   ],
+   "agreement": null,
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kikar.co.il/political-news/tm0nt3",
+    "https://www.kan.org.il/content/kan-news/politic/1103572/"
+   ]
+  },
+  {
+   "letters": "ט",
+   "id": "Religious Zionism",
+   "cec_list_no": 31,
+   "official_name": "הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין",
+   "requested_letters": "ט",
+   "cec_key": "tzionutdatit-zehut_list31",
+   "cec_url": "https://www.gov.il/he/pages/tzionutdatit-zehut_list31",
+   "first_candidates": [
+    "סמוטריץ בצלאל יואל",
+    "פייגלין משה זלמן"
+   ],
+   "leader": "בצלאל סמוטריץ׳",
+   "aliases": [
+    "הציונות הדתית"
+   ],
+   "agreement": "מחל",
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kikar.co.il/political-news/tm0nt3"
+   ]
+  },
+  {
+   "letters": "צבי",
+   "id": null,
+   "cec_list_no": 32,
+   "official_name": "תנועת אחי תנועתו של הרב יורם אברג'ל זצ\"ל",
+   "requested_letters": "צ/צבי",
+   "cec_key": "chozrim-leshorashim_list32",
+   "cec_url": "https://www.gov.il/he/pages/chozrim-leshorashim_list32",
+   "first_candidates": [
+    "אלמלך יובל",
+    "אפל ישראל אביחי"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "בי",
+   "id": null,
+   "cec_list_no": 33,
+   "official_name": "צומת בית ישראל",
+   "requested_letters": "בי",
+   "cec_key": "tzomet-beit-israel_list33",
+   "cec_url": "https://www.gov.il/he/pages/tzomet-beit-israel_list33",
+   "first_candidates": [
+    "יברקן דסטה",
+    "גרין משה"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ק",
+   "id": null,
+   "cec_list_no": 34,
+   "official_name": "תקומה",
+   "requested_letters": "ק",
+   "cec_key": "tekuma_list34",
+   "cec_url": "https://www.gov.il/he/pages/tekuma_list34",
+   "first_candidates": [
+    "פדרמן אלקנא",
+    "נגר לוטם"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ודם",
+   "id": "Joint List",
+   "cec_list_no": 35,
+   "official_name": "הרשימה המשותפת",
+   "requested_letters": "ודם",
+   "cec_key": "hareshima-hameshutefet_list35",
+   "cec_url": "https://www.gov.il/he/pages/hareshima-hameshutefet_list35",
+   "first_candidates": [
+    "גבארין יוסף",
+    "טיבי אחמד"
+   ],
+   "leader": "יוסף ג׳בארין",
+   "aliases": [
+    "הרשימה המשותפת"
+   ],
+   "agreement": "עם",
+   "leader_sources": [
+    "https://www.idi.org.il/media/32320/%D7%94%D7%A8%D7%A9%D7%99%D7%9E%D7%94-%D7%94%D7%9E%D7%A9%D7%95%D7%AA%D7%A4%D7%AA.pdf",
+    "https://www.israelnationalnews.com/news/434004"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kan.org.il/content/kan-news/politic/1103572/",
+    "https://www.kipa.co.il/%D7%97%D7%93%D7%A9%D7%95%D7%AA/1232376-0/",
+    "https://he.wikipedia.org/wiki/%D7%94%D7%A8%D7%A9%D7%99%D7%9E%D7%94_%D7%94%D7%9E%D7%A9%D7%95%D7%AA%D7%A4%D7%AA"
+   ]
+  },
+  {
+   "letters": "רץ",
+   "id": null,
+   "cec_list_no": 36,
+   "official_name": "הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים",
+   "requested_letters": "רץ",
+   "cec_key": "machane-israel_list36",
+   "cec_url": "https://www.gov.il/he/pages/machane-israel_list36",
+   "first_candidates": [
+    "אלבוים שלמה",
+    "אדלר ברוך מנדל"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  },
+  {
+   "letters": "ג",
+   "id": "UTJ",
+   "cec_list_no": 37,
+   "official_name": "יהדות התורה והשבת אגודת ישראל – דגל התורה",
+   "requested_letters": "ג",
+   "cec_key": "yahadut-degel_list37",
+   "cec_url": "https://www.gov.il/he/pages/yahadut-degel_list37",
+   "first_candidates": [
+    "אשר יעקב",
+    "גולדקנופ יצחק יששכר"
+   ],
+   "leader": "יעקב אשר",
+   "aliases": [
+    "יהדות התורה"
+   ],
+   "agreement": "שס",
+   "leader_sources": [
+    "https://www.israelhayom.co.il/israelnow/article/21370694",
+    "https://www.israelhayom.co.il/israelnow/article/21384752"
+   ],
+   "verified": {
+    "letters": true,
+    "agreement": true,
+    "cec": false
+   },
+   "letter_sources": [
+    "https://www.kikar.co.il/political-news/tm0nt3"
+   ]
+  },
+  {
+   "letters": "ני",
+   "id": null,
+   "cec_list_no": 38,
+   "official_name": "נעם לישראל למען עתיד הילדים בראשות אבי מעוז",
+   "requested_letters": "ני",
+   "cec_key": "noam_list38",
+   "cec_url": "https://www.gov.il/he/pages/noam_list38",
+   "first_candidates": [
+    "מעוז אביגדור",
+    "טבול שמעון"
+   ],
+   "verified": {
+    "letters": false,
+    "agreement": false,
+    "cec": false
+   },
+   "letter_sources": []
+  }
+ ],
+ "agreements": [
+  {
+   "lists": [
+    "מחל",
+    "ט"
+   ],
+   "ids": [
+    "Likud",
+    "Religious Zionism"
+   ],
+   "announced": "2026-10-06",
+   "sources": [
+    "https://www.haaretz.co.il/news/elections/2026-10-06/ty-article/000001a1-104d-d4b5-afff-b6cfa31b0000",
+    "https://www.jpost.com/israel-election-2026/article-910758",
+    "https://www.timesofisrael.com/liveblog_entry/likud-and-religious-zionism-sign-surplus-vote-agreement/",
+    "https://www.ynetnews.com/article/asxop5pjn",
+    "https://www.ynet.co.il/news/elections2026/article/skpacqgjfe"
+   ],
+   "verified": true,
+   "cec": false
+  },
+  {
+   "lists": [
+    "שס",
+    "ג"
+   ],
+   "ids": [
+    "Shas",
+    "UTJ"
+   ],
+   "announced": "2026-10-11",
+   "sources": [
+    "https://www.haaretz.co.il/news/elections/2026-10-11/ty-article/000001a1-2ab0-d4fa-a5b9-efb40ed20000",
+    "https://www.jpost.com/israel-election-2026/article-911320",
+    "https://www.timesofisrael.com/liveblog_entry/shas-utj-sign-surplus-vote-agreement-ahead-of-election/",
+    "https://www.zman.co.il/live/732151/"
+   ],
+   "verified": true,
+   "cec": false
+  },
+  {
+   "lists": [
+    "דרך",
+    "אמת"
+   ],
+   "ids": [
+    "Yashar",
+    "The Democrats"
+   ],
+   "announced": null,
+   "sources": [
+    "https://www.jpost.com/israel-election-2026/article-908296",
+    "https://www.ynet.co.il/news/elections2026/article/syswreefmx"
+   ],
+   "verified": true,
+   "cec": false
+  },
+  {
+   "lists": [
+    "רק",
+    "ל"
+   ],
+   "ids": [
+    "Together",
+    "Yisrael Beiteinu"
+   ],
+   "announced": null,
+   "sources": [
+    "https://www.jpost.com/israel-election-2026/article-908296",
+    "https://www.ynet.co.il/news/elections2026/article/syswreefmx"
+   ],
+   "verified": true,
+   "cec": false
+  },
+  {
+   "lists": [
+    "עם",
+    "ודם"
+   ],
+   "ids": [
+    "Ra'am",
+    "Joint List"
+   ],
+   "announced": null,
+   "sources": [
+    "https://www.ynet.co.il/news/elections2026/article/sku7exmfzx"
+   ],
+   "verified": true,
+   "cec": false
+  }
+ ],
+ "agreements_count_sources": [
+  "https://www.emess.co.il/radio/1945293",
+  "https://www.kikar.co.il/political-news/surplus-agreements-elections-hendel-winter-ben-gvi"
+ ],
+ "no_agreement": [
+  {
+   "letters": "ב",
+   "id": "Otzma Yehudit",
+   "sources": [
+    "https://www.timesofisrael.com/ben-gvir-rules-out-surplus-vote-deal-with-winter-calls-him-bennett-2/",
+    "https://www.ynetnews.com/article/s1ql002sjge",
+    "https://www.ynet.co.il/news/elections2026/article/hkhvccojge",
+    "https://www.i24news.tv/he/news/israel-elections-2026/artc-bbc948a9"
+   ],
+   "as_of": "2026-10-16 12:00",
+   "verified": true,
+   "cec": false
+  },
+  {
+   "letters": "ך",
+   "id": "Amcha Yisrael",
+   "sources": [
+    "https://www.i24news.tv/he/news/israel-elections-2026/artc-bbc948a9",
+    "https://www.walla.co.il/news/israel/383957693",
+    "https://www.ynet.co.il/news/elections2026/article/hjextlj2gl"
+   ],
+   "as_of": "2026-10-16 12:00",
+   "verified": true,
+   "cec": false
+  },
+  {
+   "letters": "די",
+   "id": "Reservists",
+   "sources": [
+    "https://www.walla.co.il/news/israel/383957693",
+    "https://www.ynet.co.il/news/elections2026/article/hjextlj2gl",
+    "https://www.mako.co.il/news-israel-elections/2026/Article-21fc14d1d9341a1027.htm"
+   ],
+   "as_of": "2026-10-16 12:00",
+   "verified": true,
+   "cec": false
+  },
+  {
+   "letters": "כן",
+   "id": "National Unity",
+   "sources": [
+    "https://www.kikar.co.il/political-news/surplus-agreements-elections-hendel-winter-ben-gvi"
+   ],
+   "as_of": "2026-10-16 12:00",
+   "verified": true,
+   "cec": false
+  }
+ ],
+ "open": [
+  "the CEC's own announcement of the agreements (after the 16.10 deadline): pipeline/fetchers/cec_lists.py",
+  "Haredi Public (זך): no report either way on an agreement",
+  "the approved ballot slips PDF and each list's roster page, read on the CEC's site (cec: false everywhere)"
+ ]
+}

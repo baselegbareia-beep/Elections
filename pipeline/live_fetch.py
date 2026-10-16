@@ -88,8 +88,10 @@ try:
     IL = ZoneInfo("Asia/Jerusalem")
 except Exception:                                   # a runner without tz data: IST (UTC+2) from 25.10.2026
     IL = dt.timezone(dt.timedelta(hours=2))
+# the surplus-vote agreements filed by the 16.10.2026 deadline, as reported (pipeline/reference/lists_2026.json, with
+# the sources; pipeline/test_live.py 11c keeps the two the same). The CEC's own list: pipeline/fetchers/cec_lists.py
 AGREEMENTS_2026 = [("Likud", "Religious Zionism"), ("Yashar", "The Democrats"), ("Together", "Yisrael Beiteinu"),
-                   ("Ra'am", "Joint List")]
+                   ("Ra'am", "Joint List"), ("Shas", "UTJ")]
 STATE = "state.json"
 DRILL_URL = "https://media25.bechirot.gov.il/files/expb.csv"
 DEFAULT_CFG = {"election_day": "2026-10-27", "results_url": "https://media26.bechirot.gov.il/files/expb.csv"}
