@@ -40,7 +40,10 @@ What it writes under DIR: files/page/ (the collector page), files/listing/page-<
 listing.json (the results gathered, as the API gave them), files/third_party/ (the indexes as fetched),
 files/pdf/<item>__<file>.pdf, files/text/<item>__<file>.txt (pdftotext only), filings.json (one row per filing
 address: where it was found, the HTTP answer, size, SHA-256, the saved name), summary.json and summary.md.
-Never raises on a single URL; exit 0 unless the script itself crashed.
+Never raises on a single URL; exit 0 unless the script itself crashed. Nothing is asked after --deadline (DEADLINE,
+20 minutes from the start; a body still coming is cut GRACE seconds later, pdftotext is not run after it): what
+was not asked by then is recorded as such and the files are written with what came (pipeline/fetchers/__init__.py:
+fetch.yml stops it at 25).
 
 Testing against a local server: --rewrite https://www.gov.il=http://127.0.0.1:8765/govil (repeatable, also for
 https://raw.githubusercontent.com) fetches from the mock and keeps the real address in the records;
@@ -94,16 +97,28 @@ MAX_PER_ITEM = 3
 MAX_FILE = 25_000_000
 MAX_TOTAL = 300_000_000
 TIMEOUT = 40
+DEADLINE = 20 * 60             # seconds from the start (pipeline/fetchers/__init__.py: fetch.yml stops it at 25 minutes)
+GRACE = 60                     # a body still coming at the deadline is cut this much later
+LATE = "not fetched: past the deadline (--deadline)"
 CHALLENGE = re.compile(rb"cf-chl|challenge-platform|Just a moment|cf_chl_opt|Attention Required", re.I)
 
 
 # ------------------------------------------------------------------ fetching
 class Fetcher:
-    def __init__(self, out, rewrite=(), only_rewritten=False, timeout=TIMEOUT, curl=True):
+    def __init__(self, out, rewrite=(), only_rewritten=False, timeout=TIMEOUT, curl=True, deadline=DEADLINE):
         self.out = out
         self.rewrite, self.only_rewritten, self.timeout = list(rewrite), only_rewritten, timeout
         self.curl = shutil.which("curl") if curl else None
         self.entries, self.total, self.lock = [], 0, threading.Lock()
+        self.stop_at = time.monotonic() + deadline
+        self.cut_at = self.stop_at + GRACE
+
+    def late(self):
+        return time.monotonic() >= self.stop_at
+
+    def left(self, cap):
+        """A request's time limit: cap, or less near the deadline's grace."""
+        return max(1.0, min(cap, self.cut_at - time.monotonic()))
 
     def target(self, url):
         for a, b in self.rewrite:
@@ -122,6 +137,9 @@ class Fetcher:
         host = urllib.parse.urlsplit(url).hostname or ""
         if not (host == "gov.il" or host.endswith(".gov.il") or host == "raw.githubusercontent.com"):
             entry["error"] = "not fetched: not a gov.il or raw.githubusercontent.com address"
+            return entry, None
+        if self.late():
+            entry["error"] = LATE
             return entry, None
         target = self.target(url)
         if target is None:
@@ -152,8 +170,8 @@ class Fetcher:
             if data is not None:
                 hdr = {**hdr, "Content-Type": "application/json;charset=UTF-8"}
             req = urllib.request.Request(target, data=data, headers=hdr, method="POST" if data is not None else "GET")
-            with urllib.request.urlopen(req, timeout=self.timeout) as r:
-                entry["status"], raw = r.status, r.read(MAX_FILE + 1)
+            with urllib.request.urlopen(req, timeout=self.left(self.timeout)) as r:
+                entry["status"], raw = r.status, read_until(r, MAX_FILE + 1, self.cut_at)
                 entry["type"] = r.headers.get("Content-Type", "")
                 if r.headers.get("Last-Modified"):
                     entry["last_modified"] = r.headers.get("Last-Modified")
@@ -176,18 +194,22 @@ class Fetcher:
     def via_curl(self, entry, target, data, hdr):
         """The same request through curl (another TLS client), when urllib was refused or got a challenge."""
         entry["transport"] = "curl"
+        if self.late():
+            entry["error"] = LATE
+            return None
         fd, path = tempfile.mkstemp(prefix="filing-")
         os.close(fd)
+        limit = int(self.left(self.timeout + 20))
         try:
             cmd = [self.curl, "-sS", "-L", "--max-redirs", "3", "--proto", "=https,http", "--compressed",
-                   "--max-time", str(int(self.timeout) + 20), "-o", path, "-w", "%{http_code}\n%{content_type}\n"]
+                   "--max-time", str(limit), "-o", path, "-w", "%{http_code}\n%{content_type}\n"]
             for k, v in hdr.items():
                 if k.lower() not in ("accept-encoding",):
                     cmd += ["-H", f"{k}: {v}"]
             if data is not None:
                 cmd += ["-H", "Content-Type: application/json;charset=UTF-8", "--data-binary", "@-"]
             cmd.append(target)
-            p = subprocess.run(cmd, input=data, capture_output=True, timeout=self.timeout + 40)
+            p = subprocess.run(cmd, input=data, capture_output=True, timeout=limit + 20)
             info = p.stdout.decode("utf-8", "replace").split("\n")
             code = int(info[0]) if info and info[0].strip().isdigit() else 0
             entry["status"], entry["type"] = code or None, (info[1] if len(info) > 1 else "")
@@ -231,6 +253,21 @@ class Fetcher:
             f.write(body)
         entry["saved"] = rel
         return path
+
+
+def read_until(r, limit, cut):
+    """r.read(limit), in pieces, stopped at the monotonic time `cut`: a slow body cannot hold the run past the
+    deadline's grace."""
+    chunks, n = [], 0
+    while n < limit:
+        if time.monotonic() > cut:
+            raise TimeoutError(f"cut at the deadline (--deadline) after {n} bytes")
+        b = r.read(min(1 << 16, limit - n))
+        if not b:
+            break
+        chunks.append(b)
+        n += len(b)
+    return b"".join(chunks)
 
 
 def decode_body(raw, enc):
@@ -450,11 +487,13 @@ def main(argv=None):
     ap.add_argument("--max-pdfs", type=int, default=MAX_PDFS)
     ap.add_argument("--probe", type=int, default=15, help="items to probe after the last known, when the listing failed")
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--deadline", type=float, default=DEADLINE,
+                    help=f"seconds from the start after which nothing is asked (default {DEADLINE}; fetch.yml stops it at 1500)")
     a = ap.parse_args(argv)
     started = dt.datetime.now(dt.timezone.utc)
     os.makedirs(a.out, exist_ok=True)
     F = Fetcher(a.out, [tuple(r.split("=", 1)) for r in a.rewrite if "=" in r], a.only_rewritten, a.timeout,
-                curl=not a.no_curl)
+                curl=not a.no_curl, deadline=a.deadline)
 
     # 1-2. the collector page and its listing
     page, html = F.request(COLLECTOR + "?skip=0", why="the collector page (its template id)")
@@ -525,7 +564,9 @@ def main(argv=None):
         rel = f"files/pdf/{rec['item']}__{safe_file(rec['file'])}"
         if F.save(entry, body, rel):
             rec["saved"] = rel
-            if pdftotext:
+            if pdftotext and F.late():
+                rec["text_error"] = "pdftotext not run: past the deadline (--deadline)"
+            elif pdftotext:
                 rec["text"] = to_text(pdftotext, os.path.join(a.out, rel), a.out, rec)
 
     with cf.ThreadPoolExecutor(max(1, a.workers)) as ex:
@@ -547,7 +588,8 @@ def main(argv=None):
                     "pdfs_saved": sum(1 for r in filings if r.get("saved")),
                     "texts": sum(1 for r in filings if r.get("text")),
                     "failed": sum(1 for r in filings if r.get("error"))},
-        "requests": len(F.entries), "rows": filings,
+        "requests": len(F.entries), "deadline_s": a.deadline,
+        "not_fetched_past_deadline": sum(1 for e in F.entries if e.get("error") == LATE), "rows": filings,
         "urls": [e for e in F.entries if e.get("why") != "a filing"],
     }
     with open(os.path.join(a.out, "summary.json"), "w", encoding="utf-8") as f:
@@ -569,6 +611,8 @@ def run_probe(F, found, items):
         return []
     last_num, hits, misses = max(nums), [], 0
     for n in range(last_item + 1, last_item + 1 + items):
+        if F.late():
+            break
         hit = None
         for num in range(last_num + 1, last_num + 9):
             for name in (f"Survey_{num}.pdf", f"Survey{num}.pdf"):
@@ -617,6 +661,9 @@ def markdown(s):
           f"{cell(', '.join(ls['transport']) or '-')}. curl on the runner: {s['curl']}; pdftotext: {s['pdftotext']}.", ""]
     for n in ls["notes"]:
         L.append(f"- {cell(n)}")
+    if s.get("not_fetched_past_deadline"):
+        L += ["", f"**Stopped at the deadline** ({s['deadline_s']:.0f} s from the start): {s['not_fetched_past_deadline']} "
+              "requests not made (`not fetched: past the deadline` below); what came before is here."]
     L += ["", f"**Filings:** {fs['items']} items ({fs['addresses']} addresses): from the listing {fs['from_listing']}; "
           f"PDFs saved {fs['pdfs_saved']}; texts {fs['texts']}; failed or not fetched {fs['failed']}.", "",
           "| third party | HTTP | filings named |", "|---|---|---|"]

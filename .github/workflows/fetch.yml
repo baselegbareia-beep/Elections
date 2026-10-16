@@ -1,8 +1,9 @@
 # Fetches official files that only GitHub's runners can reach (gov.il, bechirot.gov.il, cbs.gov.il and data.gov.il
 # answer the build container with 403): runs one fetcher, pipeline/fetchers/<what>.py --out DIR (the shared fetch
-# contract: standard library only; raw files plus summary.json and summary.md in DIR; exit 0 unless the fetcher itself
-# crashed), and pushes DIR to the ops-reports branch as reports/fetch/<what>/<YYYYMMDD-HHMM>/ (Israel time, one per
-# run) and reports/fetch/<what>/latest/ (replaced by every run). Never to main: no Pages build. Read the files with
+# contract: standard library only; raw files plus summary.json and summary.md in DIR; done within 20 minutes, its own
+# --deadline, and stopped here at 25; exit 0 unless the fetcher itself crashed), and pushes DIR to the ops-reports
+# branch as reports/fetch/<what>/<YYYYMMDD-HHMM>/ (Israel time, one per run) and reports/fetch/<what>/latest/
+# (replaced by every run). Never to main: no Pages build. Read the files with
 # `git fetch origin ops-reports && git show origin/ops-reports:reports/fetch/<what>/latest/summary.md`, or the GitHub
 # MCP tool get_file_contents with ref ops-reports. The run's summary page shows summary.md, and DIR is kept with the
 # run as an artifact (14 days), also when the push failed.
@@ -113,8 +114,22 @@ jobs:
           token=$(python3 -c 'import secrets; print(secrets.token_hex(16))')
           echo "::stop-commands::$token"
           rc=0
-          timeout 1500 python3 "pipeline/fetchers/$WHAT.py" --out "$OUT" || rc=$?
+          # 25 minutes, then a kill 30 s on: the push and the artifact get the job's last 5. A fetcher stops asking at
+          # 20 (its --deadline) and writes its summary (pipeline/fetchers/__init__.py), so this is the backstop
+          timeout -k 30 1500 python3 "pipeline/fetchers/$WHAT.py" --out "$OUT" || rc=$?
           echo "::$token::"
+          if [ "$rc" = 124 ] || [ "$rc" = 137 ]; then
+            echo "::warning::pipeline/fetchers/$WHAT.py was stopped at fetch.yml's limit (25 minutes, exit $rc): what it wrote by then is pushed"
+            if [ ! -f "$OUT/summary.md" ]; then
+              {
+                echo "# $WHAT: stopped at fetch.yml's limit (25 minutes, exit $rc), no summary of its own"
+                echo
+                echo "The files it wrote by then:"
+                echo
+                (cd "$OUT" && find . -type f ! -name summary.md | sort | head -n 500 | sed 's|^\./|- |')
+              } > "$OUT/summary.md"
+            fi
+          fi
           if [ -f "$OUT/summary.md" ]; then
             {
               echo "## Fetch $WHAT, $STAMP (Israel time)"

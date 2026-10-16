@@ -18,7 +18,9 @@ What it asks for:
   * the surplus-vote agreements: a few likely page names (surplus-agreements-26 and others), every gov.il page or
     file a fetched page links to whose address or text names עודפים / surplus / הסכם, bechirot.gov.il's pages;
   * data.gov.il's catalogue (package_search) for 26th-Knesset datasets on lists and agreements.
-Only *.gov.il addresses are fetched; links elsewhere are listed. At most MAX_URLS requests, MAX_FILE bytes a file.
+Only *.gov.il addresses are fetched; links elsewhere are listed. At most MAX_URLS requests, MAX_FILE bytes a file,
+and nothing asked after --deadline (DEADLINE, 20 minutes from the start; a body still coming is cut GRACE seconds
+later): the summary is then written with what came (pipeline/fetchers/__init__.py: fetch.yml stops it at 25).
 
 What it writes: DIR/files/<sha8>-<host>_<name> (each body once), DIR/summary.json and DIR/summary.md: per URL the
 HTTP status, type, size, SHA-256 and saved name; per list the letters and title its CEC page shows against
@@ -43,6 +45,7 @@ import re
 import socket
 import sys
 import threading
+import time
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -69,16 +72,19 @@ MAX_URLS = 220
 MAX_FILE = 15_000_000
 MAX_TOTAL = 80_000_000
 TIMEOUT = 30
+DEADLINE = 20 * 60             # seconds from the start (pipeline/fetchers/__init__.py: fetch.yml stops it at 25 minutes)
+GRACE = 60                     # a body still coming at the deadline is cut this much later
 HEB = "א-ת"
 
 
 # ------------------------------------------------------------------ fetching
 class Fetcher:
-    def __init__(self, out, rewrite=(), only_rewritten=False, timeout=TIMEOUT, max_urls=MAX_URLS):
+    def __init__(self, out, rewrite=(), only_rewritten=False, timeout=TIMEOUT, max_urls=MAX_URLS, deadline=DEADLINE):
         self.out, self.files = out, os.path.join(out, "files")
         os.makedirs(self.files, exist_ok=True)
         self.rewrite, self.only_rewritten, self.timeout, self.max_urls = list(rewrite), only_rewritten, timeout, max_urls
         self.entries, self.seen, self.saved, self.total = [], {}, {}, 0
+        self.stop_at, self.late = time.monotonic() + deadline, 0      # late: requests not made, past the deadline
         self.lock = threading.Lock()
 
     def real_to_fetch(self, url):
@@ -94,6 +100,9 @@ class Fetcher:
                 return self.seen[url]
             if len(self.seen) >= self.max_urls:
                 return {"url": url, "error": "skipped: request limit"}, None
+            if time.monotonic() >= self.stop_at:
+                self.late += 1
+                return {"url": url, "error": "skipped: past the deadline (--deadline)"}, None
             entry = {"url": url, "why": why}
             self.seen[url] = (entry, None)
             self.entries.append(entry)
@@ -109,8 +118,9 @@ class Fetcher:
                 req = urllib.request.Request(target, headers={
                     "User-Agent": UA, "Accept": "text/html,application/json,application/xhtml+xml,*/*;q=0.8",
                     "Accept-Language": "he-IL,he;q=0.9,en;q=0.8", "Accept-Encoding": "gzip, deflate", **(headers or {})})
-                with urllib.request.urlopen(req, timeout=self.timeout) as r:
-                    entry["status"], raw = r.status, r.read(MAX_FILE + 1)
+                cut = self.stop_at + GRACE
+                with urllib.request.urlopen(req, timeout=max(1.0, min(self.timeout, cut - time.monotonic()))) as r:
+                    entry["status"], raw = r.status, read_until(r, MAX_FILE + 1, cut)
                     entry["type"] = r.headers.get("Content-Type", "")
                     entry["last_modified"] = r.headers.get("Last-Modified")
                     final = r.geturl()
@@ -158,6 +168,21 @@ class Fetcher:
         """[(url, headers, why)] in parallel: [(entry, body)] in the same order."""
         with cf.ThreadPoolExecutor(workers) as ex:
             return list(ex.map(lambda j: self.get(*j), jobs))
+
+
+def read_until(r, limit, cut):
+    """r.read(limit), in pieces, stopped at the monotonic time `cut`: a slow body cannot hold the run past the
+    deadline's grace."""
+    chunks, n = [], 0
+    while n < limit:
+        if time.monotonic() > cut:
+            raise TimeoutError(f"cut at the deadline (--deadline) after {n} bytes")
+        b = r.read(min(1 << 16, limit - n))
+        if not b:
+            break
+        chunks.append(b)
+        n += len(b)
+    return b"".join(chunks)
 
 
 def decode_body(raw, enc):
@@ -415,6 +440,8 @@ def main(argv=None):
     ap.add_argument("--only-rewritten", action="store_true")
     ap.add_argument("--timeout", type=float, default=TIMEOUT)
     ap.add_argument("--max-urls", type=int, default=MAX_URLS)
+    ap.add_argument("--deadline", type=float, default=DEADLINE,
+                    help=f"seconds from the start after which nothing is asked (default {DEADLINE}; fetch.yml stops it at 1500)")
     a = ap.parse_args(argv)
     started = dt.datetime.now(dt.timezone.utc)
     os.makedirs(a.out, exist_ok=True)
@@ -424,7 +451,8 @@ def main(argv=None):
         ref, ref_err = {}, f"{exc.__class__.__name__}: {exc}"
     else:
         ref_err = None
-    F = Fetcher(a.out, [tuple(r.split("=", 1)) for r in a.rewrite if "=" in r], a.only_rewritten, a.timeout, a.max_urls)
+    F = Fetcher(a.out, [tuple(r.split("=", 1)) for r in a.rewrite if "=" in r], a.only_rewritten, a.timeout, a.max_urls,
+                a.deadline)
     base, cid = api_config(F)
     hdr = {"Origin": GOVIL, "Referer": GOVIL + "/", "Accept": "application/json", **({"x-client-id": cid} if cid else {})}
 
@@ -502,6 +530,7 @@ def main(argv=None):
         "reference": os.path.relpath(a.ref, ROOT) if a.ref.startswith(ROOT) else a.ref, "reference_error": ref_err,
         "content_api": base, "client_id_found": bool(cid),
         "requests": len(F.entries), "answered": sum(1 for e in F.entries if e.get("status") == 200),
+        "deadline_s": a.deadline, "skipped_past_deadline": F.late,
         "stored": sorted(set(F.saved.values())),
         "index": {"roster_pages_linked": len(indexed), "not_in_reference": [k for k in indexed if k not in pages],
                   "not_linked": [k for k in pages if indexed and ROSTER.search(k) and k not in indexed]},
@@ -542,6 +571,9 @@ def markdown(s):
          f"Content-pages API: `{s['content_api']}` (client id found: {s['client_id_found']}).", ""]
     if s.get("reference_error"):
         L += [f"**The reference file could not be read:** {cell(s['reference_error'])}", ""]
+    if s.get("skipped_past_deadline"):
+        L += [f"**Stopped at the deadline** ({s['deadline_s']:.0f} s from the start): {s['skipped_past_deadline']} requests "
+              "not made; the comparison below is of what came before.", ""]
     rows, ix = s["lists"], s["index"]
     bad = [r for r in rows if r["letters_match"] is False]
     L += ["## Lists", "",

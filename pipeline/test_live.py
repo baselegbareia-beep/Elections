@@ -57,9 +57,11 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      Cancel run): the request step of live.yml, discover.yml, net-check.yml, daily.yml and fetch.yml run on sample
      requests (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red; a fetch
      request without a fetcher's name in `what` is red), fetch.yml's guard (the name again, the file on the commit),
-     its run step (the fetcher's output cannot issue workflow commands; a crash is noted, the files still pushed) and
+     its run step (the fetcher's output cannot issue workflow commands; a crash is noted, the files still pushed; one
+     stopped at the limit, with no summary, gets one listing its files; the limit well inside the job's) and
      its push to ops-reports run against a scratch origin (reports/fetch/<what>/<stamp>/ and latest/, latest replaced,
-     the rest of the branch kept, a rejected push redone, nothing else written), a drill
+     the rest of the branch kept, a rejected push redone, nothing else written), the two steps' GNU `timeout -k` and
+     `base64 -w0` stood in for (with a note) where this shell has not got them (macOS), a drill
      request through live.yml's guard into the poll ban and a daily request through the ban guard, the groups and
      write targets (main, ops-reports; never the triggering branch), a run from ops-control taking live_input/
      from main, and the "restart" request that ends a running loop, only for a request the requested run will
@@ -70,13 +72,20 @@ Runs single passes into a temporary folder and checks the JSON contract with the
  11c. the 2026 lists: pipeline/reference/lists_2026.json against build_polls (ids, letters), polls_2026.json's
      parties, live_fetch.AGREEMENTS_2026 and live_model.BASE_MAP['K26']; pipeline/fetchers/cec_lists.py against a
      local stand-in for gov.il (the content-pages API, a roster page with other letters, an agreements page, a PDF,
-     404 / 500 / refused URLs): exit 0, the summary's comparison, the files stored.
+     404 / 500 / refused URLs): exit 0, the summary's comparison, the files stored;
+ 11d. the fetchers' clock (pipeline/fetchers/__init__.py): cbs.py, cec_lists.py and poll_filings.py each with a
+     --deadline at least 3 minutes inside fetch.yml's limit, and with --deadline 0 nothing asked, both summaries
+     written, exit 0 (a fetcher without one is noted); cbs.py against a stand-in for census.cbs.gov.il (Jerusalem
+     first, the areas that matter in every city before the rest, a cut search asked again one digit longer, the
+     deadline stopping part 4 with its city files and a partial summary written) and on a sample catalogue listing
+     (taken by name pattern, any case, a subfolder; GEO_MAX files at most; every file not taken named in summary.md).
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
 import contextlib
 import datetime as dt
 import glob
+import html
 import http.server
 import io
 import json
@@ -91,6 +100,7 @@ import threading
 import time
 import types
 import urllib.parse
+import zipfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import live_fetch as LF  # noqa: E402
@@ -454,9 +464,58 @@ def tail(log, n):
     return " | ".join(log.strip().splitlines())[-n:]
 
 
+def gnu_stand_ins(dest):
+    """fetch.yml's run and push steps use GNU `timeout -k` and `base64 -w0` (ubuntu runners have both). Where this
+    shell has not got them (macOS, a BSD: live.yml's drill may run this file on a self-hosted Mac), portable stand-ins
+    go into dest, first on PATH for those two steps only, and a note says so. Returns the names stood in for."""
+    names = []
+    r = subprocess.run(["bash", "-c", "timeout -k 1 5 true"], capture_output=True)
+    if r.returncode != 0:
+        write(os.path.join(dest, "timeout"), f"""#!{sys.executable}
+# a stand-in for GNU timeout [-k KILL] [-s SIG] DURATION COMMAND...: its exit codes (124 when the time ran out)
+import subprocess, sys
+a, kill = sys.argv[1:], None
+while a and a[0].startswith("-") and a[0] != "--":
+    o = a.pop(0)
+    if o in ("-k", "-s"):
+        v = a.pop(0)
+        kill = v if o == "-k" else kill
+    elif o.startswith("--kill-after="):
+        kill = o.split("=", 1)[1]
+a = a[1:] if a and a[0] == "--" else a
+secs = lambda s: float(s.rstrip("smhd")) * {{"m": 60, "h": 3600, "d": 86400}}.get(s[-1:], 1)
+p = subprocess.Popen(a[1:])
+try:
+    rc = p.wait(timeout=secs(a[0]))
+    sys.exit(rc if rc >= 0 else 128 - rc)
+except subprocess.TimeoutExpired:
+    p.terminate()
+    try:
+        p.wait(timeout=secs(kill) if kill else None)
+    except subprocess.TimeoutExpired:
+        p.kill()
+        p.wait()
+        sys.exit(137)
+    sys.exit(124)
+""")
+        names.append("timeout")
+    r = subprocess.run(["bash", "-c", "printf x | base64 -w0"], capture_output=True, text=True)
+    if r.returncode != 0 or r.stdout != "eA==":
+        write(os.path.join(dest, "base64"), f"#!{sys.executable}\n# a stand-in for GNU base64 -w0 (encode, no line breaks)\n"
+              "import base64, sys\nsys.stdout.write(base64.b64encode(sys.stdin.buffer.read()).decode())\n")
+        names.append("base64 -w0")
+    for n in names:
+        os.chmod(os.path.join(dest, n.split()[0]), 0o755)
+    if names:
+        print(f"  note: no GNU {' or '.join(names)} in this shell: fetch.yml's run and push steps run here with portable "
+              f"stand-ins ({dest}); the runners have the real ones")
+    return names
+
+
 def fetch_yml(doc, wtmp):
     """11b, fetch.yml: the shared runner path for pipeline/fetchers/<what>.py. Its jobs and groups, the guard on
-    sample names, the run step on stand-in fetchers, and the push to ops-reports against a scratch origin."""
+    sample names, the run step on stand-in fetchers (one stopped at the limit), and the push to ops-reports against
+    a scratch origin; the GNU tools of the two steps stood in for where this shell lacks them."""
     on = doc.get("on", doc.get(True)) or {}
     inp = ((on.get("workflow_dispatch") or {}).get("inputs") or {}).get("what") or {}
     jobs = doc.get("jobs") or {}
@@ -494,24 +553,40 @@ def fetch_yml(doc, wtmp):
         check(rc == code and (code or (outs.get("what") == what and re.fullmatch(r"\d{8}-\d{4}", outs.get("stamp", "")))),
               f"fetch.yml guard, what={what!r}: exit {rc} (want {code}) {outs} {tail(log, 90)}")
 
-    # the run step: what a fetcher prints cannot issue workflow commands; a crash is noted and the step goes on
+    # the run step: what a fetcher prints cannot issue workflow commands; a crash is noted and the step goes on; a
+    # fetcher stopped at the limit (timeout's 124) without a summary of its own gets one listing its files
+    tools = os.path.join(wtmp, "fetch_tools")
+    os.makedirs(tools, exist_ok=True)
+    gnu_stand_ins(tools)
+    tools_path = tools + os.pathsep + os.environ.get("PATH", "")
     write(os.path.join(gdir, "pipeline", "fetchers", "stub_ok.py"),
           "import os, sys\nout = sys.argv[sys.argv.index('--out') + 1]\nos.makedirs(os.path.join(out, 'files'), exist_ok=True)\n"
           "open(os.path.join(out, 'summary.md'), 'w').write('stub summary\\n')\nprint('::error::from a page')\n")
     write(os.path.join(gdir, "pipeline", "fetchers", "stub_crash.py"), "raise SystemExit(3)\n")
+    write(os.path.join(gdir, "pipeline", "fetchers", "stub_stopped.py"),
+          "import os, sys\nout = sys.argv[sys.argv.index('--out') + 1]\nos.makedirs(os.path.join(out, 'files'), exist_ok=True)\n"
+          "open(os.path.join(out, 'files', 'partial.html'), 'w').write('<p>half</p>')\nraise SystemExit(124)\n")
     summ = os.path.join(TMP, "gh_summary")
-    for what, rc_want in (("stub_ok", "0"), ("stub_crash", "3")):
+    for what, rc_want in (("stub_ok", "0"), ("stub_crash", "3"), ("stub_stopped", "124")):
         out = os.path.join(wtmp, "fetch_out_" + what)
         open(summ, "w").close()
-        rc, outs, log = run_block(run_st.get("run", "false"), {"WHAT": what, "STAMP": "20261016-1200", "OUT": out}, gdir)
+        rc, outs, log = run_block(run_st.get("run", "false"), {"WHAT": what, "STAMP": "20261016-1200", "OUT": out,
+                                                               "PATH": tools_path}, gdir)
         stop = re.search(r"^::stop-commands::(\w+)$", log, re.M)
         guarded = bool(stop) and (what != "stub_ok" or (log.index(stop.group(0)) < log.index("::error::from a page")
                                                         < log.index(f"::{stop.group(1)}::")))
         said = open(summ).read()
+        own = open(os.path.join(out, "summary.md")).read() if os.path.exists(os.path.join(out, "summary.md")) else ""
         check(rc == 0 and outs.get("rc") == rc_want and guarded
-              and (what != "stub_ok" or "## Fetch stub_ok, 20261016-1200" in said and "stub summary" in said),
+              and (what != "stub_ok" or "## Fetch stub_ok, 20261016-1200" in said and "stub summary" in said)
+              and (what != "stub_stopped" or ("stopped at fetch.yml's limit" in log and "- files/partial.html" in own
+                                              and "stopped at fetch.yml's limit" in said and "summary.md" not in own.split("by then:")[-1])),
               f"fetch.yml run step, {what}: exit {rc}, rc={outs.get('rc')} (want {rc_want}), the fetcher's output between "
-              f"stop-commands and its resume: {guarded}")
+              f"stop-commands and its resume: {guarded}; its summary {own[:120]!r}")
+    lim = re.search(r"^\s*timeout -k (\d+) (\d+) python3 \"pipeline/fetchers/\$WHAT\.py\" --out \"\$OUT\"", run_st.get("run", ""), re.M)
+    check(lim and int(lim.group(1)) + int(lim.group(2)) <= 60 * int(job.get("timeout-minutes") or 0) - 180,
+          f"fetch.yml: the fetcher is stopped (and killed soon after) at least 3 minutes before the job's own limit, the "
+          f"push's time: {lim and lim.group(0).strip()[:40]}, timeout-minutes {job.get('timeout-minutes')}")
 
     # the push: a scratch origin whose ops-reports already holds a discover report
     origin, clone, other = (os.path.join(wtmp, n) for n in ("fetch_origin.git", "fetch_clone", "fetch_other"))
@@ -543,7 +618,7 @@ def fetch_yml(doc, wtmp):
             write(os.path.join(out, n), body)
         return run_block(pub.get("run", "false"), {"WHAT": what, "STAMP": stamp, "OUT": out, "GH_TOKEN": "test-token",
                                                    "RUNNER_TEMP": os.path.join(wtmp, "fetch_rt"),
-                                                   "PATH": stub + os.pathsep + os.environ.get("PATH", "")}, clone)
+                                                   "PATH": stub + os.pathsep + tools_path}, clone)
 
     def tree():
         return set(sh(["git", "ls-tree", "-r", "--name-only", "refs/heads/ops-reports"], origin).split())
@@ -1166,6 +1241,159 @@ def lists_2026():
           and all(e.get("error", "").startswith("not fetched") for u, e in seen.items() if u.startswith("https://bechirot.gov.il")),
           f"cec_lists.py: the slips PDF and a data.gov.il resource stored, a refused host and the hosts not rewritten recorded, "
           f"no link off gov.il followed: {slips.get('saved')} {csv_.get('saved')} {refused.get('error')}")
+
+
+class CensusMock(http.server.BaseHTTPRequestHandler):
+    """A stand-in for census.cbs.gov.il (11d): /search?search=<term> answers the htmx partial with the areas whose
+    label starts with the term (and, for a term without a number, the locality's own item first), 100 at most in
+    label order, as the real search caps it; /csv?...&ID=<id> a zip of one CSV. The ids asked for a dashboard are
+    kept in order; every answer waits `delay` seconds."""
+    areas, asked, delay = {}, [], 0.0
+
+    def do_GET(self):
+        time.sleep(CensusMock.delay)
+        u = urllib.parse.urlsplit(self.path)
+        q = urllib.parse.parse_qs(u.query)
+        if u.path == "/search":
+            term = q.get("search", [""])[0]
+            items = sorted((lab, aid) for aid, lab in CensusMock.areas.items() if "אזור" in lab and lab.startswith(term))
+            if not re.search(r"\d", term):
+                items = [(lab, aid) for aid, lab in CensusMock.areas.items() if lab == term.split(" אזור")[0]] + items
+            body = "<ul>" + "".join(f'<li data-id="{aid}" data-search="{html.escape(lab)}" data-type="area">{html.escape(lab)}</li>'
+                                    for lab, aid in items[:100]) + "</ul>"
+            body, ctype = body.encode("utf-8"), "text/html"
+        else:
+            CensusMock.asked.append(q.get("ID", [""])[0])
+            buf = io.BytesIO()
+            with zipfile.ZipFile(buf, "w") as z:
+                z.writestr("religion.csv", "religion,share\nמוסלמים,12.5\n")
+            body, ctype = buf.getvalue(), "application/zip"
+        self.send_response(200)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *a):
+        pass
+
+
+def fetchers_budget():
+    """11d. The fetchers' clock (pipeline/fetchers/__init__.py): each one's --deadline well inside fetch.yml's limit,
+    and kept: with --deadline 0 a fetcher asks nothing, writes summary.json and summary.md and exits 0. Then cbs.py
+    against stand-ins: the cities in priority order, Jerusalem first, the areas that matter before the rest, the
+    search asked again where its answer is cut, part 4 stopped at the deadline with its files and a partial summary
+    written; the geographic catalogue taken by name pattern (case, subfolders), bounded, every file left named."""
+    print("11d. the fetchers' clock: --deadline inside fetch.yml's limit, and kept; cbs.py's census order and catalogue")
+    import importlib.util
+    fdir = os.path.join(ROOT, "pipeline", "fetchers")
+    m = re.search(r"timeout -k (\d+) (\d+) python3", open(os.path.join(ROOT, ".github", "workflows", "fetch.yml"), encoding="utf-8").read())
+    limit = int(m.group(2)) if m else 0
+    mods = {}
+    for name, extra in (("cbs", []), ("cec_lists", ["--only-rewritten"]), ("poll_filings", ["--only-rewritten", "--no-curl"])):
+        spec = importlib.util.spec_from_file_location(f"fetcher_{name}", os.path.join(fdir, name + ".py"))
+        mods[name] = mod = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        check(limit and mod.DEADLINE + mod.GRACE + 180 <= limit,
+              f"{name}.py: its deadline ({mod.DEADLINE} s, a body cut {mod.GRACE} s on) at least 3 minutes inside fetch.yml's "
+              f"limit ({limit} s)")
+        out = os.path.join(TMP, f"deadline0_{name}")
+        t = time.time()
+        r = subprocess.run([sys.executable, os.path.join(fdir, name + ".py"), "--out", out, "--deadline", "0", *extra],
+                           capture_output=True, text=True, timeout=120)
+        s, md = load(out, "summary.json") or {}, os.path.join(out, "summary.md")
+        md = open(md, encoding="utf-8").read() if os.path.exists(md) else ""
+        if name == "cbs":
+            kept = (s.get("census_dashboards") or {}).get("stopped") == "the deadline (--deadline)" and s.get("past_deadline") is True \
+                and all("past the deadline" in str(i.get("error")) for i in s.get("items") or [] if not i["name"].startswith("census/"))
+        elif name == "cec_lists":
+            kept = s.get("requests") == 0 and s.get("skipped_past_deadline", 0) > 30 and "Stopped at the deadline" in md
+        else:
+            kept = s.get("requests", 0) > 30 and s.get("not_fetched_past_deadline") == s.get("requests") \
+                and all(str(x.get("error")).startswith("not fetched") for x in s.get("rows") or []) and "Stopped at the deadline" in md
+        check(r.returncode == 0 and md and kept and time.time() - t < 60,
+              f"{name}.py --deadline 0: nothing asked, summary.json and summary.md written, exit {r.returncode} in "
+              f"{time.time() - t:.1f} s {r.stderr.strip()[-160:]}")
+    for p in sorted(glob.glob(os.path.join(fdir, "[a-z]*.py"))):
+        n = os.path.basename(p)[:-3]
+        if n not in mods and "--deadline" not in open(p, encoding="utf-8").read():
+            print(f"  note: pipeline/fetchers/{n}.py takes no --deadline: fetch.yml's limit is its only clock, and a run "
+                  "stopped there has no summary of its own (pipeline/fetchers/__init__.py)")
+
+    C = mods["cbs"]
+    check(list(C.CENSUS_CITIES) == [3000, 4000, 5000, 7600, 8500, 7000, 1061, 1063, 8000],
+          f"cbs.py: the census cities in priority order, Jerusalem first: {list(C.CENSUS_CITIES)}")
+    prio, err = C.census_priority()
+    check(not err and len(prio.get(3000, ())) >= 10 and all(prio.get(c) for c in (4000, 5000, 7000, 7600, 8500)),
+          f"cbs.py: the areas that matter, from cbs_mixed_areas.json and cbs_validation.json: "
+          f"{ {c: len(v) for c, v in prio.items()} } {err}")
+    srv = http.server.HTTPServer(("127.0.0.1", 0), CensusMock)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{srv.server_address[1]}"
+    C.CENSUS_SEARCH, C.CENSUS_CSV_API, C.POLITE = base + "/search?search=", base + "/csv?dashboardId={dash}&ID={aid}", 0
+    jer = list(range(111, 200)) + list(range(1001, 1061)) + list(range(2001, 2021))    # "1" answers 149: cut at 100
+    CensusMock.areas = {"3000-loc": "ירושלים", **{f"3000-{n}": f"ירושלים אזור סטטיסטי {n}" for n in jer},
+                        "4000-loc": "חיפה", **{f"4000-{n}": f"חיפה אזור סטטיסטי {n}" for n in range(11, 41)}}
+    CensusMock.asked, CensusMock.delay = [], 0.0
+    f = C.Fetcher(os.path.join(TMP, "cbs_census"), deadline=120)
+    turns, said = [], io.StringIO()          # what the fetcher prints is its log, not this test's
+    with contextlib.redirect_stdout(said):
+        st = C.part_census_dashboards(f, {3000: {199, 1005, 2003, 9999}, 4000: {15}}, lambda s_: turns.append(dict(s_)))
+    j = load(os.path.join(f.out, "census"), "religion_3000.json") or {}
+    check(st.get("stopped") is None and CensusMock.asked[:6] == ["3000-loc", "3000-199", "3000-1005", "3000-2003", "4000-loc", "4000-15"]
+          and len(CensusMock.asked) == 2 + len(jer) + 30 and len(set(CensusMock.asked)) == len(CensusMock.asked)
+          and j.get("areas_found") == len(jer) and sum(1 for a in j.get("areas") or [] if "csv" in a) == len(jer) + 1
+          and len(turns) == 2 * len(C.CENSUS_CITIES) and st.get("searched") == [str(c) for c in C.CENSUS_CITIES],
+          f"cbs.py part 4: every city's locality and priority areas first (Jerusalem's, then Haifa's), then the rest; the "
+          f"search asked again one digit longer where it was cut ({j.get('areas_found')} of {len(jer)} areas found, "
+          f"{j.get('searches')} searches); the files and the summary after each city: {CensusMock.asked[:6]} {st}")
+    CensusMock.asked, CensusMock.delay = [], 0.006         # the whole part would take 290 answers, 1.7 s at least
+    f = C.Fetcher(os.path.join(TMP, "cbs_census_late"), deadline=1.0)
+    with contextlib.redirect_stdout(said):
+        st = C.part_census_dashboards(f, {3000: {199}}, lambda s_: C.write_summary(f, "t0", s_, "during part 4 (census)"))
+    md = open(os.path.join(f.out, "summary.md"), encoding="utf-8").read()
+    check("deadline" in str(st.get("stopped")) and 0 < len(CensusMock.asked) < len(jer)
+          and (load(os.path.join(f.out, "census"), "religion_3000.json") or {}).get("areas") and "**Partial:**" in md
+          and "(passed:" in md and not glob.glob(os.path.join(f.out, "**", "*.tmp"), recursive=True),
+          f"cbs.py part 4 at the deadline: stopped, what it had written (the city files, a partial summary): {st}")
+    srv.shutdown()
+
+    # the geographic catalogue: by name pattern, any case, one level of subfolders; GEO_MAX files at most; the rest named
+    g = C.Fetcher(os.path.join(TMP, "cbs_geo"))
+    cat, sub = C.GEO_CATALOG, C.GEO_CATALOG + "/קלפיות 2026"
+
+    def item(n, size=1_000_000, mod="2023-01-01T00:00:00Z", folder=cat):
+        return {"Name": n, "ServerRelativeUrl": f"{folder}/{n}", "Length": str(size), "TimeLastModified": mod}
+    listings = {
+        ("Files", cat): [item("kalpi_April2019_stat2011.xlsx"), item("Kalpi_March2021_Stat2011.XLSX"),
+                         item("מפתח מעבר אס 2011 לאס 2022.xlsx"), item("kalpi_October2026_stat2022.xlsx", mod="2026-10-01T00:00:00Z"),
+                         item("kalpi_huge_2026.xlsx", 50 * 2 ** 20), item("population_2024.xlsx"), item("map.png"),
+                         item("statisticalareas_demography2022.gdb.zip", 30 * 2 ** 20),
+                         item("statisticalareas_demography2019.gdb.zip", 20 * 2 ** 20)]
+        + [item(f"kalpi_extra{i:02d}_stat2011.xlsx", mod=f"2020-01-{i % 28 + 1:02d}T{i % 24:02d}:00:00Z") for i in range(45)],
+        ("Folders", cat): [{"Name": "Forms", "ServerRelativeUrl": cat + "/Forms"}, {"Name": "קלפיות 2026", "ServerRelativeUrl": sub}],
+        ("Files", sub): [item("ballot_stations_2026.xlsx", mod="2026-09-01T00:00:00Z", folder=sub)],
+    }
+    g.listing = lambda name, folder, what="Files": listings.get((what, folder))
+    g.get = lambda url, headers=None, timeout=120, tries=3: (200, b"PK\x03\x04" + b"0" * 200_000, {})
+    with contextlib.redirect_stdout(said):
+        C.part_geo_catalog(g)
+        C.write_summary(g, "t0", None)
+    taken = {i["name"] for i in g.items if i.get("ok")}
+    left = {x["name"]: x["why"] for x in g.not_taken}
+    md = open(os.path.join(g.out, "summary.md"), encoding="utf-8").read()
+    check({"k21_kalpi_to_stat2011.xlsx", "k24_kalpi_to_stat2011.xlsx", "stat2011_to_stat2022.xlsx", "kalpi_October2026_stat2022.xlsx",
+           "ballot_stations_2026.xlsx", "statisticalareas_demography2022.gdb.zip"} <= taken
+          and len(taken - {"statisticalareas_demography2022.gdb.zip"}) == C.GEO_MAX
+          and sum(1 for w in left.values() if w.startswith("beyond the first")) == 50 - C.GEO_MAX
+          and "size cap" in left.get("kalpi_huge_2026.xlsx", "") and "GEO_TAKE" in left.get("population_2024.xlsx", "")
+          and "map.png" in left and "older" in left.get("statisticalareas_demography2019.gdb.zip", "") and "Forms/" not in left
+          and "listed, not taken" in md and "population_2024.xlsx" in md,
+          f"cbs.py geographic catalogue: taken by pattern (any case, a subfolder), the known names renamed, {C.GEO_MAX} files "
+          f"at most, every listed file not taken named in summary.md: {len(taken)} taken {sorted(taken)[:5]} {sorted(left.items())[:4]}")
+    check(C.ascii_name("קובץ א.xlsx") != C.ascii_name("קובץ ב.xlsx") and C.ascii_name("קובץ א.xlsx").endswith(".xlsx")
+          and C.ascii_name("bycode2024.xlsx") == "bycode2024.xlsx",
+          f"cbs.py: two Hebrew names never meet as ASCII file names: {C.ascii_name('קובץ א.xlsx')} {C.ascii_name('קובץ ב.xlsx')}")
 
 
 # ---------------------------------------------------------------- tests
@@ -2253,6 +2481,7 @@ def main():
         check(not new and "skip the checkout's ops/request.json" in out and not ops_placeholder(root)[0],
               f"11b in a checkout of the request {drill} with HEALTH_GATE=1 (the drill's smoke test): {len(new)} failure(s) {new[:3]}")
     lists_2026()
+    fetchers_budget()
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")
