@@ -18,6 +18,12 @@ def read(*p):
         return f.read()
 
 
+# Visitor counts for the owner only (Cloudflare Web Analytics: no cookies, no personal data). The token only
+# lets the page send counts; viewing them needs the owner's Cloudflare login. GitHub Pages page only, not the artifact.
+ANALYTICS = ("\n<!-- Cloudflare Web Analytics --><script type='module' src='https://static.cloudflareinsights.com/beacon.min.js' "
+             "data-cf-beacon='{\"token\": \"4c5dbff159b44452ab501e24fff89e52\"}'></script><!-- End Cloudflare Web Analytics -->")
+
+
 def main():
     tpl = read("index.html")
     css = "\n".join(read(name) for name in CSS_ORDER if os.path.exists(os.path.join(SRC, name)))
@@ -28,7 +34,7 @@ def main():
     full = ('<!doctype html>\n<html lang="he" dir="rtl">\n<head>\n<meta charset="utf-8">\n'
             '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">\n'
             + body.replace('<div dir="rtl" lang="he">', '</head>\n<body>\n<div dir="rtl" lang="he">', 1)
-            + "\n</body>\n</html>\n")
+            + ANALYTICS + "\n</body>\n</html>\n")
     with open(os.path.join(ROOT, "site", "index.html"), "w", encoding="utf-8") as f:
         f.write(full)
     print(f"index.html {len(full):,} bytes; artifact.html {len(body):,} bytes")
