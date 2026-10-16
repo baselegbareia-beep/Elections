@@ -1,0 +1,7043 @@
+{
+ "sources": {
+  "bycode": {
+   "title": "הלמ״ס — קובץ היישובים 2024 (bycode2024.xlsx)",
+   "official_url": "https://www.cbs.gov.il/he/publications/doclib/2019/ishuvim/bycode2024.xlsx",
+   "file": "bycode2024.xlsx",
+   "bytes": 370654,
+   "sha256": "c97316c60d0fc9250bfe6b0ef79e565255e033bb756e3dc3eb4ba081c7bb44b2",
+   "copy": "mirror",
+   "url": "https://raw.githubusercontent.com/NX1X/OpenTaxMap/2add2ff20d7fa73010451368e78b4c52a57dcd9f/data/cbs/bycode2024.xlsx",
+   "file_modified": "2025-12-23T12:08:50Z",
+   "sheet_rows": 1490,
+   "population_column": "סך הכל אוכלוסייה 2024"
+  },
+  "bycode_check": {
+   "title": "הלמ״ס — קובץ היישובים 2023, סופי (bycode2023Sofi.xlsx)",
+   "official_url": "https://data.gov.il/dataset/d9b1e04c-426f-4e32-ba40-a1ad9d8748a7/resource/d47a54ff-87f0-44b3-b33a-f284c0c38e5a/download/bycode2023.xlsx",
+   "file": "bycode2023Sofi.xlsx",
+   "bytes": 318412,
+   "sha256": "a372c2b45e62bc77bab83eb885c73eab0985d79f53b40853946146915e11a7a9",
+   "copy": "mirror",
+   "url": "https://raw.githubusercontent.com/mattip/population-map/61263be3b4cca02d9ec576b38d6443250a2d80c7/bycode2023Sofi.xlsx"
+  },
+  "census2022": {
+   "title": "הלמ״ס — מפקד 2022, נתונים נבחרים ליישובים ולאזורים סטטיסטיים",
+   "official_url": "https://data.gov.il/dataset/3bd97fde-6cc3-456d-ab63-1caad16b2b6a/resource/9a9e085f-3bc8-41df-b15f-be0daaf99e30/download/selected-data-by-localities-and-statistical-areas-2022-census.csv",
+   "file": "census2022_localities_statareas.csv",
+   "bytes": 763723,
+   "sha256": "85847ae55d35b77ef82a0bcc95b203ae72d5996e54706a741d5dd4a3f18707a8",
+   "copy": "mirror",
+   "url": "https://raw.githubusercontent.com/cokobi/israel-public-transport-project/a27595834083e89d44d2fa9adee82170761a7a6d/exploration/mifkad2022.csv"
+  },
+  "statistical_areas_2011": {
+   "title": "הלמ״ס — אזורים סטטיסטיים 2011 (פוליגונים, WGS84)",
+   "official_url": "https://www.cbs.gov.il/he/Pages/geo-layers.aspx",
+   "file": "statistical_areas_2011.zip",
+   "bytes": 13443230,
+   "sha256": "aa083e5fed9ab54f6d188daeacfffa007ffacdc76dfe2753092dfbd2cbecd26f",
+   "copy": "mirror",
+   "url": "https://raw.githubusercontent.com/Yoavfried/israel-election-map/4bb9cb9664630a31444a6769502eec6ffea77b77/public-data/v1/geographies/statistical_areas_2011.zip"
+  },
+  "statistical_areas_2022": {
+   "title": "הלמ״ס — אזורים סטטיסטיים 2022 (פוליגונים, WGS84)",
+   "official_url": "https://www.cbs.gov.il/he/Pages/geo-layers.aspx",
+   "file": "statistical_areas_2022.zip",
+   "bytes": 39526690,
+   "sha256": "ddb21bd8a8315291b5170a961b14e5e74c2b221e6f3ddaf3f7ed6f6398a42c28",
+   "copy": "mirror",
+   "url": "https://raw.githubusercontent.com/Yoavfried/israel-election-map/4bb9cb9664630a31444a6769502eec6ffea77b77/public-data/v1/geographies/statistical_areas_2022.zip"
+  }
+ },
+ "coordinates_check": {
+  "points_inside_polygon": 1253,
+  "points_outside": 27,
+  "outside_km_from_polygon_box_centre": [
+   [
+    3788,
+    "טלמון",
+    1.94
+   ],
+   [
+    353,
+    "בית זיד",
+    1.26
+   ],
+   [
+    3727,
+    "עלי זהב",
+    0.65
+   ],
+   [
+    3726,
+    "נוקדים",
+    0.59
+   ],
+   [
+    3653,
+    "מעלה עמוס",
+    0.49
+   ],
+   [
+    3603,
+    "הר גילה",
+    0.4
+   ],
+   [
+    3779,
+    "כוכב יעקב",
+    0.33
+   ],
+   [
+    1792,
+    "תעשיון שח\"ק",
+    0.17
+   ],
+   [
+    1793,
+    "שלומציון",
+    0.17
+   ],
+   [
+    3647,
+    "יקיר",
+    0.17
+   ],
+   [
+    3715,
+    "עלמון",
+    0.17
+   ],
+   [
+    3617,
+    "עפרה",
+    0.15
+   ],
+   [
+    3791,
+    "צופים",
+    0.15
+   ],
+   [
+    3654,
+    "ברקן",
+    0.14
+   ],
+   [
+    3725,
+    "נווה דניאל",
+    0.12
+   ],
+   [
+    3557,
+    "קדומים",
+    0.11
+   ],
+   [
+    3746,
+    "קריית נטפים",
+    0.1
+   ],
+   [
+    3824,
+    "עמיחי",
+    0.1
+   ],
+   [
+    3564,
+    "כוכב השחר",
+    0.09
+   ],
+   [
+    3568,
+    "ריחן",
+    0.09
+   ],
+   [
+    3641,
+    "שילה",
+    0.09
+   ],
+   [
+    3655,
+    "ניל\"י",
+    0.09
+   ],
+   [
+    3638,
+    "כפר אדומים",
+    0.08
+   ],
+   [
+    3743,
+    "טנא",
+    0.07
+   ],
+   [
+    3786,
+    "אבנת",
+    0.07
+   ]
+  ]
+ },
+ "religion_codes": {
+  "counts": {
+   "1": 1084,
+   "2": 128,
+   "3": 28,
+   "4": 9,
+   "None": 241
+  },
+  "reading": {
+   "1": "יישוב יהודי",
+   "2": "יישוב ערבי (כולל דרוזים וצ׳רקסים)",
+   "3": "שבט בדואי (צורת יישוב 460, בלי נתוני אוכלוסייה)",
+   "4": "יישוב מעורב",
+   "None": "מקום בלי אוכלוסייה (מוסד, אזור תעשייה)"
+  },
+  "note": "לפי הנתונים; ההגדרות הרשמיות בקובץ ההסבר intro.pdf (נמשך ב-runner)"
+ },
+ "list_vs_cbs": {
+  "rows": 155,
+  "disagreements": [],
+  "per_segment_cbs_religion": {
+   "ALAWITE_GHAJAR": {
+    "2": 1
+   },
+   "CHRISTIAN_MAJORITY_OR_PLURALITY": {
+    "2": 6
+   },
+   "CIRCASSIAN_EXCLUDED": {
+    "2": 2
+   },
+   "DRUZE_GALILEE_CARMEL": {
+    "2": 11
+   },
+   "DRUZE_GOLAN": {
+    "2": 4
+   },
+   "GALILEE_HAIFA_OTHER_ARAB": {
+    "2": 41
+   },
+   "JERUSALEM_AREA_ARAB": {
+    "2": 3
+   },
+   "MIXED_CITY": {
+    "4": 8
+   },
+   "MIXED_DRUZE_MUSLIM_CHRISTIAN_TOWN": {
+    "2": 3
+   },
+   "MIXED_SMALL_COMMUNITY_EXCLUDED": {
+    "4": 1
+   },
+   "NAZARETH": {
+    "2": 1
+   },
+   "NEGEV_BEDOUIN": {
+    "3": 20,
+    "2": 18
+   },
+   "NORTH_BEDOUIN": {
+    "2": 20
+   },
+   "TRIANGLE_NORTH_WADI_ARA": {
+    "2": 10
+   },
+   "TRIANGLE_SOUTH": {
+    "2": 6
+   }
+  },
+  "rows_detail_fields": [
+   "code",
+   "name",
+   "segment",
+   "cbs_religion",
+   "cbs_arab_share"
+  ],
+  "rows_detail": [
+   [
+    472,
+    "אבו גוש",
+    "JERUSALEM_AREA_ARAB",
+    2,
+    0.994
+   ],
+   [
+    473,
+    "אבו סנאן",
+    "MIXED_DRUZE_MUSLIM_CHRISTIAN_TOWN",
+    2,
+    0.9988
+   ],
+   [
+    475,
+    "דחי",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    478,
+    "אכסאל",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9998
+   ],
+   [
+    480,
+    "בית ג'ן",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9998
+   ],
+   [
+    481,
+    "מגאר",
+    "MIXED_DRUZE_MUSLIM_CHRISTIAN_TOWN",
+    2,
+    0.9995
+   ],
+   [
+    482,
+    "בועיינה-נוג'ידאת",
+    "NORTH_BEDOUIN",
+    2,
+    0.9991
+   ],
+   [
+    483,
+    "בענה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9993
+   ],
+   [
+    485,
+    "ג'ולס",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9999
+   ],
+   [
+    487,
+    "ג'ש (גוש חלב)",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9991
+   ],
+   [
+    489,
+    "דבוריה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9972
+   ],
+   [
+    490,
+    "דייר אל-אסד",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9996
+   ],
+   [
+    492,
+    "דייר חנא",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9993
+   ],
+   [
+    494,
+    "דאלית אל-כרמל",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9958
+   ],
+   [
+    496,
+    "חורפיש",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    1.0
+   ],
+   [
+    497,
+    "טייבה (בעמק)",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9977
+   ],
+   [
+    498,
+    "טורעאן",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9997
+   ],
+   [
+    499,
+    "יפיע",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9998
+   ],
+   [
+    502,
+    "ירכא",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9935
+   ],
+   [
+    504,
+    "כאבול",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9996
+   ],
+   [
+    505,
+    "כאוכב אבו אל-היג'א",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9995
+   ],
+   [
+    507,
+    "כפר יאסיף",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9985
+   ],
+   [
+    508,
+    "כפר כמא",
+    "CIRCASSIAN_EXCLUDED",
+    2,
+    0.9966
+   ],
+   [
+    509,
+    "כפר כנא",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9995
+   ],
+   [
+    510,
+    "כפר מנדא",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9997
+   ],
+   [
+    511,
+    "עילוט",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9999
+   ],
+   [
+    512,
+    "כפר מצר",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9993
+   ],
+   [
+    514,
+    "עין ראפה",
+    "JERUSALEM_AREA_ARAB",
+    2,
+    0.9951
+   ],
+   [
+    516,
+    "מג'ד אל-כרום",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9995
+   ],
+   [
+    517,
+    "מזרעה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9974
+   ],
+   [
+    518,
+    "מעיליא",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9722
+   ],
+   [
+    520,
+    "משהד",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    521,
+    "עין נקובא",
+    "JERUSALEM_AREA_ARAB",
+    2,
+    1.0
+   ],
+   [
+    522,
+    "נחף",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.999
+   ],
+   [
+    523,
+    "ניין",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.999
+   ],
+   [
+    524,
+    "נאעורה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    525,
+    "סאג'ור",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9995
+   ],
+   [
+    526,
+    "סולם",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9986
+   ],
+   [
+    528,
+    "עוזייר",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9992
+   ],
+   [
+    529,
+    "אעבלין",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9993
+   ],
+   [
+    530,
+    "עיילבון",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9945
+   ],
+   [
+    531,
+    "עראבה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9992
+   ],
+   [
+    532,
+    "עין מאהל",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9991
+   ],
+   [
+    534,
+    "עספיא",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9795
+   ],
+   [
+    535,
+    "פסוטה",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9991
+   ],
+   [
+    536,
+    "פקיעין (בוקייעה)",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9998
+   ],
+   [
+    537,
+    "פוריידיס",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9994
+   ],
+   [
+    538,
+    "שעב",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9999
+   ],
+   [
+    539,
+    "רומאנה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    540,
+    "ריחאניה",
+    "CIRCASSIAN_EXCLUDED",
+    2,
+    0.9983
+   ],
+   [
+    541,
+    "ג'סר א-זרקא",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9994
+   ],
+   [
+    542,
+    "ריינה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9989
+   ],
+   [
+    543,
+    "ראמה",
+    "CHRISTIAN_MAJORITY_OR_PLURALITY",
+    2,
+    0.9987
+   ],
+   [
+    546,
+    "עין אל-אסד",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    1.0
+   ],
+   [
+    547,
+    "טמרה (יזרעאל)",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9994
+   ],
+   [
+    627,
+    "ג'לג'וליה",
+    "TRIANGLE_SOUTH",
+    2,
+    0.986
+   ],
+   [
+    628,
+    "ג'ת",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9991
+   ],
+   [
+    633,
+    "כפר ברא",
+    "TRIANGLE_SOUTH",
+    2,
+    1.0
+   ],
+   [
+    634,
+    "כפר קאסם",
+    "TRIANGLE_SOUTH",
+    2,
+    0.9989
+   ],
+   [
+    635,
+    "מוקייבלה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9994
+   ],
+   [
+    636,
+    "צנדלה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    637,
+    "ערערה",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9991
+   ],
+   [
+    638,
+    "קלנסווה",
+    "TRIANGLE_SOUTH",
+    2,
+    0.9986
+   ],
+   [
+    649,
+    "מייסר",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    1.0
+   ],
+   [
+    652,
+    "אבטין",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9996
+   ],
+   [
+    654,
+    "כפר קרע",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9991
+   ],
+   [
+    658,
+    "שייח' דנון",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9993
+   ],
+   [
+    913,
+    "שבלי - אום אל-גנם",
+    "NORTH_BEDOUIN",
+    2,
+    0.9988
+   ],
+   [
+    939,
+    "מסעודין אל-עזאזמה",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    942,
+    "סואעד (חמרייה)",
+    "NORTH_BEDOUIN",
+    2,
+    0.9719
+   ],
+   [
+    944,
+    "בסמת טבעון",
+    "NORTH_BEDOUIN",
+    2,
+    0.9983
+   ],
+   [
+    956,
+    "הוזייל (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    957,
+    "עוקבי (בנו עוקבה)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    958,
+    "אבו עבדון (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    960,
+    "אסד (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    961,
+    "אבו רוקייק (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    962,
+    "טובא-זנגריה",
+    "NORTH_BEDOUIN",
+    2,
+    0.9997
+   ],
+   [
+    963,
+    "אעצם (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    964,
+    "קודייראת א-צאנע(שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    965,
+    "אטרש (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    966,
+    "אבו רובייעה (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    967,
+    "אבו ג'ווייעד (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    968,
+    "אבו קורינאת (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    969,
+    "עטאוונה (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    970,
+    "תראבין א-צאנע (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    972,
+    "קוואעין (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    975,
+    "זרזיר",
+    "NORTH_BEDOUIN",
+    2,
+    0.9986
+   ],
+   [
+    976,
+    "ג'נאביב (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    978,
+    "כעביה-טבאש-חג'אג'רה",
+    "NORTH_BEDOUIN",
+    2,
+    0.9979
+   ],
+   [
+    990,
+    "ראס עלי",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    993,
+    "חמאם",
+    "NORTH_BEDOUIN",
+    2,
+    0.9989
+   ],
+   [
+    994,
+    "מנשית זבדה",
+    "NORTH_BEDOUIN",
+    2,
+    0.9981
+   ],
+   [
+    997,
+    "רומת הייב",
+    "NORTH_BEDOUIN",
+    2,
+    0.9996
+   ],
+   [
+    998,
+    "ביר אל-מכסור",
+    "NORTH_BEDOUIN",
+    2,
+    0.9999
+   ],
+   [
+    1041,
+    "נצאצרה (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    1054,
+    "תל שבע",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9984
+   ],
+   [
+    1059,
+    "כסיפה",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9993
+   ],
+   [
+    1060,
+    "לקיה",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9999
+   ],
+   [
+    1061,
+    "נצרת עילית",
+    "MIXED_CITY",
+    4,
+    0.404
+   ],
+   [
+    1063,
+    "מעלות-תרשיחא",
+    "MIXED_CITY",
+    4,
+    0.2459
+   ],
+   [
+    1161,
+    "רהט",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9974
+   ],
+   [
+    1169,
+    "הוואשלה (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    1170,
+    "סייד (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    1192,
+    "ערערה-בנגב",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9995
+   ],
+   [
+    1234,
+    "קבועה (שבט)",
+    "NEGEV_BEDOUIN",
+    3,
+    null
+   ],
+   [
+    1245,
+    "סלמה",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1246,
+    "עראמשה",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1259,
+    "נווה שלום",
+    "MIXED_SMALL_COMMUNITY_EXCLUDED",
+    4,
+    0.5151
+   ],
+   [
+    1286,
+    "שגב-שלום",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9992
+   ],
+   [
+    1290,
+    "זמר",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9997
+   ],
+   [
+    1292,
+    "ג'דיידה-מכר",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9991
+   ],
+   [
+    1295,
+    "יאנוח-ג'ת",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9999
+   ],
+   [
+    1296,
+    "כסרא-סמיע",
+    "DRUZE_GALILEE_CARMEL",
+    2,
+    0.9995
+   ],
+   [
+    1303,
+    "חורה",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9993
+   ],
+   [
+    1316,
+    "אל-עריאן",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    1317,
+    "דמיידה",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1320,
+    "עין חוד",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    1.0
+   ],
+   [
+    1321,
+    "ח'ואלד",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1326,
+    "בסמ\"ה",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9997
+   ],
+   [
+    1327,
+    "מעלה עירון",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9999
+   ],
+   [
+    1331,
+    "כמאנה",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1332,
+    "חוסנייה",
+    "NORTH_BEDOUIN",
+    2,
+    0.996
+   ],
+   [
+    1334,
+    "ראס אל-עין",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1335,
+    "ערב אל נעים",
+    "NORTH_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1342,
+    "אבו קרינאת (יישוב)",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9993
+   ],
+   [
+    1343,
+    "מכחול",
+    "NEGEV_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1346,
+    "תראבין א-צאנע(ישוב)",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9938
+   ],
+   [
+    1347,
+    "קצר א-סר",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9994
+   ],
+   [
+    1348,
+    "ביר הדאג'",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9997
+   ],
+   [
+    1349,
+    "דריג'את",
+    "NEGEV_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1358,
+    "אום בטין",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9971
+   ],
+   [
+    1359,
+    "אל סייד",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9974
+   ],
+   [
+    1360,
+    "סעוה",
+    "NEGEV_BEDOUIN",
+    2,
+    0.9995
+   ],
+   [
+    1367,
+    "כחלה",
+    "NEGEV_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    1375,
+    "אבו תלול",
+    "NEGEV_BEDOUIN",
+    2,
+    1.0
+   ],
+   [
+    2024,
+    "אום אל-קוטוף",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9992
+   ],
+   [
+    2710,
+    "אום אל-פחם",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9992
+   ],
+   [
+    2720,
+    "טירה",
+    "TRIANGLE_SOUTH",
+    2,
+    0.9983
+   ],
+   [
+    2730,
+    "טייבה",
+    "TRIANGLE_SOUTH",
+    2,
+    0.9991
+   ],
+   [
+    3000,
+    "ירושלים",
+    "MIXED_CITY",
+    4,
+    0.4023
+   ],
+   [
+    4000,
+    "חיפה",
+    "MIXED_CITY",
+    4,
+    0.1408
+   ],
+   [
+    4001,
+    "בוקעאתא",
+    "DRUZE_GOLAN",
+    2,
+    1.0
+   ],
+   [
+    4201,
+    "מג'דל שמס",
+    "DRUZE_GOLAN",
+    2,
+    0.9998
+   ],
+   [
+    4203,
+    "מסעדה",
+    "DRUZE_GOLAN",
+    2,
+    0.9995
+   ],
+   [
+    4501,
+    "ע'ג'ר",
+    "ALAWITE_GHAJAR",
+    2,
+    0.9996
+   ],
+   [
+    4502,
+    "עין קנייא",
+    "DRUZE_GOLAN",
+    2,
+    1.0
+   ],
+   [
+    5000,
+    "תל אביב - יפו",
+    "MIXED_CITY",
+    4,
+    0.0577
+   ],
+   [
+    6000,
+    "באקה אל-גרביה",
+    "TRIANGLE_NORTH_WADI_ARA",
+    2,
+    0.9992
+   ],
+   [
+    7000,
+    "לוד",
+    "MIXED_CITY",
+    4,
+    0.2955
+   ],
+   [
+    7300,
+    "נצרת",
+    "NAZARETH",
+    2,
+    0.9981
+   ],
+   [
+    7500,
+    "סח'נין",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9995
+   ],
+   [
+    7600,
+    "עכו",
+    "MIXED_CITY",
+    4,
+    0.3493
+   ],
+   [
+    8500,
+    "רמלה",
+    "MIXED_CITY",
+    4,
+    0.2578
+   ],
+   [
+    8800,
+    "שפרעם",
+    "MIXED_DRUZE_MUSLIM_CHRISTIAN_TOWN",
+    2,
+    0.9943
+   ],
+   [
+    8900,
+    "טמרה",
+    "GALILEE_HAIFA_OTHER_ARAB",
+    2,
+    0.9992
+   ]
+  ]
+ },
+ "cbs_nonjewish_not_in_list": [
+  {
+   "code": 493,
+   "name": "דייר ראפאת",
+   "cbs_religion": 2,
+   "form": 440,
+   "district": "ירושלים",
+   "israelis": 86,
+   "arabs": 85,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 932,
+   "name": "אבו עמרה (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הדרום",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 935,
+   "name": "אבו סריחאן (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הדרום",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 948,
+   "name": "חוג'ייראת (ד'הרה) (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הצפון",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 959,
+   "name": "אפיניש (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הדרום",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 986,
+   "name": "ח'ואלד (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הצפון",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 989,
+   "name": "סואעד (כמאנה) (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הצפון",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 1042,
+   "name": "אבו עמאר (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הדרום",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 1339,
+   "name": "אל -עזי",
+   "cbs_religion": 2,
+   "form": 450,
+   "district": "הדרום",
+   "israelis": 192,
+   "arabs": 191,
+   "in_election_results": false,
+   "k25_eligible": null
+  },
+  {
+   "code": 2742,
+   "name": "זבארגה (שבט)",
+   "cbs_religion": 3,
+   "form": 460,
+   "district": "הדרום",
+   "israelis": null,
+   "arabs": null,
+   "in_election_results": false,
+   "k25_eligible": null
+  }
+ ],
+ "core_vs_cbs": {
+  "localities": 1219,
+  "confusion_sector_vs_cbs_group": {
+   "arab|arab": 108,
+   "arab|bedouin_tribe": 20,
+   "druze|arab": 18,
+   "jewish|None": 7,
+   "jewish|jewish": 1053,
+   "mixed|mixed": 9
+  },
+  "confusion_k25_eligible": {
+   "arab|arab": 817601,
+   "arab|bedouin_tribe": 39921,
+   "druze|arab": 80879,
+   "jewish|None": 989,
+   "jewish|jewish": 4496906,
+   "mixed|mixed": 1352170
+  },
+  "disagreements": [],
+  "not_in_cbs_file": [
+   {
+    "code": 3400,
+    "name": "חברון",
+    "sector": "jewish",
+    "k25_eligible": 338,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 3637,
+    "name": "מעלה שומרון",
+    "sector": "jewish",
+    "k25_eligible": null,
+    "elections": [
+     "K21",
+     "K22",
+     "K23"
+    ]
+   },
+   {
+    "code": 3720,
+    "name": "שערי תקווה",
+    "sector": "jewish",
+    "k25_eligible": null,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24"
+    ]
+   },
+   {
+    "code": 3778,
+    "name": "עץ אפרים",
+    "sector": "jewish",
+    "k25_eligible": null,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24"
+    ]
+   }
+  ],
+  "no_population_group_in_cbs_file": [
+   {
+    "code": 1411,
+    "name": "מחנה הילה",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 133,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1412,
+    "name": "מחנה תל נוף",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 158,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1413,
+    "name": "מחנה יהודית",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 136,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1414,
+    "name": "מחנה מרים",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 83,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1415,
+    "name": "מחנה יפה",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 217,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1416,
+    "name": "מחנה יוכבד",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 108,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   },
+   {
+    "code": 1418,
+    "name": "מחנה טלי",
+    "sector": "jewish",
+    "cbs_form": 510,
+    "k25_eligible": 154,
+    "elections": [
+     "K21",
+     "K22",
+     "K23",
+     "K24",
+     "K25"
+    ]
+   }
+  ]
+ },
+ "jewish_localities_with_arab_minority": [
+  {
+   "code": 2600,
+   "name": "אילת",
+   "israelis": 53200,
+   "arabs": 3313,
+   "arab_share": 0.0623,
+   "k25_eligible": 51974,
+   "k25_arab_list_share": 0.0082
+  },
+  {
+   "code": 1139,
+   "name": "כרמיאל",
+   "israelis": 47470,
+   "arabs": 2793,
+   "arab_share": 0.0588,
+   "k25_eligible": 42065,
+   "k25_arab_list_share": 0.0199
+  },
+  {
+   "code": 2560,
+   "name": "ערד",
+   "israelis": 29089,
+   "arabs": 2176,
+   "arab_share": 0.0748,
+   "k25_eligible": 21746,
+   "k25_arab_list_share": 0.0118
+  },
+  {
+   "code": 2800,
+   "name": "קריית שמונה",
+   "israelis": 24233,
+   "arabs": 1219,
+   "arab_share": 0.0503,
+   "k25_eligible": 18582,
+   "k25_arab_list_share": 0.0024
+  },
+  {
+   "code": 1271,
+   "name": "להבים",
+   "israelis": 7968,
+   "arabs": 705,
+   "arab_share": 0.0885,
+   "k25_eligible": 5518,
+   "k25_arab_list_share": 0.0233
+  },
+  {
+   "code": 831,
+   "name": "ירוחם",
+   "israelis": 11678,
+   "arabs": 696,
+   "arab_share": 0.0596,
+   "k25_eligible": 7861,
+   "k25_arab_list_share": 0.0161
+  },
+  {
+   "code": 666,
+   "name": "עומר",
+   "israelis": 7945,
+   "arabs": 430,
+   "arab_share": 0.0541,
+   "k25_eligible": 6642,
+   "k25_arab_list_share": 0.0098
+  },
+  {
+   "code": 99,
+   "name": "מצפה רמון",
+   "israelis": 5695,
+   "arabs": 362,
+   "arab_share": 0.0636,
+   "k25_eligible": 3739,
+   "k25_arab_list_share": 0.0305
+  },
+  {
+   "code": 1263,
+   "name": "כפר ורדים",
+   "israelis": 5490,
+   "arabs": 313,
+   "arab_share": 0.057,
+   "k25_eligible": 4780,
+   "k25_arab_list_share": 0.0266
+  },
+  {
+   "code": 795,
+   "name": "יערה",
+   "israelis": 883,
+   "arabs": 143,
+   "arab_share": 0.1619,
+   "k25_eligible": 590,
+   "k25_arab_list_share": 0.0052
+  },
+  {
+   "code": 872,
+   "name": "גאולי תימן",
+   "israelis": 405,
+   "arabs": 116,
+   "arab_share": 0.2864,
+   "k25_eligible": 252,
+   "k25_arab_list_share": 0.1302
+  },
+  {
+   "code": 1313,
+   "name": "פורייה עילית",
+   "israelis": 1437,
+   "arabs": 108,
+   "arab_share": 0.0752,
+   "k25_eligible": 939,
+   "k25_arab_list_share": 0.0149
+  },
+  {
+   "code": 921,
+   "name": "שער מנשה",
+   "israelis": 523,
+   "arabs": 67,
+   "arab_share": 0.1281,
+   "k25_eligible": 132,
+   "k25_arab_list_share": 0.05
+  },
+  {
+   "code": 3644,
+   "name": "גבעון החדשה",
+   "israelis": 1167,
+   "arabs": 63,
+   "arab_share": 0.054,
+   "k25_eligible": 958,
+   "k25_arab_list_share": 0.0
+  },
+  {
+   "code": 1171,
+   "name": "לוטם",
+   "israelis": 702,
+   "arabs": 54,
+   "arab_share": 0.0769,
+   "k25_eligible": 533,
+   "k25_arab_list_share": 0.047
+  },
+  {
+   "code": 809,
+   "name": "נחם",
+   "israelis": 595,
+   "arabs": 42,
+   "arab_share": 0.0706,
+   "k25_eligible": 418,
+   "k25_arab_list_share": 0.0061
+  },
+  {
+   "code": 1195,
+   "name": "ניצנה (קהילת חינוך)",
+   "israelis": 311,
+   "arabs": 31,
+   "arab_share": 0.0997,
+   "k25_eligible": 324,
+   "k25_arab_list_share": 0.0811
+  },
+  {
+   "code": 1046,
+   "name": "אוהד",
+   "israelis": 405,
+   "arabs": 28,
+   "arab_share": 0.0691,
+   "k25_eligible": 280,
+   "k25_arab_list_share": 0.015
+  },
+  {
+   "code": 1143,
+   "name": "נס עמים",
+   "israelis": 448,
+   "arabs": 27,
+   "arab_share": 0.0603,
+   "k25_eligible": 256,
+   "k25_arab_list_share": 0.0431
+  },
+  {
+   "code": 1196,
+   "name": "מחנה יתיר",
+   "israelis": 338,
+   "arabs": 27,
+   "arab_share": 0.0799,
+   "k25_eligible": null,
+   "k25_arab_list_share": null
+  }
+ ],
+ "segments_vs_census2022_religion": {
+  "counts": {
+   "ALAWITE_GHAJAR": {
+    "מוסלמים": 1
+   },
+   "CHRISTIAN_MAJORITY_OR_PLURALITY": {
+    "נוצרים": 6
+   },
+   "CIRCASSIAN_EXCLUDED": {
+    "מוסלמים": 2
+   },
+   "DRUZE_GALILEE_CARMEL": {
+    "דרוזים": 11
+   },
+   "DRUZE_GOLAN": {
+    "דרוזים": 4
+   },
+   "GALILEE_HAIFA_OTHER_ARAB": {
+    "מוסלמים": 41
+   },
+   "JERUSALEM_AREA_ARAB": {
+    "מוסלמים": 3
+   },
+   "MIXED_CITY": {
+    "יהודים": 8
+   },
+   "MIXED_DRUZE_MUSLIM_CHRISTIAN_TOWN": {
+    "מוסלמים": 2,
+    "דרוזים": 1
+   },
+   "MIXED_SMALL_COMMUNITY_EXCLUDED": {
+    "יהודים": 1
+   },
+   "NAZARETH": {
+    "מוסלמים": 1
+   },
+   "NEGEV_BEDOUIN": {
+    "(no census row)": 20,
+    "מוסלמים": 18
+   },
+   "NORTH_BEDOUIN": {
+    "מוסלמים": 20
+   },
+   "TRIANGLE_NORTH_WADI_ARA": {
+    "מוסלמים": 10
+   },
+   "TRIANGLE_SOUTH": {
+    "מוסלמים": 6
+   }
+  },
+  "disagreements": []
+ },
+ "second_copy_check": {
+  "rows_main": 1490,
+  "rows_check": 1484,
+  "only_in_main": [
+   [
+    3861,
+    "עשהאל"
+   ],
+   [
+    3862,
+    "גבעות הרואה"
+   ],
+   [
+    3864,
+    "בית חוגלה"
+   ],
+   [
+    3865,
+    "משמר יהודה"
+   ],
+   [
+    3868,
+    "שחרית"
+   ],
+   [
+    3869,
+    "אביגיל"
+   ]
+  ],
+  "only_in_check": [],
+  "religion_code_changed": [
+   [
+    1056,
+    "עין כרם-בי\"ס חקלאי",
+    1,
+    null
+   ]
+  ]
+ },
+ "mixed_city_stations": {
+  "rule_by_vote": "build_data.py: median Arab-list share over the elections >= 0.5",
+  "rule_by_area": "mean Arab share of the station's 2011 statistical areas >= 0.5 (2022 census modal religion, density-weighted overlay)",
+  "localities": [
+   1061,
+   1063,
+   1259,
+   3000,
+   4000,
+   5000,
+   7000,
+   7600,
+   8000,
+   8500
+  ],
+  "totals": {
+   "K21": {
+    "1061": {
+     "stations": 66,
+     "eligible": 39282,
+     "arab_list_votes": 3265,
+     "by_vote": {
+      "stations": 4,
+      "eligible": 2524,
+      "valid": 1452,
+      "arab_list_votes": 930,
+      "share_of_city_arab_list_votes": 0.285,
+      "arab_list_share_inside": 0.64
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3390,
+      "valid": 1796,
+      "arab_list_votes": 892,
+      "share_of_city_arab_list_votes": 0.273,
+      "arab_list_share_inside": 0.497
+     },
+     "by_both": {
+      "stations": 3,
+      "eligible": 2137,
+      "valid": 1195,
+      "arab_list_votes": 787,
+      "share_of_city_arab_list_votes": 0.241,
+      "arab_list_share_inside": 0.659
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1063": {
+     "stations": 30,
+     "eligible": 17972,
+     "arab_list_votes": 1484,
+     "by_vote": {
+      "stations": 5,
+      "eligible": 3637,
+      "valid": 1853,
+      "arab_list_votes": 1344,
+      "share_of_city_arab_list_votes": 0.906,
+      "arab_list_share_inside": 0.725
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3637,
+      "valid": 1853,
+      "arab_list_votes": 1344,
+      "share_of_city_arab_list_votes": 0.906,
+      "arab_list_share_inside": 0.725
+     },
+     "by_both": {
+      "stations": 5,
+      "eligible": 3637,
+      "valid": 1853,
+      "arab_list_votes": 1344,
+      "share_of_city_arab_list_votes": 0.906,
+      "arab_list_share_inside": 0.725
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1259": {
+     "stations": 1,
+     "eligible": 205,
+     "arab_list_votes": 79,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 205,
+      "valid": 144,
+      "arab_list_votes": 79,
+      "share_of_city_arab_list_votes": 1.0,
+      "arab_list_share_inside": 0.549
+     },
+     "by_area": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "by_both": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 205
+     }
+    },
+    "3000": {
+     "stations": 665,
+     "eligible": 410258,
+     "arab_list_votes": 2147,
+     "by_vote": {
+      "stations": 14,
+      "eligible": 7559,
+      "valid": 1292,
+      "arab_list_votes": 818,
+      "share_of_city_arab_list_votes": 0.381,
+      "arab_list_share_inside": 0.633
+     },
+     "by_area": {
+      "stations": 25,
+      "eligible": 13910,
+      "valid": 2597,
+      "arab_list_votes": 1086,
+      "share_of_city_arab_list_votes": 0.506,
+      "arab_list_share_inside": 0.418
+     },
+     "by_both": {
+      "stations": 14,
+      "eligible": 7559,
+      "valid": 1292,
+      "arab_list_votes": 818,
+      "share_of_city_arab_list_votes": 0.381,
+      "arab_list_share_inside": 0.633
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "4000": {
+     "stations": 407,
+     "eligible": 247866,
+     "arab_list_votes": 8783,
+     "by_vote": {
+      "stations": 36,
+      "eligible": 21721,
+      "valid": 10351,
+      "arab_list_votes": 5668,
+      "share_of_city_arab_list_votes": 0.645,
+      "arab_list_share_inside": 0.548
+     },
+     "by_area": {
+      "stations": 50,
+      "eligible": 30649,
+      "valid": 13733,
+      "arab_list_votes": 6408,
+      "share_of_city_arab_list_votes": 0.73,
+      "arab_list_share_inside": 0.467
+     },
+     "by_both": {
+      "stations": 33,
+      "eligible": 19931,
+      "valid": 9399,
+      "arab_list_votes": 5254,
+      "share_of_city_arab_list_votes": 0.598,
+      "arab_list_share_inside": 0.559
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "5000": {
+     "stations": 680,
+     "eligible": 426398,
+     "arab_list_votes": 6198,
+     "by_vote": {
+      "stations": 12,
+      "eligible": 8430,
+      "valid": 3950,
+      "arab_list_votes": 1833,
+      "share_of_city_arab_list_votes": 0.296,
+      "arab_list_share_inside": 0.464
+     },
+     "by_area": {
+      "stations": 20,
+      "eligible": 13800,
+      "valid": 6688,
+      "arab_list_votes": 2522,
+      "share_of_city_arab_list_votes": 0.407,
+      "arab_list_share_inside": 0.377
+     },
+     "by_both": {
+      "stations": 12,
+      "eligible": 8430,
+      "valid": 3950,
+      "arab_list_votes": 1833,
+      "share_of_city_arab_list_votes": 0.296,
+      "arab_list_share_inside": 0.464
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7000": {
+     "stations": 91,
+     "eligible": 54846,
+     "arab_list_votes": 3334,
+     "by_vote": {
+      "stations": 16,
+      "eligible": 10505,
+      "valid": 3469,
+      "arab_list_votes": 2400,
+      "share_of_city_arab_list_votes": 0.72,
+      "arab_list_share_inside": 0.692
+     },
+     "by_area": {
+      "stations": 16,
+      "eligible": 10505,
+      "valid": 3469,
+      "arab_list_votes": 2400,
+      "share_of_city_arab_list_votes": 0.72,
+      "arab_list_share_inside": 0.692
+     },
+     "by_both": {
+      "stations": 16,
+      "eligible": 10505,
+      "valid": 3469,
+      "arab_list_votes": 2400,
+      "share_of_city_arab_list_votes": 0.72,
+      "arab_list_share_inside": 0.692
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7600": {
+     "stations": 70,
+     "eligible": 41584,
+     "arab_list_votes": 4897,
+     "by_vote": {
+      "stations": 20,
+      "eligible": 12444,
+      "valid": 6043,
+      "arab_list_votes": 3901,
+      "share_of_city_arab_list_votes": 0.797,
+      "arab_list_share_inside": 0.646
+     },
+     "by_area": {
+      "stations": 26,
+      "eligible": 15971,
+      "valid": 7669,
+      "arab_list_votes": 4319,
+      "share_of_city_arab_list_votes": 0.882,
+      "arab_list_share_inside": 0.563
+     },
+     "by_both": {
+      "stations": 20,
+      "eligible": 12444,
+      "valid": 6043,
+      "arab_list_votes": 3901,
+      "share_of_city_arab_list_votes": 0.797,
+      "arab_list_share_inside": 0.646
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8000": {
+     "stations": 40,
+     "eligible": 23118,
+     "arab_list_votes": 100,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 140,
+      "arab_list_votes": 94,
+      "share_of_city_arab_list_votes": 0.94,
+      "arab_list_share_inside": 0.671
+     },
+     "by_area": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 140,
+      "arab_list_votes": 94,
+      "share_of_city_arab_list_votes": 0.94,
+      "arab_list_share_inside": 0.671
+     },
+     "by_both": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 140,
+      "arab_list_votes": 94,
+      "share_of_city_arab_list_votes": 0.94,
+      "arab_list_share_inside": 0.671
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8500": {
+     "stations": 91,
+     "eligible": 55296,
+     "arab_list_votes": 3118,
+     "by_vote": {
+      "stations": 9,
+      "eligible": 5658,
+      "valid": 2241,
+      "arab_list_votes": 1577,
+      "share_of_city_arab_list_votes": 0.506,
+      "arab_list_share_inside": 0.704
+     },
+     "by_area": {
+      "stations": 20,
+      "eligible": 12373,
+      "valid": 5667,
+      "arab_list_votes": 2502,
+      "share_of_city_arab_list_votes": 0.802,
+      "arab_list_share_inside": 0.442
+     },
+     "by_both": {
+      "stations": 9,
+      "eligible": 5658,
+      "valid": 2241,
+      "arab_list_votes": 1577,
+      "share_of_city_arab_list_votes": 0.506,
+      "arab_list_share_inside": 0.704
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    }
+   },
+   "K22": {
+    "1061": {
+     "stations": 65,
+     "eligible": 39435,
+     "arab_list_votes": 4819,
+     "by_vote": {
+      "stations": 4,
+      "eligible": 2547,
+      "valid": 1660,
+      "arab_list_votes": 1228,
+      "share_of_city_arab_list_votes": 0.255,
+      "arab_list_share_inside": 0.74
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3416,
+      "valid": 2002,
+      "arab_list_votes": 1204,
+      "share_of_city_arab_list_votes": 0.25,
+      "arab_list_share_inside": 0.601
+     },
+     "by_both": {
+      "stations": 3,
+      "eligible": 2165,
+      "valid": 1377,
+      "arab_list_votes": 1051,
+      "share_of_city_arab_list_votes": 0.218,
+      "arab_list_share_inside": 0.763
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1063": {
+     "stations": 30,
+     "eligible": 18132,
+     "arab_list_votes": 2299,
+     "by_vote": {
+      "stations": 5,
+      "eligible": 3503,
+      "valid": 2279,
+      "arab_list_votes": 2008,
+      "share_of_city_arab_list_votes": 0.873,
+      "arab_list_share_inside": 0.881
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3503,
+      "valid": 2279,
+      "arab_list_votes": 2008,
+      "share_of_city_arab_list_votes": 0.873,
+      "arab_list_share_inside": 0.881
+     },
+     "by_both": {
+      "stations": 5,
+      "eligible": 3503,
+      "valid": 2279,
+      "arab_list_votes": 2008,
+      "share_of_city_arab_list_votes": 0.873,
+      "arab_list_share_inside": 0.881
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1259": {
+     "stations": 1,
+     "eligible": 213,
+     "arab_list_votes": 101,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 213,
+      "valid": 168,
+      "arab_list_votes": 101,
+      "share_of_city_arab_list_votes": 1.0,
+      "arab_list_share_inside": 0.601
+     },
+     "by_area": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "by_both": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 213
+     }
+    },
+    "3000": {
+     "stations": 667,
+     "eligible": 413140,
+     "arab_list_votes": 3582,
+     "by_vote": {
+      "stations": 20,
+      "eligible": 12131,
+      "valid": 2549,
+      "arab_list_votes": 2011,
+      "share_of_city_arab_list_votes": 0.561,
+      "arab_list_share_inside": 0.789
+     },
+     "by_area": {
+      "stations": 25,
+      "eligible": 14751,
+      "valid": 3393,
+      "arab_list_votes": 2145,
+      "share_of_city_arab_list_votes": 0.599,
+      "arab_list_share_inside": 0.632
+     },
+     "by_both": {
+      "stations": 20,
+      "eligible": 12131,
+      "valid": 2549,
+      "arab_list_votes": 2011,
+      "share_of_city_arab_list_votes": 0.561,
+      "arab_list_share_inside": 0.789
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "4000": {
+     "stations": 409,
+     "eligible": 248570,
+     "arab_list_votes": 12697,
+     "by_vote": {
+      "stations": 36,
+      "eligible": 21797,
+      "valid": 11515,
+      "arab_list_votes": 7968,
+      "share_of_city_arab_list_votes": 0.628,
+      "arab_list_share_inside": 0.692
+     },
+     "by_area": {
+      "stations": 49,
+      "eligible": 30084,
+      "valid": 15019,
+      "arab_list_votes": 9127,
+      "share_of_city_arab_list_votes": 0.719,
+      "arab_list_share_inside": 0.608
+     },
+     "by_both": {
+      "stations": 33,
+      "eligible": 19994,
+      "valid": 10497,
+      "arab_list_votes": 7416,
+      "share_of_city_arab_list_votes": 0.584,
+      "arab_list_share_inside": 0.706
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "5000": {
+     "stations": 682,
+     "eligible": 430203,
+     "arab_list_votes": 8446,
+     "by_vote": {
+      "stations": 11,
+      "eligible": 7743,
+      "valid": 4006,
+      "arab_list_votes": 2517,
+      "share_of_city_arab_list_votes": 0.298,
+      "arab_list_share_inside": 0.628
+     },
+     "by_area": {
+      "stations": 18,
+      "eligible": 12409,
+      "valid": 6507,
+      "arab_list_votes": 3415,
+      "share_of_city_arab_list_votes": 0.404,
+      "arab_list_share_inside": 0.525
+     },
+     "by_both": {
+      "stations": 11,
+      "eligible": 7743,
+      "valid": 4006,
+      "arab_list_votes": 2517,
+      "share_of_city_arab_list_votes": 0.298,
+      "arab_list_share_inside": 0.628
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7000": {
+     "stations": 92,
+     "eligible": 55192,
+     "arab_list_votes": 4544,
+     "by_vote": {
+      "stations": 17,
+      "eligible": 10627,
+      "valid": 4772,
+      "arab_list_votes": 3128,
+      "share_of_city_arab_list_votes": 0.688,
+      "arab_list_share_inside": 0.655
+     },
+     "by_area": {
+      "stations": 17,
+      "eligible": 10627,
+      "valid": 4772,
+      "arab_list_votes": 3128,
+      "share_of_city_arab_list_votes": 0.688,
+      "arab_list_share_inside": 0.655
+     },
+     "by_both": {
+      "stations": 17,
+      "eligible": 10627,
+      "valid": 4772,
+      "arab_list_votes": 3128,
+      "share_of_city_arab_list_votes": 0.688,
+      "arab_list_share_inside": 0.655
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7600": {
+     "stations": 69,
+     "eligible": 41830,
+     "arab_list_votes": 6965,
+     "by_vote": {
+      "stations": 21,
+      "eligible": 13274,
+      "valid": 7730,
+      "arab_list_votes": 5723,
+      "share_of_city_arab_list_votes": 0.822,
+      "arab_list_share_inside": 0.74
+     },
+     "by_area": {
+      "stations": 26,
+      "eligible": 16060,
+      "valid": 9094,
+      "arab_list_votes": 6126,
+      "share_of_city_arab_list_votes": 0.88,
+      "arab_list_share_inside": 0.674
+     },
+     "by_both": {
+      "stations": 21,
+      "eligible": 13274,
+      "valid": 7730,
+      "arab_list_votes": 5723,
+      "share_of_city_arab_list_votes": 0.822,
+      "arab_list_share_inside": 0.74
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8000": {
+     "stations": 40,
+     "eligible": 23253,
+     "arab_list_votes": 152,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 369,
+      "valid": 178,
+      "arab_list_votes": 139,
+      "share_of_city_arab_list_votes": 0.914,
+      "arab_list_share_inside": 0.781
+     },
+     "by_area": {
+      "stations": 1,
+      "eligible": 369,
+      "valid": 178,
+      "arab_list_votes": 139,
+      "share_of_city_arab_list_votes": 0.914,
+      "arab_list_share_inside": 0.781
+     },
+     "by_both": {
+      "stations": 1,
+      "eligible": 369,
+      "valid": 178,
+      "arab_list_votes": 139,
+      "share_of_city_arab_list_votes": 0.914,
+      "arab_list_share_inside": 0.781
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8500": {
+     "stations": 91,
+     "eligible": 55469,
+     "arab_list_votes": 4630,
+     "by_vote": {
+      "stations": 9,
+      "eligible": 5685,
+      "valid": 2817,
+      "arab_list_votes": 2296,
+      "share_of_city_arab_list_votes": 0.496,
+      "arab_list_share_inside": 0.815
+     },
+     "by_area": {
+      "stations": 20,
+      "eligible": 12451,
+      "valid": 6549,
+      "arab_list_votes": 3642,
+      "share_of_city_arab_list_votes": 0.787,
+      "arab_list_share_inside": 0.556
+     },
+     "by_both": {
+      "stations": 9,
+      "eligible": 5685,
+      "valid": 2817,
+      "arab_list_votes": 2296,
+      "share_of_city_arab_list_votes": 0.496,
+      "arab_list_share_inside": 0.815
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    }
+   },
+   "K23": {
+    "1061": {
+     "stations": 65,
+     "eligible": 39579,
+     "arab_list_votes": 5473,
+     "by_vote": {
+      "stations": 4,
+      "eligible": 2557,
+      "valid": 1675,
+      "arab_list_votes": 1322,
+      "share_of_city_arab_list_votes": 0.242,
+      "arab_list_share_inside": 0.789
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3432,
+      "valid": 2053,
+      "arab_list_votes": 1306,
+      "share_of_city_arab_list_votes": 0.239,
+      "arab_list_share_inside": 0.636
+     },
+     "by_both": {
+      "stations": 3,
+      "eligible": 2172,
+      "valid": 1386,
+      "arab_list_votes": 1126,
+      "share_of_city_arab_list_votes": 0.206,
+      "arab_list_share_inside": 0.812
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1063": {
+     "stations": 31,
+     "eligible": 18341,
+     "arab_list_votes": 2755,
+     "by_vote": {
+      "stations": 5,
+      "eligible": 3528,
+      "valid": 2511,
+      "arab_list_votes": 2387,
+      "share_of_city_arab_list_votes": 0.866,
+      "arab_list_share_inside": 0.951
+     },
+     "by_area": {
+      "stations": 5,
+      "eligible": 3528,
+      "valid": 2511,
+      "arab_list_votes": 2387,
+      "share_of_city_arab_list_votes": 0.866,
+      "arab_list_share_inside": 0.951
+     },
+     "by_both": {
+      "stations": 5,
+      "eligible": 3528,
+      "valid": 2511,
+      "arab_list_votes": 2387,
+      "share_of_city_arab_list_votes": 0.866,
+      "arab_list_share_inside": 0.951
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1259": {
+     "stations": 1,
+     "eligible": 225,
+     "arab_list_votes": 117,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 225,
+      "valid": 171,
+      "arab_list_votes": 117,
+      "share_of_city_arab_list_votes": 1.0,
+      "arab_list_share_inside": 0.684
+     },
+     "by_area": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "by_both": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 225
+     }
+    },
+    "3000": {
+     "stations": 671,
+     "eligible": 415991,
+     "arab_list_votes": 5321,
+     "by_vote": {
+      "stations": 22,
+      "eligible": 12866,
+      "valid": 3330,
+      "arab_list_votes": 2922,
+      "share_of_city_arab_list_votes": 0.549,
+      "arab_list_share_inside": 0.877
+     },
+     "by_area": {
+      "stations": 27,
+      "eligible": 15625,
+      "valid": 4216,
+      "arab_list_votes": 3164,
+      "share_of_city_arab_list_votes": 0.595,
+      "arab_list_share_inside": 0.75
+     },
+     "by_both": {
+      "stations": 22,
+      "eligible": 12866,
+      "valid": 3330,
+      "arab_list_votes": 2922,
+      "share_of_city_arab_list_votes": 0.549,
+      "arab_list_share_inside": 0.877
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "4000": {
+     "stations": 409,
+     "eligible": 249627,
+     "arab_list_votes": 14915,
+     "by_vote": {
+      "stations": 36,
+      "eligible": 21872,
+      "valid": 11887,
+      "arab_list_votes": 9034,
+      "share_of_city_arab_list_votes": 0.606,
+      "arab_list_share_inside": 0.76
+     },
+     "by_area": {
+      "stations": 50,
+      "eligible": 30196,
+      "valid": 15439,
+      "arab_list_votes": 10382,
+      "share_of_city_arab_list_votes": 0.696,
+      "arab_list_share_inside": 0.672
+     },
+     "by_both": {
+      "stations": 33,
+      "eligible": 20074,
+      "valid": 10881,
+      "arab_list_votes": 8396,
+      "share_of_city_arab_list_votes": 0.563,
+      "arab_list_share_inside": 0.772
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "5000": {
+     "stations": 688,
+     "eligible": 434208,
+     "arab_list_votes": 11413,
+     "by_vote": {
+      "stations": 11,
+      "eligible": 7824,
+      "valid": 4214,
+      "arab_list_votes": 2875,
+      "share_of_city_arab_list_votes": 0.252,
+      "arab_list_share_inside": 0.682
+     },
+     "by_area": {
+      "stations": 18,
+      "eligible": 12563,
+      "valid": 6757,
+      "arab_list_votes": 3912,
+      "share_of_city_arab_list_votes": 0.343,
+      "arab_list_share_inside": 0.579
+     },
+     "by_both": {
+      "stations": 11,
+      "eligible": 7824,
+      "valid": 4214,
+      "arab_list_votes": 2875,
+      "share_of_city_arab_list_votes": 0.252,
+      "arab_list_share_inside": 0.682
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7000": {
+     "stations": 93,
+     "eligible": 55743,
+     "arab_list_votes": 7170,
+     "by_vote": {
+      "stations": 17,
+      "eligible": 10808,
+      "valid": 5899,
+      "arab_list_votes": 5212,
+      "share_of_city_arab_list_votes": 0.727,
+      "arab_list_share_inside": 0.884
+     },
+     "by_area": {
+      "stations": 17,
+      "eligible": 10808,
+      "valid": 5899,
+      "arab_list_votes": 5212,
+      "share_of_city_arab_list_votes": 0.727,
+      "arab_list_share_inside": 0.884
+     },
+     "by_both": {
+      "stations": 17,
+      "eligible": 10808,
+      "valid": 5899,
+      "arab_list_votes": 5212,
+      "share_of_city_arab_list_votes": 0.727,
+      "arab_list_share_inside": 0.884
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7600": {
+     "stations": 70,
+     "eligible": 42009,
+     "arab_list_votes": 7805,
+     "by_vote": {
+      "stations": 20,
+      "eligible": 11930,
+      "valid": 7313,
+      "arab_list_votes": 5889,
+      "share_of_city_arab_list_votes": 0.755,
+      "arab_list_share_inside": 0.805
+     },
+     "by_area": {
+      "stations": 27,
+      "eligible": 15898,
+      "valid": 9426,
+      "arab_list_votes": 6754,
+      "share_of_city_arab_list_votes": 0.865,
+      "arab_list_share_inside": 0.717
+     },
+     "by_both": {
+      "stations": 20,
+      "eligible": 11930,
+      "valid": 7313,
+      "arab_list_votes": 5889,
+      "share_of_city_arab_list_votes": 0.755,
+      "arab_list_share_inside": 0.805
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8000": {
+     "stations": 40,
+     "eligible": 23506,
+     "arab_list_votes": 243,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 367,
+      "valid": 227,
+      "arab_list_votes": 214,
+      "share_of_city_arab_list_votes": 0.881,
+      "arab_list_share_inside": 0.943
+     },
+     "by_area": {
+      "stations": 1,
+      "eligible": 367,
+      "valid": 227,
+      "arab_list_votes": 214,
+      "share_of_city_arab_list_votes": 0.881,
+      "arab_list_share_inside": 0.943
+     },
+     "by_both": {
+      "stations": 1,
+      "eligible": 367,
+      "valid": 227,
+      "arab_list_votes": 214,
+      "share_of_city_arab_list_votes": 0.881,
+      "arab_list_share_inside": 0.943
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8500": {
+     "stations": 91,
+     "eligible": 55672,
+     "arab_list_votes": 6054,
+     "by_vote": {
+      "stations": 9,
+      "eligible": 5745,
+      "valid": 3354,
+      "arab_list_votes": 2972,
+      "share_of_city_arab_list_votes": 0.491,
+      "arab_list_share_inside": 0.886
+     },
+     "by_area": {
+      "stations": 20,
+      "eligible": 12551,
+      "valid": 7335,
+      "arab_list_votes": 4736,
+      "share_of_city_arab_list_votes": 0.782,
+      "arab_list_share_inside": 0.646
+     },
+     "by_both": {
+      "stations": 9,
+      "eligible": 5745,
+      "valid": 3354,
+      "arab_list_votes": 2972,
+      "share_of_city_arab_list_votes": 0.491,
+      "arab_list_share_inside": 0.886
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    }
+   },
+   "K24": {
+    "1061": {
+     "stations": 75,
+     "eligible": 39640,
+     "arab_list_votes": 4227,
+     "by_vote": {
+      "stations": 6,
+      "eligible": 2608,
+      "valid": 1520,
+      "arab_list_votes": 1090,
+      "share_of_city_arab_list_votes": 0.258,
+      "arab_list_share_inside": 0.717
+     },
+     "by_area": {
+      "stations": 9,
+      "eligible": 4831,
+      "valid": 2292,
+      "arab_list_votes": 1112,
+      "share_of_city_arab_list_votes": 0.263,
+      "arab_list_share_inside": 0.485
+     },
+     "by_both": {
+      "stations": 5,
+      "eligible": 2220,
+      "valid": 1257,
+      "arab_list_votes": 931,
+      "share_of_city_arab_list_votes": 0.22,
+      "arab_list_share_inside": 0.741
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1063": {
+     "stations": 38,
+     "eligible": 18650,
+     "arab_list_votes": 1970,
+     "by_vote": {
+      "stations": 9,
+      "eligible": 3800,
+      "valid": 2131,
+      "arab_list_votes": 1759,
+      "share_of_city_arab_list_votes": 0.893,
+      "arab_list_share_inside": 0.825
+     },
+     "by_area": {
+      "stations": 9,
+      "eligible": 3800,
+      "valid": 2131,
+      "arab_list_votes": 1759,
+      "share_of_city_arab_list_votes": 0.893,
+      "arab_list_share_inside": 0.825
+     },
+     "by_both": {
+      "stations": 9,
+      "eligible": 3800,
+      "valid": 2131,
+      "arab_list_votes": 1759,
+      "share_of_city_arab_list_votes": 0.893,
+      "arab_list_share_inside": 0.825
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1259": {
+     "stations": 1,
+     "eligible": 230,
+     "arab_list_votes": 95,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 230,
+      "valid": 178,
+      "arab_list_votes": 95,
+      "share_of_city_arab_list_votes": 1.0,
+      "arab_list_share_inside": 0.534
+     },
+     "by_area": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "by_both": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 230
+     }
+    },
+    "3000": {
+     "stations": 741,
+     "eligible": 423130,
+     "arab_list_votes": 3149,
+     "by_vote": {
+      "stations": 25,
+      "eligible": 14532,
+      "valid": 2437,
+      "arab_list_votes": 1773,
+      "share_of_city_arab_list_votes": 0.563,
+      "arab_list_share_inside": 0.728
+     },
+     "by_area": {
+      "stations": 29,
+      "eligible": 17395,
+      "valid": 3359,
+      "arab_list_votes": 1943,
+      "share_of_city_arab_list_votes": 0.617,
+      "arab_list_share_inside": 0.578
+     },
+     "by_both": {
+      "stations": 24,
+      "eligible": 14398,
+      "valid": 2430,
+      "arab_list_votes": 1769,
+      "share_of_city_arab_list_votes": 0.562,
+      "arab_list_share_inside": 0.728
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "4000": {
+     "stations": 448,
+     "eligible": 249870,
+     "arab_list_votes": 10275,
+     "by_vote": {
+      "stations": 39,
+      "eligible": 21002,
+      "valid": 9153,
+      "arab_list_votes": 5712,
+      "share_of_city_arab_list_votes": 0.556,
+      "arab_list_share_inside": 0.624
+     },
+     "by_area": {
+      "stations": 54,
+      "eligible": 29385,
+      "valid": 12154,
+      "arab_list_votes": 6829,
+      "share_of_city_arab_list_votes": 0.665,
+      "arab_list_share_inside": 0.562
+     },
+     "by_both": {
+      "stations": 36,
+      "eligible": 19290,
+      "valid": 8367,
+      "arab_list_votes": 5347,
+      "share_of_city_arab_list_votes": 0.52,
+      "arab_list_share_inside": 0.639
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 255
+     }
+    },
+    "5000": {
+     "stations": 750,
+     "eligible": 439193,
+     "arab_list_votes": 6382,
+     "by_vote": {
+      "stations": 20,
+      "eligible": 10322,
+      "valid": 4198,
+      "arab_list_votes": 2105,
+      "share_of_city_arab_list_votes": 0.33,
+      "arab_list_share_inside": 0.501
+     },
+     "by_area": {
+      "stations": 25,
+      "eligible": 13396,
+      "valid": 5756,
+      "arab_list_votes": 2547,
+      "share_of_city_arab_list_votes": 0.399,
+      "arab_list_share_inside": 0.442
+     },
+     "by_both": {
+      "stations": 20,
+      "eligible": 10322,
+      "valid": 4198,
+      "arab_list_votes": 2105,
+      "share_of_city_arab_list_votes": 0.33,
+      "arab_list_share_inside": 0.501
+     },
+     "no_area_data": {
+      "stations": 6,
+      "eligible": 3365
+     }
+    },
+    "7000": {
+     "stations": 105,
+     "eligible": 57343,
+     "arab_list_votes": 4095,
+     "by_vote": {
+      "stations": 21,
+      "eligible": 11166,
+      "valid": 3843,
+      "arab_list_votes": 2837,
+      "share_of_city_arab_list_votes": 0.693,
+      "arab_list_share_inside": 0.738
+     },
+     "by_area": {
+      "stations": 21,
+      "eligible": 11166,
+      "valid": 3843,
+      "arab_list_votes": 2837,
+      "share_of_city_arab_list_votes": 0.693,
+      "arab_list_share_inside": 0.738
+     },
+     "by_both": {
+      "stations": 21,
+      "eligible": 11166,
+      "valid": 3843,
+      "arab_list_votes": 2837,
+      "share_of_city_arab_list_votes": 0.693,
+      "arab_list_share_inside": 0.738
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7600": {
+     "stations": 79,
+     "eligible": 42169,
+     "arab_list_votes": 4625,
+     "by_vote": {
+      "stations": 22,
+      "eligible": 11432,
+      "valid": 4717,
+      "arab_list_votes": 3249,
+      "share_of_city_arab_list_votes": 0.702,
+      "arab_list_share_inside": 0.689
+     },
+     "by_area": {
+      "stations": 30,
+      "eligible": 16257,
+      "valid": 6636,
+      "arab_list_votes": 3914,
+      "share_of_city_arab_list_votes": 0.846,
+      "arab_list_share_inside": 0.59
+     },
+     "by_both": {
+      "stations": 22,
+      "eligible": 11432,
+      "valid": 4717,
+      "arab_list_votes": 3249,
+      "share_of_city_arab_list_votes": 0.702,
+      "arab_list_share_inside": 0.689
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8000": {
+     "stations": 44,
+     "eligible": 23806,
+     "arab_list_votes": 100,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 130,
+      "arab_list_votes": 89,
+      "share_of_city_arab_list_votes": 0.89,
+      "arab_list_share_inside": 0.685
+     },
+     "by_area": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 130,
+      "arab_list_votes": 89,
+      "share_of_city_arab_list_votes": 0.89,
+      "arab_list_share_inside": 0.685
+     },
+     "by_both": {
+      "stations": 1,
+      "eligible": 371,
+      "valid": 130,
+      "arab_list_votes": 89,
+      "share_of_city_arab_list_votes": 0.89,
+      "arab_list_share_inside": 0.685
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8500": {
+     "stations": 104,
+     "eligible": 56406,
+     "arab_list_votes": 3702,
+     "by_vote": {
+      "stations": 12,
+      "eligible": 5888,
+      "valid": 2262,
+      "arab_list_votes": 1746,
+      "share_of_city_arab_list_votes": 0.472,
+      "arab_list_share_inside": 0.772
+     },
+     "by_area": {
+      "stations": 19,
+      "eligible": 10041,
+      "valid": 4085,
+      "arab_list_votes": 2482,
+      "share_of_city_arab_list_votes": 0.67,
+      "arab_list_share_inside": 0.608
+     },
+     "by_both": {
+      "stations": 12,
+      "eligible": 5888,
+      "valid": 2262,
+      "arab_list_votes": 1746,
+      "share_of_city_arab_list_votes": 0.472,
+      "arab_list_share_inside": 0.772
+     },
+     "no_area_data": {
+      "stations": 2,
+      "eligible": 710
+     }
+    }
+   },
+   "K25": {
+    "1061": {
+     "stations": 72,
+     "eligible": 40467,
+     "arab_list_votes": 5386,
+     "by_vote": {
+      "stations": 7,
+      "eligible": 3315,
+      "valid": 2059,
+      "arab_list_votes": 1450,
+      "share_of_city_arab_list_votes": 0.269,
+      "arab_list_share_inside": 0.704
+     },
+     "by_area": {
+      "stations": 9,
+      "eligible": 4986,
+      "valid": 2628,
+      "arab_list_votes": 1296,
+      "share_of_city_arab_list_votes": 0.241,
+      "arab_list_share_inside": 0.493
+     },
+     "by_both": {
+      "stations": 5,
+      "eligible": 2296,
+      "valid": 1372,
+      "arab_list_votes": 1069,
+      "share_of_city_arab_list_votes": 0.198,
+      "arab_list_share_inside": 0.779
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "1063": {
+     "stations": 35,
+     "eligible": 18917,
+     "arab_list_votes": 2496,
+     "by_vote": {
+      "stations": 8,
+      "eligible": 3887,
+      "valid": 2444,
+      "arab_list_votes": 2179,
+      "share_of_city_arab_list_votes": 0.873,
+      "arab_list_share_inside": 0.892
+     },
+     "by_area": {
+      "stations": 6,
+      "eligible": 2945,
+      "valid": 1819,
+      "arab_list_votes": 1607,
+      "share_of_city_arab_list_votes": 0.644,
+      "arab_list_share_inside": 0.883
+     },
+     "by_both": {
+      "stations": 6,
+      "eligible": 2945,
+      "valid": 1819,
+      "arab_list_votes": 1607,
+      "share_of_city_arab_list_votes": 0.644,
+      "arab_list_share_inside": 0.883
+     },
+     "no_area_data": {
+      "stations": 2,
+      "eligible": 942
+     }
+    },
+    "1259": {
+     "stations": 1,
+     "eligible": 253,
+     "arab_list_votes": 103,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 253,
+      "valid": 185,
+      "arab_list_votes": 103,
+      "share_of_city_arab_list_votes": 1.0,
+      "arab_list_share_inside": 0.557
+     },
+     "by_area": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "by_both": {
+      "stations": 0,
+      "eligible": 0,
+      "valid": 0,
+      "arab_list_votes": 0,
+      "share_of_city_arab_list_votes": 0.0,
+      "arab_list_share_inside": null
+     },
+     "no_area_data": {
+      "stations": 1,
+      "eligible": 253
+     }
+    },
+    "3000": {
+     "stations": 706,
+     "eligible": 432125,
+     "arab_list_votes": 4990,
+     "by_vote": {
+      "stations": 27,
+      "eligible": 16450,
+      "valid": 3414,
+      "arab_list_votes": 2885,
+      "share_of_city_arab_list_votes": 0.578,
+      "arab_list_share_inside": 0.845
+     },
+     "by_area": {
+      "stations": 32,
+      "eligible": 19637,
+      "valid": 4384,
+      "arab_list_votes": 3141,
+      "share_of_city_arab_list_votes": 0.629,
+      "arab_list_share_inside": 0.716
+     },
+     "by_both": {
+      "stations": 27,
+      "eligible": 16450,
+      "valid": 3414,
+      "arab_list_votes": 2885,
+      "share_of_city_arab_list_votes": 0.578,
+      "arab_list_share_inside": 0.845
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "4000": {
+     "stations": 424,
+     "eligible": 253292,
+     "arab_list_votes": 13033,
+     "by_vote": {
+      "stations": 38,
+      "eligible": 21915,
+      "valid": 10497,
+      "arab_list_votes": 7212,
+      "share_of_city_arab_list_votes": 0.553,
+      "arab_list_share_inside": 0.687
+     },
+     "by_area": {
+      "stations": 53,
+      "eligible": 31153,
+      "valid": 13973,
+      "arab_list_votes": 8510,
+      "share_of_city_arab_list_votes": 0.653,
+      "arab_list_share_inside": 0.609
+     },
+     "by_both": {
+      "stations": 36,
+      "eligible": 20739,
+      "valid": 9888,
+      "arab_list_votes": 6852,
+      "share_of_city_arab_list_votes": 0.526,
+      "arab_list_share_inside": 0.693
+     },
+     "no_area_data": {
+      "stations": 2,
+      "eligible": 1128
+     }
+    },
+    "5000": {
+     "stations": 736,
+     "eligible": 447576,
+     "arab_list_votes": 9974,
+     "by_vote": {
+      "stations": 11,
+      "eligible": 6121,
+      "valid": 3061,
+      "arab_list_votes": 1909,
+      "share_of_city_arab_list_votes": 0.191,
+      "arab_list_share_inside": 0.624
+     },
+     "by_area": {
+      "stations": 18,
+      "eligible": 10612,
+      "valid": 5367,
+      "arab_list_votes": 3101,
+      "share_of_city_arab_list_votes": 0.311,
+      "arab_list_share_inside": 0.578
+     },
+     "by_both": {
+      "stations": 11,
+      "eligible": 6121,
+      "valid": 3061,
+      "arab_list_votes": 1909,
+      "share_of_city_arab_list_votes": 0.191,
+      "arab_list_share_inside": 0.624
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "7000": {
+     "stations": 103,
+     "eligible": 58888,
+     "arab_list_votes": 7217,
+     "by_vote": {
+      "stations": 20,
+      "eligible": 11459,
+      "valid": 5885,
+      "arab_list_votes": 5031,
+      "share_of_city_arab_list_votes": 0.697,
+      "arab_list_share_inside": 0.855
+     },
+     "by_area": {
+      "stations": 20,
+      "eligible": 11459,
+      "valid": 5885,
+      "arab_list_votes": 5031,
+      "share_of_city_arab_list_votes": 0.697,
+      "arab_list_share_inside": 0.855
+     },
+     "by_both": {
+      "stations": 20,
+      "eligible": 11459,
+      "valid": 5885,
+      "arab_list_votes": 5031,
+      "share_of_city_arab_list_votes": 0.697,
+      "arab_list_share_inside": 0.855
+     },
+     "no_area_data": {
+      "stations": 5,
+      "eligible": 3140
+     }
+    },
+    "7600": {
+     "stations": 74,
+     "eligible": 43269,
+     "arab_list_votes": 6663,
+     "by_vote": {
+      "stations": 22,
+      "eligible": 12081,
+      "valid": 6256,
+      "arab_list_votes": 4837,
+      "share_of_city_arab_list_votes": 0.726,
+      "arab_list_share_inside": 0.773
+     },
+     "by_area": {
+      "stations": 29,
+      "eligible": 16379,
+      "valid": 8238,
+      "arab_list_votes": 5633,
+      "share_of_city_arab_list_votes": 0.845,
+      "arab_list_share_inside": 0.684
+     },
+     "by_both": {
+      "stations": 22,
+      "eligible": 12081,
+      "valid": 6256,
+      "arab_list_votes": 4837,
+      "share_of_city_arab_list_votes": 0.726,
+      "arab_list_share_inside": 0.773
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8000": {
+     "stations": 43,
+     "eligible": 24148,
+     "arab_list_votes": 160,
+     "by_vote": {
+      "stations": 1,
+      "eligible": 381,
+      "valid": 176,
+      "arab_list_votes": 140,
+      "share_of_city_arab_list_votes": 0.875,
+      "arab_list_share_inside": 0.795
+     },
+     "by_area": {
+      "stations": 1,
+      "eligible": 381,
+      "valid": 176,
+      "arab_list_votes": 140,
+      "share_of_city_arab_list_votes": 0.875,
+      "arab_list_share_inside": 0.795
+     },
+     "by_both": {
+      "stations": 1,
+      "eligible": 381,
+      "valid": 176,
+      "arab_list_votes": 140,
+      "share_of_city_arab_list_votes": 0.875,
+      "arab_list_share_inside": 0.795
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    },
+    "8500": {
+     "stations": 100,
+     "eligible": 57383,
+     "arab_list_votes": 5788,
+     "by_vote": {
+      "stations": 16,
+      "eligible": 8490,
+      "valid": 4314,
+      "arab_list_votes": 3424,
+      "share_of_city_arab_list_votes": 0.592,
+      "arab_list_share_inside": 0.794
+     },
+     "by_area": {
+      "stations": 23,
+      "eligible": 12491,
+      "valid": 6734,
+      "arab_list_votes": 4120,
+      "share_of_city_arab_list_votes": 0.712,
+      "arab_list_share_inside": 0.612
+     },
+     "by_both": {
+      "stations": 16,
+      "eligible": 8490,
+      "valid": 4314,
+      "arab_list_votes": 3424,
+      "share_of_city_arab_list_votes": 0.592,
+      "arab_list_share_inside": 0.794
+     },
+     "no_area_data": {
+      "stations": 0,
+      "eligible": 0
+     }
+    }
+   }
+  },
+  "disagreements": {
+   "K21": [
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.1",
+     "eligible": 420,
+     "arab_list_share": 0.31,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.2",
+     "eligible": 419,
+     "arab_list_share": 0.322,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72",
+     "eligible": 740,
+     "arab_list_share": 0.323,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74",
+     "eligible": 768,
+     "arab_list_share": 0.14,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "85",
+     "eligible": 651,
+     "arab_list_share": 0.323,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89",
+     "eligible": 730,
+     "arab_list_share": 0.209,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "96",
+     "eligible": 659,
+     "arab_list_share": 0.324,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "121",
+     "eligible": 688,
+     "arab_list_share": 0.234,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "127",
+     "eligible": 654,
+     "arab_list_share": 0.262,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129",
+     "eligible": 674,
+     "arab_list_share": 0.439,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "147",
+     "eligible": 534,
+     "arab_list_share": 0.298,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000421
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "234",
+     "eligible": 635,
+     "arab_list_share": 0.448,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "282",
+     "eligible": 513,
+     "arab_list_share": 0.423,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290",
+     "eligible": 642,
+     "arab_list_share": 0.431,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "293",
+     "eligible": 556,
+     "arab_list_share": 0.118,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "294",
+     "eligible": 686,
+     "arab_list_share": 0.124,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "297",
+     "eligible": 653,
+     "arab_list_share": 0.269,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "299",
+     "eligible": 624,
+     "arab_list_share": 0.258,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "301",
+     "eligible": 594,
+     "arab_list_share": 0.278,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "308",
+     "eligible": 668,
+     "arab_list_share": 0.212,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.1",
+     "eligible": 531,
+     "arab_list_share": 0.05,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.2",
+     "eligible": 531,
+     "arab_list_share": 0.067,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.3",
+     "eligible": 531,
+     "arab_list_share": 0.125,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.4",
+     "eligible": 531,
+     "arab_list_share": 0.114,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "522",
+     "eligible": 660,
+     "arab_list_share": 0.449,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002311
+     ],
+     "area_arab_share": 0.989
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "531",
+     "eligible": 639,
+     "arab_list_share": 0.4,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002412
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "532",
+     "eligible": 696,
+     "arab_list_share": 0.467,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002411
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "534",
+     "eligible": 606,
+     "arab_list_share": 0.463,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002112
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "614",
+     "eligible": 616,
+     "arab_list_share": 0.4,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002213
+     ],
+     "area_arab_share": 0.966
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "623",
+     "eligible": 375,
+     "arab_list_share": 0.039,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002613
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "652",
+     "eligible": 635,
+     "arab_list_share": 0.494,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002112
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4",
+     "eligible": 576,
+     "arab_list_share": 0.022,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "10",
+     "eligible": 677,
+     "arab_list_share": 0.3,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35",
+     "eligible": 387,
+     "arab_list_share": 0.556,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "2",
+     "eligible": 747,
+     "arab_list_share": 0.458,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000034
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.1",
+     "eligible": 583,
+     "arab_list_share": 0.149,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.2",
+     "eligible": 582,
+     "arab_list_share": 0.144,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28",
+     "eligible": 465,
+     "arab_list_share": 0.326,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "29",
+     "eligible": 548,
+     "arab_list_share": 0.24,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "80",
+     "eligible": 602,
+     "arab_list_share": 0.185,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "2",
+     "eligible": 724,
+     "arab_list_share": 0.323,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "4",
+     "eligible": 755,
+     "arab_list_share": 0.159,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5",
+     "eligible": 517,
+     "arab_list_share": 0.07,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.1",
+     "eligible": 576,
+     "arab_list_share": 0.544,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.2",
+     "eligible": 576,
+     "arab_list_share": 0.063,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.3",
+     "eligible": 576,
+     "arab_list_share": 0.285,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.1",
+     "eligible": 587,
+     "arab_list_share": 0.724,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.2",
+     "eligible": 587,
+     "arab_list_share": 0.36,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.3",
+     "eligible": 587,
+     "arab_list_share": 0.173,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.4",
+     "eligible": 587,
+     "arab_list_share": 0.217,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "80",
+     "eligible": 643,
+     "arab_list_share": 0.206,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875",
+     "eligible": 609,
+     "arab_list_share": 0.154,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "882",
+     "eligible": 536,
+     "arab_list_share": 0.197,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883",
+     "eligible": 522,
+     "arab_list_share": 0.27,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "884",
+     "eligible": 730,
+     "arab_list_share": 0.364,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "886",
+     "eligible": 689,
+     "arab_list_share": 0.303,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "887",
+     "eligible": 732,
+     "arab_list_share": 0.159,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "918",
+     "eligible": 774,
+     "arab_list_share": 0.248,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000723
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "934",
+     "eligible": 778,
+     "arab_list_share": 0.319,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000725
+     ],
+     "area_arab_share": 1.0
+    }
+   ],
+   "K22": [
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.1",
+     "eligible": 424,
+     "arab_list_share": 0.529,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.2",
+     "eligible": 424,
+     "arab_list_share": 0.523,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72",
+     "eligible": 754,
+     "arab_list_share": 0.43,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74",
+     "eligible": 797,
+     "arab_list_share": 0.224,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "85",
+     "eligible": 652,
+     "arab_list_share": 0.404,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89",
+     "eligible": 729,
+     "arab_list_share": 0.315,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "96",
+     "eligible": 651,
+     "arab_list_share": 0.474,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "121",
+     "eligible": 689,
+     "arab_list_share": 0.324,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "127",
+     "eligible": 645,
+     "arab_list_share": 0.369,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129",
+     "eligible": 692,
+     "arab_list_share": 0.542,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "147",
+     "eligible": 537,
+     "arab_list_share": 0.405,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000421
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "234",
+     "eligible": 641,
+     "arab_list_share": 0.524,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "282",
+     "eligible": 509,
+     "arab_list_share": 0.567,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290",
+     "eligible": 653,
+     "arab_list_share": 0.54,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "293",
+     "eligible": 545,
+     "arab_list_share": 0.182,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "294",
+     "eligible": 676,
+     "arab_list_share": 0.163,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "297",
+     "eligible": 653,
+     "arab_list_share": 0.424,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "299",
+     "eligible": 629,
+     "arab_list_share": 0.379,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "301",
+     "eligible": 593,
+     "arab_list_share": 0.381,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.1",
+     "eligible": 559,
+     "arab_list_share": 0.174,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.2",
+     "eligible": 559,
+     "arab_list_share": 0.213,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.3",
+     "eligible": 559,
+     "arab_list_share": 0.333,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.4",
+     "eligible": 558,
+     "arab_list_share": 0.124,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "623",
+     "eligible": 385,
+     "arab_list_share": 0.061,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002613
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4",
+     "eligible": 577,
+     "arab_list_share": 0.042,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "10",
+     "eligible": 674,
+     "arab_list_share": 0.412,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35",
+     "eligible": 382,
+     "arab_list_share": 0.625,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.1",
+     "eligible": 581,
+     "arab_list_share": 0.213,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.2",
+     "eligible": 581,
+     "arab_list_share": 0.204,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28",
+     "eligible": 478,
+     "arab_list_share": 0.445,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "29",
+     "eligible": 556,
+     "arab_list_share": 0.373,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "80",
+     "eligible": 590,
+     "arab_list_share": 0.296,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "2",
+     "eligible": 724,
+     "arab_list_share": 0.421,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "4",
+     "eligible": 754,
+     "arab_list_share": 0.215,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5",
+     "eligible": 523,
+     "arab_list_share": 0.153,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.1",
+     "eligible": 581,
+     "arab_list_share": 0.657,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.2",
+     "eligible": 581,
+     "arab_list_share": 0.099,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.3",
+     "eligible": 581,
+     "arab_list_share": 0.338,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.1",
+     "eligible": 593,
+     "arab_list_share": 0.759,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.2",
+     "eligible": 593,
+     "arab_list_share": 0.471,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.3",
+     "eligible": 593,
+     "arab_list_share": 0.253,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.4",
+     "eligible": 592,
+     "arab_list_share": 0.264,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "80",
+     "eligible": 651,
+     "arab_list_share": 0.344,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875",
+     "eligible": 611,
+     "arab_list_share": 0.258,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "882",
+     "eligible": 561,
+     "arab_list_share": 0.28,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883",
+     "eligible": 527,
+     "arab_list_share": 0.396,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "884",
+     "eligible": 719,
+     "arab_list_share": 0.478,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "886",
+     "eligible": 706,
+     "arab_list_share": 0.448,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "887",
+     "eligible": 755,
+     "arab_list_share": 0.248,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "934",
+     "eligible": 787,
+     "arab_list_share": 0.417,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000725
+     ],
+     "area_arab_share": 1.0
+    }
+   ],
+   "K23": [
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74.1",
+     "eligible": 401,
+     "arab_list_share": 0.308,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74.2",
+     "eligible": 403,
+     "arab_list_share": 0.336,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290",
+     "eligible": 654,
+     "arab_list_share": 0.613,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "297",
+     "eligible": 642,
+     "arab_list_share": 0.489,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "299",
+     "eligible": 633,
+     "arab_list_share": 0.462,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "301",
+     "eligible": 591,
+     "arab_list_share": 0.392,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.1",
+     "eligible": 435,
+     "arab_list_share": 0.562,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.2",
+     "eligible": 434,
+     "arab_list_share": 0.556,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "293",
+     "eligible": 567,
+     "arab_list_share": 0.246,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "294",
+     "eligible": 686,
+     "arab_list_share": 0.226,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72",
+     "eligible": 750,
+     "arab_list_share": 0.544,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "85",
+     "eligible": 648,
+     "arab_list_share": 0.448,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89",
+     "eligible": 728,
+     "arab_list_share": 0.317,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "96",
+     "eligible": 654,
+     "arab_list_share": 0.575,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "121",
+     "eligible": 678,
+     "arab_list_share": 0.41,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "127",
+     "eligible": 656,
+     "arab_list_share": 0.411,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129",
+     "eligible": 686,
+     "arab_list_share": 0.584,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "234",
+     "eligible": 636,
+     "arab_list_share": 0.622,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "282",
+     "eligible": 508,
+     "arab_list_share": 0.671,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "147",
+     "eligible": 530,
+     "arab_list_share": 0.473,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000421
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.1",
+     "eligible": 590,
+     "arab_list_share": 0.341,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.2",
+     "eligible": 590,
+     "arab_list_share": 0.301,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.3",
+     "eligible": 590,
+     "arab_list_share": 0.522,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.4",
+     "eligible": 587,
+     "arab_list_share": 0.301,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "623",
+     "eligible": 402,
+     "arab_list_share": 0.067,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002613
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4",
+     "eligible": 578,
+     "arab_list_share": 0.073,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "10",
+     "eligible": 682,
+     "arab_list_share": 0.431,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35",
+     "eligible": 385,
+     "arab_list_share": 0.678,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "2",
+     "eligible": 429,
+     "arab_list_share": 0.505,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000034
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.1",
+     "eligible": 641,
+     "arab_list_share": 0.359,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.2",
+     "eligible": 641,
+     "arab_list_share": 0.415,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.3",
+     "eligible": 639,
+     "arab_list_share": 0.441,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28",
+     "eligible": 474,
+     "arab_list_share": 0.438,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "29",
+     "eligible": 550,
+     "arab_list_share": 0.385,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "80",
+     "eligible": 594,
+     "arab_list_share": 0.33,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "2",
+     "eligible": 733,
+     "arab_list_share": 0.556,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "4",
+     "eligible": 756,
+     "arab_list_share": 0.332,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5",
+     "eligible": 524,
+     "arab_list_share": 0.223,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.1",
+     "eligible": 586,
+     "arab_list_share": 0.752,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.2",
+     "eligible": 586,
+     "arab_list_share": 0.118,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.3",
+     "eligible": 586,
+     "arab_list_share": 0.37,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.1",
+     "eligible": 596,
+     "arab_list_share": 0.811,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.2",
+     "eligible": 596,
+     "arab_list_share": 0.538,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.3",
+     "eligible": 596,
+     "arab_list_share": 0.318,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.4",
+     "eligible": 596,
+     "arab_list_share": 0.382,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "80",
+     "eligible": 651,
+     "arab_list_share": 0.431,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875",
+     "eligible": 616,
+     "arab_list_share": 0.291,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "882",
+     "eligible": 566,
+     "arab_list_share": 0.326,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883",
+     "eligible": 533,
+     "arab_list_share": 0.457,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "884",
+     "eligible": 722,
+     "arab_list_share": 0.559,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "886",
+     "eligible": 719,
+     "arab_list_share": 0.487,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "887",
+     "eligible": 781,
+     "arab_list_share": 0.284,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "934",
+     "eligible": 802,
+     "arab_list_share": 0.464,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000725
+     ],
+     "area_arab_share": 1.0
+    }
+   ],
+   "K24": [
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "2",
+     "eligible": 506,
+     "arab_list_share": 0.362,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74",
+     "eligible": 530,
+     "arab_list_share": 0.069,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290.1",
+     "eligible": 607,
+     "arab_list_share": 0.433,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290.2",
+     "eligible": 606,
+     "arab_list_share": 0.406,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "297",
+     "eligible": 624,
+     "arab_list_share": 0.366,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "299",
+     "eligible": 642,
+     "arab_list_share": 0.309,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.1",
+     "eligible": 474,
+     "arab_list_share": 0.375,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "57.2",
+     "eligible": 473,
+     "arab_list_share": 0.377,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000314
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "308",
+     "eligible": 435,
+     "arab_list_share": 0.372,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72.1",
+     "eligible": 637,
+     "arab_list_share": 0.554,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72.2",
+     "eligible": 637,
+     "arab_list_share": 0.635,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72.3",
+     "eligible": 637,
+     "arab_list_share": 0.546,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "85",
+     "eligible": 632,
+     "arab_list_share": 0.413,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.1",
+     "eligible": 555,
+     "arab_list_share": 0.338,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.2",
+     "eligible": 555,
+     "arab_list_share": 0.328,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.3",
+     "eligible": 555,
+     "arab_list_share": 0.432,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.4",
+     "eligible": 555,
+     "arab_list_share": 0.33,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.5",
+     "eligible": 555,
+     "arab_list_share": 0.392,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "129.6",
+     "eligible": 551,
+     "arab_list_share": 0.24,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "282",
+     "eligible": 499,
+     "arab_list_share": 0.547,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "147",
+     "eligible": 542,
+     "arab_list_share": 0.342,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000421
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "615",
+     "eligible": 134,
+     "arab_list_share": 0.571,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      30000543
+     ],
+     "area_arab_share": 0.002
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.1",
+     "eligible": 639,
+     "arab_list_share": 0.247,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.2",
+     "eligible": 639,
+     "arab_list_share": 0.203,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.3",
+     "eligible": 639,
+     "arab_list_share": 0.295,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.4",
+     "eligible": 636,
+     "arab_list_share": 0.25,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "623",
+     "eligible": 444,
+     "arab_list_share": 0.039,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002613
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.1",
+     "eligible": 585,
+     "arab_list_share": 0.641,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.2",
+     "eligible": 585,
+     "arab_list_share": 0.068,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "34.3",
+     "eligible": 585,
+     "arab_list_share": 0.311,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.1",
+     "eligible": 600,
+     "arab_list_share": 0.783,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.2",
+     "eligible": 600,
+     "arab_list_share": 0.504,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.3",
+     "eligible": 600,
+     "arab_list_share": 0.267,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "35.4",
+     "eligible": 598,
+     "arab_list_share": 0.329,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "882",
+     "eligible": 613,
+     "arab_list_share": 0.215,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883",
+     "eligible": 528,
+     "arab_list_share": 0.293,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "887.1",
+     "eligible": 651,
+     "arab_list_share": 0.366,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "887.2",
+     "eligible": 650,
+     "arab_list_share": 0.292,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000732
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "918",
+     "eligible": 632,
+     "arab_list_share": 0.286,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000723
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "2",
+     "eligible": 588,
+     "arab_list_share": 0.369,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000034
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.1",
+     "eligible": 641,
+     "arab_list_share": 0.31,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.2",
+     "eligible": 641,
+     "arab_list_share": 0.302,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.3",
+     "eligible": 641,
+     "arab_list_share": 0.358,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28.1",
+     "eligible": 590,
+     "arab_list_share": 0.323,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28.2",
+     "eligible": 590,
+     "arab_list_share": 0.394,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28.3",
+     "eligible": 588,
+     "arab_list_share": 0.456,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "29",
+     "eligible": 546,
+     "arab_list_share": 0.243,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.1",
+     "eligible": 643,
+     "arab_list_share": 0.069,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.2",
+     "eligible": 643,
+     "arab_list_share": 0.104,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.3",
+     "eligible": 641,
+     "arab_list_share": 0.091,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "10",
+     "eligible": 684,
+     "arab_list_share": 0.362,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35",
+     "eligible": 388,
+     "arab_list_share": 0.605,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    }
+   ],
+   "K25": [
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "2",
+     "eligible": 549,
+     "arab_list_share": 0.384,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "74",
+     "eligible": 574,
+     "arab_list_share": 0.119,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "290",
+     "eligible": 657,
+     "arab_list_share": 0.56,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000613
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "297",
+     "eligible": 594,
+     "arab_list_share": 0.419,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "299",
+     "eligible": 633,
+     "arab_list_share": 0.436,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000632
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "301",
+     "eligible": 582,
+     "arab_list_share": 0.636,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000633
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "58.1",
+     "eligible": 530,
+     "arab_list_share": 0.399,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000321
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "58.2",
+     "eligible": 530,
+     "arab_list_share": 0.293,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000321
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "72",
+     "eligible": 624,
+     "arab_list_share": 0.434,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000324
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "85",
+     "eligible": 607,
+     "arab_list_share": 0.511,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89.1",
+     "eligible": 659,
+     "arab_list_share": 0.406,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89.2",
+     "eligible": 659,
+     "arab_list_share": 0.401,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89.3",
+     "eligible": 659,
+     "arab_list_share": 0.348,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89.4",
+     "eligible": 659,
+     "arab_list_share": 0.556,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "89.5",
+     "eligible": 658,
+     "arab_list_share": 0.223,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000334
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "121",
+     "eligible": 698,
+     "arab_list_share": 0.416,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "127",
+     "eligible": 645,
+     "arab_list_share": 0.373,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000413
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "282",
+     "eligible": 519,
+     "arab_list_share": 0.623,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      40000532
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 4000,
+     "name": "חיפה",
+     "kalpi": "147",
+     "eligible": 554,
+     "arab_list_share": 0.416,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      40000421
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.1",
+     "eligible": 679,
+     "arab_list_share": 0.351,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.2",
+     "eligible": 679,
+     "arab_list_share": 0.302,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.3",
+     "eligible": 679,
+     "arab_list_share": 0.408,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "501.4",
+     "eligible": 676,
+     "arab_list_share": 0.31,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002514
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 3000,
+     "name": "ירושלים",
+     "kalpi": "623",
+     "eligible": 474,
+     "arab_list_share": 0.057,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      30002613
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.1",
+     "eligible": 666,
+     "arab_list_share": 0.052,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.2",
+     "eligible": 666,
+     "arab_list_share": 0.084,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "4.3",
+     "eligible": 666,
+     "arab_list_share": 0.128,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "10",
+     "eligible": 692,
+     "arab_list_share": 0.413,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      10610021
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35.1",
+     "eligible": 510,
+     "arab_list_share": 0.5,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 1061,
+     "name": "נוף הגליל",
+     "kalpi": "35.2",
+     "eligible": 509,
+     "arab_list_share": 0.612,
+     "class_by_vote": "arab",
+     "class_by_area": "other",
+     "areas_2011": [
+      10610032
+     ],
+     "area_arab_share": 0.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "2",
+     "eligible": 696,
+     "arab_list_share": 0.463,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000034
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.1",
+     "eligible": 652,
+     "arab_list_share": 0.349,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.2",
+     "eligible": 652,
+     "arab_list_share": 0.431,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "22.3",
+     "eligible": 650,
+     "arab_list_share": 0.464,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000024
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "28",
+     "eligible": 497,
+     "arab_list_share": 0.375,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "29",
+     "eligible": 538,
+     "arab_list_share": 0.384,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 7600,
+     "name": "עכו",
+     "kalpi": "80",
+     "eligible": 613,
+     "arab_list_share": 0.292,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      76000026
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5.1",
+     "eligible": 671,
+     "arab_list_share": 0.585,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5.2",
+     "eligible": 671,
+     "arab_list_share": 0.287,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5.3",
+     "eligible": 671,
+     "arab_list_share": 0.18,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "5.4",
+     "eligible": 668,
+     "arab_list_share": 0.282,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "80.1",
+     "eligible": 361,
+     "arab_list_share": 0.448,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "80.2",
+     "eligible": 360,
+     "arab_list_share": 0.315,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000014
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 8500,
+     "name": "רמלה",
+     "kalpi": "87",
+     "eligible": 599,
+     "arab_list_share": 0.035,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      85000017
+     ],
+     "area_arab_share": 0.881
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875.1",
+     "eligible": 697,
+     "arab_list_share": 0.683,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875.2",
+     "eligible": 697,
+     "arab_list_share": 0.674,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "875.3",
+     "eligible": 697,
+     "arab_list_share": 0.625,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000734
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883.1",
+     "eligible": 583,
+     "arab_list_share": 0.485,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883.2",
+     "eligible": 583,
+     "arab_list_share": 0.345,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "883.3",
+     "eligible": 581,
+     "arab_list_share": 0.433,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000733
+     ],
+     "area_arab_share": 1.0
+    },
+    {
+     "code": 5000,
+     "name": "תל אביב -יפו",
+     "kalpi": "918",
+     "eligible": 653,
+     "arab_list_share": 0.385,
+     "class_by_vote": "other",
+     "class_by_area": "arab",
+     "areas_2011": [
+      50000723
+     ],
+     "area_arab_share": 1.0
+    }
+   ]
+  },
+  "disagreement_counts": {
+   "K21": 59,
+   "K22": 50,
+   "K23": 53,
+   "K24": 52,
+   "K25": 51
+  }
+ }
+}
