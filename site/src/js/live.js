@@ -4,17 +4,17 @@
 // CEC file, projected), turnout.json (the day), exit_polls.json (from 22:00). Without a feed (the artifact,
 // or before election day) the tab replays election night 2021 in the real counting order, and 2022 in a
 // simulated one, from the official ballot results.
-const SECTOR_NAME = { arab: 'יישובים ערביים', druze: 'יישובים דרוזיים', mixed: 'ערים מעורבות', haredi: 'יישובים חרדיים', jewish: 'שאר היישובים' };
+const SECTOR_NAME = { arab: t('יישובים ערביים'), druze: t('יישובים דרוזיים'), mixed: t('ערים מעורבות'), haredi: t('יישובים חרדיים'), jewish: t('שאר היישובים') };
 // The daytime release is classified box by box (live_fetch.station_sector: Haredi boxes, Arab boxes in mixed
 // cities and Jewish localities), the night projection locality by locality, so the two tables need their own labels.
 // The day's Druze sector also holds the two Circassian villages, which the Arab section's Druze panel leaves out.
-const DAY_SECTOR_NAME = { arab: 'יישובים ערביים', druze: 'יישובים דרוזיים וצ׳רקסיים', mixed: 'קלפיות ערביות בערים מעורבות וביישובים יהודיים', haredi: 'קלפיות חרדיות', jewish: 'שאר הקלפיות' };
+const DAY_SECTOR_NAME = { arab: t('יישובים ערביים'), druze: t('יישובים דרוזיים וצ׳רקסיים'), mixed: t('קלפיות ערביות בערים מעורבות וביישובים יהודיים'), haredi: t('קלפיות חרדיות'), jewish: t('שאר הקלפיות') };
 const SECTOR_ORDER = ['jewish', 'haredi', 'mixed', 'druze', 'arab'];
 const LIVE_POLL_MS = 60000;
 S.liveIdx = null; S.livePlay = null;
 const pollsClosed = () => ilStamp(ilNow()) >= POLLS_CLOSE;
 const hhmm = t => `${String(t.h).padStart(2, '0')}:${String(t.min).padStart(2, '0')}`;
-const heList = a => a.length > 1 ? a.slice(0, -1).join(', ') + ' ו' + a[a.length - 1] : a[0] || '';
+const heList = a => AR_ON ? arJoin(a) : a.length > 1 ? a.slice(0, -1).join(', ') + ' ו' + a[a.length - 1] : a[0] || '';
 
 async function fetchLive(name) {
   // live data exists only on the hosted site during election day and night. The 30-second bucket in the
@@ -28,7 +28,7 @@ async function fetchLive(name) {
 }
 async function replayDoc() {
   if (!S.replayDoc) {
-    const doc = await fetchJSON('data/replay_night.json');
+    const doc = i18nReplay(await fetchJSON('data/replay_night.json'));
     if (!doc.replays) {   // older single-replay format
       doc.replays = { [doc.election || 'K25']: { ...doc, simulated_order: doc.simulated_order !== false } };
       doc.default = doc.election || 'K25';
@@ -57,13 +57,13 @@ async function loadLive() {
   const [res, turnout, history, exits] = await Promise.all([
     status && status.has_results ? fetchLive('results.json') : null,
     status && status.has_turnout ? fetchLive('turnout.json') : null,
-    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json'),
+    S.turnoutHistory ? Promise.resolve(S.turnoutHistory) : fetchJSON('data/turnout_history.json').then(i18nTurnoutHistory),
     status && status.exit_polls ? fetchLive('exit_polls.json') : null]);
   S.turnoutHistory = history;
   // a file that fails to load keeps its previous copy; one the feed no longer lists is dropped
   if (!turnout) S.liveTurnout = null; else if (turnout.ok) S.liveTurnout = turnout.data;
   if (!exits) S.liveExit = null; else if (exits.ok) S.liveExit = exits.data;
-  let R = res && res.ok ? res.data : null;
+  let R = res && res.ok ? i18nLive(res.data) : null;
   if (res && !res.ok && S.live && S.live.mode === 'live') R = S.live;
   if (R && R.frame && !earlyResults(R)) {
     // the replay file also carries the real 2021 track used for the coverage note (cached after the first load)
@@ -94,63 +94,63 @@ async function renderLive() {
   // (the Arab section's long table and map sit in the day section and must not push the count down on the night)
   const closed = pollsClosed();
   S.liveNightFirst = closed;
-  const night = `<h2 class="lv-h2" id="lv-count">ליל הבחירות: ספירת הקולות</h2>
-  ${waiting ? `<div class="card c12 lv-wait"><h3>${!closed ? 'הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00' : 'ממתינים לתוצאות הראשונות של ועדת הבחירות'}</h3>
-    <p class="sub">ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. מדגמי הטלוויזיה מתפרסמים ב-22:00. ב-2021 הגרסה הראשונה של קובץ הקלפיות הרשמי שהכילה נתונים הופיעה ב-01:01, כשלוש שעות אחרי סגירת הקלפיות (הגרסה שלפניה, מ-23:37, הייתה ריקה); כמחצית הקולות נספרו עד 04:00–05:00 וכ-97% עד שעות הבוקר המאוחרות. המעטפות הכפולות נספרות מהלילה שאחרי, והתוצאה הסופית מתפרסמת ביום חמישי.</p></div>
-    ${exit26 ? `<div class="card c12" id="lv-exit26"><h3>המדגמים של 22:00</h3>
-    <p class="sub">המדגמים של ערוצי הטלוויזיה כפי שפורסמו. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה: ב-2021 וב-2022 הזיזו המדגמים 5–8 מנדטים בין רשימות וטעו בגוש ב-1–3 מנדטים. התחזית מהספירה תופיע כשיגיע הקובץ הראשון של ועדת הבחירות.</p>
+  const night = `<h2 class="lv-h2" id="lv-count">${t('ליל הבחירות: ספירת הקולות')}</h2>
+  ${waiting ? `<div class="card c12 lv-wait"><h3>${!closed ? t('הספירה תתחיל אחרי סגירת הקלפיות, ב-22:00') : t('ממתינים לתוצאות הראשונות של ועדת הבחירות')}</h3>
+    <p class="sub">${t('ההדגמה של לילות הבחירות הקודמים מוסתרת ביום הבחירות. מדגמי הטלוויזיה מתפרסמים ב-22:00. ב-2021 הגרסה הראשונה של קובץ הקלפיות הרשמי שהכילה נתונים הופיעה ב-01:01, כשלוש שעות אחרי סגירת הקלפיות (הגרסה שלפניה, מ-23:37, הייתה ריקה); כמחצית הקולות נספרו עד 04:00–05:00 וכ-97% עד שעות הבוקר המאוחרות. המעטפות הכפולות נספרות מהלילה שאחרי, והתוצאה הסופית מתפרסמת ביום חמישי.')}</p></div>
+    ${exit26 ? `<div class="card c12" id="lv-exit26"><h3>${t('המדגמים של 22:00')}</h3>
+    <p class="sub">${t('המדגמים של ערוצי הטלוויזיה כפי שפורסמו. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה: ב-2021 וב-2022 הזיזו המדגמים 5–8 מנדטים בין רשימות וטעו בגוש ב-1–3 מנדטים. התחזית מהספירה תופיע כשיגיע הקובץ הראשון של ועדת הבחירות.')}</p>
     ${exit26}</div>` : ''}` : ''}
   <div ${waiting ? 'hidden' : ''}>
   <div class="live-bar ${demo ? 'demo' : 'on'}">
-    ${demo ? `<span class="live-chip demo">הדגמה</span><span class="live-text">${R0.simulated_order
-        ? 'ליל הבחירות 2022, משוחזר מתוצאות הקלפיות הרשמיות <b>בסדר ספירה מדומה</b>.'
-        : 'ליל הבחירות 2021, <b>בסדר הספירה האמיתי</b>: הגרסאות של קובץ הקלפיות הרשמי כפי שהתעדכן במהלך הלילה.'} ב-27 באוקטובר יוצגו כאן נתוני הספירה החיים.</span>
-      ${seg('lv-replay', Object.entries(L.replays).map(([k, r]) => [k, k === 'K24' ? '2021 · סדר אמיתי' : '2022 · סדר מדומה']), S.replayKey)}
-      <span class="live-ctl"><button type="button" class="slip" id="lv-play" aria-label="הפעלה">▶ הפעלה</button>
-      <input type="range" id="lv-step" dir="ltr" min="0" max="${R0.frames.length - 1}" step="1" value="${S.liveIdx}" aria-label="שלב בספירה">
+    ${demo ? `<span class="live-chip demo">${t('הדגמה')}</span><span class="live-text">${R0.simulated_order
+        ? t('ליל הבחירות 2022, משוחזר מתוצאות הקלפיות הרשמיות <b>בסדר ספירה מדומה</b>.')
+        : t('ליל הבחירות 2021, <b>בסדר הספירה האמיתי</b>: הגרסאות של קובץ הקלפיות הרשמי כפי שהתעדכן במהלך הלילה.')} ${t('ב-27 באוקטובר יוצגו כאן נתוני הספירה החיים.')}</span>
+      ${seg('lv-replay', Object.entries(L.replays).map(([k, r]) => [k, k === 'K24' ? t('2021 · סדר אמיתי') : t('2022 · סדר מדומה')]), S.replayKey)}
+      <span class="live-ctl"><button type="button" class="slip" id="lv-play" aria-label="${t('הפעלה')}">${t('▶ הפעלה')}</button>
+      <input type="range" id="lv-step" dir="ltr" min="0" max="${R0.frames.length - 1}" step="1" value="${S.liveIdx}" aria-label="${t('שלב בספירה')}">
       <b class="num lv-when" id="lv-when" aria-live="polite"></b></span>`
-    : `${L.drill ? '<span class="live-chip demo">תרגול</span>' : liveChip(L.updated_at, 'הספירה', 'lv-chip')}<span class="live-text">${L.drill ? 'תרגול על קובץ 2022. ' : ''}<span id="lv-upd">${updatedLine('results')}</span>. מקור: <a href="${esc(L.source_url || '#')}" target="_blank" rel="noopener" dir="ltr">${esc(L.source_label || 'ועדת הבחירות המרכזית')}</a>. <span class="lv-cad">${cadence()}</span>; השעה היא שעת הנתונים.</span>`}
+    : `${L.drill ? `<span class="live-chip demo">${t('תרגול')}</span>` : liveChip(L.updated_at, t('הספירה'), 'lv-chip')}<span class="live-text">${L.drill ? t('תרגול על קובץ 2022. ') : ''}<span id="lv-upd">${updatedLine('results')}</span>. ${t('מקור:')} <a href="${esc(L.source_url || '#')}" target="_blank" rel="noopener" dir="ltr">${esc(L.source_label || t('ועדת הבחירות המרכזית'))}</a>. <span class="lv-cad">${cadence()}</span>${t('; השעה היא שעת הנתונים.')}</span>`}
   </div>
   <div class="grid">
     <div class="card c12" id="lv-progress-card"></div>
     <div class="card c7">
-      <div class="card-head"><div><h3 id="lv-seats-h">תחזית המנדטים לסיום הספירה</h3>
+      <div class="card-head"><div><h3 id="lv-seats-h">${t('תחזית המנדטים לסיום הספירה')}</h3>
       <p class="sub" id="lv-seats-sub"></p></div></div>
       <div class="chart" id="lv-seats"></div>
     </div>
     <div class="card c5">
-      <h3>המרוץ ל-61</h3>
-      <p class="sub">${demo || L.drill ? 'המנדטים הצפויים לכל גוש.' : 'המנדטים הצפויים לכל גוש, לפי השיוך שבמחשבון הקואליציות.'}</p>
+      <h3>${t('המרוץ ל-61')}</h3>
+      <p class="sub">${demo || L.drill ? t('המנדטים הצפויים לכל גוש.') : t('המנדטים הצפויים לכל גוש, לפי השיוך שבמחשבון הקואליציות.')}</p>
       <div id="lv-blocs"></div>
-      <h3 style="margin-top:18px">אחוז החסימה</h3>
-      <p class="sub">רשימות שעשויות להיות בצד הלא נכון של 3.25%.</p>
+      <h3 style="margin-top:18px">${t('אחוז החסימה')}</h3>
+      <p class="sub">${t('רשימות שעשויות להיות בצד הלא נכון של 3.25%.')}</p>
       <div id="lv-thr" class="tbl-wrap"></div>
     </div>
     <div class="card c12" id="lv-exit-card" hidden>
-      <h3>המדגמים מול הספירה</h3>
-      <p class="sub">המדגמים של ערוצי הטלוויזיה (פורסמו ב-22:00) לעומת התחזית לסיום הספירה. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה.</p>
+      <h3>${t('המדגמים מול הספירה')}</h3>
+      <p class="sub">${t('המדגמים של ערוצי הטלוויזיה (פורסמו ב-22:00) לעומת התחזית לסיום הספירה. מדגם הוא סקר של מצביעים ביציאה מהקלפי, לא ספירה.')}</p>
       <div id="lv-exit"></div>
     </div>
     <div class="card c6">
-      <h3>השתתפות בקלפיות שנספרו</h3>
-      <p class="sub">שיעור ההצבעה בקלפיות שכבר נספרו, מול שיעור ההצבעה באותם יישובים בבחירות הקודמות. ${S.liveTurnout && S.liveTurnout.sectors
-        ? 'בניגוד לפרסומי היום, זה נתון מהספירה עצמה.' : 'זה הנתון הרשמי הראשון מהספירה עצמה על ההשתתפות בחברה הערבית.'}</p>
+      <h3>${t('השתתפות בקלפיות שנספרו')}</h3>
+      <p class="sub">${t('שיעור ההצבעה בקלפיות שכבר נספרו, מול שיעור ההצבעה באותם יישובים בבחירות הקודמות.')} ${S.liveTurnout && S.liveTurnout.sectors
+        ? t('בניגוד לפרסומי היום, זה נתון מהספירה עצמה.') : t('זה הנתון הרשמי הראשון מהספירה עצמה על ההשתתפות בחברה הערבית.')}</p>
       <div class="chart" id="lv-turnout"></div>
     </div>
     <div class="card c6">
-      <h3>כמה לסמוך על התחזית</h3>
-      <p class="sub">בדיקה לאחור: אותו מודל הורץ על ליל הבחירות 2021 בסדר הספירה האמיתי, ועל 2022 ו-2021 בחמישה סדרי ספירה מדומים (כולל סדר שבו היישובים הערביים והחרדיים נספרים אחרונים).</p>
+      <h3>${t('כמה לסמוך על התחזית')}</h3>
+      <p class="sub">${t('בדיקה לאחור: אותו מודל הורץ על ליל הבחירות 2021 בסדר הספירה האמיתי, ועל 2022 ו-2021 בחמישה סדרי ספירה מדומים (כולל סדר שבו היישובים הערביים והחרדיים נספרים אחרונים).')}</p>
       <div class="chart" id="lv-acc"></div>
     </div>
   </div>
   </div>
-  <p class="foot">${demo && !waiting ? esc(R0.note || '') + ' ' : ''}השיטה: אמידה יחסית לפי שכבות (מגזר, אזור והצבעה קודמת), עם נקודת מוצא מממוצע הסקרים, וחלוקת מנדטים בבדר-עופר עם הסכמי העודפים. פירוט בלשונית "שיטה ומקורות".</p>`;
+  <p class="foot">${demo && !waiting ? esc(R0.note || '') + ' ' : ''}${t('השיטה: אמידה יחסית לפי שכבות (מגזר, אזור והצבעה קודמת), עם נקודת מוצא מממוצע הסקרים, וחלוקת מנדטים בבדר-עופר עם הסכמי העודפים. פירוט בלשונית "שיטה ומקורות".')}</p>`;
   root.innerHTML = `
   <div class="section-head"><div>
-    <span class="eyebrow">יום הבחירות · יום שלישי, 27 באוקטובר 2026 · הקלפיות פתוחות 07:00–22:00</span>
-    <h2>יום הבחירות, בזמן אמת</h2>
-    <p>במהלך היום: שיעור ההצבעה הרשמי של ועדת הבחירות, מול אותה שעה בבחירות הקודמות, ולראשונה גם לפי קלפי. מ-22:00: ספירת הקולות קלפי אחר קלפי, ותחזית לסיום הספירה שמשווה כל יישוב שנספר לתוצאה שלו ב-2022. התחזית אינה תוצאה רשמית.</p>
-    ${closed ? '<p class="lv-jump"><a href="#lv-day" data-jump="lv-day">לשיעור ההצבעה במהלך היום ולחברה הערבית ↓</a></p>' : ''}
+    <span class="eyebrow">${t('יום הבחירות · יום שלישי, 27 באוקטובר 2026 · הקלפיות פתוחות 07:00–22:00')}</span>
+    <h2>${t('יום הבחירות, בזמן אמת')}</h2>
+    <p>${t('במהלך היום: שיעור ההצבעה הרשמי של ועדת הבחירות, מול אותה שעה בבחירות הקודמות, ולראשונה גם לפי קלפי. מ-22:00: ספירת הקולות קלפי אחר קלפי, ותחזית לסיום הספירה שמשווה כל יישוב שנספר לתוצאה שלו ב-2022. התחזית אינה תוצאה רשמית.')}</p>
+    ${closed ? `<p class="lv-jump"><a href="#lv-day" data-jump="lv-day">${t('לשיעור ההצבעה במהלך היום ולחברה הערבית ↓')}</a></p>` : ''}
   </div></div>
   <p class="lv-notes" id="lv-notes" hidden></p>
   ${closed ? night + dayMarkup() : dayMarkup() + night}`;
@@ -171,7 +171,7 @@ async function renderLive() {
     play.addEventListener('click', () => {
       if (S.livePlay) { stopPlay(); return; }
       if (S.liveIdx >= R0.frames.length - 1) S.liveIdx = 0;
-      play.textContent = '❚❚ עצירה'; play.setAttribute('aria-label', 'עצירה');
+      play.textContent = t('❚❚ עצירה'); play.setAttribute('aria-label', t('עצירה'));
       S.livePlay = setInterval(() => {
         S.liveIdx = Math.min(R0.frames.length - 1, S.liveIdx + 1); step.value = S.liveIdx; drawLiveFrame();
         if (S.liveIdx >= R0.frames.length - 1) stopPlay();
@@ -202,7 +202,7 @@ async function liveTick() {
 }
 function stopPlay() {
   clearInterval(S.livePlay); S.livePlay = null;
-  const b = $('#lv-play'); if (b) { b.textContent = '▶ הפעלה'; b.setAttribute('aria-label', 'הפעלה'); }
+  const b = $('#lv-play'); if (b) { b.textContent = t('▶ הפעלה'); b.setAttribute('aria-label', t('הפעלה')); }
 }
 function liveFrame() { const L = S.live; return L.mode === 'demo' ? L.replays[S.replayKey].frames[S.liveIdx] : L.frame; }
 // The Arab-society section of the day (arab_day.js) draws into #lv-arab after every render and refresh tick,
@@ -217,7 +217,7 @@ function updatedLine(kind) {
   // results.updated_he: when the CEC file last changed; turnout.updated_he: the pass that published the figure
   const st = S.liveStatus || {}, src = kind === 'results' ? (S.live || {}) : (S.liveTurnout || {});
   const data = withDate(src.updated_he, src.updated_at), chk = withDate(st.updated_he, st.updated_at);
-  return `עודכן ${data || '—'}${chk && chk !== data ? ` · נבדק ${chk}` : ''}`;
+  return t('עודכן {d}', { d: data || '—' }) + (chk && chk !== data ? t(' · נבדק {c}', { c: chk }) : '');
 }
 // 'HH:MM' from the feed, with the date when the ISO time is not today in Israel ('01:56 (28.10)'); the feed's own
 // he_time already adds one when it wrote the file on another day
@@ -235,37 +235,37 @@ function withDate(he, iso) {
 function liveChip(iso, neutral, id = '') {
   const age = (Date.now() - Date.parse(iso || '')) / 36e5;
   const quiet = ilStamp(ilNow()) >= ELECTION_DAY[1] && !(age <= 2);
-  return `<span class="live-chip ${quiet ? 'demo' : 'on'}"${id ? ` id="${id}"` : ''}>${quiet ? neutral : 'חי'}</span>`;
+  return `<span class="live-chip ${quiet ? 'demo' : 'on'}"${id ? ` id="${id}"` : ''}>${quiet ? neutral : t('חי')}</span>`;
 }
 // The feed publishes into main at most every publish_every_min (8) minutes in branch mode (ARCH_V3), so the page
 // changes every few minutes; with the Actions path a change reaches it within a minute or two.
 function cadence() {
   const st = S.liveStatus || {};
   const fewMin = st.publish_mode ? st.publish_mode !== 'actions' : !(+st.heartbeat_s > 0 && +st.heartbeat_s <= 300);
-  return fewMin ? 'הדף מתעדכן כל כמה דקות' : 'הדף בודק עדכון כל דקה';
+  return fewMin ? t('הדף מתעדכן כל כמה דקות') : t('הדף בודק עדכון כל דקה');
 }
 function feedNotes() {
   // quiet notes above the day bar for readers: a lost connection, a feed that stopped, the CEC file not there yet.
   // The fetcher's own diagnostics (probe codes, raw errors) only with '#live-ops' in the address (PAGE-5).
   const st = S.liveStatus || {}, out = [], errs = (st.errors || []).map(String);
   const age = st.updated_at ? Math.round((Date.now() - Date.parse(st.updated_at)) / 60000) : null;
-  const ago = m => m > 2880 ? `${fmt(Math.round(m / 1440))} ימים` : m > 120 ? `${fmt(Math.round(m / 60))} שעות` : `${fmt(m)} דקות`;
+  const ago = m => m > 2880 ? t('{n} ימים', { n: fmt(Math.round(m / 1440)) }) : m > 120 ? t('{n} שעות', { n: fmt(Math.round(m / 60)) }) : t('{n} דקות', { n: fmt(m) });
   // status.json is re-stamped every heartbeat_s (480 s in branch mode, where it is also published only that often)
   // and a Pages build adds a few minutes, so a feed counts as stopped after two missed heartbeats (PAGE-1)
   const beat = (+st.heartbeat_s > 0 ? +st.heartbeat_s : 300) / 60;
-  if (S.liveConn) out.push(`<span class="lv-warn">אין חיבור לעדכונים מאז ${hhmm(S.liveConn.since)}${S.liveStatus ? '; מוצגים הנתונים האחרונים שהתקבלו' : ''}.</span>`);
-  else if (inElectionWindow() && age != null && age > 2 * beat + 3) out.push(`<span class="lv-warn">העדכון האחרון מהמערכת התקבל ב-${esc(st.updated_he || '')} (לפני ${ago(age)}).</span>`);
+  if (S.liveConn) out.push(`<span class="lv-warn">${t(S.liveStatus ? 'אין חיבור לעדכונים מאז {h}; מוצגים הנתונים האחרונים שהתקבלו.' : 'אין חיבור לעדכונים מאז {h}.', { h: hhmm(S.liveConn.since) })}</span>`);
+  else if (inElectionWindow() && age != null && age > 2 * beat + 3) out.push(`<span class="lv-warn">${t('העדכון האחרון מהמערכת התקבל ב-{h} (לפני {ago}).', { h: esc(st.updated_he || ''), ago: ago(age) })}</span>`);
   const resErr = errs.find(e => /^results:/.test(e));
   if (pollsClosed() && st.results_state === 'waiting' && resErr) {
     // only a 404 says the CEC has not published; a 403 is usually the CEC's firewall refusing GitHub's runners,
     // and a network error says nothing about the file, so those get a neutral line
-    out.push(S.live && S.live.mode === 'live' ? 'הבדיקה האחרונה של קובץ ועדת הבחירות לא הצליחה; מוצגים הנתונים האחרונים שהתקבלו.'
-      : /\b404\b/.test(resErr) ? 'קובץ התוצאות של ועדת הבחירות עדיין לא פורסם.'
-      : /HTTP|URLError|[Tt]imeout|timed out|Connection|SSL|socket|\b[45]\d\d\b/.test(resErr) ? 'התוצאות הראשונות של ועדת הבחירות עדיין לא הגיעו לדף.'
-      : 'קובץ התוצאות של ועדת הבחירות עדיין ריק או שאי אפשר לקרוא אותו; הספירה תוצג עם הקובץ התקין הראשון.');
+    out.push(S.live && S.live.mode === 'live' ? t('הבדיקה האחרונה של קובץ ועדת הבחירות לא הצליחה; מוצגים הנתונים האחרונים שהתקבלו.')
+      : /\b404\b/.test(resErr) ? t('קובץ התוצאות של ועדת הבחירות עדיין לא פורסם.')
+      : /HTTP|URLError|[Tt]imeout|timed out|Connection|SSL|socket|\b[45]\d\d\b/.test(resErr) ? t('התוצאות הראשונות של ועדת הבחירות עדיין לא הגיעו לדף.')
+      : t('קובץ התוצאות של ועדת הבחירות עדיין ריק או שאי אפשר לקרוא אותו; הספירה תוצג עם הקובץ התקין הראשון.'));
   }
   if (st.pages_source === 'legacy') out.push(S.ops ? '<span class="lv-ops">pages_source=legacy בלי publish_mode=branch: הפיד מפרסם לענף live-data, והאתר מוגש מהענף main; הנתונים החיים לא יגיעו לדף.</span>'
-    : 'ייתכן שהנתונים כאן אינם העדכניים: הגדרת הפרסום של האתר אינה תואמת את הפיד.');
+    : t('ייתכן שהנתונים כאן אינם העדכניים: הגדרת הפרסום של האתר אינה תואמת את הפיד.'));
   if (S.ops) {
     const T = S.liveTurnout || {}, ops = [`publish_mode=${esc(st.publish_mode || '—')}${st.pages_source ? `, pages_source=${esc(st.pages_source)}` : ''}, heartbeat_s=${esc(st.heartbeat_s ?? '—')}, results_state=${esc(st.results_state || '—')}, נבדק ${esc(st.checked_he || st.updated_he || '—')}${st.data_he ? `, נתונים ${esc(st.data_he)}` : ''}`];
     if (st.results_probe && st.results_probe.http != null) ops.push(`בדיקת קובץ התוצאות באתר הוועדה: HTTP ${esc(st.results_probe.http)} ב-${esc(st.results_probe.at_he || '')}`);
@@ -280,13 +280,13 @@ function refreshBars() {
   if (u1) u1.textContent = updatedLine('results');
   if (u2) u2.textContent = updatedLine('turnout');
   const c1 = $('#lv-chip'), c2 = $('#dy-chip');
-  if (c1 && S.live) c1.outerHTML = liveChip(S.live.updated_at, 'הספירה', 'lv-chip');
-  if (c2 && S.liveTurnout) c2.outerHTML = liveChip(S.liveTurnout.updated_at, 'יום הבחירות', 'dy-chip');
+  if (c1 && S.live) c1.outerHTML = liveChip(S.live.updated_at, t('הספירה'), 'lv-chip');
+  if (c2 && S.liveTurnout) c2.outerHTML = liveChip(S.liveTurnout.updated_at, t('יום הבחירות'), 'dy-chip');
   // the header's register size: the official figure the operator entered (turnout.json eligible), once it is not the
   // pre-election placeholder; a drill's figure is the 2022 file's and stays out of the header
   const el = $('#cd-elig'), elig = +(S.liveTurnout || {}).eligible;
   if (el && elig > 5e6 && elig !== ELIGIBLE_2026 && !(S.liveTurnout.drill || (S.liveStatus || {}).drill)) {
-    el.textContent = `כ-${(elig / 1e6).toFixed(2)} מיליון בעלי זכות בחירה · 38 רשימות`;
+    el.textContent = t('כ-{m} מיליון בעלי זכות בחירה · 38 רשימות', { m: (elig / 1e6).toFixed(2) });
   }
   $$('#tab-live .lv-cad').forEach(e => { e.textContent = cadence(); });
   if (n) { const h = feedNotes(); n.hidden = !h; n.innerHTML = h; }
@@ -307,9 +307,9 @@ function drawLiveFrame() {
   const F = F0.paused ? countedOnly(F0) : F0;
   const when = $('#lv-when'); if (when) when.textContent = F.label || '';
   const h = $('#lv-seats-h'), sub = $('#lv-seats-sub');
-  if (h) h.textContent = F.paused ? 'המנדטים לפי הקולות שנספרו' : 'תחזית המנדטים לסיום הספירה';
-  if (sub) sub.textContent = F.paused ? 'התחזית מושהית. הפס: המנדטים לפי הקולות שנספרו עד עכשיו בלבד, בלי אומדן למה שטרם נספר.'
-    : `הפס: המנדטים הצפויים; הקו הדק: הטווח שהמודל מסמן כ-80%; המעוין: המנדטים לפי הקולות שנספרו עד עכשיו בלבד. ${coverageNote(F.counted.share)}`;
+  if (h) h.textContent = F.paused ? t('המנדטים לפי הקולות שנספרו') : t('תחזית המנדטים לסיום הספירה');
+  if (sub) sub.textContent = F.paused ? t('התחזית מושהית. הפס: המנדטים לפי הקולות שנספרו עד עכשיו בלבד, בלי אומדן למה שטרם נספר.')
+    : `${t('הפס: המנדטים הצפויים; הקו הדק: הטווח שהמודל מסמן כ-80%; המעוין: המנדטים לפי הקולות שנספרו עד עכשיו בלבד.')} ${coverageNote(F.counted.share)}`;
   drawLiveProgress($('#lv-progress-card'), F);
   drawLiveSeats($('#lv-seats'), F);
   drawLiveBlocs($('#lv-blocs'), F);
@@ -328,10 +328,10 @@ function coverageAt(share) {
 }
 function coverageNote(share) {
   const c = coverageAt(share), parts = [];
-  if (c.K25) parts.push(`ב-${pct(100 * c.K25.cover80, 0)} מהרשימות (2022, סדר מדומה)`);
-  if (c.K24) parts.push(`ב-${pct(100 * c.K24.cover80, 0)} (2021, סדר מדומה)`);
-  if (c.real) parts.push(`ב-${pct(100 * c.real.cover80, 0)} (2021, סדר הספירה האמיתי)`);
-  return parts.length ? `בבדיקות לאחור, בשלב דומה של הספירה, הטווח כלל את התוצאה הסופית ${heList(parts)}.` : '';
+  if (c.K25) parts.push(t('ב-{p} מהרשימות (2022, סדר מדומה)', { p: pct(100 * c.K25.cover80, 0) }));
+  if (c.K24) parts.push(t('ב-{p} (2021, סדר מדומה)', { p: pct(100 * c.K24.cover80, 0) }));
+  if (c.real) parts.push(t('ב-{p} (2021, סדר הספירה האמיתי)', { p: pct(100 * c.real.cover80, 0) }));
+  return parts.length ? t('בבדיקות לאחור, בשלב דומה של הספירה, הטווח כלל את התוצאה הסופית {l}.', { l: heList(parts) }) : '';
 }
 // the coalition band along the real 2021 order: share of the night's frames whose band held the final bloc
 function realBlocCover() {
@@ -364,26 +364,26 @@ function exitTable(E, F, past = false) {
     lists = lists.filter(l => E.polls.some(p => seatOf(p, l) > 0)).sort((a, b) => d3.mean(E.polls, p => seatOf(p, b)) - d3.mean(E.polls, p => seatOf(p, a)));
   }
   const final = F && (F.final || E.final) || null;
-  const col = F ? (F.paused ? 'לפי מה שנספר' : 'תחזית עכשיו') : null;
+  const col = F ? (F.paused ? t('לפי מה שנספר') : t('תחזית עכשיו')) : null;
   // §16ה(ב)–(ג) disclosure of every 2026 poll (past: the replay's 2021/2022 polls, which need none): every item the
   // law lists is shown, and one the channel did not publish (empty, null or typed as 'לא פורסם') says so (PAGE-4)
   const num = v => typeof v === 'number' ? fmt(v) : esc(v);
   const given = v => !(v == null || String(v).trim() === '' || /^לא פורס[םמ]/.test(String(v).trim()));
   const item = (v, yes, no) => given(v) ? yes(v) : no;
   const meta = past ? [] : E.polls.map(p => `${esc(p.outlet)}: ${[
-    item(p.commissioner, v => `בהזמנת ${esc(v)}`, 'המזמין לא פורסם'),
-    item(p.pollster, v => `מכון ${esc(v)}`, 'המכון לא פורסם'),
-    item([p.date, p.time].filter(given).join(' '), v => `מועד ${esc(v)}`, 'המועד לא פורסם'),
-    item(p.population, v => `אוכלוסייה: ${esc(v)}`, 'האוכלוסייה לא פורסמה'),
-    item(p.n_invited, v => `${num(v)} פונים`, 'מספר הפונים לא פורסם'),
-    item(p.n, v => `${num(v)} משיבים`, 'מספר המשיבים לא פורסם'),
+    item(p.commissioner, v => t('בהזמנת {v}', { v: esc(v) }), t('המזמין לא פורסם')),
+    item(p.pollster, v => t('מכון {v}', { v: esc(v) }), t('המכון לא פורסם')),
+    item([p.date, p.time].filter(given).join(' '), v => t('מועד {v}', { v: esc(v) }), t('המועד לא פורסם')),
+    item(p.population, v => t('אוכלוסייה: {v}', { v: esc(v) }), t('האוכלוסייה לא פורסמה')),
+    item(p.n_invited, v => t('{n} פונים', { n: num(v) }), t('מספר הפונים לא פורסם')),
+    item(p.n, v => t('{n} משיבים', { n: num(v) }), t('מספר המשיבים לא פורסם')),
     // a bare number is a percentage, as the channels state it ('±3.5%')
-    item(p.moe, v => `טעות דגימה ±${esc(String(v).trim().replace(/^[±+]/, ''))}${/^[±+]?\d+(\.\d+)?$/.test(String(v).trim()) ? '%' : ''}`, 'טעות הדגימה לא פורסמה'),
-    item(p.questions, v => `נוסח השאלות: ${esc(v)}`, 'נוסח השאלות לא פורסם'),
-    p.revised ? `עודכן ב-${esc(p.revised)}` : null].filter(Boolean).join(', ')}`);
+    item(p.moe, v => t('טעות דגימה ±{v}', { v: esc(String(v).trim().replace(/^[±+]/, '')) + (/^[±+]?\d+(\.\d+)?$/.test(String(v).trim()) ? '%' : '') }), t('טעות הדגימה לא פורסמה')),
+    item(p.questions, v => t('נוסח השאלות: {v}', { v: esc(v) }), t('נוסח השאלות לא פורסם')),
+    p.revised ? t('עודכן ב-{v}', { v: esc(p.revised) }) : null].filter(Boolean).join(AR_ON ? '، ' : ', ')}`);
   // the projection and the result sit next to the list name, so at phone width the channels scroll under the
   // sticky name column and the projection stays on screen (PAGE-2)
-  return `<div class="tbl-wrap lv-scroll"><table class="t sticky1"><thead><tr><th>רשימה</th>${col ? `<th class="n">${col}</th>` : ''}${final ? '<th class="n">תוצאה</th>' : ''}${E.polls.map(p => `<th class="n">${esc(p.outlet)}</th>`).join('')}</tr></thead><tbody>${
+  return `<div class="tbl-wrap lv-scroll"><table class="t sticky1"><thead><tr><th>${t('רשימה')}</th>${col ? `<th class="n">${col}</th>` : ''}${final ? `<th class="n">${t('תוצאה')}</th>` : ''}${E.polls.map(p => `<th class="n">${esc(p.outlet)}</th>`).join('')}</tr></thead><tbody>${
     lists.map(l => `<tr><td>${slip(l.letters, l.name, liveColor(l))}</td>${col ? `<td class="n"><b>${l.seats}</b></td>` : ''}${final ? `<td class="n">${final[l.id] ?? 0}</td>` : ''}${E.polls.map(p => `<td class="n">${seatOf(p, l)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>
     ${E.note ? `<p class="foot">${esc(E.note)}</p>` : ''}${meta.length ? `<p class="foot">${meta.join(' · ')}</p>` : ''}`;
 }
@@ -407,37 +407,37 @@ function drawLiveProgress(el, F) {
   // 'complete' comes only from the feed (env_status, when the operator entered the official envelope total);
   // a replay frame is complete when it carries the official result
   const complete = c.env_status ? c.env_status === 'complete' : !!(F.final && c.envelopes);
-  const base = demo ? 'הבחירות הקודמות' : '2022';
+  const base = demo ? t('הבחירות הקודמות') : '2022';
   // env_override: the envelope total the operator entered from the CEC's own statement, not an estimate from 2022
   const envs = c.env_override
-    ? `${fmt(c.env_valid)} קולות במעטפות הכפולות (לפי הודעת ועדת הבחירות: כ-${fmt(c.env_override)}; הספירה טרם הסתיימה)`
-    : `${fmt(c.env_valid)} קולות במעטפות הכפולות (הצפי לפי ${base}: כ-${fmt(c.env_expected)}; המספר הסופי טרם פורסם)`;
-  const done = complete ? 'הספירה הושלמה, כולל המעטפות הכפולות'
-    : c.envelopes && c.share >= 0.995 ? `הקלפיות נספרו; נספרו ${envs}`
-    : c.envelopes ? `נספרו קלפיות של ${pct(100 * c.share, 0)} מבעלי זכות הבחירה, וגם ${envs}`
-    : c.share >= 0.995 ? `כל הקלפיות נספרו; המעטפות הכפולות (${c.env_override ? `כ-${fmt(c.env_override)} קולות לפי הודעת ועדת הבחירות` : `כ-${fmt(c.env_expected)} קולות לפי ${base}`}) עוד לא`
-    : `נספרו קלפיות של ${pct(100 * c.share, 0)} מבעלי זכות הבחירה`;
+    ? t('{n} קולות במעטפות הכפולות (לפי הודעת ועדת הבחירות: כ-{o}; הספירה טרם הסתיימה)', { n: fmt(c.env_valid), o: fmt(c.env_override) })
+    : t('{n} קולות במעטפות הכפולות (הצפי לפי {b}: כ-{e}; המספר הסופי טרם פורסם)', { n: fmt(c.env_valid), b: base, e: fmt(c.env_expected) });
+  const done = complete ? t('הספירה הושלמה, כולל המעטפות הכפולות')
+    : c.envelopes && c.share >= 0.995 ? t('הקלפיות נספרו; נספרו {e}', { e: envs })
+    : c.envelopes ? t('נספרו קלפיות של {p} מבעלי זכות הבחירה, וגם {e}', { p: pct(100 * c.share, 0), e: envs })
+    : c.share >= 0.995 ? t('כל הקלפיות נספרו; המעטפות הכפולות ({x}) עוד לא', { x: c.env_override ? t('כ-{n} קולות לפי הודעת ועדת הבחירות', { n: fmt(c.env_override) }) : t('כ-{n} קולות לפי {b}', { n: fmt(c.env_expected), b: base }) })
+    : t('נספרו קלפיות של {p} מבעלי זכות הבחירה', { p: pct(100 * c.share, 0) });
   const sectors = SECTOR_ORDER.filter(k => F.sectors[k]);
   el.innerHTML = `<div class="lv-prog">
     <div class="lv-big"><span class="v num">${pct(100 * c.share, 0)}</span><span class="l">${esc(done)}</span></div>
     <div class="kv">
-      <div><b class="num">${fmt(c.boxes)}</b><span>קלפיות נספרו</span></div>
-      <div><b class="num">${fmt(c.valid)}</b><span>קולות כשרים נספרו</span></div>
-      <div><b class="num">${pct(100 * c.turnout)}</b><span>הצבעה בקלפיות שנספרו</span></div>
+      <div><b class="num">${fmt(c.boxes)}</b><span>${t('קלפיות נספרו')}</span></div>
+      <div><b class="num">${fmt(c.valid)}</b><span>${t('קולות כשרים נספרו')}</span></div>
+      <div><b class="num">${pct(100 * c.turnout)}</b><span>${t('הצבעה בקלפיות שנספרו')}</span></div>
     </div></div>
-    <h3 style="margin-top:14px">איפה עוד לא נספר</h3>
-    <p class="sub">כל פס הוא קבוצת יישובים ברוחב חלקה בבעלי זכות הבחירה; החלק הכהה כבר נספר, מול הפנקס של הבחירות הקודמות.</p>
+    <h3 style="margin-top:14px">${t('איפה עוד לא נספר')}</h3>
+    <p class="sub">${t('כל פס הוא קבוצת יישובים ברוחב חלקה בבעלי זכות הבחירה; החלק הכהה כבר נספר, מול הפנקס של הבחירות הקודמות.')}</p>
     <div class="lv-remain">${sectors.map(k => {
       const s = F.sectors[k], w = Math.min(100, 100 * s.counted);   // a register that grew faster than the national rate can pass 100%
-      return `<div class="lv-rem-row"><span class="lv-rem-name">${SECTOR_NAME[k]}</span><span class="lv-rem-bar"${s.counted > 1 ? ' title="נספרו יותר בעלי זכות מבפנקס הקודם: הפנקס גדל"' : ''}><i style="width:${w.toFixed(1)}%"></i></span><span class="lv-rem-v num">${pct(w, 0)}</span></div>`;
+      return `<div class="lv-rem-row"><span class="lv-rem-name">${SECTOR_NAME[k]}</span><span class="lv-rem-bar"${s.counted > 1 ? ` title="${t('נספרו יותר בעלי זכות מבפנקס הקודם: הפנקס גדל')}"` : ''}><i style="width:${w.toFixed(1)}%"></i></span><span class="lv-rem-v num">${pct(w, 0)}</span></div>`;
     }).join('')}</div>
-    ${F.batch ? `<p class="lv-batch">העדכון האחרון הוסיף ${fmt(F.batch.stations)} קלפיות${(() => {
+    ${F.batch ? `<p class="lv-batch">${t('העדכון האחרון הוסיף {n} קלפיות{top}. בקלפיות האלה: {b}.', { n: fmt(F.batch.stations), c: F.batch.stations, top: (() => {
       const top = Object.entries(F.batch.by_sector).sort((a, b) => b[1] - a[1])[0];
-      return top ? `, ${pct(100 * top[1] / F.batch.stations, 0)} מהן ב${SECTOR_NAME[top[0]] || top[0]}` : '';
-    })()}. בקלפיות האלה: ${['coal', 'opp', 'arab'].filter(b => F.batch.blocs[b] != null).map(b => `${BLOC_NAME[b]} ${pct(100 * F.batch.blocs[b], 0)}`).join(' · ')}.</p>` : ''}
-    ${F.paused ? `<p class="lv-paused">${ICON_NO} התחזית מושהית: ${esc(typeof F.paused === 'string' ? F.paused : '')} מוצגים רק הקולות שנספרו.</p>` : ''}
-    ${F.final ? `<p class="lv-final">${ICON_OK} התוצאה הרשמית (כולל המעטפות): ${F.lists.filter(l => F.final[l.id] > 0).map(l => `${esc(l.name)} ${F.final[l.id]}`).join(' · ')}</p>` : ''}
-    ${demo ? '' : '<p class="foot">המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים) נספרות אחרי הקלפיות הרגילות; התחזית כוללת אומדן שלהן.</p>'}`;
+      return top ? t(', {p} מהן ב{s}', { p: pct(100 * top[1] / F.batch.stations, 0), s: SECTOR_NAME[top[0]] || top[0] }) : '';
+    })(), b: ['coal', 'opp', 'arab'].filter(b => F.batch.blocs[b] != null).map(b => `${BLOC_NAME[b]} ${pct(100 * F.batch.blocs[b], 0)}`).join(' · ') })}</p>` : ''}
+    ${F.paused ? `<p class="lv-paused">${ICON_NO} ${t('התחזית מושהית: {why} מוצגים רק הקולות שנספרו.', { why: esc(typeof F.paused === 'string' ? F.paused : '') })}</p>` : ''}
+    ${F.final ? `<p class="lv-final">${ICON_OK} ${t('התוצאה הרשמית (כולל המעטפות): {l}', { l: F.lists.filter(l => F.final[l.id] > 0).map(l => `${esc(l.name)} ${F.final[l.id]}`).join(' · ') })}</p>` : ''}
+    ${demo ? '' : `<p class="foot">${t('המעטפות הכפולות (חיילים, נציגויות, אסירים ומאושפזים) נספרות אחרי הקלפיות הרגילות; התחזית כוללת אומדן שלהן.')}</p>`}`;
 }
 
 function liveColor(l) { return isDark() ? l.dark : l.color; }
@@ -447,7 +447,7 @@ function drawLiveSeats(el, F) {
     .sort((a, b) => b.seats - a.seats || b.pct - a.pct);
   const W = widthOf(el), nar = W < 560, rowH = 30, M = { t: 20, r: nar ? 150 : 170, b: 18, l: 34 };
   const H = M.t + M.b + rowH * lists.length, share = F.counted.share;
-  const svg = svgEl(el, W, H, F.paused ? 'המנדטים לפי הקולות שנספרו' : 'תחזית המנדטים לסיום הספירה');
+  const svg = svgEl(el, W, H, F.paused ? t('המנדטים לפי הקולות שנספרו') : t('תחזית המנדטים לסיום הספירה'));
   const maxV = Math.max(10, d3.max(lists, l => Math.max(l.hi, l.seats_counted)) + 1);
   const x = d3.scaleLinear().domain([0, maxV]).range([W - M.r, M.l]);
   d3.range(0, maxV + 1, maxV > 30 ? 10 : 5).forEach(v => {
@@ -465,13 +465,13 @@ function drawLiveSeats(el, F) {
     // RTL text: anchor 'start' puts the right edge at x, so the number sits left of the longest mark
     svg.append('text').attr('class', 'lbl-strong').attr('x', x(Math.max(l.hi, l.seats, l.seats_counted)) - 9).attr('y', cy).attr('dy', '.35em').attr('text-anchor', 'start').text(l.seats);
     svg.append('rect').attr('x', 0).attr('y', y).attr('width', W).attr('height', rowH).attr('fill', 'transparent')
-      .call(sel => bindTT(sel, () => `<h4>${esc(l.name)}</h4>${ttRows(F.paused ? [['לפי מה שנספר', l.seats_counted], ['אחוז בקולות שנספרו', pct(l.pct, 2)]] : [
-        ['תחזית', `${l.seats} (טווח ${l.lo}–${l.hi})`], ['לפי מה שנספר', l.seats_counted],
-        ['אחוז בקולות שנספרו', pct(l.pct, 2)], ['אחוז צפוי', pct(l.pct_proj != null ? l.pct_proj : l.pct, 2)],
-        ...(l.p_pass != null && l.p_pass < 0.995 ? [['סיכוי לעבור את אחוז החסימה', pPass(l.p_pass, share)]] : [])])}`));
+      .call(sel => bindTT(sel, () => `<h4>${esc(l.name)}</h4>${ttRows(F.paused ? [[t('לפי מה שנספר'), l.seats_counted], [t('אחוז בקולות שנספרו'), pct(l.pct, 2)]] : [
+        [t('תחזית'), t('{s} (טווח {lo}–{hi})', { s: l.seats, lo: l.lo, hi: l.hi })], [t('לפי מה שנספר'), l.seats_counted],
+        [t('אחוז בקולות שנספרו'), pct(l.pct, 2)], [t('אחוז צפוי'), pct(l.pct_proj != null ? l.pct_proj : l.pct, 2)],
+        ...(l.p_pass != null && l.p_pass < 0.995 ? [[t('סיכוי לעבור את אחוז החסימה'), pPass(l.p_pass, share)]] : [])])}`));
   });
   // the same numbers as a table, for screen readers and for copying
-  el.insertAdjacentHTML('beforeend', `<details class="lv-table"><summary>הנתונים בטבלה</summary><div class="tbl-wrap"><table class="t"><thead><tr><th>רשימה</th><th class="n">${F.paused ? 'לפי הספירה' : 'תחזית'}</th>${F.paused ? '' : '<th class="n">טווח</th><th class="n">לפי הספירה</th><th class="n">אחוז צפוי</th><th class="n">סיכוי לעבור</th>'}</tr></thead><tbody>${
+  el.insertAdjacentHTML('beforeend', `<details class="lv-table"><summary>${t('הנתונים בטבלה')}</summary><div class="tbl-wrap"><table class="t"><thead><tr><th>${t('רשימה')}</th><th class="n">${F.paused ? t('לפי הספירה') : t('תחזית')}</th>${F.paused ? '' : `<th class="n">${t('טווח')}</th><th class="n">${t('לפי הספירה')}</th><th class="n">${t('אחוז צפוי')}</th><th class="n">${t('סיכוי לעבור')}</th>`}</tr></thead><tbody>${
     lists.map(l => `<tr><td>${esc(l.name)}</td><td class="n"><b>${l.seats}</b></td>${F.paused ? '' : `<td class="n"><span class="num">${l.lo}–${l.hi}</span></td><td class="n">${l.seats_counted}</td><td class="n">${pct(l.pct_proj != null ? l.pct_proj : l.pct, 2)}</td><td class="n"><span class="num">${pPass(l.p_pass, share)}</span></td>`}</tr>`).join('')}</tbody></table></div></details>`);
 }
 
@@ -494,41 +494,41 @@ function drawLiveBlocs(el, F) {
   const same = F.lists.every(l => !(l.seats > 0 || l.hi > 0) || !calc(l) || calc(l) === l.bloc);
   const rows = ['coal', 'opp', 'arab'].map(b => ({ b, seats: by[b], lo: same ? F.blocs[b].lo : null, hi: same ? F.blocs[b].hi : null, p61: same ? F.blocs[b].p61 : null }));
   const c = coverageAt(share), real = realBlocCover();
-  const cov = [c.K25 && c.K25.bloc_cover80 != null ? `ב-${pct(100 * c.K25.bloc_cover80, 0)} (2022)` : null, c.K24 && c.K24.bloc_cover80 != null ? `ב-${pct(100 * c.K24.bloc_cover80, 0)} (2021)` : null].filter(Boolean);
-  const note = F.paused ? 'התחזית מושהית: הגושים לפי הקולות שנספרו בלבד.'
-    : !same ? 'השיוך במחשבון הקואליציות שונה מזה שבתחזית, ולכן מוצגים המנדטים בלי טווח וסיכוי לרוב.'
-    : cov.length ? `הטווח (80% לפי המודל) כלל את התוצאה של הגוש בבדיקות לאחור בשלב דומה ${heList(cov)}${real != null ? `, ולאורך ליל 2021 בסדר הספירה האמיתי ב-${pct(100 * real, 0)} מנקודות הבדיקה` : ''}.` : '';
+  const cov = [c.K25 && c.K25.bloc_cover80 != null ? t('ב-{p} (2022)', { p: pct(100 * c.K25.bloc_cover80, 0) }) : null, c.K24 && c.K24.bloc_cover80 != null ? t('ב-{p} (2021)', { p: pct(100 * c.K24.bloc_cover80, 0) }) : null].filter(Boolean);
+  const note = F.paused ? t('התחזית מושהית: הגושים לפי הקולות שנספרו בלבד.')
+    : !same ? t('השיוך במחשבון הקואליציות שונה מזה שבתחזית, ולכן מוצגים המנדטים בלי טווח וסיכוי לרוב.')
+    : cov.length ? t('הטווח (80% לפי המודל) כלל את התוצאה של הגוש בבדיקות לאחור בשלב דומה {l}{r}.', { l: heList(cov), r: real != null ? t(', ולאורך ליל 2021 בסדר הספירה האמיתי ב-{p} מנקודות הבדיקה', { p: pct(100 * real, 0) }) : '' }) : '';
   el.innerHTML = rows.map(r => `<div class="lv-bloc">
       <div class="lv-bloc-top"><span><i class="swatch" style="background:var(${blocVar(r.b)})"></i>${BLOC_NAME[r.b]}</span>
       <span><b class="num">${r.seats}</b>${r.lo != null && r.hi > r.lo ? ` <span class="muted num">(${r.lo}–${r.hi})</span>` : ''}</span></div>
       <div class="lv-bloc-bar"><i style="width:${(100 * r.seats / 120).toFixed(2)}%;background:var(${blocVar(r.b)})"></i><b style="right:${(100 * 61 / 120).toFixed(2)}%"></b></div>
-      ${r.b !== 'arab' && r.p61 != null ? `<div class="muted lv-p61">סיכוי לרוב לבד: <b class="num">${pPass(r.p61, share)}</b></div>` : ''}
-    </div>`).join('') + `<p class="foot">הקו האנכי: 61 מנדטים. ${note}</p>`;
+      ${r.b !== 'arab' && r.p61 != null ? `<div class="muted lv-p61">${t('סיכוי לרוב לבד:')} <b class="num">${pPass(r.p61, share)}</b></div>` : ''}
+    </div>`).join('') + `<p class="foot">${t('הקו האנכי: 61 מנדטים.')} ${note}</p>`;
 }
 
 function drawLiveThreshold(el, F) {
   const near = F.lists.filter(l => (l.p_pass != null && l.p_pass > 0.01 && l.p_pass < 0.99) || (l.pct > 1.5 && l.pct < 5)).sort((a, b) => b.pct - a.pct);
-  if (!near.length) { el.innerHTML = '<p class="empty">אין רשימות קרובות לאחוז החסימה.</p>'; return; }
+  if (!near.length) { el.innerHTML = `<p class="empty">${t('אין רשימות קרובות לאחוז החסימה.')}</p>`; return; }
   const thr = F.counted.valid_proj ? 0.0325 * F.counted.valid_proj : null;
   const paused = !!F.paused, share = F.counted.share;
   // the chance sits next to the name so it stays on screen at phone width (the table scrolls)
-  el.innerHTML = `<table class="t wrap"><thead><tr><th>רשימה</th>${paused ? '' : '<th class="n">סיכוי לעבור</th>'}<th class="n">בקולות שנספרו</th>${paused ? '' : '<th class="n hide-sm">צפי, כולל מעטפות</th><th class="n hide-sm">פער מהסף (קולות)</th>'}</tr></thead><tbody>${near.map(l => {
+  el.innerHTML = `<table class="t wrap"><thead><tr><th>${t('רשימה')}</th>${paused ? '' : `<th class="n">${t('סיכוי לעבור')}</th>`}<th class="n">${t('בקולות שנספרו')}</th>${paused ? '' : `<th class="n hide-sm">${t('צפי, כולל מעטפות')}</th><th class="n hide-sm">${t('פער מהסף (קולות)')}</th>`}</tr></thead><tbody>${near.map(l => {
     const p = l.p_pass == null ? (l.seats > 0 ? 1 : 0) : l.p_pass;
-    const st = p > 0.95 ? ['עוברת', 'ok'] : p > 0.6 ? ['<span class="hide-sm">כנראה </span>עוברת', 'ok'] : p > 0.4 ? ['על הגדר', 'no'] : ['<span class="hide-sm">כנראה </span>בחוץ', 'no'];
+    const st = p > 0.95 ? [t('עוברת'), 'ok'] : p > 0.6 ? [t('<span class="hide-sm">כנראה </span>עוברת'), 'ok'] : p > 0.4 ? [t('על הגדר'), 'no'] : [t('<span class="hide-sm">כנראה </span>בחוץ'), 'no'];
     const gap = thr && l.votes_proj != null ? l.votes_proj - thr : null;
     return `<tr><td>${slip(l.letters, l.name, liveColor(l))}</td>${paused ? '' : `<td class="n"><span class="status ${st[1]}">${st[1] === 'ok' ? ICON_OK : ICON_NO}<span class="num">${pPass(p, share)}</span></span></td>`}<td class="n">${pct(l.pct, 2)}</td>${paused ? '' : `<td class="n hide-sm">${l.pct_proj != null ? pct(l.pct_proj, 2) : '—'}</td><td class="n hide-sm" style="direction:ltr">${gap == null ? '—' : (gap >= 0 ? '+' : '−') + fmt(Math.abs(gap))}</td>`}</tr>`;
   }).join('')}</tbody></table>
-  <p class="foot">ברשימות הערביות חלקן במעטפות הכפולות נמוך בהרבה מבקלפיות (ב-2022 כמחצית או פחות), ולכן הסף "האמיתי" שלהן בספירת הקלפיות הרגילות גבוה מעט מ-3.25% (ב-2021–2022 כ-3.4%).</p>`;
+  <p class="foot">${t('ברשימות הערביות חלקן במעטפות הכפולות נמוך בהרבה מבקלפיות (ב-2022 כמחצית או פחות), ולכן הסף "האמיתי" שלהן בספירת הקלפיות הרגילות גבוה מעט מ-3.25% (ב-2021–2022 כ-3.4%).')}</p>`;
 }
 
 function drawLiveTurnout(el, F) {
   const rows = SECTOR_ORDER.filter(k => F.sectors[k] && F.sectors[k].turnout != null).map(k => ({ k, ...F.sectors[k] }));
-  if (!rows.length) { el.innerHTML = '<p class="empty">עוד לא נספרו קלפיות.</p>'; return; }
+  if (!rows.length) { el.innerHTML = `<p class="empty">${t('עוד לא נספרו קלפיות.')}</p>`; return; }
   const W = widthOf(el), nar = W < 560;
   // wide: names in a column on the right; narrow: name and value on a line above each dumbbell
   const rowH = nar ? 50 : 40, M = nar ? { t: 8, r: 18, b: 22, l: 18 } : { t: 18, r: 140, b: 22, l: 96 };
   const H = M.t + M.b + rowH * rows.length;
-  const svg = svgEl(el, W, H, 'שיעור ההצבעה בקלפיות שנספרו לפי מגזר, מול הבחירות הקודמות');
+  const svg = svgEl(el, W, H, t('שיעור ההצבעה בקלפיות שנספרו לפי מגזר, מול הבחירות הקודמות'));
   const x = d3.scaleLinear().domain([30, 90]).range([M.l, W - M.r - (nar ? 0 : 70)]);
   [30, 50, 70, 90].forEach(v => {
     svg.append('line').attr('class', 'gridline').attr('x1', x(v)).attr('x2', x(v)).attr('y1', M.t).attr('y2', H - M.b);
@@ -538,11 +538,11 @@ function drawLiveTurnout(el, F) {
     const top = M.t + i * rowH, cy = nar ? top + 34 : top + rowH / 2, a = 100 * r.turnout_base, b = 100 * r.turnout, d = b - a;
     const label = `${pct(b)} (${d >= 0 ? '+' : '−'}${fmt1(Math.abs(d))})`, cnt = pct(Math.min(100, 100 * r.counted), 0);
     if (nar) {
-      svg.append('text').attr('class', 'lbl-strong').attr('x', W - 2).attr('y', top + 12).attr('text-anchor', 'start').text(`${SECTOR_NAME[r.k]} · נספרו ${cnt}`);
+      svg.append('text').attr('class', 'lbl-strong').attr('x', W - 2).attr('y', top + 12).attr('text-anchor', 'start').text(t('{s} · נספרו {p}', { s: SECTOR_NAME[r.k], p: cnt }));
       svg.append('text').attr('class', 'lbl-strong').attr('x', 2).attr('y', top + 12).attr('text-anchor', 'start').style('direction', 'ltr').text(label);   // LTR: left edge at x
     } else {
       svg.append('text').attr('class', 'lbl-strong').attr('x', W - 2).attr('y', cy - 6).attr('text-anchor', 'start').text(SECTOR_NAME[r.k]);
-      svg.append('text').attr('class', 'lbl').attr('x', W - 2).attr('y', cy + 10).attr('text-anchor', 'start').text(`נספרו ${cnt}`);
+      svg.append('text').attr('class', 'lbl').attr('x', W - 2).attr('y', cy + 10).attr('text-anchor', 'start').text(t('נספרו {p}', { p: cnt }));
     }
     svg.append('line').attr('x1', x(a)).attr('x2', x(b)).attr('y1', cy).attr('y2', cy).attr('stroke', 'var(--rule-strong)').attr('stroke-width', 3);
     svg.append('circle').attr('cx', x(a)).attr('cy', cy).attr('r', 5).attr('fill', 'var(--surface)').attr('stroke', 'var(--muted)').attr('stroke-width', 2);
@@ -554,19 +554,19 @@ function drawLiveTurnout(el, F) {
         .style('direction', 'ltr').text(label);
     }
   });
-  el.insertAdjacentHTML('beforeend', '<div class="legend"><span><i style="background:var(--muted)"></i>אותם יישובים, בחירות קודמות</span><span><i style="background:var(--ink)"></i>עכשיו</span></div>');
+  el.insertAdjacentHTML('beforeend', `<div class="legend"><span><i style="background:var(--muted)"></i>${t('אותם יישובים, בחירות קודמות')}</span><span><i style="background:var(--ink)"></i>${t('עכשיו')}</span></div>`);
 }
 
 function drawLiveAccuracy(el, F) {
   const A = S.live.accuracy || {};
   const sets = Array.isArray(A) ? { K25: A } : A;
-  const series = [['K25', '2022, סדרי ספירה מדומים', null], ['K24', '2021, סדרי ספירה מדומים', '5 4']]
+  const series = [['K25', t('2022, סדרי ספירה מדומים'), null], ['K24', t('2021, סדרי ספירה מדומים'), '5 4']]
     .filter(([k]) => sets[k]).map(([k, name, dash]) => ({ k, name, dash, pts: sets[k].filter(a => a.counted < 1) }));
   const real = (S.live.accuracy_real || []).filter(a => !a.envelopes && a.counted < 0.995);
-  if (real.length) series.push({ k: 'real', name: '2021, סדר הספירה האמיתי', dash: '1 3', real: true, pts: real.map(a => ({ ...a, counted: a.counted })) });
-  if (!series.length) { el.innerHTML = '<p class="empty">נתוני הבדיקה לאחור לא נטענו.</p>'; return; }
+  if (real.length) series.push({ k: 'real', name: t('2021, סדר הספירה האמיתי'), dash: '1 3', real: true, pts: real.map(a => ({ ...a, counted: a.counted })) });
+  if (!series.length) { el.innerHTML = `<p class="empty">${t('נתוני הבדיקה לאחור לא נטענו.')}</p>`; return; }
   const W = widthOf(el), H = 230, M = { t: 18, r: 16, b: 30, l: 34 };
-  const svg = svgEl(el, W, H, 'מנדטים שזזו בין התחזית לתוצאה בבדיקות לאחור, לפי שיעור הספירה');
+  const svg = svgEl(el, W, H, t('מנדטים שזזו בין התחזית לתוצאה בבדיקות לאחור, לפי שיעור הספירה'));
   const x = d3.scaleLinear().domain([0, 1]).range([M.l, W - M.r]);
   const y = d3.scaleLinear().domain([0, Math.max(4, d3.max(series, s => d3.max(s.pts, a => a.seat_err)) + 0.5)]).range([H - M.b, M.t]);
   y.ticks(4).forEach(v => {
@@ -579,15 +579,15 @@ function drawLiveAccuracy(el, F) {
       .attr('stroke', s.real ? 'var(--arab)' : 'var(--ink)').attr('stroke-width', s.real ? 2.5 : 2).attr('stroke-dasharray', s.real ? null : s.dash);
     svg.selectAll(null).data(s.pts).join('circle').attr('cx', a => x(a.counted)).attr('cy', a => y(a.seat_err)).attr('r', s.real ? 3 : 4)
       .attr('fill', s.dash && !s.real ? 'var(--surface)' : s.real ? 'var(--arab)' : 'var(--ink)').attr('stroke', s.real ? 'var(--arab)' : 'var(--ink)').attr('stroke-width', 1.5)
-      .call(sel => bindTT(sel, a => `<h4>${esc(s.name)} · ${a.time ? esc(a.time) + ' · ' : ''}נספרו ${pct(100 * a.counted, 0)}</h4>${ttRows([[s.real ? 'מנדטים שזזו' : 'מנדטים שזזו בממוצע', fmt1(a.seat_err)], ['טעות בגוש נתניהו', fmt1(a.bloc_err)], ['הטווח של 80% כלל את התוצאה (רשימות)', pct(100 * a.cover80, 0)], ...(a.bloc_cover80 != null ? [['הטווח של 80% כלל את התוצאה (גוש)', pct(100 * a.bloc_cover80, 0)]] : [])])}`));
+      .call(sel => bindTT(sel, a => `<h4>${esc(s.name)} · ${a.time ? esc(a.time) + ' · ' : ''}${t('נספרו {p}', { p: pct(100 * a.counted, 0) })}</h4>${ttRows([[s.real ? t('מנדטים שזזו') : t('מנדטים שזזו בממוצע'), fmt1(a.seat_err)], [t('טעות בגוש נתניהו'), fmt1(a.bloc_err)], [t('הטווח של 80% כלל את התוצאה (רשימות)'), pct(100 * a.cover80, 0)], ...(a.bloc_cover80 != null ? [[t('הטווח של 80% כלל את התוצאה (גוש)'), pct(100 * a.bloc_cover80, 0)]] : [])])}`));
   });
   const cur = F.counted.share;
   svg.append('line').attr('class', 'ref-line').attr('x1', x(cur)).attr('x2', x(cur)).attr('y1', M.t).attr('y2', H - M.b);
-  svg.append('text').attr('class', 'ref-text').attr('x', x(cur)).attr('y', M.t - 4).attr('text-anchor', 'middle').text('עכשיו');
+  svg.append('text').attr('class', 'ref-text').attr('x', x(cur)).attr('y', M.t - 4).attr('text-anchor', 'middle').text(t('עכשיו'));
   el.insertAdjacentHTML('beforeend', `<div class="legend">${series.map(s => `<span><i class="line" style="background:var(${s.real ? '--arab' : '--ink'})${s.dash && !s.real ? ';opacity:.5' : ''}"></i>${esc(s.name)}</span>`).join('')}</div>
-    <p class="foot">ציר אנכי: מנדטים שזזו בממוצע בין התחזית לתוצאה הסופית. ציר אופקי: שיעור בעלי זכות הבחירה בקלפיות שנספרו. ${
+    <p class="foot">${t('ציר אנכי: מנדטים שזזו בממוצע בין התחזית לתוצאה הסופית. ציר אופקי: שיעור בעלי זכות הבחירה בקלפיות שנספרו.')} ${
       // the build's own statement of which backtests set the constants (build_replay ACCURACY_NOTE, LM-E)
-      S.live.accuracy_note ? esc(S.live.accuracy_note) : 'הקו של 2021 בסדר הספירה האמיתי הוא הבדיקה היחידה על סדר ספירה אמיתי, והוא לא שימש לכיול המודל.'}</p>`);
+      S.live.accuracy_note ? esc(S.live.accuracy_note) : t('הקו של 2021 בסדר הספירה האמיתי הוא הבדיקה היחידה על סדר ספירה אמיתי, והוא לא שימש לכיול המודל.')}</p>`);
 }
 
 /* ---------- election day: turnout ---------- */
@@ -600,15 +600,15 @@ function dayMarkup() {
   const live = !!S.liveTurnout, day = inElectionWindow(), H0 = S.turnoutHistory;
   // the 22:00 figure is the CEC's election-night estimate; its largest miss of the final count in 2015–2022
   const miss = H0 ? d3.max(['K20', 'K21', 'K22', 'K23', 'K24', 'K25'].filter(e => H0.elections[e]), e => Math.abs(H0.elections[e].final - H0.elections[e].values[6])) : 0.7;
-  return `<h2 class="lv-h2" id="lv-day">במהלך היום: שיעור ההצבעה</h2>
+  return `<h2 class="lv-h2" id="lv-day">${t('במהלך היום: שיעור ההצבעה')}</h2>
   <div class="live-bar ${live ? 'on' : 'demo'}">${live
-    ? `${liveChip(S.liveTurnout.updated_at, 'יום הבחירות', 'dy-chip')}<span class="live-text">נתוני ועדת הבחירות, <span id="dy-upd">${updatedLine('turnout')}</span>. <span class="lv-cad">${cadence()}</span>.</span>`
-    : day ? '<span class="live-chip demo">יום הבחירות</span><span class="live-text">ממתינים לפרסום הראשון של ועדת הבחירות (הנתון של 10:00 מתפרסם בדרך כלל 30–65 דקות אחרי השעה). עד אז מוצגות הסדרות של הבחירות הקודמות.</span>'
-    : '<span class="live-chip demo">לפני יום הבחירות</span><span class="live-text">ועדת הבחירות מפרסמת שיעור הצבעה ארצי מצטבר בשעות 10:00, 12:00, 14:00, 16:00, 18:00, 20:00 ו-22:00 (ב-2022 פורסם גם נתון ל-19:00). כאן מוצגות הסדרות של הבחירות הקודמות; ב-27 באוקטובר יתווסף אליהן הקו של 2026.</span>'}</div>
+    ? `${liveChip(S.liveTurnout.updated_at, t('יום הבחירות'), 'dy-chip')}<span class="live-text">${t('נתוני ועדת הבחירות,')} <span id="dy-upd">${updatedLine('turnout')}</span>. <span class="lv-cad">${cadence()}</span>.</span>`
+    : day ? `<span class="live-chip demo">${t('יום הבחירות')}</span><span class="live-text">${t('ממתינים לפרסום הראשון של ועדת הבחירות (הנתון של 10:00 מתפרסם בדרך כלל 30–65 דקות אחרי השעה). עד אז מוצגות הסדרות של הבחירות הקודמות.')}</span>`
+    : `<span class="live-chip demo">${t('לפני יום הבחירות')}</span><span class="live-text">${t('ועדת הבחירות מפרסמת שיעור הצבעה ארצי מצטבר בשעות 10:00, 12:00, 14:00, 16:00, 18:00, 20:00 ו-22:00 (ב-2022 פורסם גם נתון ל-19:00). כאן מוצגות הסדרות של הבחירות הקודמות; ב-27 באוקטובר יתווסף אליהן הקו של 2026.')}</span>`}</div>
   <div class="grid">
     <div class="card c7">
-      <h3>שיעור ההצבעה המצטבר, לפי שעה</h3>
-      <p class="sub">אחוז מכלל בעלי זכות הבחירה שהצביעו עד כל שעה, לפי הודעות ועדת הבחירות (בדרך כלל 30–65 דקות אחרי השעה העגולה; ב-2022 פורסם גם נתון ל-19:00 ממדגם הלמ״ס). אלה אומדנים של הוועדה מדיווחי מזכירי הקלפיות וממדגם של הלמ״ס, לא ספירה: המספר של 22:00 היה ב-2015–2022 במרחק של עד ${fmt1(miss)} נקודה מהתוצאה הסופית (ב-2022: 71.3% בליל הבחירות, 70.63% בסוף).</p>
+      <h3>${t('שיעור ההצבעה המצטבר, לפי שעה')}</h3>
+      <p class="sub">${t('אחוז מכלל בעלי זכות הבחירה שהצביעו עד כל שעה, לפי הודעות ועדת הבחירות (בדרך כלל 30–65 דקות אחרי השעה העגולה; ב-2022 פורסם גם נתון ל-19:00 ממדגם הלמ״ס). אלה אומדנים של הוועדה מדיווחי מזכירי הקלפיות וממדגם של הלמ״ס, לא ספירה: המספר של 22:00 היה ב-2015–2022 במרחק של עד {m} נקודה מהתוצאה הסופית (ב-2022: 71.3% בליל הבחירות, 70.63% בסוף).', { m: fmt1(miss) })}</p>
       <div class="chart" id="dy-chart"></div>
     </div>
     <div class="card c5" id="dy-now"></div>
@@ -646,7 +646,7 @@ function drawDay() {
 
 function drawDayChart(el, H0) {
   const W = widthOf(el), nar = W < 560, H = nar ? 250 : 290, M = { t: 14, r: nar ? 72 : 84, b: 26, l: 36 };
-  const svg = svgEl(el, W, H, 'שיעור ההצבעה המצטבר לפי שעה, 2019–2022 ו-2026');
+  const svg = svgEl(el, W, H, t('שיעור ההצבעה המצטבר לפי שעה, 2019–2022 ו-2026'));
   const x = d3.scaleLinear().domain([7, 22]).range([M.l, W - M.r]);   // time runs left to right
   const y = d3.scaleLinear().domain([0, 80]).range([H - M.b, M.t]);
   [0, 20, 40, 60, 80].forEach(v => {
@@ -664,8 +664,8 @@ function drawDayChart(el, H0) {
       .attr('stroke', hi ? 'var(--ink-2)' : 'var(--rule-strong)').attr('stroke-width', hi ? 2.2 : 1.4);
     svg.selectAll(null).data(pts.slice(1)).join('circle').attr('cx', p => x(p.t)).attr('cy', p => y(p.v)).attr('r', hi ? 3.5 : 2.6)
       .attr('fill', hi ? 'var(--ink-2)' : 'var(--rule-strong)')
-      .call(sel => bindTT(sel, p => `<h4>${esc(d.label)} · ${String(Math.floor(p.t)).padStart(2, '0')}:00</h4>${ttRows([['שיעור הצבעה מצטבר', pct(p.v)], ['תוצאה סופית', pct(d.final, 2)],
-        ...(p.t === 22 && d.note22 ? [['הנתון של 22:00', 'ההודעה של ליל הבחירות']] : [])])}`));
+      .call(sel => bindTT(sel, p => `<h4>${esc(d.label)} · ${String(Math.floor(p.t)).padStart(2, '0')}:00</h4>${ttRows([[t('שיעור הצבעה מצטבר'), pct(p.v)], [t('תוצאה סופית'), pct(d.final, 2)],
+        ...(p.t === 22 && d.note22 ? [[t('הנתון של 22:00'), t('ההודעה של ליל הבחירות')]] : [])])}`));
     labels.push({ y: y(d.values[6]), name: d.label, strong: hi });
   });
   if (live.length) {
@@ -673,7 +673,7 @@ function drawDayChart(el, H0) {
     svg.append('path').attr('d', d3.line().x(p => x(p.t)).y(p => y(p.v))(pts)).attr('fill', 'none').attr('stroke', 'var(--crit)').attr('stroke-width', 3);
     svg.selectAll(null).data(pts.slice(1)).join('circle').attr('cx', p => x(p.t)).attr('cy', p => y(p.v)).attr('r', 4.5).attr('fill', 'var(--crit)')
       .call(sel => bindTT(sel, p => { const h = live.find(q => hourNum(q.h) === p.t).h, rel = releasedAt(h);
-        return `<h4>2026 · ${h}</h4>${ttRows([['שיעור הצבעה מצטבר', pct(p.v)], ...(rel ? [['פורסם', rel]] : [])])}`; }));
+        return `<h4>2026 · ${h}</h4>${ttRows([[t('שיעור הצבעה מצטבר'), pct(p.v)], ...(rel ? [[t('פורסם'), rel]] : [])])}`; }));
     // LTR label so '2026: x%' reads in order; early in the day it sits right of the point (clear of the axis),
     // later to its left; below the point when the point is near the top
     const last = pts[pts.length - 1], lx = x(last.t), toRight = lx - M.l < 70;
@@ -695,13 +695,13 @@ function drawDayNow(el, H0) {
   const live = dayPoints();
   const K25 = H0.elections.K25, K24 = H0.elections.K24;
   if (!live.length) {
-    el.innerHTML = `<h3>מה יוצג כאן ביום הבחירות</h3>
+    el.innerHTML = `<h3>${t('מה יוצג כאן ביום הבחירות')}</h3>
       <ul class="lv-list">
-        <li><b>השוואה לאותה שעה:</b> כל נתון של 2026 מול 2022 ומול שלוש הבחירות שלפניה.</li>
-        <li><b>טווח לשיעור ההצבעה הסופי:</b> היחס בין התוצאה הסופית לנתון של אותה שעה נע ב-2019–2022 בין ${fmt1(d3.min(PAST, e => H0.elections[e].ratio[4]))} ל-${fmt1(d3.max(PAST, e => H0.elections[e].ratio[4]))} בשעה 18:00, ולכן הטווח מצטמצם לקראת הערב.</li>
-        <li><b>כמה קולות יידרשו כדי לעבור את אחוז החסימה:</b> 3.25% מהקולות הכשרים הצפויים.</li>
+        <li>${t('<b>השוואה לאותה שעה:</b> כל נתון של 2026 מול 2022 ומול שלוש הבחירות שלפניה.')}</li>
+        <li>${t('<b>טווח לשיעור ההצבעה הסופי:</b> היחס בין התוצאה הסופית לנתון של אותה שעה נע ב-2019–2022 בין {a} ל-{b} בשעה 18:00, ולכן הטווח מצטמצם לקראת הערב.', { a: fmt1(d3.min(PAST, e => H0.elections[e].ratio[4])), b: fmt1(d3.max(PAST, e => H0.elections[e].ratio[4])) })}</li>
+        <li>${t('<b>כמה קולות יידרשו כדי לעבור את אחוז החסימה:</b> 3.25% מהקולות הכשרים הצפויים.')}</li>
       </ul>
-      <p class="foot">לדוגמה, ב-2022: ${pct(K25.values[2])} ב-14:00, ${pct(K25.values[4])} ב-18:00, ${pct(K25.final, 2)} בסוף.</p>`;
+      <p class="foot">${t('לדוגמה, ב-2022: {a} ב-14:00, {b} ב-18:00, {c} בסוף.', { a: pct(K25.values[2]), b: pct(K25.values[4]), c: pct(K25.final, 2) })}</p>`;
     return;
   }
   const last = live[live.length - 1];
@@ -712,34 +712,36 @@ function drawDayNow(el, H0) {
   const hours = [...new Set([...DAY_HOURS, ...live.map(p => p.h)])].sort((a, b) => hourNum(a) - hourNum(b));
   const past = (d, h) => DAY_HOURS.includes(h) ? pct(d.values[DAY_HOURS.indexOf(h)]) : d.extra && d.extra[h] != null ? pct(d.extra[h]) : '—';
   el.innerHTML = `<div class="kv kv3">
-      <div><b class="num">${pct(last.v)}</b><span>עד ${last.h}</span></div>
-      <div><b class="num" style="direction:ltr">${d22 >= 0 ? '+' : '−'}${fmt1(Math.abs(d22))}</b><span>נקודות מול 2022 באותה שעה</span></div>
-      <div><b class="num">${pct(lo, 0)}–${pct(hi, 0)}</b><span>טווח לשיעור הסופי</span></div>
+      <div><b class="num">${pct(last.v)}</b><span>${t('עד {h}', { h: last.h })}</span></div>
+      <div><b class="num" style="direction:ltr">${d22 >= 0 ? '+' : '−'}${fmt1(Math.abs(d22))}</b><span>${t('נקודות מול 2022 באותה שעה')}</span></div>
+      <div><b class="num">${pct(lo, 0)}–${pct(hi, 0)}</b><span>${t('טווח לשיעור הסופי')}</span></div>
     </div>
-    <table class="t"><thead><tr><th>שעה</th><th class="n">2026</th><th class="n">2022</th><th class="n">2021</th></tr></thead><tbody>${
+    <table class="t"><thead><tr><th>${t('שעה')}</th><th class="n">2026</th><th class="n">2022</th><th class="n">2021</th></tr></thead><tbody>${
       hours.map(h => { const p = live.find(q => q.h === h), rel = p && releasedAt(h);
-        return `<tr><td>${h}${rel ? `<span class="lv-rel">פורסם ${rel}</span>` : ''}</td><td class="n"><b>${p ? pct(p.v) : '—'}</b></td><td class="n">${past(K25, h)}</td><td class="n">${past(K24, h)}</td></tr>`; }).join('')}</tbody></table>
-    <p class="foot">אחוז החסימה יעמוד, לפי הטווח, על כ-<span class="num">${fmt(thr(lo))}–${fmt(thr(hi))}</span> קולות. הטווח מבוסס על היחס בין הנתון השעתי לתוצאה הסופית בחמש הבחירות האחרונות; ב-2022 ההצבעה הוקדמה יחסית. הנתונים השעתיים הם אומדנים: ב-2022 הנתון של 22:00 היה גבוה מהתוצאה הסופית ב-0.7 נקודה.${sourceLink()}</p>`;
+        return `<tr><td>${h}${rel ? `<span class="lv-rel">${t('פורסם {r}', { r: rel })}</span>` : ''}</td><td class="n"><b>${p ? pct(p.v) : '—'}</b></td><td class="n">${past(K25, h)}</td><td class="n">${past(K24, h)}</td></tr>`; }).join('')}</tbody></table>
+    <p class="foot">${t('אחוז החסימה יעמוד, לפי הטווח, על כ-<span class="num">{lo}–{hi}</span> קולות. הטווח מבוסס על היחס בין הנתון השעתי לתוצאה הסופית בחמש הבחירות האחרונות; ב-2022 ההצבעה הוקדמה יחסית. הנתונים השעתיים הם אומדנים: ב-2022 הנתון של 22:00 היה גבוה מהתוצאה הסופית ב-0.7 נקודה.', { lo: fmt(thr(lo)), hi: fmt(thr(hi)) })}${sourceLink()}</p>`;
 }
 // the CEC statement the operator recorded with the figures (turnout.json source_url / source)
 function sourceLink() {
   const T = S.liveTurnout || {}, url = String(T.source_url || '').trim();
   if (!/^https?:\/\/\S+$/i.test(url)) return '';
-  return ` מקור: <a href="${esc(url)}" target="_blank" rel="noopener">${esc(T.source || 'הודעת ועדת הבחירות')}</a>.`;
+  return ` ${t('מקור:')} <a href="${esc(url)}" target="_blank" rel="noopener">${esc(T.source || t('הודעת ועדת הבחירות'))}</a>.`;
 }
 
 function drawDaySectors(el, H0) {
   const T = S.liveTurnout;
   const ach = H0.arab_estimates && H0.arab_estimates.K25, K25 = H0.elections.K25;
   const closed = pollsClosed();
-  const noSeats = closed ? 'במהלך היום הדף לא תרגם שיעורי הצבעה למנדטים.' : 'עד 22:00 הדף אינו מתרגם שיעורי הצבעה למנדטים.';
+  const noSeats = closed ? t('במהלך היום הדף לא תרגם שיעורי הצבעה למנדטים.') : t('עד 22:00 הדף אינו מתרגם שיעורי הצבעה למנדטים.');
   if (!T || !T.sectors) {
     // the national curve projected from each aChord figure, so the 37% is anchored to its hour
     const proj = h => ach && ach.points[h] != null ? Math.round(ach.points[h] * K25.final / hourValue(K25, h)) : null;
-    el.innerHTML = `<h3>שיעור ההצבעה לפי מגזר</h3>
-      <p class="sub">לפי החלטת יו״ר ועדת הבחירות (16.8.2026), הוועדה תפרסם לראשונה את שיעור ההצבעה בכל קלפי רגילה, לפחות ארבע פעמים במהלך היום. בג״ץ (17.9.2026) ביטל את ההיתר לדיווח מזוהה על מצביעים, והפרסום המצרפי לפי קלפי נותר על כנו (לפי חדשות 12: כל ארבע שעות); השעות, הכתובת והפורמט טרם פורסמו. אם הנתונים יפורסמו, הדף יחבר כל קלפי למגזר שלה (יישובים ערביים, דרוזיים, קלפיות חרדיות, קלפיות ערביות בערים מעורבות וביישובים יהודיים, ושאר הקלפיות) ויציג לכל מגזר את שיעור ההצבעה ואת היחס לשיעור הארצי באותה שעה.</p>
-      <div class="lv-note"><b>למה היחס ולא המספר עצמו:</b> בחברה הערבית מצביעים מאוחר יותר ביום. ב-2022 דיווח טיימס אוף ישראל על אומדני מרכז אקורד (האוניברסיטה העברית) לשיעור ההצבעה בחברה הערבית${ach ? `: ${ach.points['14:00']}% ב-14:00, ${ach.points['16:00']}% ב-16:00 ו-${ach.points['20:00']}% ב-20:00 (נתון של ${ach.points['18:00']}% ב-18:00 יוחס שם למכון מחקר שלא נקב בשמו)` : ''}, והתוצאה הסופית ביישובים הערביים והדרוזיים הייתה ${ach ? pct(ach.final) : '53.2%'}. מי שהיה מקרין את הסוף לפי העקומה הארצית היה מגיע מהנתון של 20:00 לכ-${proj('20:00') ?? 47}%${proj('18:00') ? `, ומהנתון של 18:00 לכ-${proj('18:00')}%` : ''}.</div>
-      <p class="foot">נתונים ממפלגות או מגופים אחרים יוצגו בנפרד ויסומנו כלא רשמיים. ${noSeats}</p>`;
+    el.innerHTML = `<h3>${t('שיעור ההצבעה לפי מגזר')}</h3>
+      <p class="sub">${t('לפי החלטת יו״ר ועדת הבחירות (16.8.2026), הוועדה תפרסם לראשונה את שיעור ההצבעה בכל קלפי רגילה, לפחות ארבע פעמים במהלך היום. בג״ץ (17.9.2026) ביטל את ההיתר לדיווח מזוהה על מצביעים, והפרסום המצרפי לפי קלפי נותר על כנו (לפי חדשות 12: כל ארבע שעות); השעות, הכתובת והפורמט טרם פורסמו. אם הנתונים יפורסמו, הדף יחבר כל קלפי למגזר שלה (יישובים ערביים, דרוזיים, קלפיות חרדיות, קלפיות ערביות בערים מעורבות וביישובים יהודיים, ושאר הקלפיות) ויציג לכל מגזר את שיעור ההצבעה ואת היחס לשיעור הארצי באותה שעה.')}</p>
+      <div class="lv-note">${t('<b>למה היחס ולא המספר עצמו:</b> בחברה הערבית מצביעים מאוחר יותר ביום. ב-2022 דיווח טיימס אוף ישראל על אומדני מרכז אקורד (האוניברסיטה העברית) לשיעור ההצבעה בחברה הערבית{pts}, והתוצאה הסופית ביישובים הערביים והדרוזיים הייתה {fin}. מי שהיה מקרין את הסוף לפי העקומה הארצית היה מגיע מהנתון של 20:00 לכ-{p20}%{p18}.', {
+        pts: ach ? t(': {a}% ב-14:00, {b}% ב-16:00 ו-{c}% ב-20:00 (נתון של {d}% ב-18:00 יוחס שם למכון מחקר שלא נקב בשמו)', { a: ach.points['14:00'], b: ach.points['16:00'], c: ach.points['20:00'], d: ach.points['18:00'] }) : '',
+        fin: ach ? pct(ach.final) : '53.2%', p20: proj('20:00') ?? 47, p18: proj('18:00') ? t(', ומהנתון של 18:00 לכ-{p}%', { p: proj('18:00') }) : '' })}</div>
+      <p class="foot">${t('נתונים ממפלגות או מגופים אחרים יוצגו בנפרד ויסומנו כלא רשמיים.')} ${noSeats}</p>`;
     return;
   }
   const rows = SECTOR_ORDER.filter(k => T.sectors[k]).map(k => ({ k, ...T.sectors[k] }));
@@ -751,21 +753,21 @@ function drawDaySectors(el, H0) {
   // counts in the turnout but not in the pace
   const X = T.sectors_excluded || {}, xn = k => +X[k] || 0;
   const notYet = xn('no figure') + xn('zero voters');
-  const EXC_HE = { unreadable: 'שורה לא קריאה', 'more voters than eligible': 'יותר מצביעים מבעלי זכות', 'no 2022 match': 'אין קלפי מקבילה ב-2022', 'implausible pace': 'קצב לא סביר' };
-  const excList = keys => keys.filter(k => xn(k)).map(k => `${fmt(xn(k))} (${esc(EXC_HE[k] || k)})`).join(', ');
+  const EXC_HE = { unreadable: t('שורה לא קריאה'), 'more voters than eligible': t('יותר מצביעים מבעלי זכות'), 'no 2022 match': t('אין קלפי מקבילה ב-2022'), 'implausible pace': t('קצב לא סביר') };
+  const excList = keys => keys.filter(k => xn(k)).map(k => `${fmt(xn(k))} (${esc(EXC_HE[k] || k)})`).join(AR_ON ? '، ' : ', ');
   const paceOnly = ['no 2022 match', 'implausible pace'];
   const dropped = excList(Object.keys(X).filter(k => !paceOnly.includes(k) && k !== 'no figure' && k !== 'zero voters'));
   const noPace = excList(paceOnly);
-  const exc = [notYet ? `${fmt(notYet)} קלפיות עוד לא דיווחו (בלי נתון או עם אפס מצביעים) ואינן בחישוב.` : '',
-    dropped ? `לא נכללו בחישוב: ${dropped}.` : '', noPace ? `נכללו בשיעור ההצבעה ולא בחישוב הקצב: ${noPace}.` : ''].filter(Boolean).join(' ');
-  el.innerHTML = `<h3>שיעור ההצבעה לפי מגזר${T.sectors_time ? `, עד ${esc(T.sectors_time)}` : ''}</h3>
-    <p class="sub">מנתוני ועדת הבחירות לכל קלפי רגילה (בלי מעטפות כפולות). הסיווג הוא לפי קלפי: קלפיות חרדיות וקלפיות ערביות בערים מעורבות וביישובים יהודיים מזוהות לפי ההצבעה ב-2022. <b>קצב</b>: כמה הצביעו עד עכשיו, ביחס לכל מי שהצביע באותן קלפיות ב-2022. <b>יחס לארצי</b>: שיעור ההצבעה במגזר חלקי השיעור בכל הקלפיות באותו פרסום. בחברה הערבית מצביעים מאוחר יותר, ולכן הקצב שלה נמוך במהלך היום גם כשההשתתפות הסופית דומה.</p>
-    <div class="tbl-wrap"><table class="t"><thead><tr><th>מגזר</th><th class="n">שיעור הצבעה</th><th class="n">קצב מול 2022</th><th class="n">יחס לארצי</th><th class="n hide-sm">סופי 2022</th><th class="n hide-sm">קלפיות</th></tr></thead><tbody>${
+  const exc = [notYet ? t('{n} קלפיות עוד לא דיווחו (בלי נתון או עם אפס מצביעים) ואינן בחישוב.', { n: fmt(notYet), c: notYet }) : '',
+    dropped ? t('לא נכללו בחישוב: {l}.', { l: dropped }) : '', noPace ? t('נכללו בשיעור ההצבעה ולא בחישוב הקצב: {l}.', { l: noPace }) : ''].filter(Boolean).join(' ');
+  el.innerHTML = `<h3>${t('שיעור ההצבעה לפי מגזר')}${T.sectors_time ? t(', עד {h}', { h: esc(T.sectors_time) }) : ''}</h3>
+    <p class="sub">${t('מנתוני ועדת הבחירות לכל קלפי רגילה (בלי מעטפות כפולות). הסיווג הוא לפי קלפי: קלפיות חרדיות וקלפיות ערביות בערים מעורבות וביישובים יהודיים מזוהות לפי ההצבעה ב-2022. <b>קצב</b>: כמה הצביעו עד עכשיו, ביחס לכל מי שהצביע באותן קלפיות ב-2022. <b>יחס לארצי</b>: שיעור ההצבעה במגזר חלקי השיעור בכל הקלפיות באותו פרסום. בחברה הערבית מצביעים מאוחר יותר, ולכן הקצב שלה נמוך במהלך היום גם כשההשתתפות הסופית דומה.')}</p>
+    <div class="tbl-wrap"><table class="t"><thead><tr><th>${t('מגזר')}</th><th class="n">${t('שיעור הצבעה')}</th><th class="n">${t('קצב מול 2022')}</th><th class="n">${t('יחס לארצי')}</th><th class="n hide-sm">${t('סופי 2022')}</th><th class="n hide-sm">${t('קלפיות')}</th></tr></thead><tbody>${
       rows.map(r => `<tr><td>${esc(DAY_SECTOR_NAME[r.k] || r.k)}</td><td class="n"><b>${r.turnout != null ? pct(100 * r.turnout) : '—'}</b></td><td class="n">${r.pace != null ? pct(100 * r.pace, 0) : '—'}</td><td class="n">${r.ratio != null ? r.ratio.toFixed(2) : '—'}</td><td class="n hide-sm">${r.final_2022 != null ? pct(100 * r.final_2022) : '—'}</td><td class="n hide-sm">${fmt(r.stations)}</td></tr>`).join('')}</tbody></table></div>
-    ${Object.keys(L).length ? `<h3 style="margin-top:14px">מי מגיע לקלפי, לפי ההצבעה ב-2022</h3>
-      <p class="sub">הקצב בכל קלפי, משוקלל לפי מספר הקולות שקיבל כל גוש באותה קלפי ב-2022. מספר גבוה יותר: הקלפיות שבהן הגוש היה חזק מגיעות מהר יותר לרמת ההצבעה של 2022. זה אומדן אקולוגי, לא מדידה של מצביעים, ואינו מתורגם למנדטים.</p>
-      <div class="lv-lean">${['coal', 'opp', 'arab'].filter(b => L[b] != null).map(b => `<div><span><i class="swatch" style="background:var(${blocVar(b)})"></i>${b === 'coal' ? 'קלפיות של גוש נתניהו' : b === 'opp' ? 'קלפיות של האופוזיציה היהודית' : 'קלפיות של הרשימות הערביות'}</span><b class="num">${pct(100 * L[b], 0)}</b></div>`).join('')}</div>` : ''}
+    ${Object.keys(L).length ? `<h3 style="margin-top:14px">${t('מי מגיע לקלפי, לפי ההצבעה ב-2022')}</h3>
+      <p class="sub">${t('הקצב בכל קלפי, משוקלל לפי מספר הקולות שקיבל כל גוש באותה קלפי ב-2022. מספר גבוה יותר: הקלפיות שבהן הגוש היה חזק מגיעות מהר יותר לרמת ההצבעה של 2022. זה אומדן אקולוגי, לא מדידה של מצביעים, ואינו מתורגם למנדטים.')}</p>
+      <div class="lv-lean">${['coal', 'opp', 'arab'].filter(b => L[b] != null).map(b => `<div><span><i class="swatch" style="background:var(${blocVar(b)})"></i>${b === 'coal' ? t('קלפיות של גוש נתניהו') : b === 'opp' ? t('קלפיות של האופוזיציה היהודית') : t('קלפיות של הרשימות הערביות')}</span><b class="num">${pct(100 * L[b], 0)}</b></div>`).join('')}</div>` : ''}
     ${exc ? `<p class="foot">${exc}</p>` : ''}
-    ${(T.claims || []).length && closed ? `<h3 style="margin-top:14px">דיווחים לא רשמיים</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
+    ${(T.claims || []).length && closed ? `<h3 style="margin-top:14px">${t('דיווחים לא רשמיים')}</h3><ul class="lv-list">${T.claims.map(c => `<li><b>${esc(c.time)}</b> · ${esc(c.source)}: ${esc(c.text)}</li>`).join('')}</ul>` : ''}
     <p class="foot">${noSeats}</p>`;
 }
