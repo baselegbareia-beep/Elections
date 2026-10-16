@@ -54,15 +54,23 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      year, minutes and drill guard, its reset going red when not published, and the push filters (site/live/**
      starts no workflow);
  11b. the operator's requests on the ops-control branch (ops/request.json, the stand-in for Run workflow and
-     Cancel run): the request step of live.yml, discover.yml, net-check.yml and daily.yml run on sample requests
-     (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red), a drill
+     Cancel run): the request step of live.yml, discover.yml, net-check.yml, daily.yml and fetch.yml run on sample
+     requests (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red; a fetch
+     request without a fetcher's name in `what` is red), fetch.yml's guard (the name again, the file on the commit),
+     its run step (the fetcher's output cannot issue workflow commands; a crash is noted, the files still pushed) and
+     its push to ops-reports run against a scratch origin (reports/fetch/<what>/<stamp>/ and latest/, latest replaced,
+     the rest of the branch kept, a rejected push redone, nothing else written), a drill
      request through live.yml's guard into the poll ban and a daily request through the ban guard, the groups and
      write targets (main, ops-reports; never the triggering branch), a run from ops-control taking live_input/
      from main, and the "restart" request that ends a running loop, only for a request the requested run will
      take (the same request check, then its guard's drill rule), and only once that run's request job has
      finished (the loop run whole against a stand-in for the runs API), or 3 minutes on; the runbook's request
      command, also when the forced push is refused; and 11b again as the drill's smoke test runs it, in a checkout
-     whose ops/request.json is the drill request.
+     whose ops/request.json is the drill request;
+ 11c. the 2026 lists: pipeline/reference/lists_2026.json against build_polls (ids, letters), polls_2026.json's
+     parties, live_fetch.AGREEMENTS_2026 and live_model.BASE_MAP['K26']; pipeline/fetchers/cec_lists.py against a
+     local stand-in for gov.il (the content-pages API, a roster page with other letters, an agreements page, a PDF,
+     404 / 500 / refused URLs): exit 0, the summary's comparison, the files stored.
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
@@ -398,7 +406,7 @@ def run_block(script, env, cwd):
 
 # the workflows a push of ops/request.json to ops-control starts: (the name a request gives it, the fields it takes)
 OPS_REQUESTS = {"live.yml": ("live", "drill reset minutes runner restart"), "discover.yml": ("discover", "mode urls runner"),
-                "net-check.yml": ("net-check", ""), "daily.yml": ("daily", "")}
+                "net-check.yml": ("net-check", ""), "daily.yml": ("daily", ""), "fetch.yml": ("fetch", "what")}
 # ops/request.json on main: a request for no workflow. The samples and the scratch origin below use this constant, not
 # the checkout's file: a run that a push to ops-control started (the drill's smoke test) has the request checked out
 OPS_PLACEHOLDER = {"workflow": "none", "id": "init"}
@@ -441,17 +449,148 @@ def ops_control_in_request_checkout(docs, body):
     return new, buf.getvalue(), root
 
 
+def tail(log, n):
+    """The end of a step's output on one line, for a check's message."""
+    return " | ".join(log.strip().splitlines())[-n:]
+
+
+def fetch_yml(doc, wtmp):
+    """11b, fetch.yml: the shared runner path for pipeline/fetchers/<what>.py. Its jobs and groups, the guard on
+    sample names, the run step on stand-in fetchers, and the push to ops-reports against a scratch origin."""
+    on = doc.get("on", doc.get(True)) or {}
+    inp = ((on.get("workflow_dispatch") or {}).get("inputs") or {}).get("what") or {}
+    jobs = doc.get("jobs") or {}
+    job = jobs.get("fetch") or {}
+    conc, fif = job.get("concurrency") or {}, str(job.get("if", ""))
+    check("schedule" not in on and inp.get("required") is True and inp.get("type") == "string"
+          and doc.get("permissions") == {"contents": "read"} and job.get("permissions") == {"contents": "write"}
+          and (jobs.get("request") or {}).get("if") == "github.event_name == 'push'" and job.get("needs") == "request"
+          and "!cancelled()" in fif and "needs.request.outputs.run == 'true'" in fif
+          and "&& format('fetch-{0}', needs.request.outputs.what || github.event.inputs.what) ||" in str(conc.get("group"))
+          and "fetch-skipped-" in str(conc.get("group")) and conc.get("cancel-in-progress") is False,
+          f"fetch.yml: no schedule; dispatch with a required `what`; read-only but the fetch job (contents: write); the fetch "
+          f"job only for a fetch request, one group per fetcher (a skipped job in a group of its own): {fif} {conc}")
+    st = {s_.get("id"): s_ for s_ in job.get("steps") or [] if s_.get("id")}
+    co = (job.get("steps") or [{}])[0]
+    guard, run_st, pub = st.get("guard") or {}, st.get("run") or {}, st.get("publish") or {}
+    token_steps = [s_.get("id") or s_.get("name") for s_ in job.get("steps") or [] if "github.token" in json.dumps(s_)]
+    check(str(co.get("uses", "")).startswith("actions/checkout") and (co.get("with") or {}).get("persist-credentials") is False
+          and token_steps == ["publish"] and "GH_TOKEN" not in json.dumps(run_st)
+          and (guard.get("env") or {}).get("WHAT") == "${{ needs.request.outputs.what || github.event.inputs.what }}"
+          and (run_st.get("env") or {}).get("OUT") == (pub.get("env") or {}).get("OUT"),
+          f"fetch.yml: a checkout without stored credentials, the token only in the push step ({token_steps}), the name from "
+          "the request or the dispatch input")
+    pushes = re.findall(r"\bgit(?:auth)?\b[^\n]*?\spush\s[^\n;]*", pub.get("run", ""))
+    check(pushes and all("HEAD:refs/heads/ops-reports" in p_ for p_ in pushes) and "ops-reports" in pub.get("run", ""),
+          f"fetch.yml: pushes to ops-reports only: {pushes}")
+
+    # the guard: a fetcher's name, and the file on this commit
+    gdir = os.path.join(wtmp, "fetch_guard")
+    for n in ("cec_lists.py", "__init__.py", "_private.py"):
+        write(os.path.join(gdir, "pipeline", "fetchers", n), "")
+    for what, code in (("cec_lists", 0), ("cbs_2026", 1), ("__init__", 1), ("_private", 1), ("../cec_lists", 1),
+                       ("cec lists", 1), ("cec_lists\nx", 1), ("", 1), ("CEC_LISTS", 1), ("a" * 41, 1)):
+        rc, outs, log = run_block(guard.get("run", "false"), {"WHAT": what}, gdir)
+        check(rc == code and (code or (outs.get("what") == what and re.fullmatch(r"\d{8}-\d{4}", outs.get("stamp", "")))),
+              f"fetch.yml guard, what={what!r}: exit {rc} (want {code}) {outs} {tail(log, 90)}")
+
+    # the run step: what a fetcher prints cannot issue workflow commands; a crash is noted and the step goes on
+    write(os.path.join(gdir, "pipeline", "fetchers", "stub_ok.py"),
+          "import os, sys\nout = sys.argv[sys.argv.index('--out') + 1]\nos.makedirs(os.path.join(out, 'files'), exist_ok=True)\n"
+          "open(os.path.join(out, 'summary.md'), 'w').write('stub summary\\n')\nprint('::error::from a page')\n")
+    write(os.path.join(gdir, "pipeline", "fetchers", "stub_crash.py"), "raise SystemExit(3)\n")
+    summ = os.path.join(TMP, "gh_summary")
+    for what, rc_want in (("stub_ok", "0"), ("stub_crash", "3")):
+        out = os.path.join(wtmp, "fetch_out_" + what)
+        open(summ, "w").close()
+        rc, outs, log = run_block(run_st.get("run", "false"), {"WHAT": what, "STAMP": "20261016-1200", "OUT": out}, gdir)
+        stop = re.search(r"^::stop-commands::(\w+)$", log, re.M)
+        guarded = bool(stop) and (what != "stub_ok" or (log.index(stop.group(0)) < log.index("::error::from a page")
+                                                        < log.index(f"::{stop.group(1)}::")))
+        said = open(summ).read()
+        check(rc == 0 and outs.get("rc") == rc_want and guarded
+              and (what != "stub_ok" or "## Fetch stub_ok, 20261016-1200" in said and "stub summary" in said),
+              f"fetch.yml run step, {what}: exit {rc}, rc={outs.get('rc')} (want {rc_want}), the fetcher's output between "
+              f"stop-commands and its resume: {guarded}")
+
+    # the push: a scratch origin whose ops-reports already holds a discover report
+    origin, clone, other = (os.path.join(wtmp, n) for n in ("fetch_origin.git", "fetch_clone", "fetch_other"))
+    sh(["git", "init", "-q", "--bare", "-b", "main", origin], wtmp)
+    sh(["git", "clone", "-q", origin, other], wtmp)
+    for k, v in (("user.email", "op@example.com"), ("user.name", "operator")):
+        sh(["git", "config", k, v], other)
+    write(os.path.join(other, "README.md"), "main\n")
+    sh(["git", "add", "-A"], other)
+    sh(["git", "commit", "-q", "-m", "main"], other)
+    sh(["git", "push", "-q", "origin", "HEAD:main"], other)
+    sh(["git", "checkout", "-q", "--orphan", "rep"], other)
+    sh(["git", "rm", "-rfq", "."], other)
+    write(os.path.join(other, "reports", "latest.md"), "discover report\n")
+    sh(["git", "add", "-A"], other)
+    sh(["git", "commit", "-q", "-m", "discover"], other)
+    sh(["git", "push", "-q", "origin", "HEAD:ops-reports"], other)
+    sh(["git", "clone", "-q", "--depth", "1", "file://" + origin, clone], wtmp)
+    main0 = sh(["git", "rev-parse", "refs/heads/main"], origin)
+    stub = os.path.join(wtmp, "fetch_stub")
+    write(os.path.join(stub, "sleep"), "#!/bin/sh\nexit 0\n")
+    os.chmod(os.path.join(stub, "sleep"), 0o755)
+
+    def publish(out_files, stamp, what="cec_lists"):
+        out = os.path.join(wtmp, f"fetch_pub_{stamp}_{len(out_files)}")
+        shutil.rmtree(out, ignore_errors=True)
+        os.makedirs(out)
+        for n, body in out_files.items():
+            write(os.path.join(out, n), body)
+        return run_block(pub.get("run", "false"), {"WHAT": what, "STAMP": stamp, "OUT": out, "GH_TOKEN": "test-token",
+                                                   "RUNNER_TEMP": os.path.join(wtmp, "fetch_rt"),
+                                                   "PATH": stub + os.pathsep + os.environ.get("PATH", "")}, clone)
+
+    def tree():
+        return set(sh(["git", "ls-tree", "-r", "--name-only", "refs/heads/ops-reports"], origin).split())
+    os.makedirs(os.path.join(wtmp, "fetch_rt"), exist_ok=True)
+    d = "reports/fetch/cec_lists/"
+    rc, _, log = publish({"summary.json": "{}", "summary.md": "one\n", "files/a.html": "<p>a</p>"}, "20261016-1200")
+    t1 = tree()
+    check(rc == 0 and {"reports/latest.md", d + "20261016-1200/summary.json", d + "20261016-1200/files/a.html",
+                       d + "latest/summary.md", d + "latest/files/a.html"} <= t1
+          and sh(["git", "rev-parse", "refs/heads/main"], origin) == main0,
+          f"fetch.yml push: reports/fetch/<what>/<stamp>/ and latest/ on ops-reports, its other reports kept, main untouched: "
+          f"exit {rc} {sorted(t1)[:6]} {tail(log, 120)}")
+    rc, _, log = publish({"summary.json": '{"n": 2}', "summary.md": "two\n"}, "20261016-1300")
+    t2 = tree()
+    check(rc == 0 and d + "latest/files/a.html" not in t2 and d + "20261016-1200/files/a.html" in t2
+          and d + "20261016-1300/summary.json" in t2 and "reports/latest.md" in t2,
+          f"fetch.yml push, a second run: latest/ replaced (a file the run did not write is gone), the first run's folder kept: "
+          f"exit {rc} {tail(log, 100)}")
+    head = sh(["git", "rev-parse", "refs/heads/ops-reports"], origin)
+    rc, _, log = publish({"summary.json": '{"n": 2}', "summary.md": "two\n"}, "20261016-1300")
+    check(rc == 0 and "already has these files" in log and sh(["git", "rev-parse", "refs/heads/ops-reports"], origin) == head,
+          f"fetch.yml push, the same files again: no commit: exit {rc} {tail(log, 80)}")
+    hook = os.path.join(origin, "hooks", "pre-receive")       # the first push is refused (a writer in between)
+    write(hook, '#!/bin/sh\nif [ ! -f "$GIT_DIR/refused-once" ]; then touch "$GIT_DIR/refused-once"; echo refused >&2; exit 1; fi\n')
+    os.chmod(hook, 0o755)
+    rc, _, log = publish({"summary.json": '{"n": 3}', "summary.md": "three\n"}, "20261016-1400")
+    os.remove(hook)
+    check(rc == 0 and "push rejected (1)" in log and d + "20261016-1400/summary.json" in tree(),
+          f"fetch.yml push, refused once: done again from the tip: exit {rc} {tail(log, 120)}")
+    for files, stamp, what, why in (({}, "20261016-1500", "cec_lists", "nothing written"),
+                                    ({"summary.md": "x"}, "", "cec_lists", "no stamp"),
+                                    ({"summary.md": "x"}, "20261016-1500", "", "no name")):
+        rc, _, log = publish(files, stamp, what)
+        check(rc == 1, f"fetch.yml push, {why}: red (exit {rc}) {tail(log, 80)}")
+
+
 def ops_control(docs, wtmp):
     """11b. The operator's requests (docs/ELECTION_DAY.md, "בקשות דרך ops-control"): the session's token can push but
     not dispatch or cancel, so a push of ops/request.json to the ops-control branch stands in for Run workflow. Every
-    one of the four workflows reads it in the same step and goes on only when the request names it, its fields
+    one of the five workflows reads it in the same step and goes on only when the request names it, its fields
     checked as the dispatch inputs are (the step itself, run here on sample requests); the request's outputs reach
     live.yml's drill guard and daily.yml's poll-ban guard; the working jobs keep their concurrency groups, and a
     request for another workflow can never take a group's pending slot; everything is written to main or
     ops-reports, never to the triggering branch; a run that ops-control started reads live_input/ and
     live_config.json from main; and a later {"restart": true} request ends a running loop (the stand-in for Cancel),
     once the run it started has finished its request job (so that its feed job is pending in the group)."""
-    print("11b. ops-control: the request step in the four workflows, its guards, groups, write targets and restart")
+    print("11b. ops-control: the request step in the five workflows, its guards, groups, write targets and restart; fetch.yml")
     steps = {}
     for wf, (name, fields) in OPS_REQUESTS.items():
         doc = docs[wf]
@@ -470,9 +609,13 @@ def ops_control(docs, wtmp):
               and ((doc["jobs"][job].get("permissions") or doc.get("permissions")) == {"contents": "read"}),
               f"{wf}: the request is read first, from a checkout of ops/ without stored credentials, in a read-only job ({job})")
         steps[wf] = st
-    check(len({st.get("run") for st in steps.values()}) == 1
+    def commands(block):                           # the block without its comment lines
+        return "\n".join(ln for ln in (block or "").splitlines() if not ln.strip().startswith("#"))
+    check(len({st.get("run") for wf, st in steps.items() if wf != "fetch.yml"}) == 1
+          and len({commands(st.get("run")) for st in steps.values()}) == 1
           and all(st.get("run", "").rstrip().endswith("\npython3 ops/check_request.py ops/request.json") for st in steps.values()),
-          "the request step is the same block in the four workflows, and runs ops/check_request.py")
+          "the request step is the same block in live.yml, discover.yml, net-check.yml and daily.yml, the same commands in "
+          "fetch.yml, and runs ops/check_request.py")
     for wf in ("pages.yml", "official-data.yml"):
         on = docs[wf].get("on", docs[wf].get(True)) or {}
         check((on.get("push") or {}).get("branches") == ["main"], f"{wf}: pushes to main only (a request starts nothing else)")
@@ -506,6 +649,23 @@ def ops_control(docs, wtmp):
          {"discover.yml": (0, {"mode": "quick", "urls": "https://a.gov.il/1 https://a.gov.il/2"})}),
         ('{"workflow": "net-check", "id": "n1"}', {"net-check.yml": (0, {})}),
         ('{"workflow": "daily", "id": "p1"}', {"daily.yml": (0, {})}),
+        ('{"workflow": "fetch", "what": "cec_lists", "id": "f1"}', {"fetch.yml": (0, {"what": "cec_lists"})}),
+        ('{"workflow": "fetch", "what": "cbs_2026"}', {"fetch.yml": (0, {"what": "cbs_2026"})}),
+        # a fetch names its fetcher: pipeline/fetchers/<what>.py, never a path, an option or a private module
+        ('{"workflow": "fetch", "id": "f2"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "../live_fetch"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "cec_lists.py"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "CEC"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "__init__"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "-h"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": ""}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "cec_lists\\nrun=true"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": ["cec_lists"]}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": 7}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "' + "a" * 41 + '"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "fetch", "what": "cec_lists", "urls": "https://a.gov.il/"}', {"fetch.yml": (1, {})}),
+        ('{"workflow": "live", "what": "cec_lists"}', {"live.yml": (1, {})}),
+        ('{"workflow": "discover", "what": "cec_lists"}', {"discover.yml": (1, {})}),
         # red in the workflow it names (a bad field, as Run workflow would refuse it), quiet in the others
         ('{"workflow": "live", "drill": "true"}', {"live.yml": (1, {})}),
         ('{"workflow": "live", "minutes": "4o"}', {"live.yml": (1, {})}),
@@ -576,6 +736,7 @@ def ops_control(docs, wtmp):
           "daily.yml: the poll-ban guard runs for a daily request (event push, refused like a manual run); the push in daily-polls")
     nprobe = next((s_ for s_ in docs["net-check.yml"]["jobs"]["net-check"]["steps"] if "curl" in (s_.get("run") or "")), {})
     check(nprobe.get("if") == "steps.request.outputs.run == 'true'", "net-check.yml: the probes run for a net-check request only")
+    fetch_yml(docs["fetch.yml"], wtmp)
 
     # a drill request reaches live.yml's guard as the dispatch input does: refused into the poll ban
     lguard = next((s_["run"] for s_ in feed.get("steps") or [] if s_.get("id") == "guard"), "")
@@ -593,7 +754,7 @@ def ops_control(docs, wtmp):
               f"request {body} at {when:%d.%m %H:%M} through live.yml's guard: exit {rc} (want {code}) {gouts.get('MINUTES')} {log.strip()[-80:]}")
 
     # writes: main (live.yml: the Pages branch; daily.yml: BRANCH) and ops-reports, never the triggering branch
-    for wf in ("live.yml", "daily.yml", "discover.yml"):
+    for wf in ("live.yml", "daily.yml", "discover.yml", "fetch.yml"):
         refs = [s_.get("name") or s_.get("id") for _, s_ in workflow_steps(docs[wf])
                 if re.search(r"GITHUB_REF\b|GITHUB_REF_NAME|github\.ref\b|github\.ref_name|GITHUB_HEAD_REF", json.dumps(s_))]
         check(not refs, f"{wf}: no step uses the triggering ref: {refs}")
@@ -855,6 +1016,156 @@ def ops_control(docs, wtmp):
     sh(["git", "config", "--unset", "receive.denyNonFastForwards"], origin)
     check(remote == new_tip != old,
           f"the request command after a refused forced push: ops-control made anew at the request ({remote[:8]}, was {old[:8]})")
+
+
+class GovilMock(http.server.BaseHTTPRequestHandler):
+    """A stand-in for gov.il (11c): routes {path or path?query: (status, content type, body)}; the headers of every
+    request kept by path."""
+    routes, asked = {}, {}
+
+    def do_GET(self):
+        GovilMock.asked[self.path] = dict(self.headers)
+        code, ctype, body = self.routes.get(self.path) or self.routes.get(self.path.split("?")[0]) or (404, "text/html", b"<p>no</p>")
+        body = body if isinstance(body, bytes) else body.encode("utf-8")
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def log_message(self, *a):
+        pass
+
+
+def lists_2026():
+    """11c. The 2026 lists: the reference file against the code, then pipeline/fetchers/cec_lists.py offline."""
+    print("11c. the 2026 lists: pipeline/reference/lists_2026.json against the code; pipeline/fetchers/cec_lists.py offline")
+    import build_polls as BP
+    ref_path = os.path.join(ROOT, "pipeline", "reference", "lists_2026.json")
+    ref = json.load(open(ref_path, encoding="utf-8"))
+    lists = ref.get("lists") or []
+    letters = [e.get("letters") for e in lists]
+    modelled = [e for e in lists if e.get("id")]
+    by_id = {e["id"]: e for e in modelled}
+    check(len(lists) == 38 and len(set(letters)) == 38 and all(isinstance(x, str) and re.fullmatch("[א-ת]{1,4}", x) for x in letters)
+          and len({e.get("cec_key") for e in lists}) == 38,
+          f"lists_2026.json: 38 lists, each with its own letters and CEC page: {len(lists)} lists, {len(set(letters))} letters")
+    check(len(modelled) == len(by_id) and set(by_id) == set(BP.PARTIES_2026)
+          and all(by_id[k]["letters"] == BP.LETTERS_2026[k] for k in by_id),
+          f"lists_2026.json: the modelled lists are build_polls.PARTIES_2026, with build_polls.LETTERS_2026: "
+          f"{sorted(k for k in by_id if by_id[k]['letters'] != BP.LETTERS_2026.get(k))}")
+    check(all(by_id[k].get("leader") == BP.PARTIES_2026[k][1] for k in by_id),
+          f"lists_2026.json: the leaders are build_polls': {[k for k in by_id if by_id[k].get('leader') != BP.PARTIES_2026[k][1]]}")
+    polls = json.load(open(os.path.join(ROOT, "site", "data", "polls_2026.json"), encoding="utf-8"))
+    parties = [{"id": k, "name": v[0], "leader": v[1], "bloc": v[2], "color": v[3], "dark": v[4], "letters": BP.LETTERS_2026.get(k, "")}
+               for k, v in BP.PARTIES_2026.items()]
+    check(polls.get("parties") == parties, "site/data/polls_2026.json: its parties are build_polls' (names, leaders, letters)")
+    ag = ref.get("agreements") or []
+    pairs_ref = {frozenset(a.get("ids") or []) for a in ag}
+    pairs_code = {frozenset(p_) for p_ in LF.AGREEMENTS_2026}
+    in_two = [k for k in by_id if sum(k in p_ for p_ in LF.AGREEMENTS_2026) > 1]
+    check(pairs_ref == pairs_code and len(pairs_code) == len(LF.AGREEMENTS_2026) and all(len(p_) == 2 for p_ in pairs_code)
+          and not in_two and all(set(p_) <= set(BP.PARTIES_2026) for p_ in pairs_code),
+          f"live_fetch.AGREEMENTS_2026 is lists_2026.json's agreements, each list in one at most: "
+          f"{sorted(map(sorted, pairs_code ^ pairs_ref))} {in_two}")
+    partner = {}
+    for a in ag:
+        x, y = a.get("lists") or ["", ""]
+        partner[x], partner[y] = y, x
+    check(all({by_id[i]["letters"] for i in a["ids"]} == set(a["lists"]) and a.get("sources") for a in ag)
+          and all(e.get("agreement") == partner.get(e["letters"]) for e in modelled)
+          and not {n.get("id") for n in ref.get("no_agreement") or []} & {i for a in ag for i in a["ids"]},
+          "lists_2026.json: each agreement's letters are its lists', with sources; every modelled list names its partner (or none)")
+    check(set(LF.LM.BASE_MAP["K26"]) == set(BP.PARTIES_2026), f"live_model.BASE_MAP['K26'] maps exactly the modelled lists: "
+          f"{sorted(set(LF.LM.BASE_MAP['K26']) ^ set(BP.PARTIES_2026))}")
+    urls = [s_ for s_ in re.findall(r'"(https?://[^"]*)"', open(ref_path, encoding="utf-8").read())]
+    check(urls and all(u.startswith("https://") and " " not in u for u in urls)
+          and all(e["letter_sources"] for e in lists if e["verified"]["letters"])
+          and all(isinstance(v, bool) for e in lists for v in e["verified"].values()),
+          f"lists_2026.json: every source an https address ({len(urls)}), verified letters with their sources, flags true or false")
+    # the page has its own copy of the agreements (site/src/js/core.js): another part of the site, reported here only
+    core = open(os.path.join(ROOT, "site", "src", "js", "core.js"), encoding="utf-8").read()
+    m = re.search(r"const AGREEMENTS_2026 = (\[.*?\]);", core)
+    page = {frozenset(a or b for a, b in re.findall(r""""([^"]*)"|'([^']*)'""", p_)) for p_ in re.findall(r"\[([^\[\]]+)\]", m.group(1))} if m else set()
+    if page != pairs_code:
+        print(f"  note: site/src/js/core.js AGREEMENTS_2026 differs from live_fetch.AGREEMENTS_2026: the page lacks "
+              f"{sorted(map(sorted, pairs_code - page))}, has {sorted(map(sorted, page - pairs_code))} beyond it")
+
+    # the fetcher against a stand-in for gov.il: client-config.js, the content-pages API, files, a catalogue
+    srv = http.server.HTTPServer(("127.0.0.1", 0), GovilMock)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    port = srv.server_address[1]
+    api = "/api/api/content-pages/"
+    lk, ya, bw = (next(e for e in lists if e.get("id") == i) for i in ("Likud", "Yashar", "National Unity"))
+    res_ = next(e for e in lists if e.get("id") == "Reservists")
+    page_json = lambda title, html_: json.dumps({"contentHead": {"title": title}, "contentMain": {"htmlContents": [{"sectionData": html_}]}},
+                                                ensure_ascii=False)
+    GovilMock.asked = {}
+    GovilMock.routes = {
+        "/govil/ContentpageWebApi/client-config.js": (200, "application/javascript",
+                                                     "window['govilRunConfig'] = {\"contentPageWebApi\": \"https://api.example.gov.il/content\", "
+                                                     "\"clientId\": \"cid-test\"};"),
+        api + "candidates-lists-26?culture=he": (200, "application/json", page_json(
+            "רשימות המועמדים לכנסת ה-26", '<p>הרשימות שאושרו</p><a href="/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf">'
+            'פתקי ההצבעה</a> <a href="/he/pages/heskem-26">הודעה על הסכמי עודפים</a> <a href="https://elsewhere.example.com/x.pdf">הסכמי עודפים (עותק)</a>'
+            f'<a href="?chapterIndex=2">פרק 2</a><a href="/he/pages/{lk["cec_key"]}">הליכוד</a><a href="/he/pages/new-party_list39">חדשה</a>')),
+        api + "candidates-lists-26?culture=he&chapterIndex=2": (200, "application/json", page_json(
+            "רשימות", f"<table><tr><td>{lk['letters']}</td><td>{lk['official_name']}</td></tr></table>")),
+        api + "heskem-26?culture=he": (200, "application/json", page_json("הסכמי עודפים", (
+            "<h2>הסכמי עודפים בין רשימות המועמדים</h2><table>"
+            "<tr><td>הליכוד בהנהגת בנימין נתניהו לראשות הממשלה</td><td>הציונות הדתית בראשות בצלאל סמוטריץ' וזהות</td></tr>"
+            "<tr><td>ש\"ס</td><td>יהדות התורה</td></tr>"
+            f"<tr><td>{bw['official_name']}</td><td>{res_['official_name']}</td></tr></table>"))),
+        api + lk["cec_key"] + "?culture=he": (200, "application/json", page_json(lk["official_name"], f"<p>אותיות הרשימה: {lk['letters']}</p>")),
+        api + ya["cec_key"] + "?culture=he": (200, "application/json", page_json(ya["official_name"], "<p>אותיות הרשימה: דרכ</p>")),
+        api + bw["cec_key"] + "?culture=he": (500, "text/html", "<p>error</p>"),
+        "/govil/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf": (200, "application/pdf", b"%PDF-1.4 slips"),
+        "/govil/he/pages/candidates-lists-26": (200, "text/html", "<html><head><title>gov.il</title></head><body><app-root></app-root></body></html>"),
+        "/data/api/3/action/package_search": (200, "application/json", json.dumps({"result": {"results": [
+            {"title": "הסכמי עודפים לכנסת ה-26", "resources": [{"name": "odafim", "url": "https://data.gov.il/dataset/o/odafim.csv"}]}]}},
+            ensure_ascii=False)),
+        "/data/dataset/o/odafim.csv": (200, "text/csv", "a,b\n"),
+    }
+    out = os.path.join(TMP, "cec_lists_out")
+    base = f"http://127.0.0.1:{port}"
+    r = subprocess.run([sys.executable, os.path.join(ROOT, "pipeline", "fetchers", "cec_lists.py"), "--out", out, "--timeout", "5",
+                        "--rewrite", f"https://www.gov.il={base}/govil", "--rewrite", f"https://api.example.gov.il/content={base}/api",
+                        "--rewrite", f"https://data.gov.il={base}/data", "--rewrite", "https://votes26.bechirot.gov.il=http://127.0.0.1:9",
+                        "--only-rewritten"], capture_output=True, text=True, timeout=180)
+    srv.shutdown()
+    s = load(out, "summary.json") or {}
+    rows = {e["cec_key"]: e for e in s.get("lists") or []}
+    seen = {e["url"]: e for e in s.get("urls") or []}
+    a_ = s.get("agreements") or {}
+    check(r.returncode == 0 and os.path.exists(os.path.join(out, "summary.md")) and len(rows) == 38,
+          f"cec_lists.py offline: exit {r.returncode}, summary.json and summary.md written {r.stderr.strip()[-200:]}")
+    asked = {k.lower(): v for k, v in (GovilMock.asked.get(api + lk["cec_key"] + "?culture=he") or {}).items()}
+    check(s.get("client_id_found") and s.get("content_api") == "https://api.example.gov.il/content/api/content-pages"
+          and asked.get("x-client-id") == "cid-test" and asked.get("origin") == "https://www.gov.il",
+          f"cec_lists.py: the content-pages API and client id from client-config.js, asked with gov.il's Origin: {s.get('content_api')} {asked}")
+    check((rows.get(lk["cec_key"]) or {}).get("letters_match") is True and (rows.get(ya["cec_key"]) or {}).get("letters_match") is False
+          and (rows.get(bw["cec_key"]) or {}).get("status") == 500 and (rows.get(bw["cec_key"]) or {}).get("letters_match") is None,
+          f"cec_lists.py: a roster page with the reference letters, one with others (flagged), one that failed (500): "
+          f"{[(k, rows.get(k, {}).get('letters_match'), rows.get(k, {}).get('status')) for k in (lk['cec_key'], ya['cec_key'], bw['cec_key'])]}")
+    check(sorted(["מחל", "ט"]) in a_.get("expected_seen", []) and sorted(["שס", "ג"]) in a_.get("expected_seen", [])
+          and any(set(p_) == {bw["letters"], res_["letters"]} for p_ in a_.get("not_expected", [])) and len(a_.get("expected_not_seen", [])) == 3,
+          f"cec_lists.py: the agreements page read (two expected pairs seen, one not expected, three not seen): {a_.get('expected_seen')} "
+          f"{a_.get('not_expected')} {a_.get('expected_not_seen')}")
+    ix = s.get("index") or {}
+    check(ix.get("roster_pages_linked") == 2 and ix.get("not_in_reference") == ["new-party_list39"]
+          and len(ix.get("not_linked", [])) == 36 and (seen.get("https://api.example.gov.il/content/api/content-pages/"
+                                                          "new-party_list39?culture=he") or {}).get("status") == 404,
+          f"cec_lists.py: a roster page the lists page links to that the reference lacks is reported and asked for: {ix}")
+    slips = seen.get(ref["cec"]["approved_slips_pdf"]) or {}
+    linked_out = seen.get("https://elsewhere.example.com/x.pdf")
+    refused = seen.get("https://votes26.bechirot.gov.il/") or {}
+    csv_ = seen.get("https://data.gov.il/dataset/o/odafim.csv") or {}
+    check(str(slips.get("saved", "")).endswith(".pdf") and os.path.exists(os.path.join(out, slips.get("saved", "-")))
+          and csv_.get("saved") and "refused" in str(refused.get("error", "")).lower()
+          and str((linked_out or {}).get("error", "")).startswith("not fetched: not a gov.il address")
+          and all(e.get("error", "").startswith("not fetched") for u, e in seen.items() if u.startswith("https://bechirot.gov.il")),
+          f"cec_lists.py: the slips PDF and a data.gov.il resource stored, a refused host and the hosts not rewritten recorded, "
+          f"no link off gov.il followed: {slips.get('saved')} {csv_.get('saved')} {refused.get('error')}")
 
 
 # ---------------------------------------------------------------- tests
@@ -1941,6 +2252,7 @@ def main():
         new, out, root = ops_control_in_request_checkout(docs, drill)
         check(not new and "skip the checkout's ops/request.json" in out and not ops_placeholder(root)[0],
               f"11b in a checkout of the request {drill} with HEALTH_GATE=1 (the drill's smoke test): {len(new)} failure(s) {new[:3]}")
+    lists_2026()
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")

@@ -68,7 +68,9 @@ BASE_MAP = {
     # belonged to a 0.02% list, so mapping כן -> כן projected Blue & White at zero (LM-1)
     "K24": {"מחל": ["מחל"], "פה": ["פה"], "כן": ["פה"], "שס": ["שס"], "ג": ["ג"], "ל": ["ל"], "ט": ["טב"],
             "ב": ["טב"], "אמת": ["אמת"], "מרצ": ["אמת"], "ודעם": ["ודעם"], "עם": ["ודעם"], "ת": []},
-    # 2026 lists (ids as in polls_2026.json) -> 2022 ballot letters
+    # 2026 lists (ids as in polls_2026.json) -> 2022 ballot letters (the 2026 letters and lists, approved 27.9.2026:
+    # pipeline/reference/lists_2026.json; a 2026 list using a letter that was another list's in 2022, such as פה, maps
+    # by id, never by letter)
     "K26": {"Likud": ["מחל"], "Yashar": ["כן"], "Together": ["פה"], "The Democrats": ["אמת", "מרצ"],
             "Yisrael Beiteinu": ["ל"], "Shas": ["שס"], "UTJ": ["ג"], "Otzma Yehudit": ["ט"],
             "Religious Zionism": ["ט"], "Joint List": ["ום", "ד"], "Ra'am": ["עם"], "National Unity": ["כן"],

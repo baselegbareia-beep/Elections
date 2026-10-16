@@ -1,0 +1,199 @@
+# Fetches official files that only GitHub's runners can reach (gov.il, bechirot.gov.il, cbs.gov.il and data.gov.il
+# answer the build container with 403): runs one fetcher, pipeline/fetchers/<what>.py --out DIR (the shared fetch
+# contract: standard library only; raw files plus summary.json and summary.md in DIR; exit 0 unless the fetcher itself
+# crashed), and pushes DIR to the ops-reports branch as reports/fetch/<what>/<YYYYMMDD-HHMM>/ (Israel time, one per
+# run) and reports/fetch/<what>/latest/ (replaced by every run). Never to main: no Pages build. Read the files with
+# `git fetch origin ops-reports && git show origin/ops-reports:reports/fetch/<what>/latest/summary.md`, or the GitHub
+# MCP tool get_file_contents with ref ops-reports. The run's summary page shows summary.md, and DIR is kept with the
+# run as an artifact (14 days), also when the push failed.
+# Requests: the election-day operator (a Claude session) can push but cannot dispatch (403), so a push to the
+# ops-control branch that changes ops/request.json stands in for Run workflow: {"workflow": "fetch", "what":
+# "cec_lists", "id": "…"} (docs/ELECTION_DAY.md, "בקשות דרך ops-control"; `what` is required). The job "request"
+# reads it with ops/check_request.py, the same step as in live.yml, discover.yml, net-check.yml and daily.yml; a
+# request for another workflow ends there. `what` is a fetcher's name (^[a-z0-9_]+$, not starting with _), checked
+# again by the job's first step together with the file's presence on the pushed commit, which is the code that runs
+# (ops-control is made from origin/main each time). One run per fetcher at a time (group fetch-<what>).
+# The fetcher runs without a token (a checkout without stored credentials): it reads pages from outside. Only the
+# push step gets the token, as a header for its git calls. No schedule: it runs when asked.
+name: Fetch official files
+
+on:
+  push:                              # the operator's requests (above): ops-control only, never main
+    branches: [ops-control]
+    paths: ['ops/request.json']
+  workflow_dispatch:
+    inputs:
+      what:
+        description: 'The fetcher to run: pipeline/fetchers/<what>.py (lower-case letters, digits and _), e.g. cec_lists'
+        type: string
+        required: true
+
+permissions:
+  contents: read
+
+jobs:
+  request:
+    # a push to ops-control: ops/request.json in place of the dispatch inputs (manual runs skip this)
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+    outputs:
+      run: ${{ steps.request.outputs.run }}
+      what: ${{ steps.request.outputs.what }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          sparse-checkout: ops
+          persist-credentials: false
+      - name: Read the request (ops/request.json on ops-control)
+        id: request
+        env:
+          WORKFLOW: fetch
+          FIELDS: 'what'
+        run: |
+          # A push to the ops-control branch is the operator's Run workflow: the session's token can push but not
+          # dispatch (docs/ELECTION_DAY.md, "בקשות דרך ops-control"). ops/check_request.py goes on (run=true) only for
+          # a request that names this workflow (WORKFLOW), its fields (FIELDS: the dispatch inputs) checked as tightly
+          # as Run workflow checks them; a request for another workflow ends here, quietly (run=false); one that does
+          # not parse, names no known workflow, or has a field or value this workflow does not take, goes red. Other
+          # events: run=true, nothing read. The same step in live.yml, discover.yml, net-check.yml, daily.yml and
+          # fetch.yml; live.yml's loop runs the same check on a restart request (pipeline/test_live.py runs both).
+          if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
+          python3 ops/check_request.py ops/request.json
+
+  fetch:
+    needs: request
+    # !cancelled(): the request job is skipped on dispatch; a push runs only for a fetch request
+    if: ${{ !cancelled() && (github.event_name != 'push' || needs.request.outputs.run == 'true') }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: write        # pushes to the ops-reports branch only
+    concurrency:
+      # one run per fetcher (one running, one pending); two fetchers run side by side, their pushes to ops-reports
+      # retried on a race. On the job, not the workflow: a push whose request is for another workflow skips this job,
+      # in a group of its own, so it never replaces a pending fetch
+      group: ${{ (github.event_name != 'push' || needs.request.outputs.run == 'true') && format('fetch-{0}', needs.request.outputs.what || github.event.inputs.what) || format('fetch-skipped-{0}', github.run_id) }}
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - name: Which fetcher (pipeline/fetchers/<what>.py on this commit)
+        id: guard
+        env:
+          WHAT: ${{ needs.request.outputs.what || github.event.inputs.what }}
+        run: |
+          # the request was checked already (ops/check_request.py); a manual run's input was not
+          if ! [[ "$WHAT" =~ ^[a-z0-9_]{1,40}$ ]] || [ "${WHAT#_}" != "$WHAT" ]; then
+            echo "::error::what is not a fetcher's name (lower-case letters, digits and _, not starting with _), e.g. cec_lists"
+            exit 1
+          fi
+          if [ ! -f "pipeline/fetchers/$WHAT.py" ]; then
+            echo "::error::no pipeline/fetchers/$WHAT.py on this commit (ops-control is made from origin/main: is it merged?)"
+            exit 1
+          fi
+          stamp=${STAMP:-$(TZ=Asia/Jerusalem date +%Y%m%d-%H%M)}
+          { echo "what=$WHAT"; echo "stamp=$stamp"; } >> "$GITHUB_OUTPUT"
+          echo "fetcher pipeline/fetchers/$WHAT.py, stamp $stamp"
+      - uses: actions/setup-python@v7
+        with:
+          python-version: '3.12'
+      - name: Run the fetcher
+        id: run
+        env:
+          WHAT: ${{ steps.guard.outputs.what }}
+          STAMP: ${{ steps.guard.outputs.stamp }}
+          OUT: ${{ runner.temp }}/fetch/out
+        run: |
+          mkdir -p "$OUT"
+          # what the fetcher prints comes partly from the pages it read: no workflow commands from it reach the runner
+          token=$(python3 -c 'import secrets; print(secrets.token_hex(16))')
+          echo "::stop-commands::$token"
+          rc=0
+          timeout 1500 python3 "pipeline/fetchers/$WHAT.py" --out "$OUT" || rc=$?
+          echo "::$token::"
+          if [ -f "$OUT/summary.md" ]; then
+            {
+              echo "## Fetch $WHAT, $STAMP (Israel time)"
+              echo
+              head -c 60000 "$OUT/summary.md"
+              echo
+              echo
+              echo "Files: https://github.com/$GITHUB_REPOSITORY/tree/ops-reports/reports/fetch/$WHAT/$STAMP"
+            } >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+          if [ "$rc" != 0 ]; then echo "::warning::pipeline/fetchers/$WHAT.py exited $rc: what it wrote is pushed, then the run goes red"; fi
+      - name: Push the files to ops-reports (reports/fetch/<what>/<stamp>/ and latest/)
+        id: publish
+        env:
+          WHAT: ${{ steps.guard.outputs.what }}
+          STAMP: ${{ steps.guard.outputs.stamp }}
+          OUT: ${{ runner.temp }}/fetch/out
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -f
+          if ! [[ "$WHAT" =~ ^[a-z0-9_]{1,40}$ && "$STAMP" =~ ^[0-9]{8}-[0-9]{4}$ ]]; then
+            echo "::error::no fetcher name or stamp from the guard step: nothing pushed"; exit 1
+          fi
+          if [ -z "$(ls -A "$OUT" 2>/dev/null)" ]; then echo "::error::the fetcher wrote nothing to push"; exit 1; fi
+          # GitHub refuses files over 100 MB; the fetchers keep theirs far smaller, this only guards the push
+          big=$(find "$OUT" -type f -size +45M | wc -l)
+          if [ "$big" != 0 ]; then find "$OUT" -type f -size +45M -delete; echo "::warning::$big file(s) over 45 MB left out"; fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          # the checkout kept no credentials: the token goes to these git calls only, as a header
+          auth=$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)
+          echo "::add-mask::$auth"
+          gitauth() { git -c "http.extraheader=AUTHORIZATION: basic $auth" "$@"; }
+          dest="reports/fetch/$WHAT"
+          wt="$RUNNER_TEMP/ops-reports-wt"
+          # the same cycle as discover.py's push_report: the branch tip, the files, one commit, push; a rejected push
+          # (another fetch or a discover report in between) starts again from the new tip. Only ops-reports is written.
+          for i in 1 2 3 4 5 6; do
+            git worktree remove --force "$wt" > /dev/null 2>&1 || true
+            rm -rf "$wt"
+            git worktree prune
+            if gitauth ls-remote --exit-code --heads origin ops-reports > /dev/null; then
+              gitauth fetch -q --depth=1 origin +refs/heads/ops-reports:refs/remotes/origin/ops-reports
+              git worktree add -q --detach "$wt" origin/ops-reports
+            else                                  # the first report of all: a branch with no history
+              git worktree add -q --detach "$wt" HEAD
+              git -C "$wt" checkout -q --orphan "ops-reports-new-$i"
+              git -C "$wt" rm -rfq --ignore-unmatch .
+            fi
+            git -C "$wt" clean -fdxq
+            rm -rf "${wt:?}/$dest/$STAMP" "${wt:?}/$dest/latest"
+            mkdir -p "$wt/$dest/$STAMP" "$wt/$dest/latest"
+            cp -R "$OUT/." "$wt/$dest/$STAMP/"
+            cp -R "$OUT/." "$wt/$dest/latest/"
+            git -C "$wt" add -A -- reports
+            if git -C "$wt" diff --cached --quiet; then echo "ops-reports already has these files"; exit 0; fi
+            git -C "$wt" commit -q -m "fetch $WHAT $STAMP"
+            if gitauth -C "$wt" push -q origin HEAD:refs/heads/ops-reports; then
+              echo "pushed $(git -C "$wt" rev-parse --short HEAD) to ops-reports: $dest/$STAMP/ and $dest/latest/"
+              exit 0
+            fi
+            echo "push rejected ($i); again from the new tip"
+            sleep $((2 + 3 * i))
+          done
+          echo "::error::could not push to ops-reports"
+          exit 1
+      - name: Keep the files with the run (also when the push failed)
+        if: always() && steps.guard.outcome == 'success'
+        uses: actions/upload-artifact@v6
+        with:
+          name: fetch-${{ steps.guard.outputs.what }}
+          path: ${{ runner.temp }}/fetch/out/
+          retention-days: 14
+          if-no-files-found: ignore
+      - name: Red when the fetcher crashed
+        if: steps.run.outputs.rc != '0'
+        env:
+          RC: ${{ steps.run.outputs.rc }}
+        run: |
+          echo "::error::the fetcher exited $RC (its files were pushed: see the run summary)"
+          exit 1

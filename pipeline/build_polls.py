@@ -17,7 +17,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # id -> (Hebrew name, leader, default bloc, light colour, dark colour)
 # Bloc "coal" = parties of the outgoing Netanyahu government; "arab" = Arab-led
-# lists; "opp" = the rest. The UI lets the reader move any list.
+# lists; "opp" = the rest. The UI lets the reader move any list. The leader is the
+# head of the list as submitted to the CEC (for Together and the Reservists the first
+# two, who lead the two parties that formed the list); the official names, the first
+# candidates and the sources: pipeline/reference/lists_2026.json.
 PARTIES_2026 = {
     "Likud":            ("הליכוד", "בנימין נתניהו", "coal", "#1d4ed8", "#5b8cff"),
     "Yashar":           ("ישר!", "גדי איזנקוט", "opp", "#be185d", "#f472b6"),
@@ -25,17 +28,19 @@ PARTIES_2026 = {
     "The Democrats":    ("הדמוקרטים", "יאיר גולן", "opp", "#dc2626", "#f87171"),
     "Yisrael Beiteinu": ("ישראל ביתנו", "אביגדור ליברמן", "opp", "#4c1d95", "#ddd6fe"),
     "Shas":             ("ש״ס", "אריה דרעי", "coal", "#52525b", "#8b8b94"),
-    "UTJ":              ("יהדות התורה", "יצחק גולדקנופף", "coal", "#0f172a", "#e2e8f0"),
+    "UTJ":              ("יהדות התורה", "יעקב אשר", "coal", "#0f172a", "#e2e8f0"),
     "Otzma Yehudit":    ("עוצמה יהודית", "איתמר בן גביר", "coal", "#ca8a04", "#eab308"),
     "Religious Zionism":("הציונות הדתית", "בצלאל סמוטריץ׳", "coal", "#b45309", "#c2410c"),
-    "Joint List":       ("הרשימה המשותפת", "חד״ש-תע״ל ובל״ד", "arab", "#065f46", "#059669"),
+    "Joint List":       ("הרשימה המשותפת", "יוסף ג׳בארין", "arab", "#065f46", "#059669"),
     "Ra'am":            ("רע״ם", "מנסור עבאס", "arab", "#65a30d", "#a3e635"),
     "Amcha Yisrael":    ("עמך ישראל", "עופר וינטר", "coal", "#78350f", "#c08457"),
-    "Reservists":       ("המילואימניקים", "יועז הנדל וחילי טרופר", "opp", "#0d9488", "#2dd4bf"),
+    "Reservists":       ("המילואימניקים", "יועז הנדל וירון זליכה", "opp", "#0d9488", "#2dd4bf"),
     "National Unity":   ("כחול לבן", "בני גנץ", "opp", "#4f46e5", "#a5b4fc"),
-    "Haredi Public":    ("הציבור החרדי", "מוטי לייטנר", "coal", "#78716c", "#a8a29e"),
+    "Haredi Public":    ("הציבור החרדי", "מוטי ליטנר", "coal", "#78716c", "#a8a29e"),
 }
-# Official 2026 ballot letters (CEC list approval, 27 Sep 2026).
+# Official 2026 ballot letters (CEC list approval, 27 Sep 2026): the column headers of the CEC's results files,
+# which the election-night feed reads by these letters. Checked against pipeline/reference/lists_2026.json
+# (pipeline/test_live.py, 11c) and, from a runner, against the CEC's own pages (pipeline/fetchers/cec_lists.py).
 LETTERS_2026 = {
     "Likud": "מחל", "Yashar": "דרך", "Together": "רק", "The Democrats": "אמת",
     "Yisrael Beiteinu": "ל", "Shas": "שס", "UTJ": "ג", "Otzma Yehudit": "ב",
