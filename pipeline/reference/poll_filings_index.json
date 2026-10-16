@@ -1,0 +1,5081 @@
+{
+ "about": "An index of the CEC's 2026 poll filings as read by third parties, kept until the filings are fetched from a GitHub runner (pipeline/fetchers/poll_filings.py) and read here: every value is a third party's reading of the PDF at 'pdf', verified: false. Party names mapped to polls_2026.json ids by build_poll_filings.party_id.",
+ "verified": false,
+ "collector": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26",
+ "api": "https://www.gov.il/he/api/DynamicCollector",
+ "template_id": "b043127d-d79d-472e-ac10-5567bc9e8d3d",
+ "template_id_source": "https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/src/scrape_cec.py",
+ "filing_rule": "https://www.bhol.co.il/news/1734638 (CEC director-general's letter, 29.7.2026: every poll published from 90 days before the election is filed within 96 hours and posted as sent)",
+ "sources": {
+  "or523": {
+   "url": "https://raw.githubusercontent.com/or523/or523.github.io/main/elections2026/data/polls.json",
+   "seen": "2026-10-16",
+   "sha256": "1093a79ed4c203ce269b44b8a5498cf13704e50e04a4de03cc7347fe4fa557d9",
+   "gives": "the collector's index (item, survey number, editor, outlet, CEC dates and notes, fieldwork dates) and each filing's seat table with the shares of the lists that won seats; filings without a national seat table listed as excluded with the reason"
+  },
+  "amitlev": {
+   "url": "https://raw.githubusercontent.com/amitlev/israel-polls-2026/main/docs/polls-data.js",
+   "seen": "2026-10-16",
+   "sha256": "b1edbdcd4f85fddf40c81c9afc0e348e1cfe8942306ffb85387a577a2f39864d",
+   "gives": "for the filings it matched to a poll: respondents, invited, response rate, sampling error, method fields and the shares of all lists (pdf-parse; its parser validated on the Midgam/Lazar, Kantar and Maagar Mochot templates)"
+  },
+  "isaranga": {
+   "url": "https://raw.githubusercontent.com/isaranga/SekerKolshehu/master/data/26th-Knesset-2026/polls/",
+   "seen": "2026-10-16",
+   "sha256": {
+    "2026-09-17-israeltoday.json": "33962dfe0141b691a04a8bfed03ab0517e6865eb3c88e883bbd22c7a9bb7b784",
+    "2026-09-22-news12.json": "a15782187c9d42e110bb7331517a9c8b4f1a0425b81c91f525d72949247cfeeb",
+    "2026-09-24-maariv.json": "55ad67373024f05da5029f70dd8af224d833406311882483dfab1921f297d65f",
+    "2026-09-27-kan11.json": "a9215901b68ae742c2aa98facdb7d9d7c2055d34adf90331ab6350c95ae830fb",
+    "2026-09-28-now14.json": "4711885666ad396ecde7bf45e9f6014b7b9b899e1fc2411372966c6b9a92ff0f",
+    "2026-09-30-maariv.json": "6f043ecfc9b0c4dbe924589c87af0ae0809f447de816c8a9a1d928c55a45550c",
+    "2026-10-01-now14.json": "f0ffa6de590a11fec370d9906ca2f6de61360ef89f9e9969425b8b2ea590f939",
+    "2026-10-04-kan11.json": "946b6271e73f8cd3125442d0d9990da0edb836921530191ee92cc14f41f51e31",
+    "2026-10-05-news12.json": "8ed6823a468326141036e5cc259e80c5c0942a129e502270c78ad45cb5784faa",
+    "2026-10-07-now14.json": "f7c5d108c69f31d7d4a1f451c04bfd06f22f176258d6c32afb243acd4f12fe93",
+    "2026-10-09-maariv.json": "4ef587f59b52c68a13fc512c100b6daa64f1082b02f812c3278bb54b0a962d33",
+    "2026-10-11-kan11.json": "00b55a74ce44b095619cf0d498c75612ca53f41a0e303ea8335bdb5b42f1a76c",
+    "2026-10-12-news12.json": "34b9d95437b76e29dad5fd4d9abb2c6f40afe49acdff3d5c928363cf9e16953b",
+    "2026-10-12-now14.json": "ba4ed051bdbf21dd23ff4b6b89aaddae304266a8cb7b4e8475580c416d911436",
+    "2026-10-12-walla.json": "e0dd6e1cbeb913c6c64be4940cbd14a9ec57ec005e93ff30fdd7d6d7d24c6c5b",
+    "2026-10-13-i24.json": "81d98ad2ceda6a8b8b3b7a275e4ccd12136ab1fbde6545b30af24c7d9d3e0838",
+    "2026-10-14-now14.json": "f93069b2d840f66fa6d70662fb7148e443b52207c0d5392ed2fb83d7e2322345"
+   },
+   "gives": "respondents (sample_size, 'the number of respondents, not the initial sample' by its .claude/skills/add-poll/SKILL.md) for the filings it transcribed; its shares are normalised to 100%, not used"
+  }
+ },
+ "filings": [
+  {
+   "item": "knesset_election1",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election1/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2028.7.2026.pdf",
+   "number": "4036",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-07-28",
+   "published": "2026-08-03",
+   "fieldwork": [
+    "2026-07-28",
+    "2026-07-29"
+   ],
+   "national": false,
+   "excluded": "seat column incomplete - ישר listed at 12.7% with no seats"
+  },
+  {
+   "item": "knesset_election2",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election2/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%202.8.2026.pdf",
+   "number": "4040",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23 , ירושלים",
+   "cec_date": "2026-08-02",
+   "published": "2026-08-03",
+   "fieldwork": [
+    "2026-08-02",
+    "2026-08-02"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Together": 13,
+     "Yashar": 23,
+     "The Democrats": 8,
+     "Reservists": 4,
+     "Religious Zionism": 4,
+     "Otzma Yehudit": 9,
+     "Yisrael Beiteinu": 9,
+     "Shas": 8,
+     "UTJ": 8,
+     "Joint List": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 18.4,
+     "Together": 10.5,
+     "Yashar": 18.3,
+     "The Democrats": 6.4,
+     "Reservists": 3.3,
+     "Religious Zionism": 3.3,
+     "Otzma Yehudit": 7.2,
+     "Yisrael Beiteinu": 7.2,
+     "Shas": 6.4,
+     "UTJ": 6.4,
+     "Joint List": 4.8,
+     "Ra'am": 4.0
+    },
+    "pct_total": 96.2
+   }
+  },
+  {
+   "item": "knesset_election3",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election3/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2029.7.2026.pdf",
+   "number": "4042",
+   "editor": "טאטיקה מחקרים ומדיה",
+   "media": "זמן ישראל",
+   "cec_date": "2026-07-29",
+   "published": "2026-08-04",
+   "fieldwork": [
+    "2026-07-29",
+    "2026-07-30"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 21,
+     "Likud": 20,
+     "Together": 13,
+     "Yisrael Beiteinu": 10,
+     "The Democrats": 8,
+     "Shas": 8,
+     "UTJ": 8,
+     "Otzma Yehudit": 7,
+     "Joint List": 6,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Reservists": 4,
+     "National Unity": 4
+    },
+    "pct": {
+     "Yashar": 18.0,
+     "Likud": 16.4,
+     "Together": 10.6,
+     "Yisrael Beiteinu": 8.2,
+     "The Democrats": 6.6,
+     "Shas": 6.6,
+     "UTJ": 6.6,
+     "Otzma Yehudit": 5.8,
+     "Joint List": 5.0,
+     "Religious Zionism": 5.0,
+     "Ra'am": 4.4,
+     "Reservists": 3.4,
+     "National Unity": 3.4
+    },
+    "pct_total": 100.0
+   }
+  },
+  {
+   "item": "knesset_election4",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election4/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%204.8.2026.pdf",
+   "number": "4046",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-08-03",
+   "published": "2026-08-04",
+   "fieldwork": [
+    "2026-08-03",
+    "2026-08-03"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 23,
+     "Together": 14,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Shas": 7,
+     "Otzma Yehudit": 7,
+     "Joint List": 5,
+     "Religious Zionism": 5,
+     "Ra'am": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 18.7,
+     "Likud": 18.6,
+     "Together": 11.2,
+     "The Democrats": 8.0,
+     "Yisrael Beiteinu": 7.2,
+     "UTJ": 6.4,
+     "Shas": 5.7,
+     "Otzma Yehudit": 5.6,
+     "Joint List": 4.1,
+     "Religious Zionism": 4.0,
+     "Ra'am": 3.9,
+     "Reservists": 3.3
+    },
+    "pct_total": 96.7
+   }
+  },
+  {
+   "item": "knesset_election5",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election5/he/4047-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "number": "4047",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-08-03",
+   "published": "2026-08-06",
+   "fieldwork": [
+    "2026-08-02",
+    "2026-08-03"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 14,
+     "Yashar": 22,
+     "National Unity": 4,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 9,
+     "The Democrats": 11,
+     "Joint List": 9,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Likud": 15.0,
+     "Together": 10.0,
+     "Yashar": 16.0,
+     "National Unity": 1.2,
+     "Otzma Yehudit": 7.0,
+     "Shas": 6.0,
+     "UTJ": 5.0,
+     "Yisrael Beiteinu": 6.0,
+     "The Democrats": 8.0,
+     "Joint List": 5.2,
+     "Ra'am": 3.0
+    },
+    "pct_total": 82.4
+   }
+  },
+  {
+   "item": "knesset_election6",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election6/he/4048-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "number": "4048",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-07-28",
+   "published": "2026-08-06",
+   "fieldwork": [
+    "2026-07-28",
+    "2026-07-29"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Shas": 7,
+     "Religious Zionism": 4,
+     "UTJ": 9,
+     "Yisrael Beiteinu": 10,
+     "Ra'am": 5,
+     "Joint List": 4,
+     "Otzma Yehudit": 8,
+     "The Democrats": 9,
+     "Together": 13,
+     "Yashar": 23
+    },
+    "other": {
+     "יסודות ישראל": 5
+    }
+   }
+  },
+  {
+   "item": "knesset_election7",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election7/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.8.2026.pdf",
+   "number": "4052",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-08-04",
+   "published": "2026-08-10",
+   "fieldwork": [
+    "2026-08-04",
+    "2026-08-05"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 22,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 11,
+     "Ra'am": 5,
+     "Joint List": 6,
+     "Otzma Yehudit": 9,
+     "The Democrats": 11,
+     "Together": 13,
+     "Yashar": 23
+    }
+   }
+  },
+  {
+   "item": "knesset_election8",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election8/he/4054-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "number": "4054",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-07-29",
+   "published": "2026-08-10",
+   "fieldwork": [
+    "2026-07-29",
+    "2026-07-30"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 22,
+     "Together": 15,
+     "Yisrael Beiteinu": 10,
+     "The Democrats": 9,
+     "UTJ": 8,
+     "Otzma Yehudit": 7,
+     "Shas": 7,
+     "Joint List": 5,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 18.0,
+     "Likud": 17.8,
+     "Together": 11.5,
+     "Yisrael Beiteinu": 7.6,
+     "The Democrats": 7.3,
+     "UTJ": 6.1,
+     "Otzma Yehudit": 5.1,
+     "Shas": 5.4,
+     "Joint List": 3.9,
+     "Ra'am": 3.8,
+     "Religious Zionism": 4.1,
+     "Reservists": 3.4
+    },
+    "pct_total": 94.0
+   }
+  },
+  {
+   "item": "knesset_election9",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election9/he/4055-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "number": "4055",
+   "editor": "מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-08-05",
+   "published": "2026-08-10",
+   "fieldwork": [
+    "2026-08-05",
+    "2026-08-06"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 22,
+     "Together": 15,
+     "Yisrael Beiteinu": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Shas": 7,
+     "Joint List": 5,
+     "Ra'am": 5,
+     "Religious Zionism": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 16.3,
+     "Likud": 16.0,
+     "Together": 11.2,
+     "Yisrael Beiteinu": 5.8,
+     "The Democrats": 6.2,
+     "Otzma Yehudit": 6.3,
+     "UTJ": 4.9,
+     "Shas": 4.2,
+     "Joint List": 3.4,
+     "Ra'am": 3.6,
+     "Religious Zionism": 3.2,
+     "Reservists": 3.4
+    },
+    "pct_total": 84.5
+   }
+  },
+  {
+   "item": "knesset_election10",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election10/he/4056-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "number": "4056",
+   "editor": "קנטאר ישראל",
+   "media": "עיתון ישראל היום בע\"מ",
+   "cec_date": "2026-08-05",
+   "published": "2026-08-10",
+   "fieldwork": [
+    "2026-08-05",
+    "2026-08-06"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Together": 13,
+     "Yashar": 22,
+     "The Democrats": 10,
+     "Reservists": 4,
+     "Religious Zionism": 4,
+     "Otzma Yehudit": 9,
+     "Yisrael Beiteinu": 9,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 5,
+     "Ra'am": 6
+    },
+    "pct": {
+     "Likud": 18.7,
+     "Together": 10.6,
+     "Yashar": 17.9,
+     "The Democrats": 8.1,
+     "Reservists": 3.3,
+     "Religious Zionism": 3.3,
+     "Otzma Yehudit": 7.3,
+     "Yisrael Beiteinu": 7.3,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Joint List": 4.1,
+     "Ra'am": 4.9
+    },
+    "pct_total": 97.7
+   }
+  },
+  {
+   "item": "knesset_election11",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election11/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "number": "4057",
+   "editor": "טאטיקה מחקרים ומדיה",
+   "media": "זמן ישראל",
+   "cec_date": "2026-08-05",
+   "published": "2026-08-10",
+   "fieldwork": [
+    "2026-08-05",
+    "2026-08-05"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 21,
+     "Together": 15,
+     "Yisrael Beiteinu": 11,
+     "UTJ": 8,
+     "The Democrats": 8,
+     "Shas": 8,
+     "Otzma Yehudit": 8,
+     "Joint List": 6,
+     "Religious Zionism": 6,
+     "Ra'am": 6
+    },
+    "pct": {
+     "Yashar": 17.6,
+     "Likud": 16.4,
+     "Together": 11.6,
+     "Yisrael Beiteinu": 8.4,
+     "UTJ": 6.4,
+     "The Democrats": 6.4,
+     "Shas": 6.4,
+     "Otzma Yehudit": 6.0,
+     "Joint List": 5.0,
+     "Religious Zionism": 5.0,
+     "Ra'am": 4.8
+    },
+    "pct_total": 94.0
+   }
+  },
+  {
+   "item": "knesset_election12",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election12/he/4059-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "number": "4059",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-08-10",
+   "published": "2026-08-11",
+   "fieldwork": [
+    "2026-08-09",
+    "2026-08-10"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 22,
+     "Together": 16,
+     "Yashar": 22,
+     "National Unity": 4,
+     "Otzma Yehudit": 9,
+     "Shas": 10,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 9,
+     "The Democrats": 12,
+     "Joint List": 5,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Likud": 14.0,
+     "Together": 11.0,
+     "Yashar": 14.0,
+     "National Unity": 2.0,
+     "Otzma Yehudit": 6.0,
+     "Shas": 7.0,
+     "UTJ": 5.0,
+     "Yisrael Beiteinu": 6.0,
+     "The Democrats": 8.0,
+     "Joint List": 3.0,
+     "Ra'am": 3.0
+    },
+    "pct_total": 79.0
+   }
+  },
+  {
+   "item": "knesset_election13",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election13/he/4061-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "number": "4061",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור",
+   "cec_date": "2026-08-09",
+   "published": "2026-08-11",
+   "fieldwork": [
+    "2026-08-09",
+    "2026-08-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 24,
+     "Together": 13,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 8,
+     "Yisrael Beiteinu": 10,
+     "Shas": 8,
+     "UTJ": 8,
+     "Joint List": 5,
+     "Ra'am": 6
+    },
+    "pct": {
+     "Likud": 18.3,
+     "Together": 9.9,
+     "Yashar": 17.6,
+     "The Democrats": 7.6,
+     "Religious Zionism": 3.8,
+     "Otzma Yehudit": 6.1,
+     "Yisrael Beiteinu": 7.6,
+     "Shas": 6.1,
+     "UTJ": 6.1,
+     "Joint List": 3.8,
+     "Ra'am": 4.6
+    },
+    "pct_total": 91.5
+   }
+  },
+  {
+   "item": "knesset_election14",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election14/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "number": "4064",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-08-10",
+   "published": "2026-08-11",
+   "fieldwork": [
+    "2026-08-10",
+    "2026-08-10"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 24,
+     "Likud": 22,
+     "Together": 15,
+     "The Democrats": 11,
+     "Yisrael Beiteinu": 10,
+     "UTJ": 8,
+     "Otzma Yehudit": 8,
+     "Shas": 7,
+     "Joint List": 5,
+     "Ra'am": 5,
+     "Religious Zionism": 5
+    },
+    "pct": {
+     "Yashar": 18.5,
+     "Likud": 17.2,
+     "Together": 11.5,
+     "The Democrats": 8.5,
+     "Yisrael Beiteinu": 7.8,
+     "UTJ": 6.2,
+     "Otzma Yehudit": 6.1,
+     "Shas": 5.4,
+     "Joint List": 3.9,
+     "Ra'am": 3.9,
+     "Religious Zionism": 3.7
+    },
+    "pct_total": 92.7
+   }
+  },
+  {
+   "item": "knesset_election15",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election15/he/4075-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2016.8.2026.pdf",
+   "number": "4075",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-08-12",
+   "published": "2026-08-16",
+   "fieldwork": [
+    "2026-08-12",
+    "2026-08-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 21,
+     "Together": 14,
+     "Yisrael Beiteinu": 10,
+     "The Democrats": 10,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Shas": 7,
+     "Joint List": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 16.6,
+     "Likud": 14.8,
+     "Together": 11.9,
+     "Yisrael Beiteinu": 9.2,
+     "The Democrats": 7.6,
+     "Otzma Yehudit": 5.3,
+     "UTJ": 6.3,
+     "Shas": 5.4,
+     "Joint List": 4.0,
+     "Ra'am": 3.9,
+     "Religious Zionism": 3.3,
+     "Reservists": 3.5
+    },
+    "pct_total": 91.8
+   }
+  },
+  {
+   "item": "knesset_election16",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election16/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2015.8.2026.pdf",
+   "number": "4074",
+   "editor": "טאטיקה מחקרים ומדיה",
+   "media": "זמן ישראל",
+   "cec_date": "2026-08-12",
+   "published": "2026-08-16",
+   "fieldwork": [
+    "2026-08-12",
+    "2026-08-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 13,
+     "Yisrael Beiteinu": 11,
+     "The Democrats": 9,
+     "UTJ": 8,
+     "Shas": 8,
+     "Otzma Yehudit": 7,
+     "Joint List": 6,
+     "Religious Zionism": 6,
+     "Ra'am": 6
+    },
+    "pct": {
+     "Yashar": 19.2,
+     "Likud": 16.0,
+     "Together": 10.2,
+     "Yisrael Beiteinu": 9.0,
+     "The Democrats": 6.8,
+     "UTJ": 6.4,
+     "Shas": 6.4,
+     "Otzma Yehudit": 5.6,
+     "Joint List": 5.2,
+     "Religious Zionism": 4.6,
+     "Ra'am": 4.6
+    },
+    "pct_total": 94.0
+   }
+  },
+  {
+   "item": "knesset_election17",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election17/he/4068-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "number": "4068",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-08-06",
+   "published": "2026-08-16",
+   "fieldwork": [
+    "2026-08-06",
+    "2026-08-06"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 28,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 9,
+     "Otzma Yehudit": 8,
+     "Joint List": 8,
+     "Shas": 8,
+     "Together": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 5
+    },
+    "pct": {
+     "Likud": 21.6,
+     "Yashar": 17.7,
+     "The Democrats": 7.7,
+     "Yisrael Beiteinu": 7.0,
+     "UTJ": 6.8,
+     "Otzma Yehudit": 6.3,
+     "Joint List": 6.1,
+     "Shas": 6.1,
+     "Together": 5.4,
+     "Ra'am": 4.0,
+     "Religious Zionism": 3.8
+    },
+    "pct_total": 92.5
+   }
+  },
+  {
+   "item": "knesset_election18",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election18/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2016.8.2026.pdf",
+   "number": "4076",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-08-13",
+   "published": "2026-08-16",
+   "fieldwork": [
+    "2026-08-13",
+    "2026-08-13"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 30,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 9,
+     "Shas": 8,
+     "Together": 8,
+     "Otzma Yehudit": 7,
+     "Joint List": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 5
+    },
+    "pct": {
+     "Likud": 22.9,
+     "Yashar": 17.6,
+     "The Democrats": 7.6,
+     "Yisrael Beiteinu": 6.9,
+     "UTJ": 6.8,
+     "Shas": 6.1,
+     "Together": 6.0,
+     "Otzma Yehudit": 5.3,
+     "Joint List": 4.6,
+     "Ra'am": 4.0,
+     "Religious Zionism": 3.8
+    },
+    "pct_total": 91.6
+   }
+  },
+  {
+   "item": "knesset_election19",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election19/he/4072-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "number": "4072",
+   "editor": "שלמה פילבר",
+   "media": "ערוץ 14",
+   "cec_date": "2026-07-29",
+   "published": "2026-08-16",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי, פירוט אחוזי התמיכה הגולמיים בכל מפלגה כפי שעולה מתשובות הנשאלים לרבות לרשימות שלא עברו את אחוז החסימה (וזאת ללא התאמה כלשהי לאופן חלוקת המנדטים)",
+   "fieldwork": [
+    "2026-07-29",
+    "2026-07-29"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 32,
+     "Yashar": 22,
+     "Shas": 10,
+     "The Democrats": 10,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Otzma Yehudit": 7,
+     "Together": 7,
+     "Joint List": 6,
+     "Religious Zionism": 5,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.6,
+     "Yashar": 16.9,
+     "Shas": 7.7,
+     "The Democrats": 7.7,
+     "UTJ": 6.2,
+     "Yisrael Beiteinu": 6.2,
+     "Otzma Yehudit": 5.4,
+     "Together": 5.4,
+     "Joint List": 4.6,
+     "Religious Zionism": 3.9,
+     "Ra'am": 3.9
+    },
+    "pct_total": 92.5
+   }
+  },
+  {
+   "item": "knesset_election20",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election20/he/4071-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "number": "4071",
+   "editor": "שלמה פילבר",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-10",
+   "published": "2026-08-16",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי, פירוט אחוזי התמיכה הגולמיים בכל מפלגה כפי שעולה מתשובות הנשאלים לרבות לרשימות שלא עברו את אחוז החסימה (וזאת ללא התאמה כלשהי לאופן חלוקת המנדטים)",
+   "fieldwork": [
+    "2026-08-09",
+    "2026-08-10"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 33,
+     "Yashar": 23,
+     "Shas": 10,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 8,
+     "Together": 7,
+     "UTJ": 7,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 6,
+     "Ra'am": 5,
+     "Joint List": 5
+    },
+    "pct": {
+     "Likud": 24.5,
+     "Yashar": 17.9,
+     "Shas": 7.9,
+     "The Democrats": 7.3,
+     "Yisrael Beiteinu": 6.0,
+     "Together": 5.2,
+     "UTJ": 5.4,
+     "Religious Zionism": 4.6,
+     "Otzma Yehudit": 4.6,
+     "Ra'am": 3.6,
+     "Joint List": 3.4
+    },
+    "pct_total": 90.4
+   }
+  },
+  {
+   "item": "knesset_election21",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election21/he/4070-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "number": "4070",
+   "editor": "שלמה פילבר",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-04",
+   "published": "2026-08-16",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי, פירוט אחוזי התמיכה הגולמיים בכל מפלגה כפי שעולה מתשובות הנשאלים לרבות לרשימות שלא עברו את אחוז החסימה (וזאת ללא התאמה כלשהי לאופן חלוקת המנדטים)",
+   "fieldwork": [
+    "2026-08-03",
+    "2026-08-04"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 22,
+     "Shas": 11,
+     "The Democrats": 10,
+     "Together": 8,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Otzma Yehudit": 6,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Joint List": 5
+    },
+    "pct": {
+     "Likud": 23.7,
+     "Yashar": 16.8,
+     "Shas": 8.4,
+     "The Democrats": 7.6,
+     "Together": 6.1,
+     "UTJ": 6.2,
+     "Yisrael Beiteinu": 6.0,
+     "Otzma Yehudit": 4.8,
+     "Religious Zionism": 4.4,
+     "Ra'am": 3.9,
+     "Joint List": 3.7
+    },
+    "pct_total": 91.6
+   }
+  },
+  {
+   "item": "knesset_election22",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election22/he/4077-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2017.8.2026.pdf",
+   "number": "4077",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-08-11",
+   "published": "2026-08-17",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי, מספר ואחוז האנשים שסירבו או לא התאימו להשתתף בסקר",
+   "fieldwork": [
+    "2026-08-11",
+    "2026-08-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 10,
+     "Ra'am": 5,
+     "Joint List": 6,
+     "Otzma Yehudit": 8,
+     "The Democrats": 11,
+     "Together": 12,
+     "Yashar": 23,
+     "Reservists": 4
+    }
+   }
+  },
+  {
+   "item": "knesset_election23",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election23/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2017.8.2026.pdf",
+   "number": "4079",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-08-13",
+   "published": "2026-08-17",
+   "fieldwork": [
+    "2026-08-13",
+    "2026-08-16"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Together": 14,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Religious Zionism": 4,
+     "Otzma Yehudit": 10,
+     "Yisrael Beiteinu": 10,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 17.5,
+     "Together": 10.7,
+     "Yashar": 17.7,
+     "The Democrats": 7.7,
+     "Religious Zionism": 3.3,
+     "Otzma Yehudit": 7.7,
+     "Yisrael Beiteinu": 7.7,
+     "Shas": 5.4,
+     "UTJ": 6.2,
+     "Joint List": 4.6,
+     "Ra'am": 3.9
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election24",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election24/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2018.8.2026.pdf",
+   "number": "4080",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-08-17",
+   "published": "2026-08-19",
+   "fieldwork": [
+    "2026-08-17",
+    "2026-08-17"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 24,
+     "Likud": 22,
+     "Together": 15,
+     "The Democrats": 11,
+     "Yisrael Beiteinu": 10,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "Joint List": 5,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 17.9,
+     "Likud": 16.4,
+     "Together": 11.0,
+     "The Democrats": 8.2,
+     "Yisrael Beiteinu": 7.6,
+     "Otzma Yehudit": 6.0,
+     "UTJ": 5.9,
+     "Shas": 5.3,
+     "Religious Zionism": 3.7,
+     "Joint List": 3.7,
+     "Ra'am": 3.7
+    },
+    "pct_total": 89.4
+   }
+  },
+  {
+   "item": "knesset_election25",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election25/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2019.8.2026.pdf",
+   "number": "4081",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-08-18",
+   "published": "2026-08-19",
+   "fieldwork": [
+    "2026-08-18",
+    "2026-08-18"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 24,
+     "The Democrats": 11,
+     "Together": 9,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Shas": 8,
+     "Otzma Yehudit": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Joint List": 5
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 18.6,
+     "The Democrats": 8.5,
+     "Together": 7.0,
+     "UTJ": 6.5,
+     "Yisrael Beiteinu": 6.2,
+     "Shas": 5.9,
+     "Otzma Yehudit": 4.6,
+     "Ra'am": 4.0,
+     "Religious Zionism": 3.9,
+     "Joint List": 3.8
+    },
+    "pct_total": 93.0
+   }
+  },
+  {
+   "item": "knesset_election26",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election26/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "number": "4049",
+   "editor": "נקסט דאטה - שלמה פילבר",
+   "media": "אתר סרוגים",
+   "cec_date": "2026-07-27",
+   "published": "2026-08-19",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי, המספר והאחוז של האנשים שסירבו או לא התאימו להשתתף בסקר, מרווח הטעות",
+   "fieldwork": [
+    "2026-07-27",
+    "2026-07-27"
+   ],
+   "national": false,
+   "excluded": "no 120-seat table found"
+  },
+  {
+   "item": "knesset_election27",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election27/he/4085-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2019.8.2026.pdf",
+   "number": "4085",
+   "editor": "שלמה פילבר",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-18",
+   "published": "2026-08-18",
+   "fieldwork": [
+    "2026-08-18",
+    "2026-08-18"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 32,
+     "Yashar": 24,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Religious Zionism": 6,
+     "Together": 6,
+     "Ra'am": 6,
+     "Joint List": 5
+    },
+    "pct": {
+     "Likud": 24.3,
+     "Yashar": 18.5,
+     "Shas": 7.6,
+     "The Democrats": 7.1,
+     "Otzma Yehudit": 6.4,
+     "UTJ": 5.3,
+     "Yisrael Beiteinu": 5.7,
+     "Religious Zionism": 4.7,
+     "Together": 4.5,
+     "Ra'am": 4.5,
+     "Joint List": 3.8
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election28",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election28/he/4089-2%20%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "number": "4089",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-08-19",
+   "published": "2026-08-23",
+   "fieldwork": [
+    "2026-08-18",
+    "2026-08-19"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 22,
+     "Together": 16,
+     "Yashar": 25,
+     "Religious Zionism": 4,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 9,
+     "The Democrats": 10,
+     "Joint List": 5,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Likud": 15.0,
+     "Together": 11.0,
+     "Yashar": 17.0,
+     "Religious Zionism": 3.0,
+     "Otzma Yehudit": 6.0,
+     "Shas": 6.0,
+     "UTJ": 5.0,
+     "Yisrael Beiteinu": 6.0,
+     "The Democrats": 7.0,
+     "Joint List": 3.0,
+     "Ra'am": 3.0
+    },
+    "pct_total": 82.0
+   }
+  },
+  {
+   "item": "knesset_election29",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election29/he/4088-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "number": "4088",
+   "editor": "טאטיקה מחקרים ומדיה",
+   "media": "זמן ישראל",
+   "cec_date": "2026-08-19",
+   "published": "2026-08-23",
+   "fieldwork": [
+    "2026-08-19",
+    "2026-08-19"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 21,
+     "Together": 15,
+     "Yisrael Beiteinu": 11,
+     "Shas": 9,
+     "UTJ": 8,
+     "The Democrats": 8,
+     "Joint List": 7,
+     "Otzma Yehudit": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 18.2,
+     "Likud": 16.6,
+     "Together": 11.6,
+     "Yisrael Beiteinu": 8.6,
+     "Shas": 6.6,
+     "UTJ": 6.4,
+     "The Democrats": 5.8,
+     "Joint List": 5.6,
+     "Otzma Yehudit": 5.4,
+     "Religious Zionism": 4.8,
+     "Ra'am": 4.2
+    },
+    "pct_total": 93.8
+   }
+  },
+  {
+   "item": "knesset_election30",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election30/he/4086-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2020.8.2026.pdf",
+   "number": "4086",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-08-18",
+   "published": "2026-08-23",
+   "fieldwork": [
+    "2026-08-18",
+    "2026-08-18"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Together": 14,
+     "Yashar": 24,
+     "The Democrats": 10,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 9,
+     "Yisrael Beiteinu": 9,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 17.6,
+     "Together": 10.7,
+     "Yashar": 18.4,
+     "The Democrats": 7.7,
+     "Religious Zionism": 3.8,
+     "Otzma Yehudit": 6.9,
+     "Yisrael Beiteinu": 7.0,
+     "Shas": 5.4,
+     "UTJ": 6.1,
+     "Joint List": 4.6,
+     "Ra'am": 3.8
+    },
+    "pct_total": 92.0
+   }
+  },
+  {
+   "item": "knesset_election31",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election31/he/%D7%9E%D7%AA%D7%95%D7%A7%D7%9F%204093-4090-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "number": "4090",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-08-19",
+   "published": "2026-08-23",
+   "fieldwork": [
+    "2026-08-19",
+    "2026-08-20"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 26,
+     "Likud": 20,
+     "Together": 14,
+     "Yisrael Beiteinu": 10,
+     "The Democrats": 10,
+     "Otzma Yehudit": 9,
+     "UTJ": 8,
+     "Shas": 7,
+     "Joint List": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 5
+    },
+    "pct": {
+     "Yashar": 19.1,
+     "Likud": 14.2,
+     "Together": 11.5,
+     "Yisrael Beiteinu": 7.7,
+     "The Democrats": 7.4,
+     "Otzma Yehudit": 6.5,
+     "UTJ": 6.2,
+     "Shas": 5.3,
+     "Joint List": 4.5,
+     "Ra'am": 4.1,
+     "Religious Zionism": 4.0
+    },
+    "pct_total": 90.5
+   }
+  },
+  {
+   "item": "knesset_election32",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election32/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2025.8.2026%204103.pdf",
+   "number": "4103",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-08-24",
+   "published": "2026-08-25",
+   "fieldwork": [
+    "2026-08-24",
+    "2026-08-24"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 24,
+     "Likud": 22,
+     "Together": 15,
+     "The Democrats": 11,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 9,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Shas": 7,
+     "Religious Zionism": 4,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Yashar": 18.7,
+     "Likud": 17.1,
+     "Together": 11.7,
+     "The Democrats": 8.4,
+     "Yisrael Beiteinu": 7.0,
+     "Otzma Yehudit": 6.9,
+     "UTJ": 6.3,
+     "Joint List": 5.3,
+     "Shas": 5.2,
+     "Religious Zionism": 3.3,
+     "Ra'am": 3.3
+    },
+    "pct_total": 93.2
+   }
+  },
+  {
+   "item": "knesset_election33",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election33/he/4091-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "number": "4091",
+   "editor": "קנטאר ישראל",
+   "media": "עיתון ישראל היום בע\"מ, השלושה 2, תל אביב",
+   "cec_date": "2026-08-19",
+   "published": "2026-08-23",
+   "fieldwork": [
+    "2026-08-19",
+    "2026-08-20"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 22,
+     "Together": 13,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 9,
+     "Yisrael Beiteinu": 10,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 17.2,
+     "Together": 10.2,
+     "Yashar": 18.0,
+     "The Democrats": 7.8,
+     "Religious Zionism": 3.9,
+     "Otzma Yehudit": 7.0,
+     "Yisrael Beiteinu": 7.8,
+     "Shas": 5.5,
+     "UTJ": 6.2,
+     "Joint List": 6.2,
+     "Ra'am": 3.9
+    },
+    "pct_total": 93.7
+   }
+  },
+  {
+   "item": "knesset_election34",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election34/he/4094-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026.pdf",
+   "number": "4094",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-08-18",
+   "published": "2026-08-24",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי",
+   "fieldwork": [
+    "2026-08-18",
+    "2026-08-18"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 23,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 9,
+     "Ra'am": 5,
+     "Joint List": 5,
+     "Otzma Yehudit": 8,
+     "The Democrats": 11,
+     "Together": 13,
+     "Yashar": 26
+    }
+   }
+  },
+  {
+   "item": "knesset_election35",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election35/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026%204099.pdf",
+   "number": "4099",
+   "editor": "קנטאר ישראל",
+   "media": "עיתון ישראל היום בע\"מ, השלושה 2, תל אביב",
+   "cec_date": "2026-08-24",
+   "published": "2026-08-24",
+   "fieldwork": [
+    "2026-08-23",
+    "2026-08-23"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 22,
+     "Together": 14,
+     "Yashar": 24,
+     "The Democrats": 10,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 9,
+     "Yisrael Beiteinu": 9,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.7,
+     "Together": 10.7,
+     "Yashar": 18.3,
+     "The Democrats": 7.6,
+     "Religious Zionism": 3.8,
+     "Otzma Yehudit": 6.8,
+     "Yisrael Beiteinu": 6.8,
+     "Shas": 5.4,
+     "UTJ": 6.1,
+     "Joint List": 5.3,
+     "Ra'am": 3.8
+    },
+    "pct_total": 91.3
+   }
+  },
+  {
+   "item": "knesset_election36",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election36/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026%204096.pdf",
+   "number": "4096",
+   "editor": "דיאלוג",
+   "media": "ידיעות אחרונות",
+   "cec_date": "2026-08-17",
+   "published": "2026-08-24",
+   "fieldwork": [
+    "2026-08-17",
+    "2026-08-19"
+   ],
+   "national": false,
+   "excluded": "no Arab list in the table - sector or scenario projection, not national"
+  },
+  {
+   "item": "knesset_election37",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election37/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2025.8.2026%204102.pdf",
+   "number": "4102",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-24",
+   "published": "2026-08-25",
+   "fieldwork": [
+    "2026-08-24",
+    "2026-08-24"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 32,
+     "Yashar": 24,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Together": 7,
+     "Yisrael Beiteinu": 7,
+     "Religious Zionism": 5,
+     "Ra'am": 5,
+     "Joint List": 5
+    },
+    "pct": {
+     "Likud": 24.8,
+     "Yashar": 18.5,
+     "Shas": 7.8,
+     "The Democrats": 6.7,
+     "Otzma Yehudit": 6.3,
+     "UTJ": 6.1,
+     "Together": 5.6,
+     "Yisrael Beiteinu": 5.1,
+     "Religious Zionism": 3.8,
+     "Ra'am": 3.7,
+     "Joint List": 4.0
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election38",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election38/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2027.8.2026%204104-1.pdf",
+   "number": "4104",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-08-25",
+   "published": "2026-08-30",
+   "fieldwork": [
+    "2026-08-25",
+    "2026-08-26"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Yashar": 21,
+     "Together": 16,
+     "The Democrats": 11,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "Yisrael Beiteinu": 8,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Amcha Yisrael": 7,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Likud": 14.0,
+     "Yashar": 14.0,
+     "Together": 11.0,
+     "The Democrats": 7.0,
+     "Otzma Yehudit": 6.0,
+     "Shas": 6.0,
+     "Yisrael Beiteinu": 6.0,
+     "UTJ": 5.0,
+     "Joint List": 5.0,
+     "Amcha Yisrael": 4.0,
+     "Ra'am": 3.0
+    },
+    "pct_total": 81.0
+   }
+  },
+  {
+   "item": "knesset_election39",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election39/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204106.pdf",
+   "number": "4106",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-08-25",
+   "published": "2026-08-30",
+   "cec_notes": "התבקשו השלמות - גודל המדגם ההתחלתי",
+   "fieldwork": [
+    "2026-08-25",
+    "2026-08-26"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 19,
+     "Shas": 8,
+     "Religious Zionism": 5,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 9,
+     "Ra'am": 5,
+     "Joint List": 10,
+     "Otzma Yehudit": 8,
+     "The Democrats": 11,
+     "Together": 13,
+     "Yashar": 24
+    }
+   }
+  },
+  {
+   "item": "knesset_election40",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election40/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204107.pdf",
+   "number": "4107",
+   "editor": "טאטיקה מחקרים ומדיה",
+   "media": "זמן ישראל",
+   "cec_date": "2026-08-26",
+   "published": "2026-08-30",
+   "cec_notes": "התבקשו השלמות: - שיטת הדגימה - גודל המדגם ההתחלתי - סוג האוכלוסיה",
+   "fieldwork": [
+    "2026-08-26",
+    "2026-08-26"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 26,
+     "Likud": 22,
+     "Together": 14,
+     "Yisrael Beiteinu": 10,
+     "Shas": 9,
+     "UTJ": 8,
+     "The Democrats": 8,
+     "Joint List": 6,
+     "Otzma Yehudit": 6,
+     "Amcha Yisrael": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 19.6,
+     "Likud": 16.2,
+     "Together": 10.8,
+     "Yisrael Beiteinu": 8.0,
+     "Shas": 7.2,
+     "UTJ": 6.4,
+     "The Democrats": 6.0,
+     "Joint List": 5.0,
+     "Otzma Yehudit": 5.0,
+     "Amcha Yisrael": 4.4,
+     "Ra'am": 4.0
+    },
+    "pct_total": 92.6
+   }
+  },
+  {
+   "item": "knesset_election41",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election41/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204108.pdf",
+   "number": "4108",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-08-26",
+   "published": "2026-08-30",
+   "fieldwork": [
+    "2026-08-26",
+    "2026-08-26"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 26,
+     "Yashar": 23,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 8,
+     "Amcha Yisrael": 8,
+     "UTJ": 8,
+     "Together": 8,
+     "Shas": 7,
+     "Otzma Yehudit": 6,
+     "Ra'am": 6,
+     "Joint List": 6,
+     "Religious Zionism": 4
+    },
+    "pct": {
+     "Likud": 20.1,
+     "Yashar": 18.3,
+     "The Democrats": 8.2,
+     "Yisrael Beiteinu": 6.5,
+     "Amcha Yisrael": 6.4,
+     "UTJ": 6.3,
+     "Together": 6.2,
+     "Shas": 5.7,
+     "Otzma Yehudit": 5.4,
+     "Ra'am": 5.3,
+     "Joint List": 4.9,
+     "Religious Zionism": 3.3
+    },
+    "pct_total": 96.6
+   }
+  },
+  {
+   "item": "knesset_election42",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election42/he/Survey_4201-4109.pdf",
+   "number": "4109",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-27",
+   "published": "2026-08-30",
+   "fieldwork": [
+    "2026-08-27",
+    "2026-08-27"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 23,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 7,
+     "Joint List": 7,
+     "UTJ": 7,
+     "Together": 7,
+     "Yisrael Beiteinu": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4,
+     "Religious Zionism": 4
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 17.9,
+     "Shas": 7.9,
+     "The Democrats": 6.9,
+     "Otzma Yehudit": 5.2,
+     "Joint List": 5.3,
+     "UTJ": 5.4,
+     "Together": 5.2,
+     "Yisrael Beiteinu": 4.5,
+     "Ra'am": 3.9,
+     "Amcha Yisrael": 3.9,
+     "Religious Zionism": 3.3
+    },
+    "pct_total": 93.4
+   }
+  },
+  {
+   "item": "knesset_election43",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election43/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204110.pdf",
+   "number": "4110",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-08-26",
+   "published": "2026-08-30",
+   "fieldwork": [
+    "2026-08-26",
+    "2026-08-27"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 15,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Amcha Yisrael": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 18.6,
+     "Likud": 14.4,
+     "Together": 12.7,
+     "The Democrats": 8.0,
+     "Yisrael Beiteinu": 7.2,
+     "Otzma Yehudit": 5.5,
+     "UTJ": 5.0,
+     "Shas": 5.4,
+     "Joint List": 6.0,
+     "Amcha Yisrael": 4.6,
+     "Ra'am": 4.2
+    },
+    "pct_total": 91.6
+   }
+  },
+  {
+   "item": "knesset_election44",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election44/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204105.pdf",
+   "number": "4105",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "וואלה תקשורת בע\"מ",
+   "cec_date": "2026-08-26",
+   "published": "2026-08-30",
+   "fieldwork": [
+    "2026-08-26",
+    "2026-08-26"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 15,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Amcha Yisrael": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 18.7,
+     "Likud": 14.5,
+     "Together": 12.5,
+     "The Democrats": 7.8,
+     "Yisrael Beiteinu": 7.4,
+     "Otzma Yehudit": 5.7,
+     "UTJ": 5.3,
+     "Shas": 5.2,
+     "Joint List": 5.9,
+     "Amcha Yisrael": 4.6,
+     "Ra'am": 4.1
+    },
+    "pct_total": 91.7
+   }
+  },
+  {
+   "item": "knesset_election45",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election45/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2031.8.2026%204113.pdf",
+   "number": "4113",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-08-30",
+   "published": "2026-08-31",
+   "fieldwork": [
+    "2026-08-30",
+    "2026-08-30"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 24,
+     "Shas": 10,
+     "The Democrats": 8,
+     "Yisrael Beiteinu": 7,
+     "Otzma Yehudit": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Together": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 4,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Likud": 23.7,
+     "Yashar": 18.4,
+     "Shas": 7.7,
+     "The Democrats": 6.1,
+     "Yisrael Beiteinu": 5.5,
+     "Otzma Yehudit": 5.5,
+     "UTJ": 5.6,
+     "Joint List": 5.4,
+     "Together": 4.4,
+     "Ra'am": 3.8,
+     "Religious Zionism": 3.1,
+     "Amcha Yisrael": 3.2
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election46",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election46/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2031.8.2026%204112.pdf",
+   "number": "4112",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-08-30",
+   "published": "2026-08-31",
+   "fieldwork": [
+    "2026-08-30",
+    "2026-08-30"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 14,
+     "Yashar": 24,
+     "The Democrats": 9,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 7,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 8,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.6,
+     "Together": 11.1,
+     "Yashar": 19.1,
+     "The Democrats": 7.1,
+     "Religious Zionism": 4.0,
+     "Otzma Yehudit": 5.6,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.4,
+     "Shas": 5.5,
+     "UTJ": 6.4,
+     "Joint List": 6.3,
+     "Ra'am": 4.0
+    },
+    "pct_total": 95.4
+   }
+  },
+  {
+   "item": "knesset_election47",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election47/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%201.9.2026%204115.pdf",
+   "number": "4115",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-08-31",
+   "published": "2026-09-02",
+   "fieldwork": [
+    "2026-08-31",
+    "2026-08-31"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 24,
+     "Likud": 23,
+     "Together": 15,
+     "The Democrats": 11,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Otzma Yehudit": 8,
+     "Shas": 7,
+     "Joint List": 7,
+     "Ra'am": 4,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 17.7,
+     "Likud": 16.7,
+     "Together": 10.8,
+     "The Democrats": 7.8,
+     "Yisrael Beiteinu": 6.5,
+     "UTJ": 5.7,
+     "Otzma Yehudit": 5.7,
+     "Shas": 5.1,
+     "Joint List": 5.0,
+     "Ra'am": 3.4,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 87.7
+   }
+  },
+  {
+   "item": "knesset_election48",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election48/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204117.pdf",
+   "number": "4117",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-09-01",
+   "published": "2026-09-03",
+   "fieldwork": [
+    "2026-09-02",
+    "2026-09-02"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 20,
+     "Likud": 19,
+     "Together": 18,
+     "The Democrats": 10,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 7,
+     "Religious Zionism": 5,
+     "Amcha Yisrael": 5,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Yashar": 15.0,
+     "Likud": 14.0,
+     "Together": 13.0,
+     "The Democrats": 7.0,
+     "Otzma Yehudit": 6.0,
+     "Shas": 7.0,
+     "UTJ": 5.0,
+     "Yisrael Beiteinu": 5.0,
+     "Joint List": 5.0,
+     "Religious Zionism": 4.0,
+     "Amcha Yisrael": 4.0,
+     "Ra'am": 3.0
+    },
+    "pct_total": 88.0
+   }
+  },
+  {
+   "item": "knesset_election49",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election49/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204116.pdf",
+   "number": "4116",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-09-02",
+   "published": "2026-09-03",
+   "cec_notes": "התבקשו השלמות - יש לציין במפורש האם מדובר באחוזי תמיכה גולמיים",
+   "fieldwork": [
+    "2026-09-02",
+    "2026-09-02"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 27,
+     "Yashar": 23,
+     "The Democrats": 9,
+     "Together": 9,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Otzma Yehudit": 7,
+     "Shas": 7,
+     "Yisrael Beiteinu": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 5
+    },
+    "pct": {
+     "Likud": 21.2,
+     "Yashar": 18.6,
+     "The Democrats": 7.1,
+     "Together": 7.0,
+     "UTJ": 6.4,
+     "Joint List": 5.7,
+     "Otzma Yehudit": 5.7,
+     "Shas": 5.6,
+     "Yisrael Beiteinu": 5.4,
+     "Religious Zionism": 4.9,
+     "Ra'am": 4.2,
+     "Amcha Yisrael": 4.1
+    },
+    "pct_total": 95.9
+   }
+  },
+  {
+   "item": "knesset_election50",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election50/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204118.pdf",
+   "number": "4118",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-09-01",
+   "published": "2026-09-03",
+   "fieldwork": [
+    "2026-09-01",
+    "2026-09-02"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Ra'am": 5,
+     "Joint List": 9,
+     "Otzma Yehudit": 7,
+     "The Democrats": 11,
+     "Together": 12,
+     "Yashar": 22,
+     "Amcha Yisrael": 4
+    },
+    "other": {
+     "האחדות": 0
+    }
+   }
+  },
+  {
+   "item": "knesset_election51",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election51/he/Survey_4121.pdf",
+   "number": "4121",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-09-02",
+   "published": "2026-09-06",
+   "fieldwork": [
+    "2026-09-02",
+    "2026-09-03"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 20,
+     "Together": 15,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Shas": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 16.5,
+     "Likud": 13.8,
+     "Together": 13.0,
+     "The Democrats": 8.9,
+     "Yisrael Beiteinu": 7.9,
+     "Otzma Yehudit": 5.9,
+     "UTJ": 4.9,
+     "Joint List": 5.0,
+     "Shas": 4.9,
+     "Ra'am": 4.6,
+     "Religious Zionism": 4.3,
+     "Amcha Yisrael": 3.6
+    },
+    "pct_total": 93.3
+   }
+  },
+  {
+   "item": "knesset_election52",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election52/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.9.2026%204120.pdf",
+   "number": "4120",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "וואלה תקשורת בע\"מ",
+   "cec_date": "2026-09-01",
+   "published": "2026-09-06",
+   "fieldwork": [
+    "2026-09-01",
+    "2026-09-02"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 24,
+     "Likud": 22,
+     "Together": 15,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Otzma Yehudit": 7,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Yashar": 17.6,
+     "Likud": 15.4,
+     "Together": 12.5,
+     "The Democrats": 7.9,
+     "Yisrael Beiteinu": 7.4,
+     "UTJ": 5.5,
+     "Joint List": 5.4,
+     "Otzma Yehudit": 5.2,
+     "Shas": 5.1,
+     "Religious Zionism": 4.2,
+     "Ra'am": 4.0
+    },
+    "pct_total": 90.2
+   }
+  },
+  {
+   "item": "knesset_election53",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election53/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.9.2026%204123.pdf",
+   "number": "4123",
+   "editor": "קנטאר ישראל",
+   "media": "עיתון ישראל היום בע\"מ, השלושה 2, תל אביב",
+   "cec_date": "2026-09-02",
+   "published": "2026-09-07",
+   "fieldwork": [
+    "2026-09-02",
+    "2026-09-03"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 13,
+     "Yashar": 24,
+     "The Democrats": 9,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 7,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 9,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.6,
+     "Together": 10.3,
+     "Yashar": 19.0,
+     "The Democrats": 7.1,
+     "Religious Zionism": 4.7,
+     "Otzma Yehudit": 5.5,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 7.1,
+     "Shas": 5.5,
+     "UTJ": 6.3,
+     "Joint List": 5.5,
+     "Ra'am": 4.0
+    },
+    "pct_total": 94.9
+   },
+   "amitlev": {
+    "n": 555,
+    "invited": 2349,
+    "response_rate": 24,
+    "refused_pct": 76,
+    "fieldwork": "2026-09-01",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 16.6,
+     "Together": 10.3,
+     "Yashar": 19,
+     "The Democrats": 7.1,
+     "Religious Zionism": 4.7,
+     "Otzma Yehudit": 5.5,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 7.1,
+     "Shas": 5.5,
+     "UTJ": 6.3,
+     "Joint List": 5.5,
+     "Ra'am": 4,
+     "National Unity": 1.7,
+     "Reservists": 2.7
+    },
+    "wasted_pct": 5.1,
+    "below": [
+     {
+      "name": "נבדקו בסקר ולא עברו אחוז חסימה כחול לבן בראשות בני גנץ",
+      "pct": 1.7,
+      "id": "National Unity"
+     },
+     {
+      "name": "בית ציוני - המילואימניקים בראשות חילי טרופר ויועז הנדל",
+      "pct": 2.7,
+      "id": "Reservists"
+     },
+     {
+      "name": "האחדות בראשות גלעד ארדן",
+      "pct": 0.7,
+      "id": "Unity"
+     }
+    ],
+    "moe_dropped": 2.4
+   }
+  },
+  {
+   "item": "knesset_election54",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election54/he/4124.pdf",
+   "number": "4124",
+   "editor": "דיאלוג",
+   "media": "ידיעות אחרונות",
+   "cec_date": "2026-08-31",
+   "published": "2026-09-07",
+   "fieldwork": [
+    "2026-08-31",
+    "2026-09-02"
+   ],
+   "national": false,
+   "excluded": "no 120-seat table found"
+  },
+  {
+   "item": "knesset_election55",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election55/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%207.9.2026%204126.pdf",
+   "number": "4126",
+   "editor": "אפקאר מחקרים וידע",
+   "media": "פרסום נצרת- משעור וו",
+   "cec_date": "2026-08-27",
+   "published": "2026-09-07",
+   "fieldwork": [
+    "2026-08-27",
+    "2026-09-01"
+   ],
+   "national": false,
+   "excluded": "duplicate party rows - not a national projection"
+  },
+  {
+   "item": "knesset_election56",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election56/he/Survey_4128.pdf",
+   "number": "4128",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-03",
+   "published": "2026-09-08",
+   "fieldwork": [
+    "2026-09-03",
+    "2026-09-03"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 22,
+     "Together": 11,
+     "Shas": 10,
+     "The Democrats": 10,
+     "UTJ": 8,
+     "Religious Zionism": 7,
+     "Otzma Yehudit": 7,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 7
+    },
+    "pct": {
+     "Likud": 24.2,
+     "Yashar": 16.9,
+     "Together": 8.6,
+     "Shas": 7.5,
+     "The Democrats": 7.5,
+     "UTJ": 6.3,
+     "Religious Zionism": 5.5,
+     "Otzma Yehudit": 5.4,
+     "Joint List": 5.3,
+     "Yisrael Beiteinu": 5.2
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election57",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election57/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%208.9.2026%204129.pdf",
+   "number": "4129",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-09-06",
+   "published": "2026-09-08",
+   "fieldwork": [
+    "2026-09-06",
+    "2026-09-06"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 20,
+     "Together": 13,
+     "Yashar": 23,
+     "The Democrats": 8,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 7,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "UTJ": 8,
+     "Reservists": 4,
+     "Joint List": 7,
+     "Ra'am": 6
+    },
+    "pct": {
+     "Likud": 16.3,
+     "Together": 10.6,
+     "Yashar": 18.8,
+     "The Democrats": 6.5,
+     "Religious Zionism": 4.9,
+     "Otzma Yehudit": 5.7,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 5.7,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Reservists": 3.3,
+     "Joint List": 5.7,
+     "Ra'am": 4.9
+    },
+    "pct_total": 97.9
+   }
+  },
+  {
+   "item": "knesset_election58",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election58/he/Survey%204130.pdf",
+   "number": "4130",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-09-07",
+   "published": "2026-09-10",
+   "fieldwork": [
+    "2026-09-07",
+    "2026-09-08"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 19.4,
+     "Likud": 14.6,
+     "Together": 11.1,
+     "The Democrats": 8.5,
+     "Yisrael Beiteinu": 7.1,
+     "Otzma Yehudit": 5.6,
+     "UTJ": 5.1,
+     "Shas": 5.0,
+     "Joint List": 5.2,
+     "Ra'am": 4.4,
+     "Religious Zionism": 4.6,
+     "Reservists": 4.3
+    },
+    "pct_total": 94.9
+   }
+  },
+  {
+   "item": "knesset_election59",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election59/he/Survey_4135.pdf",
+   "number": "4135",
+   "editor": "מכון די אר איי",
+   "media": "סקר עצמאי - ללא מזמין חיצוני",
+   "cec_date": "2026-09-07",
+   "published": "2026-09-10",
+   "fieldwork": [
+    "2026-09-07",
+    "2026-09-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 25,
+     "Yashar": 20,
+     "Shas": 10,
+     "Otzma Yehudit": 9,
+     "Together": 9,
+     "The Democrats": 9,
+     "Religious Zionism": 8,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Ra'am": 5,
+     "Joint List": 7,
+     "National Unity": 4
+    },
+    "pct": {
+     "Likud": 19.24,
+     "Yashar": 15.16,
+     "Shas": 7.87,
+     "Otzma Yehudit": 7.58,
+     "Together": 7.28,
+     "The Democrats": 7.01,
+     "Religious Zionism": 6.07,
+     "UTJ": 5.88,
+     "Yisrael Beiteinu": 5.69,
+     "Ra'am": 4.17,
+     "Joint List": 5.69,
+     "National Unity": 3.26
+    },
+    "pct_total": 94.9
+   }
+  },
+  {
+   "item": "knesset_election60",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election60/he/Survey_4137.pdf",
+   "number": "4137",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-10",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": false,
+   "excluded": "duplicate filing of knesset_election82"
+  },
+  {
+   "item": "knesset_election61",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election61/he/Survey_4138.pdf",
+   "number": "4138",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-10",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 27,
+     "Yashar": 22,
+     "Together": 10,
+     "The Democrats": 9,
+     "UTJ": 8,
+     "Otzma Yehudit": 8,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Likud": 21.1,
+     "Yashar": 17.7,
+     "Together": 7.7,
+     "The Democrats": 7.5,
+     "UTJ": 6.2,
+     "Otzma Yehudit": 6.1,
+     "Joint List": 5.7,
+     "Yisrael Beiteinu": 5.4,
+     "Shas": 5.3,
+     "Religious Zionism": 5.0,
+     "Ra'am": 4.5,
+     "Amcha Yisrael": 3.4
+    },
+    "pct_total": 95.6
+   },
+   "amitlev": {
+    "fieldwork": "2026-09-08"
+   }
+  },
+  {
+   "item": "knesset_election62",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election62/he/Survey_4134.pdf",
+   "number": "4134",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-09-08",
+   "published": "2026-09-10",
+   "fieldwork": [
+    "2026-09-08",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 20,
+     "Together": 16,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "The Democrats": 9,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 4,
+     "Amcha Yisrael": 4
+    }
+   }
+  },
+  {
+   "item": "knesset_election63",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election63/he/Survey4139.pdf",
+   "number": "4139",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "וואלה תקשורת בע\"מ",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 14,
+     "Yisrael Beiteinu": 9,
+     "The Democrats": 9,
+     "Otzma Yehudit": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 18.9,
+     "Likud": 14.7,
+     "Together": 12.3,
+     "Yisrael Beiteinu": 7.3,
+     "The Democrats": 7.4,
+     "Otzma Yehudit": 5.9,
+     "UTJ": 5.4,
+     "Joint List": 5.5,
+     "Shas": 4.9,
+     "Religious Zionism": 4.6,
+     "Ra'am": 4.7,
+     "Amcha Yisrael": 3.4
+    },
+    "pct_total": 95.0
+   }
+  },
+  {
+   "item": "knesset_election64",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election64/he/Survey4140.pdf",
+   "number": "4140",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 19,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Ra'am": 6,
+     "Joint List": 8,
+     "Otzma Yehudit": 9,
+     "The Democrats": 10,
+     "Together": 13,
+     "Yashar": 21,
+     "Amcha Yisrael": 5
+    }
+   }
+  },
+  {
+   "item": "knesset_election65",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election65/he/Survey4141.pdf",
+   "number": "4141",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-09-07",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-07",
+    "2026-09-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 13,
+     "The Democrats": 11,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Joint List": 7,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 6,
+     "Amcha Yisrael": 4,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Yashar": 19.7,
+     "Likud": 16.6,
+     "Together": 10.3,
+     "The Democrats": 8.7,
+     "UTJ": 6.1,
+     "Yisrael Beiteinu": 6.0,
+     "Joint List": 5.4,
+     "Shas": 5.3,
+     "Religious Zionism": 4.7,
+     "Otzma Yehudit": 4.7,
+     "Amcha Yisrael": 3.4,
+     "Ra'am": 3.3
+    },
+    "pct_total": 94.2
+   },
+   "amitlev": {
+    "n": 503,
+    "invited": 2490,
+    "response_rate": 20,
+    "refused_pct": 80,
+    "moe": 4.4,
+    "fieldwork": "2026-09-07",
+    "undecided_pct": 11,
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "population": "בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה",
+    "mode": "טלפוני + אינטרנטי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות",
+    "pct": {
+     "Yashar": 19.7,
+     "Likud": 16.6,
+     "Together": 10.3,
+     "The Democrats": 8.7,
+     "UTJ": 6.1,
+     "Yisrael Beiteinu": 6,
+     "Joint List": 5.4,
+     "Shas": 5.3,
+     "Religious Zionism": 4.7,
+     "Otzma Yehudit": 4.7,
+     "Amcha Yisrael": 3.4,
+     "Ra'am": 3.3,
+     "Reservists": 2.7,
+     "National Unity": 1,
+     "Haredi Public": 1.1
+    },
+    "wasted_pct": 5.8,
+    "below": [
+     {
+      "name": "המילואימניקים - הכלכלית החדשה בראשות יועז הנדל וירון זליכה",
+      "pct": 2.7,
+      "id": "Reservists"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 1.1,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 1,
+      "id": "National Unity"
+     },
+     {
+      "name": "נעם לישראל בראשות אבי מעוז",
+      "pct": 0.2
+     },
+     {
+      "name": "מקום לכולנו בראשות רולא דאוד ואלון לי - גרין",
+      "pct": 0.1
+     },
+     {
+      "name": "ישראל תחילה – עלה ירוק בראשות שרן השכל",
+      "pct": 0
+     },
+     {
+      "name": "מפלגות אחרות",
+      "pct": 0.7
+     }
+    ]
+   }
+  },
+  {
+   "item": "knesset_election66",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election66/he/Survey_4143.pdf",
+   "number": "4143",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 22,
+     "Shas": 10,
+     "Religious Zionism": 8,
+     "The Democrats": 8,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Together": 7,
+     "Yisrael Beiteinu": 7,
+     "Ra'am": 6,
+     "Joint List": 6
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 17.0,
+     "Shas": 8.0,
+     "Religious Zionism": 6.0,
+     "The Democrats": 6.0,
+     "Otzma Yehudit": 6.0,
+     "UTJ": 5.0,
+     "Together": 5.0,
+     "Yisrael Beiteinu": 5.0,
+     "Ra'am": 5.0,
+     "Joint List": 5.0
+    },
+    "pct_total": 92.0
+   }
+  },
+  {
+   "item": "knesset_election67",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election67/he/Survey_4144.pdf",
+   "number": "4144",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-10"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 19,
+     "Together": 14,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 18.8,
+     "Likud": 13.9,
+     "Together": 11.7,
+     "The Democrats": 9.4,
+     "Yisrael Beiteinu": 7.0,
+     "Otzma Yehudit": 6.2,
+     "UTJ": 5.0,
+     "Shas": 5.2,
+     "Joint List": 5.4,
+     "Ra'am": 4.5,
+     "Religious Zionism": 4.3,
+     "Amcha Yisrael": 3.4
+    },
+    "pct_total": 94.8
+   },
+   "amitlev": {
+    "n": 601,
+    "invited": 4329,
+    "moe": 4.4,
+    "fieldwork": "2026-09-08",
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "mode": "פאנל משיבים אינטרנטי התפלגות התשובות: אם היו מתקיימות היום",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות"
+   }
+  },
+  {
+   "item": "knesset_election68",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election68/he/Survey_4184-4142.pdf",
+   "number": "4142",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-07",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-07",
+    "2026-09-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 30,
+     "Yashar": 22,
+     "The Democrats": 10,
+     "Shas": 10,
+     "Religious Zionism": 8,
+     "Joint List": 8,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Together": 6,
+     "Yisrael Beiteinu": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 23.2,
+     "Yashar": 17.0,
+     "The Democrats": 8.5,
+     "Shas": 7.9,
+     "Religious Zionism": 7.0,
+     "Joint List": 6.4,
+     "Otzma Yehudit": 6.2,
+     "UTJ": 5.7,
+     "Together": 5.2,
+     "Yisrael Beiteinu": 5.0,
+     "Ra'am": 3.9
+    },
+    "pct_total": 96.0
+   },
+   "also": [
+    "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election68/he/Survey_4142.pdf"
+   ],
+   "amitlev": {
+    "n": 1057,
+    "response_rate": 17,
+    "fieldwork": "2026-09-06"
+   }
+  },
+  {
+   "item": "knesset_election69",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election69/he/Survey_4145.pdf",
+   "number": "4145",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-14",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 25,
+     "Likud": 21,
+     "Together": 13,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Shas": 7,
+     "Joint List": 7,
+     "Otzma Yehudit": 6,
+     "Religious Zionism": 5,
+     "Amcha Yisrael": 5,
+     "Ra'am": 4
+    },
+    "pct": {
+     "Yashar": 19.4,
+     "Likud": 16.3,
+     "Together": 9.2,
+     "The Democrats": 8.5,
+     "Yisrael Beiteinu": 7.0,
+     "UTJ": 6.3,
+     "Shas": 5.4,
+     "Joint List": 5.3,
+     "Otzma Yehudit": 4.6,
+     "Religious Zionism": 4.4,
+     "Amcha Yisrael": 3.9,
+     "Ra'am": 3.3
+    },
+    "pct_total": 93.6
+   },
+   "amitlev": {
+    "n": 504,
+    "invited": 2507,
+    "response_rate": 20,
+    "refused_pct": 80,
+    "moe": 4.4,
+    "fieldwork": "2026-09-09",
+    "undecided_pct": 10.2,
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "population": "בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה",
+    "mode": "טלפוני + אינטרנטי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות",
+    "pct": {
+     "Yashar": 19.4,
+     "Likud": 16.3,
+     "Together": 9.2,
+     "The Democrats": 8.5,
+     "Yisrael Beiteinu": 7,
+     "UTJ": 6.3,
+     "Shas": 5.4,
+     "Joint List": 5.3,
+     "Otzma Yehudit": 4.6,
+     "Religious Zionism": 4.4,
+     "Amcha Yisrael": 3.9,
+     "Ra'am": 3.3,
+     "Reservists": 2.9,
+     "National Unity": 1.4,
+     "Haredi Public": 1
+    },
+    "wasted_pct": 6.4,
+    "below": [
+     {
+      "name": "המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה",
+      "pct": 2.9,
+      "id": "Reservists"
+     },
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 1.4,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 1,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "ישראל תחילה – עלה ירוק בראשות שרן השכל",
+      "pct": 0.3
+     },
+     {
+      "name": "נעם לישראל בראשות אבי מעוז",
+      "pct": 0.2
+     },
+     {
+      "name": "הקהל בראשות שלמה אלבוים",
+      "pct": 0.1
+     },
+     {
+      "name": "מפלגות אחרות",
+      "pct": 0.5
+     }
+    ]
+   }
+  },
+  {
+   "item": "knesset_election70",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election70/he/Survey_4146.pdf",
+   "number": "4146",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-09-14",
+   "published": "2026-09-16",
+   "fieldwork": [
+    "2026-09-14",
+    "2026-09-14"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 20,
+     "Together": 12,
+     "Yashar": 24,
+     "The Democrats": 8,
+     "Reservists": 4,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 8,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 8,
+     "Shas": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.2,
+     "Together": 9.7,
+     "Yashar": 19.4,
+     "The Democrats": 6.4,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.8,
+     "Otzma Yehudit": 6.4,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.4,
+     "Shas": 5.6,
+     "UTJ": 5.6,
+     "Joint List": 5.6,
+     "Ra'am": 4.0
+    },
+    "pct_total": 96.7
+   }
+  },
+  {
+   "item": "knesset_election72",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election72/he/Survey_4147.pdf",
+   "number": "4147",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-09-14",
+   "published": "2026-09-17",
+   "fieldwork": [
+    "2026-09-14",
+    "2026-09-14"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 10,
+     "Joint List": 8,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Shas": 7,
+     "Otzma Yehudit": 6,
+     "Religious Zionism": 5,
+     "Reservists": 4,
+     "Ra'am": 4,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 18.9,
+     "Likud": 16.4,
+     "Together": 10.7,
+     "The Democrats": 8.2,
+     "Joint List": 6.6,
+     "UTJ": 6.5,
+     "Yisrael Beiteinu": 6.4,
+     "Shas": 5.8,
+     "Otzma Yehudit": 4.9,
+     "Religious Zionism": 4.1,
+     "Reservists": 3.4,
+     "Ra'am": 3.3,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 98.5
+   },
+   "amitlev": {
+    "n": 502,
+    "invited": 2514,
+    "response_rate": 20,
+    "refused_pct": 80,
+    "moe": 4.4,
+    "fieldwork": "2026-09-14",
+    "undecided_pct": 11,
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "population": "בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה",
+    "mode": "טלפוני + אינטרנטי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות",
+    "pct": {
+     "Yashar": 18.9,
+     "Likud": 16.4,
+     "Together": 10.7,
+     "The Democrats": 8.2,
+     "Joint List": 6.6,
+     "UTJ": 6.5,
+     "Yisrael Beiteinu": 6.4,
+     "Shas": 5.8,
+     "Otzma Yehudit": 4.9,
+     "Religious Zionism": 4.1,
+     "Reservists": 3.4,
+     "Ra'am": 3.3,
+     "Amcha Yisrael": 3.3,
+     "National Unity": 0.5,
+     "Haredi Public": 0.2
+    },
+    "wasted_pct": 1.5,
+    "below": [
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 0.5,
+      "id": "National Unity"
+     },
+     {
+      "name": "ישראל תחילה – עלה ירוק בראשות שרן השכל",
+      "pct": 0.3
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.2,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "הקהל בראשות שלמה אלבוים",
+      "pct": 0.1
+     },
+     {
+      "name": "נעם לישראל בראשות אבי מעוז",
+      "pct": 0.1
+     },
+     {
+      "name": "מפלגות אחרות",
+      "pct": 0.3
+     }
+    ]
+   }
+  },
+  {
+   "item": "knesset_election73",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election73/he/Survey_4150.pdf",
+   "number": "4150",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-15",
+   "published": "2026-09-17",
+   "fieldwork": [
+    "2026-09-15",
+    "2026-09-15"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 30,
+     "Yashar": 21,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "Together": 8,
+     "Religious Zionism": 8,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 23.1,
+     "Yashar": 16.0,
+     "Shas": 7.7,
+     "The Democrats": 7.1,
+     "Otzma Yehudit": 6.5,
+     "Together": 6.0,
+     "Religious Zionism": 6.1,
+     "UTJ": 6.3,
+     "Joint List": 5.5,
+     "Yisrael Beiteinu": 4.6,
+     "Ra'am": 3.6
+    },
+    "pct_total": 92.5
+   },
+   "amitlev": {
+    "n": 433,
+    "response_rate": 4,
+    "fieldwork": "2026-09-14"
+   }
+  },
+  {
+   "item": "knesset_election74",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election74/he/Survey_4151.pdf",
+   "number": "4151",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-09-15",
+   "published": "2026-09-17",
+   "fieldwork": [
+    "2026-09-15",
+    "2026-09-16"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 21,
+     "Likud": 18,
+     "Together": 16,
+     "Otzma Yehudit": 9,
+     "Shas": 9,
+     "The Democrats": 9,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Amcha Yisrael": 4,
+     "Reservists": 4
+    }
+   },
+   "amitlev": {
+    "n": 535,
+    "invited": 1878,
+    "response_rate": 28,
+    "moe": 4.2,
+    "fieldwork": "2026-09-14",
+    "population": "האוכלוסייה הישראלית הבוגרת גילי 18 ומעלה הדגימה דגימת שכבות + אקראית הסתברותית בתוך כל שכבה"
+   }
+  },
+  {
+   "item": "knesset_election75",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election75/he/Survey_4153.pdf",
+   "number": "4153",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-09-15",
+   "published": "2026-09-17",
+   "fieldwork": [
+    "2026-09-15",
+    "2026-09-16"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 18,
+     "Shas": 7,
+     "Religious Zionism": 8,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 8,
+     "Amcha Yisrael": 6,
+     "Ra'am": 6,
+     "Joint List": 8,
+     "Otzma Yehudit": 8,
+     "The Democrats": 10,
+     "Together": 12,
+     "Yashar": 22
+    }
+   }
+  },
+  {
+   "item": "knesset_election76",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election76/he/Survey_4154.pdf",
+   "number": "4154",
+   "editor": "מכון די אר איי",
+   "media": "סקר עצמאי - ללא מזמין חיצוני",
+   "cec_date": "2026-09-15",
+   "published": "2026-09-23",
+   "fieldwork": [
+    "2026-09-15",
+    "2026-09-15"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 26,
+     "Yashar": 18,
+     "Shas": 10,
+     "Otzma Yehudit": 9,
+     "Together": 9,
+     "The Democrats": 9,
+     "Religious Zionism": 7,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 8,
+     "Ra'am": 5,
+     "Joint List": 8,
+     "National Unity": 4
+    },
+    "pct": {
+     "Likud": 19.57,
+     "Yashar": 13.48,
+     "Shas": 7.77,
+     "Otzma Yehudit": 7.49,
+     "Together": 7.38,
+     "The Democrats": 6.93,
+     "Religious Zionism": 6.01,
+     "UTJ": 5.8,
+     "Yisrael Beiteinu": 6.09,
+     "Ra'am": 4.12,
+     "Joint List": 6.1,
+     "National Unity": 3.28
+    },
+    "pct_total": 94.0
+   }
+  },
+  {
+   "item": "knesset_election77",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election77/he/Survey_4158.pdf",
+   "number": "4158",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-09-16",
+   "published": "2026-09-23",
+   "fieldwork": [
+    "2026-09-16",
+    "2026-09-17"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 18,
+     "Together": 13,
+     "The Democrats": 9,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 6,
+     "Amcha Yisrael": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 17.0,
+     "Likud": 14.9,
+     "Together": 11.0,
+     "The Democrats": 7.6,
+     "Yisrael Beiteinu": 7.7,
+     "Otzma Yehudit": 6.3,
+     "UTJ": 5.2,
+     "Shas": 5.1,
+     "Joint List": 5.4,
+     "Ra'am": 4.2,
+     "Religious Zionism": 5.2,
+     "Amcha Yisrael": 3.4,
+     "Reservists": 3.5
+    },
+    "pct_total": 96.5
+   },
+   "amitlev": {
+    "n": 600,
+    "invited": 4089,
+    "moe": 4.4,
+    "fieldwork": "2026-09-15",
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "mode": "פאנל משיבים אינטרנטי אם היו מתקיימות היום בחירות לכנסת, לאי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות"
+   }
+  },
+  {
+   "item": "knesset_election78",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election78/he/Survey_4159.pdf",
+   "number": "4159",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-17",
+   "published": "2026-09-23",
+   "fieldwork": [
+    "2026-09-17",
+    "2026-09-17"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 20,
+     "Shas": 10,
+     "Together": 9,
+     "UTJ": 8,
+     "Otzma Yehudit": 8,
+     "The Democrats": 8,
+     "Religious Zionism": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 15.4,
+     "Shas": 7.9,
+     "Together": 6.9,
+     "UTJ": 6.3,
+     "Otzma Yehudit": 6.1,
+     "The Democrats": 6.3,
+     "Religious Zionism": 5.3,
+     "Yisrael Beiteinu": 5.5,
+     "Joint List": 6.8,
+     "Ra'am": 4.0
+    },
+    "pct_total": 94.5
+   }
+  },
+  {
+   "item": "knesset_election79",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election79/he/Survey_4160.pdf",
+   "number": "4160",
+   "editor": "קנטאר ישראל",
+   "media": "עיתון ישראל היום בע\"מ, השלושה 2, תל אביב",
+   "cec_date": "2026-09-16",
+   "published": "2026-09-23",
+   "fieldwork": [
+    "2026-09-16",
+    "2026-09-17"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 20,
+     "Together": 13,
+     "Yashar": 22,
+     "The Democrats": 9,
+     "Reservists": 4,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 8,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 8,
+     "Shas": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.2,
+     "Together": 10.5,
+     "Yashar": 17.8,
+     "The Democrats": 7.2,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.9,
+     "Otzma Yehudit": 6.5,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.5,
+     "Shas": 5.6,
+     "UTJ": 5.7,
+     "Joint List": 5.6,
+     "Ra'am": 4.0
+    },
+    "pct_total": 97.1
+   },
+   "amitlev": {
+    "n": 551,
+    "invited": 2489,
+    "response_rate": 22,
+    "refused_pct": 78,
+    "fieldwork": "2026-09-15",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 16.2,
+     "Together": 10.5,
+     "Yashar": 17.8,
+     "The Democrats": 7.2,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.9,
+     "Otzma Yehudit": 6.5,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.5,
+     "Shas": 5.6,
+     "UTJ": 5.7,
+     "Joint List": 5.6,
+     "Ra'am": 4,
+     "National Unity": 1.2,
+     "Haredi Public": 0.8
+    },
+    "wasted_pct": 2.9,
+    "below": [
+     {
+      "name": "נבדקו בסקר ולא עברו אחוז חסימה כחול לבן בראשות בני גנץ",
+      "pct": 1.2,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.8,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "מפלגת נעם בראשות אבי מעוז",
+      "pct": 0.4
+     },
+     {
+      "name": "\" צבע שחור – מגן עולם התורה\" בראשות אליהו באומרינד",
+      "pct": 0.5
+     }
+    ],
+    "moe_dropped": 2.4
+   },
+   "isaranga": {
+    "n": 551,
+    "file": "2026-09-17-israeltoday.json"
+   }
+  },
+  {
+   "item": "knesset_election80",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election80/he/Survey_4161.pdf",
+   "number": "4161",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-09-17",
+   "published": "2026-09-23",
+   "fieldwork": [
+    "2026-09-17",
+    "2026-09-17"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 27,
+     "Yashar": 21,
+     "The Democrats": 10,
+     "Together": 9,
+     "Yisrael Beiteinu": 8,
+     "UTJ": 8,
+     "Otzma Yehudit": 7,
+     "Joint List": 7,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 5
+    },
+    "pct": {
+     "Likud": 21.6,
+     "Yashar": 17.0,
+     "The Democrats": 8.0,
+     "Together": 7.4,
+     "Yisrael Beiteinu": 6.4,
+     "UTJ": 6.1,
+     "Otzma Yehudit": 5.7,
+     "Joint List": 5.4,
+     "Shas": 5.3,
+     "Religious Zionism": 5.2,
+     "Ra'am": 4.2,
+     "Amcha Yisrael": 3.7
+    },
+    "pct_total": 96.0
+   },
+   "amitlev": {
+    "fieldwork": "2026-09-16"
+   }
+  },
+  {
+   "item": "knesset_election81",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election81/he/Survey_4191-4162.pdf",
+   "number": "4162",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-09-22",
+   "published": "2026-09-24",
+   "fieldwork": [
+    "2026-09-22",
+    "2026-09-22"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 9,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Shas": 7,
+     "Joint List": 7,
+     "Otzma Yehudit": 6,
+     "Ra'am": 5,
+     "Religious Zionism": 5,
+     "Reservists": 4,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Yashar": 19.0,
+     "Likud": 16.5,
+     "Together": 10.7,
+     "The Democrats": 7.4,
+     "Yisrael Beiteinu": 7.3,
+     "UTJ": 6.6,
+     "Shas": 5.8,
+     "Joint List": 5.7,
+     "Otzma Yehudit": 5.0,
+     "Ra'am": 4.1,
+     "Religious Zionism": 4.0,
+     "Reservists": 3.5,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 98.9
+   },
+   "also": [
+    "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election81/he/Survey_4162.pdf"
+   ],
+   "isaranga": {
+    "n": 501,
+    "file": "2026-09-22-news12.json"
+   }
+  },
+  {
+   "item": "knesset_election82",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election82/he/Survey_4163.pdf",
+   "number": "4163",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-09-09",
+   "published": "2026-09-27",
+   "fieldwork": [
+    "2026-09-09",
+    "2026-09-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 12,
+     "Yashar": 24,
+     "The Democrats": 9,
+     "Reservists": 4,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 7,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 17.0,
+     "Together": 9.7,
+     "Yashar": 19.4,
+     "The Democrats": 7.2,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.1,
+     "Otzma Yehudit": 5.7,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 5.7,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Joint List": 5.7,
+     "Ra'am": 4.1
+    },
+    "pct_total": 97.4
+   },
+   "amitlev": {
+    "n": 554,
+    "invited": 2300,
+    "response_rate": 24,
+    "refused_pct": 76,
+    "moe": 4.2,
+    "fieldwork": "2026-09-08",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 17,
+     "Together": 9.7,
+     "Yashar": 19.4,
+     "The Democrats": 7.2,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.1,
+     "Otzma Yehudit": 5.7,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 5.7,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Joint List": 5.7,
+     "Ra'am": 4.1,
+     "National Unity": 0.8,
+     "Haredi Public": 0.9
+    },
+    "wasted_pct": 2.6,
+    "below": [
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 0.8,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.9,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "מפלגת נעם בראשות אבי מעוז",
+      "pct": 0.4
+     },
+     {
+      "name": "ישראל תחילה ועלה ירוק בראשות שרן השכל",
+      "pct": 0.5
+     }
+    ]
+   }
+  },
+  {
+   "item": "knesset_election83",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election83/he/Survey_4164.pdf",
+   "number": "4164",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-09-23",
+   "published": "2026-09-27",
+   "fieldwork": [
+    "2026-09-23",
+    "2026-09-24"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 22,
+     "Likud": 18,
+     "Together": 13,
+     "The Democrats": 11,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 9,
+     "Joint List": 7,
+     "UTJ": 6,
+     "Shas": 6,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 15.9,
+     "Likud": 14.4,
+     "Together": 11.0,
+     "The Democrats": 9.3,
+     "Yisrael Beiteinu": 7.7,
+     "Otzma Yehudit": 7.2,
+     "Joint List": 5.4,
+     "UTJ": 5.0,
+     "Shas": 5.0,
+     "Religious Zionism": 4.8,
+     "Ra'am": 4.4,
+     "Amcha Yisrael": 3.4,
+     "Reservists": 3.4
+    },
+    "pct_total": 96.9
+   },
+   "isaranga": {
+    "n": 610,
+    "file": "2026-09-24-maariv.json"
+   }
+  },
+  {
+   "item": "knesset_election84",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election84/he/Survey_4165.pdf",
+   "number": "4165",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-09-24",
+   "published": "2026-09-28",
+   "fieldwork": [
+    "2026-09-24",
+    "2026-09-24"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 27,
+     "Yashar": 22,
+     "Together": 9,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 6,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Likud": 20.4,
+     "Yashar": 17.5,
+     "Together": 7.2,
+     "The Democrats": 7.0,
+     "Otzma Yehudit": 6.6,
+     "UTJ": 6.1,
+     "Joint List": 5.7,
+     "Yisrael Beiteinu": 5.6,
+     "Shas": 5.3,
+     "Religious Zionism": 4.4,
+     "Ra'am": 4.4,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 93.5
+   },
+   "amitlev": {
+    "invited": 8850,
+    "response_rate": 6.1,
+    "fieldwork": "2026-09-23",
+    "sampling": "אקראית הסתברותית",
+    "population": "מדגם ארצי ומייצג של כלל האוכלוסייה בישראל בגילאי + 18 , לרבות יהודים וערבים",
+    "mode": "אינטרנטי, פאנל משיבים"
+   }
+  },
+  {
+   "item": "knesset_election85",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election85/he/Survey_4166.pdf",
+   "number": "4166",
+   "editor": "דיאלוג",
+   "media": "ידיעות אחרונות",
+   "cec_date": "2026-09-22",
+   "published": "2026-09-28",
+   "fieldwork": [
+    "2026-09-22",
+    "2026-09-23"
+   ],
+   "national": false,
+   "excluded": "no 120-seat table found"
+  },
+  {
+   "item": "knesset_election86",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election86/he/Survey_4169.pdf",
+   "number": "4169",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-09-22",
+   "published": "2026-09-29",
+   "fieldwork": [
+    "2026-09-22",
+    "2026-09-23"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 18,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Amcha Yisrael": 5,
+     "Ra'am": 5,
+     "Joint List": 8,
+     "Otzma Yehudit": 7,
+     "The Democrats": 11,
+     "Together": 11,
+     "Yashar": 22,
+     "Reservists": 4
+    }
+   },
+   "amitlev": {
+    "n": 1698,
+    "invited": 10206,
+    "response_rate": 23.2,
+    "fieldwork": "2026-09-21",
+    "sampling": "דגימת שכבות עם דגימה אקראית בתוך השכבות אם הבחירות לכנסת היו מתקיימות היום, לאיזו מפלגה היית מצביע/ה? שם המפלגה תוצאות סקר נוכחי: מנדטים אחוזים גולמיים לא משוקללים – מדגם בוגרים יהודים אחוזים גולמיים"
+   }
+  },
+  {
+   "item": "knesset_election87",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election87/he/Survey_4171.pdf",
+   "number": "4171",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-23",
+   "published": "2026-09-29",
+   "fieldwork": [
+    "2026-09-23",
+    "2026-09-23"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 32,
+     "Yashar": 22,
+     "Shas": 11,
+     "The Democrats": 9,
+     "Together": 7,
+     "Religious Zionism": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 7,
+     "Otzma Yehudit": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.3,
+     "Yashar": 17.2,
+     "Shas": 8.6,
+     "The Democrats": 7.2,
+     "Together": 5.1,
+     "Religious Zionism": 5.5,
+     "UTJ": 5.1,
+     "Joint List": 5.4,
+     "Yisrael Beiteinu": 5.5,
+     "Otzma Yehudit": 4.5,
+     "Ra'am": 4.0
+    },
+    "pct_total": 92.4
+   }
+  },
+  {
+   "item": "knesset_election88",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election88/he/Survey_4173.pdf",
+   "number": "4173",
+   "editor": "מאגר מוחות",
+   "media": "ערוץ 16",
+   "cec_date": "2026-09-29",
+   "published": "2026-09-30",
+   "fieldwork": [
+    "2026-09-29",
+    "2026-09-29"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 21,
+     "Likud": 19,
+     "Together": 14,
+     "Otzma Yehudit": 8,
+     "Shas": 8,
+     "The Democrats": 9,
+     "UTJ": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 7,
+     "Ra'am": 5,
+     "Religious Zionism": 6,
+     "Amcha Yisrael": 5,
+     "Reservists": 4
+    }
+   },
+   "amitlev": {
+    "n": 550,
+    "invited": 2403,
+    "response_rate": 23,
+    "moe": 4.2,
+    "fieldwork": "2026-09-28",
+    "population": "האוכלוסייה הישראלית הבוגרת גילי 18 ומעלה הדגימה דגימת שכבות + אקראית הסתברותית בתוך כל שכבה"
+   }
+  },
+  {
+   "item": "knesset_election89",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election89/he/Survey_4175.pdf",
+   "number": "4175",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-09-28",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-09-28",
+    "2026-09-28"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 21,
+     "Shas": 10,
+     "Together": 9,
+     "The Democrats": 9,
+     "UTJ": 8,
+     "Religious Zionism": 7,
+     "Otzma Yehudit": 7,
+     "Joint List": 7,
+     "Yisrael Beiteinu": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 16.3,
+     "Shas": 7.5,
+     "Together": 6.9,
+     "The Democrats": 7.1,
+     "UTJ": 6.4,
+     "Religious Zionism": 5.3,
+     "Otzma Yehudit": 5.1,
+     "Joint List": 5.2,
+     "Yisrael Beiteinu": 4.8,
+     "Ra'am": 3.8
+    },
+    "pct_total": 92.4
+   },
+   "isaranga": {
+    "n": 573,
+    "file": "2026-09-28-now14.json"
+   }
+  },
+  {
+   "item": "knesset_election90",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election90/he/Survey_4177.pdf",
+   "number": "4177",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-10-30",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-09-30",
+    "2026-10-01"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 21,
+     "Likud": 19,
+     "Together": 13,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 9,
+     "Joint List": 7,
+     "UTJ": 7,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 15.4,
+     "Likud": 14.8,
+     "Together": 11.3,
+     "The Democrats": 8.6,
+     "Yisrael Beiteinu": 7.4,
+     "Otzma Yehudit": 7.6,
+     "Joint List": 6.0,
+     "UTJ": 5.5,
+     "Shas": 5.7,
+     "Religious Zionism": 3.9,
+     "Ra'am": 4.7,
+     "Amcha Yisrael": 3.5,
+     "Reservists": 3.6
+    },
+    "pct_total": 98.0
+   },
+   "isaranga": {
+    "n": 610,
+    "file": "2026-09-30-maariv.json"
+   }
+  },
+  {
+   "item": "knesset_election91",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election91/he/Survey_4176.pdf",
+   "number": "4176",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-10-01",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 32,
+     "Yashar": 21,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Together": 8,
+     "UTJ": 8,
+     "Religious Zionism": 7,
+     "Joint List": 7,
+     "Otzma Yehudit": 7,
+     "Yisrael Beiteinu": 6,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.9,
+     "Yashar": 16.4,
+     "Shas": 7.7,
+     "The Democrats": 7.1,
+     "Together": 6.1,
+     "UTJ": 6.1,
+     "Religious Zionism": 5.2,
+     "Joint List": 5.1,
+     "Otzma Yehudit": 5.5,
+     "Yisrael Beiteinu": 4.7,
+     "Ra'am": 3.6
+    },
+    "pct_total": 92.4
+   },
+   "isaranga": {
+    "n": 2145,
+    "file": "2026-10-01-now14.json"
+   }
+  },
+  {
+   "item": "knesset_election92",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election92/he/Survey_4178.pdf",
+   "number": "4178",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-10-01",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-10-01",
+    "2026-10-01"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 28,
+     "Yashar": 22,
+     "Together": 9,
+     "The Democrats": 9,
+     "Joint List": 8,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "Religious Zionism": 5,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Likud": 22.0,
+     "Yashar": 17.1,
+     "Together": 7.4,
+     "The Democrats": 7.1,
+     "Joint List": 6.5,
+     "Otzma Yehudit": 6.4,
+     "UTJ": 6.1,
+     "Yisrael Beiteinu": 5.6,
+     "Shas": 5.5,
+     "Religious Zionism": 4.3,
+     "Ra'am": 4.2,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 95.5
+   },
+   "amitlev": {
+    "fieldwork": "2026-09-30"
+   }
+  },
+  {
+   "item": "knesset_election93",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election93/he/Survey_4179.pdf",
+   "number": "4179",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-09-27",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-09-27",
+    "2026-09-27"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 11,
+     "Yashar": 23,
+     "The Democrats": 9,
+     "Reservists": 4,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 7,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 9,
+     "Shas": 7,
+     "UTJ": 7,
+     "Joint List": 7,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.2,
+     "Together": 9.0,
+     "Yashar": 18.6,
+     "The Democrats": 7.1,
+     "Reservists": 3.6,
+     "Religious Zionism": 5.1,
+     "Otzma Yehudit": 5.8,
+     "Amcha Yisrael": 3.5,
+     "Yisrael Beiteinu": 7.1,
+     "Shas": 5.5,
+     "UTJ": 5.7,
+     "Joint List": 5.8,
+     "Ra'am": 4.4
+    },
+    "pct_total": 97.4
+   },
+   "amitlev": {
+    "n": 552,
+    "invited": 2118,
+    "response_rate": 26,
+    "refused_pct": 74,
+    "moe": 4.2,
+    "fieldwork": "2026-09-26",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 16.2,
+     "Together": 9,
+     "Yashar": 18.6,
+     "The Democrats": 7.1,
+     "Reservists": 3.6,
+     "Religious Zionism": 5.1,
+     "Otzma Yehudit": 5.8,
+     "Amcha Yisrael": 3.5,
+     "Yisrael Beiteinu": 7.1,
+     "Shas": 5.5,
+     "UTJ": 5.7,
+     "Joint List": 5.8,
+     "Ra'am": 4.4,
+     "National Unity": 0.7,
+     "Haredi Public": 0.9
+    },
+    "wasted_pct": 2.6,
+    "below": [
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 0.7,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.9,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "מפלגת נעם בראשות אבי מעוז",
+      "pct": 0.4
+     },
+     {
+      "name": "צבע שחור מגן התורה",
+      "pct": 0.6
+     }
+    ]
+   },
+   "isaranga": {
+    "n": 552,
+    "file": "2026-09-27-kan11.json"
+   }
+  },
+  {
+   "item": "knesset_election94",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election94/he/Survey_4182.pdf",
+   "number": "4182",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-09-29",
+   "published": "2026-10-04",
+   "fieldwork": [
+    "2026-09-29",
+    "2026-09-30"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 19,
+     "Shas": 7,
+     "Religious Zionism": 7,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 9,
+     "Amcha Yisrael": 5,
+     "Ra'am": 5,
+     "Joint List": 9,
+     "Otzma Yehudit": 8,
+     "The Democrats": 11,
+     "Together": 11,
+     "Yashar": 21
+    }
+   }
+  },
+  {
+   "item": "knesset_election95",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election95/he/Survey_4183.pdf",
+   "number": "4183",
+   "editor": "מרכז אקורד",
+   "media": "עצמאי",
+   "cec_date": "2026-09-10",
+   "published": "2026-10-05",
+   "fieldwork": [
+    "2026-09-10",
+    "2026-09-10"
+   ],
+   "national": false,
+   "excluded": "no party in the 120-seat block"
+  },
+  {
+   "item": "knesset_election96",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election96/he/Survey_4186.pdf",
+   "number": "4146",
+   "editor": "מכון די אר איי",
+   "media": "סקר עצמאי - ללא מזמין חיצוני",
+   "cec_date": "2026-10-18",
+   "published": "2026-10-06",
+   "fieldwork": [
+    "2026-09-18",
+    "2026-09-20"
+   ],
+   "national": false,
+   "excluded": "no 120-seat table found"
+  },
+  {
+   "item": "knesset_election97",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election97/he/Survey_4188.pdf",
+   "number": "4188",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-10-04",
+   "published": "2026-10-07",
+   "fieldwork": [
+    "2026-10-04",
+    "2026-10-04"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 21,
+     "Together": 12,
+     "Yashar": 23,
+     "The Democrats": 8,
+     "Reservists": 4,
+     "Religious Zionism": 6,
+     "Otzma Yehudit": 8,
+     "Yisrael Beiteinu": 9,
+     "Shas": 8,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.2,
+     "Together": 9.4,
+     "Yashar": 18.0,
+     "The Democrats": 6.3,
+     "Reservists": 3.4,
+     "Religious Zionism": 4.6,
+     "Otzma Yehudit": 6.3,
+     "Yisrael Beiteinu": 6.9,
+     "Shas": 6.3,
+     "UTJ": 6.3,
+     "Joint List": 6.3,
+     "Ra'am": 3.9
+    },
+    "pct_total": 93.9
+   },
+   "amitlev": {
+    "n": 553,
+    "invited": 2390,
+    "response_rate": 23,
+    "refused_pct": 77,
+    "moe": 4.2,
+    "fieldwork": "2026-10-03",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 16.2,
+     "Together": 9.4,
+     "Yashar": 18,
+     "The Democrats": 6.3,
+     "Reservists": 3.4,
+     "Religious Zionism": 4.6,
+     "Otzma Yehudit": 6.3,
+     "Yisrael Beiteinu": 6.9,
+     "Shas": 6.3,
+     "UTJ": 6.3,
+     "Joint List": 6.3,
+     "Ra'am": 3.9,
+     "Amcha Yisrael": 2.6,
+     "National Unity": 1.3,
+     "Haredi Public": 0.9
+    },
+    "wasted_pct": 6.1,
+    "below": [
+     {
+      "name": "עמך ישראל בראשות עופר וינטר",
+      "pct": 2.6,
+      "id": "Amcha Yisrael"
+     },
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 1.3,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.9,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "מפלגת אח\"י בראשות הרב אברג' ל",
+      "pct": 0.7
+     },
+     {
+      "name": "צבע שחור מגן עולם התורה בראשות אליהו בוימרינד",
+      "pct": 0.6
+     }
+    ]
+   },
+   "isaranga": {
+    "n": 553,
+    "file": "2026-10-04-kan11.json"
+   }
+  },
+  {
+   "item": "knesset_election99",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election99/he/Survey4190.pdf",
+   "number": "4190",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-10-05",
+   "published": "2026-10-08",
+   "fieldwork": [
+    "2026-10-05",
+    "2026-10-05"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 21,
+     "Together": 13,
+     "The Democrats": 9,
+     "Yisrael Beiteinu": 9,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Shas": 7,
+     "Otzma Yehudit": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 18.7,
+     "Likud": 17.0,
+     "Together": 10.5,
+     "The Democrats": 7.2,
+     "Yisrael Beiteinu": 7.1,
+     "UTJ": 6.5,
+     "Joint List": 6.4,
+     "Shas": 5.7,
+     "Otzma Yehudit": 5.5,
+     "Religious Zionism": 4.9,
+     "Ra'am": 4.1,
+     "Reservists": 3.4
+    },
+    "pct_total": 97.0
+   },
+   "amitlev": {
+    "n": 501,
+    "invited": 2501,
+    "response_rate": 20,
+    "refused_pct": 80,
+    "moe": 4.4,
+    "fieldwork": "2026-10-05",
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "population": "מדגם ארצי ומייצג של בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה",
+    "mode": "טלפוני + אינטרנטי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות",
+    "pct": {
+     "Yashar": 18.7,
+     "Likud": 17,
+     "Together": 10.5,
+     "The Democrats": 7.2,
+     "Yisrael Beiteinu": 7.1,
+     "UTJ": 6.5,
+     "Joint List": 6.4,
+     "Shas": 5.7,
+     "Otzma Yehudit": 5.5,
+     "Religious Zionism": 4.9,
+     "Ra'am": 4.1,
+     "Reservists": 3.4,
+     "Amcha Yisrael": 1.5
+    },
+    "wasted_pct": 3,
+    "below": [
+     {
+      "name": "עמך ישראל בראשות עופר וינטר",
+      "pct": 1.5,
+      "id": "Amcha Yisrael"
+     },
+     {
+      "name": "מפלגות אחרות עד 1% כ\"א",
+      "pct": 1.5
+     }
+    ]
+   },
+   "isaranga": {
+    "n": 501,
+    "file": "2026-10-05-news12.json"
+   }
+  },
+  {
+   "item": "knesset_election100",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election100/he/Survey_4192.pdf",
+   "number": "4192",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-10-07",
+   "published": "2026-10-08",
+   "fieldwork": [
+    "2026-10-07",
+    "2026-10-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 31,
+     "Yashar": 23,
+     "Shas": 10,
+     "The Democrats": 9,
+     "Otzma Yehudit": 8,
+     "Together": 8,
+     "UTJ": 8,
+     "Joint List": 7,
+     "Religious Zionism": 6,
+     "Yisrael Beiteinu": 5,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 24.0,
+     "Yashar": 17.4,
+     "Shas": 7.9,
+     "The Democrats": 6.7,
+     "Otzma Yehudit": 6.1,
+     "Together": 6.2,
+     "UTJ": 6.3,
+     "Joint List": 5.3,
+     "Religious Zionism": 4.6,
+     "Yisrael Beiteinu": 3.9,
+     "Ra'am": 4.0
+    },
+    "pct_total": 92.4
+   },
+   "isaranga": {
+    "n": 1079,
+    "file": "2026-10-07-now14.json"
+   }
+  },
+  {
+   "item": "knesset_election101",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election101/he/Survey_4193.pdf",
+   "number": "4193",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-10-06",
+   "published": "2026-10-08",
+   "fieldwork": [
+    "2026-10-06",
+    "2026-10-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 20,
+     "Shas": 7,
+     "Religious Zionism": 7,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 8,
+     "Amcha Yisrael": 5,
+     "Ra'am": 6,
+     "Joint List": 9,
+     "Otzma Yehudit": 8,
+     "The Democrats": 10,
+     "Together": 12,
+     "Yashar": 20
+    }
+   }
+  },
+  {
+   "item": "knesset_election102",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election102/he/Survey_4197.pdf",
+   "number": "4197",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "עיתון מעריב",
+   "cec_date": "2026-10-07",
+   "published": "2026-10-11",
+   "fieldwork": [
+    "2026-10-08",
+    "2026-10-09"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 21,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 9,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "Joint List": 7,
+     "UTJ": 7,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 15.9,
+     "Likud": 15.2,
+     "Together": 11.2,
+     "The Democrats": 8.0,
+     "Yisrael Beiteinu": 7.8,
+     "Otzma Yehudit": 6.2,
+     "Joint List": 4.3,
+     "UTJ": 5.9,
+     "Shas": 5.7,
+     "Religious Zionism": 5.2,
+     "Ra'am": 5.0,
+     "Amcha Yisrael": 3.4,
+     "Reservists": 3.6
+    },
+    "pct_total": 97.4
+   },
+   "isaranga": {
+    "n": 700,
+    "file": "2026-10-09-maariv.json"
+   }
+  },
+  {
+   "item": "knesset_election103",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election103/he/Survey_4198.pdf",
+   "number": "4198",
+   "editor": "דיאלוג",
+   "media": "ידיעות אחרונות",
+   "cec_date": "2026-10-05",
+   "published": "2026-10-11",
+   "fieldwork": [
+    "2026-10-05",
+    "2026-10-06"
+   ],
+   "national": false,
+   "excluded": "no 120-seat table found"
+  },
+  {
+   "item": "knesset_election104",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election104/he/Survey_4199.pdf",
+   "number": "4199",
+   "editor": "דיירקט פולס בעמ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-10-07",
+   "published": "2026-10-11",
+   "fieldwork": [
+    "2026-10-07",
+    "2026-10-07"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 26,
+     "Yashar": 20,
+     "Together": 11,
+     "The Democrats": 10,
+     "Otzma Yehudit": 9,
+     "UTJ": 8,
+     "Shas": 7,
+     "Yisrael Beiteinu": 7,
+     "Joint List": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Amcha Yisrael": 4
+    },
+    "pct": {
+     "Likud": 19.8,
+     "Yashar": 16.0,
+     "Together": 8.4,
+     "The Democrats": 7.9,
+     "Otzma Yehudit": 7.3,
+     "UTJ": 6.1,
+     "Shas": 5.7,
+     "Yisrael Beiteinu": 5.6,
+     "Joint List": 5.4,
+     "Religious Zionism": 5.0,
+     "Ra'am": 4.1,
+     "Amcha Yisrael": 3.3
+    },
+    "pct_total": 94.6
+   },
+   "amitlev": {
+    "fieldwork": "2026-10-06"
+   }
+  },
+  {
+   "item": "knesset_election105",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election105/he/Survey_4200.pdf",
+   "number": "4200",
+   "editor": "קנטאר ישראל",
+   "media": "תאגיד השידור כאן , כנפי נשרים 23, ירושלים",
+   "cec_date": "2026-10-11",
+   "published": "2026-10-12",
+   "fieldwork": [
+    "2026-10-11",
+    "2026-10-11"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 20,
+     "Together": 12,
+     "Yashar": 22,
+     "The Democrats": 8,
+     "Reservists": 4,
+     "Religious Zionism": 5,
+     "Otzma Yehudit": 9,
+     "Amcha Yisrael": 4,
+     "Yisrael Beiteinu": 8,
+     "Shas": 7,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Ra'am": 5
+    },
+    "pct": {
+     "Likud": 16.1,
+     "Together": 9.7,
+     "Yashar": 17.7,
+     "The Democrats": 6.5,
+     "Reservists": 3.3,
+     "Religious Zionism": 4.0,
+     "Otzma Yehudit": 7.3,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.5,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Joint List": 6.4,
+     "Ra'am": 4.0
+    },
+    "pct_total": 97.0
+   },
+   "amitlev": {
+    "n": 552,
+    "invited": 2586,
+    "response_rate": 21,
+    "refused_pct": 79,
+    "moe": 4.2,
+    "fieldwork": "2026-10-10",
+    "sampling": "אקראית הסתברותית",
+    "pct": {
+     "Likud": 16.1,
+     "Together": 9.7,
+     "Yashar": 17.7,
+     "The Democrats": 6.5,
+     "Reservists": 3.3,
+     "Religious Zionism": 4,
+     "Otzma Yehudit": 7.3,
+     "Amcha Yisrael": 3.3,
+     "Yisrael Beiteinu": 6.5,
+     "Shas": 5.7,
+     "UTJ": 6.5,
+     "Joint List": 6.4,
+     "Ra'am": 4,
+     "National Unity": 0.9,
+     "Haredi Public": 0.9
+    },
+    "wasted_pct": 3,
+    "below": [
+     {
+      "name": "כחול לבן בראשות בני גנץ",
+      "pct": 0.9,
+      "id": "National Unity"
+     },
+     {
+      "name": "הציבור החרדי בראשות מוטי לייטנר",
+      "pct": 0.9,
+      "id": "Haredi Public"
+     },
+     {
+      "name": "מפלגת אח\"י בראשות הרב אברג' ל",
+      "pct": 0.5
+     },
+     {
+      "name": "צבע שחור מגן עולם התורה בראשות אליהו בוימרינד",
+      "pct": 0.7
+     }
+    ]
+   },
+   "isaranga": {
+    "n": 552,
+    "file": "2026-10-11-kan11.json"
+   }
+  },
+  {
+   "item": "knesset_election106",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election106/he/Survey_4202.pdf",
+   "number": "4202",
+   "editor": "מדגם יעוץ ומחקר",
+   "media": "חדשות 12",
+   "cec_date": "2026-10-12",
+   "published": "2026-10-13",
+   "fieldwork": [
+    "2026-10-12",
+    "2026-10-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 23,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 9,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "Shas": 8,
+     "Joint List": 8,
+     "UTJ": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 18.2,
+     "Likud": 16.1,
+     "Together": 10.4,
+     "The Democrats": 7.3,
+     "Yisrael Beiteinu": 7.2,
+     "Otzma Yehudit": 6.4,
+     "Shas": 6.3,
+     "Joint List": 6.2,
+     "UTJ": 5.6,
+     "Religious Zionism": 4.8,
+     "Ra'am": 4.1,
+     "Reservists": 3.4
+    },
+    "pct_total": 96.0
+   },
+   "amitlev": {
+    "n": 509,
+    "invited": 2521,
+    "response_rate": 20,
+    "refused_pct": 80,
+    "moe": 4.4,
+    "fieldwork": "2026-10-12",
+    "sampling": "דגימת שכבות ובתוך השכבות דגימה אקראית",
+    "population": "מדגם ארצי ומייצג של בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה",
+    "mode": "טלפוני + אינטרנטי",
+    "method": "הסקר בוצע בשיטות סטטיסטיות מקובלות",
+    "pct": {
+     "Yashar": 18.2,
+     "Likud": 16.1,
+     "Together": 10.4,
+     "The Democrats": 7.3,
+     "Yisrael Beiteinu": 7.2,
+     "Otzma Yehudit": 6.4,
+     "Shas": 6.3,
+     "Joint List": 6.2,
+     "UTJ": 5.6,
+     "Religious Zionism": 4.8,
+     "Ra'am": 4.1,
+     "Reservists": 3.4,
+     "Amcha Yisrael": 1.8
+    },
+    "wasted_pct": 4,
+    "below": [
+     {
+      "name": "עמך ישראל בראשות עופר וינטר",
+      "pct": 1.8,
+      "id": "Amcha Yisrael"
+     },
+     {
+      "name": "מפלגות אחרות עד 1% כ\"א",
+      "pct": 2.2
+     }
+    ]
+   },
+   "isaranga": {
+    "n": 509,
+    "file": "2026-10-12-news12.json"
+   }
+  },
+  {
+   "item": "knesset_election107",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election107/he/Survey_4207.pdf",
+   "number": "4207",
+   "editor": "ד\"ר מנחם לזר",
+   "media": "וואלה תקשורת",
+   "cec_date": "2026-10-12",
+   "published": "2026-10-14",
+   "fieldwork": [
+    "2026-10-12",
+    "2026-10-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Yashar": 22,
+     "Likud": 20,
+     "Together": 13,
+     "The Democrats": 10,
+     "Yisrael Beiteinu": 9,
+     "Otzma Yehudit": 8,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "Ra'am": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Yashar": 15.9,
+     "Likud": 14.9,
+     "Together": 11.2,
+     "The Democrats": 8.5,
+     "Yisrael Beiteinu": 7.2,
+     "Otzma Yehudit": 6.3,
+     "UTJ": 6.2,
+     "Joint List": 6.4,
+     "Shas": 5.5,
+     "Religious Zionism": 5.4,
+     "Ra'am": 3.9,
+     "Reservists": 3.5
+    },
+    "pct_total": 94.9
+   },
+   "isaranga": {
+    "n": 601,
+    "file": "2026-10-12-walla.json"
+   }
+  },
+  {
+   "item": "knesset_election108",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election108/he/Survey4209.pdf",
+   "number": "4209",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-10-12",
+   "published": "2026-10-15",
+   "fieldwork": [
+    "2026-10-12",
+    "2026-10-12"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 29,
+     "Yashar": 20,
+     "The Democrats": 10,
+     "Shas": 10,
+     "UTJ": 8,
+     "Joint List": 8,
+     "Religious Zionism": 7,
+     "Together": 7,
+     "Otzma Yehudit": 7,
+     "Yisrael Beiteinu": 5,
+     "Ra'am": 5,
+     "Reservists": 4
+    },
+    "pct": {
+     "Likud": 23.2,
+     "Yashar": 16.0,
+     "The Democrats": 8.0,
+     "Shas": 8.0,
+     "UTJ": 6.4,
+     "Joint List": 6.4,
+     "Religious Zionism": 5.6,
+     "Together": 5.6,
+     "Otzma Yehudit": 5.6,
+     "Yisrael Beiteinu": 4.0,
+     "Ra'am": 4.0,
+     "Reservists": 3.3
+    },
+    "pct_total": 96.1
+   },
+   "isaranga": {
+    "n": 538,
+    "file": "2026-10-12-now14.json"
+   }
+  },
+  {
+   "item": "knesset_election109",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election109/he/Survey_4210.pdf",
+   "number": "4210",
+   "editor": "שמואל רוזנר",
+   "media": "ערוץ 13",
+   "cec_date": "2026-10-13",
+   "published": "2026-10-15",
+   "fieldwork": [
+    "2026-10-13",
+    "2026-10-13"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 18,
+     "Shas": 7,
+     "Religious Zionism": 6,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 9,
+     "Amcha Yisrael": 4,
+     "Ra'am": 6,
+     "Joint List": 9,
+     "Otzma Yehudit": 8,
+     "The Democrats": 9,
+     "Together": 12,
+     "Yashar": 20,
+     "Reservists": 4
+    }
+   }
+  },
+  {
+   "item": "knesset_election110",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election110/he/Survey_4211.pdf",
+   "number": "4211",
+   "editor": "דיירקט פולס בע\"מ",
+   "media": "חדשות המזרח התיכון 24 בע\"מ",
+   "cec_date": "2026-10-13",
+   "published": "2026-10-16",
+   "fieldwork": [
+    "2026-10-13",
+    "2026-10-13"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 27,
+     "Yashar": 21,
+     "Together": 13,
+     "Otzma Yehudit": 9,
+     "The Democrats": 9,
+     "UTJ": 8,
+     "Yisrael Beiteinu": 7,
+     "Shas": 7,
+     "Joint List": 7,
+     "Ra'am": 6,
+     "Religious Zionism": 6
+    },
+    "pct": {
+     "Likud": 20.5,
+     "Yashar": 16.4,
+     "Together": 9.7,
+     "Otzma Yehudit": 7.2,
+     "The Democrats": 7.1,
+     "UTJ": 5.8,
+     "Yisrael Beiteinu": 5.7,
+     "Shas": 5.4,
+     "Joint List": 5.2,
+     "Ra'am": 5.0,
+     "Religious Zionism": 4.7
+    },
+    "pct_total": 92.7
+   },
+   "isaranga": {
+    "n": 1210,
+    "file": "2026-10-13-i24.json"
+   }
+  },
+  {
+   "item": "knesset_election111",
+   "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election111/he/Survey_4212.pdf",
+   "number": "4212",
+   "editor": "נקסט דאטה",
+   "media": "ערוץ 14",
+   "cec_date": "2026-10-14",
+   "published": "2026-10-16",
+   "fieldwork": [
+    "2026-10-14",
+    "2026-10-14"
+   ],
+   "national": true,
+   "or523": {
+    "seats": {
+     "Likud": 29,
+     "Yashar": 20,
+     "Together": 11,
+     "Shas": 10,
+     "Joint List": 9,
+     "The Democrats": 8,
+     "UTJ": 8,
+     "Otzma Yehudit": 8,
+     "Religious Zionism": 7,
+     "Ra'am": 5,
+     "Yisrael Beiteinu": 5
+    },
+    "pct": {
+     "Likud": 22.1,
+     "Yashar": 15.6,
+     "Together": 8.5,
+     "Shas": 7.7,
+     "Joint List": 7.0,
+     "The Democrats": 6.4,
+     "UTJ": 6.1,
+     "Otzma Yehudit": 5.9,
+     "Religious Zionism": 5.5,
+     "Ra'am": 3.6,
+     "Yisrael Beiteinu": 4.0
+    },
+    "pct_total": 92.4
+   },
+   "isaranga": {
+    "n": 568,
+    "file": "2026-10-14-now14.json"
+   }
+  }
+ ]
+}

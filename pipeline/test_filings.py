@@ -1,0 +1,547 @@
+#!/usr/bin/env python3
+"""Tests of the CEC poll filings: pipeline/fetchers/poll_filings.py and pipeline/build_poll_filings.py.
+
+    python3 pipeline/test_filings.py
+
+Self-contained (no network): a temporary folder, a local stand-in for gov.il and raw.githubusercontent.com.
+  1. reading a filing's text: the pdftotext -layout rendering of an RTL filing (value cells left of their labels,
+     the bidi marks pdftotext writes), a narrative template, a trend table that must be refused, list labels as
+     pollsters type them, dates (ranges, two-digit years, gov.il's UTC midnights);
+  2. the same filing as a PDF whose glyphs stand in visual order (as an RTL PDF stores them), read with pdftotext
+     (skipped when this machine has none);
+  3. the builder: polls matched by their seats, by house and date, and by the link they carry; a filing read here
+     wins over the third parties and is marked verified; shares never attached to a table that is not the poll's;
+     polls_2026.json byte for byte unchanged and no seat in the output; a fetch's paths that leave it ignored;
+     the same input, the same output;
+  4. the fetcher against the stand-in: the template id from the collector page, the listing paged, PDFs saved,
+     a 404 and a challenge page recorded, addresses from third parties taken only in the filing form, a listing
+     that is refused falling back on the indexes and a bounded probe; summary.json and summary.md written.
+
+The fixtures are constructed. Their format: the field labels the three templates read by
+amitlev/israel-polls-2026 use (.github/scripts/lib/govil-pdf-parser.mjs, LABEL_ALIASES and ALL_LABELS), the main
+table as its README quotes Kantar's filing of 9.9.2026 ("תחזית המנדטים / מנדטים / אחוזים (נתונים גולמיים)", rows
+"<list> בראשות <leader>  <seats>  <share>%", lists below the threshold with a share only, a "סה"כ" row); the values
+of the Midgam fixture are those amitlev's parser read from filing 4202 (knesset_election106, Survey_4202.pdf: n 509,
+invited 2,521, response rate 20%, sampling error 4.4, the method texts, the shares); its undecided line and the
+other fixtures' numbers are invented.
+"""
+import http.server
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import threading
+import zlib
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, os.path.join(ROOT, "pipeline"))
+import build_poll_filings as B  # noqa: E402
+
+FETCHER = os.path.join(ROOT, "pipeline", "fetchers", "poll_filings.py")
+failures = []
+
+
+def check(cond, what):
+    print(("  ok   " if cond else "  FAIL ") + what)
+    if not cond:
+        failures.append(what)
+
+
+def write(path, obj):
+    os.makedirs(os.path.dirname(path), exist_ok=True)
+    mode = "wb" if isinstance(obj, bytes) else "w"
+    with open(path, mode, **({} if mode == "wb" else {"encoding": "utf-8"})) as f:
+        f.write(obj if isinstance(obj, (str, bytes)) else json.dumps(obj, ensure_ascii=False))
+    return path
+
+
+# ---------------------------------------------------------------- fixtures
+# (right edge of the label column, label, [(right edge, value)...]) as an RTL table: the label at the right, each
+# value cell further left. Rendered as pdftotext -layout writes it (layout_text) and as a PDF (make_pdf).
+MIDGAM = {
+    "head": ["ממצאי סקר חדשות12 בנושא: מנדטים ואקטואליה"],
+    "fields": [("מזמין הסקר", 'חברת החדשות הישראלית בע"מ'), ("עורך הסקר", 'מדגם יעוץ ומחקר בע"מ'),
+               ("מועד איסוף הנתונים", "12/10/2026"), ("שיטת הדגימה", "דגימת שכבות ובתוך השכבות דגימה אקראית"),
+               ("סוגי האוכלוסייה שנדגמו", "מדגם ארצי ומייצג של בעלי זכות בחירה - כלל האוכלוסייה בישראל מגיל 18 ומעלה"),
+               ("מספר המתבקשים להשתתף בסקר", "2,521"), ("מספר המשיבים לסקר בפועל", "509"),
+               ("אחוז המשתתפים בסקר", "20%"), ("אחוז האנשים שסרבו להשתתף", "80%"),
+               ("טעות הדגימה המרבית", "±4.4%"), ("שיטה סטטיסטית", "הסקר בוצע בשיטות סטטיסטיות מקובלות"),
+               ("אופן ביצוע הסקר", "טלפוני + אינטרנטי")],
+    "question": "שאלה: אם הבחירות לכנסת היו מתקיימות היום, לאיזו מפלגה היית מצביע?",
+    "header": ("תחזית המנדטים", "מנדטים", "אחוזים (נתונים גולמיים)"),
+    "rows": [("ישר! בראשות גדי איזנקוט", "23", "18.2%"), ("הליכוד בראשות בנימין נתניהו", "20", "16.1%"),
+             ("ביחד בראשות נפתלי בנט ויאיר לפיד", "13", "10.4%"), ("הדמוקרטים בראשות יאיר גולן", "9", "7.3%"),
+             ("ישראל ביתנו בראשות אביגדור ליברמן", "9", "7.2%"), ("עוצמה יהודית בראשות איתמר בן גביר", "8", "6.4%"),
+             ('ש"ס בראשות אריה דרעי', "8", "6.3%"), ('הרשימה המשותפת חד"ש-תע"ל ובל"ד', "8", "6.2%"),
+             ("יהדות התורה", "7", "5.6%"), ("הציונות הדתית בראשות בצלאל סמוטריץ'", "6", "4.8%"),
+             ('רע"ם בראשות מנסור עבאס', "5", "4.1%"), ("המילואימניקים בראשות יועז הנדל", "4", "3.4%"),
+             ("עמך ישראל בראשות עופר וינטר", "", "1.8%"), ('מפלגות אחרות עד 1% כ"א', "", "2.2%"),
+             ('סה"כ (מנדטים)', "120", "100%")],
+    "after": ["לא החליטו: 14%"],
+}
+MIDGAM_SEATS = {"Yashar": 23, "Likud": 20, "Together": 13, "The Democrats": 9, "Yisrael Beiteinu": 9, "Otzma Yehudit": 8,
+                "Shas": 8, "Joint List": 8, "UTJ": 7, "Religious Zionism": 6, "Ra'am": 5, "Reservists": 4}
+MIDGAM_PCT = {"Yashar": 18.2, "Likud": 16.1, "Together": 10.4, "The Democrats": 7.3, "Yisrael Beiteinu": 7.2,
+              "Otzma Yehudit": 6.4, "Shas": 6.3, "Joint List": 6.2, "UTJ": 5.6, "Religious Zionism": 4.8, "Ra'am": 4.1,
+              "Reservists": 3.4, "Amcha Yisrael": 1.8}
+RLE, LRE, PDF = "\u202b", "\u202a", "\u202c"
+
+
+def layout_text(doc, marks=True):
+    """The fixture as pdftotext -layout writes an RTL page: each line's cells left to right (values first), runs
+    wrapped in the embedding marks it adds (RLE ... PDF; numbers LRE ... PDF inside)."""
+    def m(s):
+        if not marks:
+            return s
+        s = re.sub(r"([\d][\d,./%±]*)", lambda x: LRE + x.group(1) + PDF, s)
+        return RLE + s + PDF
+    L = [" " * 40 + m(h) for h in doc["head"]]
+    for label, value in doc["fields"]:
+        L.append(m(value).rjust(70) + " " * 6 + m(label))
+    L += ["", " " * 20 + m(doc["question"]), ""]
+    h = doc["header"]
+    L.append(" " * 20 + m(h[2]) + " " * 5 + m(h[1]) + " " * 17 + m(h[0]))
+    for name, seats, pct in doc["rows"]:
+        L.append(" " * 30 + m(pct).rjust(8) + " " * 10 + (m(seats) if seats else "").rjust(5) + " " * 10 + m(name))
+    L += [""] + [" " * 50 + m(a) for a in doc["after"]]
+    return "\n".join(L) + "\n"
+
+
+NARRATIVE = """\
+סקר מאגר מוחות עבור ערוץ 16
+הסקר נערך בתאריכים 28-29.9.26 בקרב 550 משיבים, מדגם מייצג של האוכלוסייה הבוגרת בישראל.
+טעות הדגימה המרבית: 4.2% ברמת ביטחון של 95%.
+הליכוד בראשות בנימין נתניהו 24 19.6%
+ישר! בראשות גדי איזנקוט 21 17.2%
+ביחד בראשות נפתלי בנט 12 10.0%
+הדמוקרטים 9 7.6%
+ישראל ביתנו 8 6.6%
+ש"ס 9 7.4%
+יהדות התורה 7 6.0%
+עוצמה יהודית 8 6.5%
+הציונות הדתית 5 4.2%
+הרשימה המשותפת 8 6.4%
+רע"מ בראשות מנסור עבאס 5 4.1%
+עמך ישראל 4 3.4%
+כחול לבן בראשות בני גנץ 1.1%
+לא החליטו 12%
+סה"כ 120 100%
+"""
+TREND = """\
+                 שבוע 1    שבוע 2    שבוע 3    שבוע 4                  תחזית המנדטים
+                   24        25        23        24             הליכוד בראשות בנימין נתניהו
+                   21        20        22        21                 ישר! בראשות גדי איזנקוט
+                   12        12        13        12                                 ביחד
+                    9         9         8         9                            הדמוקרטים
+                    8         8         9         8                          ישראל ביתנו
+                   46        46        45        46                               אחרות
+                  120       120       120       120                                  סה"כ
+"""
+
+
+def visual(s):
+    """An RTL line's characters in visual order (left to right), as an RTL PDF places its glyphs: runs of digits
+    and Latin keep their order, the rest is reversed, and the runs go right to left."""
+    if not re.search("[א-ת]", s):
+        return s
+    runs, pos = [], 0
+    for mt in re.finditer(r"[0-9A-Za-z%.,/±+]+(?:[ ]?[0-9A-Za-z%.,/±+]+)*", s):
+        if mt.start() > pos:
+            runs.append(("r", s[pos:mt.start()]))
+        runs.append(("l", mt.group(0)))
+        pos = mt.end()
+    if pos < len(s):
+        runs.append(("r", s[pos:]))
+    return "".join(t if kind == "l" else t[::-1] for kind, t in reversed(runs))
+
+
+def make_pdf(rows, size=9):
+    """A one-page PDF: rows of (right edge, text) cells, glyphs placed one by one in visual order, a Type 3 font
+    whose glyphs draw nothing and whose ToUnicode map gives each code its character (what pdftotext reads)."""
+    chars = sorted({c for row in rows for _, t in row for c in t} | {" "})
+    if len(chars) > 250:
+        raise ValueError("too many characters for a one-byte code")
+    code = {c: i + 1 for i, c in enumerate(chars)}
+    w, y, ops = size * 0.5, 800, []
+    for row in rows:
+        for right, text in row:
+            vis = visual(text)
+            x = right - len(vis) * w
+            for k, c in enumerate(vis):
+                if c != " ":
+                    ops.append(f"BT /F1 {size} Tf {x + k * w:.2f} {y:.1f} Td <{code[c]:02x}> Tj ET")
+        y -= size * 1.8
+    content = zlib.compress("\n".join(ops).encode())
+    n = len(chars)
+    cmap = "\n".join(["/CIDInit /ProcSet findresource begin", "12 dict begin", "begincmap",
+                      "/CIDSystemInfo << /Registry (Adobe) /Ordering (UCS) /Supplement 0 >> def",
+                      "/CMapName /Adobe-Identity-UCS def", "/CMapType 2 def", "1 begincodespacerange", "<01> <ff>",
+                      "endcodespacerange", f"{n} beginbfchar"] + [f"<{code[c]:02x}> <{ord(c):04x}>" for c in chars]
+                     + ["endbfchar", "endcmap", "CMapName currentdict /CMap defineresource pop", "end", "end"]).encode()
+    glyph = b"500 0 0 0 0 0 d1"
+    objs = [b"<< /Type /Catalog /Pages 2 0 R >>", b"<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+            b"<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R >> >> "
+            b"/Contents 4 0 R >>",
+            b"<< /Length %d /Filter /FlateDecode >>\nstream\n" % len(content) + content + b"\nendstream",
+            (f"<< /Type /Font /Subtype /Type3 /FontBBox [0 0 500 700] /FontMatrix [0.001 0 0 0.001 0 0] "
+             f"/CharProcs << /g 7 0 R >> /Encoding << /Type /Encoding /Differences [1 {' '.join(['/g'] * n)}] >> "
+             f"/FirstChar 1 /LastChar {n} /Widths [{' '.join(['500'] * n)}] /ToUnicode 6 0 R >>").encode(),
+            b"<< /Length %d >>\nstream\n" % len(cmap) + cmap + b"\nendstream",
+            b"<< /Length %d >>\nstream\n" % len(glyph) + glyph + b"\nendstream"]
+    out, offs = bytearray(b"%PDF-1.4\n%\xe2\xe3\xcf\xd3\n"), []
+    for i, o in enumerate(objs, 1):
+        offs.append(len(out))
+        out += b"%d 0 obj\n" % i + o + b"\nendobj\n"
+    xref = len(out)
+    out += b"xref\n0 %d\n0000000000 65535 f \n" % (len(objs) + 1) + b"".join(b"%010d 00000 n \n" % o for o in offs)
+    out += b"trailer\n<< /Size %d /Root 1 0 R >>\nstartxref\n%d\n%%%%EOF\n" % (len(objs) + 1, xref)
+    return bytes(out)
+
+
+def midgam_pdf():
+    rows = [[(560, h)] for h in MIDGAM["head"]]
+    rows += [[(560, label), (380, value)] for label, value in MIDGAM["fields"] if len(value) < 40]
+    rows += [[(560, MIDGAM["question"])]]
+    h = MIDGAM["header"]
+    rows += [[(560, h[0]), (330, h[1]), (230, h[2])]]
+    rows += [[(560, name)] + ([(330, seats)] if seats else []) + [(230, pct)] for name, seats, pct in MIDGAM["rows"]]
+    rows += [[(560, a)] for a in MIDGAM["after"]]
+    return make_pdf(rows)
+
+
+# ---------------------------------------------------------------- 1. reading a filing's text
+def test_text():
+    print("1. reading a filing's text")
+    for marks in (True, False):
+        p = B.parse_filing(layout_text(MIDGAM, marks))
+        tag = "with pdftotext's bidi marks" if marks else "without marks"
+        check(p.get("n") == 509 and p.get("invited") == 2521 and p.get("moe") == 4.4,
+              f"RTL layout ({tag}): respondents 509, invited 2,521, sampling error 4.4 (got {p.get('n')}, "
+              f"{p.get('invited')}, {p.get('moe')})")
+        check(p.get("response_rate") == 20 and p.get("refused_pct") == 80,
+              f"RTL layout ({tag}): response rate 20, refused 80")
+        check(p.get("fieldwork_start") == p.get("fieldwork_end") == "2026-10-12", f"RTL layout ({tag}): fieldwork 12.10.2026")
+        check(p.get("seats") == MIDGAM_SEATS and p.get("seats_total") == 120, f"RTL layout ({tag}): the seat table, 120")
+        check(p.get("pct") == MIDGAM_PCT, f"RTL layout ({tag}): raw shares of every list, also below the threshold")
+        check(p.get("wasted_pct") == 4.0 and p.get("pct_complete") is True and p.get("pct_total") == 100.0,
+              f"RTL layout ({tag}): below the threshold 4.0 (1.8 + 2.2: a label with '1%' in it is still a label)")
+        check(p.get("undecided_pct") == 14, f"RTL layout ({tag}): undecided 14% read after the table")
+        check(p.get("commissioner") == 'חברת החדשות הישראלית בע"מ' and p.get("mode") == "טלפוני + אינטרנטי",
+              f"RTL layout ({tag}): the text fields")
+    n = B.parse_filing(NARRATIVE)
+    check(n.get("n") == 550 and n.get("moe") == 4.2, f"narrative: 550 respondents, 4.2 (got {n.get('n')}, {n.get('moe')})")
+    check((n.get("fieldwork_start"), n.get("fieldwork_end")) == ("2026-09-28", "2026-09-29"),
+          f"narrative: the range 28-29.9.26 (got {n.get('fieldwork_start')}..{n.get('fieldwork_end')})")
+    check(n.get("seats_total") == 120 and n.get("seats", {}).get("Likud") == 24 and n.get("pct", {}).get("National Unity") == 1.1,
+          "narrative: rows written with single spaces, a list below the threshold")
+    check(n.get("undecided_pct") == 12 and "לא החליטו" not in json.dumps(n.get("below"), ensure_ascii=False),
+          "narrative: the undecided row inside the table is neither a list nor a wasted vote")
+    t = B.parse_filing(TREND)
+    check("seats" not in t, "a trend table (four weeks side by side) is refused, not read as one ballot")
+    labels = {"מפלג ת ישר! בראשות גדי איזנקוט": "Yashar", "המילואמיניקים בראשות יועז הנדל": "Reservists",
+              'רע"מ בראשות מנסור עבאס': "Ra'am", "מפלגת ימין חדשה בראשות עופר וינטר": "Amcha Yisrael",
+              "יחד בראשות נפתלי בנט": "Together", 'חד"ש-תע"ל-בל"ד': "Joint List", "ש״ס": "Shas",
+              "כחול לבן בראשות בני גנץ": "National Unity", "הציבור החרדי בראשות מוטי לייטנר": "Haredi Public",
+              "ישראל תחילה ועלה ירוק בראשות שרן השכל": None, "מפלגת נעם בראשות אבי מעוז": None,
+              "הציונות הדתית וזהות": "Religious Zionism", "האחדות בראשות גלעד ארדן": "Unity",
+              "דוכילה": "Likud"}            # the last: text read in visual order (reversed)
+    bad = {k: B.party_id(k) for k, v in labels.items() if B.party_id(k) != v}
+    check(not bad, f"list labels as pollsters type them (a split word, a typo, a final mem, a new name, a leader): {bad}")
+    d = B.dates_in("11-12/10/2026 ו-13.10.26")
+    check([x.isoformat() for x in d] == ["2026-10-11", "2026-10-12", "2026-10-13"], f"dates: a day range and a short year {d}")
+    check(str(B.local_date("2026-07-26T21:00:00Z")) == "2026-07-27" and str(B.local_date("2026-10-25T22:00:00Z")) == "2026-10-26",
+          "gov.il's UTC midnights are Israel's dates, before and after summer time ends (25.10)")
+    check(B.parse_filing("טעות הדגימה המרבית  ±0.9%\nמספר המשיבים  500").get("moe") is None,
+          "a sampling error below the minimum for its n is a misreading, not kept")
+
+
+# ---------------------------------------------------------------- 2. the PDF path
+def test_pdf(tmp):
+    print("2. a PDF read with pdftotext")
+    if not shutil.which("pdftotext"):
+        print("  skip no pdftotext on this machine")
+        return None
+    path = write(os.path.join(tmp, "midgam.pdf"), midgam_pdf())
+    text, err = B.pdf_text(path)
+    p = B.parse_filing(text or "")
+    check(err is None and p.get("seats") == MIDGAM_SEATS and p.get("pct") == MIDGAM_PCT,
+          f"the seat table and the shares from a PDF with glyphs in visual order ({err or 'read'})")
+    check(p.get("n") == 509 and p.get("moe") == 4.4 and p.get("fieldwork_end") == "2026-10-12",
+          f"respondents, sampling error and fieldwork from the PDF (got {p.get('n')}, {p.get('moe')}, {p.get('fieldwork_end')})")
+    return path
+
+
+# ---------------------------------------------------------------- 3. the builder
+def poll(polls, date, house):
+    return next(p for p in polls if p["date"] == date and p["house"] == house)
+
+
+def test_builder(tmp, pdf_path):
+    print("3. the builder")
+    polls_src = os.path.join(ROOT, "site", "data", "polls_2026.json")
+    polls_doc = json.load(open(polls_src, encoding="utf-8"))
+    polls = polls_doc["polls"]
+    polls_path = write(os.path.join(tmp, "b", "polls_2026.json"), polls_doc)
+    before = open(polls_path, "rb").read()
+    ref_path = os.path.join(ROOT, "pipeline", "reference", "poll_filings_index.json")
+    ref = json.load(open(ref_path, encoding="utf-8"))
+    check(ref.get("verified") is False and all(s.get("url") and s.get("seen") for s in ref["sources"].values()),
+          "the reference index: every source with its address and date, verified: false")
+    check(all(B.canon(f["pdf"]) for f in ref["filings"]), f"the reference index: {len(ref['filings'])} filings, "
+          "each at a CEC filing address")
+    # a fetch: the listing for knesset_election106 and its PDF (as pdftotext's text; and, below, as the PDF
+    # itself), a path that leaves the fetch
+    fetched = os.path.join(tmp, "b", "fetch")
+    listing = {"results": [
+        {"UrlName": "knesset_election106", "Data": {"survey_editor": "מדגם יעוץ ומחקר", "media": "חדשות 12",
+                                                   "date_the_survey": "2026-10-11T21:00:00Z", "survey_number": "4202",
+                                                   "file_PDF": [{"FileName": "Survey_4202.pdf", "Extension": "pdf"}]}},
+        {"UrlName": "../../etc", "Data": {}}]}
+    write(os.path.join(fetched, "listing.json"), listing)
+    write(os.path.join(fetched, "files", "text", "knesset_election106__Survey_4202.txt"), layout_text(MIDGAM))
+    write(os.path.join(fetched, "files", "pdf", "knesset_election106__Survey_4202.pdf"), b"%PDF-1.4 not read: text given")
+    write(os.path.join(tmp, "b", "outside.txt"), layout_text(MIDGAM))
+    url106 = "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election106/he/Survey_4202.pdf"
+    url81 = "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election81/he/Survey_4162.pdf"
+    rows = [{"item": "knesset_election106", "url": url106, "saved": "files/pdf/knesset_election106__Survey_4202.pdf",
+             "text": "files/text/knesset_election106__Survey_4202.txt", "from": ["listing"]},
+            {"item": "knesset_election81", "url": url81, "saved": "files/pdf/../../outside.txt",
+             "text": "../outside.txt", "from": ["or523"]}]
+    write(os.path.join(fetched, "filings.json"), rows)
+    out1 = os.path.join(tmp, "b", "out1.json")
+    doc = B.build(polls_path, ref_path, [fetched], out1)
+    check(open(polls_path, "rb").read() == before, "polls_2026.json is unchanged, byte for byte")
+    check(not any("seats" in r for r in doc["polls"]), "no seat number in the output (only seat_diff where they differ)")
+    by = {r["key"]: r for r in doc["polls"]}
+    p106 = poll(polls, "2026-10-12", "midgam")
+    r = by.get(f"{p106['date']}|{p106['pollster']}|{p106['outlet']}", {})
+    check(r.get("match") == "seats" and r.get("seats_equal") is True and r.get("filing", {}).get("url") == url106,
+          "Midgam 12.10 matched to knesset_election106 by its seats")
+    check(r.get("verified") is True and r.get("src", {}).get("n") == "cec_pdf" and r.get("src", {}).get("pct") == "cec_pdf",
+          "a filing read here wins over the third parties and is marked verified")
+    check(r.get("n") == 509 and r.get("moe") == 4.4 and r.get("pct") == MIDGAM_PCT and r.get("wasted_pct") == 4.0
+          and r.get("fieldwork") == {"start": "2026-10-12", "end": "2026-10-12"},
+          "its respondents, sampling error, shares, wasted share and fieldwork")
+    check(r.get("filing", {}).get("number") == "4202" and r.get("filing", {}).get("listing", {}).get("survey_date") == "2026-10-12",
+          "the listing's number and its UTC date as Israel's")
+    p81 = poll(polls, "2026-09-22", "midgam")
+    r81 = by.get(f"{p81['date']}|{p81['pollster']}|{p81['outlet']}", {})
+    check(r81.get("filing", {}).get("item") == "knesset_election81" and r81.get("verified") is False
+          and r81.get("src", {}).get("n") == "isaranga",
+          "a fetch path that leaves the fetch directory is ignored: knesset_election81 stays a third party's reading")
+    check(r81.get("previous_link", "").endswith("knesset_election86/he/Survey_4169.pdf")
+          and any(c["key"] == r81["key"] for c in doc["conflicts"]),
+          "polls_2026.json's link to another poll's filing (Midgam 22.9 -> Channel 13's 86) is reported as a conflict")
+    check(all(r["seats_equal"] or "pct" not in r for r in doc["polls"]),
+          "shares are attached only where the filing's seats are the poll's")
+    hd = [r for r in doc["polls"] if r["match"] == "house+date"]
+    check(hd and all(r.get("seat_diff") and "pct" not in r for r in hd),
+          f"house and date matches list their seat differences and carry no shares ({len(hd)})")
+    items = [r["filing"]["item"] for r in doc["polls"]]
+    check(len(items) == len(set(items)), "each filing goes to one poll at most")
+    check(doc["counts"]["matched"] >= 40, f"most polls matched ({doc['counts']['matched']}/{doc['counts']['polls']})")
+    out2 = os.path.join(tmp, "b", "out2.json")
+    B.build(polls_path, ref_path, [fetched], out2)
+    check(open(out1, "rb").read() == open(out2, "rb").read(), "the same input, the same output")
+    if pdf_path:
+        # the same fetch with the PDF itself and no text: read here with pdftotext
+        fp = os.path.join(tmp, "b", "fetch_pdf")
+        write(os.path.join(fp, "listing.json"), listing)
+        shutil.copy(pdf_path, write(os.path.join(fp, "files", "pdf", "knesset_election106__Survey_4202.pdf"), b""))
+        write(os.path.join(fp, "filings.json"), [{**rows[0], "text": None}])
+        d2 = B.build(polls_path, ref_path, [fp], os.path.join(tmp, "b", "out_pdf.json"))
+        r2 = {r["key"]: r for r in d2["polls"]}.get(r.get("key"), {})
+        check(r2.get("verified") is True and r2.get("n") == 509 and r2.get("pct") == MIDGAM_PCT
+              and r2.get("src", {}).get("moe") == "cec_pdf", "a fetched PDF without text is read here with pdftotext")
+    # the committed file: the reference alone (no fetch yet)
+    committed = os.path.join(ROOT, "site", "data", "poll_filings_2026.json")
+    if os.path.exists(committed):
+        built_from = json.load(open(committed, encoding="utf-8")).get("inputs", {})
+        if built_from.get("polls_sha256") != B.sha256(polls_src) or built_from.get("fetched"):
+            # the daily update rewrites polls_2026.json; the file is rebuilt from it, not checked against it
+            print("  note site/data/poll_filings_2026.json was built from another polls_2026.json or from a fetch: "
+                  "python3 pipeline/build_poll_filings.py [--fetched DIR] rebuilds it")
+        else:
+            out3 = os.path.join(tmp, "b", "out3.json")
+            B.build(polls_src, ref_path, [], out3)
+            check(open(out3, "rb").read() == open(committed, "rb").read(),
+                  "site/data/poll_filings_2026.json is the builder's output for the committed inputs")
+
+
+# ---------------------------------------------------------------- 4. the fetcher
+GUID = "11111111-2222-3333-4444-555555555555"
+
+
+class Govil(http.server.BaseHTTPRequestHandler):
+    items, mode, hits = [], "ok", []
+
+    def log_message(self, *a):
+        pass
+
+    def send(self, code, body, ctype="application/json"):
+        body = body if isinstance(body, bytes) else body.encode("utf-8")
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        Govil.hits.append(("GET", self.path))
+        p = self.path
+        if p.startswith("/govil/he/departments/dynamiccollectors/knesset_election_polls_26"):
+            return self.send(200, f'<div ng-init="dynamicCtrl.Events.initCtrl(&#39;{GUID}&#39;, 10)"></div>', "text/html")
+        m = re.match(r"/govil/BlobFolder/dynamiccollectorresultitem/(knesset_election\d+)/he/(.+)$", p)
+        if m:
+            item, name = m.group(1), m.group(2)
+            if item == "knesset_election3":
+                return self.send(404, "not found", "text/html")
+            if item == "knesset_election7" and self.headers.get("Accept-Encoding") == "gzip, deflate":
+                # refuses urllib's request (its headers), answers curl's: a TLS client turned away by Cloudflare
+                return self.send(403, "<html>Attention Required! | Cloudflare</html>", "text/html")
+            if item == "knesset_election4":
+                return self.send(200, "<html><head><title>Just a moment...</title></head>cf-chl</html>", "text/html")
+            if (item == "knesset_election201" and name != "Survey_4302.pdf") or B.item_no(item) > 201:
+                return self.send(404, "not found", "text/html")
+            return self.send(200, b"%PDF-1.4\n% " + f"{item} {name}".encode() + b"\n%%EOF\n", "application/pdf")
+        if p.startswith("/gh/or523/"):
+            return self.send(200, json.dumps({"polls": [
+                {"id": "knesset_election200", "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election200/he/Survey_4300.pdf"},
+                {"id": "x", "pdf": "https://evil.example/BlobFolder/dynamiccollectorresultitem/knesset_election99/he/a.pdf"},
+                {"id": "y", "pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election98/he/../../x.pdf"}],
+                "excluded": []}))
+        if p.startswith("/gh/amitlev/"):
+            return self.send(200, "/* data */\nwindow.BASE_POLLS_DATA = [{\"govilSourceUrl\": "
+                                  "\"https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election2/he/Survey_4040.pdf\"}];\n"
+                                  "window.GOVIL_TOPICAL_DATA = [];\n", "application/javascript")
+        if p.startswith("/gh/idoherling/"):
+            return self.send(200, "4041|knesset_election1|סקר בחירות מיום 28.7.2026.pdf|x|y|2026-07-27|2026-08-01|\n", "text/plain")
+        return self.send(404, "no", "text/plain")
+
+    def do_POST(self):
+        n = int(self.headers.get("Content-Length") or 0)
+        body = json.loads(self.rfile.read(n) or b"{}")
+        Govil.hits.append(("POST", self.path, body))
+        if not self.path.startswith("/govil/he/api/DynamicCollector"):
+            return self.send(404, "{}")
+        if Govil.mode == "blocked":
+            return self.send(403, "<html>Attention Required! | Cloudflare</html>", "text/html")
+        if body.get("DynamicTemplateID") != GUID:
+            return self.send(200, json.dumps({"Results": [], "TotalResults": 0}))
+        skip = body.get("From", 0)
+        if Govil.mode == "from-only" and body["QueryFilters"]["skip"]["Query"] != 0:
+            skip = 0                                       # a server that takes the offset from From only
+        page = Govil.items[skip:skip + 10]
+        return self.send(200, json.dumps({"Results": page, "TotalResults": len(Govil.items)}, ensure_ascii=False))
+
+
+def run_fetcher(out, base, ref, polls, curl=False):
+    args = [sys.executable, FETCHER, "--out", out, "--rewrite", f"https://www.gov.il={base}/govil",
+            "--rewrite", f"https://raw.githubusercontent.com={base}/gh", "--only-rewritten",
+            "--timeout", "5", "--ref", ref, "--polls", polls, "--workers", "2"] + ([] if curl else ["--no-curl"])
+    p = subprocess.run(args, capture_output=True, text=True, timeout=120)
+    return p
+
+
+def test_fetcher(tmp):
+    print("4. the fetcher against a stand-in for gov.il")
+    Govil.items = [{"UrlName": f"knesset_election{i}", "Data": {
+        "survey_editor": "מדגם", "date_the_survey": "2026-10-11T21:00:00Z",
+        "file_PDF": [{"FileName": f"Survey_{4000 + i}.pdf"}]}} for i in range(1, 14)]
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), Govil)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{srv.server_address[1]}"
+    ref = write(os.path.join(tmp, "f", "ref.json"), {"filings": [
+        {"pdf": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election5/he/Survey_4005.pdf"}]})
+    polls = write(os.path.join(tmp, "f", "polls.json"), {"polls": [
+        {"filing": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election6/he/Survey_4006-b.pdf"}]})
+    try:
+        for mode in ("ok", "from-only"):
+            Govil.mode, Govil.hits = mode, []
+            out = os.path.join(tmp, "f", mode)
+            p = run_fetcher(out, base, ref, polls)
+            check(p.returncode == 0, f"[{mode}] exit 0 ({p.stdout.strip()[-200:]}{p.stderr.strip()[-300:]})")
+            s = json.load(open(os.path.join(out, "summary.json"), encoding="utf-8"))
+            lst = json.load(open(os.path.join(out, "listing.json"), encoding="utf-8"))
+            posts = [h for h in Govil.hits if h[0] == "POST"]
+            check(lst["template_id"] == GUID and len(lst["results"]) == 13 and s["listing"]["total_results"] == 13,
+                  f"[{mode}] the template id from the page's initCtrl, all 13 results paged ({len(posts)} requests)")
+            check(all(h[2].get("DynamicTemplateID") and "QueryFilters" in h[2] and "From" in h[2] for h in posts),
+                  f"[{mode}] the request shape: DynamicTemplateID, QueryFilters.skip.Query, From")
+            all_rows = json.load(open(os.path.join(out, "filings.json"), encoding="utf-8"))
+            rows = {r["item"]: r for r in all_rows if "listing" in r["from"] or r["item"] not in
+                    {x["item"] for x in all_rows if "listing" in x["from"]}}
+            found_in = {}
+            for r in all_rows:
+                found_in.setdefault(r["item"], set()).update(r["from"])
+            check(rows["knesset_election1"].get("saved") and open(os.path.join(out, rows["knesset_election1"]["saved"]), "rb").read(5) == b"%PDF-",
+                  f"[{mode}] a PDF saved under files/pdf/")
+            check(sum(1 for r in all_rows if r["item"] == "knesset_election1" and r.get("saved")) == 2,
+                  f"[{mode}] both files of an item filed twice (the listing's and an index's) are fetched")
+            check(rows["knesset_election3"].get("status") == 404 and not rows["knesset_election3"].get("saved"),
+                  f"[{mode}] a 404 recorded, the run goes on")
+            check("challenge" in (rows["knesset_election4"].get("error") or "") and not rows["knesset_election4"].get("saved"),
+                  f"[{mode}] a challenge page instead of a PDF is not saved ({rows['knesset_election4'].get('error')})")
+            check(found_in["knesset_election1"] >= {"listing", "idoherling"} and "or523" in found_in.get("knesset_election200", ())
+                  and "amitlev" in found_in["knesset_election2"] and "reference" in found_in["knesset_election5"]
+                  and "polls_2026" in found_in["knesset_election6"],
+                  f"[{mode}] addresses from the listing, the third parties, the reference and polls_2026.json")
+            gets = [h[1] for h in Govil.hits if h[0] == "GET"]
+            check(not any("evil" in g or "x.pdf" in g for g in gets) and not ({"knesset_election98", "knesset_election99"} & set(found_in)),
+                  f"[{mode}] a third party's address not of the filing form is never fetched")
+            files = [os.path.join(dp, f) for dp, _, fs in os.walk(out) for f in fs]
+            check(all(os.path.realpath(f).startswith(os.path.realpath(out) + os.sep) for f in files)
+                  and os.path.exists(os.path.join(out, "summary.md")), f"[{mode}] everything under --out, summary.md written")
+            if mode == "ok":
+                # the builder reads what the fetcher wrote (these PDFs are stand-ins: no text, no crash)
+                try:
+                    d = B.build(os.path.join(ROOT, "site", "data", "polls_2026.json"),
+                                os.path.join(ROOT, "pipeline", "reference", "poll_filings_index.json"), [out],
+                                os.path.join(tmp, "f", "built.json"))
+                    ok = d["counts"]["filings"] >= 109 and d["counts"]["verified"] == 0
+                except Exception as exc:                  # noqa: BLE001 - reported as a failure
+                    ok = f"{exc.__class__.__name__}: {exc}"
+                check(ok is True, f"the builder reads the fetcher's directory ({ok})")
+        if shutil.which("curl"):
+            Govil.mode, Govil.hits = "ok", []
+            out = os.path.join(tmp, "f", "curl")
+            p = run_fetcher(out, base, ref, polls, curl=True)
+            r7 = next((r for r in json.load(open(os.path.join(out, "filings.json"), encoding="utf-8"))
+                       if r["item"] == "knesset_election7"), {})
+            check(p.returncode == 0 and r7.get("saved") and r7.get("transport") == "curl",
+                  f"a request urllib was refused (403) is asked again through curl and saved ({r7.get('transport')})")
+        else:
+            print("  skip no curl on this machine")
+        Govil.mode, Govil.hits = "blocked", []
+        out = os.path.join(tmp, "f", "blocked")
+        p = run_fetcher(out, base, ref, polls)
+        s = json.load(open(os.path.join(out, "summary.json"), encoding="utf-8"))
+        check(p.returncode == 0 and s["listing"]["results"] == 0 and s["filings"]["items"] >= 5,
+              "a refused listing: exit 0, the filings known from the indexes are still fetched")
+        check(any("knesset_election201/he/Survey_4302.pdf" in u for u in s["probe_found"]),
+              f"the probe finds the next item after the last known ({s['probe_found']})")
+        probes = [h for h in Govil.hits if h[0] == "GET" and "probe" not in h[1] and "knesset_election20" in h[1]]
+        check(len(probes) <= 15 * 16 + 2, f"the probe is bounded ({len(probes)} requests)")
+        check("Listing:** 0 results" in open(os.path.join(out, "summary.md"), encoding="utf-8").read(),
+              "summary.md says the listing gave nothing")
+    finally:
+        srv.shutdown()
+
+
+def main():
+    tmp = tempfile.mkdtemp(prefix="kalpi26-filings-")
+    test_text()
+    pdf_path = test_pdf(tmp)
+    test_builder(tmp, pdf_path)
+    test_fetcher(tmp)
+    print(f"\n{len(failures)} failure(s); scratch in {tmp}")
+    if not failures:
+        shutil.rmtree(tmp, ignore_errors=True)
+    return 1 if failures else 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())
