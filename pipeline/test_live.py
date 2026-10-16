@@ -1158,13 +1158,15 @@ def lists_2026():
           and all(e["letter_sources"] for e in lists if e["verified"]["letters"])
           and all(isinstance(v, bool) for e in lists for v in e["verified"].values()),
           f"lists_2026.json: every source an https address ({len(urls)}), verified letters with their sources, flags true or false")
-    # the page has its own copy of the agreements (site/src/js/core.js): another part of the site, reported here only
+    # the page has its own copy of the agreements (site/src/js/core.js): the same pairs as the feed
     core = open(os.path.join(ROOT, "site", "src", "js", "core.js"), encoding="utf-8").read()
     m = re.search(r"const AGREEMENTS_2026 = (\[.*?\]);", core)
     page = {frozenset(a or b for a, b in re.findall(r""""([^"]*)"|'([^']*)'""", p_)) for p_ in re.findall(r"\[([^\[\]]+)\]", m.group(1))} if m else set()
-    if page != pairs_code:
-        print(f"  note: site/src/js/core.js AGREEMENTS_2026 differs from live_fetch.AGREEMENTS_2026: the page lacks "
-              f"{sorted(map(sorted, pairs_code - page))}, has {sorted(map(sorted, page - pairs_code))} beyond it")
+    check(page == pairs_code, f"site/src/js/core.js AGREEMENTS_2026 is live_fetch.AGREEMENTS_2026 (the page lacks "
+          f"{sorted(map(sorted, pairs_code - page))}, has {sorted(map(sorted, page - pairs_code))} beyond it)")
+    # the Arabic version keys its dictionaries by the Hebrew UI strings: every key still used in site/src/js
+    p_ = __import__("check_i18n").problems()
+    check(not p_, f"pipeline/check_i18n.py: the Arabic dictionaries match the Hebrew sources {p_[:5]}")
 
     # the fetcher against a stand-in for gov.il: client-config.js, the content-pages API, files, a catalogue
     srv = http.server.HTTPServer(("127.0.0.1", 0), GovilMock)

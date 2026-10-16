@@ -215,6 +215,8 @@ def midgam_pdf():
 # ---------------------------------------------------------------- 1. reading a filing's text
 def test_text():
     print("1. reading a filing's text")
+    check(B.house_of('מדגם יעוץ ומחקר') == 'midgam', "the house in a Midgam filing (final letters folded): midgam")
+    check(B.selftest() == 0, "build_poll_filings.py --selftest: houses, list names, the verified flag")
     for marks in (True, False):
         p = B.parse_filing(layout_text(MIDGAM, marks))
         tag = "with pdftotext's bidi marks" if marks else "without marks"
