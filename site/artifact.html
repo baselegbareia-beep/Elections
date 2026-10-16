@@ -551,8 +551,10 @@ table.t.ad-tbl tr.ad-pin-last td { border-bottom: 2px solid var(--rule-strong); 
 // so the word order can differ between the languages. A string missing from AR stays in Hebrew and is listed in
 // I18N.missing. In Hebrew t() returns its key with the values filled in, so nothing changes for Hebrew readers.
 // Names that come with the data (lists, localities, regions, pollsters) are put into Arabic once, as each file
-// loads (i18nCore, i18nPolls, ...): party names from AR_PARTY, locality names from data/names_ar.json (CBS code ->
-// Arabic name, built by pipeline/build_names_ar.py; a locality without one keeps its Hebrew name).
+// loads (i18nCore, i18nPolls, ...): party names from AR_PARTY, the 2026 leaders from AR_LEADER (by list id),
+// pollsters and channels from AR_ORG, locality names from data/names_ar.json (CBS code -> Arabic name, built by
+// pipeline/build_names_ar.py; a locality without one keeps its Hebrew name). pipeline/check_i18n.py checks the
+// dictionaries against the Hebrew sources.
 // Numbers keep the Western digits and separators of the Hebrew page (as Arabic media in Israel write them); a date
 // with a month name is written with 'ar-u-nu-latn' (27 أكتوبر 2026), a day.month date stays 27.10 as in the text.
 // Switching the language reloads the page in the other language.
@@ -582,6 +584,29 @@ function t(he, vars) {
 // a list name, a locality name: the Arabic when there is one, else the Hebrew
 const tp = he => (AR_ON && he != null && AR_PARTY[String(he).trim()]) || he;
 const tLoc = (code, he) => (AR_ON && I18N.loc && code != null && I18N.loc[String(code)]) || he;
+// a 2026 list's leader, by the list's id. AR_LEADER keeps the Hebrew name next to the Arabic one, so a leader who
+// changes in the poll data (pipeline/build_polls.py) shows in Hebrew, never as the former leader's Arabic name, until
+// the map is updated (pipeline/check_i18n.py fails until then)
+function tLeader(id, he) {
+  if (!AR_ON || he == null) return he;
+  const a = AR_LEADER[id];
+  if (a && a[0] === String(he).trim()) return a[1];
+  I18N.missing.add(he);
+  return he;
+}
+// a pollster, a channel, whoever commissioned a poll: AR_ORG, never the UI dictionary (מדגם, the pollster Midgam, is
+// also the UI word 'sample'). 'X (Y)', 'X + Y' and 'X / Y' are put into Arabic part by part; a name without an Arabic
+// form stays as written (the exit polls of the night are typed by the operator)
+function tOrg(he) {
+  if (!AR_ON || typeof he !== 'string') return he;
+  const s = he.trim();
+  if (AR_ORG[s]) return AR_ORG[s];
+  const m = /^(.+?)\s*\((.+)\)$/.exec(s);
+  if (m) { const a = tOrg(m[1]), b = tOrg(m[2]); return a !== m[1] || b !== m[2] ? `${a} (${b})` : he; }
+  const parts = s.split(/(\s+[+/]\s+)/);
+  if (parts.length > 1) { const ar = parts.map((x, i) => (i % 2 ? x : tOrg(x))); if (ar.some((x, i) => x !== parts[i])) return ar.join(''); }
+  return he;
+}
 // 'א, ב וג' / 'أ، ب وج' (the Arabic conjunction is written joined to the next word, also before a number)
 const arJoin = a => (a.length > 1 ? a.slice(0, -1).join('، ') + ' و' + a[a.length - 1] : a[0] || '');
 // a date with a month name in the page's language (a day.month date is formatted 'he-IL' in both: 27.10)
@@ -660,15 +685,15 @@ function i18nCore(core) {
 }
 function i18nPolls(P) {
   if (!AR_ON || !P) return P;
-  P.parties.forEach(p => { p.name_he = p.name; p.name = tp(p.name); p.leader = t(p.leader); });
-  P.polls.forEach(q => { q.house_he = t(q.house_he); q.outlet_he = t(q.outlet_he); if (q.pollster_he) q.pollster_he = t(q.pollster_he); });
+  P.parties.forEach(p => { p.name_he = p.name; p.name = tp(p.name); p.leader = tLeader(p.id, p.leader); });
+  P.polls.forEach(q => { q.house_he = tOrg(q.house_he); q.outlet_he = tOrg(q.outlet_he); if (q.pollster_he) q.pollster_he = tOrg(q.pollster_he); });
   if (P.source) P.source = t(P.source);
   return P;
 }
 function i18nFinalPolls(F) {
   if (!AR_ON || !F) return F;
   F.source = t(F.source);
-  F.elections.forEach(e => e.polls.forEach(q => { if (q.pollster_he) q.pollster_he = t(q.pollster_he); }));
+  F.elections.forEach(e => e.polls.forEach(q => { if (q.pollster_he) q.pollster_he = tOrg(q.pollster_he); }));
   return F;
 }
 // the election-day Arab section's 2022 base: regions, kinds and every locality (a mixed city's entry by its city)
@@ -696,9 +721,16 @@ function i18nReplay(doc) {
   Object.values(doc.replays || {}).forEach(R => {
     ['label', 'note'].forEach(k => { if (R[k]) R[k] = t(R[k]); });
     i18nFrames(R.frames);
-    if (R.exit_polls) { if (R.exit_polls.note) R.exit_polls.note = t(R.exit_polls.note); (R.exit_polls.polls || []).forEach(p => { p.outlet = t(p.outlet); }); }
+    if (R.exit_polls) { if (R.exit_polls.note) R.exit_polls.note = t(R.exit_polls.note); i18nExit(R.exit_polls); }
   });
   return doc;
+}
+// exit polls, the replay's and the night's live/exit_polls.json: the channel, the pollster and whoever commissioned
+// the poll by AR_ORG; the note and the other disclosure items are the operator's free text and stay as typed
+function i18nExit(E) {
+  if (!AR_ON || !E) return E;
+  (E.polls || []).forEach(p => ['outlet', 'pollster', 'commissioner'].forEach(k => { if (p[k] != null) p[k] = tOrg(p[k]); }));
+  return E;
 }
 // the live feed's results.json: the lists and the labels the feed writes; free text the operator types stays as typed
 function i18nLive(R) {
@@ -789,6 +821,65 @@ const AR_PARTY = {
   'הרשימה הערבית בראשות מוחמד כנעאן': 'القائمة العربية برئاسة محمد كنعان',
   'שחר כוח חברתי בראשות וג`די טאהר': 'شاحر قوة اجتماعية برئاسة وجدي طاهر',
 };
+// AR_LEADER: list id (pipeline/build_polls.py PARTIES_2026) -> [the leader in Hebrew as the poll data has it, Arabic]
+const AR_LEADER = {
+  'Likud': ['בנימין נתניהו', 'بنيامين نتنياهو'],
+  'Yashar': ['גדי איזנקוט', 'غادي آيزنكوت'],
+  'Together': ['נפתלי בנט ויאיר לפיד', 'نفتالي بينيت ويائير لبيد'],
+  'The Democrats': ['יאיר גולן', 'يائير غولان'],
+  'Yisrael Beiteinu': ['אביגדור ליברמן', 'أفيغدور ليبرمان'],
+  'Shas': ['אריה דרעי', 'أرييه درعي'],
+  'UTJ': ['יעקב אשר', 'يعقوب آشر'],
+  'Otzma Yehudit': ['איתמר בן גביר', 'إيتمار بن غفير'],
+  'Religious Zionism': ['בצלאל סמוטריץ׳', 'بتسلئيل سموتريتش'],
+  'Joint List': ['יוסף ג׳בארין', 'يوسف جبارين'],
+  "Ra'am": ['מנסור עבאס', 'منصور عباس'],
+  'Amcha Yisrael': ['עופר וינטר', 'عوفر فينتر'],
+  'Reservists': ['יועז הנדל וירון זליכה', 'يوعاز هندل ويارون زليخا'],
+  'National Unity': ['בני גנץ', 'بيني غانتس'],
+  'Haredi Public': ['מוטי ליטנר', 'موطي ليتنر'],
+};
+// AR_ORG: pollsters, channels and whoever commissions a poll (polls_2026.json, final_polls.json, the exit polls),
+// transliterated as the Arabic press writes them; the channels by the name they go by in Arabic (القناة 12, كان 11).
+// The expected 2026 exit-poll pairings (live_input/README.md) are here before the night.
+const AR_ORG = {
+  'מדגם': 'مدغام',
+  'מדגם פרויקט': 'مدغام بروجكت',
+  'מדגם פרויקט וסטטנט': 'مدغام بروجكت وستاتنت',
+  'מדגם (חדשות 12)': 'مدغام (القناة 12)',
+  'מדגם פרויקט וסטטנט (חדשות 13)': 'مدغام بروجكت وستاتنت (القناة 13)',
+  'קנטאר': 'كانتار',
+  'המדד': 'همداد',
+  'נקסט דאטה': 'نكست داتا',
+  'פילבר': 'فيلبر',
+  'פילבר + נקסט דאטה': 'فيلبر + نكست داتا',
+  'פילבר (ערוץ 14)': 'فيلبر (القناة 14)',
+  'דיירקט פולס': 'دايركت بولز',
+  'יוסי טטיקה': 'يوسي طاطيكا',
+  'לזר': 'لازار',
+  'לזר / פאנל4אול': 'لازار / Panel4All',
+  'לזר + פאנל4אול': 'لازار + Panel4All',
+  'פאנל4אול': 'Panel4All',
+  'מאגר מוחות': 'مأغار موحوت',
+  'דיאלוג': 'ديالوغ',
+  'מסקר': 'مسكار',
+  'סמית': 'سميث',
+  'פאנלס (לזר)': 'بانلز (لازار)',
+  'פאנלס פוליטיקס': 'بانلز بوليتيكس',
+  'קמיל פוקס': 'كاميل فوكس',
+  'שווקים פנורמה': 'شفاكيم بانوراما',
+  'כאן 11': 'كان 11',
+  'כאן': 'كان',
+  'תאגיד השידור הישראלי': 'هيئة البث الإسرائيلية',
+  'חדשות 12': 'القناة 12',
+  'קשת 12': 'كيشت 12',
+  'חדשות 13': 'القناة 13',
+  'רשת 13': 'ريشيت 13',
+  'ערוץ 14': 'القناة 14',
+  'מעריב': 'معاريف',
+  'וואלה': 'واللا',
+  'זמן ישראל': 'زمان يسرائيل',
+};
 // AR: Hebrew UI string -> Arabic. Keep the {placeholders} and the markup of the key.
 const AR = {
   __title: 'اقتراع 26',
@@ -830,7 +921,7 @@ const AR = {
   'נקודות פחות מיהודים ואחרים': 'نقطة أقل من اليهود وآخرين',
   'ביישובים הערביים והדרוזיים; {p} בקרב יהודים ואחרים': 'في البلدات العربية والدرزية؛ {p} بين اليهود وآخرين',
   'הכנסת לפי הממוצע': 'الكنيست بحسب المعدّل',
-  '120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.': 'المقاعد الـ120 بحسب معدّل الاستطلاعات، بعد نسبة الحسم واتفاقيات فائض الأصوات التي أُعلن عنها (الليكود–الصهيونية الدينية، يشار!–الديمقراطيون، بياحد–يسرائيل بيتينو، الموحدة–القائمة المشتركة). القوائم التي يقلّ معدّلها عن نسبة الحسم لا تدخل الكنيست، وتتوزّع مقاعدها على القوائم الأخرى.',
+  '120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ש״ס–יהדות התורה, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.': 'المقاعد الـ120 بحسب معدّل الاستطلاعات، بعد نسبة الحسم واتفاقيات فائض الأصوات التي أُعلن عنها (الليكود–الصهيونية الدينية، شاس–يهدوت هتوراه، يشار!–الديمقراطيون، بياحد–يسرائيل بيتينو، الموحدة–القائمة المشتركة). القوائم التي يقلّ معدّلها عن نسبة الحسم لا تدخل الكنيست، وتتوزّع مقاعدها على القوائم الأخرى.',
   'ממוצע הסקרים, לפי רשימה': 'معدّل الاستطلاعات، بحسب القائمة',
   'מנדטים בממוצע המשוקלל; הקו הדק מראה את הטווח בין הסקר הנמוך לגבוה ב-28 הימים האחרונים. אזור אחוז החסימה מסומן.': 'المقاعد في المعدّل المرجَّح؛ يبيّن الخط الرفيع المدى بين أدنى استطلاع وأعلاه في الأيام الـ28 الأخيرة. منطقة نسبة الحسم مُعلَّمة.',
   'המקור: {n} סקרים שפורסמו מ-6 בספטמבר 2026 ואילך (אחרי סגירת הרשימות), ללא כפילויות.': v => `المصدر: ${arN(v.n, AR_POLLS)} نُشرت منذ 6 سبتمبر 2026 (بعد إغلاق القوائم)، دون تكرار.`,
@@ -1743,7 +1834,8 @@ const AR = {
   'היום': 'اليوم',
   'הבחירות התקיימו': 'جرت الانتخابات',
   'טעינת הנתונים נכשלה. רעננו את הדף.': 'فشل تحميل البيانات. حدِّثوا الصفحة.',
-  // ---- names and notes that come with the data files (core, polls_2026, final_polls, arab_day_2022, replay_night, turnout_history, the feed)
+  // ---- names and notes that come with the data files (core, polls_2026, final_polls, arab_day_2022, replay_night, turnout_history, the feed);
+  // the 2026 leaders are in AR_LEADER, the pollsters and channels in AR_ORG
   'הכנסת ה-21': 'الكنيست الـ21',
   'אפר׳ 2019': 'أبريل 2019',
   '65 ח״כים המליצו על נתניהו (כולל ישראל ביתנו).': 'أوصى 65 عضو كنيست بنتنياهو (بمن فيهم يسرائيل بيتينو).',
@@ -1782,51 +1874,8 @@ const AR = {
   'יישובים דרוזיים בגליל, בכרמל ובגולן, ע׳ג׳ר, כפר כמא וריחאנייה': 'البلدات الدرزية في الجليل والكرمل والجولان، والغجر، وكفر كما والريحانية',
   'יתר הקלפיות, כולל מעטפות כפולות (חיילים, נציגויות ועוד)': 'سائر الصناديق، بما فيها المغلفات المزدوجة (الجنود والممثليات وغيرها)',
   'ע׳ג׳ר': 'الغجر',
-  'בנימין נתניהו': 'بنيامين نتنياهو',
-  'גדי איזנקוט': 'غادي آيزنكوت',
-  'נפתלי בנט ויאיר לפיד': 'نفتالي بينيت ويائير لبيد',
-  'יאיר גולן': 'يائير غولان',
-  'אביגדור ליברמן': 'أفيغدور ليبرمان',
-  'אריה דרעי': 'أرييه درعي',
-  'יצחק גולדקנופף': 'يتسحاق غولدكنوبف',
-  'איתמר בן גביר': 'إيتمار بن غفير',
-  'בצלאל סמוטריץ׳': 'بتسلئيل سموتريتش',
-  'חד״ש-תע״ל ובל״ד': 'الجبهة والعربية للتغيير والتجمع',
-  'מנסור עבאס': 'منصور عباس',
-  'עופר וינטר': 'عوفر فينتر',
-  'יועז הנדל וחילי טרופר': 'يوعاز هندل وحيلي تروبر',
-  'בני גנץ': 'بيني غانتس',
-  'מוטי לייטנר': 'موطي لايتنر',
-  'דיירקט פולס': 'دايركت بولز',
-  'יוסי טטיקה': 'يوسي طاطيكا',
-  'לזר / פאנל4אול': 'لازار / Panel4All',
-  'מאגר מוחות': 'مأغار موحوت',
-  'מדגם (חדשות 12)': 'مدغام (القناة 12)',
-  'מדגם פרויקט וסטטנט (חדשות 13)': 'مدغام بروجكت وستاتنت (القناة 13)',
-  'פילבר (ערוץ 14)': 'فيلبر (القناة 14)',
-  'קנטאר': 'كانتار',
-  'וואלה': 'واللا',
-  'זמן ישראל': 'زمان يسرائيل',
-  'חדשות 12': 'القناة 12',
-  'חדשות 13': 'القناة 13',
-  'כאן 11': 'كان 11',
-  'מעריב': 'معاريف',
-  'ערוץ 14': 'القناة 14',
-  'לזר': 'لازار',
-  'לזר + פאנל4אול': 'لازار + Panel4All',
-  'מדגם פרויקט וסטטנט': 'مدغام بروجكت وستاتنت',
-  'פילבר': 'فيلبر',
-  'פילבר + נקסט דאטה': 'فيلبر + نكست داتا',
   'רשומות סקרים שפורסמו (טבלת הסקרים בוויקיפדיה), מוצלבות מול קובצי הדיווח על סקרים שמפרסמת ועדת הבחירות המרכזית ב-gov.il, כשנמצאו': 'سجلات استطلاعات منشورة (جدول الاستطلاعات في ويكيبيديا)، مُقاطَعة مع ملفات تقارير الاستطلاعات التي تنشرها لجنة الانتخابات المركزية في gov.il، حيثما وُجدت',
   'סקרים אחרונים שפורסמו בכלי התקשורת לפני כל מערכת בחירות (ריכוז: טבלאות הסקרים בוויקיפדיה, שתי סריקות עצמאיות זהות; כותרות מרכזיות אומתו מול דיווחי חדשות)': 'الاستطلاعات الأخيرة التي نُشرت في وسائل الإعلام قبل كل جولة انتخابية (التجميع: جداول الاستطلاعات في ويكيبيديا، مسحان مستقلان متطابقان؛ وجرى التحقق من العناوين الرئيسية مقابل التقارير الإخبارية)',
-  'דיאלוג': 'ديالوغ',
-  'מדגם פרויקט': 'مدغام بروجكت',
-  'מסקר': 'مسكار',
-  'סמית': 'سميث',
-  'פאנלס (לזר)': 'بانلز (لازار)',
-  'פאנלס פוליטיקס': 'بانلز بوليتيكس',
-  'קמיל פוקס': 'كاميل فوكس',
-  'שווקים פנורמה': 'شفاكيم بانوراما',
   'המשולש': 'المثلث',
   'הגליל והעמקים': 'الجليل والسهول',
   'הכרמל ומחוז חיפה': 'الكرمل ومنطقة حيفا',
@@ -2139,8 +2188,9 @@ function voteSharesFromAverage(avg) {
 /* ---------- Monte Carlo ---------- */
 function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
 function gauss(rnd) { let u = 0, v = 0; while (u === 0) u = rnd(); while (v === 0) v = rnd(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); }
-// Surplus-vote agreements reported in the media (Sep–Oct 2026). The CEC publishes the official list after the 16 Oct filing deadline.
-const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List']];
+// The surplus-vote agreements filed by the 16 Oct 2026 deadline, as reported (pipeline/reference/lists_2026.json, with
+// the sources); pipeline/test_live.py 11c compares this copy with the feed's live_fetch.AGREEMENTS_2026.
+const AGREEMENTS_2026 = [['Likud', 'Religious Zionism'], ['Yashar', 'The Democrats'], ['Together', 'Yisrael Beiteinu'], ["Ra'am", 'Joint List'], ['Shas', 'UTJ']];
 /* Final-week poll average vs result, K21–K25 (final_polls.json): Netanyahu-bloc RMSE 2.4 seats,
    Arab lists 1.55 seats. With about 2.5 weeks left the spread is widened by half, to about 3.6 and
    2.3 seats; the factor is an assumption (no averages from 2.5 weeks out are in the data). The bloc spread comes only from the swing between the two Jewish camps and the
@@ -2299,7 +2349,7 @@ function renderOverview() {
 
     <div class="card c12">
       <div class="card-head"><div><h3>${t('הכנסת לפי הממוצע')}</h3>
-      <p class="sub">${t('120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.')}</p></div></div>
+      <p class="sub">${t('120 המושבים לפי ממוצע הסקרים, אחרי אחוז החסימה והסכמי העודפים שדווחו (ליכוד–הציונות הדתית, ש״ס–יהדות התורה, ישר!–הדמוקרטים, ביחד–ישראל ביתנו, רע״ם–הרשימה המשותפת). רשימות שממוצען מתחת לסף לא נכנסות, והמנדטים שלהן מתחלקים בין האחרות.')}</p></div></div>
       <div class="chart" id="ov-strip"></div>
       <div class="legend" id="ov-strip-legend"></div>
     </div>
@@ -4090,7 +4140,7 @@ async function loadLive() {
   S.turnoutHistory = history;
   // a file that fails to load keeps its previous copy; one the feed no longer lists is dropped
   if (!turnout) S.liveTurnout = null; else if (turnout.ok) S.liveTurnout = turnout.data;
-  if (!exits) S.liveExit = null; else if (exits.ok) S.liveExit = exits.data;
+  if (!exits) S.liveExit = null; else if (exits.ok) S.liveExit = i18nExit(exits.data);
   let R = res && res.ok ? i18nLive(res.data) : null;
   if (res && !res.ok && S.live && S.live.mode === 'live') R = S.live;
   if (R && R.frame && !earlyResults(R)) {
