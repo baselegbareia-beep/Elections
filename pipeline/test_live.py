@@ -1358,6 +1358,18 @@ def fetchers_budget():
           and (load(os.path.join(f.out, "census"), "religion_3000.json") or {}).get("areas") and "**Partial:**" in md
           and "(passed:" in md and not glob.glob(os.path.join(f.out, "**", "*.tmp"), recursive=True),
           f"cbs.py part 4 at the deadline: stopped, what it had written (the city files, a partial summary): {st}")
+    # a host that never answers (cbs.gov.il and GitHub's runners, 16.10) is asked HOST_FAILS times, then skipped at once,
+    # so the parts on other hosts (data.gov.il) still run inside the deadline; a host that answers is not affected
+    dead = __import__("socket").socket(); dead.bind(("127.0.0.1", 0)); dead_port = dead.getsockname()[1]; dead.close()
+    h = C.Fetcher(os.path.join(TMP, "cbs_hostdown"), deadline=60)
+    t0_ = time.monotonic()
+    with contextlib.redirect_stdout(said):
+        recs = [h.save(f"x{i}", f"http://127.0.0.1:{dead_port}/f{i}") for i in range(4)]
+        ok_ = h.save("alive", base + "/census/does-not-exist")
+    check(all(not r["ok"] for r in recs) and all("HostDown" in r["error"] for r in recs[1:])
+          and ok_.get("status") is not None and time.monotonic() - t0_ < 20,
+          f"cbs.py: a host with no answer is skipped after {C.HOST_FAILS} tries, another host is still asked "
+          f"({[r['error'][:40] for r in recs]}, {ok_.get('status')}, {time.monotonic() - t0_:.1f} s)")
     srv.shutdown()
 
     # the geographic catalogue: by name pattern, any case, one level of subfolders; GEO_MAX files at most; the rest named

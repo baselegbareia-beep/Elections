@@ -106,6 +106,7 @@ SEARCH_FULL = 90                    # a search answer this long may be cut (the 
 SEARCH_MAX = 60                     # search requests a city, at most
 DEADLINE = 20 * 60                  # seconds from the start (fetchers/__init__.py: fetch.yml stops it at 25 minutes)
 GRACE = 60                          # a body still coming at the deadline is cut this much later
+HOST_FAILS = 2                      # no answer at all this many times in a row: the host is not asked again this run
 
 
 class Stop(Exception):
@@ -117,30 +118,43 @@ class TooBig(IOError):
     """A body over the size cap: not asked again."""
 
 
+class HostDown(IOError):
+    """The host gave no answer (no HTTP status) HOST_FAILS times in a row in this run: not asked again, so one
+    unreachable host (cbs.gov.il drops GitHub's runners) does not spend the whole deadline on retries."""
+
+
 class Fetcher:
     def __init__(self, out, deadline=DEADLINE):
         self.out, self.deadline = out, deadline
         self.stop_at = time.monotonic() + deadline
         self.items, self.not_taken = [], []
+        self.silent = {}         # host -> requests in a row that got no answer at all (HOST_FAILS)
         for d in ("files", "listings", "census"):
             os.makedirs(os.path.join(out, d), exist_ok=True)
 
     def late(self):
         return time.monotonic() >= self.stop_at
 
-    def get(self, url, headers=None, timeout=120, tries=3):
+    def get(self, url, headers=None, timeout=45, tries=3):
         """(status, bytes, headers) or raises after `tries` attempts; HTTP errors return their status. Nothing is
-        asked after the deadline (Stop), and a body still coming is cut GRACE seconds after it."""
+        asked after the deadline (Stop) or of a host that stopped answering (HostDown), and a body still coming
+        is cut GRACE seconds after the deadline. The timeout is per socket operation, not for the whole body."""
+        host = urllib.parse.urlsplit(url).netloc
         last = None
         for attempt in range(tries):
             if self.late():
                 raise last or Stop("not asked: past the deadline (--deadline)")
+            if self.silent.get(host, 0) >= HOST_FAILS:
+                raise HostDown(f"not asked: {host} gave no answer {HOST_FAILS} times in a row in this run"
+                               + (f" (last: {last.__class__.__name__}: {last})" if last else ""))
             cut = self.stop_at + GRACE
             try:
                 req = urllib.request.Request(url, headers={"User-Agent": UA, **(headers or {})})
                 with urllib.request.urlopen(req, timeout=max(1.0, min(timeout, cut - time.monotonic()))) as r:
+                    self.silent[host] = 0
                     return r.status, read_until(r, SIZE_CAP, cut), dict(r.headers)
             except urllib.error.HTTPError as err:
+                self.silent[host] = 0
                 if err.code in (429, 500, 502, 503, 504) and attempt < tries - 1:
                     time.sleep(3 * (attempt + 1))
                     continue
@@ -149,6 +163,7 @@ class Fetcher:
                 raise
             except Exception as err:  # noqa: BLE001 - network errors of every kind are recorded
                 last = err
+                self.silent[host] = self.silent.get(host, 0) + 1
                 time.sleep(3 * (attempt + 1))
         raise last
 
