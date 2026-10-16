@@ -18,7 +18,8 @@ Where the values come from, best first (per field; "src" in the output names it)
   amitlev, or523, isaranga
                third parties' readings of the same PDFs (pipeline/reference/poll_filings_index.json, each source with
                its address and the SHA-256 of the file read): kept apart and marked verified: false until the PDF
-               itself has been read here.
+               itself has been read here and gave the pollster, the fieldwork dates, the respondents and a seat
+               table of 120 that agree with the poll, the listing and those readings.
 A poll is matched to a filing by its seats (all lists equal, fieldwork ending at most 10 days before publication);
 else by its polling house and the date (at most 3 days apart, at most 6 seats different, the differences listed);
 else by the link polls_2026.json already carries. Each filing goes to one poll at most.
@@ -28,6 +29,7 @@ Run:
                                                                    reports/fetch/poll_filings/latest)
   python3 pipeline/build_poll_filings.py --reference --or523 F --amitlev F [--isaranga DIR]
                                                                   (rewrites the reference index from those files)
+  python3 pipeline/build_poll_filings.py --selftest               (the houses, the list names, the verified flag)
 """
 import argparse
 import datetime as dt
@@ -84,6 +86,12 @@ def fold(s):
     return s.translate(str.maketrans("םןךףץ", "מנכפצ"))
 
 
+def word(name):
+    """A folded name found as whole words only: 'ביחד' is not in 'ביחדנו', 'מדגם' not in 'במדגם'."""
+    return re.compile(("(?<!\\w)" if re.match(r"\w", name) else "") + re.escape(name)
+                      + ("(?!\\w)" if re.search(r"\w$", name) else ""))
+
+
 # ------------------------------------------------------------------ lists
 # A filing names a list as its pollster typed it ("הליכוד בראשות בנימין נתניהו", "מפלג ת ישר!", a typo, a final
 # mem for a final nun), so each list is known by its names and, failing those, by its leaders: a pollster can
@@ -96,34 +104,70 @@ RULES = [
     ("Otzma Yehudit", ["עוצמה יהודית"], ["בנ גביר", "בנגביר"]),
     ("Haredi Public", ["הציבור החרדי"], ["לייטנר", "ליטנר"]),
     ("UTJ", ["יהדות התורה", "דגל התורה", "אגודת ישראל"], ["גולדקנופפ", "יעקב אשר"]),
-    ("Shas", ['ש"ס', "שס בראשות"], ["דרעי"]),
+    ("Shas", ['ש"ס', "שס בראשות", "התאחדות הספרדימ"], ["דרעי"]),
     ("Likud", ["הליכוד", "ליכוד"], ["נתניהו"]),
     ("The Democrats", ["הדמוקרטימ"], ["יאיר גולנ"]),
     ("Yashar", ["ישר!", "ישר !"], ["איזנקוט", "אייזנקוט"]),
     ("Together", ["ביחד", "יחד בראשות"], ["נפתלי בנט", "יאיר לפיד"]),
     ("Reservists", ["המילואימניקימ", "המילואמיניקימ", "המילואימניקיס", "בית ציוני"], ["הנדל", "טרופר"]),
     ("Joint List", ["הרשימה המשותפת", 'חד"ש', 'תע"ל', 'בל"ד'], ["עודה", "ג'בארינ", "גבארינ", "ג'אברינ", "טיבי"]),
-    ("Ra'am", ['רע"מ', "רעמ בראשות"], ["עבאס"]),
+    ("Ra'am", ['רע"מ', "רעמ בראשות", "הרשימה הערבית המאוחדת"], ["עבאס"]),
     ("National Unity", ["כחול לבנ"], ["בני גנצ"]),
 ]
 # lists on some filings that polls_2026.json does not carry: their share counts as below the threshold
 OTHER = [("Unity", ["האחדות"], ["ארדנ"]), ("Yesodot Yisrael", ["יסודות ישראל"], [])]
+# names of no list polls_2026.json carries, with those of the untracked lists on the ballot (lists_2026.json): a
+# tracked list's name inside one of them is not that list ('ביחד' in 'ביחד נצליח', list בד)
 UNTRACKED = ["נעמ", "ישראל תחילה", "עלה ירוק", "הבית היהודי", "מרצ", "העבודה", "זהות", "מפלגות אחרות", "אחרימ",
              "הכלכלית החדשה", "מפלגה אחרת", "רשימות אחרות", "אחר"]
-_RULES = [(i, [fold(n) for n in ns], [fold(x) for x in ls]) for i, ns, ls in RULES + OTHER]
+LISTS = os.path.join(ROOT, "pipeline", "reference", "lists_2026.json")
+
+
+def ballot_names(path=LISTS):
+    """(names, leaders), folded, of the lists on the ballot that polls_2026.json does not carry (lists_2026.json, the
+    lists without an id): each official name and the short forms a pollster types (the words before a dash or
+    'בראשות', without 'מפלגת'), and the leader the name gives ('בראשות אבי שקד')."""
+    try:
+        lists = json.load(open(path, encoding="utf-8"))["lists"]
+    except (OSError, ValueError, KeyError, TypeError):
+        return [], []
+    names, leaders = set(), set()
+    for l in lists:
+        if l.get("id") or not isinstance(l.get("official_name"), str):
+            continue
+        full = fold(l["official_name"])
+        for n in (full, full.split(" - ")[0], full.split(" בראשות ")[0]):
+            n = n.strip(' "-')
+            names.update(x for x in (n, re.sub(r"^מפלג[הת] ", "", n)) if x)
+        if " בראשות " in full:
+            leaders.add(re.sub(r"^הרב ", "", full.split(" בראשות ", 1)[1].strip()))
+    return sorted(names), sorted(leaders)
+
+
+_RULES = [(i, [word(fold(n)) for n in ns], [fold(x) for x in ls]) for i, ns, ls in RULES + OTHER]
+_BALLOT, _BALLOT_LEADERS = ballot_names()
+_OFF = [word(n) for n in sorted({fold(n) for n in UNTRACKED} | set(_BALLOT))]
+_OFF_LEADERS = [word(x) for x in _BALLOT_LEADERS]
 
 
 def party_id(label):
-    """The id of the list a filing's label names, or None. Also tried reversed (text read in visual order)."""
+    """The id of the list a filing's label names, or None. A name counts as whole words and not inside the name of
+    a list this does not track ('ביחד' in 'מפלגת ביחד נצליח', list בד), and a label that names such a list, or its
+    leader, and no tracked leader is none of the tracked lists. Also tried reversed (text read in visual order)."""
     for f in (fold(label), fold(label)[::-1]):
         if not f:
             continue
+        led = next((i for i, _, ls in _RULES if any(x in f for x in ls)), None)
+        if led is None and any(r.search(f) for r in _OFF_LEADERS):
+            return None
+        off = [m.span() for r in _OFF for m in r.finditer(f)]
         for i, ns, _ in _RULES:
-            if any(n in f for n in ns):
-                return i
-        for i, _, ls in _RULES:
-            if any(x in f for x in ls):
-                return i
+            for r in ns:
+                if any(not any(a <= m.start() and m.end() <= b and b - a > m.end() - m.start() for a, b in off)
+                       for m in r.finditer(f)):
+                    return i
+        if led is not None or off:
+            return led
     return None
 
 
@@ -138,14 +182,16 @@ HOUSES = [("רוזנר", "ch13"), ("פרויקט", "ch13"), ("סטטנט", "ch13
           ("פילבר", "filber"), ("לזר", "lazar"), ("מאגר מוחות", "maagar-mochot"), ("טאטיקה", "yossi-tatika"),
           ("טטיקה", "yossi-tatika"), ("מדגם", "midgam"), ("דיאלוג", "dialog"), ("אקורד", "accord"),
           ("די אר איי", "dri"), ("אפקאר", "afkar")]
+_HOUSES = [(word(fold(p).lower()), h) for p, h in HOUSES]      # folded as the text is: 'מדגם' is 'מדגמ' in both
 
 
 def house_of(*names):
+    """The house the first of these names that names one gives (a filing's editor, then its commissioner)."""
     for n in names:
         f = fold(n).lower()
         if f:
-            for pat, h in HOUSES:
-                if pat in f:
+            for r, h in _HOUSES:
+                if r.search(f):
                     return h
     return None
 
@@ -697,8 +743,46 @@ def merged(rec):
     if P and P.get("notes"):
         out["notes"] = P["notes"]
     out["src"] = src
-    out["read"] = bool(P)
+    # read: the PDF gave a value here, not merely some text (a scanned page, a garbled font or text in visual order
+    # parses to next to nothing); verified: no doubts, the concrete fields read and checked against each other
+    out["read"] = any(v == "cec_pdf" for v in src.values())
+    out["pdf_house"] = house_of(P.get("pollster") or "") if P else None
+    out["doubts"] = doubts(P, out, T)
     return out
+
+
+def doubts(P, f, third):
+    """Why a filing's PDF does not verify it, [] when it does: the PDF itself must give the pollster (a house known
+    here, the listing's), the fieldwork dates, the respondents (no more than were asked, as the third parties read
+    them) and a seat table of 120."""
+    if not f["read"]:
+        return ["the PDF was not read here" if not P else "nothing was read from the PDF's text"]
+    why = [f"no {what} in the PDF" for k, what in (("seats", "seat table of 120"), ("n", "respondents"),
+                                                   ("fieldwork_end", "fieldwork dates")) if f["src"].get(k) != "cec_pdf"]
+    if not f["pdf_house"]:
+        why.append("the PDF names no polling house known here" + (f" ({P['pollster'][:40]})" if P.get("pollster") else ""))
+    elif f.get("house") and f["house"] != f["pdf_house"]:
+        why.append(f"the PDF's pollster ({f['pdf_house']}) is not the listing's ({f['house']})")
+    n = P.get("n")
+    for k in ("invited", "n_initial"):
+        if n and P.get(k) and n > P[k]:
+            why.append(f"more respondents ({n}) than {k} ({P[k]})")
+    for name in ("amitlev", "isaranga"):
+        other = (third.get(name) or {}).get("n")
+        if n and other and other != n:
+            why.append(f"respondents {n} here, {other} by {name}")
+    return why
+
+
+def poll_doubts(p, f, seats_equal):
+    """Why a filing read here is not verified as this poll's, [] when it is: its seats, its house and its dates."""
+    why = [] if seats_equal is True else ["the filing's seat table is not the poll's"]
+    if f.get("pdf_house") and f["pdf_house"] != p.get("house"):
+        why.append(f"the PDF's pollster ({f['pdf_house']}) is not the poll's ({p.get('house')})")
+    end = f.get("fieldwork_end") if f["src"].get("fieldwork_end") == "cec_pdf" else None
+    if end and not -1 <= days(p["date"], end) <= 10:
+        why.append(f"fieldwork ended {end}, the poll is of {p['date']}")
+    return why
 
 
 # ------------------------------------------------------------------ matching polls and filings
@@ -801,7 +885,11 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
             row["filing"]["listing"] = f["listing"]
         row["src"] = {k: v for k, v in f["src"].items()
                       if k in row or k in ("fieldwork_start", "fieldwork_end", "seats") or k in row["filing"]}
-        row["verified"] = f["read"]                        # the PDF itself was read here
+        # the PDF itself read here, its pollster, dates, respondents and seats this poll's
+        why = f["doubts"] + (poll_doubts(p, f, row["seats_equal"]) if f["read"] else [])
+        row["verified"] = not why
+        if f["read"] and why:
+            row.setdefault("notes", []).append("not verified: " + "; ".join(why))
         prev = canon(p.get("filing") or "")
         if prev and prev[2] != f["url"] and prev[2] not in f["also"]:
             row["previous_link"] = prev[2]
@@ -825,11 +913,13 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
                                   if f.get(k) is not None} | {"national": bool(f.get("national") and f.get("seats"))})
     inputs = {"polls": rel(polls_path), "polls_sha256": sha256(polls_path), "reference": rel(ref_path),
               "reference_sha256": sha256(ref_path) if os.path.exists(ref_path) else None,
+              "lists": rel(LISTS), "lists_sha256": sha256(LISTS) if os.path.exists(LISTS) else None,  # party_id's names
               "fetched": [rel(d) for d in fetched]}
     doc = {
         "about": "קובצי הדיווח על סקרי הבחירות שהוגשו לוועדת הבחירות המרכזית, מוצמדים לסקרים שבטבלת הסקרים: מספר "
                  "המשיבים, טעות הדגימה, מועדי איסוף הנתונים והאחוזים הגולמיים של כל רשימה. המנדטים והממוצע אינם "
-                 "משתנים; שדה src אומר מאין נקרא כל ערך, ו-verified: false כשהקובץ עצמו עוד לא נקרא כאן",
+                 "משתנים; שדה src אומר מאין נקרא כל ערך. verified: true רק כשהקובץ עצמו נקרא כאן ונמצאו בו עורך "
+                 "הסקר, מועדי איסוף הנתונים, מספר המשיבים וטבלת מנדטים של 120, התואמים לסקר, לרישום ולקריאות האחרות",
         "source": "ועדת הבחירות המרכזית, מאגר הסקרים לכנסת ה-26 ב-gov.il (" + COLLECTOR + "); עד לקריאת הקבצים מכאן: "
                   "קריאות של צד שלישי (" + ", ".join(sorted(THIRD_PARTY)) + ") כמפורט ב-"
                   "pipeline/reference/poll_filings_index.json",
@@ -838,7 +928,8 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
                    "by_match": {h: sum(1 for r in rows if r["match"] == h) for h in ("seats", "house+date", "source link")},
                    "with_pct": sum(1 for r in rows if r.get("pct")), "with_n": sum(1 for r in rows if r.get("n")),
                    "with_moe": sum(1 for r in rows if r.get("moe")), "verified": sum(1 for r in rows if r["verified"]),
-                   "filings": len(filings), "filings_read": sum(1 for f in filings.values() if f["read"])},
+                   "filings": len(filings), "filings_read": sum(1 for f in filings.values() if f["read"]),
+                   "filings_verified": sum(1 for f in filings.values() if not f["doubts"])},
         "polls": rows,
         "unmatched_polls": [f"{p['date']}|{p['pollster']}|{p.get('outlet', '')}" for i, p in enumerate(polls)
                             if i not in matched_polls],
@@ -993,6 +1084,99 @@ def reference(or523_path, amitlev_path, isaranga_dir=None, out_path=REF, seen=No
     return doc
 
 
+# ------------------------------------------------------------------ self-test
+# each pattern of HOUSES by a name as the filings write it (the editors in the reference index)
+HOUSE_NAMES = {"רוזנר": "שמואל רוזנר", "פרויקט": "מדגם פרויקט", "סטטנט": 'סטטנט בע"מ', "קנטאר": "קנטאר ישראל",
+               "קאנטר": "קאנטר ישראל", "kantar": "Kantar Israel", "דיירקט": 'דיירקט פולס בע"מ',
+               "direct polls": "Direct Polls Ltd", "נקסט דאטה": "נקסט דאטה - שלמה פילבר", "פילבר": "שלמה פילבר",
+               "לזר": 'ד"ר מנחם לזר', "מאגר מוחות": "מאגר מוחות", "טאטיקה": "טאטיקה מחקרים ומדיה",
+               "טטיקה": "יוסי טטיקה", "מדגם": 'מדגם יעוץ ומחקר בע"מ', "דיאלוג": "דיאלוג", "אקורד": "מרכז אקורד",
+               "די אר איי": "מכון די אר איי", "אפקאר": "אפקאר מחקרים וידע"}
+
+
+def selftest():
+    """--selftest: the polling houses, the list names (against lists_2026.json) and the verified flag, on
+    constructed text; no network, nothing written. Exit 0 when all pass."""
+    failures = []
+
+    def check(cond, what):
+        print(("  ok   " if cond else "  FAIL ") + what)
+        if not cond:
+            failures.append(what)
+
+    print("houses")
+    wrong = {}
+    for pat, h in HOUSES:
+        name = HOUSE_NAMES.get(pat, "")
+        if house_of(name) != h or not word(fold(pat).lower()).search(fold(name).lower()):
+            wrong[pat] = house_of(name)
+    check(not wrong, f"each of the {len(HOUSES)} patterns of HOUSES, by a name as the filings write it: {wrong or 'all'}")
+    check(house_of("מדגם יעוץ ומחקר") == "midgam", "Midgam: 'מדגם' folded (final mem) in the pattern as in the text")
+    check(house_of("במדגם ארצי ומייצג", "סקר עצמאי") is None, "a word holding a house's name ('במדגם') is not the house")
+
+    print("lists")
+    try:
+        lists = json.load(open(LISTS, encoding="utf-8"))["lists"]
+    except (OSError, ValueError, KeyError):
+        lists = []
+    wrong = {n: party_id(n) for l in lists for n in [l.get("official_name")] + (l.get("aliases") or [])
+             if isinstance(n, str) and party_id(n) != l.get("id")}
+    check(len(lists) >= 30 and bool(_BALLOT) and not wrong,
+          f"the {len(lists)} lists on the ballot (lists_2026.json), by official name and alias: {wrong or 'all'}")
+    labels = {"מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד": None, "מפלגת ביחד נצליח": None,
+              "ביחד נצליח"[::-1]: None, "ביחד בראשות אבי שקד": None, "ביחדנו": None, "ביחד": "Together",
+              "ביחד בראשות נפתלי בנט ויאיר לפיד": "Together", "יחד בראשות נפתלי בנט": "Together",
+              "הליכוד ושרשר לאהבה ואחדות העם": "Likud", "תקומה בראשות בצלאל סמוטריץ'": "Religious Zionism",
+              "הציונות הדתית וזהות": "Religious Zionism", 'מפלגות אחרות עד 1% כ"א': None, "דוכילה": "Likud"}
+    wrong = {k: party_id(k) for k, v in labels.items() if party_id(k) != v}
+    check(not wrong, "Together by its own words only: not in בד's 'ביחד נצליח' (also in visual order) or under its "
+          f"leader; a tracked list named beside an untracked one is still found: {wrong or 'all'}")
+
+    print("verified")
+    table = [("הליכוד בראשות בנימין נתניהו", "30", "24.1%"), ("ישר! בראשות גדי איזנקוט", "25", "20.2%"),
+             ("ביחד בראשות נפתלי בנט", "20", "16.0%"), ("הדמוקרטים בראשות יאיר גולן", "15", "12.1%"),
+             ("ישראל ביתנו", "15", "12.0%"), ('ש"ס', "15", "11.9%"), ("מפלגת ביחד נצליח בראשות אבי שקד", "", "0.9%"),
+             ('סה"כ', "120", "97.2%")]
+    fields = [("מועד איסוף הנתונים", "11-12/10/2026"), ("מספר המתבקשים להשתתף בסקר", "2,521"),
+              ("מספר המשיבים לסקר בפועל", "509"), ("טעות הדגימה המרבית", "±4.4%")]
+    poll = {"date": "2026-10-13", "house": "midgam", "seats": {"Likud": 30, "Yashar": 25, "Together": 20,
+                                                              "The Democrats": 15, "Yisrael Beiteinu": 15, "Shas": 15}}
+
+    def filing(pollster='מדגם יעוץ ומחקר בע"מ', with_fields=True, third=None, text=None):
+        lines = [f"{v:>30}      {k}" for k, v in [("עורך הסקר", pollster)] + fields] if with_fields else []
+        lines += [f"{p:>10}    {s:>4}    {name}" for name, s, p in table]
+        rec = new_rec("knesset_election1")
+        rec["listing"], rec["third"] = {"editor": "מדגם יעוץ ומחקר"}, third or {}
+        P = parse_filing("\n".join(lines) if text is None else text(lines))
+        rec["texts"] = [dict(P, url=BLOB.format(item="knesset_election1", file="Survey_4001.pdf"))]
+        return merged(rec), P
+
+    def verified(f, p=poll):
+        return not (f["doubts"] + poll_doubts(p, f, not seat_diff(p["seats"], f.get("seats"))))
+    f, P = filing()
+    check(f["read"] and not f["doubts"] and verified(f),
+          f"pollster, dates, respondents and seats read and agreeing: verified ({f['doubts']})")
+    check(P.get("pct", {}).get("Together") == 16.0 and not any(b.get("id") for b in P.get("below", [])),
+          "בד's row in the table is a list below the threshold, not Together's share")
+    f, _ = filing(text=lambda lines: "")
+    check(not f["read"] and not verified(f), f"a PDF with no text (a scanned page): not verified ({f['doubts']})")
+    f, _ = filing(text=lambda lines: "\n".join(l[::-1] for l in lines))
+    check(not verified(f), f"text in visual order (each line reversed): not verified ({f['doubts'][:2]})")
+    f, _ = filing(with_fields=False)
+    check(f["read"] and not verified(f), f"the seat table alone: read, not verified ({f['doubts']})")
+    f, _ = filing(pollster="קנטאר ישראל")
+    check(not verified(f), f"the PDF's pollster not the listing's: not verified ({f['doubts']})")
+    f, _ = filing(third={"amitlev": {"n": 609}})
+    check(not verified(f), f"respondents a third party read otherwise: not verified ({f['doubts']})")
+    f, _ = filing()
+    others = [dict(poll, seats=dict(poll["seats"], Likud=29, Yashar=26)), dict(poll, house="kantar"),
+              dict(poll, date="2026-10-30")]
+    check(not any(verified(f, p) for p in others),
+          "a poll with other seats, of another house or long after the fieldwork: not verified as that poll's")
+    print(f"\n{len(failures)} failure(s)")
+    return 1 if failures else 0
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n\n")[0])
     ap.add_argument("--fetched", action="append", default=[], help="a poll_filings fetch directory (repeatable)")
@@ -1004,7 +1188,10 @@ def main(argv=None):
     ap.add_argument("--amitlev")
     ap.add_argument("--isaranga", help="a directory of isaranga/SekerKolshehu poll files")
     ap.add_argument("--seen", help="the date the third parties' files were read (YYYY-MM-DD)")
+    ap.add_argument("--selftest", action="store_true", help="test the houses, the list names and the verified flag")
     a = ap.parse_args(argv)
+    if a.selftest:
+        return selftest()
     if a.reference:
         if not (a.or523 and a.amitlev):
             ap.error("--reference needs --or523 and --amitlev")
@@ -1014,7 +1201,7 @@ def main(argv=None):
     doc = build(a.polls, a.ref, a.fetched, a.out)
     c = doc["counts"]
     print(f"{c['matched']}/{c['polls']} polls matched to a filing ({c['by_match']}); shares {c['with_pct']}, n {c['with_n']}, "
-          f"sampling error {c['with_moe']}; read here: {c['verified']}; conflicts with polls_2026.json links: "
+          f"sampling error {c['with_moe']}; verified here: {c['verified']}; conflicts with polls_2026.json links: "
           f"{len(doc['conflicts'])}; filings {c['filings']}, unmatched {len(doc['unmatched_filings'])}")
     return 0
 
