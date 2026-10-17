@@ -97,6 +97,9 @@ Runs single passes into a temporary folder and checks the JSON contract with the
  11h. a station group in pace only when the release holds all of it: forwards (an earlier file as the base) within the
      limits, the K25 file with rows absent (the pace and the lean unmoved), a re-split, a repeat, a row station_rows
      leaves out, and through live_fetch.main.
+ 11i. the daily poll-table check on the CEC filings build_polls.py attaches (official, corrected, filings): with them
+     and without them a table passes; partial, off gov.il, unknown codes or fields, markup, a seat change do not;
+     on the committed table and on the ones a daily update may build (links fixed upstream, no filings file).
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
@@ -1226,6 +1229,96 @@ def wayback_mock(closest, cdx, snaps, refuse=None):
         m = re.match(r"/wb/web/(\d{14})id_/(.+)$", path)
         return snaps.get(m.group(2)) if m else None
     return dyn
+
+
+def daily_filings(val, good):
+    """11i. daily.yml's poll-table check on the CEC filings build_polls.py attaches (val: the validate step, good: the
+    committed polls_2026.json): a table with them or without them passes; one with them on some polls only, a
+    filing address off gov.il's, a doubt or a corrected field it does not know, markup in a correction, a seat change
+    passed off as a correction, does not. On the committed table and on the tables a daily update may build from it
+    (the health gate must not hang on the data): links fixed upstream for the verified polls, so the only corrected
+    poll is one whose filing is not verified, and a table built without poll_filings_2026.json."""
+    print("11i. the daily poll-table check on the CEC filings (official, corrected, filings)")
+
+    def fixed_upstream(d):
+        for p in d["polls"]:
+            if p.get("official") and p["official"]["verified"]:
+                p.pop("corrected", None)
+
+    def no_file(d):
+        d.pop("filings", None)
+        for p in d["polls"]:
+            p.pop("official", None)
+            p.pop("corrected", None)
+    for label, fn in (("the committed table", None), ("links fixed upstream for the verified polls", fixed_upstream),
+                      ("built without the filings", no_file)):
+        sample = json.loads(json.dumps(good))
+        if fn:
+            fn(sample)
+        daily_filings_cases(val, label, sample)
+
+
+def daily_filings_cases(val, label, good):
+    """11i on one table (good): the cases, with the filings, a corrected poll with a verified filing and a poll with
+    an unverified one put in where it has none."""
+    # the cases below need i corrected and verified, j unverified, whatever the data
+    base = json.loads(json.dumps(good))
+    base.setdefault("filings", {"fetched": "2026-10-17",
+                                "collector": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26"})
+    url = "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election{}/he/Survey_{}.pdf"
+    polls = base["polls"]
+    for p in polls:
+        p.setdefault("official", None)
+    verified = lambda p: bool(p["official"] and p["official"]["verified"])
+    i = next((k for k, p in enumerate(polls) if p.get("corrected") and verified(p)), None)
+    if i is None:
+        i = next((k for k, p in enumerate(polls) if verified(p)), 0)
+        if not verified(polls[i]):
+            polls[i]["official"] = {"url": url.format(58, 4130), "item": "knesset_election58", "number": "4130",
+                                    "verified": True, "published": "2026-09-10"}
+        polls[i]["corrected"] = [{"field": "n", "old": 601, "new": 600, "why": "another poll's filing"}]
+    j = next((k for k, p in enumerate(polls) if p["official"] and not p["official"]["verified"]), None)
+    if j is None:
+        j = 1 if i != 1 else 0
+        polls[j]["official"] = {"url": url.format(64, 4140), "item": "knesset_election64", "number": "4140",
+                                "verified": False, "published": None, "doubts": ["seats"],
+                                "seat_diff": {"Yashar": [22, 21]}}
+
+    def table(fn):
+        d = json.loads(json.dumps(base))
+        fn(d)
+        return d
+
+    def without(d):
+        d.pop("filings")
+        for p in d["polls"]:
+            p.pop("official")
+            p.pop("corrected", None)
+    off = "https://evil.example/BlobFolder/dynamiccollectorresultitem/knesset_election57/he/x.pdf"
+    tables = {
+        "with the filings": (base, 0),
+        "without the filings (no poll_filings_2026.json)": (table(without), 0),
+        "official on some polls only": (table(lambda d: d["polls"][0].pop("official")), 1),
+        "filings without its fetch date's form": (table(lambda d: d["filings"].update(fetched="17.10.2026")), 1),
+        "an official address off gov.il": (table(lambda d: d["polls"][i]["official"].update(url=off)), 1),
+        "a javascript: official address": (table(lambda d: d["polls"][i]["official"].update(url="javascript:alert(1)")), 1),
+        "an official item not the address's": (table(lambda d: d["polls"][i]["official"].update(item="knesset_election1")), 1),
+        "verified as text": (table(lambda d: d["polls"][i]["official"].update(verified="yes")), 1),
+        "an unknown doubt": (table(lambda d: d["polls"][j]["official"].update(doubts=["<b>x</b>"])), 1),
+        "doubts on a verified filing": (table(lambda d: d["polls"][i]["official"].update(doubts=["seats"])), 1),
+        "seats passed off as a correction": (table(lambda d: d["polls"][i]["corrected"].append(
+            {"field": "seats", "old": None, "new": {"Likud": 120}, "why": "x"})), 1),
+        "markup in a correction's why": (table(lambda d: d["polls"][i]["corrected"][0].update(why="<script>x</script>")), 1),
+        "a javascript: link as a correction's old value": (table(lambda d: d["polls"][i]["corrected"][0].update(
+            old="javascript:alert(1)")), 1),
+        "a field corrected twice": (table(lambda d: d["polls"][i]["corrected"].append(dict(d["polls"][i]["corrected"][0]))), 1),
+        "an extra key in official": (table(lambda d: d["polls"][i]["official"].update(evil=1)), 1),
+    }
+    for what, (t, code) in tables.items():
+        p = write(os.path.join(TMP, "wf", "polls_filings_check.json"), json.dumps(t, ensure_ascii=False))
+        rc, _, log = run_block(val, {"POLLS": p}, ROOT)
+        check(rc == code, f"daily poll-table check ({label}), {what}: exit {rc} (want {code}) "
+                          f"{log.strip().splitlines()[-1][:120] if log.strip() else ''}")
 
 
 def lists_2026():
@@ -3241,6 +3334,7 @@ def main():
             p = write(os.path.join(TMP, "wf", "polls_check.json"), table if isinstance(table, str) else json.dumps(table, ensure_ascii=False))
             rc, _, log = run_block(val, {"POLLS": p}, ROOT)
             check(rc == code, f"daily poll-table check, {what}: exit {rc} (want {code}) {log.strip().splitlines()[-1][:120] if log.strip() else ''}")
+        daily_filings(val, good)
 
         # live.yml: a reset that was not published, or whose rebuild request failed, makes the run red
         live_run = next((s["run"] for _, s in workflow_steps(docs["live.yml"]) if "--reset-live" in (s.get("run") or "")), "")

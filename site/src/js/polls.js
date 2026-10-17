@@ -15,7 +15,7 @@ function renderPolls() {
   const houses = [...new Set(polls.map(p => p.house))];
   root.innerHTML = `
   <div class="section-head"><div>
-    <span class="eyebrow">${t('{p} סקרים · {h} סוקרים · {f} עם קובץ דיווח רשמי לוועדת הבחירות', { p: polls.length, h: houses.length, f: polls.filter(p => p.filing).length })}</span>
+    <span class="eyebrow">${t('{p} סקרים · {h} סוקרים · {f} עם קובץ דיווח רשמי לוועדת הבחירות', { p: polls.length, h: houses.length, f: polls.filter(p => p.official || p.filing).length })}</span>
     <h2>${t('מגמות בסקרים')}</h2>
     <p>${t('כל נקודה היא סקר שפורסם; הקו הוא הממוצע המשוקלל ביום נתון (מחצית משקל אחרי {d} ימים, תיקון לגודל מדגם ולסוקרים שמפרסמים הרבה). כשהמתג פעיל, הממוצע מתוקן להטיה הקבועה של כל סוקר.', { d: S.halfLife })}</p>
   </div></div>
@@ -44,9 +44,12 @@ function renderPolls() {
     </div>
     <div class="card c12">
       <h3>${t('כל הסקרים')}</h3>
-      <p class="sub">${t('מהחדש לישן. ⎙ מסמן סקר שנמצא לו קובץ דיווח רשמי לוועדת הבחירות, לפי חוק הבחירות (דרכי תעמולה).')}</p>
+      <p class="sub">${S.polls.filings
+        ? t('מהחדש לישן. בעמודה האחרונה, מול קובצי הדיווח שהוגשו לוועדת הבחירות לפי חוק הבחירות (דרכי תעמולה): ✓ הסקר אומת מול הקובץ שלו, ○ נמצא קובץ אך הסקר לא אומת מולו (הסיבה בתיאור הסימן), — לא נמצא קובץ. ✓ ו-○ מקשרים לקובץ.')
+        : t('מהחדש לישן. ⎙ מסמן סקר שנמצא לו קובץ דיווח רשמי לוועדת הבחירות, לפי חוק הבחירות (דרכי תעמולה).')}</p>
       <div class="controls"><label class="ctl-label" for="pl-house-sel">${t('סוקר')}</label><select id="pl-house-sel"><option value="all">${t('כל הסוקרים')}</option>${houses.map(h => `<option value="${esc(h)}" ${S.pollHouse === h ? 'selected' : ''}>${esc(polls.find(p => p.house === h).house_he)}</option>`).join('')}</select></div>
       <div class="tbl-wrap scroll-y" id="pl-table"></div>
+      ${filingsSummary()}
       <p class="foot">${esc(S.polls.source)}.</p>
     </div>
   </div>`;
@@ -212,7 +215,52 @@ function drawPollTable() {
   const { polls, parties } = S.polls;
   const cols = parties.filter(p => d3.max(polls, q => q.seats[p.id] || 0) > 0);
   const rows = polls.filter(p => S.pollHouse === 'all' || p.house === S.pollHouse).slice().reverse();
-  $('#pl-table').innerHTML = `<table class="t"><thead><tr><th>${t('תאריך')}</th><th>${t('סוקר')}</th><th>${t('גוף')}</th><th class="n">${t('מדגם')}</th>${cols.map(p => `<th class="n" title="${esc(p.name)}">${esc(p.letters)}</th>`).join('')}<th class="n">${t('גוש נתניהו')}</th><th class="n">${t('אופוזיציה')}</th><th class="n">${t('ערביות')}</th><th></th></tr></thead><tbody>${
-    rows.map(q => { const b = pollBlocs(q); return `<tr><td>${toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'numeric' })}</td><td>${esc(q.house_he)}</td><td>${esc(q.outlet_he)}</td><td class="n">${q.n ? fmt(q.n) : '—'}</td>${cols.map(p => `<td class="n">${q.seats[p.id] ?? 0}</td>`).join('')}<td class="n"><b>${b.coal}</b></td><td class="n">${b.opp}</td><td class="n">${b.arab}</td><td>${q.filing ? `<a href="${esc(q.filing)}" target="_blank" rel="noopener" title="${t('קובץ הדיווח לוועדת הבחירות')}">⎙</a>` : ''}</td></tr>`; }).join('')
+  $('#pl-table').innerHTML = `<table class="t"><thead><tr><th>${t('תאריך')}</th><th>${t('סוקר')}</th><th>${t('גוף')}</th><th class="n">${t('מדגם')}</th>${cols.map(p => `<th class="n" title="${esc(p.name)}">${esc(p.letters)}</th>`).join('')}<th class="n">${t('גוש נתניהו')}</th><th class="n">${t('אופוזיציה')}</th><th class="n">${t('ערביות')}</th><th>${S.polls.filings ? t('דיווח') : ''}</th></tr></thead><tbody>${
+    rows.map(q => { const b = pollBlocs(q); return `<tr><td>${toDate(q.date).toLocaleDateString('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'numeric' })}</td><td>${esc(q.house_he)}</td><td>${esc(q.outlet_he)}</td><td class="n">${q.n ? fmt(q.n) : '—'}</td>${cols.map(p => `<td class="n">${q.seats[p.id] ?? 0}</td>`).join('')}<td class="n"><b>${b.coal}</b></td><td class="n">${b.opp}</td><td class="n">${b.arab}</td><td>${filingMark(q)}</td></tr>`; }).join('')
   }</tbody></table>`;
+}
+
+/* ---------- the CEC filings (pipeline/build_polls.py, from site/data/poll_filings_2026.json) ---------- */
+// Each poll's mark, a symbol with its words (title and accessible name), never colour alone: ✓ verified against its
+// filing, ○ a filing found but the poll not verified against it (why), — none found; * the poll corrected from its
+// own filing (what). Both link the filing at gov.il. A table built without the filings keeps polls-data.js's link (⎙).
+function filingMark(q) {
+  const o = q.official;
+  if (!S.polls.filings || (!o && q.filing)) return q.filing ? `<a href="${esc(q.filing)}" target="_blank" rel="noopener" title="${t('קובץ הדיווח לוועדת הבחירות')}">⎙</a>` : '';
+  if (!o) {
+    const s = t('לא נמצא קובץ דיווח לוועדת הבחירות לסקר זה');
+    return `<span class="fmark none" role="img" title="${esc(s)}" aria-label="${esc(s)}">—</span>`;
+  }
+  const s = (o.verified ? t('אומת מול קובץ הדיווח לוועדת הבחירות')
+    : t('נמצא קובץ דיווח לוועדת הבחירות, אך הסקר לא אומת מולו: {why}', { why: filingDoubts(o) }))
+    + (q.corrected ? '. ' + correctedNote(q) : '');
+  return `<a class="fmark ${o.verified ? 'ok' : 'part'}" href="${esc(o.url)}" target="_blank" rel="noopener" title="${esc(s)}" aria-label="${esc(s)}">${o.verified ? '✓' : '○'}${q.corrected ? '<span aria-hidden="true">*</span>' : ''}</a>`;
+}
+const listSep = () => (AR_ON ? '؛ ' : '; ');
+function filingDoubts(o) {
+  const name = id => (S.polls.parties.find(p => p.id === id) || { name: id }).name;
+  const diff = Object.entries(o.seat_diff || {}).map(([id, [a, b]]) => t('{p}: {a} בפרסום, {b} בקובץ', { p: name(id), a, b }));
+  return (o.doubts || ['other']).map(d => ({
+    seats: t('טבלת המנדטים בקובץ שונה מזו שפורסמה') + (diff.length ? ` (${diff.join(listSep())})` : ''),
+    pollster: t('עורך הסקר בקובץ אינו הסוקר שצוין בפרסום'),
+    fieldwork: t('מועדי איסוף הנתונים בקובץ אינם מתאימים למועד הפרסום'),
+    respondents: t('מספר המשיבים בקובץ אינו עקבי'),
+    unread: t('הקובץ עצמו לא נקרא כאן, רק קריאות של צד שלישי'),
+  }[d] || t('לא כל פרטי הקובץ תואמים את הסקר'))).join(listSep());
+}
+function correctedNote(q) {
+  const what = q.corrected.map(c => (c.field === 'filing' ? t('הקישור בטבלת הסקרים הוביל לקובץ הדיווח של סקר אחר')
+    : c.field === 'n' ? (c.new ? t('מספר המשיבים {n} במקום {o}', { n: fmt(c.new), o: c.old ? fmt(c.old) : '—' }) : t('מספר המשיבים, של סקר אחר, הוסר'))
+    : c.field === 'pct' ? (c.new ? t('האחוזים הגולמיים מהקובץ של הסקר') : t('האחוזים הגולמיים, של סקר אחר, הוסרו'))
+    : null)).filter(Boolean);
+  return t('תוקן: {what}', { what: what.join(listSep()) });
+}
+// under the table: how many polls were verified, as of the fetch of the filings, and the corrected ones
+function filingsSummary() {
+  const F = S.polls.filings;
+  if (!F) return '';
+  const { polls } = S.polls, fixed = polls.filter(q => q.corrected).length;
+  const d = F.fetched && toDate(F.fetched).toLocaleDateString('he-IL', { timeZone: 'UTC', day: 'numeric', month: 'numeric' });
+  return `<p class="foot">${t('{n} מתוך {m} הסקרים אומתו מול קובצי הדיווח הרשמיים לוועדת הבחירות', { n: polls.filter(q => q.official && q.official.verified).length, m: polls.length })}${d ? t(' (עודכן {d})', { d }) : ''}.${
+    fixed ? ' ' + t('סקרים שתוקנו: {c} (מסומנים *). הקישור שלהם בטבלת הסקרים הוביל לקובץ הדיווח של סקר אחר; הוא הוחלף בקובץ של הסקר, ומספר המשיבים והאחוזים הגולמיים שנלקחו מהקובץ האחר הוחלפו בנתוני הקובץ של הסקר כשהסקר אומת מולו, או הוסרו. המנדטים לא שונו.', { c: fixed }) : ''}</p>`;
 }

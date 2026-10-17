@@ -155,6 +155,13 @@ table.t tbody tr:hover td { background: var(--surface-2); }
 table.t th[data-sort] { cursor: pointer; }
 table.t th[data-sort]:hover { color: var(--ink); }
 .scroll-y { max-height: 440px; overflow: auto; border: 1px solid var(--rule); border-radius: 8px; }
+/* the polls table's CEC filing marks (polls.js filingMark): ✓ ○ —, each with its words for screen readers in
+   aria-label, never in visually hidden text: an absolutely placed span in the scrolled table (#pl-table is not
+   positioned) escapes its overflow and widens and lengthens the page */
+.fmark { display: inline-block; min-width: 1.6em; padding: 0 4px; border-radius: 99px; text-align: center; font-weight: 600; text-decoration: none; white-space: nowrap; color: var(--ink-2); }
+.fmark.ok { color: var(--ink); background: color-mix(in srgb, var(--good) 16%, transparent); }
+.fmark.none { color: var(--muted); }
+a.fmark:hover, a.fmark:focus-visible { text-decoration: underline; }
 .minibar { display: inline-block; height: 8px; border-radius: 2px; vertical-align: middle; }
 .delta-up { color: var(--good); } .delta-down { color: var(--crit); }
 .badge { display: inline-block; font-size: 11px; padding: 1px 7px; border-radius: 99px; border: 1px solid var(--rule-strong); color: var(--ink-2); white-space: nowrap; }

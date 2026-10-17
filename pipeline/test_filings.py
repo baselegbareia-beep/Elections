@@ -25,9 +25,14 @@ Self-contained (no network): a temporary folder, a local stand-in for gov.il and
      filings no poll has;
   4. the fetcher against the stand-in: the template id from the collector page, the listing paged, PDFs saved,
      a 404 and a challenge page recorded, addresses from third parties taken only in the filing form, a listing
-     that is refused falling back on the indexes and a bounded probe; summary.json and summary.md written.
+     that is refused falling back on the indexes and a bounded probe; summary.json and summary.md written;
+  5. the filings in the poll table (pipeline/build_polls.py): official on every poll, the polls linked to another
+     poll's filing corrected from their own (verified: its n, raw shares if a whole table, margin of error and
+     fieldwork; not verified: those values dropped), a re-filing, a link that is the poll's, no verdict, never the
+     seats, the same output twice; a missing or malformed file: the table exactly as without it, with a warning;
+     the committed table against the committed filings.
 
-The fixtures of 1, 2 and 3 are constructed (those of 1b are not). Their format: the field labels the three templates read by
+The fixtures of 1, 2, 3 and 5 are constructed (those of 1b are not). Their format: the field labels the three templates read by
 amitlev/israel-polls-2026 use (.github/scripts/lib/govil-pdf-parser.mjs, LABEL_ALIASES and ALL_LABELS), the main
 table as its README quotes Kantar's filing of 9.9.2026 ("תחזית המנדטים / מנדטים / אחוזים (נתונים גולמיים)", rows
 "<list> בראשות <leader>  <seats>  <share>%", lists below the threshold with a share only, a "סה"כ" row); the values
@@ -627,10 +632,22 @@ def poll(polls, date, house):
     return next(p for p in polls if p["date"] == date and p["house"] == house)
 
 
+def as_given(doc):
+    """polls_2026.json as polls-data.js gives it, the table build_poll_filings.py is run on (pipeline/build_polls.py):
+    each correction from the CEC filings undone, the filings taken out"""
+    d = json.loads(json.dumps(doc))
+    d.pop("filings", None)
+    for p in d["polls"]:
+        for c in reversed(p.pop("corrected", None) or []):
+            p[c["field"]] = c["old"]
+        p.pop("official", None)
+    return d
+
+
 def test_builder(tmp, pdf_path):
     print("3. the builder")
     polls_src = os.path.join(ROOT, "site", "data", "polls_2026.json")
-    polls_doc = json.load(open(polls_src, encoding="utf-8"))
+    polls_doc = as_given(json.load(open(polls_src, encoding="utf-8")))
     polls = polls_doc["polls"]
     polls_path = write(os.path.join(tmp, "b", "polls_2026.json"), polls_doc)
     before = open(polls_path, "rb").read()
@@ -962,6 +979,246 @@ def test_fetcher(tmp):
         srv.shutdown()
 
 
+# ---------------------------------------------------------------- 5. the filings in the poll table
+FILE = "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election{}/he/Survey_{}.pdf"
+COLLECTOR = "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26"
+
+
+def seats_k(k):
+    """a seat table of 120, a different one for each k (two equal tables within two days are one poll)"""
+    return {"Likud": 30 - k, "Yashar": 25 + k, "Together": 15, "The Democrats": 10, "Shas": 10, "UTJ": 8,
+            "Otzma Yehudit": 8, "Joint List": 8, "Ra'am": 6}
+
+
+def poll_fixture():
+    """(polls-data.js records, poll_filings_2026.json) for build_polls: one poll of each case, the first four after
+    the conflicts of 16.10.2026 (their items, respondents and shares), the others constructed."""
+    full = {"Likud": 16.3, "Yashar": 18.8, "Together": 10.6, "The Democrats": 6.5, "Shas": 5.7, "UTJ": 6.5,
+            "Otzma Yehudit": 5.7, "Joint List": 5.7, "Ra'am": 4.9, "Religious Zionism": 4.9, "Amcha Yisrael": 3.3,
+            "Yisrael Beiteinu": 5.7, "Reservists": 3.3, "National Unity": 1.2, "Haredi Public": 0.9}
+    wrong = {"Likud": 16.6, "Yashar": 19, "Together": 10.3, "National Unity": 1.7}
+
+    def rec(date, pollster, outlet, k, item=None, num=None, **kw):
+        return {"date": date, "pollster": pollster, "outlet": outlet, **seats_k(k), "Yesh Atid": None,
+                **({"govilSourceUrl": FILE.format(item, num)} if item else {}), **kw}
+
+    def row(date, pollster, outlet, item, num, verified=True, **kw):
+        return {"key": f"{date}|{pollster}|{outlet}", "date": date, "pollster": pollster, "outlet": outlet,
+                "match": "seats", "seats_equal": kw.pop("seats_equal", True),
+                "filing": {"url": FILE.format(item, num), "item": f"knesset_election{item}", "number": str(num),
+                           "published": kw.pop("published", date)},
+                "fieldwork": {"start": kw.get("end", date), "end": kw.pop("end", date)},
+                "src": {"seats": "cec_pdf", "n": "cec_pdf"}, "verified": verified, **kw}
+
+    def conflict(date, pollster, outlet, linked, matched, verdict):
+        return {"key": f"{date}|{pollster}|{outlet}", "polls_2026_link": FILE.format(*linked),
+                "matched": FILE.format(*matched) if matched else None, "match": "seats", "verdict": verdict, "note": "x"}
+    raw = [
+        # 1. another poll's filing linked, its own verified: n, shares, margin of error and fieldwork from it
+        rec("2026-09-06", "Kantar", "Israel Hayom", 0, 53, 4123, sampleSize=551, respondents=555, marginOfError=4.6,
+            fieldworkDate="2026-09-01", pct=wrong),
+        # 2. another poll's filing linked, its own not verified: the wrong values dropped, n the poll's sample size
+        rec("2026-09-09", "Midgam", "Channel 13", 1, 69, 4145, sampleSize=1119, respondents=504, marginOfError=4.4,
+            fieldworkDate="2026-09-09", pct=wrong),
+        # 3. a re-filing linked ("both"): nothing changes
+        rec("2026-09-12", "Kantar", "Israel Hayom", 2, 82, 4163, sampleSize=554, respondents=554, pct=wrong),
+        # 4. no verdict on a link to another filing than a verified match (a file built from a corrected table)
+        rec("2026-09-22", "Midgam", "Channel 12 (HaHadashot 12)", 3, 86, 4169, sampleSize=501, respondents=1698),
+        # 5. no filing found
+        rec("2026-09-25", "Yossi Tatika", "Zman Israel / Times of Israel", 4, sampleSize=500),
+        # 6. the link is the poll's ("link"): no official, nothing changes
+        rec("2026-09-28", "Lazar", "Maariv", 5, 90, 4200, respondents=600),
+        # 7. its own filing verified, its shares not a whole table (no Ra'am): the wrong ones dropped, none taken
+        rec("2026-10-01", "SF+ND", "Channel 14", 6, 95, 4210, respondents=700, pct=wrong),
+        # 8. a verdict only on another link (the link changed since), the match not verified: left, with a warning
+        rec("2026-10-04", "Maagar Mochot", "Channel 13", 7, 98, 4220, respondents=500),
+        # 9. linked to another address of its own filing's item: nothing changes
+        rec("2026-10-06", "Kantar", "Israel Hayom", 8, 100, 4230, respondents=553),
+        # 10. a verdict on a link polls-data.js no longer has: as without a verdict
+        rec("2026-10-08", "Lazar", "Walla", 9, 105, 4240, respondents=610),
+        # 11. no verdict, the match not verified, the file built from a table that linked it: the values dropped
+        rec("2026-10-11", "Midgam", "Channel 12 (HaHadashot 12)", 10, 110, 4250, sampleSize=509, respondents=1018,
+            marginOfError=3.1, pct=wrong),
+    ]
+    rows = [
+        row("2026-09-06", "Kantar", "Israel Hayom", 57, 4129, n=551, moe=4.2, pct=full, pct_total=100.0,
+            published="2026-09-08", notes=["polls_2026.json's n (555) is not the filing's (551)"], previous_link="x"),
+        row("2026-09-09", "Midgam", "Channel 13", 64, 4140, verified=False, seats_equal=False, n=1119, moe=3.2,
+            seat_diff={"Likud": [29, 28], "Yashar": [26, 27]}, match="house+date",
+            notes=["not verified: the filing's seat table is not the poll's"]),
+        row("2026-09-12", "Kantar", "Israel Hayom", 60, 4137, n=554, moe=4.2, pct=full, pct_total=100.0),
+        row("2026-09-22", "Midgam", "Channel 12 (HaHadashot 12)", 81, 4162, n=501, moe=4.4, pct=full, pct_total=99.9,
+            end="2026-09-23"),
+        row("2026-09-28", "Lazar", "Maariv", 91, 4201, n=600),
+        row("2026-10-01", "SF+ND", "Channel 14", 96, 4211, n=1079, moe=3.0,
+            pct={k: v for k, v in full.items() if k != "Ra'am"}, pct_total=95.1),
+        row("2026-10-04", "Maagar Mochot", "Channel 13", 99, 4221, verified=False, n=535, moe=4.3,
+            notes=["not verified: the PDF's pollster (dri) is not the poll's (maagar-mochot)"],
+            previous_link=FILE.format(97, 4219)),
+        row("2026-10-06", "Kantar", "Israel Hayom", 100, 4231, n=553, moe=4.2),
+        row("2026-10-08", "Lazar", "Walla", 106, 4241, n=601, moe=4.4),
+        row("2026-10-11", "Midgam", "Channel 12 (HaHadashot 12)", 111, 4251, verified=False, seats_equal=False,
+            n=509, moe=4.4, seat_diff={"Likud": [20, 21], "Yashar": [35, 34]},
+            notes=["not verified: the filing's seat table is not the poll's"]),
+    ]
+    rows[7]["filing"]["url"] = FILE.format(100, "4230-4231")            # (9.) the same item, another file name
+    conflicts = [
+        conflict("2026-09-06", "Kantar", "Israel Hayom", (53, 4123), (57, 4129), "matched"),
+        conflict("2026-09-09", "Midgam", "Channel 13", (69, 4145), (64, 4140), "matched"),
+        conflict("2026-09-12", "Kantar", "Israel Hayom", (82, 4163), (60, 4137), "both"),
+        conflict("2026-09-28", "Lazar", "Maariv", (90, 4200), (91, 4201), "link"),
+        conflict("2026-10-01", "SF+ND", "Channel 14", (95, 4210), (96, 4211), "matched"),
+        conflict("2026-10-04", "Maagar Mochot", "Channel 13", (97, 4219), (99, 4221), "matched"),
+        conflict("2026-10-08", "Lazar", "Walla", (104, 4239), (106, 4241), "matched"),
+    ]
+    doc = {"about": "x", "collector": COLLECTOR, "polls": rows, "conflicts": conflicts, "unmatched_polls": [],
+           "inputs": {"fetched": [{"source": "ops-reports:reports/fetch/poll_filings/latest",
+                                   "started": "2026-10-16T21:02:41+00:00"}]}}
+    return raw, doc
+
+
+def test_poll_table(tmp):
+    """5. pipeline/build_polls.py with poll_filings_2026.json: official on every poll, the corrections of the polls
+    linked to another poll's filing (never their seats), the same output twice; without the file, or with one that
+    is not what build_poll_filings.py writes, the table exactly as built without it (and a warning)."""
+    print("5. the filings in the poll table (pipeline/build_polls.py)")
+    import contextlib
+    import io
+    import build_polls as BP
+    raw, doc = poll_fixture()
+    src = write(os.path.join(tmp, "p", "polls-data.js"), "window.BASE_POLLS_DATA = " + json.dumps(raw) + ";\n")
+    fpath = write(os.path.join(tmp, "p", "poll_filings_2026.json"), doc)
+
+    def build(filings, name):
+        out, err = os.path.join(tmp, "p", name), io.StringIO()
+        with contextlib.redirect_stderr(err), contextlib.redirect_stdout(io.StringIO()):
+            BP.build(src, out, filings)
+        return open(out, "rb").read(), err.getvalue()
+    plain, err0 = build("", "plain.json")
+    base = json.loads(plain)
+    check(not err0 and "filings" not in base and not any({"official", "corrected"} & set(p) for p in base["polls"])
+          and len(base["polls"]) == len(raw), f"--filings '': the table as before, no official, no filings ({err0[:80]})")
+    got, err = build(fpath, "with.json")
+    again, _ = build(fpath, "again.json")
+    check(got == again, "the same inputs, the same table, byte for byte")
+    d = json.loads(got)
+    P = {f"{p['date']}|{p['pollster']}|{p['outlet']}": p for p in d["polls"]}
+    B0 = {f"{p['date']}|{p['pollster']}|{p['outlet']}": p for p in base["polls"]}
+    check(all(P[k]["seats"] == B0[k]["seats"] for k in B0) and set(P) == set(B0),
+          "the seats of every poll as without the filings, no poll added or dropped")
+    check(d.get("filings") == {"fetched": "2026-10-17", "collector": COLLECTOR},
+          f"filings: the fetch's date in Israel (21:02 UTC on 16.10 is 17.10) and the collector ({d.get('filings')})")
+    check(all("official" in p for p in d["polls"]), "official on every poll")
+
+    def fields(k):
+        return [c["field"] for c in P[k].get("corrected") or []]
+    k1 = "2026-09-06|Kantar|Israel Hayom"
+    p1 = P[k1]
+    check(p1["filing"] == FILE.format(57, 4129) and p1["n"] == 551 and p1["moe"] == 4.2 and p1["fieldwork"] == "2026-09-06"
+          and p1["pct"] == doc["polls"][0]["pct"] and fields(k1) == ["filing", "n", "pct", "moe", "fieldwork"]
+          and p1["official"] == {"url": FILE.format(57, 4129), "item": "knesset_election57", "number": "4129",
+                                 "verified": True, "published": "2026-09-08"}
+          and p1["corrected"][1]["old"] == 555 and p1["corrected"][1]["new"] == 551
+          and "verdict matched" in p1["corrected"][0]["why"],
+          f"verdict matched, its filing verified: its address, n, raw shares, margin of error and fieldwork, each "
+          f"change listed (old, new, why) {fields(k1)}")
+    k2 = "2026-09-09|Midgam|Channel 13"
+    p2 = P[k2]
+    check(p2["filing"] == FILE.format(64, 4140) and p2["n"] == 1119 and p2["pct"] is None and p2["moe"] is None
+          and fields(k2) == ["filing", "n", "pct", "moe"]
+          and p2["official"]["verified"] is False and p2["official"]["doubts"] == ["seats"]
+          and p2["official"]["seat_diff"] == {"Likud": [29, 28], "Yashar": [26, 27]},
+          f"verdict matched, its filing not verified: its address; the wrong n back to the poll's sample size, the "
+          f"wrong shares and margin of error dropped; why it is not verified {p2['official']} {fields(k2)}")
+    k3 = "2026-09-12|Kantar|Israel Hayom"
+    check(P[k3]["filing"] == FILE.format(82, 4163) and "corrected" not in P[k3] and P[k3]["pct"] == B0[k3]["pct"]
+          and P[k3]["official"]["item"] == "knesset_election60",
+          "verdict both (a re-filing): the link and the values as they are, official its matched filing")
+    k4 = "2026-09-22|Midgam|Channel 12 (HaHadashot 12)"
+    p4 = P[k4]
+    check(p4["filing"] == FILE.format(81, 4162) and p4["n"] == 501 and p4["fieldwork"] == "2026-09-22"
+          and p4["pct"] == doc["polls"][3]["pct"] and "no verdict" in p4["corrected"][0]["why"],
+          "no verdict on a link to another filing than a verified match: corrected as for matched (fieldwork ending "
+          "after publication: the publication date)")
+    check(P["2026-09-25|Yossi Tatika|Zman Israel / Times of Israel"]["official"] is None,
+          "no filing found: official null")
+    k6 = "2026-09-28|Lazar|Maariv"
+    check(P[k6]["official"] is None and "corrected" not in P[k6] and P[k6]["filing"] == FILE.format(90, 4200),
+          "verdict link (the link's filing is the poll's): no official, nothing changed")
+    k7 = "2026-10-01|SF+ND|Channel 14"
+    check(P[k7]["pct"] is None and P[k7]["n"] == 1079 and "pct" in fields(k7)
+          and "not a complete set" in next(c["why"] for c in P[k7]["corrected"] if c["field"] == "pct"),
+          "its own filing's shares not a whole table (a seated list missing): none taken, the wrong ones dropped")
+    k8 = "2026-10-04|Maagar Mochot|Channel 13"
+    check(P[k8]["filing"] == FILE.format(98, 4220) and "corrected" not in P[k8]
+          and P[k8]["official"]["doubts"] == ["pollster"] and k8 in err,
+          f"a verdict only on another link, the match not verified: left as it is, a warning ({err.strip()[:100]})")
+    k9 = "2026-10-06|Kantar|Israel Hayom"
+    check("corrected" not in P[k9] and P[k9]["filing"] == FILE.format(100, 4230)
+          and P[k9]["official"]["url"] == FILE.format(100, "4230-4231"),
+          "a link to another file of its own filing's item: nothing changed, official the filing's address")
+    k10 = "2026-10-08|Lazar|Walla"
+    check(P[k10]["filing"] == FILE.format(106, 4241) and "no verdict" in P[k10]["corrected"][0]["why"],
+          "a verdict on a link polls-data.js no longer has: as without a verdict")
+    k11 = "2026-10-11|Midgam|Channel 12 (HaHadashot 12)"
+    check(P[k11]["filing"] == FILE.format(111, 4251) and P[k11]["n"] == 509 and P[k11]["pct"] is None
+          and P[k11]["moe"] is None and "not verified" in P[k11]["corrected"][0]["why"],
+          "no verdict, the match not verified, built from a table that linked it: the link, the values dropped")
+    check(all(c["field"] != "seats" for p in d["polls"] for c in p.get("corrected") or []),
+          "no correction of seats")
+    check(as_given(d) == base, "corrected says what changed: the table with each change undone is the table as built "
+                               "without the filings")
+    # the reference alone: no fetch date
+    ref_only = dict(doc, inputs={"fetched": []})
+    got_r, _ = build(write(os.path.join(tmp, "p", "ref_only.json"), ref_only), "ref_only_out.json")
+    check(json.loads(got_r)["filings"]["fetched"] is None, "a file built from the reference alone: no fetch date")
+    no_start = dict(doc, inputs={"fetched": [{"source": "ops-reports:reports/fetch/poll_filings", "started": None}]})
+    got_s, err_s = build(write(os.path.join(tmp, "p", "no_start.json"), no_start), "no_start_out.json")
+    check(json.loads(got_s)["filings"]["fetched"] is None and json.loads(got_s)["polls"] == d["polls"] and not err_s.strip()
+          .startswith("warning: no_start"), "a fetch with no start time (no summary.json): the filings, no fetch date")
+    # missing or malformed: the table as without the file
+    bad = {
+        "a missing file": None,
+        "not JSON": "{",
+        "a list": [],
+        "NaN": json.dumps(doc).replace('"n": 551', '"n": NaN'),
+        "n as text": json.dumps(doc).replace('"n": 551', '"n": "551"'),
+        "a javascript: filing address": json.dumps(doc).replace(FILE.format(57, 4129), "javascript:alert(1)"),
+        "an item not its address's": json.dumps(doc).replace('"item": "knesset_election57"', '"item": "knesset_election58"'),
+        "a matched conflict naming another filing": json.dumps(doc).replace(
+            '"matched": "' + FILE.format(64, 4140), '"matched": "' + FILE.format(65, 4140)),
+        "an unknown verdict": json.dumps(doc).replace('"verdict": "both"', '"verdict": "maybe"'),
+        "a fetch that is no record": json.dumps(dict(doc, inputs={"fetched": ["x"]})),
+        "a start that is no timestamp": json.dumps(doc).replace("2026-10-16T21:02:41+00:00", "yesterday"),
+        "no collector": json.dumps(dict(doc, collector="https://evil.example/")),
+    }
+    for what, body in bad.items():
+        path = os.path.join(tmp, "p", "bad.json")
+        if body is None:
+            path = os.path.join(tmp, "p", "missing.json")
+        else:
+            write(path, body)
+        got_b, err_b = build(path, "bad_out.json")
+        check(got_b == plain and "warning" in err_b,
+              f"{what}: the table exactly as without the filings, and a warning ({err_b.strip()[:90]})")
+    # the committed table and filings: the table built from them (the daily update builds both from main)
+    committed = os.path.join(ROOT, "site", "data", "polls_2026.json")
+    cf = os.path.join(ROOT, "site", "data", "poll_filings_2026.json")
+    if os.path.exists(committed) and os.path.exists(cf):
+        T, F = json.load(open(committed, encoding="utf-8")), BP.load_filings(cf)
+        rebuild = "python3 pipeline/build_polls.py --src polls-data.js rebuilds it"
+        ok = "filings" in T and T["filings"]["fetched"] == F["fetched"]
+        for p in T["polls"]:
+            r = F["rows"].get(f"{p['date']}|{p['pollster']}|{p['outlet']}")
+            o = p.get("official")
+            ok = ok and (o is None if r is None else o is None or (
+                o["url"] == r["filing"]["url"] and o["verified"] == r["verified"] and o["item"] == r["filing"]["item"]))
+            if p.get("corrected"):
+                ok = ok and o and p["filing"] == o["url"] and (not o["verified"] or p["n"] == r["n"])
+        check(ok, f"site/data/polls_2026.json carries the filings of site/data/poll_filings_2026.json, its corrected "
+                  f"polls linking their own filing ({rebuild})")
+
+
 def main():
     tmp = tempfile.mkdtemp(prefix="kalpi26-filings-")
     test_text()
@@ -969,6 +1226,7 @@ def main():
     pdf_path = test_pdf(tmp)
     test_builder(tmp, pdf_path)
     test_fetcher(tmp)
+    test_poll_table(tmp)
     print(f"\n{len(failures)} failure(s); scratch in {tmp}")
     if not failures:
         shutil.rmtree(tmp, ignore_errors=True)
