@@ -20,12 +20,14 @@ What it asks for, in this order:
      them), the roster page of each of the 38 lists (cec_key in lists_2026.json), a few likely names of the agreements
      page (surplus-agreements-26 and others), and every gov.il page or file these link to whose address or text names
      the lists or עודפים / surplus / הסכם (two levels); then data.gov.il's catalogue (package_search);
-  2. www.bechirot.gov.il, the CEC's own site (Umbraco), crawled within bounds: same host only, MAX_PAGES pages at most
-     (HTML, the site's API answers, robots.txt, sitemaps), MAX_FILES files (PDF, XLSX, XLS, DOCX, DOC, CSV) and
-     MAX_SCRIPTS scripts, one request a second (--polite). Its pages draw their menus and blocks in the browser: the
-     HTML has no links, only elements with component-query / currentPageId attributes and the scripts that fill them
+  2. www.bechirot.gov.il, the CEC's own site (Umbraco), crawled within bounds: same host only (its redirects too),
+     MAX_PAGES pages at most (HTML, the site's API answers, MAX_API of them, robots.txt, sitemaps, MAX_SITEMAPS of
+     them; each redirect counted), MAX_FILES files (PDF, XLSX, XLS, DOCX, DOC, CSV) and MAX_SCRIPTS scripts, one
+     request a second (--polite, redirects too). Its pages draw their menus and blocks in the browser: the HTML has no
+     links, only elements with component-query / currentPageId attributes and the scripts that fill them
      (/dist/<Name>.bundle.js for #PageHeader, #Banner-..., #ContentShow-...), so the crawl reads those scripts for the
-     API addresses they call (/umbraco/api/..., /api/...) and asks each with the attributes of the elements it fills.
+     API addresses they call (/umbraco/api/..., /api/...) and asks each with the attributes of the elements it fills:
+     a page's blocks for every page (its content), its header, footer and share bar once (the same on every page).
      It starts from robots.txt (its Disallow rules for every agent are kept, and a longer Crawl-delay), the home page,
      sitemap.xml, Umbraco's content listing (the Delivery API, a 404 where it is off), the links gov.il pages give to
      the site, and the archive's index of the site (the Wayback Machine's CDX listing: addresses only, each then asked
@@ -43,8 +45,10 @@ What it asks for, in this order:
      archive's listing of the lists page's BlobFolder. One request every --archive-gap seconds (archive.org allows
      about 15 a minute); a 429 ends this part. MAX_LOOKUPS lookups and MAX_SNAPSHOTS snapshots at most.
 Parts 2 and 3 take turns (twice more at most) while either has something new. Only *.gov.il addresses and
-archive.org's are fetched. At most MAX_URLS requests, MAX_FILE bytes a file, and nothing asked after --deadline
-(DEADLINE, 20 minutes from the start; a body still coming is cut GRACE seconds later): the summary is then written with
+archive.org's are fetched, and a redirect is followed only to the same kind (gov.il to gov.il, archive.org to
+archive.org, the crawl's to its own site), MAX_HOPS at most, else the body is not read. At most MAX_URLS requests,
+MAX_FILE bytes a file (unpacked too), and nothing asked after --deadline (DEADLINE, 20 minutes from the start; a body
+still coming, also one dripped a few bytes at a time, is cut GRACE seconds later): the summary is then written with
 what came (pipeline/fetchers/__init__.py: fetch.yml stops it at 25).
 
 What it reads: HTML and JSON (the text, one line a block, table cells joined with ' | ', and the links: a JSON
@@ -58,10 +62,11 @@ the letters lists_2026.json gives and the CEC pages or files that confirm them (
 letters alone in a table cell, after אותיות, or in brackets; its roster page's אותיות הרשימה), per agreement those with
 a line naming its two lists, each with its address and kind (live page, live file, archive snapshot <timestamp>); what
 no official page or file read here confirms, what shows other letters, a pair the reference lacks. Only a text about
-the 26th Knesset counts: its address or text says so (26, העשרים ושש, 2026), it is a roster page, or the page linking to
-it is and it names no earlier Knesset. Then the crawl, the archive part, the roster pages against the reference (a list
-added, withdrawn or renamed), and per URL the HTTP status, type, size, SHA-256, saved name and how it was read. Reading
-is best effort; the files are the record. Never raises on a single URL; exit 0 unless the script itself crashed.
+the 26th Knesset counts: its address or text says so (26, העשרים ושש; 2026 where it names no earlier Knesset), it is a
+roster page, or the page linking to it is and it names no earlier Knesset. Then the crawl, the archive part, the
+roster pages against the reference (a list added, withdrawn or renamed), and per URL the HTTP status, type, size,
+SHA-256, saved name and how it was read. Reading is best effort; the files are the record. Never raises on a single
+URL; exit 0 unless the script itself crashed.
 
 Testing against a local server: --rewrite https://www.gov.il=http://127.0.0.1:8765/govil (repeatable) fetches from
 the mock and keeps the real address in the summary; --only-rewritten skips every other host.
@@ -70,7 +75,6 @@ import argparse
 import concurrent.futures as cf
 import csv
 import datetime as dt
-import gzip
 import hashlib
 import heapq
 import html
@@ -115,6 +119,7 @@ TOPIC = re.compile(r"עודפים|surplus|odafim|heskem|הסכם|agreement", re.
 LISTS_TOPIC = re.compile(r"Approved|Slips|letters|אותיות|פתק|candidates-lists|רשימות[\s_-]*המועמדים", re.I)
 ROSTER = re.compile(r"(?:list|iist)_?\d*$", re.I)    # a list's roster page: beyahad_list1, yashar_list_2, ..._iist29
 MAX_URLS = 420
+MAX_HOPS = 5                   # redirects followed for one request (each in its host's turn)
 MAX_FILE = 15_000_000
 MAX_TOTAL = 80_000_000
 TIMEOUT = 30
@@ -124,8 +129,9 @@ HEB = "א-ת"
 # part 2: www.bechirot.gov.il
 BECHIROT = "https://www.bechirot.gov.il"
 SITE_HOSTS = ("www.bechirot.gov.il", "bechirot.gov.il")
-MAX_PAGES = 60                 # HTML pages, API answers, robots.txt and sitemaps
-MAX_API = 25                   # of those, the site's API answers
+MAX_PAGES = 60                 # HTML pages, API answers, robots.txt and sitemaps (and the redirects among them)
+MAX_API = 35                   # of those, the site's API answers (a page's content is in them)
+MAX_SITEMAPS = 5               # of those, sitemaps (an index listing thousands would take every page)
 MAX_FILES = 40
 MAX_SCRIPTS = 12
 MAX_ENDPOINTS = 20
@@ -143,9 +149,10 @@ MAX_SNAPSHOTS = 40
 PDF_TIMEOUT = 60
 MAX_LINES = 20_000             # lines kept of one text
 
-# about the 26th Knesset: in a text, and in an address (unquoted; not a hex id's "-26ab")
-K26_TEXT = re.compile(r"(?:כנסת|לכנסת|הכנסת)\s*ה?\s*[-־–]?\s*26(?!\d)|העשרים\s+ו?שש|knesset\W{0,3}26(?!\d)|26th\s+knesset"
-                      r"|(?<![\d/.-])2026(?![\d/.-])", re.I)
+# about the 26th Knesset: in a text, and in an address (unquoted; not a hex id's "-26ab"); the year alone only in a
+# text that names no earlier Knesset (k26_of: "עודכן 3 בינואר 2026" on a page about the 25th is not)
+K26_TEXT = re.compile(r"(?:כנסת|לכנסת|הכנסת)\s*ה?\s*[-־–]?\s*26(?!\d)|העשרים\s+ו?שש|knesset\W{0,3}26(?!\d)|26th\s+knesset", re.I)
+K26_YEAR = re.compile(r"(?<![\d/.-])2026(?![\d/.-])")
 K26_URL = re.compile(r"(?:[-_/]|knesset|bechirot|elections?|votes|media)26(?=$|[/?#._&=-])", re.I)
 OLD_KNESSET = re.compile(r"(?:כנסת|לכנסת|הכנסת)\s*ה?\s*[-־–]?\s*(?:1\d|2[0-5])(?!\d)|knesset\W{0,3}(?:1\d|2[0-5])(?!\d)"
                          r"|(?:bechirot|elections?|votes|media)[-_]?(?:1\d|2[0-5])(?=$|[/?#._&=-])", re.I)
@@ -168,6 +175,48 @@ NOT_TEXT = ("config", "data.gov.il catalogue", "crawl robots", "crawl sitemap", 
 # ------------------------------------------------------------------ fetching
 def fetchable(host):
     return host == "gov.il" or host.endswith(".gov.il") or host in ARCHIVE_HOSTS
+
+
+def family(u):
+    """Where a redirect from u may go (Fetcher.get's default): "gov.il" for a gov.il address, "archive.org" for the
+    archive's; None elsewhere."""
+    host = (urllib.parse.urlsplit(u or "").hostname or "").lower()
+    return "archive.org" if host in ARCHIVE_HOSTS else "gov.il" if host == "gov.il" or host.endswith(".gov.il") else None
+
+
+class NotFollowed(Exception):
+    """A redirect Fetcher.get did not follow: its status, the (real) address it pointed to, and why."""
+
+    def __init__(self, code, url, why):
+        super().__init__(f"redirect ({code}) to {url[:160]} not followed: {why}")
+        self.code, self.url = code, url
+
+
+class Redirects(urllib.request.HTTPRedirectHandler):
+    """Redirects followed only where the request's allow (of the real address) says, each in its host's turn (the
+    polite gap, the deadline) and counted in its entry's hops, its hops at most: an off-site body is never read as the
+    page asked. Those three ride on the request (req.rules: entry, allow, hops), the opener is the Fetcher's."""
+    max_redirections = MAX_HOPS
+
+    def __init__(self, F):
+        super().__init__()
+        self.F = F
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        entry, allow, hops = req.rules
+        real, seen = self.F.real_of(newurl), getattr(req, "redirect_dict", {})     # urllib's loop check, done first
+        why = ("not the same site" if not allow(real) else "--only-rewritten" if self.F.real_to_fetch(real) is None
+               else "a loop" if seen.get(newurl, 0) >= self.max_repeats
+               else "over the limit of redirects" if entry.get("hops", 0) >= hops or len(seen) >= self.max_redirections
+               else None if self.F.turn(urllib.parse.urlsplit(real).hostname) else "past the deadline (--deadline)")
+        if why:
+            fp.close()
+            raise NotFollowed(code, real, why)
+        entry["hops"] = entry.get("hops", 0) + 1
+        new = super().redirect_request(req, fp, code, msg, headers, iri(self.F.real_to_fetch(real)))
+        if new is not None:
+            new.rules = req.rules
+        return new
 
 
 def host_key(host):
@@ -193,6 +242,7 @@ class Fetcher:
         self.stop_at, self.late = time.monotonic() + deadline, 0      # late: requests not made, past the deadline
         self.gaps, self.next_at = dict(gaps or {}), {}                  # seconds between two requests to one host_key
         self.lock = threading.Lock()
+        self.opener = urllib.request.build_opener(Redirects(self))     # once: building one makes an SSL context
 
     def real_to_fetch(self, url):
         for a, b in self.rewrite:
@@ -224,8 +274,10 @@ class Fetcher:
         time.sleep(max(0.0, at - time.monotonic()))
         return True
 
-    def get(self, url, headers=None, why=""):
-        """One request: the entry (also kept in self.entries) and the body (None when nothing usable came)."""
+    def get(self, url, headers=None, why="", allow=None, hops=MAX_HOPS):
+        """One request: the entry (also kept in self.entries) and the body (None when nothing usable came). A redirect
+        is followed where allow(its real address) is true (by default: from gov.il to gov.il, from archive.org to
+        archive.org), `hops` at most (Redirects); else the entry has the 3xx, redirect_refused and no body."""
         with self.lock:
             if url in self.seen:
                 return self.seen[url]
@@ -256,8 +308,9 @@ class Fetcher:
                 req = urllib.request.Request(iri(target), headers={
                     "User-Agent": UA, "Accept": "text/html,application/json,application/xhtml+xml,*/*;q=0.8",
                     "Accept-Language": "he-IL,he;q=0.9,en;q=0.8", "Accept-Encoding": "gzip, deflate", **(headers or {})})
-                cut = self.stop_at + GRACE
-                with urllib.request.urlopen(req, timeout=max(1.0, min(self.timeout, cut - time.monotonic()))) as r:
+                cut, fam = self.stop_at + GRACE, family(url)
+                req.rules = (entry, allow or (lambda v: family(v) == fam), hops)
+                with self.opener.open(req, timeout=max(1.0, min(self.timeout, cut - time.monotonic()))) as r:
                     entry["status"], raw = r.status, read_until(r, MAX_FILE + 1, cut)
                     entry["type"] = r.headers.get("Content-Type", "")
                     entry["last_modified"] = r.headers.get("Last-Modified")
@@ -266,12 +319,16 @@ class Fetcher:
                         entry["redirected_to"] = final
                     enc = (r.headers.get("Content-Encoding") or "").lower()
                 body = decode_body(raw, enc)
-                if len(raw) > MAX_FILE:
-                    entry["error"], body = f"over {MAX_FILE // 1_000_000} MB: not stored", None
+                if len(raw) > MAX_FILE or len(body) > MAX_FILE:
+                    unpacked = " unpacked" if len(raw) <= MAX_FILE else ""
+                    entry["error"], body = f"over {MAX_FILE // 1_000_000} MB{unpacked}: not stored, not read", None
+            except NotFollowed as exc:
+                entry["status"], entry["error"], entry["redirect_refused"] = exc.code, str(exc), exc.url
             except urllib.error.HTTPError as exc:
                 entry["status"], entry["type"] = exc.code, exc.headers.get("Content-Type", "") if exc.headers else ""
                 try:
-                    entry["head"] = text_head(decode_body(exc.read(4096), (exc.headers or {}).get("Content-Encoding", "")))
+                    entry["head"] = text_head(decode_body(read_until(getattr(exc, "fp", None) or exc, 4096, cut),
+                                                          (exc.headers or {}).get("Content-Encoding", ""), 4096))
                 except Exception:
                     pass
                 entry["error"] = f"HTTP {exc.code}"
@@ -310,12 +367,13 @@ class Fetcher:
 
 def read_until(r, limit, cut):
     """r.read(limit), in pieces, stopped at the monotonic time `cut`: a slow body cannot hold the run past the
-    deadline's grace."""
-    chunks, n = [], 0
+    deadline's grace. read1 where there is one (an HTTP response): what one read of the socket gives, so a body
+    dripped a few bytes at a time comes back to the clock between pieces (read(64 KB) waits for all 64)."""
+    read, chunks, n = getattr(r, "read1", None) or r.read, [], 0
     while n < limit:
         if time.monotonic() > cut:
             raise TimeoutError(f"cut at the deadline (--deadline) after {n} bytes")
-        b = r.read(min(1 << 16, limit - n))
+        b = read(min(1 << 16, limit - n))
         if not b:
             break
         chunks.append(b)
@@ -323,18 +381,15 @@ def read_until(r, limit, cut):
     return b"".join(chunks)
 
 
-def decode_body(raw, enc):
+def decode_body(raw, enc, limit=MAX_FILE + 1):
+    """raw unpacked (gzip, deflate), `limit` bytes at most: a small body that would unpack to gigabytes stops there
+    (get() then drops it as over MAX_FILE); raw itself where it does not unpack."""
     enc = (enc or "").lower()
-    try:
-        if "gzip" in enc or raw[:2] == b"\x1f\x8b":
-            return gzip.decompress(raw)
-        if "deflate" in enc:
-            try:
-                return zlib.decompress(raw)
-            except zlib.error:
-                return zlib.decompress(raw, -zlib.MAX_WBITS)
-    except (OSError, EOFError, zlib.error):
-        pass
+    for wbits in ((31,) if "gzip" in enc or raw[:2] == b"\x1f\x8b" else (15, -15) if "deflate" in enc else ()):
+        try:
+            return zlib.decompressobj(wbits).decompress(raw, limit)
+        except zlib.error:
+            continue
     return raw
 
 
@@ -490,21 +545,24 @@ def read_body(entry, body):
     if s.lstrip()[:1] in ("{", "["):
         try:
             doc = json.loads(s)
-        except ValueError:
+        except (ValueError, RecursionError):
             doc = None
     if doc is None:
         return (*read_html(s), None)
-    lines, links = [], list(json_links(doc))
-    for x in strings(doc):
-        if "<" in x and ">" in x:
-            ln, lk = read_html(x)
-            lines += ln
-            links += lk
-        elif x.strip():
-            lines.append(" ".join(x.split()))
-            if re.match(r"(https?://|/BlobFolder/|/he/)", x.strip()):
-                links.append((x.strip(), ""))
-    return (lines + list(json_rows(doc)))[:MAX_LINES], links, doc
+    try:
+        lines, links = [], list(json_links(doc))
+        for x in strings(doc):
+            if "<" in x and ">" in x:
+                ln, lk = read_html(x)
+                lines += ln
+                links += lk
+            elif x.strip():
+                lines.append(" ".join(x.split()))
+                if re.match(r"(https?://|/BlobFolder/|/he/)", x.strip()):
+                    links.append((x.strip(), ""))
+        return (lines + list(json_rows(doc)))[:MAX_LINES], links, doc
+    except RecursionError:                                # nested deeper than the walk goes: read as text
+        return (*read_html(s), None)
 
 
 def read_any(entry, body):
@@ -715,11 +773,17 @@ def classify(u):
     return "file" if FILE_EXT.search(path) else "asset" if ASSET_EXT.search(path) else "page"
 
 
+def k26_of(s):
+    """A text says it is about the 26th Knesset: by name (K26_TEXT), or by the year 2026 where no earlier Knesset is
+    named."""
+    return bool(K26_TEXT.search(s) or (K26_YEAR.search(s) and not OLD_KNESSET.search(s)))
+
+
 def crawl_score(url, label=""):
     """0 for a link about the lists, letters, agreements, rosters or notices; 1 for one about the 26th Knesset; 2 for
     a weaker match (lists, publications); None for the rest, and for a link about an earlier Knesset only."""
     s = f"{urllib.parse.unquote(url or '')} {label}"
-    k26 = K26_TEXT.search(s) or K26_URL.search(s)
+    k26 = k26_of(s) or K26_URL.search(s)
     if OLD_KNESSET.search(s) and not k26:
         return None
     return 0 if CRAWL_TOPIC.search(s) else 1 if k26 else 2 if CRAWL_WEAK.search(s) else None
@@ -729,7 +793,7 @@ def cdx_rows(body):
     """The rows of a CDX answer (output=json: a header row, then a row a capture) as dicts."""
     try:
         d = json.loads(as_text(body)) if body else []
-    except ValueError:
+    except (ValueError, RecursionError):
         return []
     if not isinstance(d, list) or len(d) < 2 or not isinstance(d[0], list):
         return []
@@ -739,10 +803,18 @@ def cdx_rows(body):
 # ------------------------------------------------------------------ comparing with lists_2026.json
 def names_of(entry):
     """The names a list goes by in CEC text, longest first: its aliases (as given) and its official name, also cut
-    at בראשות / בהנהגת (those two only when 4 characters or more: שמע, בטח are words too)."""
+    at בראשות / בהנהגת (those two only when 4 characters or more: שמע, בטח are words too), and that cut again at a
+    spaced dash, a leading מפלגת dropped (when two words or more, 6 characters or more, or an acronym: הקהל is a word):
+    ביחד נצליח, list בד's short name, so that a row of it is not read as naming ביחד (list רק) by the longer match."""
     off = (entry.get("official_name") or "").strip()
-    cut = {off, re.split(r"\s+(?:בראשות|בהנהגת)\s+", off)[0].strip(" –-")} if off else set()
-    out = {n for n in cut if len(n) >= 4} | {n for n in entry.get("aliases") or [] if len(n) >= 2}
+    out = set()
+    if off:
+        head = re.split(r"\s+(?:בראשות|בהנהגת)\s+", off)[0].strip(" –-")
+        out = {n for n in (off, head) if len(n) >= 4}
+        short = re.sub(r"^מפלג[תה]\s+", "", re.split(r"\s+[–-]\s+", head)[0]).strip()
+        if len(short.split()) >= 2 or len(short) >= 6 or re.search("[\"״]", short):
+            out.add(short)
+    out |= {n for n in entry.get("aliases") or [] if len(n) >= 2}
     return sorted(out, key=len, reverse=True)
 
 
@@ -794,15 +866,19 @@ def letter_cells(line, spans, strict=False):
     """The ballot letters a line shows apart from the names in it: a table cell of 1 to 4 letters alone, after
     אותיות (הרשימה):, or in brackets. strict (for other letters than the reference's): a cell only in a row where a
     list's name is its own cell (it starts it, or is half of it or more: not a word inside a longer text, ביחד in
-    'מטעם מפלגת אנחנו. ביחד-'), brackets only just after a name."""
+    'מטעם מפלגת אנחנו. ביחד-'; a one-word name starts it only when בראשות, a dash, a bracket or nothing follows: not
+    ביחד in 'ביחד נצליח', another list's name), brackets only just after a name."""
     def free(a, b):
         return not any(x < b and a < y for _, x, y in spans)
 
     def own_cell(x, y):
         for a, b, t in cells:
             if a <= x and y <= b:
-                c = t.strip(" \t\"'״׳")
-                return c.startswith(line[x:y]) or (y - x) * 2 >= len(c)
+                c, n = t.strip(" \t\"'״׳"), line[x:y]
+                if c.startswith(n):
+                    rest = c[len(n):].lstrip()
+                    return " " in n.strip() or not rest or bool(re.match(r"(?:בראשות|בהנהגת|לראשות)\s|[–\-(,;:.!]", rest))
+                return (y - x) * 2 >= len(c)
         return False
     cells = [(m.start(), m.end(), m.group(0)) for m in re.finditer(r"[^|]+", line)] if "|" in line else []
     whole = not strict or any(own_cell(x, y) for _, x, y in spans)
@@ -973,13 +1049,16 @@ class Run:
             entry["parent_k26"] = True
         if body is None:
             return entry, [], []
-        lines, links, doc, how = read_any(entry, body)
+        try:
+            lines, links, doc, how = read_any(entry, body)
+        except Exception as exc:                          # a body no reader copes with is that URL's problem
+            lines, links, doc, how = [], [], None, f"not read: {exc.__class__.__name__}: {str(exc)[:80]}"
         if doc is not None:
             entry["doc"] = doc
         address = entry.get("snapshot_of") or u
         kind = entry.get("source") or ("live file" if how in FILE_READS or how.startswith("not read") else "live page")
         text = "\n".join(lines[:3000])
-        k26 = bool(roster or K26_URL.search(urllib.parse.unquote(address)) or K26_TEXT.search(text)
+        k26 = bool(roster or K26_URL.search(urllib.parse.unquote(address)) or k26_of(text)
                    or (parent_k26 and not OLD_KNESSET.search(text)))
         entry.update({"source": kind, "read": how, "lines": len(lines), "k26": k26})
         if lines:
@@ -1030,11 +1109,13 @@ def fill(names, attrs):
 class Crawl:
     """Part 2: the bounded crawl of www.bechirot.gov.il (module docstring)."""
     LIMIT = {"page": MAX_PAGES, "file": MAX_FILES, "script": MAX_SCRIPTS}
+    SUB = {"api": ("MAX_API", MAX_API), "sitemap": ("MAX_SITEMAPS", MAX_SITEMAPS)}      # within MAX_PAGES
 
     def __init__(self, R):
         self.R, self.heap, self.queued, self.n = R, [], set(), itertools.count()
-        self.count = {"page": 0, "file": 0, "script": 0, "api": 0}
-        self.endpoints, self.components = {}, []     # (script stem, address) -> [parameter names]; (page, attrs)
+        self.count = {"page": 0, "file": 0, "script": 0, "api": 0, "sitemap": 0}
+        self.endpoints, self.components = {}, []     # (stem, address) -> [parameter names]; (page, attrs, prio, k26)
+        self.chrome = set()                          # the endpoints asked for a page's own elements (once each)
         self.gov_links, self.begun, self.dead, self.robots = [], False, None, None
         self.log = {"home": None, "asked": [], "not_asked": [], "not_asked_n": 0, "not_followed": 0, "elsewhere": [],
                     "api_found": [], "sitemap_urls": 0, "stopped": None, "seeds": [], "robots": None}
@@ -1074,19 +1155,27 @@ class Crawl:
             if what != "robots" and self.robots is not None and not self.robots.can_fetch("*", u):
                 self.left(u, what, "disallowed by robots.txt")
                 continue
-            if self.count[group] >= self.LIMIT[group] or (what == "api" and self.count["api"] >= MAX_API):
-                self.left(u, what, f"over the limit ({'MAX_API' if what == 'api' else 'MAX_' + group.upper() + 'S'})")
+            name, room = f"MAX_{group.upper()}S", self.LIMIT[group] - self.count[group]
+            if what in self.SUB and self.SUB[what][1] - self.count[what] < room:
+                name, room = self.SUB[what][0], self.SUB[what][1] - self.count[what]
+            if room <= 0:
+                self.left(u, what, f"over the limit ({name})")
                 continue
             new = u not in F.seen
-            entry, body = F.get(u, why=why[:160])
+            # a redirect: on this site only (and not where robots.txt says no), in the site's turn, within the limit
+            entry, body = F.get(u, why=why[:160], allow=self.allowed, hops=min(MAX_HOPS, room - 1))
             err = entry.get("error") or ""
             if err.startswith("skipped"):
                 self.log["stopped"] = err[len("skipped: "):]
                 self.left(u, what, self.log["stopped"])
                 continue
             if new:
-                self.count[group] += 1
-                self.count["api"] += what == "api"
+                n = 1 + entry.get("hops", 0)
+                self.count[group] += n
+                self.count["api"] += n * (what == "api")
+                self.count["sitemap"] += n * (what == "sitemap")
+                if is_govil(entry.get("redirect_refused")) and not site_url(entry["redirect_refused"]):
+                    self.gov_links.append((entry["redirect_refused"], label, k26, u))      # another gov.il host: part 3
             entry.setdefault("role", f"crawl {what}")
             if k26:
                 entry["parent_k26"] = True
@@ -1110,7 +1199,12 @@ class Crawl:
             elif what == "script":
                 self.read_script(u, as_text(body))
             else:
-                self.read_page(entry, body, u, base, label, what, k26)
+                self.read_page(entry, body, u, base, label, what, k26, prio)
+
+    def allowed(self, u):
+        """Where a redirect of the crawl may go: this site, where robots.txt does not say no."""
+        v = site_url(u)
+        return bool(v) and (self.robots is None or self.robots.can_fetch("*", v))
 
     def read_robots(self, entry, s):
         """robots.txt's rules for every agent (*), kept for the rest of the crawl, and its Crawl-delay when longer than
@@ -1159,16 +1253,25 @@ class Crawl:
 
     def api_calls(self):
         """The site's API asked as its scripts would: each endpoint with the attributes of the elements its script
-        fills (Header for #PageHeader, Banner for #Banner-..., by name), else once with the page's own."""
+        fills (Header for #PageHeader, Banner for #Banner-..., by name), else once with the page's own. A page's own
+        elements (#PageHeader, #PageFooter, #PageShare: currentPageId, no component-* attribute) draw the same menus on
+        every page: asked once, for the first page that has them. A block (#ContentShow-..., #Banner-...) is its page's
+        content: asked for every page, just ahead of the pages ranked with it (its page's priority, less 0.5), and about
+        the 26th Knesset when its page is (and it names no earlier one)."""
         for (stem, target), names in self.endpoints.items():
             st = stem.lower()
-            mine = [(p, c) for p, c in self.components if st and st in f"{c.get('id', '')} {c.get('component-type', '')}".lower()]
-            for page, c in mine or [(p, c) for p, c in self.components if c.get("currentpageid")][:1]:
+            mine = [x for x in self.components if st and st in f"{x[1].get('id', '')} {x[1].get('component-type', '')}".lower()]
+            for page, c, prio, k26 in mine or [x for x in self.components if x[1].get("currentpageid")][:1]:
+                block = any(k.startswith("component-") for k in c)
+                if not block:
+                    if (stem, target) in self.chrome:
+                        continue
+                    self.chrome.add((stem, target))
                 q = fill(names, c)
                 u = target + (("&" if "?" in target else "?") + urllib.parse.urlencode(q) if q else "")
-                self.push(-1, u, what="api", why=f"the site's API ({stem}) for {c.get('id') or page}")
+                self.push(prio - 0.5, u, what="api", why=f"the site's API ({stem}) for {c.get('id') or page}", k26=block and k26)
 
-    def read_page(self, entry, body, u, base, label, what, k26):
+    def read_page(self, entry, body, u, base, label, what, k26, prio):
         R = self.R
         entry, lines, links = R.take1(entry, body, f"crawl {what}", parent_k26=k26)
         if what == "file":
@@ -1181,7 +1284,7 @@ class Crawl:
                 v = site_url(absolute(src, base))
                 if v and urllib.parse.urlsplit(v).path.lower().endswith(".js") and not SCRIPT_SKIP.search(v):
                     self.push(-1.5, v, what="script", why=f"a script of {u}")
-            self.components += [(u, c) for c in t.components][:100]
+            self.components += [(u, c, prio, entry.get("k26")) for c in t.components][:100]
             self.api_calls()
         for href, text in links:
             v = absolute(href, base)
@@ -1205,8 +1308,8 @@ class Crawl:
                 self.log["elsewhere"].append(v)
 
     def report(self):
-        return {**self.log, "count": self.count, "limits": {"pages": MAX_PAGES, "api": MAX_API, "files": MAX_FILES,
-                                                            "scripts": MAX_SCRIPTS}, "dead": self.dead}
+        return {**self.log, "count": self.count, "limits": {"pages": MAX_PAGES, "api": MAX_API, "sitemaps": MAX_SITEMAPS,
+                                                            "files": MAX_FILES, "scripts": MAX_SCRIPTS}, "dead": self.dead}
 
 
 class Archive:
@@ -1347,7 +1450,7 @@ class Archive:
             return None, f"lookup failed: {(entry or {}).get('error') or self.stopped}"
         try:
             c = ((json.loads(as_text(body)) or {}).get("archived_snapshots") or {}).get("closest") or {}
-        except (ValueError, AttributeError):
+        except (ValueError, AttributeError, RecursionError):
             return None, "lookup failed: not the availability JSON"
         if c.get("timestamp") and str(c.get("status") or "200") == "200" and c.get("available", True) is not False:
             return str(c["timestamp"]), f"closest snapshot {c['timestamp']}"
@@ -1629,7 +1732,7 @@ def write_summary(out, summary):
 def datagov_resources(body):
     try:
         d = json.loads(as_text(body)) if body else {}
-    except ValueError:
+    except (ValueError, RecursionError):
         return []
     out = []
     for p in ((d.get("result") or {}).get("results") or []) if isinstance(d, dict) else []:
@@ -1706,9 +1809,10 @@ def markdown(s):
         n, lim = cr["count"], cr["limits"]
         L += ["", "## www.bechirot.gov.il (the crawl)", "",
               f"Home page: {cell(cr.get('home'))}. Asked: {n['page']} pages of {lim['pages']} (the site's API: {n['api']} of "
-              f"{lim['api']}), {n['file']} files of {lim['files']}, {n['script']} scripts of {lim['scripts']}; one request "
-              f"every {s.get('polite_s')} s." + (f" **Stopped: {cell(cr['stopped'] or cr.get('dead'))}.**"
-                                                 if cr.get("stopped") or cr.get("dead") else ""), "",
+              f"{lim['api']}; sitemaps: {n.get('sitemap', '-')} of {lim.get('sitemaps', '-')}), {n['file']} files of "
+              f"{lim['files']}, {n['script']} scripts of {lim['scripts']}, each redirect counted; one request every "
+              f"{s.get('polite_s')} s, redirects followed on this site only."
+              + (f" **Stopped: {cell(cr['stopped'] or cr.get('dead'))}.**" if cr.get("stopped") or cr.get("dead") else ""), "",
               "API addresses its scripts call: " + (cell("; ".join(
                   f"{x['address']} ({', '.join(x['params']) or 'no parameters seen'})"
                   + (" (another host: not asked)" if x.get("elsewhere") else "") for x in cr["api_found"][:12]), 1500)
@@ -1723,7 +1827,10 @@ def markdown(s):
         by = {e["url"]: e for e in s["urls"]}
         for x in cr["asked"]:
             e = by.get(x["url"]) or {}
-            L.append(f"| {cell(urllib.parse.unquote(x['url']))} | {x['what']} | {cell(e.get('status') or e.get('error'))} | "
+            http_ = str(e.get("status") or e.get("error"))
+            http_ += (f" (to {urllib.parse.unquote(e['redirect_refused'])}: not followed)" if e.get("redirect_refused")
+                      else f" (after {e['hops']} redirects)" if e.get("hops") else "")
+            L.append(f"| {cell(urllib.parse.unquote(x['url']))} | {x['what']} | {cell(http_, 200)} | "
                      f"{cell(e.get('read'))} | {cell(e.get('lines'))} | {cell(x['why'][:80])} |")
     ar = s.get("archive")
     if ar:

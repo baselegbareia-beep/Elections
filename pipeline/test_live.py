@@ -74,10 +74,13 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      local stand-in for gov.il (the content-pages API, a roster page with other letters, an agreements page, a PDF,
      404 / 500 / refused URLs): exit 0, the summary's comparison, the files stored; then with gov.il answering 403,
      against a stand-in for www.bechirot.gov.il (a home page without links whose scripts name the site's API, robots.txt,
-     a sitemap, a Hebrew address, a PDF, an XLSX, a DOCX, a page about the 25th Knesset) and for the Wayback Machine
-     (availability, CDX, raw snapshots): the crawl's choices and its gap between requests, letters and agreements
-     confirmed by live pages and files or by archive snapshots (marked as such), lists_2026.json never written,
-     --reread; the crawl's bounds on a 100-page site, a 429 from the archive, the deadline;
+     a sitemap, a Hebrew address, a PDF, an XLSX, a DOCX, a page about the 25th Knesset dated 2026, redirects on the site,
+     off it and to itself, JSON nested 5000 deep) and for the Wayback Machine (availability, CDX, raw snapshots): the
+     crawl's choices and its gap between requests (redirects too), letters and agreements confirmed by live pages and
+     files or by archive snapshots (marked as such), never by a page off the site or about an earlier Knesset,
+     lists_2026.json never written, --reread; the crawl's bounds on a 100-page site (a sitemap index of 3000), a 429
+     from the archive, the deadline, the site's menus asked once and every page's block; a dripped body cut at the
+     deadline, a gzip body unpacked to MAX_FILE at most;
  11d. the fetchers' clock (pipeline/fetchers/__init__.py): cbs.py, cec_lists.py and poll_filings.py each with a
      --deadline at least 3 minutes inside fetch.yml's limit, and with --deadline 0 nothing asked, both summaries
      written, exit 0 (a fetcher without one is noted); cbs.py against a stand-in for census.cbs.gov.il (Jerusalem
@@ -1100,21 +1103,33 @@ def ops_control(docs, wtmp):
 
 class GovilMock(http.server.BaseHTTPRequestHandler):
     """A stand-in for gov.il, www.bechirot.gov.il and the Wayback Machine (11c): routes {path or path?query: (status,
-    content type, body)}, else dynamic(path) when set (None: 404); the headers of every request kept by path, and the
-    time it came (times: [(monotonic, path)])."""
+    content type, body[, extra headers])}, else dynamic(path) when set (None: 404); an extra "_drip": s sends the body
+    8 bytes every s seconds. The headers of every request kept by path, and the time it came (times: [(monotonic,
+    path)])."""
     routes, asked, times, dynamic = {}, {}, [], None
 
     def do_GET(self):
         GovilMock.asked[self.path] = dict(self.headers)
         GovilMock.times.append((time.monotonic(), self.path))
-        code, ctype, body = (self.routes.get(self.path) or self.routes.get(self.path.split("?")[0])
-                             or (GovilMock.dynamic and GovilMock.dynamic(self.path)) or (404, "text/html", b"<p>no</p>"))
+        code, ctype, body, *more = (self.routes.get(self.path) or self.routes.get(self.path.split("?")[0])
+                                    or (GovilMock.dynamic and GovilMock.dynamic(self.path)) or (404, "text/html", b"<p>no</p>"))
         body = body if isinstance(body, bytes) else body.encode("utf-8")
+        extra = dict(more[0]) if more else {}
+        drip = extra.pop("_drip", None)
         self.send_response(code)
         self.send_header("Content-Type", ctype)
         self.send_header("Content-Length", str(len(body)))
+        for k, v in extra.items():
+            self.send_header(k, v)
         self.end_headers()
-        self.wfile.write(body)
+        try:
+            for piece in [body[i:i + 8] for i in range(0, len(body), 8)] if drip else [body]:
+                self.wfile.write(piece)
+                if drip:
+                    self.wfile.flush()
+                    time.sleep(drip)
+        except (BrokenPipeError, ConnectionResetError):
+            pass
 
     def log_message(self, *a):
         pass
@@ -1348,8 +1363,10 @@ def cec_lists_site(ref, ref_path, lists):
     """11c, the CEC's own site and the Wayback Machine, with www.gov.il answering 403 to everything (as its WAF answers
     GitHub's runners): a stand-in for www.bechirot.gov.il whose home page has no links, only the elements its scripts
     fill from the site's API (the addresses found in the scripts), with robots.txt, a sitemap, a page under a Hebrew
-    address, a PDF, an XLSX and a DOCX; and for archive.org (the availability API, the CDX index, raw snapshots). Then
-    the bounds (a site of 100 pages and 200 files), a 429 from the archive, the deadline, and --reread."""
+    address, a PDF, an XLSX and a DOCX, redirects; and for archive.org (the availability API, the CDX index, raw
+    snapshots). Then --reread, the bounds (a site of 100 pages and 200 files, a sitemap index), a 429 from the archive,
+    the deadline, the site's header, footer and share bar against the API budget; in-process, a dripped body and a gzip
+    one."""
     import importlib.util
     spec = importlib.util.spec_from_file_location("cec_lists_11c", os.path.join(ROOT, "pipeline", "fetchers", "cec_lists.py"))
     C = importlib.util.module_from_spec(spec)
@@ -1397,12 +1414,26 @@ def cec_lists_site(ref, ref_path, lists):
         "/elections-26/": (200, "text/html", '<h1>הבחירות לכנסת ה-26</h1><a href="/elections-26/candidates/">רשימות המועמדים</a>'),
         "/elections-26/candidates/": (200, "text/html", (
             "<h1>רשימות המועמדים לכנסת ה-26</h1><table>" + row("מחל", by["Likud"]["official_name"]) + row("שס", by["Shas"]["official_name"])
-            + row("דרכ", by["Yashar"]["official_name"]) + '</table><a href="/media/a1/slips.pdf">פתקי ההצבעה</a>'
-            '<a href="/media/a2/lists.xlsx">קובץ להורדה</a><a href="/media/a3/photo.jpg">תמונה</a>')),
+            + row("דרכ", by["Yashar"]["official_name"]) + row("בד", "ביחד נצליח") + '</table><a href="/media/a1/slips.pdf">פתקי ההצבעה</a>'
+            '<a href="/media/a2/lists.xlsx">קובץ להורדה</a><a href="/media/a3/photo.jpg">תמונה</a>'
+            '<a href="/elections-26/moved">רשימות המועמדים - עדכון</a><a href="/elections-26/away/">הודעות הוועדה</a>'
+            '<a href="/elections-26/loop/">רשימות המועמדים - קישור ישן</a><a href="/results/knesset-lists/">רשימות המועמדים (ארכיון)</a>')),
+        # a redirect on the site (followed, in the site's turn), one off it (not followed), one to itself
+        "/elections-26/moved": (301, "text/html", "", {"Location": "/bech/elections-26/moved/"}),
+        "/elections-26/moved/": (200, "text/html", "<h1>רשימות המועמדים לכנסת ה-26: עדכון</h1><table>"
+                                 + row("ך", by["Amcha Yisrael"]["official_name"]) + "</table>"),
+        "/elections-26/away/": (302, "text/html", "", {"Location": "/evil/page"}),
+        "/elections-26/loop/": (302, "text/html", "", {"Location": "/bech/elections-26/loop/"}),
+        # the 25th Knesset's lists, updated in 2026: not about the 26th
+        "/results/knesset-lists/": (200, "text/html", "<h1>רשימות המועמדים והתוצאות - הבחירות לכנסת ה-25</h1><p>עודכן 3 בינואר 2026</p>"
+                                    "<p>הסכמי עודפים</p><table>" + row("ב", by["Otzma Yehudit"]["official_name"])
+                                    + row(by["Otzma Yehudit"]["official_name"], by["Haredi Public"]["official_name"]) + "</table>"),
+        "/notices/deep-26/": (200, "application/json", "[" * 5000 + "]" * 5000),
         ag_slug: (200, "text/html", "<h1>הסכמי עודפים לבחירות לכנסת ה-26</h1><table>"
                   + row(by["Together"]["official_name"], by["Yisrael Beiteinu"]["official_name"]) + "</table>"),
         notices_slug: (200, "text/html", '<h1>ילקוט הפרסומים: הודעות הוועדה לכנסת ה-26</h1><a href="/media/n1/notice.docx">הודעה על '
-                       'רשימות המועמדים</a><a href="https://www.gov.il/he/pages/surplus-agreements-knesset26">הסכמי העודפים באתר gov.il</a>'),
+                       'רשימות המועמדים</a><a href="https://www.gov.il/he/pages/surplus-agreements-knesset26">הסכמי העודפים באתר gov.il</a>'
+                       '<a href="/notices/deep-26/">הודעות נוספות</a>'),
         "/notices/heskem-yashar-26/": (200, "text/html", "<h1>הודעה על הסכם עודפים</h1><p>הבחירות לכנסת ה-26</p><table>"
                                        + row(by["The Democrats"]["official_name"], by["Yashar"]["official_name"]) + "</table>"),
         "/media/a1/slips.pdf": (200, "application/pdf", pdf_rows([["פתקי ההצבעה לכנסת ה-26"], ["רק", by["Together"]["official_name"]]])),
@@ -1451,8 +1482,10 @@ def cec_lists_site(ref, ref_path, lists):
         return min((b - a for a, b in zip(ts, ts[1:])), default=None), len(ts)
 
     try:
-        r, s, md, secs, out_b = fetch("cec_lists_site", {"/bech" + k: v for k, v in site.items()}, wayback_mock(closest, cdx, snaps),
-                                      "--polite", "0.15", "--archive-gap", "0.05")
+        evil = (200, "text/html", "<h1>רשימות המועמדים לכנסת ה-26</h1><p>הסכמי עודפים</p><table>" + row("זך", by["Haredi Public"]["official_name"])
+                + row(by["Likud"]["official_name"], by["Religious Zionism"]["official_name"]) + "</table>")
+        r, s, md, secs, out_b = fetch("cec_lists_site", {**{"/bech" + k: v for k, v in site.items()}, "/evil/page": evil},
+                                      wayback_mock(closest, cdx, snaps), "--polite", "0.15", "--archive-gap", "0.08")
         asked = set(GovilMock.asked)
         site_gap, n_site = gaps(("/bech/",))
         arch_gap, n_arch = gaps(("/arch/", "/wb/"))
@@ -1478,11 +1511,12 @@ def cec_lists_site(ref, ref_path, lists):
               and any(x.get("why") == "disallowed by robots.txt" for x in cr.get("not_asked") or []),
               f"cec_lists.py, the crawl: not a page about none of the topics, about the 25th Knesset only, or disallowed by "
               f"robots.txt; a link elsewhere listed, not fetched: {sorted(p_ for p_ in asked if p_.startswith('/bech/'))[:30]}")
-        check(site_gap is not None and site_gap >= 0.15 * 0.9 and arch_gap is not None and arch_gap >= 0.05 * 0.9,
+        check(site_gap is not None and site_gap >= 0.15 * 0.8 and arch_gap is not None and arch_gap >= 0.08 * 0.8,
               f"cec_lists.py: one request to the site every --polite seconds, to archive.org every --archive-gap: the "
               f"shortest gaps {site_gap and round(site_gap, 3)} s over {n_site} and {arch_gap and round(arch_gap, 3)} s over {n_arch}")
         want_l = {"מחל": "live", "שס": "live", "ל": "live", "כן": "live", "ג": "archive snapshot", "די": "archive snapshot",
-                  "רק": "live" if pdf_ok else "not confirmed", "אמת": "live", "דרך": "not confirmed", "ט": "not confirmed"}
+                  "רק": "live" if pdf_ok else "not confirmed", "אמת": "live", "דרך": "not confirmed", "ט": "not confirmed",
+                  "ך": "live", "בד": "live", "ב": "not confirmed", "זך": "not confirmed"}
         got_l = {k: (st_l.get(k) or {}).get("status") for k in want_l}
         kinds = {k: [(x["url"], x["kind"]) for x in (st_l.get(k) or {}).get("confirmed_by") or []] for k in ("ג", "די", "ל", "כן", "אמת")}
         check(got_l == want_l and (st_l.get("דרך") or {}).get("other_letters") == ["דרכ"]
@@ -1513,6 +1547,27 @@ def cec_lists_site(ref, ref_path, lists):
               f"cec_lists.py, the archive: every gov.il address that answered 403 looked up, a closest snapshot that is not a 200 "
               f"replaced by the index's latest 200, a PDF that does not read recorded: {ar.get('lookups')} lookups, "
               f"{ar.get('snapshots')} snapshots, the slips {slip_row}")
+        by_url = {e["url"]: e for e in s.get("urls") or []}
+        moved, away, loop = (by_url.get(f"{C.BECHIROT}/elections-26/{p_}") or {} for p_ in ("moved", "away/", "loop/"))
+        n_loop = sum(1 for _, p_ in GovilMock.times if p_ == "/bech/elections-26/loop/")
+        n_pages = sum(1 for _, p_ in GovilMock.times if p_.startswith("/bech/") and not p_.startswith(("/bech/media/", "/bech/dist/")))
+        check("/evil/page" not in asked and away.get("status") == 302 and "/evil/page" in str(away.get("redirect_refused"))
+              and "not followed" in str(away.get("error")) and "/bech/elections-26/moved/" in asked and moved.get("hops") == 1
+              and [(x["url"], x["kind"]) for x in (st_l.get("ך") or {}).get("confirmed_by") or []] == [(C.BECHIROT + "/elections-26/moved", "live page")]
+              and n_loop == 1 + loop.get("hops", 0) <= 1 + C.MAX_HOPS and "a loop" in str(loop.get("error"))
+              and (cr.get("count") or {}).get("page") == n_pages and "not followed" in md,
+              f"cec_lists.py, the crawl's redirects: one on the site followed (in the site's turn, counted), one off it not "
+              f"(its body not read, its lists not confirmed), one to itself stopped; every request counted: {away.get('error')} "
+              f"{moved.get('hops')} hops, {n_loop} requests of the loop ({loop.get('error')}), {n_pages} pages asked, "
+              f"{(cr.get('count') or {}).get('page')} counted")
+        k25 = by_url.get(C.BECHIROT + "/results/knesset-lists/") or {}
+        deep = by_url.get(C.BECHIROT + "/notices/deep-26/") or {}
+        L_ = {k: st_l.get(k) or {} for k in ("ב", "בד", "רק")}
+        check(k25.get("status") == 200 and k25.get("k26") is False and L_["ב"].get("status") == "not confirmed"
+              and L_["בד"].get("confirmed_by") and L_["רק"].get("other_letters") == [] and deep.get("status") == 200 and deep.get("read"),
+              f"cec_lists.py: a page about the 25th Knesset dated 2026 is not about the 26th; the row 'בד | ביחד נצליח' "
+              f"confirms בד and is not read as other letters for ביחד (רק); a JSON answer nested 5000 deep read: "
+              f"{k25.get('k26')} {L_['רק'].get('other_letters')} {deep.get('read')}")
         check(open(ref_path, "rb").read() == ref_before[0] and os.path.getmtime(ref_path) == ref_before[1]
               and "never written" in md,
               "cec_lists.py: lists_2026.json read, never written")
@@ -1541,6 +1596,10 @@ def cec_lists_site(ref, ref_path, lists):
                                             f'<a href="/media/n{i}/b.xlsx">קובץ</a><a href="https://evil.example.com/{i}">הודעה</a>')
         big[f"/bech/media/n{i}/a.pdf"] = (200, "application/pdf", b"%PDF-1.4 x")
         big[f"/bech/media/n{i}/b.xlsx"] = (200, "application/vnd.ms-excel", b"PK\x03\x04 not a zip")
+    # a sitemap index of 3000 sitemaps (and itself): MAX_SITEMAPS of them asked, the pages still
+    big["/bech/sitemap.xml"] = (200, "application/xml", '<?xml version="1.0"?><sitemapindex>' + "".join(
+        f"<sitemap><loc>{C.BECHIROT}/sm/{i}.xml</loc></sitemap>" for i in range(3000)) + f"<sitemap><loc>{C.BECHIROT}/sitemap.xml</loc>"
+        "</sitemap></sitemapindex>")
     srv = http.server.HTTPServer(("127.0.0.1", 0), GovilMock)
     threading.Thread(target=srv.serve_forever, daemon=True).start()
     base = f"http://127.0.0.1:{srv.server_address[1]}"
@@ -1560,6 +1619,12 @@ def cec_lists_site(ref, ref_path, lists):
               f"cec_lists.py, the crawl's bounds: {C.MAX_PAGES} pages and {C.MAX_FILES} files at most (robots.txt and the sitemap "
               f"among the pages), the rest named as not asked, nothing off the site: {len(pages_)} pages, {len(files_)} files, "
               f"{cr.get('not_asked_n')} not asked, exit {r.returncode} {r.stderr.strip()[-160:]}")
+        maps = [p_ for p_ in pages_ if p_.startswith(("/bech/sm/", "/bech/sitemap.xml"))]
+        notices = [p_ for p_ in pages_ if p_.startswith("/bech/elections-26/n")]
+        check(len(maps) == (cr.get("count") or {}).get("sitemap") == C.MAX_SITEMAPS and len(notices) >= C.MAX_PAGES - C.MAX_SITEMAPS - 6
+              and any("MAX_SITEMAPS" in x["why"] for x in cr.get("not_asked") or []),
+              f"cec_lists.py, the crawl's bounds: a sitemap index of 3000 asks {C.MAX_SITEMAPS} sitemaps, the pages still asked: "
+              f"{len(maps)} sitemaps, {len(notices)} pages")
         check(sum(1 for p_ in asked if p_.startswith(("/arch/", "/wb/"))) == 1 and "429" in str(ar.get("stopped"))
               and ar.get("lookups") == 0 and "429" in md,
               f"cec_lists.py, the archive answering 429: nothing more asked of it, said in summary.md: {ar.get('stopped')}")
@@ -1572,8 +1637,68 @@ def cec_lists_site(ref, ref_path, lists):
               and "Stopped at the deadline" in md and s.get("skipped_past_deadline", 0) > 0,
               f"cec_lists.py, the crawl at the deadline: stopped, the summary written with what came: {n_site} requests to the "
               f"site in {secs:.1f} s, {cr.get('stopped')}")
+        # a page's content is in its blocks' API answers: a home page whose block links 14 pages, every page with the
+        # site's header, footer and share bar (the same menus on every page: asked once) and a block of its own (asked
+        # for every page, within MAX_API), about the 26th Knesset as its page is
+        chrome = '<header id="PageHeader" navigation="2" currentPageId="{p}" htmlLangAttribute="he"></header>' \
+                 '<div id="ContentShow-c{p}" component-id="c{p}" component-query="{q}" component-currentPageId="{p}" ' \
+                 'component-type="Boxes"></div><div id="PageShare" currentPageId="{p}"></div><footer id="PageFooter" ' \
+                 'currentPageId="{p}"></footer><script src="/dist/Header.bundle.js?v=1"></script><script src="/dist/Footer.bundle.js?v=1">' \
+                 '</script><script src="/dist/Share.bundle.js?v=1"></script><script src="/dist/ContentShow.bundle.js?v=1"></script>'
+        rows14 = lists[:14]
+        cs = {"/bech/": (200, "text/html", "<title>ועדת הבחירות המרכזית לכנסת ה-26</title>" + chrome.format(p=1000, q=5000)),
+              "/bech/umbraco/api/ContentShow/GetItems?query=5000&currentPageId=1000": (200, "application/json", json.dumps(
+                  [{"Title": f"רשימות המועמדים {i}", "Url": f"/elections-26/p{i}/"} for i in range(14)], ensure_ascii=False))}
+        for name, call in (("Header", "MiniSiteApi/GetMenu?currentPageId="), ("Footer", "MiniSiteApi/GetFooter?currentPageId="),
+                           ("Share", "MiniSiteApi/GetShare?currentPageId=")):
+            cs[f"/bech/dist/{name}.bundle.js"] = (200, "application/javascript", f'fetch("/umbraco/api/{call}"+e.currentPageId)')
+        cs["/bech/dist/ContentShow.bundle.js"] = (200, "application/javascript", 'axios.get("/umbraco/api/ContentShow/GetItems",'
+                                                  '{params:{query:t.query,currentPageId:t.currentPageId}})')
+        for i, e in enumerate(rows14):
+            cs[f"/bech/elections-26/p{i}/"] = (200, "text/html", f"<title>רשימות המועמדים לכנסת ה-26: {i}</title>"
+                                               + chrome.format(p=1001 + i, q=5001 + i))
+            cs[f"/bech/umbraco/api/ContentShow/GetItems?query={5001 + i}&currentPageId={1001 + i}"] = (
+                200, "application/json", json.dumps([{"letters": e["letters"], "listName": e["official_name"]}], ensure_ascii=False))
+        r, s, md, secs, _ = fetch("cec_lists_chrome", cs, wayback_mock({}, {}, {}), "--polite", "0.01", "--archive-gap", "0.01")
+        asked = [p_ for _, p_ in GovilMock.times]
+        cr = s.get("crawl") or {}
+        st_l = {x["letters"]: x for x in (s.get("confirmation") or {}).get("letters") or []}
+        menus = {k: sum(1 for p_ in asked if f"/{k}?" in p_) for k in ("GetMenu", "GetFooter", "GetShare")}
+        blocks = sum(1 for p_ in asked if "/ContentShow/GetItems?" in p_)
+        live = [e["letters"] for e in rows14 if (st_l.get(e["letters"]) or {}).get("status") == "live"]
+        check(r.returncode == 0 and menus == {"GetMenu": 1, "GetFooter": 1, "GetShare": 1} and blocks == 15
+              and len(live) == 14 and (cr.get("count") or {}).get("api", 99) <= C.MAX_API,
+              f"cec_lists.py, the site's API: the header, footer and share bar asked once, every page's block (its content) "
+              f"asked and read: {menus}, {blocks} blocks, {len(live)} of 14 lists confirmed by them, API {(cr.get('count') or {}).get('api')}")
     finally:
         srv.shutdown()
+
+    # in-process: a body dripped 8 bytes at a time is cut GRACE after the deadline (read(64 KB) would wait for it all);
+    # a gzip body unpacks to MAX_FILE at most; a JSON answer nested too deep is read as text, not a crash
+    import gzip
+    bomb = gzip.compress(b"\0" * (C.MAX_FILE + 5_000_000))
+    GovilMock.routes, GovilMock.dynamic = {"/drip": (200, "text/html", b"<p>" + b"x" * 2000, {"_drip": 0.02}),
+                                           "/bomb": (200, "text/html", bomb, {"Content-Encoding": "gzip"})}, None
+    srv = http.server.HTTPServer(("127.0.0.1", 0), GovilMock)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    grace, C.GRACE = C.GRACE, 0.6
+    try:
+        rw = [("https://www.bechirot.gov.il", f"http://127.0.0.1:{srv.server_address[1]}")]
+        t = time.monotonic()
+        drip, _ = C.Fetcher(os.path.join(TMP, "cec_lists_drip"), rw, deadline=0.3).get(C.BECHIROT + "/drip")
+        t_drip = time.monotonic() - t
+        bomb_e, bomb_b = C.Fetcher(os.path.join(TMP, "cec_lists_bomb"), rw).get(C.BECHIROT + "/bomb")
+    finally:
+        C.GRACE = grace
+        srv.shutdown()
+    nested = [C.read_any({"url": "x"}, b"[" * n + b"]" * n)[3] for n in (5000, 200_000)]
+    check("cut at the deadline" in str(drip.get("error")) and t_drip < 3 and bomb_b is None and "unpacked" in str(bomb_e.get("error"))
+          and len(C.decode_body(bomb, "gzip")) == C.MAX_FILE + 1 and nested == ["html", "html"],
+          f"cec_lists.py: a dripped body cut at the deadline ({t_drip:.1f} s: {drip.get('error')}), a gzip body unpacked to "
+          f"MAX_FILE at most ({bomb_e.get('error')}), JSON nested 5000 and 200000 deep read as text {nested}")
+    k = [C.k26_of(t_) for t_ in ("רשימות המועמדים - הבחירות לכנסת ה-25\nעודכן 3 בינואר 2026", "עודכן 3 בינואר 2026",
+                                 "הבחירות לכנסת ה-26 (בכנסת ה-25: ...)")]
+    check(k == [False, True, True], f"cec_lists.k26_of: the year 2026 alone not about the 26th Knesset where an earlier one is named: {k}")
 
 
 class CensusMock(http.server.BaseHTTPRequestHandler):
