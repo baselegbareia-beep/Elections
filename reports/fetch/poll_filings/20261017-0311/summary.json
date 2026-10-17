@@ -1,0 +1,2256 @@
+{
+ "fetcher": "poll_filings",
+ "started": "2026-10-17T00:11:31+00:00",
+ "finished": "2026-10-17T00:11:37+00:00",
+ "collector": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26",
+ "page": {
+  "status": 403,
+  "error": "HTTP 403",
+  "transport": "curl",
+  "bytes": null
+ },
+ "listing": {
+  "template_id": null,
+  "tried": [
+   "b043127d-d79d-472e-ac10-5567bc9e8d3d"
+  ],
+  "total_results": null,
+  "results": 0,
+  "transport": [],
+  "notes": [
+   "b043127d-d79d-472e-ac10-5567bc9e8d3d: no listing"
+  ]
+ },
+ "third_party": {
+  "or523": {
+   "url": "https://raw.githubusercontent.com/or523/or523.github.io/main/elections2026/data/polls.json",
+   "status": 200,
+   "error": null,
+   "filings": 109
+  },
+  "amitlev": {
+   "url": "https://raw.githubusercontent.com/amitlev/israel-polls-2026/main/docs/polls-data.js",
+   "status": 200,
+   "error": null,
+   "filings": 102
+  },
+  "idoherling": {
+   "url": "https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/cec_filings_index.psv",
+   "status": 200,
+   "error": null,
+   "filings": 37
+  }
+ },
+ "probe_found": [],
+ "curl": true,
+ "pdftotext": true,
+ "filings": {
+  "addresses": 111,
+  "items": 109,
+  "from_listing": 0,
+  "pdfs_saved": 0,
+  "texts": 0,
+  "failed": 111
+ },
+ "requests": 164,
+ "deadline_s": 1200,
+ "not_fetched_past_deadline": 0,
+ "rows": [
+  {
+   "item": "knesset_election1",
+   "file": "סקר בחירות מיום 28.7.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election1/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2028.7.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election2",
+   "file": "סקר בחירות מיום 2.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election2/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%202.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election3",
+   "file": "סקר בחירות מיום 29.7.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election3/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2029.7.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election4",
+   "file": "סקר בחירות מיום 4.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election4/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%204.8.2026.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election5",
+   "file": "4047-סקר בחירות מיום 5.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election5/he/4047-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election6",
+   "file": "4048-סקר בחירות מיום 5.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election6/he/4048-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election7",
+   "file": "סקר בחירות מיום 6.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election7/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election8",
+   "file": "4054-סקר בחירות מיום 9.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election8/he/4054-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election9",
+   "file": "4055-סקר בחירות מיום 9.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election9/he/4055-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election10",
+   "file": "4056-סקר בחירות מיום 9.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election10/he/4056-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election11",
+   "file": "סקר בחירות מיום 9.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election11/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%209.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election12",
+   "file": "4059-סקר בחירות מיום 11.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election12/he/4059-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election13",
+   "file": "4061-סקר בחירות מיום 11.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election13/he/4061-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election14",
+   "file": "סקר בחירות מיום 11.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election14/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2011.8.2026.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election15",
+   "file": "4075-סקר בחירות מיום 16.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election15/he/4075-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2016.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election16",
+   "file": "סקר בחירות מיום 15.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election16/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2015.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election17",
+   "file": "4068-סקר בחירות מיום 13.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election17/he/4068-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election18",
+   "file": "סקר בחירות מיום 16.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election18/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2016.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election19",
+   "file": "4072-סקר בחירות מיום 13.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election19/he/4072-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election20",
+   "file": "4071-סקר בחירות מיום 13.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election20/he/4071-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election21",
+   "file": "4070-סקר בחירות מיום 13.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election21/he/4070-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2013.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election22",
+   "file": "4077-סקר בחירות מיום 17.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election22/he/4077-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2017.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election23",
+   "file": "סקר בחירות מיום 17.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election23/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2017.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election24",
+   "file": "סקר בחירות מיום 18.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election24/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2018.8.2026.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election25",
+   "file": "סקר בחירות מיום 19.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election25/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2019.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election26",
+   "file": "סקר בחירות מיום 5.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election26/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%205.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election27",
+   "file": "4085-סקר בחירות מיום 19.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election27/he/4085-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2019.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election28",
+   "file": "4089-2 סקר בחירות מיום 23.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election28/he/4089-2%20%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election29",
+   "file": "4088-סקר בחירות מיום 23.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election29/he/4088-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election30",
+   "file": "4086-סקר בחירות מיום 20.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election30/he/4086-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2020.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election31",
+   "file": "מתוקן 4093-4090-סקר בחירות מיום 23.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election31/he/%D7%9E%D7%AA%D7%95%D7%A7%D7%9F%204093-4090-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election32",
+   "file": "סקר בחירות מיום 25.8.2026 4103.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election32/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2025.8.2026%204103.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election33",
+   "file": "4091-סקר בחירות מיום 23.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election33/he/4091-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2023.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election34",
+   "file": "4094-סקר בחירות מיום 24.8.2026.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election34/he/4094-%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election35",
+   "file": "סקר בחירות מיום 24.8.2026 4099.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election35/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026%204099.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election36",
+   "file": "סקר בחירות מיום 24.8.2026 4096.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election36/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2024.8.2026%204096.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election37",
+   "file": "סקר בחירות מיום 25.8.2026 4102.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election37/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2025.8.2026%204102.pdf",
+   "from": [
+    "or523",
+    "idoherling",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election38",
+   "file": "סקר בחירות מיום 27.8.2026 4104-1.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election38/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2027.8.2026%204104-1.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election39",
+   "file": "סקר בחירות מיום 30.8.2026 4106.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election39/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204106.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election40",
+   "file": "סקר בחירות מיום 30.8.2026 4107.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election40/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204107.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election41",
+   "file": "סקר בחירות מיום 30.8.2026 4108.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election41/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204108.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election42",
+   "file": "Survey_4201-4109.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election42/he/Survey_4201-4109.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election43",
+   "file": "סקר בחירות מיום 30.8.2026 4110.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election43/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204110.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election44",
+   "file": "סקר בחירות מיום 30.8.2026 4105.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election44/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2030.8.2026%204105.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election45",
+   "file": "סקר בחירות מיום 31.8.2026 4113.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election45/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2031.8.2026%204113.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election46",
+   "file": "סקר בחירות מיום 31.8.2026 4112.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election46/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%2031.8.2026%204112.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election47",
+   "file": "סקר בחירות מיום 1.9.2026 4115.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election47/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%201.9.2026%204115.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election48",
+   "file": "סקר בחירות מיום 3.9.2026 4117.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election48/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204117.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election49",
+   "file": "סקר בחירות מיום 3.9.2026 4116.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election49/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204116.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election50",
+   "file": "סקר בחירות מיום 3.9.2026 4118.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election50/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%203.9.2026%204118.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election51",
+   "file": "Survey_4121.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election51/he/Survey_4121.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election52",
+   "file": "סקר בחירות מיום 6.9.2026 4120.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election52/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.9.2026%204120.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election53",
+   "file": "סקר בחירות מיום 6.9.2026 4123.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election53/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%206.9.2026%204123.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election54",
+   "file": "4124.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election54/he/4124.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election55",
+   "file": "סקר בחירות מיום 7.9.2026 4126.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election55/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%207.9.2026%204126.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election56",
+   "file": "Survey_4128.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election56/he/Survey_4128.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election57",
+   "file": "סקר בחירות מיום 8.9.2026 4129.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election57/he/%D7%A1%D7%A7%D7%A8%20%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9E%D7%99%D7%95%D7%9D%208.9.2026%204129.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election58",
+   "file": "Survey 4130.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election58/he/Survey%204130.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election59",
+   "file": "Survey_4135.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election59/he/Survey_4135.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election60",
+   "file": "Survey_4137.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election60/he/Survey_4137.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election61",
+   "file": "Survey_4138.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election61/he/Survey_4138.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election62",
+   "file": "Survey_4134.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election62/he/Survey_4134.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election63",
+   "file": "Survey4139.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election63/he/Survey4139.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election64",
+   "file": "Survey4140.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election64/he/Survey4140.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election65",
+   "file": "Survey4141.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election65/he/Survey4141.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election66",
+   "file": "Survey_4143.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election66/he/Survey_4143.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election67",
+   "file": "Survey_4144.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election67/he/Survey_4144.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election68",
+   "file": "Survey_4142.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election68/he/Survey_4142.pdf",
+   "from": [
+    "amitlev",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election68",
+   "file": "Survey_4184-4142.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election68/he/Survey_4184-4142.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election69",
+   "file": "Survey_4145.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election69/he/Survey_4145.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election70",
+   "file": "Survey_4146.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election70/he/Survey_4146.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election72",
+   "file": "Survey_4147.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election72/he/Survey_4147.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election73",
+   "file": "Survey_4150.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election73/he/Survey_4150.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election74",
+   "file": "Survey_4151.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election74/he/Survey_4151.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election75",
+   "file": "Survey_4153.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election75/he/Survey_4153.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election76",
+   "file": "Survey_4154.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election76/he/Survey_4154.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election77",
+   "file": "Survey_4158.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election77/he/Survey_4158.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election78",
+   "file": "Survey_4159.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election78/he/Survey_4159.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election79",
+   "file": "Survey_4160.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election79/he/Survey_4160.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election80",
+   "file": "Survey_4161.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election80/he/Survey_4161.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election81",
+   "file": "Survey_4162.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election81/he/Survey_4162.pdf",
+   "from": [
+    "amitlev"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election81",
+   "file": "Survey_4191-4162.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election81/he/Survey_4191-4162.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election82",
+   "file": "Survey_4163.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election82/he/Survey_4163.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election83",
+   "file": "Survey_4164.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election83/he/Survey_4164.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election84",
+   "file": "Survey_4165.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election84/he/Survey_4165.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election85",
+   "file": "Survey_4166.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election85/he/Survey_4166.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election86",
+   "file": "Survey_4169.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election86/he/Survey_4169.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election87",
+   "file": "Survey_4171.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election87/he/Survey_4171.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election88",
+   "file": "Survey_4173.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election88/he/Survey_4173.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election89",
+   "file": "Survey_4175.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election89/he/Survey_4175.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election90",
+   "file": "Survey_4177.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election90/he/Survey_4177.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election91",
+   "file": "Survey_4176.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election91/he/Survey_4176.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election92",
+   "file": "Survey_4178.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election92/he/Survey_4178.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election93",
+   "file": "Survey_4179.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election93/he/Survey_4179.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election94",
+   "file": "Survey_4182.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election94/he/Survey_4182.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election95",
+   "file": "Survey_4183.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election95/he/Survey_4183.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election96",
+   "file": "Survey_4186.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election96/he/Survey_4186.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election97",
+   "file": "Survey_4188.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election97/he/Survey_4188.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election99",
+   "file": "Survey4190.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election99/he/Survey4190.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election100",
+   "file": "Survey_4192.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election100/he/Survey_4192.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election101",
+   "file": "Survey_4193.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election101/he/Survey_4193.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election102",
+   "file": "Survey_4197.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election102/he/Survey_4197.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election103",
+   "file": "Survey_4198.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election103/he/Survey_4198.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election104",
+   "file": "Survey_4199.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election104/he/Survey_4199.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election105",
+   "file": "Survey_4200.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election105/he/Survey_4200.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election106",
+   "file": "Survey_4202.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election106/he/Survey_4202.pdf",
+   "from": [
+    "or523",
+    "amitlev",
+    "reference",
+    "polls_2026"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election107",
+   "file": "Survey_4207.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election107/he/Survey_4207.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election108",
+   "file": "Survey4209.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election108/he/Survey4209.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election109",
+   "file": "Survey_4210.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election109/he/Survey_4210.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election110",
+   "file": "Survey_4211.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election110/he/Survey_4211.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  },
+  {
+   "item": "knesset_election111",
+   "file": "Survey_4212.pdf",
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election111/he/Survey_4212.pdf",
+   "from": [
+    "or523",
+    "reference"
+   ],
+   "status": 403,
+   "error": "HTTP 403",
+   "transport": "curl"
+  }
+ ],
+ "urls": [
+  {
+   "url": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26?skip=0",
+   "why": "the collector page (its template id)",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-"
+  },
+  {
+   "url": "https://www.gov.il/he/api/DynamicCollector",
+   "why": "the collector's listing, from 0",
+   "post": "{\"DynamicTemplateID\": \"b043127d-d79d-472e-ac10-5567bc9e8d3d\", \"QueryFilters\": {\"skip\": {\"Query\": 0}}, \"From\": 0}",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html> <!--[if lt IE 7]> <html class=\"no-js ie6 oldie\" lang=\"en-US\"> <![endif]--> <!--[if IE 7]> <html class=\"no-js ie7 oldie\" lang=\"en-US\"> <![endif]-"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/or523/or523.github.io/main/elections2026/data/polls.json",
+   "why": "or523's index of the collector (data only)",
+   "status": 200,
+   "type": "text/plain; charset=utf-8",
+   "transport": "urllib",
+   "bytes": 130415,
+   "sha256": "1093a79ed4c203ce269b44b8a5498cf13704e50e04a4de03cc7347fe4fa557d9",
+   "saved": "files/third_party/or523_polls.json"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/amitlev/israel-polls-2026/main/docs/polls-data.js",
+   "why": "amitlev's index of the collector (data only)",
+   "status": 200,
+   "type": "text/plain; charset=utf-8",
+   "transport": "urllib",
+   "bytes": 101832,
+   "sha256": "b1edbdcd4f85fddf40c81c9afc0e348e1cfe8942306ffb85387a577a2f39864d",
+   "saved": "files/third_party/amitlev_polls-data.js"
+  },
+  {
+   "url": "https://raw.githubusercontent.com/idoherling/2026_Election_Model/main/data/cec_filings_index.psv",
+   "why": "idoherling's index of the collector (data only)",
+   "status": 200,
+   "type": "text/plain; charset=utf-8",
+   "transport": "urllib",
+   "bytes": 6721,
+   "sha256": "9a1b53a9337d135af0d279cf7023c3c99f562c35a6bd9b2c901e454bf601c0b5",
+   "saved": "files/third_party/idoherling_cec_filings_index.psv"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey_4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election112/he/Survey4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey_4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election113/he/Survey4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4213.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4214.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4215.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4216.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4217.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4218.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4219.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey_4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election114/he/Survey4220.pdf",
+   "why": "probe: an item after the last known",
+   "urllib": {
+    "status": 403,
+    "type": "text/html; charset=UTF-8",
+    "error": "HTTP 403",
+    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+   },
+   "transport": "curl",
+   "status": 403,
+   "type": "text/html; charset=UTF-8",
+   "error": "HTTP 403",
+   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA"
+  }
+ ]
+}

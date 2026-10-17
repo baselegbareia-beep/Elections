@@ -1,0 +1,13 @@
+{
+ "collector": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26",
+ "api": "https://www.gov.il/he/api/DynamicCollector",
+ "template_id": null,
+ "template_ids_tried": [
+  "b043127d-d79d-472e-ac10-5567bc9e8d3d"
+ ],
+ "total_results": null,
+ "notes": [
+  "b043127d-d79d-472e-ac10-5567bc9e8d3d: no listing"
+ ],
+ "results": []
+}
