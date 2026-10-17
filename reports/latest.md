@@ -1,4 +1,4 @@
-## CEC file discovery, 16.10 13:06 Israel time (full, github-hosted)
+## CEC file discovery, 17.10 12:40 Israel time (full, github-hosted)
 
 507 URLs probed, 98 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
@@ -13,7 +13,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-15T13:17:38+03:00: 0 new, 0 changed, 0 gone
+### Since 2026-10-16T13:06:13+03:00: 0 new, 0 changed, 0 gone
 
 ### Files and pages with data
 
@@ -47,7 +47,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} | URLError |
 | votes26.bechirot.gov.il | 13.226.53.120, 13.226.53.62, 13.226.53.70 | 55 | 0 | {"404": 55} | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 2600:9000:2137:3200:1e:5e2c:7e80:93a1, 2600:9000:2137:400:1e:5e2c:7e80:93a1, 2600:9000:21… | 32 | 23 | {"200": 23, "no answer": 9} | URLError; skipped |
+| www.bechirot.gov.il | 2600:9000:2137:2400:1e:5e2c:7e80:93a1, 2600:9000:2137:5400:1e:5e2c:7e80:93a1, 2600:9000:2… | 32 | 23 | {"200": 23, "no answer": 9} | URLError; skipped |
 | www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 17 | 15 | {"200": 15, "404": 2} | not found |
 
 ### Pages and scripts that answered
