@@ -4,7 +4,7 @@ const IDI_TURNOUT = { K21: 49.2, K22: 59.2, K23: 64.8, K24: 44.6, K25: 53.2 };
 function renderMethod() {
   const root = $('#tab-method');
   const els = S.core.elections;
-  const pollsWithFiling = S.polls.polls.filter(p => p.filing).length;
+  const pollsWithFiling = S.polls.polls.filter(p => p.official || p.filing).length;   // a CEC filing matched, or a link
   root.innerHTML = `
   <div class="section-head"><div>
     <span class="eyebrow">${t('שקיפות')}</span>

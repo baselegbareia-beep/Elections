@@ -7,11 +7,13 @@
 # runs it (no node); a file that is anything else fails the build. Two jobs all the same (defence in depth):
 #   build   reads it with nothing to steal: read-only permissions, no GH_TOKEN, no git credentials left in the
 #           checkout (persist-credentials: false). The only thing that leaves it is the poll table it built,
-#           as an artifact.
+#           as an artifact. The CEC filings in it come from main's committed site/data/poll_filings_2026.json
+#           (read, never rebuilt here: the runner has no pdftotext; a missing or broken file, the table without them).
 #   commit  never reads polls-data.js. It checks the artifact's shape (step "validate": the parties exactly as
-#           build_polls.py defines them, every poll's fields, types and ranges, seats adding up to 120, no markup
-#           in any text), rebuilds the page from main's own code, runs the health check, and pushes. Its checkout
-#           keeps no credentials either: the token reaches only the push step and the build request.
+#           build_polls.py defines them, every poll's fields, types and ranges, seats adding up to 120, the filings'
+#           addresses and corrections, no markup in any text), rebuilds the page from main's own code, runs the
+#           health check, and pushes. Its checkout keeps no credentials either: the token reaches only the push
+#           step and the build request.
 # Never from Sat 24.10 00:00 to Tue 27.10 22:00 Israel time (Elections (Propaganda) Law §16ה(ח)), and no push after
 # Fri 23.10 23:30, so the page's build is done before the ban starts: the guard job refuses (a manual run goes red),
 # and the push step checks the clock again right before pushing. A run goes red if the page could not be rebuilt
@@ -211,8 +213,40 @@ jobs:
           ids = set(B.PARTIES_2026)
           KEYS = {"date", "fieldwork", "pollster", "pollster_he", "house", "firm", "house_he", "outlet", "outlet_he",
                   "n", "moe", "seats", "pct", "filing"}
-          if not isinstance(d, dict) or set(d) != {"parties", "polls", "dropped", "source"}:
+          TOP = {"parties", "polls", "dropped", "source"}
+          # the CEC filings build_polls.py attaches from the committed poll_filings_2026.json: "filings" (the fetch's
+          # date), "official" on every poll (null: none found), "corrected" on a poll fixed from its own filing; a
+          # table built without that file has none of them
+          OFFICIAL = {"url", "item", "number", "verified", "published"}
+          def link(x):
+              return bool(text(x, 600) and re.fullmatch(r"https://\S+", x) and "'" not in x)
+          def shares(x):
+              return isinstance(x, dict) and set(x) <= ids and all(num(v, 0, 100) for v in x.values())
+          VALUE = {"filing": link, "n": lambda x: num(x, 1, 1_000_000, integer=True), "pct": shares,
+                   "moe": lambda x: num(x, 0.01, 20), "fieldwork": lambda x: bool(day(x))}
+          def official(o):
+              return o is None or bool(
+                  isinstance(o, dict) and OFFICIAL <= set(o) <= OFFICIAL | {"doubts", "seat_diff"}
+                  and isinstance(o["url"], str) and B.FILING_URL.fullmatch(o["url"]) and o["item"] == B.item_of(o["url"])
+                  and (o["number"] is None or isinstance(o["number"], str) and re.fullmatch(r"\d{1,8}", o["number"]))
+                  and isinstance(o["verified"], bool) and (o["published"] is None or day(o["published"]))
+                  and ("doubts" not in o or not o["verified"] and isinstance(o["doubts"], list)
+                       and 1 <= len(o["doubts"]) <= len(B.DOUBTS) and all(x in B.DOUBTS for x in o["doubts"]))
+                  and ("seat_diff" not in o or isinstance(o["seat_diff"], dict) and set(o["seat_diff"]) <= ids and all(
+                      isinstance(v, list) and len(v) == 2 and all(num(x, 0, 120, integer=True) for x in v)
+                      for v in o["seat_diff"].values())))
+          def corrected(c):
+              return (isinstance(c, list) and 1 <= len(c) <= len(VALUE) and all(
+                  isinstance(x, dict) and set(x) == {"field", "old", "new", "why"} and x["field"] in VALUE
+                  and all(x[k] is None or VALUE[x["field"]](x[k]) for k in ("old", "new")) and text(x["why"], 300)
+                  for x in c) and len({x["field"] for x in c}) == len(c))
+          if not isinstance(d, dict) or not TOP <= set(d) <= TOP | {"filings"}:
               sys.exit(f"::error::polls_2026.json: top-level keys {safe(sorted(d) if isinstance(d, dict) else type(d).__name__)}")
+          f = d.get("filings")
+          if "filings" in d and not (isinstance(f, dict) and set(f) == {"fetched", "collector"}
+                                     and (f["fetched"] is None or day(f["fetched"])) and isinstance(f["collector"], str)
+                                     and B.COLLECTOR_URL.fullmatch(f["collector"])):
+              bad.append("filings is not the fetch's date and the CEC collector's address")
           if d["parties"] != parties:
               bad.append("parties differ from build_polls.PARTIES_2026 / LETTERS_2026")
           if not text(d["source"], 400):
@@ -225,7 +259,8 @@ jobs:
           latest = dt.date.today() + dt.timedelta(days=2)
           for i, p in enumerate(polls):
               where = f"poll {i}"
-              if not isinstance(p, dict) or set(p) != KEYS:
+              if not isinstance(p, dict) or not KEYS <= set(p) <= KEYS | {"official", "corrected"} \
+                      or ("official" in p) != ("filings" in d):
                   bad.append(f"{where}: keys {safe(sorted(p) if isinstance(p, dict) else type(p).__name__)}")
                   continue
               where = f"poll {i} ({safe(p['date'])} {safe(p['pollster'])})"[:80]
@@ -252,6 +287,10 @@ jobs:
               if not (p["filing"] is None or (text(p["filing"], 600) and re.fullmatch(r"https://\S+", p["filing"])
                                               and "'" not in p["filing"])):
                   bad.append(f"{where}: filing is not an https address")
+              if not official(p.get("official")):
+                  bad.append(f"{where}: official is not a CEC filing as build_polls.py attaches it")
+              if "corrected" in p and not corrected(p["corrected"]):
+                  bad.append(f"{where}: corrected is not a list of changes (field, old, new, why)")
           if bad:
               for b in bad[:20]:
                   print(f"::error::polls_2026.json: {b}")
