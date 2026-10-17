@@ -102,6 +102,11 @@ jobs:
       - uses: actions/setup-python@v7
         with:
           python-version: '3.12'
+      - name: Tools for reading PDFs (pdftotext, pypdf; a fetcher reads without them, only less)
+        run: |
+          sudo apt-get install -y -qq --no-install-recommends poppler-utils > /dev/null 2>&1 || echo "::warning::poppler-utils not installed: PDFs are stored but not read here"
+          python3 -m pip install -q pypdf > /dev/null 2>&1 || echo "::warning::pypdf not installed"
+          command -v pdftotext || true
       - name: Run the fetcher
         id: run
         env:
