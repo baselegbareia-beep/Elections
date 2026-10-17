@@ -71,7 +71,8 @@ Uncertainty: mid = turnout / f(h) assumes 2026 keeps the 2022 Arab timing. Timin
   projected before 10:00. A release without eligible counts projects pace x the 2022 final turnout of the
   same stations (basis "pace", i.e. the 2022 register).
 Limits: a mixed city's stations are classified by their 2022 number (arab_boxes: the box rule of
-  build_data.py, or an Arab-list majority in 2022): a new station there is not counted (checks.unclassified)
+  build_data.py, or an Arab-list majority in 2022): a new station there is not counted (checks.unclassified;
+  with live_config "mixed_area_class" on, it takes the class of its CBS 2026 area, see arab_section)
   and a renumbered one takes the class of its new number. A locality's basis can change between releases (a
   station group missing from one file, present in the next): each locality carries its `basis`, and
   history_entry keeps it, so that a change of pace is read only between releases on the same basis.
@@ -108,6 +109,7 @@ import re
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 BASE_PATH = os.path.join(ROOT, "site", "data", "arab_day_2022.json")
 BALLOTS_PATH = os.path.join(ROOT, "site", "data", "ballots_K25.json")
+STATIONS_2026 = os.path.join(ROOT, "pipeline", "reference", "cbs_stations_2026.json")   # build_cbs_stations.py
 OPEN_H = 7.0             # polls open; the curve starts from 0 here
 CLOSE_H = 22.0           # polls close; a later release time is read as 22:00
 PROJECT_FROM = 10.0      # earlier releases are not projected: too little of the day has passed
@@ -120,6 +122,7 @@ RENUMBERED = 0.5         # a locality with less than this share of its 2022 stat
 ARAB_LISTS_K25 = ("עם", "ום", "ד")   # registry.ARAB_LISTS["K25"]: Ra'am, Hadash-Ta'al, Balad
 ARAB_BOX_SHARE = 0.5     # registry.ARAB_BOX_MIN_SHARE: a mixed city's station with this Arab-list share in 2022 is Arab
 _IDX = {}
+_AREA = {}
 try:
     from zoneinfo import ZoneInfo
     IL = ZoneInfo("Asia/Jerusalem")
@@ -189,6 +192,24 @@ def arab_boxes(b25):
         a[1] += row[5]
         a[2] = a[2] or row[2] % 10 == 1
     return {k for k, (ar, valid, box_rule) in acc.items() if box_rule or (valid and ar / valid >= ARAB_BOX_SHARE)}
+
+
+def area_shares(path=STATIONS_2026):
+    """{(code, 2026 number): Arab share or None} for the mixed cities' 2026 station numbers that were not a 2022 CEC
+    station group, from the CBS 2026 station file (pipeline/reference/cbs_stations_2026.json "mixed", built by
+    pipeline/build_cbs_stations.py): the eligible-weighted share of the 2022 Arab groups (arab_boxes) in the 2011
+    parent area(s) of the number's 2022 area, None where no 2022 group lies there. Loaded once; {} without the
+    file. CBS numbers its stations as integers and the CEC merges some into one group (X, X.1, X.2 ...), so a CEC
+    base number X is read as CBS station X."""
+    if path not in _AREA:
+        try:
+            with open(path, encoding="utf-8") as f:
+                mixed = json.load(f).get("mixed") or {}
+            _AREA[path] = {(int(c), int(k)): x.get("share") for c, m in mixed.items() for k, x in m.items()
+                           if not x.get("k25")}
+        except (OSError, ValueError, AttributeError, TypeError):
+            _AREA[path] = {}
+    return _AREA[path]
 
 
 def _index(base, ballots_path=BALLOTS_PATH):
@@ -435,7 +456,7 @@ def _measures(s, h, curve, full=True):
     return out
 
 
-def arab_section(rows, base, national_turnout=None, released=None, as_of=None):
+def arab_section(rows, base, national_turnout=None, released=None, as_of=None, area_class=False):
     """One per-station turnout release -> the Arab-society section of turnout.json.
 
     rows: iterable of {"code": int, "kalpi": str, "elig": int | None, "voters": int}, every station of the
@@ -443,8 +464,17 @@ def arab_section(rows, base, national_turnout=None, released=None, as_of=None):
     base: the loaded site/data/arab_day_2022.json; the 2022 per-station voters come from ballots_K25.json;
     national_turnout: the national turnout of the same release, fraction or percent (optional);
     released: the time the figures refer to, 'HH:MM' Israel time; as_of overrides it for the curve. A time after
-      the polls close (22:00) is 22:00."""
+      the polls close (22:00) is 22:00;
+    area_class: live_config "mixed_area_class". A mixed-city station under a number that was not a 2022 station group
+      ("unclassified") takes the class of its CBS 2026 area (area_shares): at an Arab share of half or more it counts
+      in the city's "<code>:arab" entry (its turnout; in pace it is a new station, as every number not used in 2022),
+      below half it is left out as a non-Arab station is, and a number not in the CBS file stays unclassified.
+      Off (the default): only checks.unclassified_area_arab / unclassified_area_other count the stations it would
+      class, so the operator sees on the night what the switch would change. The hold-out test of the rule
+      (build_cbs_stations.py --analog): F1 better in 5 of 6 past pairs, the Arab set's turnout error smaller in 4,
+      worse by 0.0014 in K25->K24, the pair that runs like the live code (base fixed at 2022): hence off."""
     idx = _index(base)
+    area = area_shares()
     curve = base["curve"]
     h = hour(as_of if as_of is not None else released)
     if h is not None:
@@ -472,8 +502,16 @@ def arab_section(rows, base, national_turnout=None, released=None, as_of=None):
         elif code in idx["mixed"]:
             b = kalpi_base(kalpi)
             key = idx["cls"].get((code, b))
-            if key is None and (code, b) not in idx["known"] and voters:
-                checks["unclassified"] += 1         # a mixed-city station without a 2022 counterpart
+            if key is None and (code, b) not in idx["known"]:
+                # a mixed-city station without a 2022 counterpart: its CBS 2026 area's class, if the switch is on
+                share = area.get((code, b)) if isinstance(b, int) else None
+                arab_area = share is not None and share >= ARAB_BOX_SHARE
+                if voters and share is not None:
+                    checks["unclassified_area_arab" if arab_area else "unclassified_area_other"] += 1
+                if area_class and arab_area:
+                    key = f"{code}:arab"
+                elif voters and not (area_class and share is not None):
+                    checks["unclassified"] += 1
         a = acc.setdefault(key, {"voters": 0, "voters_e": 0, "elig": 0, "stations": [], "blank": set()}) \
             if key else None
         if not voters or voters < 0:

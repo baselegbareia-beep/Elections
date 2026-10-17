@@ -286,6 +286,22 @@ def check(base):
     newst = rows + [{"code": 4000, "kalpi": "9999", "elig": 500, "voters": 100}]
     ok(at22(newst)["checks"].get("unclassified") == 1,
        "a new mixed-city station is reported as unclassified")
+    # live_config "mixed_area_class": a Haifa number not used in 2022 by its CBS 2026 area (cbs_stations_2026.json)
+    shares = sorted((k, s) for (c, k), s in AT.area_shares().items() if c == 4000 and s is not None)
+    hi = next((k for k, s in shares if s >= AT.ARAB_BOX_SHARE), None)
+    lo = next((k for k, s in shares if s < AT.ARAB_BOX_SHARE), None)
+    extra = [{"code": 4000, "kalpi": str(hi), "elig": 600, "voters": 300},
+             {"code": 4000, "kalpi": str(lo), "elig": 700, "voters": 350}, newst[-1]]
+    off, on = at22(rows + extra), at22(rows + extra, area_class=True)
+    h0, h1, hf = loc(off, "4000:arab"), loc(on, "4000:arab"), loc(full, "4000:arab")
+    ok(hi is not None and lo is not None and off["checks"].get("unclassified") == 3
+       and off["checks"].get("unclassified_area_arab") == 1 and off["checks"].get("unclassified_area_other") == 1
+       and h0 == hf and on["checks"].get("unclassified") == 1 and on["checks"].get("unclassified_area_arab") == 1
+       and h1["stations"] == hf["stations"] + 1 and h1["elig"] == hf["elig"] + 600 and h1["voters"] == hf["voters"] + 300
+       and h1["pace"] == hf["pace"] and on["checks"].get("new station") == (full["checks"].get("new station") or 0) + 1,
+       f"mixed_area_class: Haifa {hi} (an Arab area) counts in 4000:arab in turnout, not in pace (a new station), {lo} "
+       f"(not Arab) is left out, 9999 (not in the CBS file) stays unclassified; off, all three are unclassified and "
+       f"only counted: {off['checks'].get('unclassified_area_arab')}/{off['checks'].get('unclassified_area_other')}")
     bad = rows + [{"code": 7300, "kalpi": "1", "elig": 100, "voters": 500}]
     ok(at22(bad)["checks"].get("more voters than eligible") == 1,
        "a row with more voters than eligible voters is dropped")

@@ -57,6 +57,7 @@
   - `pipeline/reference/cbs_localities.json`: שורה לכל יישוב בקובץ הלמ״ס, עם המקור, תאריך הקובץ וה-SHA-256 של כל קלט.
   - `pipeline/reference/cbs_validation.json`: כל אי-התאמה בין הלמ״ס לרשימה ולמגזרים של `core.json`, עם המספרים, ובדיקת הקלפיות הערביות בערים המעורבות לפי אזור סטטיסטי.
   - `pipeline/reference/cbs_mixed_areas.json`: האזורים הסטטיסטיים (2011) של הערים המעורבות ושל צפת, החלק הערבי המשוער בכל אחד, ולכל קלפי ב-2019–2022 הסיווג לפי האזור ולפי ההצבעה.
+- `pipeline/build_cbs_stations.py --src <ops-reports>/reports/fetch/cbs/<stamp>/files --analog` בונה את `pipeline/reference/cbs_stations_2026.json` מקובצי הקלפיות הרשמיים שה-runner משך ב-16.10.2026 (`kalpi_October2026_stat2022.xlsx`, `Stable_kalpi_october_2026.xlsx`, קובצי השיוך 2019–2022, מפתח המעבר 2022 → 2011, קובץ המפקד; כולם נעוצים ב-SHA-256, וגם `site/data/ballots_K25.json`): לכל קלפי של 2026 האזור הסטטיסטי של 2022 וסימון "יציבה", ולכל מספר קלפי בערים המעורבות מקור סיווג (מספר של 2022 או החלק הערבי לפי האזור), עם הבדיקה על מערכות קודמות (`docs/METHODOLOGY.md`, "קובצי הקלפיות הרשמיים של הלמ״ס").
 - `pipeline/registry.py`: אותיות, שמות, משפחות פוליטיות וגושים לכל מערכת.
 
 ## רשימות 2026
