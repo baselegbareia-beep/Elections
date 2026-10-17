@@ -1371,6 +1371,19 @@ def cec_lists_site(ref, ref_path, lists):
     spec = importlib.util.spec_from_file_location("cec_lists_11c", os.path.join(ROOT, "pipeline", "fetchers", "cec_lists.py"))
     C = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(C)
+    # agreements: the lines the 17.10 run took for two (the disqualification proceedings, a numbered list of committee
+    # members) are not agreements; lines under a heading that names the surplus votes are
+    noise = ['בפ"ר 7/26 (לגבי רשימת רע"ם); ובפ"מ 6/26 ובפ"ר 10/26 (לגבי הרשימה המשותפת ול',
+             'מיכאל בן ארי ואח׳ נ׳ רע״ם-בל״ד) ,ובקשות פסילה כנגד רשימת רע״מ כחלק מהרשימה המשותפת',
+             'ב .עו"ד ארז מלול נציג שס', 'ג .עליזה אוזן נציגת שס', 'בהסכמת שס ו-ג']
+    deals = ["הסכמי עודפים לבחירות לכנסת ה-26", "שס – ג", 'רע"ם – הרשימה המשותפת']
+    fa = C.find_agreements(ref, [{"url": "https://www.gov.il/x/odafim-26", "kind": "live page", "k26": True,
+                                  "lines": ["הבחירות לכנסת ה-26: הסכם"] + noise},
+                                 {"url": "https://www.gov.il/x/surplus-26", "kind": "live page", "k26": True, "lines": deals}])
+    check(sorted(sorted(v["lists"]) for v in fa["seen"]) == [["ג", "שס"], ["ודם", "עם"]]
+          and all(v["urls"] == ["https://www.gov.il/x/surplus-26"] for v in fa["seen"]),
+          f"cec_lists.find_agreements: an agreement needs עודפים on its line or the lines above it; proceedings and "
+          f"numbered items are not agreements: {[(v['lists'], v['urls']) for v in fa['seen']]}")
     pdf_ok = bool(C.pdf_reader())
     if not pdf_ok:
         print("  note: neither pdftotext nor pypdf here: the PDFs below are stored, not read, and so not counted")

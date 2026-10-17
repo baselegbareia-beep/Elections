@@ -11,11 +11,12 @@
   "cec_list_no": "the number in the CEC's index (submission order; the suffix of cec_key)",
   "requested_letters": "the letters the list asked for, first choice first (the 19.9 index)",
   "first_candidates": "the first two names on the submitted roster (the 19.9 capture)",
-  "agreement": "the letters of the surplus-vote partner, null for none (modelled lists only)"
+  "agreement": "the letters of the surplus-vote partner, null for none (modelled lists only)",
+  "cec_sources": "the CEC page(s) whose table of approved lists has this list with these letters (cec_check; verified.cec true)"
  },
  "election": "K26",
  "election_day": "2026-10-27",
- "as_of": "2026-10-16",
+ "as_of": "2026-10-17",
  "cec": {
   "lists_page": "https://www.gov.il/he/pages/candidates-lists-26",
   "approved_slips_pdf": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
@@ -71,11 +72,14 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/",
     "https://www.kikar.co.il/political-news/tm0nt3"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -99,12 +103,15 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/",
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.davar1.co.il/698869/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -122,9 +129,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ד",
@@ -141,10 +151,13 @@
    "verified": {
     "letters": true,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -162,10 +175,13 @@
    "verified": {
     "letters": true,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -188,13 +204,16 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/727907/",
     "https://www.ynet.co.il/news/article/s1ibdii5fe",
     "https://www.ynet.co.il/news/article/hk11sxv300fl",
     "https://www.kikar.co.il/political-news/tkzw79"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -212,10 +231,13 @@
    "verified": {
     "letters": true,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -233,10 +255,13 @@
    "verified": {
     "letters": true,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.davar1.co.il/698869/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -254,9 +279,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "בד",
@@ -273,9 +301,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ל",
@@ -297,10 +328,13 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kikar.co.il/political-news/tm0nt3"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -318,9 +352,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "נף",
@@ -337,9 +374,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ב",
@@ -361,13 +401,16 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.ynet.co.il/news/elections2026/article/sjmed8uqgx",
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.israelnationalnews.com/news/433712",
     "https://www.inn.co.il/news/707158"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -385,9 +428,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "די",
@@ -413,12 +459,15 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/727907/",
     "https://www.ynet.co.il/news/article/s1ibdii5fe",
     "https://www.walla.co.il/news/politics/383955473"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -441,13 +490,16 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/",
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.davar1.co.il/698869/",
     "https://www.walla.co.il/news/politics/383955473"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -472,12 +524,16 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/727907/",
     "https://www.ynet.co.il/news/article/s1ibdii5fe",
     "https://www.kan.org.il/content/kan-news/politic/1103572/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
    ]
   },
   {
@@ -502,11 +558,15 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.walla.co.il/news/politics/383955473"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
    ]
   },
   {
@@ -533,12 +593,15 @@
    "verified": {
     "letters": true,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/727907/",
     "https://www.ynet.co.il/news/article/s1ibdii5fe",
     "https://www.kikar.co.il/political-news/tm0nt3"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -556,9 +619,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "זץ",
@@ -575,9 +641,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "נקי",
@@ -594,9 +663,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "יק",
@@ -613,9 +685,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ז",
@@ -632,9 +707,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "בקר",
@@ -651,9 +729,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "נץ",
@@ -670,9 +751,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "נר",
@@ -689,9 +773,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "מחל",
@@ -713,13 +800,17 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.zman.co.il/live/728050/",
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.davar1.co.il/698869/",
     "https://www.walla.co.il/news/politics/383955473"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
    ]
   },
   {
@@ -742,11 +833,15 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kikar.co.il/political-news/tm0nt3",
     "https://www.kan.org.il/content/kan-news/politic/1103572/"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
    ]
   },
   {
@@ -769,10 +864,13 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kikar.co.il/political-news/tm0nt3"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -790,9 +888,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "בי",
@@ -809,9 +910,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ק",
@@ -828,9 +932,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ודם",
@@ -856,12 +963,15 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kan.org.il/content/kan-news/politic/1103572/",
     "https://www.kipa.co.il/%D7%97%D7%93%D7%A9%D7%95%D7%AA/1232376-0/",
     "https://he.wikipedia.org/wiki/%D7%94%D7%A8%D7%A9%D7%99%D7%9E%D7%94_%D7%94%D7%9E%D7%A9%D7%95%D7%AA%D7%A4%D7%AA"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
    ]
   },
   {
@@ -879,9 +989,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   },
   {
    "letters": "ג",
@@ -907,10 +1020,14 @@
    "verified": {
     "letters": true,
     "agreement": true,
-    "cec": false
+    "cec": true
    },
    "letter_sources": [
     "https://www.kikar.co.il/political-news/tm0nt3"
+   ],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
    ]
   },
   {
@@ -928,9 +1045,12 @@
    "verified": {
     "letters": false,
     "agreement": false,
-    "cec": false
+    "cec": true
    },
-   "letter_sources": []
+   "letter_sources": [],
+   "cec_sources": [
+    "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he"
+   ]
   }
  ],
  "agreements": [
@@ -1079,7 +1199,12 @@
  ],
  "open": [
   "the CEC's own announcement of the agreements (after the 16.10 deadline): pipeline/fetchers/cec_lists.py",
-  "Haredi Public (זך): no report either way on an agreement",
-  "the approved ballot slips PDF and each list's roster page, read on the CEC's site (cec: false everywhere)"
- ]
+  "Haredi Public (זך): no report either way on an agreement"
+ ],
+ "cec_check": {
+  "fetched": "2026-10-17T00:10:16+00:00",
+  "source": "ops-reports:reports/fetch/cec_lists (fetch.yml run of 2026-10-17)",
+  "letters": "38 of 38 lists with these letters in the CEC's table of approved lists (the content-pages API behind https://www.gov.il/he/pages/candidates-lists-26, read through openapi-gc.digital.gov.il)",
+  "agreements": "0 of 5 on a CEC page yet: the two pairs the fetcher matched (Shas+UTJ, Ra'am+Joint List) were lines of the disqualification proceedings naming both lists, not agreements; the agreements stay as reported (verified, cec false) until the CEC publishes them"
+ }
 }

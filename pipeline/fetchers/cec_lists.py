@@ -116,6 +116,12 @@ HTML_PAGES = (GOVIL + "/he/pages/" + LISTS_PAGE, GOVIL + "/he/departments/guides
 DATA_GOV = "https://data.gov.il/api/3/action/package_search?rows=50&q="
 DATA_QUERIES = ("עודפים", "רשימות המועמדים", "הכנסת ה-26", "knesset 26")
 TOPIC = re.compile(r"עודפים|surplus|odafim|heskem|הסכם|agreement", re.I)
+# an agreement's own line names the agreement (or sits under a heading that does, within AGREEMENT_CONTEXT lines);
+# the lines of the disqualification proceedings name two lists too ("פ\"ר 5/26 הליכוד נ' רשימת רע\"ם", read 17.10)
+AGREEMENT_LINE = re.compile(r"עודפים|surplus|odafim", re.I)   # "הסכם בדבר עודפים", "הסכמי עודפים"; not "בהסכמת"
+PROCEEDINGS = re.compile(r"(?:^|\s)נ['׳’]\s|פ[\"״]\s?[מר]\s*\d|פסיל|עתיר|ערעור|בקשות?\s+ל?פסילה|disqualif", re.I)
+AGREEMENT_CONTEXT = 3
+ENUMERATION = re.compile(r"^\W*[א-ת]{1,2}\s*[.)](?=\s*[א-ת\"])\s*")   # "ג. עליזה אוזן נציגת שס": an item letter, not UTJ's ג
 LISTS_TOPIC = re.compile(r"Approved|Slips|letters|אותיות|פתק|candidates-lists|רשימות[\s_-]*המועמדים", re.I)
 ROSTER = re.compile(r"(?:list|iist)_?\d*$", re.I)    # a list's roster page: beyahad_list1, yashar_list_2, ..._iist29
 MAX_URLS = 420
@@ -920,7 +926,8 @@ def compare_lists(ref, pages, snaps=None):
 
 
 def find_agreements(ref, docs):
-    """Lines that name exactly two lists, on pages about surplus-vote agreements and the 26th Knesset."""
+    """Lines that name exactly two lists, on pages about surplus-vote agreements and the 26th Knesset, with the
+    agreement named on the line or in the AGREEMENT_CONTEXT lines above it, and not a line of a legal proceeding."""
     expected = {frozenset(a["lists"]) for a in ref.get("agreements", [])}
     found = {}
     for d in docs:
@@ -928,9 +935,10 @@ def find_agreements(ref, docs):
         text = "\n".join(lines)
         if not d.get("k26") or not (TOPIC.search(text) or TOPIC.search(urllib.parse.unquote(url))):
             continue
-        for ln in lines:
-            named = lists_named(ln, ref.get("lists", []))
-            if len(named) == 2:
+        for i, ln in enumerate(lines):
+            named = lists_named(ENUMERATION.sub("", ln), ref.get("lists", []))
+            near = lines[max(0, i - AGREEMENT_CONTEXT):i + 1]
+            if len(named) == 2 and not PROCEEDINGS.search(ln) and any(AGREEMENT_LINE.search(x) for x in near):
                 k = frozenset(named)
                 f = found.setdefault(k, {"lists": named, "lines": [], "urls": [], "sources": []})
                 if len(f["lines"]) < 3:
