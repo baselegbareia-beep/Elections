@@ -85,7 +85,10 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      turnout exact, the pace error within its limits), K25's "mixed" = the Arab section's mixed-city stations, a new
      number in an Arab locality and in Bnei Brak, "12" against 12.1 and 12.2, a blank sub-station, a register 1.6 times;
  11g. live_config "mixed_area_class": off, arab_section as before but for two counters; on, a Jaffa number by its CBS
-     2026 area, the switch passed through by live_fetch to the section and the day-sector.
+     2026 area, the switch passed through by live_fetch to the section and the day-sector;
+ 11h. a station group in pace only when the release holds all of it: forwards (an earlier file as the base) within the
+     limits, the K25 file with rows absent (the pace and the lean unmoved), a re-split, a repeat, a row station_rows
+     leaves out, and through live_fetch.main.
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
@@ -1497,20 +1500,26 @@ def cbs_stations_2026():
 
 
 # the K21..K24 files read as releases against 2022 (the station rule of 21.10, design/st_rule.py): live_fetch.station_turnout
-# before the group matching, pace minus the true pace (the file's voters / 2022 voters by locality sector), and the limit
-# of the sum over arab, druze and jewish with the group matching
+# before the group matching, pace minus the true pace (the file's voters / 2022 voters by locality sector); DAY_GROUP the
+# same with the group matching before its whole-group checks (b3e10b5); and the limit of the sum over arab, druze and
+# jewish with them. These files run backwards (an earlier file against 2022): a group that grew by 2022 lists fewer
+# sub-stations here, with less register, as a group with rows missing does, and leaving it out raises a pace that is
+# already high; forwards (11h, the direction of the day) the same checks lower the error in every pair
 DAY_TODAY = {"K24": {"arab": -0.042, "druze": -0.109, "jewish": -0.012}, "K23": {"arab": 0.073, "druze": 0.010, "jewish": 0.069},
              "K22": {"arab": 0.077, "druze": 0.110, "jewish": 0.076}, "K21": {"arab": 0.076, "druze": 0.021, "jewish": 0.086}}
-DAY_LIMIT = {"K24": 0.054, "K23": 0.121, "K22": 0.238, "K21": 0.159}
+DAY_GROUP = {"K24": {"arab": 0.013, "druze": -0.024, "jewish": 0.017}, "K23": {"arab": 0.057, "druze": 0.008, "jewish": 0.056},
+             "K22": {"arab": 0.065, "druze": 0.111, "jewish": 0.062}, "K21": {"arab": 0.070, "druze": -0.014, "jewish": 0.075}}
+DAY_LIMIT = {"K24": 0.064, "K23": 0.129, "K22": 0.247, "K21": 0.164}
 
 
 def day_station_groups():
     """11f. The daytime matching (live_fetch.station_turnout, release_sector) by station group with the locality's own
     sector as the default, on the committed K21..K24 files read as releases with every figure present: Arab and Druze
-    turnout equal the locality truth, the pace error within the limits and no sector worse by more than 0.01, the
-    K25 file's "mixed" equal to the Arab section's mixed-city Arab stations; then single stations: a new number in an
-    Arab locality and in Bnei Brak, a 2026 "12" against 2022's 12.1 and 12.2, a group with a blank sub-station, a group
-    whose register grew 1.6 times."""
+    turnout equal the locality truth, the pace error within the limits and no sector worse by more than 0.01 than the
+    group matching before its whole-group checks, the K25 file's "mixed" equal to the Arab section's mixed-city Arab
+    stations; then single stations: a new number in an Arab locality and in Bnei Brak, a 2026 "12" against 2022's 12.1
+    and 12.2 (one group with the whole register; without eligible counts, or as 12.1 and 12.3, out), a group with a
+    blank sub-station, a group whose register grew 1.6 times."""
     print("11f. daytime station matching by station group, the locality's sector as the default (live_fetch)")
     E = LF.Election2026(json.load(open(os.path.join(ROOT, "pipeline", "live_config.json"), encoding="utf-8")))
     core = json.load(open(os.path.join(ROOT, "site", "data", "core.json"), encoding="utf-8"))
@@ -1535,12 +1544,13 @@ def day_station_groups():
             te[locsec.get(r[0], "jewish")] += r[3]
         S = LF.station_turnout(E, rows)["sectors"]
         err = {s: S[s]["pace"] - tv[s] / v22[s] for s in ("arab", "druze", "jewish")}
-        worse = {s: round(abs(err[s]) - abs(DAY_TODAY[eid][s]), 3) for s in err}
+        worse = {s: round(abs(err[s]) - abs(DAY_GROUP[eid][s]), 3) for s in err}
         check(all(S[s]["turnout"] == round(tv[s] / te[s], 4) for s in ("arab", "druze"))
               and round(sum(map(abs, err.values())), 3) <= DAY_LIMIT[eid] and all(w <= 0.01 for w in worse.values()),
               f"{eid} as a release: Arab and Druze turnout {S['arab']['turnout']} / {S['druze']['turnout']} = the locality truth; "
-              f"sum |pace error| {sum(map(abs, err.values())):.3f} <= {DAY_LIMIT[eid]} (before {sum(map(abs, DAY_TODAY[eid].values())):.3f}), "
-              f"each sector at most 0.01 worse {worse}; coverage arab {S['arab']['coverage']} druze {S['druze']['coverage']}")
+              f"sum |pace error| {sum(map(abs, err.values())):.3f} <= {DAY_LIMIT[eid]} (groups before the whole-group checks "
+              f"{sum(map(abs, DAY_GROUP[eid].values())):.3f}, station by station {sum(map(abs, DAY_TODAY[eid].values())):.3f}), "
+              f"each sector at most 0.01 worse than the former {worse}; coverage arab {S['arab']['coverage']} druze {S['druze']['coverage']}")
     _, rows = release("K25")
     S = LF.station_turnout(E, rows)["sectors"]
     with open(os.path.join(ROOT, "site", "data", "arab_day_2022.json"), encoding="utf-8") as f:
@@ -1567,19 +1577,20 @@ def day_station_groups():
     s3, x3, l3 = one([{"code": g[0], "kalpi": str(g[1]), "elig": ge, "voters": gv // 2}])
     s3b, x3b, _ = one([{"code": g[0], "kalpi": f"{g[1]}.1", "elig": ge // 2, "voters": gv // 4},
                        {"code": g[0], "kalpi": f"{g[1]}.3", "elig": ge - ge // 2, "voters": gv // 2 - gv // 4}])
-    check(not x3 and s3["jewish"]["pace"] == round((gv // 2) / gv, 3) and s3b["jewish"]["pace"] == s3["jewish"]["pace"] and not x3b
-          and all(abs(v - (gv // 2) / gv) < 1e-3 for v in l3.values()),
-          f"a 2026 '{g[1]}' against 2022's {g[1]}.1 and {g[1]}.2 ({g[0]}): one group, pace {s3['jewish']['pace']}; "
-          f"{g[1]}.1 + {g[1]}.3 the same; the lean weights the group's pace: {l3}")
+    check(not x3 and s3["jewish"]["pace"] == round((gv // 2) / gv, 3) and s3b["jewish"]["pace"] is None
+          and x3b == {"no 2022 match": 2} and all(abs(v - (gv // 2) / gv) < 1e-3 for v in l3.values()),
+          f"a 2026 '{g[1]}' with the whole register against 2022's {g[1]}.1 and {g[1]}.2 ({g[0]}): one group, pace "
+          f"{s3['jewish']['pace']}; the lean weights the group's pace: {l3}; {g[1]}.1 + {g[1]}.3 (no {g[1]}.2: a sub-station "
+          f"not in the release) out of pace {x3b}")
     s4, x4, _ = one([{"code": g[0], "kalpi": f"{g[1]}.1", "elig": ge // 2, "voters": gv // 4},
                      {"code": g[0], "kalpi": f"{g[1]}.2", "elig": ge - ge // 2, "voters": None}])
     s5, x5, _ = one([{"code": g[0], "kalpi": str(g[1]), "elig": round(ge * 1.6), "voters": gv // 2}])
     s6, x6, _ = one([{"code": g[0], "kalpi": str(g[1]), "elig": None, "voters": gv // 2}])
     check(s4["jewish"]["pace"] is None and s4["jewish"]["stations"] == 1 and s4["jewish"]["turnout"] == round((gv // 4) / (ge // 2), 4)
           and x4 == {"no figure": 1, "no 2022 match": 1} and s5["jewish"]["pace"] is None and s5["jewish"]["stations"] == 1
-          and x5 == {"no 2022 match": 1} and s6["jewish"]["pace"] == s3["jewish"]["pace"] and not x6,
+          and x5 == {"no 2022 match": 1} and s6["jewish"]["pace"] is None and x6 == {"no 2022 match": 1},
           f"out of pace, still in turnout: a group with a blank sub-station ({x4}), a group whose register is 1.6 times 2022's "
-          f"({x5}); without eligible counts the register is not checked (pace {s6['jewish']['pace']})")
+          f"({x5}); without eligible counts a '{g[1]}' for 2022's two sub-stations, a merge or one of them missing ({x6})")
     s7, x7, _ = one([{"code": g[0], "kalpi": str(g[1]), "elig": ge, "voters": gv * 2 + 10}])
     check(s7["jewish"]["pace"] is None and x7 == {"implausible pace": 1},
           f"a group above twice its 2022 voters: 'implausible pace' ({x7})")
@@ -1646,6 +1657,132 @@ def mixed_area_class():
           and c0.get("unclassified_area_arab") == 1 and c1.get("unclassified") == 2,
           f"live_fetch passes the switch through: 5000:arab {a0.get('stations')} -> {a1.get('stations')} stations, the day's "
           f"'mixed' {m0.get('stations')} -> {m1.get('stations')}; errors {[e for e in e0 if 'arab' in e or 'turnout' in e][:2]}")
+
+
+# 11h: forwards, as on the day (an earlier file as the base, a later one as the release): (the limit of sum |pace error|
+# over arab, druze and jewish with the whole-group checks, the same with the group matching before them, b3e10b5)
+DAY_FORWARD = {("K24", "K25"): (0.073, 0.087), ("K23", "K25"): (0.178, 0.188), ("K23", "K24"): (0.098, 0.104),
+               ("K22", "K24"): (0.062, 0.068), ("K21", "K24"): (0.122, 0.130)}
+
+
+def day_station_whole():
+    """11h. live_fetch.station_turnout counts a station group in pace only when the release holds all of it. Forwards, as
+    on the day (Election2026.base_stations from an earlier file, a later one as the release): the pace error within the
+    limits, below the group matching without the checks. The K25 file as a release (voters x0.6, register x1.08: every
+    pace and the lean 0.6): 10% of its rows absent, the last sub-station of every group of three or more absent, the
+    same without eligible counts, every X.2 absent without them, the same rows blank. Single groups: a re-split into
+    fewer sub-stations with the whole register (in) and two of three sub-stations with their share (out), a row listed
+    twice, a sub-station station_rows leaves out (`dropped`), and the same through live_fetch.main for Jerusalem's
+    groups of three or more re-split into one more sub-station whose figure is more voters than eligible."""
+    print("11h. a station group in pace only when the release holds all of it (live_fetch.station_turnout)")
+    import copy
+    E = LF.Election2026(json.load(open(os.path.join(ROOT, "pipeline", "live_config.json"), encoding="utf-8")))
+    core = json.load(open(os.path.join(ROOT, "site", "data", "core.json"), encoding="utf-8"))
+    locsec = {loc["code"]: loc["sector"] for loc in core["localities"]}
+
+    def ballots(eid):
+        return json.load(open(os.path.join(ROOT, "site", "data", f"ballots_{eid}.json"), encoding="utf-8"))
+
+    def by_sector(b):
+        n = collections.Counter()
+        for r in b["rows"]:
+            n[locsec.get(r[0], "jewish")] += r[4]
+        return n
+    for (base, rel), (limit, before) in DAY_FORWARD.items():
+        bb, br = ballots(base), ballots(rel)
+        E2 = copy.copy(E)
+        E2.base_stations(bb, core, base)
+        st = LF.station_turnout(E2, [{"code": r[0], "kalpi": str(r[1]), "elig": r[3], "voters": r[4]} for r in br["rows"]])
+        S, t0, t1 = st["sectors"], by_sector(bb), by_sector(br)
+        err = {s: round(S[s]["pace"] - t1[s] / t0[s], 3) for s in ("arab", "druze", "jewish")}
+        tot = round(sum(abs(S[s]["pace"] - t1[s] / t0[s]) for s in err), 3)
+        check(tot <= limit < before, f"{base} as the base, {rel} as the release: sum |pace error| {tot} <= {limit} (before the "
+              f"whole-group checks {before}) {err}; coverage {st['coverage']}")
+    # the K25 file as a release with stations missing from it: every pace and the lean stay 0.6
+    rows = [{"code": r[0], "kalpi": str(r[1]), "elig": round(r[3] * 1.08), "voters": round(r[4] * 0.6)}
+            for r in ballots("K25")["rows"]]
+    rnd = random.Random(7)
+    gone = {i for i in range(len(rows)) if rnd.random() < 0.1}
+    last = {}
+    for r in rows:
+        key = (r["code"], LF.kalpi_group(r["kalpi"]))
+        if E.group22[key][4] >= 3 and LF.sub_number(r["kalpi"]) > LF.sub_number(last.get(key, "0")):
+            last[key] = r["kalpi"]
+    tail = [r for r in rows if last.get((r["code"], LF.kalpi_group(r["kalpi"]))) != r["kalpi"]]
+
+    def bare(rr):
+        return [{**r, "elig": None} for r in rr]
+    cases = {"10% of the rows absent": [r for i, r in enumerate(rows) if i not in gone],
+             "the same rows blank": [{**r, "voters": None} if i in gone else r for i, r in enumerate(rows)],
+             "the last sub-station of every group of 3+ absent": tail,
+             "the same, no eligible counts": bare(tail),
+             "every X.2 absent, no eligible counts": bare([r for r in rows if not r["kalpi"].endswith(".2")])}
+    for what, rr in cases.items():
+        st = LF.station_turnout(E, rr)
+        pace = {k: v["pace"] for k, v in st["sectors"].items()}
+        check(all(abs(p - 0.6) <= 0.001 for p in pace.values()) and len(pace) == 5
+              and all(abs(v - 0.6) <= 0.001 for v in st["lean"].values()) and len(st["lean"]) == 3,
+              f"K25 as a release (pace 0.6), {what} ({len(rows) - len(rr) or sum(1 for r in rr if r['voters'] is None)} "
+              f"rows): pace {pace}, lean {st['lean']}, coverage {st['coverage']}, no 2022 match {st['excluded'].get('no 2022 match', 0)}")
+    # single groups of three sub-stations in 2022, a small release (the median from too few groups: E.g)
+    three = sorted(k for k, x in E.group22.items() if x[4] == 3 and x[3] == "jewish" and x[0] > 600
+                   and {(k[0], f"{k[1]}.{i}") for i in (1, 2, 3)} <= set(E.station22))
+    code, num = three[0]
+    v22, e22 = E.group22[(code, num)][:2]
+
+    def subs(n, elig, voters, extra=()):
+        return [{"code": code, "kalpi": f"{num}.{i}", "elig": elig, "voters": voters} for i in range(1, n + 1)] + list(extra)
+
+    def one(rr, dropped=()):
+        st = LF.station_turnout(E, rr, dropped=dropped)
+        return (st["sectors"].get("jewish") or {}).get("pace"), st["excluded"]
+    p2, x2 = one(subs(2, e22 // 2, v22 // 4))
+    p2b, x2b = one(subs(2, e22 // 3, v22 // 6))
+    p3, x3 = one(subs(3, e22 // 3, v22 // 6))
+    pr, xr = one(subs(3, e22 // 3, v22 // 6, [{"code": code, "kalpi": f"{num}.1", "elig": e22 // 3, "voters": v22 // 6}]))
+    p4, x4 = one(subs(3, e22 // 4, v22 // 8))
+    p4d, x4d = one(subs(3, e22 // 4, v22 // 8), dropped={(code, f"{num}.4")})
+    check(p2 == round(2 * (v22 // 4) / v22, 3) and not x2 and p2b is None and x2b == {"no 2022 match": 2} and p3 is not None
+          and not x3 and pr is None and xr == {"no 2022 match": 4} and p4 == round(3 * (v22 // 8) / v22, 3) and p4d is None
+          and x4d == {"no 2022 match": 3},
+          f"{code} {num} (three sub-stations in 2022): {num}.1-2 with the whole register in pace ({p2}: a re-split), with two "
+          f"thirds of it out ({x2b}: one absent); {num}.1 listed twice out ({xr}); {num}.1-3 of a re-split into four in pace "
+          f"({p4}) unless {num}.4 was left out by station_rows ({x4d})")
+    # station_rows reports the rows it leaves out, and live_fetch.main hands them on: Jerusalem's groups of three or
+    # more as one more sub-station each (the register re-split), the added one more voters than eligible
+    lines = ["סמל ישוב,שם ישוב,קלפי,בזב,מצביעים", f"{code},x,{num}.1,{e22 // 3},12a"]
+    jer = collections.defaultdict(list)
+    for r in rows:
+        if r["code"] == 3000:
+            jer[LF.kalpi_group(r["kalpi"])].append(r)
+    grown = 0
+    for b, rr in sorted(jer.items(), key=lambda x: str(x[0])):
+        if len(rr) >= 3:
+            el, vo = sum(r["elig"] for r in rr) // (len(rr) + 1), sum(r["voters"] for r in rr) // (len(rr) + 1)
+            lines += [f"3000,x,{b}.{i},{el},{vo}" for i in range(1, len(rr) + 1)] + [f"3000,x,{b}.{len(rr) + 1},{el},{el * 2}"]
+            grown += 1
+        else:
+            lines += [f"3000,x,{r['kalpi']},{r['elig']},{r['voters']}" for r in rr]
+    body = ("﻿" + "\n".join(lines) + "\n").encode("utf-8")
+    dropped = set()
+    rr, xx = LF.station_rows(body, dropped=dropped)
+    plain = LF.station_turnout(E, rr, xx)["sectors"]
+    check(xx == {"unreadable": 1, "more voters than eligible": grown} and len(dropped) == grown + 1
+          and (code, f"{num}.1") in dropped and any(plain[s]["pace"] < 0.59 for s in plain),
+          f"station_rows: {dict(xx)}, the rows' (code, number) in `dropped` ({len(dropped)}); without them station_turnout "
+          f"counts the re-split groups short: pace {({s: plain[s]['pace'] for s in plain})}")
+    rel = write(os.path.join(TMP, "whole_groups.csv"), body.decode("utf-8"))
+    inp = os.path.join(TMP, "whole_groups_inputs")
+    os.makedirs(inp, exist_ok=True)
+    out = os.path.join(TMP, "whole_groups")
+    run("--out", out, "--config", cfg_file("whole_groups.json", results_url=os.path.join(TMP, "nothing.csv"),
+                                           station_turnout_url=rel), "--as", "K25", "--inputs", inp, now=NIGHT)
+    T = load(out, "turnout.json") or {}
+    sec, ex = T.get("sectors") or {}, T.get("sectors_excluded") or {}
+    check(sec and all(abs(x["pace"] - 0.6) < 0.0015 for x in sec.values()) and ex.get("more voters than eligible") == grown
+          and ex.get("no 2022 match", 0) >= 3 * grown,
+          f"live_fetch.main: turnout.json pace {({s: x['pace'] for s, x in sec.items()})} with the {grown} re-split groups out "
+          f"of it ({ex}); error {T.get('station_error')}")
 
 
 # ---------------------------------------------------------------- tests
@@ -2737,6 +2874,7 @@ def main():
     cbs_stations_2026()
     day_station_groups()
     mixed_area_class()
+    day_station_whole()
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")
