@@ -18,9 +18,11 @@ Where the values come from, best first (per field; "src" in the output names it)
   amitlev, or523, isaranga
                third parties' readings of the same PDFs (pipeline/reference/poll_filings_index.json, each source with
                its address and the SHA-256 of the file read): kept apart and marked verified: false until the PDF
-               itself has been read here and gave the pollster, the fieldwork dates, the respondents (up to 10% over
-               the initial sample: a panel's overshoot) and a seat table of 120 that agree with the poll, the
-               listing and those readings.
+               itself has been read here and gave the pollster (the poll's and the listing's), the fieldwork dates
+               (within two weeks, ending at most 10 days before the poll), a seat table of 120 (the poll's) and the
+               respondents (no more than were asked, up to 10% over the initial sample: a panel's overshoot, and as
+               those readings give them). polls_2026.json's own n is not a condition: where it differs, polls_n
+               and the notes say so.
 A poll is matched to a filing by its seats (all lists equal, fieldwork ending at most 10 days before publication);
 else by its polling house and the date (at most 3 days apart, at most 6 seats different, the differences listed);
 else by the link polls_2026.json already carries. Each filing goes to one poll at most. Where polls_2026.json links
@@ -37,6 +39,7 @@ Run:
 """
 import argparse
 import datetime as dt
+import functools
 import glob
 import hashlib
 import json
@@ -70,10 +73,11 @@ sys.path.insert(0, os.path.join(ROOT, "pipeline"))
 
 
 # ------------------------------------------------------------------ text
-BIDI = re.compile("[\u200e\u200f\u202a-\u202e\u2066-\u2069\ufeff]")
+BIDI = re.compile("[\u200e\u200f\u202a-\u202e\u2060\u2066-\u2069\ufeff]")      # and the word joiner
 NIQQUD = re.compile("[\u0591-\u05c7]")
 
 
+@functools.lru_cache(maxsize=1 << 16)             # the field readers look at each line of a filing many times
 def clean(s):
     """A line of extracted text: no bidi controls or niqqud, one spelling of each quote mark and dash."""
     s = BIDI.sub("", s or "")
@@ -84,6 +88,7 @@ def clean(s):
     return s.replace("\u00a0", " ").replace("\t", "    ")
 
 
+@functools.lru_cache(maxsize=1 << 16)
 def fold(s):
     """For matching: clean, single spaces, final letters folded (רע"ם = רע"מ)."""
     s = re.sub(r"\s+", " ", clean(s)).strip()
@@ -317,8 +322,9 @@ def moe_floor(n):
 # The labels of the disclosure fields, as the three templates read by amitlev/israel-polls-2026
 # (.github/scripts/lib/govil-pdf-parser.mjs: Midgam/Lazar, Kantar, Maagar Mochot) and idoherling/2026_Election_Model
 # (src/scrape_cec.py) word them, and as the filings fetched on 16.10.2026 do (Channel 13's 'מועד איסוף נתונים',
-# Next Data's and DRI's 'תאריך ביצוע הסקר', Direct Polls' 'מרווח טעות', Tatika's running text 'השיבו לו 500משיבים
-# ,סטיית תקן 4.4%', the sampling error it states); the most specific first.
+# Next Data's and DRI's 'תאריך ביצוע הסקר', 'שיעור האנשים שלא השתתפו', 'איסוף הנתונים' and 'עיבוד הסקר', Next
+# Data's running text 'היקף הפנייה :הסקר נשלח ל 59,580-איש', Direct Polls' 'מרווח טעות', Tatika's running text
+# 'השיבו לו 500משיבים ,סטיית תקן 4.4%', the sampling error it states); the most specific first.
 LABELS = {
     "commissioner": ["שם הגוף שהזמין את הסקר", "מזמין הסקר ומענו", "מזמין הסקר", "הגוף שהזמין"],
     "pollster": ["הגורם שערך את הסקר", "הגוף שערך את הסקר", "שם עורך הסקר", "עורך הסקר ומענו", "עורך הסקר",
@@ -330,17 +336,17 @@ LABELS = {
     "population": ["סוגי האוכלוסייה שנדגמו", "סוגי האוכלוסיה שנדגמו", "סוג האוכלוסייה", "האוכלוסייה שנדגמה",
                    "אוכלוסיית המדגם", "אוכלוסיית המחקר"],
     "invited": ["מספר המתבקשים להשתתף", "מס' האנשים שהתבקשו להשתתף", "מספר האנשים שהתבקשו", "מס' האנשים אליהם פנו",
-                "מספר האנשים אליהם פנו", "מספר המתבקשים"],
+                "מספר האנשים אליהם פנו", "מספר המתבקשים", "היקף הפנייה"],
     "n": ["מספר המשיבים", "מס' המשיבים", "מס' האנשים שהשתתפו בסקר בפועל", "מספר האנשים שהשתתפו בסקר בפועל",
           "מספר המשתתפים בסקר", "מספר משיבים", "גודל המדגם הסופי"],
     "response_rate": ["אחוז המשתתפים בסקר", "שיעור ההיענות לסקר", "שיעור ההיענות", "שיעור היענות", "אחוז ההיענות"],
     "refused": ["מספר האנשים שסרבו", "מספר האנשים שסירבו", "מס' האנשים שסרבו", "מס' האנשים שסירבו"],
     "refused_pct": ["אחוז האנשים שסרבו", "אחוז האנשים שסירבו", "שיעור האנשים שסרבו", "שיעור האנשים שסירבו",
-                    "אחוז הסירוב", "שיעור הסירוב"],
+                    "שיעור האנשים שלא השתתפו", "אחוז הסירוב", "שיעור הסירוב"],
     "moe": ["טעות הדגימה המרבית", "טעות הדגימה המירבית", "טעות הדגימה", "טעות דגימה", "מרווח הטעות", "מרווח טעות",
             "גודל הטעות הסטטיסטית", "טעות סטטיסטית", "סטיית תקן"],
-    "method": ["השיטה הסטטיסטית", "שיטה סטטיסטית"],
-    "mode": ["אופן ביצוע הסקר", "אופן איסוף הנתונים", "שיטת איסוף הנתונים"],
+    "method": ["השיטה הסטטיסטית", "שיטה סטטיסטית", "עיבוד הסקר"],
+    "mode": ["אופן ביצוע הסקר", "אופן איסוף הנתונים", "שיטת איסוף הנתונים", "איסוף הנתונים"],
 }
 TEXT_FIELDS = ("commissioner", "pollster", "sampling", "population", "method", "mode")
 RANGES = {"n_initial": (100, 2_000_000), "invited": (100, 2_000_000), "n": (100, 100_000), "refused": (0, 2_000_000),
@@ -350,22 +356,33 @@ UNDECIDED = ["לא החליטו", "לא החלטתי", "טרם החליט", "ל�
 # '550 משיבים', 'השיבו לו  500משיבים', 'משיבים 588 :נדגמים'; not the year the layout glues to the word ('| 2026משיבים')
 RESPONDENTS = re.compile(r"(?<![\d.,])(?!2026)(\d{1,3}(?:,\d{3})+|\d{3,6})\s*:?\s*"
                          r"(?:משיבים|משיבות|נשאלים|מרואיינים|נדגמים)")
+RAN_BY = re.compile(r'(?<![א-ת])(?:נאספו|בוצע|נערך|עובד|נותח)\s+(?:[^\s]+\s+){0,5}?(?:בידי|על ידי|ע"י)\s+(חברת\s+.{2,40}?|'
+                    r'(?!חברת).{2,40}?)(?=\s{2,}|\s*(?:באמצעות|בשיטת|בע"מ)|[.,;]|$)')
 N_EQUALS = re.compile(r"(?<![A-Za-z])N\s*=\s*(\d{1,3}(?:,\d{3})+|\d{3,6})(?![\d,])")      # 'N = 656 | ...'
 COUNTS = ("n", "n_initial", "invited", "refused")
 
 
 def cells(line):
     """The cells of a line of pdftotext -layout output: runs of text separated by two spaces or more."""
-    return [c.strip() for c in re.split(r"\s{2,}", clean(line).strip()) if c.strip()]
+    return list(_cells(line))
+
+
+@functools.lru_cache(maxsize=1 << 16)
+def _cells(line):
+    return tuple(c.strip() for c in re.split(r"\s{2,}", clean(line).strip()) if c.strip())
 
 
 def find_field(lines, key):
     """(value, the line it was read from) of one disclosure field, or (None, None). In an RTL table the value cell
     stands left of the label, so pdftotext -layout writes it before the label; in running text it follows. A label
-    whose cell holds nothing else but words of the label ('מספר המשיבים בפועל', 'התאריכים והשעות בהם בוצע הסקר')
-    is alone on its line: its value wrapped around it, on the line above and the line below. A fieldwork value is
-    the dates anywhere on the label's line (running text splits it in cells: 'בתאריכים ה 26/8-בשעה  12:00עד ה
-    27/8-בשעה'), else on the lines around it (Maagar Mochot's '25-26.8.26' above a line with a typo, '25/7')."""
+    whose cell holds nothing else but a few words of the label ('מספר המשיבים בפועל', 'מס' האנשים שסירבו /') is
+    alone on its line: its value wrapped around it, on the line above and the line below; a sentence that starts
+    with a label ('שיעור ההיענות כולל את כל מי שניגש לשאלון...', a footnote) is not. A text value cut in the middle
+    ('...בסקר אינטרנטי ו-' over '221מהאוכלוסייה הלא יהודית בתשאול טלפוני  שיטת איסוף הנתונים') takes its other
+    half from the line before or after. A fieldwork value is the dates anywhere on the label's line (running text
+    splits it in cells: 'בתאריכים ה 26/8-בשעה  12:00עד ה 27/8-בשעה'), else on the lines around it (Maagar Mochot's
+    '25-26.8.26' above a line with a typo, '25/7'). A label wrapped over two or three lines in its column, its
+    value on one of them (Next Data's 'גודל המדגם' / '2,200איש' / 'ההתחלתי'), is read last (wrapped_field)."""
     for label in LABELS[key]:
         fl = fold(label)
         for i, line in enumerate(lines):
@@ -378,17 +395,26 @@ def find_field(lines, key):
                 if key == "n" and "התחלתי" in fc:
                     continue
                 rest = fc[k + len(fl):].strip(" :-")
-                # a longer label that starts with this one ("גודל המדגם" in "גודל המדגם ההתחלתי") is another field
-                if any(other != fl and other.startswith(fl) and fc[k:].startswith(other) for other in ALL_LABELS):
+                if key in TEXT_FIELDS:
+                    # a cell is single-spaced and stripped, so fold() kept its places: the text as written
+                    rest = clean(c)[k + len(fl):].strip(" :-")
+                # a longer label that holds this one here ("גודל המדגם" in "גודל המדגם ההתחלתי", "איסוף הנתונים" in
+                # "מועד איסוף הנתונים") is another field
+                if any(len(o) > len(fl) and fl in o and any(m.start() <= k and k + len(fl) <= m.end()
+                                                            for m in re.finditer(re.escape(o), fc))
+                       for o in ALL_LABELS):
                     continue
                 if key == "fieldwork":
                     cands = [" ".join([rest] + cs[:j] + cs[j + 1:])]
+                elif key in TEXT_FIELDS and j == 0 and rest:
+                    cands = [" ".join([rest] + cs[1:])]             # running text: 'label: value' to the line's end
                 else:
                     cands = [rest] if rest else []
-                    cands += [" ".join(cs[:j])] if j else []
+                    if j:
+                        cands += [cut(lines, i, " ".join(cs[:j])) if key in TEXT_FIELDS else " ".join(cs[:j])]
                     cands += [" ".join(cs[j + 1:])] if j + 1 < len(cs) else []
-                if key == "fieldwork" or len(cs) == 1 and (not rest or not re.search(r"\d", rest)
-                                                           and value_of(key, rest) is None):
+                alone = len(cs) == 1 and not re.search(r"\d", rest) and len(re.findall(r"[^\s/,.:()-]+", rest)) <= 3
+                if key == "fieldwork" or alone and value_of(key, rest) is None:
                     # the label alone on its line: the value wrapped around it (the line above, the line below)
                     near = [" ".join(cells(lines[x])) for x in (i - 1, i + 1)
                             if 0 <= x < len(lines) and not is_field(lines[x])]
@@ -397,6 +423,50 @@ def find_field(lines, key):
                     v = value_of(key, cand)
                     if v is not None:
                         return v, clean(line).strip()
+    return wrapped_field(lines, key)
+
+
+def cut(lines, i, value):
+    """A text value on line i with its half on the line before or after, when it was cut in the middle: the line
+    before ends in '-' or ',' ('...בסקר אינטרנטי ו-' over '221מהאוכלוסייה...'), or the value does ('...אריאל
+    איילון,' over 'חברת סטטנט נט...'); that line no field's."""
+    def other(x):
+        return " ".join(cells(lines[x])) if 0 <= x < len(lines) and not is_field(lines[x]) else None
+    before, after = other(i - 1), other(i + 1)
+    if before and re.search(r"[-,]$", before):
+        value = before + " " + value
+    if after and re.search(r"[-,]$", value):
+        value = value + " " + after
+    return value
+
+
+def wrapped_field(lines, key):
+    """(value, its lines) of a field whose label wraps over two or three lines in the label column, as Next Data's
+    table sets it: 'מספר האנשים' / '7,862איש  שהתבקשו להשתתף' / 'בסקר', 'גודל המדגם' / '2,200איש' / 'ההתחלתי',
+    'שיעור האנשים שלא' / '89%' / 'השתתפו'. A line's last cell is a piece of the label when it has no figure and
+    a few words; the label's pieces, joined, start with the label, and its first line holds a piece; the value is in
+    the other cells of those lines. (None, None) when there is none."""
+    def piece(cs):
+        return cs[-1] if cs and not re.search(r"\d", cs[-1]) and len(cs[-1].split()) <= 4 else None
+    for label in LABELS[key]:
+        fl = fold(label)
+        for i in range(len(lines) - 1):
+            for w in (2, 3):
+                win = [cells(l) for l in lines[i:i + w]]
+                if len(win) < w or piece(win[0]) is None or fl in fold(piece(win[0])):
+                    continue
+                if any(is_field(l) and fl not in fold(l) for l in lines[i:i + w]):
+                    continue
+                heads = [piece(cs) for cs in win]
+                joined = fold(" ".join(h for h in heads if h))
+                if not joined.startswith(fl):
+                    continue
+                vals = [c for cs, h in zip(win, heads) for c in (cs[:-1] if h else cs)]
+                for cand in vals + ([" ".join(vals)] if key in TEXT_FIELDS and vals else []):
+                    v = value_of(key, cand)
+                    if v is not None:
+                        return v, " / ".join(" ".join(cs) for cs in win)
+                break
     return None, None
 
 
@@ -408,6 +478,7 @@ def value_of(key, s):
         ds = dates_in(s, bare=True)
         return (ds[0], ds[-1]) if ds else None
     if key in TEXT_FIELDS:
+        s = s.strip(" :§•")                                            # Tatika's bullets
         return re.sub(r"\s+", " ", s)[:200] if re.search("[א-תA-Za-z]", s) else None
     s = DATE.sub(" ", DAY_RANGE.sub(" ", clean(s)))                    # a date's digits are not a count
     nums = numbers(s)
@@ -580,6 +651,7 @@ def is_total(label):
     return 'סה"כ' in fold(label) or "סך הכל" in fold(label) or 'סה"כ' in fold(label)[::-1]
 
 
+@functools.lru_cache(maxsize=1 << 16)
 def is_field(label):
     f = fold(label)
     return any(l in f for l in ALL_LABELS)
@@ -678,6 +750,49 @@ def sector_of(population, head):
     return None
 
 
+# Channel 13's sub-samples, each on a line of its own in the field of those asked: 'מדגם בוגרים יהודים - 4,478מתבקשים
+# להשיב ,שיעור היענות ,32.6%...', 'מדגם 5098 - 1מתבקשים להשיב 11.7% ,היענות' (sample 1, its number moved by the
+# layout), and one with no count, 'מדגם חרדים טלפוני - 220משיבים תקינים'
+ASKED = re.compile(r"(?<![\d,])(\d{1,3}(?:,\d{3})+|\d{3,6})(?:\s*-\s*\d)?\s*מתבקשימ להשיב")
+SUBSAMPLE = re.compile(r"(?:^|\s)מדגמ\s[^-]{0,30}-")
+
+
+def subsamples(lines):
+    """([count of those asked, per sub-sample], [the lines of sub-samples that state none]) of a filing whose field
+    of those asked lists two sub-samples or more (Channel 13's), else None."""
+    asked = [(i, int(m.group(1).replace(",", ""))) for i, l in enumerate(lines) for m in [ASKED.search(fold(l))] if m]
+    if len(asked) < 2:
+        return None
+    missing = [re.sub(r"\s+", " ", clean(l)).strip() for l in lines[asked[0][0]:asked[-1][0] + 1]
+               if not ASKED.search(fold(l)) and SUBSAMPLE.search(fold(l))]
+    return [c for _, c in asked], missing
+
+
+def below_table(lines, start):
+    """(kind, [(label, share)]) of the lists below the threshold that a filing gives in a table of their own after
+    its seat table (Next Data's: 'מפלגות שלא עברו את אחוז החסימה (מתחת ל-3.25%)', a header 'אחוז גולמי  רשימה',
+    then '2.1%   עמך ישראל בראשות עופר וינטר'...), from its line start on: each row one share and a name, up to the
+    first line that is not one. kind is what its header says the shares are: "raw" ('גולמי', as the seat table's),
+    "weighted" ('אחוז משוקלל', some of Next Data's: not raw shares) or None; (None, []) when there is none."""
+    for k in range(start, min(len(lines), start + 12)):
+        if "שלא עברו את אחוז" not in fold(lines[k]):
+            continue
+        out, kind = [], None
+        for x in range(k + 1, min(len(lines), k + 25)):
+            r = table_rows([lines[x]])
+            r = r[0] if r else None
+            if (r and re.search("[א-ת]", r["label"]) and len(r["vals"]) == 1 and not is_seat(r["vals"][0][0])
+                    and not r["marks"] and not is_total(r["label"])):
+                out.append((re.sub(r"\s+", " ", r["label"]).strip(), float(r["vals"][0][0].strip("%± "))))
+            elif out or x > k + 2:
+                break
+            elif not r:
+                f = fold(lines[x])
+                kind = kind or ("raw" if "גולמי" in f else "weighted" if "משוקלל" in f else None)
+        return kind, out
+    return None, []
+
+
 def parse_filing(text):
     """The fields of one filing's text (pdftotext -layout): metadata, the main seat table, the shares."""
     lines = [l for l in (text or "").splitlines() if l.strip()]
@@ -687,6 +802,12 @@ def parse_filing(text):
         if v is not None:
             out[key] = v
             read_from[key] = line[:160]
+    if "pollster" not in out:
+        # no editor's label: who ran it, in running text ('הנתונים נאספו בידי חברת Next Data', 'הסקר בוצע ע"י
+        # מאגר מוחות', 'ע"י חברת Next Data בע"מ')
+        m = RAN_BY.search(clean(" ".join(lines)))
+        if m:
+            out["pollster"], read_from["pollster"] = re.sub(r"\s+", " ", m.group(1)).strip(" .,"), m.group(0)[:160]
     if "n" not in out:
         # running text ("הסקר נערך בקרב 550 משיבים"), the narrative template; its 'N = 656' first, before the
         # counts of its sub-groups ('בוחרי הליכוד 387 :משיבים')
@@ -696,13 +817,35 @@ def parse_filing(text):
     if "fieldwork" in out:
         out["fieldwork_start"], out["fieldwork_end"] = iso(out["fieldwork"][0]), iso(out["fieldwork"][1])
         if (out["fieldwork"][1] - out["fieldwork"][0]).days > 14:
-            # Maagar Mochot's '1600-2400 1/8' over '0700-1500 2/9' (1/9): kept as written, said
+            # Maagar Mochot's '1600-2400 1/8' over '0700-1500 2/9' (1/9): kept as written, said, and a doubt
+            out["fieldwork_typo"] = True
             out.setdefault("notes", []).append(f"fieldwork {out['fieldwork_start']} to {out['fieldwork_end']} as "
                                                "the PDF writes it: over two weeks, its first date likely a typo")
         del out["fieldwork"]
     if out.get("moe") and out.get("n") and out["moe"] < moe_floor(out["n"]):
-        out["notes"] = [f"sampling error {out['moe']} is below the minimum for n={out['n']}: not kept"]
+        out.setdefault("notes", []).append(f"sampling error {out['moe']} is below the minimum for n={out['n']}: "
+                                           "not kept")
         del out["moe"]
+    subs = subsamples(lines)
+    if subs:
+        # Channel 13's: no response rate of the whole; those asked the sum of the sub-samples', when each says it
+        counts, missing = subs
+        out.pop("response_rate", None)
+        read_from.pop("response_rate", None)
+        out["subsamples"] = len(counts) + len(missing)
+        what = f"{out['subsamples']} sub-samples, each with its own response rate: none of the whole kept"
+        if missing:
+            out.pop("invited", None)
+            read_from.pop("invited", None)
+            what += (f"; {len(missing)} of them ('{missing[0][:40]}') states no count of those asked, so the "
+                     f"number asked ({' + '.join(f'{c:,}' for c in counts)} in the others) is not given")
+        else:
+            out["invited"] = sum(counts)
+            read_from["invited"] = "the sum of the sub-samples' 'מתבקשים להשיב': " + " + ".join(map(str, counts))
+            what += f"; those asked, {out['invited']:,}, are the sum of theirs"
+            if out.get("n_initial") and out["n_initial"] != out["invited"]:
+                what += f" (the PDF's initial sample is {out['n_initial']:,})"
+        out.setdefault("notes", []).append(what)
     sector = sector_of(out.get("population"), lines[:4])
     if sector:
         out["sector"] = sector
@@ -728,16 +871,40 @@ def parse_filing(text):
                 unknown.append(name)
             if not r["seats"] and r["pct"] is not None:
                 below.append({"name": name[:80], "pct": r["pct"], **({"id": pid} if pid else {})})
+        kind, extra = below_table(lines, table[-1]["i"] + 1)
+        if extra and kind != "raw":
+            # weighted shares (or shares of a kind not said) are not the raw shares of the seat table: kept apart
+            out["below_weighted" if kind == "weighted" else "below_other"] = [
+                {"name": n[:80], "pct": x, **({"id": party_id(n)} if party_id(n) else {})} for n, x in extra]
+            out.setdefault("notes", []).append(
+                f"the {len(extra)} lists below the threshold are given "
+                + ("as weighted shares only ('אחוז משוקלל')" if kind == "weighted" else "with no word of their kind")
+                + ": kept apart, not in the raw shares; the share below the threshold is not known")
+            extra = []
+        for name, share in extra:
+            pid = party_id(name)
+            if pid in TRACKED:
+                if pid in seats and pid != "Joint List":
+                    dup.add(pid)
+                else:                                      # Balad below the threshold beside Hadash-Ta'al's seats
+                    pct[pid] = round(pct.get(pid, 0) + share, 2)
+            below.append({"name": name[:80], "pct": share, **({"id": pid} if pid else {})})
         for pid in dup:                                    # one list on two rows: neither share is kept
             pct.pop(pid, None)
         out["seats"] = {k: v for k, v in seats.items() if v}
         out["pct"] = pct
         withp = [r for r in table if r["pct"] is not None]
-        out["pct_total"] = round(sum(r["pct"] for r in withp), 1)
-        out["wasted_pct"] = round(sum(b["pct"] for b in below), 1)
+        out["pct_total"] = round(sum(r["pct"] for r in withp) + sum(x for _, x in extra), 1)
         out["table_rows"] = len(table)
         out["seats_total"] = sum(r["seats"] or 0 for r in table)
         out["pct_complete"] = len(withp) >= 0.8 * len(table) and 95 <= out["pct_total"] <= 105
+        # the share of the lists below the threshold: theirs where the filing names them; none named, nothing when
+        # the shares do not add up to the whole (Next Data's table alone is 92%: the rest is not known) or the
+        # lists below it are given in weighted shares only, else 0
+        out["wasted_pct"] = (round(sum(b["pct"] for b in below), 1) if below else None
+                             if "below_weighted" in out or "below_other" in out or not out["pct_complete"] else 0.0)
+        if extra:
+            out["below_table"] = len(extra)
         if below:
             out["below"] = below
         if dup or unknown:
@@ -981,6 +1148,7 @@ def merged(rec):
         put("pct_total", ("cec_pdf", P.get("pct_total")))
         put("wasted_pct", ("cec_pdf", P.get("wasted_pct")))
         put("below", ("cec_pdf", P.get("below")))
+        put("below_weighted", ("cec_pdf", P.get("below_weighted")))
     elif src.get("pct") == "amitlev":
         put("wasted_pct", ("amitlev", A.get("wasted_pct")))
         put("below", ("amitlev", A.get("below")))
@@ -990,6 +1158,8 @@ def merged(rec):
                       ("refused_pct", "refused_pct"), ("moe", "moe"), ("undecided_pct", "undecided_pct"),
                       ("sampling", "sampling"), ("population", "population"), ("mode", "mode"), ("method", "method"),
                       ("commissioner", None)):
+        if key in ("invited", "response_rate") and (P or {}).get("subsamples"):
+            akey = None             # the PDF read here has none of the whole: a third party's is one sub-sample's
         put(key, ("cec_pdf", (P or {}).get(key)), ("amitlev", A.get(akey) if akey else None),
             ("isaranga", S.get("n") if key == "n" else None))
     if out.get("moe") and out.get("n") and out["moe"] < moe_floor(out["n"]):
@@ -1027,8 +1197,8 @@ THIRD_N = "respondents {n} here, {other} by {name}"
 
 def doubts(P, f, third):
     """Why a filing's PDF does not verify it, [] when it does: the PDF itself must give the pollster (a house known
-    here, the listing's), the fieldwork dates, the respondents (no more than were asked, at most 10% over the
-    initial sample, as the third parties read them) and a seat table of 120."""
+    here, the listing's), the fieldwork dates (within two weeks), the respondents (no more than were asked, at most
+    10% over the initial sample, as the third parties read them) and a seat table of 120."""
     if not f["read"]:
         return ["the PDF was not read here" if not P else "nothing was read from the PDF's text"]
     why = [f"no {what} in the PDF" for k, what in (("seats", "seat table of 120"), ("n", "respondents"),
@@ -1039,6 +1209,9 @@ def doubts(P, f, third):
         why.append(f"the PDF's pollster ({f['pdf_house']}) is not the listing's ({f['house']})")
     if P.get("sector"):
         why.append(f"a poll of one group ('{P['sector']}'): its seat table, if any, is not the electorate's")
+    if P.get("fieldwork_typo"):
+        why.append(f"the PDF's fieldwork dates ({P['fieldwork_start']} to {P['fieldwork_end']}) span over two weeks: "
+                   "one of them likely a typo")
     n = P.get("n")
     if n and P.get("invited") and n > P["invited"]:
         why.append(f"more respondents ({n}) than people asked to take part ({P['invited']})")
@@ -1239,17 +1412,29 @@ def classify(f, filings, polls, first, matched=()):
     return "not_in_polls", "a national seat table of 120, no poll of its house in polls_2026.json then", None
 
 
+STAMP_DIR = re.compile(r"latest|\d{8}-\d{4}")                       # fetch.yml's directories: latest/, YYYYMMDD-HHMM/
+FETCHER_NAME = re.compile(r"[a-z][a-z0-9_]{0,39}")
+STARTED = re.compile(r"\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,6})?)?(?:Z|[+-]\d{2}:\d{2})?")
+
+
 def fetch_label(d):
     """A fetch directory as the ops-reports branch names it, not where it lies here: {"source":
     "ops-reports:reports/fetch/<fetcher>/<its directory>", "started" (summary.json's: the run's own stamp
-    directory holds the same files), "listing_sha256", "filings_sha256"}; the same fetch, the same record."""
+    directory holds the same files), "listing_sha256", "filings_sha256"}; the same fetch, the same record. Only
+    what has the shape fetch.yml gives is taken from the fetch: the fetcher's name in summary.json (else
+    poll_filings, the only fetch this reads), a directory named latest or YYYYMMDD-HHMM (else none: the SHA-256s
+    say which fetch it was), a start time as an ISO timestamp (else none); never a local path."""
     try:
         s = json.load(open(os.path.join(d, "summary.json"), encoding="utf-8"))
     except (OSError, ValueError):
         s = {}
-    a = os.path.abspath(d)
-    what = s.get("fetcher") if isinstance(s.get("fetcher"), str) else os.path.basename(os.path.dirname(a))
-    out = {"source": f"ops-reports:reports/fetch/{what}/{os.path.basename(a)}", "started": s.get("started")}
+    s = s if isinstance(s, dict) else {}
+    what = s.get("fetcher") if isinstance(s.get("fetcher"), str) and FETCHER_NAME.fullmatch(s["fetcher"]) \
+        else "poll_filings"
+    name = os.path.basename(os.path.abspath(d))
+    started = s.get("started") if isinstance(s.get("started"), str) and STARTED.fullmatch(s["started"]) else None
+    out = {"source": f"ops-reports:reports/fetch/{what}" + (f"/{name}" if STAMP_DIR.fullmatch(name) else ""),
+           "started": started}
     for name in ("listing", "filings"):
         path = os.path.join(d, name + ".json")
         out[name + "_sha256"] = sha256(path) if os.path.isfile(path) else None
@@ -1258,7 +1443,7 @@ def fetch_label(d):
 
 # ------------------------------------------------------------------ the output
 FIELDS = ("n", "n_initial", "invited", "response_rate", "refused_pct", "moe", "pct", "pct_total", "below",
-          "wasted_pct", "undecided_pct", "sampling", "population", "mode", "method", "commissioner")
+          "below_weighted", "wasted_pct", "undecided_pct", "sampling", "population", "mode", "method", "commissioner")
 
 
 def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
@@ -1291,7 +1476,7 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
                 row[k] = f[k]
         if row.get("pct") and not row["seats_equal"]:
             # the shares of a table whose seats are not the poll's (or not known): not this poll's table
-            for k in ("pct", "pct_total", "below", "wasted_pct"):
+            for k in ("pct", "pct_total", "below", "below_weighted", "wasted_pct"):
                 row.pop(k, None)
             row.setdefault("notes", []).append("the filing's seat table is not the poll's (or was not read): its "
                                                "shares are not attached")
@@ -1309,6 +1494,8 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
                 why.remove(w)
                 row.setdefault("notes", []).append(f"{w[len(pre):]}: not kept, the PDF and polls_2026.json say {fn}")
         elif fn and p.get("n"):
+            # not a doubt of the filing: polls_2026.json's n may be another filing's (conflicts) or a typo there
+            row["polls_n"] = p["n"]
             row.setdefault("notes", []).append(f"polls_2026.json's n ({p['n']}) is not the filing's ({fn})")
         row["verified"] = not why
         if f["read"] and why:
@@ -1355,10 +1542,14 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
         "about": "קובצי הדיווח על סקרי הבחירות שהוגשו לוועדת הבחירות המרכזית, מוצמדים לסקרים שבטבלת הסקרים: מספר "
                  "המשיבים, טעות הדגימה, מועדי איסוף הנתונים והאחוזים הגולמיים של כל רשימה. המנדטים והממוצע אינם "
                  "משתנים; שדה src אומר מאין נקרא כל ערך. verified: true רק כשהקובץ עצמו נקרא כאן ונמצאו בו עורך "
-                 "הסקר, מועדי איסוף הנתונים, מספר המשיבים וטבלת מנדטים של 120, התואמים לסקר, לרישום ולקריאות האחרות "
-                 "(מספר משיבים של עד 10% מעל גודל המדגם ההתחלתי מתקבל: פאנל שעבר את המכסה שתוכננה). conflicts: סקר "
-                 "שהקישור שלו בטבלת הסקרים אינו הקובץ שהותאם לו, ו-verdict אומר לפי שני הקבצים איזה מהם שלו; "
-                 "unmatched_filings: קבצים שאין להם סקר בטבלה, ו-class אומר למה",
+                 "הסקר, מועדי איסוף הנתונים (בטווח של עד שבועיים), מספר המשיבים וטבלת מנדטים של 120: טבלת המנדטים "
+                 "היא של הסקר, עורך הסקר הוא של הסקר ושל הרישום, האיסוף הסתיים עד 10 ימים לפני הפרסום, ומספר המשיבים "
+                 "תואם לקריאות האחרות, אינו עולה על מספר המתבקשים ואינו עולה ביותר מ-10% על גודל המדגם ההתחלתי "
+                 "(פאנל שעבר את המכסה שתוכננה). מספר המשיבים שבטבלת הסקרים אינו תנאי: כשהוא שונה משל הקובץ, polls_n "
+                 "ו-notes אומרים זאת. below: הרשימות שמתחת לאחוז החסימה באחוזים גולמיים; below_weighted: כשהקובץ "
+                 "נותן אותן באחוז משוקלל בלבד, ואז wasted_pct חסר. conflicts: סקר שהקישור שלו בטבלת הסקרים אינו הקובץ "
+                 "שהותאם לו, ו-verdict אומר לפי שני הקבצים איזה מהם שלו; unmatched_filings: קבצים שאין להם סקר "
+                 "בטבלה, ו-class אומר למה",
         "source": "ועדת הבחירות המרכזית, מאגר הסקרים לכנסת ה-26 ב-gov.il (" + COLLECTOR + "); עד לקריאת הקבצים מכאן: "
                   "קריאות של צד שלישי (" + ", ".join(sorted(THIRD_PARTY)) + ") כמפורט ב-"
                   "pipeline/reference/poll_filings_index.json",
@@ -1367,6 +1558,7 @@ def build(polls_path=POLLS, ref_path=REF, fetched=(), out_path=OUT):
                    "by_match": {h: sum(1 for r in rows if r["match"] == h) for h in ("seats", "house+date", "source link")},
                    "with_pct": sum(1 for r in rows if r.get("pct")), "with_n": sum(1 for r in rows if r.get("n")),
                    "with_moe": sum(1 for r in rows if r.get("moe")), "verified": sum(1 for r in rows if r["verified"]),
+                   "verified_polls_n_differs": sum(1 for r in rows if r["verified"] and "polls_n" in r),
                    "filings": len(filings), "filings_read": sum(1 for f in filings.values() if f["read"]),
                    "filings_verified": sum(1 for f in filings.values() if not f["doubts"]),
                    "conflicts": {v: sum(1 for c in conflicts if c["verdict"] == v) for v in VERDICTS},
