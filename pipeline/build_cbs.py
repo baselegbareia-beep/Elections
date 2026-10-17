@@ -185,9 +185,9 @@ NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 RID = "{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id"
 
 
-def read_xlsx(path):
-    """First worksheet of an .xlsx as a list of rows (standard library only), and the file's own
-    last-modified stamp (docProps/core.xml)."""
+def read_xlsx(path, sheet=0):
+    """One worksheet of an .xlsx (`sheet`: its index in the workbook or its name; the first by default) as a list
+    of rows (standard library only), and the file's own last-modified stamp (docProps/core.xml)."""
     with zipfile.ZipFile(path) as z:
         names = set(z.namelist())
         shared = []
@@ -195,7 +195,13 @@ def read_xlsx(path):
             for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall("m:si", NS):
                 shared.append("".join(t.text or "" for t in si.iter(f"{{{NS['m']}}}t")))
         wb = ET.fromstring(z.read("xl/workbook.xml"))
-        first = wb.find("m:sheets/m:sheet", NS)
+        sheets = wb.findall("m:sheets/m:sheet", NS)
+        if isinstance(sheet, int):
+            first = sheets[sheet]
+        else:
+            first = next((s for s in sheets if s.get("name") == sheet), None)
+            if first is None:
+                raise ValueError(f"{path}: no sheet {sheet!r} ({[s.get('name') for s in sheets]})")
         rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
         target = next(r.get("Target") for r in rels if r.get("Id") == first.get(RID))
         target = target.lstrip("/")

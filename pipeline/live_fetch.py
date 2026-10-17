@@ -62,6 +62,7 @@ import os
 import random
 import re
 import shutil
+import statistics
 import subprocess
 import sys
 import tempfile
@@ -101,6 +102,10 @@ QUIET_EVERY = 30        # minutes: branch mode publishes a feed with nothing new
 QUIET_AFTER = 60        # minutes: the same from noon the day after the election (the regular count is over)
 HOLD_FOR_TIME = 10      # minutes a new per-station release waits for its sectors_time while the polls are open
 SHRINK_OK = 0.98        # a results file may lose up to 2% of its counted stations (a CEC correction), not more
+GROUP_ELIG_SPREAD = 1.5  # station_turnout: a station group whose register changed more than this either way since 2022
+                         # is another group (arab_turnout.ELIG_SPREAD)
+GROUP_MAX_PACE = 2.0     # station_turnout: a group above this pace is a renumbered or merged station (arab_turnout.MAX_PACE)
+GROUP_MEDIAN_MIN = 20    # station_turnout: whole groups needed for the release's own median register ratio (else E.g)
 HOUR_RE = re.compile(r"^\d{2}:\d{2}$")
 PLACEHOLDER_ELIGIBLE = 7340000   # the pre-election estimate in live_config.json; the CEC's official figure replaces it (LM-B)
 REGISTER_SLACK = 0.99            # while the counted register exceeds the configured one, the share reads this, not "all counted"
@@ -283,26 +288,56 @@ class Election2026:
         self.lists = list(self.meta)
         camp = {j: m["bloc"] for j, m in self.meta.items()}
         self.proj = LM.Projector(self.B, self.lists, mapping, self.g, agreements, prior=prior, camp=camp)
-        # station -> sector for turnout during the day (2022 classification of each station)
+        # station -> sector for turnout during the day (2022 classification of each station group, release_sector)
         b25 = json.load(open(os.path.join(ROOT, "site", "data", "ballots_K25.json"), encoding="utf-8"))
+        # the Arab station groups of mixed cities and Jewish localities: arab_turnout.arab_boxes, the groups of the Arab
+        # section's mixed_arab entries (the box rule, or an Arab-list majority in 2022), so that the day's "mixed" and
+        # the section's mixed-city Arab stations are the same 156 stations; without the module, the box rule alone
+        self.base_stations(b25, core, "K25", AT.arab_boxes(b25) if hasattr(AT, "arab_boxes") else None)
+        # live_config "mixed_area_class": a mixed-city station under a number that was not a 2022 group takes the class
+        # of its CBS 2026 area (pipeline/reference/cbs_stations_2026.json, arab_turnout.area_shares): "mixed" at an
+        # Arab share of half or more; read only while the switch is on
+        self.area_share = AT.area_shares() if hasattr(AT, "area_shares") else {}
+
+    def base_stations(self, b, core, eid, arab=None):
+        """The day's 2022 tables from the ballots file `b` (site/data/ballots_K2x.json) of election `eid` (its parties in
+        core.json give the blocs): station_sector, sector_final, station22, group22 and locality_sector. `arab`: the
+        groups of arab_turnout.arab_boxes (None: the box rule alone). pipeline/test_live.py builds them from an earlier
+        election too, to run station_turnout forward (2021 -> 2022) as it runs on the day (2022 -> 2026)."""
         locsec = {l["code"]: l["sector"] for l in core["localities"]}
         self.station_sector = {}
         self.sector_final = collections.defaultdict(lambda: [0, 0])
         # 2022 per station: final voters and votes by bloc, for turnout pace and the lean-weighted signal
-        el25 = next(e for e in core["elections"] if e["id"] == "K25")
-        bloc25 = {p["id"]: ("coal" if p["bloc"] == "nb" else "arab" if p["bloc"] == "arab" else "opp") for p in el25["parties"]}
-        cols = b25["cols"]
+        el = next(e for e in core["elections"] if e["id"] == eid)
+        bloc = {p["id"]: ("coal" if p["bloc"] == "nb" else "arab" if p["bloc"] == "arab" else "opp") for p in el["parties"]}
+        cols = b["cols"]
         self.station22 = {}
-        for row in b25["rows"]:
+        # 2022 per station group (code, base number: 12, 12.1 and 12.2 are one group, register splits of one place):
+        # (voters, eligible, votes by bloc, sector, sub-stations); the unit of the day's matching (station_turnout)
+        groups = {}
+        by_loc = collections.defaultdict(collections.Counter)
+        for row in b["rows"]:
             code, kalpi, sc, elig, voters = row[0], str(row[1]), row[2], row[3], row[4]
-            sec = station_sector(locsec.get(code, "jewish"), sc)
+            g = (code, kalpi_group(kalpi))
+            sec = station_sector(locsec.get(code, "jewish"), sc, None if arab is None else g in arab)
             self.station_sector[(code, kalpi)] = sec
             self.sector_final[sec][0] += elig
             self.sector_final[sec][1] += voters
             bv = collections.Counter()
             for c, v in zip(cols, row[6:]):
-                bv[bloc25.get(c, "opp")] += v
+                bv[bloc.get(c, "opp")] += v
             self.station22[(code, kalpi)] = (voters, dict(bv), sec)
+            x = groups.setdefault(g, [0, 0, collections.Counter(), sec, 0])
+            x[0] += voters
+            x[1] += elig
+            x[2].update(bv)
+            x[4] += 1
+            by_loc[code][sec] += elig
+        self.group22 = {g: (v, e, dict(bv), sec, n) for g, (v, e, bv, sec, n) in groups.items()}
+        # a station under a number new in 2026: its locality's majority 2022 day-sector by eligible voters (arab, druze;
+        # haredi in Bnei Brak; jewish in the mixed cities), a locality new in 2026 its sector in core.json
+        self.locality_sector = {l["code"]: station_sector(l["sector"], 0, False) for l in core["localities"]}
+        self.locality_sector.update({c: n.most_common(1)[0][0] for c, n in by_loc.items()})
 
     def set_register(self, cfg):
         """The register size from the config, re-read every pass so an edit of `eligible` acts at the next pass."""
@@ -311,16 +346,62 @@ class Election2026:
         self.g = self.proj.g = self.eligible / self.base_elig
 
 
-def station_sector(loc_sector, code):
+def station_sector(loc_sector, code, arab=None):
+    """The day-sector of a 2022 station from its locality's sector and its sector code (ballots_K2x.json sc); `arab`:
+    whether its group is one of arab_turnout.arab_boxes (None: the box rule alone, sc 1)."""
     if loc_sector == "arab":
         return "arab"
     if loc_sector == "druze":
         return "druze"
-    if code % 10 == 1:
+    if (code % 10 == 1) if arab is None else arab:
         return "mixed"       # Arab station in a mixed city or Jewish locality
     if code >= 10:
         return "haredi"
     return "jewish"
+
+
+def kalpi_group(k):
+    """A station's group: its number without the sub-station suffix, '12.1', '12' and '12.0' -> 12 (as
+    arab_turnout.kalpi_base); a number that does not read as one stays as written."""
+    try:
+        return int(float(k))
+    except (TypeError, ValueError):
+        return str(k).strip()
+
+
+def sub_number(k):
+    """A station's sub-station number, read from its text: '12.3' -> 3, '12.10' -> 10, '12' and '12.0' -> 0; None for a
+    number that does not read as one (kalpi_group keeps it as written)."""
+    base, dot, sub = str(k).strip().partition(".")
+    try:
+        int(base)
+        return int(sub) if dot and sub else 0
+    except ValueError:
+        return None
+
+
+def sub_run(subs):
+    """Do a group's listed sub-station numbers (sub_number) run without a gap or a repeat: X alone, X.1..X.k (or X,
+    X.1..X.k)? The CEC numbers a group's sub-stations 1..n (no group of the 2019-2022 files has a gap), so 12.1 and 12.3
+    without 12.2 is a group with a sub-station absent from the release, and a repeat is a row listed twice."""
+    if None in subs:
+        return len(subs) == 1
+    s = sorted(subs)
+    return s[0] in (0, 1) and s == list(range(s[0], s[0] + len(s)))
+
+
+def release_sector(E, code, kalpi):
+    """The day-sector of a station of a 2026 release, for the sector turnout and results.json batch.by_sector: the 2022
+    sector of its group (code, base number; the sub-stations of a group share one), else, for a number not used in
+    2022, its locality's majority 2022 day-sector (E.locality_sector), and with live_config "mixed_area_class" on, a
+    mixed-city number whose CBS 2026 area is Arab by the area prior (share >= 0.5) is "mixed"."""
+    g = (code, kalpi_group(kalpi))
+    x = E.group22.get(g)
+    if x:
+        return x[3]
+    if E.cfg.get("mixed_area_class") and (E.area_share.get(g) or 0) >= 0.5:
+        return "mixed"
+    return E.locality_sector.get(code, "jewish")
 
 
 def poll_prior(polls):
@@ -388,7 +469,7 @@ def results_pass(E, data, out, source_url, history, state, errors, restamp=True)
         for r in rows:
             k = (r["code"], r["kalpi"])
             if k in new:
-                by_sec[E.station_sector.get(k) or E.station_sector.get((r["code"], r["kalpi"].split(".")[0]), "jewish")] += 1
+                by_sec[release_sector(E, r["code"], r["kalpi"])] += 1
                 for j, v in r["votes"].items():
                     camp_v[E.meta.get(j, {}).get("bloc", "opp")] += v
         tv = sum(camp_v.values()) or 1
@@ -626,7 +707,8 @@ def turnout_pass(E, cfg, out, state, status, inputs):
             data = read_source(url)
             sha = hashlib.sha256(data).hexdigest()
             released = release_time(manual, state, sha, election_day, status["errors"])
-            rows, excluded = station_rows(data, cfg.get("column_aliases") or None)
+            dropped = set()                       # rows station_rows left out: their groups stay out of pace
+            rows, excluded = station_rows(data, cfg.get("column_aliases") or None, dropped=dropped)
             if held_for_time(state, sha, closed):
                 # R1: the page keeps the last release until this one has its CEC time (or the hold ends)
                 status["errors"].append(f"turnout: per-station release seen {state.get('station_seen')} held for sectors_time "
@@ -636,7 +718,7 @@ def turnout_pass(E, cfg, out, state, status, inputs):
                     doc["lean"] = old["lean"]
                 write_json(out, "turnout.json", doc)
                 return doc
-            st = station_turnout(E, rows, excluded)
+            st = station_turnout(E, rows, excluded, dropped)
             if st["sectors"]:
                 doc.update({"sectors": st["sectors"], "stations_national": st["national"], "sectors_time": released,
                             "sectors_coverage": st["coverage"], "sectors_excluded": st["excluded"], "sectors_sha256": sha})
@@ -644,7 +726,8 @@ def turnout_pass(E, cfg, out, state, status, inputs):
                 if lean_ok:
                     doc["lean"] = st["lean"]
             # the national turnout of the same rows under the same rule (blank = not reported), see station_turnout
-            arab_pass(rows, st["national"], released, sha, doc, old, state, status["errors"])
+            arab_pass(rows, st["national"], released, sha, doc, old, state, status["errors"],
+                      area_class=bool(cfg.get("mixed_area_class")))
         except Exception as exc:
             doc["station_error"] = f"{exc.__class__.__name__}: {exc}"[:200]
             # the CEC file comes and goes: the last release read stays on the page
@@ -660,7 +743,9 @@ STATION_KEYS = ("sectors", "stations_national", "sectors_time", "sectors_coverag
 # turnout.json "sectors_excluded" {key: stations}: the per-station rows left out, by reason. The keys are part of the
 # contract with the page, which shows each in Hebrew. Out of every sum: "no figure" (blank or '-': not reported yet),
 # "zero voters" (0: not reported yet), "unreadable", "more voters than eligible". In the turnout but out of the pace:
-# "no 2022 match" and "implausible pace" (more than twice the station's 2022 voters, usually a renumbered station).
+# "no 2022 match" (a station group not in 2022, one with a sub-station not reported yet, absent from the release or
+# left out as above, or one whose register is not 2022's) and "implausible pace" (more than twice the group's 2022
+# voters, usually a renumbered station).
 EXCLUDED_KEYS = ("no figure", "zero voters", "unreadable", "more voters than eligible", "no 2022 match", "implausible pace")
 SECTORS_FIT = (10, 180)   # minutes: a sectors_time fits a release first seen up to 10 minutes before it to 3 hours after
 
@@ -743,14 +828,16 @@ def _cell(rec, i):
     return None if s in ("", "-") else float(s.rstrip("%"))
 
 
-def station_rows(data, column_aliases=None):
+def station_rows(data, column_aliases=None, dropped=None):
     """A per-station turnout release -> rows [{"code", "kalpi", "elig" (None without a בזב column), "voters"}]
     and a count of the rows left out, by reason. The CEC format is not known in advance, so columns are
     found by their Hebrew names (as in expb.csv: סמל ישוב, קלפי, בזב, מצביעים, and the variants in
     STATION_COLS), after build_data.HEADER_ALIASES and live_config.json column_aliases ({"their name":
     "expected name"}); the delimiter is a comma, semicolon, tab or '|', whichever the header uses; a file with
     a turnout percentage and no voter count gives voters = percentage x eligible. A blank or '-' voters cell
-    is a station not reported yet: voters None (not 0), as arab_turnout reads it."""
+    is a station not reported yet: voters None (not 0), as arab_turnout reads it. `dropped`, a set from the
+    caller, gets (code, number) of each row left out whose code and number read (an unreadable figure, more voters
+    than eligible): station_turnout leaves its station group out of pace, as one with a blank sub-station."""
     try:
         text = data.decode("utf-8-sig")
     except UnicodeDecodeError:
@@ -771,8 +858,10 @@ def station_rows(data, column_aliases=None):
     for rec in rd:
         if not any(c.strip() for c in rec):
             continue
+        key = None
         try:
             code, kalpi = int(float(rec[ic])), rec[ik].strip()
+            key = (code, kalpi)
             e = _cell(rec, ie)
             elig = int(e) if e is not None else None
             if iv is not None:
@@ -783,23 +872,47 @@ def station_rows(data, column_aliases=None):
                 voters = round(p / 100 * elig) if (p is not None and elig) else None
         except (ValueError, IndexError):
             excluded["unreadable"] += 1
+            if key and dropped is not None:
+                dropped.add(key)
             continue
         if elig and voters and voters > elig * 1.02:
             excluded["more voters than eligible"] += 1
+            if dropped is not None:
+                dropped.add(key)
             continue
         rows.append({"code": code, "kalpi": kalpi, "elig": elig, "voters": voters})
     return rows, excluded
 
 
-def station_turnout(E, rows, excluded=None):
+def station_turnout(E, rows, excluded=None, dropped=()):
     """Per-station turnout rows (station_rows) -> turnout by sector and by 2022 vote. For every sector:
       turnout  = voters so far / eligible, over the stations in the release;
       ratio    = that turnout / the national turnout of the same release;
-      pace     = voters so far / the same stations' final voters in 2022.
-    The lean-weighted signal weights each station's pace by its 2022 votes for each bloc: are the
+      pace     = voters so far / the same station groups' final voters in 2022.
+    A station's sector is its 2022 group's (release_sector: the group of 12, 12.1 and 12.2 is the number 12), and
+    for a number not used in 2022 its locality's majority 2022 day-sector, so a new station of an Arab, Druze or
+    Haredi locality counts there, not as Jewish. The pace compares station groups, not stations: the CEC splits a
+    group's register evenly over X.1..X.n, so the sub-stations are register splits, not places, and a 2026 "12"
+    is the 2022 "12.1, 12.2". A group's pace (its release voters / its 2022 voters) counts only when the release
+    holds all of the group, since a sub-station missing from the sum lowers the group's pace by its share:
+      - every listed sub-station has a figure, none was left out by station_rows (`dropped`) and the listed numbers
+        run without a gap or a repeat (sub_run);
+      - at least as many sub-stations as in 2022 (group22's count), or fewer with eligible counts that show the
+        whole register under them: k of a group's n sub-stations hold k/n of its register, so the release register
+        / 2022's must be nearer the release's median group ratio (`growth`) than k/n of it (at least growth x
+        sqrt(k/n): a merge or a re-split into fewer sub-stations, not n - k of them absent from the file). Without
+        eligible counts the two cannot be told apart, and such a group is out;
+      - its release eligible voters within 1/1.5..1.5 of 2022's (arab_turnout.ELIG_SPREAD; not checked without
+        eligible counts) and a pace of at most 2.0.
+    Otherwise its stations count in the turnout and are left out of pace under "no 2022 match" (a number not used
+    in 2022, a group with a sub-station not reported yet or not in the release, another register under the number)
+    or "implausible pace". `growth` is the median of release / 2022 eligible over the groups listed whole with as
+    many sub-stations as in 2022 or more (at least GROUP_MEDIAN_MIN of them; else E.g, the configured register's).
+    A group listed with as many sub-stations as in 2022 or more cannot show that its last one is missing (12.1..12.3
+    listed where the CEC made 12.1..12.4 in 2026); that case stays open (docs/METHODOLOGY.md, the day's sectors).
+    The lean-weighted signal weights each group's pace by its 2022 votes for each bloc: are the
     stations that voted for the Netanyahu bloc, the Jewish opposition or the Arab lists in 2022
-    turning out faster or slower than then? Stations that cannot be matched to 2022 or whose pace
-    is implausible (>2.0, usually a renumbered station) are left out of pace and counted.
+    turning out faster or slower than then?
     A station with a blank figure or 0 voters has not reported yet: it is left out of every sum, the national
     turnout's numerator and denominator included (arab_turnout's rule, so the "national" returned here is
     the figure arab_section computes from the same rows), and counted under "no figure" / "zero voters"."""
@@ -807,31 +920,56 @@ def station_turnout(E, rows, excluded=None):
     lean = collections.defaultdict(lambda: [0.0, 0.0])           # bloc -> [Σ pace×votes22, Σ votes22]
     nat = {"elig": 0, "voters": 0}
     excluded = collections.Counter(excluded or {})
+    grp = collections.defaultdict(lambda: {"voters": 0, "elig": 0, "stations": 0, "no_elig": False, "blank": False,
+                                           "subs": []})
+    for code, kalpi in dropped or ():             # a row station_rows left out: its group is not whole in the release
+        grp[(code, kalpi_group(kalpi))]["blank"] = True
     for r in rows:
         code, kalpi, voters, elig = r["code"], r["kalpi"], r["voters"], r["elig"] or 0
+        g = grp[(code, kalpi_group(kalpi))]
+        g["subs"].append(sub_number(kalpi))
         if not voters or voters < 0:              # not reported yet (no station had 0 voters in 2022)
             excluded["no figure" if voters is None else "zero voters"] += 1
+            g["blank"] = True
             continue
-        key = (code, kalpi) if (code, kalpi) in E.station22 else (code, kalpi.split(".")[0])
-        sec = E.station_sector.get(key, "jewish")
-        a = agg[sec]
+        a = agg[release_sector(E, code, kalpi)]
         if elig:
             a["elig"] += elig
             a["voters"] += voters
             nat["elig"] += elig
             nat["voters"] += voters
         a["stations"] += 1
-        s22 = E.station22.get(key)
-        if not s22 or not s22[0]:
-            excluded["no 2022 match"] += 1
+        g["voters"] += voters
+        g["elig"] += elig
+        g["stations"] += 1
+        g["no_elig"] = g["no_elig"] or not elig
+    # the groups listed whole by their numbers (whole[key]: as many sub-stations as in 2022 or more), their register
+    # ratio to 2022 where every sub-station has an eligible count, and the release's median ratio
+    whole, ratio = {}, {}
+    for key, g in grp.items():
+        s22 = E.group22.get(key)
+        if g["stations"] and s22 and s22[0] and not g["blank"] and sub_run(g["subs"]):
+            whole[key] = len(g["subs"]) >= s22[4]
+            if not g["no_elig"] and s22[1]:
+                ratio[key] = g["elig"] / s22[1]
+    ref = [x for key, x in ratio.items() if whole[key] and 1 / GROUP_ELIG_SPREAD <= x <= GROUP_ELIG_SPREAD]
+    growth = statistics.median(ref) if len(ref) >= GROUP_MEDIAN_MIN else E.g
+    for key, g in grp.items():
+        if not g["stations"]:
             continue
-        pace = voters / s22[0]
-        if pace > 2.0:
-            excluded["implausible pace"] += 1
+        s22, x = E.group22.get(key), ratio.get(key)
+        if key not in whole or (x is not None and not 1 / GROUP_ELIG_SPREAD <= x <= GROUP_ELIG_SPREAD) or (
+                not whole[key] and (x is None or x < growth * (len(g["subs"]) / s22[4]) ** 0.5)):
+            excluded["no 2022 match"] += g["stations"]
             continue
-        a["now"] += voters
+        pace = g["voters"] / s22[0]
+        if pace > GROUP_MAX_PACE:
+            excluded["implausible pace"] += g["stations"]
+            continue
+        a = agg[s22[3]]
+        a["now"] += g["voters"]
         a["then"] += s22[0]
-        for b, v in s22[1].items():
+        for b, v in s22[2].items():
             lean[b][0] += pace * v
             lean[b][1] += v
     nt = nat["voters"] / nat["elig"] if nat["elig"] else None
@@ -879,14 +1017,15 @@ def history_entry(sec, released):
     return entry
 
 
-def arab_pass(rows, national, released, sha, doc, old, state, errors):
+def arab_pass(rows, national, released, sha, doc, old, state, errors, area_class=False):
     """The Arab-society section (pipeline/arab_turnout.py; ARCH_V3 §2): the official per-station turnout
     by locality, by the list that led there in 2022 (Ra'am / Joint List), by region and by kind, shown
     during voting hours too. It carries no party votes, seats or threshold figures. turnout.json gets
     "arab" (this release, with "seen_he": when the feed first saw its file) and "arab_history" (one
     compact entry per release, history_entry, the last 8, kept in state with the file's SHA-256 so a
     relabelled release replaces its entry). A missing module or base file skips the section; a failure
-    keeps the last one and is reported."""
+    keeps the last one and is reported. area_class: live_config "mixed_area_class", passed on only when on (an
+    arab_section without the argument runs as before with the switch off)."""
     if AT is None or not os.path.exists(ARAB_BASE):
         if AT_ERR:
             errors.append(f"arab: {AT_ERR}"[:200])
@@ -894,7 +1033,8 @@ def arab_pass(rows, national, released, sha, doc, old, state, errors):
     try:
         if "base" not in _arab_base:
             _arab_base["base"] = json.load(open(ARAB_BASE, encoding="utf-8"))
-        sec = AT.arab_section(rows, _arab_base["base"], national_turnout=national, released=released)
+        kw = {"area_class": True} if area_class else {}
+        sec = AT.arab_section(rows, _arab_base["base"], national_turnout=national, released=released, **kw)
         entry = history_entry(sec, released)
     except Exception as exc:
         errors.append(f"arab: {exc.__class__.__name__}: {exc}"[:200])
