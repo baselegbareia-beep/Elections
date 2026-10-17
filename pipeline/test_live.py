@@ -88,7 +88,8 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      deadline stopping part 4 with its city files and a partial summary written) and on a sample catalogue listing
      (taken by name pattern, any case, a subfolder; GEO_MAX files at most; every file not taken named in summary.md);
  11e. the daily poll-table check on the CEC filings build_polls.py attaches (official, corrected, filings): with them
-     and without them a table passes; partial, off gov.il, unknown codes or fields, markup, a seat change do not.
+     and without them a table passes; partial, off gov.il, unknown codes or fields, markup, a seat change do not;
+     on the committed table and on the ones a daily update may build (links fixed upstream, no filings file).
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. Runtime about four minutes."""
@@ -1223,26 +1224,54 @@ def daily_filings(val, good):
     """11e. daily.yml's poll-table check on the CEC filings build_polls.py attaches (val: the validate step, good: the
     committed polls_2026.json): a table with them or without them passes; one with them on some polls only, a
     filing address off gov.il's, a doubt or a corrected field it does not know, markup in a correction, a seat change
-    passed off as a correction, does not."""
+    passed off as a correction, does not. On the committed table and on the tables a daily update may build from it
+    (the health gate must not hang on the data): links fixed upstream for the verified polls, so the only corrected
+    poll is one whose filing is not verified, and a table built without poll_filings_2026.json."""
     print("11e. the daily poll-table check on the CEC filings (official, corrected, filings)")
-    # the committed table as it is; where it has no filings, a corrected or an unverified poll (the daily update's
-    # table, before or after the links are fixed upstream), they are put in
+
+    def fixed_upstream(d):
+        for p in d["polls"]:
+            if p.get("official") and p["official"]["verified"]:
+                p.pop("corrected", None)
+
+    def no_file(d):
+        d.pop("filings", None)
+        for p in d["polls"]:
+            p.pop("official", None)
+            p.pop("corrected", None)
+    for label, fn in (("the committed table", None), ("links fixed upstream for the verified polls", fixed_upstream),
+                      ("built without the filings", no_file)):
+        sample = json.loads(json.dumps(good))
+        if fn:
+            fn(sample)
+        daily_filings_cases(val, label, sample)
+
+
+def daily_filings_cases(val, label, good):
+    """11e on one table (good): the cases, with the filings, a corrected poll with a verified filing and a poll with
+    an unverified one put in where it has none."""
+    # the cases below need i corrected and verified, j unverified, whatever the data
     base = json.loads(json.dumps(good))
     base.setdefault("filings", {"fetched": "2026-10-17",
                                 "collector": "https://www.gov.il/he/departments/dynamiccollectors/knesset_election_polls_26"})
     url = "https://www.gov.il/BlobFolder/dynamiccollectorresultitem/knesset_election{}/he/Survey_{}.pdf"
-    for p in base["polls"]:
+    polls = base["polls"]
+    for p in polls:
         p.setdefault("official", None)
-    if not any(p.get("corrected") for p in base["polls"]):
-        base["polls"][0].update(official={"url": url.format(58, 4130), "item": "knesset_election58", "number": "4130",
-                                          "verified": True, "published": "2026-09-10"},
-                                corrected=[{"field": "n", "old": 601, "new": 600, "why": "another poll's filing"}])
-    if not any(p["official"] and not p["official"]["verified"] for p in base["polls"]):
-        base["polls"][1]["official"] = {"url": url.format(64, 4140), "item": "knesset_election64", "number": "4140",
-                                        "verified": False, "published": None, "doubts": ["seats"],
-                                        "seat_diff": {"Yashar": [22, 21]}}
-    i = next(k for k, p in enumerate(base["polls"]) if p.get("corrected"))
-    j = next(k for k, p in enumerate(base["polls"]) if p["official"] and not p["official"]["verified"])
+    verified = lambda p: bool(p["official"] and p["official"]["verified"])
+    i = next((k for k, p in enumerate(polls) if p.get("corrected") and verified(p)), None)
+    if i is None:
+        i = next((k for k, p in enumerate(polls) if verified(p)), 0)
+        if not verified(polls[i]):
+            polls[i]["official"] = {"url": url.format(58, 4130), "item": "knesset_election58", "number": "4130",
+                                    "verified": True, "published": "2026-09-10"}
+        polls[i]["corrected"] = [{"field": "n", "old": 601, "new": 600, "why": "another poll's filing"}]
+    j = next((k for k, p in enumerate(polls) if p["official"] and not p["official"]["verified"]), None)
+    if j is None:
+        j = 1 if i != 1 else 0
+        polls[j]["official"] = {"url": url.format(64, 4140), "item": "knesset_election64", "number": "4140",
+                                "verified": False, "published": None, "doubts": ["seats"],
+                                "seat_diff": {"Yashar": [22, 21]}}
 
     def table(fn):
         d = json.loads(json.dumps(base))
@@ -1277,7 +1306,7 @@ def daily_filings(val, good):
     for what, (t, code) in tables.items():
         p = write(os.path.join(TMP, "wf", "polls_filings_check.json"), json.dumps(t, ensure_ascii=False))
         rc, _, log = run_block(val, {"POLLS": p}, ROOT)
-        check(rc == code, f"daily poll-table check, {what}: exit {rc} (want {code}) "
+        check(rc == code, f"daily poll-table check ({label}), {what}: exit {rc} (want {code}) "
                           f"{log.strip().splitlines()[-1][:120] if log.strip() else ''}")
 
 

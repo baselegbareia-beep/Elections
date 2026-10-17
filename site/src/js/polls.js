@@ -229,7 +229,7 @@ function filingMark(q) {
   if (!S.polls.filings || (!o && q.filing)) return q.filing ? `<a href="${esc(q.filing)}" target="_blank" rel="noopener" title="${t('קובץ הדיווח לוועדת הבחירות')}">⎙</a>` : '';
   if (!o) {
     const s = t('לא נמצא קובץ דיווח לוועדת הבחירות לסקר זה');
-    return `<span class="fmark none" title="${esc(s)}"><span aria-hidden="true">—</span><span class="vh">${esc(s)}</span></span>`;
+    return `<span class="fmark none" role="img" title="${esc(s)}" aria-label="${esc(s)}">—</span>`;
   }
   const s = (o.verified ? t('אומת מול קובץ הדיווח לוועדת הבחירות')
     : t('נמצא קובץ דיווח לוועדת הבחירות, אך הסקר לא אומת מולו: {why}', { why: filingDoubts(o) }))
