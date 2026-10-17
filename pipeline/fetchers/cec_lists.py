@@ -272,13 +272,16 @@ class Fetcher:
         gap = self.gaps.get(key)
         if not gap:
             return True
-        with self.lock:
-            at = max(time.monotonic(), self.next_at.get(key, 0.0))
-            if at >= self.stop_at:
-                return False
-            self.next_at[key] = at + gap
-        time.sleep(max(0.0, at - time.monotonic()))
-        return True
+        while True:    # the turn is taken when it comes, not reserved ahead: a thread that wakes late keeps the gap
+            with self.lock:
+                now = time.monotonic()
+                at = max(now, self.next_at.get(key, 0.0))
+                if at >= self.stop_at:
+                    return False
+                if at <= now:
+                    self.next_at[key] = now + gap
+                    return True
+            time.sleep(at - now)
 
     def get(self, url, headers=None, why="", allow=None, hops=MAX_HOPS):
         """One request: the entry (also kept in self.entries) and the body (None when nothing usable came). A redirect
