@@ -7,17 +7,27 @@ Self-contained (no network): a temporary folder, a local stand-in for gov.il and
   1. reading a filing's text: the pdftotext -layout rendering of an RTL filing (value cells left of their labels,
      the bidi marks pdftotext writes), a narrative template, a trend table that must be refused, list labels as
      pollsters type them, dates (ranges, two-digit years, gov.il's UTC midnights);
+  1b. excerpts of the real filings fetched on 16.10.2026, a few lines each and four seat tables whole: Hebrew month
+     names, a range's day moved by the layout, Direct Polls' table with no total and a share written twice, Maagar
+     Mochot's weeks side by side, Tatika's running text and its seats beside a count of respondents, Channel 13's
+     July table that must be refused, labels alone on their line (and a footnote that only starts with one),
+     Channel 13's sub-samples, a text value cut in two, Next Data's labels wrapped over lines and its lists below
+     the threshold in a table of their own (raw or weighted), a count glued to a bracket, the houses' Latin names
+     and in running text, sector polls;
   2. the same filing as a PDF whose glyphs stand in visual order (as an RTL PDF stores them), read with pdftotext
      (skipped when this machine has none);
   3. the builder: polls matched by their seats, by house and date, and by the link they carry; a filing read here
      wins over the third parties and is marked verified; shares never attached to a table that is not the poll's;
      polls_2026.json byte for byte unchanged and no seat in the output; a fetch's paths that leave it ignored;
-     the same input, the same output;
+     the same input, the same output, the fetch named as ops-reports names it (no local path, whatever its
+     directory or summary.json say); the rules on the real cases: respondents over the initial sample (up to
+     10%), fieldwork dates with a typo, the five conflicts with polls_2026.json's links, the classes of the
+     filings no poll has;
   4. the fetcher against the stand-in: the template id from the collector page, the listing paged, PDFs saved,
      a 404 and a challenge page recorded, addresses from third parties taken only in the filing form, a listing
      that is refused falling back on the indexes and a bounded probe; summary.json and summary.md written.
 
-The fixtures are constructed. Their format: the field labels the three templates read by
+The fixtures of 1, 2 and 3 are constructed (those of 1b are not). Their format: the field labels the three templates read by
 amitlev/israel-polls-2026 use (.github/scripts/lib/govil-pdf-parser.mjs, LABEL_ALIASES and ALL_LABELS), the main
 table as its README quotes Kantar's filing of 9.9.2026 ("תחזית המנדטים / מנדטים / אחוזים (נתונים גולמיים)", rows
 "<list> בראשות <leader>  <seats>  <share>%", lists below the threshold with a share only, a "סה"כ" row); the values
@@ -260,6 +270,342 @@ def test_text():
           "a sampling error below the minimum for its n is a misreading, not kept")
 
 
+# ---------------------------------------------------------------- 1b. the real filings
+# Excerpts of the filings fetched on 16.10.2026 (pdftotext -layout, the bidi marks it adds taken out; the item
+# each comes from named): a few lines each, and the seat tables of three templates whole, the readings each rule
+# was written for.
+KANTAR_FW = ("         2בספטמבר ( 3 – )15:40בספטמבר ()08:30                                      "
+             "תאריכי ושעות ביצוע הסקר")                                          # knesset_election53
+DIRECT = """\
+           חדשות המזרח התיכון  24Iבע״מ               שם הגוף שהזמין את הסקר
+    דיירקט פולס בע"מ בראשות צוריאל שרון                 הגורם שערך את הסקר
+   17בספטמבר  ,2026בין השעות 9:00-14:00                    תאריכי ביצוע הסקר
+                                   8,550   מס' האנשים שהתבקשו להשתתף בסקר
+                                    500                 גודל המדגם ההתחלתי
+                              525נדגמים      מס' האנשים שהשתתפו בסקר בפועל
+               -+4.2%בהסתברות של 95%                              מרווח טעות
+     1.אילו הבחירות לכנסת היו מתקיימות היום ,למי הייתם מצביעים?
+ %גולמי                מנדטים                   מפלגה
+ 21.6%                    27                    הליכוד
+ 17.0%                    21                     ישר
+ 8.0%                     10                  הדמוקרטים
+ 7.4%                     9                      ביחד
+ 6.4%                     8                  ישראל ביתנו
+ 6.1%                     8                  יהדות התורה
+ 5.7%                     7                  עוצמה יהודית
+ 5.4%                     7               הרשימה המשותפת
+ 5.3%                     7                      ש"ס
+ 5.2%                     6              הציונות הדתית וזהות
+ 4.2%                     5                      רע"ם
+ 3.7%                     5                   עמך ישראל
+ 2.2%                    2.2%               המילואימניקים
+                                              והכלכלית
+     נדגמו וקיבלו מתחת ל :1%-צבע שחור ,הציבור החרדי ,אח"י ,כחול לבן
+"""                                                                              # knesset_election80
+MAAGAR = """\
+              )7:00-12:00( 29.9.26                   התאריכים והשעות בהם בוצע הסקר
+                    מנדטים                              אחוזים
+                                            בעלי        גולמיים
+                                                                                                 התשובות
+    9.9.26   16.9.26 24.9.26 29.9.26        הדעה      ללא שקלול
+                                                        מנדטים
+     23        21        23         21       17%         16%                     "ישר!" בראשות גדי איזנקוט
+     20        18        19         19       16%         15%                   הליכוד בראשות בנימין נתניהו
+      16       16        13         14       12%         11%                     "ביחד" בראשות נפתלי בנט
+      9        9             9       8        7%         7%            עוצמה יהודית בראשות איתמר בן גביר
+      9        9             8       8        6%         6%                         ש"ס בראשות אריה דרעי
+      9        9             8       9        8%         7%                    הדמוקרטים בראשות יאיר גולן
+      7        7             7       7        6%         6%                 יהדות התורה בראשות יעקב אשר
+      7        7             8       7        5%         5%             ישראל ביתנו בראשות אביגדור ליברמן
+                                                                   הרשימה המשותפת בראשות פרופ' יוסף
+      7        6             7       7        6%         5%
+                                                                                              ג׳בארין
+      5        5             5       5        4%         4%                      רע"מ בראשות מנסור עבאס
+                                                                   הציונות הדתית  +זהות ,בראשות בצלאל
+      4        5             5       6        5%         5%
+                                                                                             סמוטריץ'
+      4        4             4       5        4%         4%                  עמך ישראל בראשות עופר וינטר
+                                                                          המילואימניקים והכלכלית בראשות
+     2.2       4             4       4       3.3%        3%
+                                                                                     יועז הנדל וירון זליכה
+     1.2      0.9        1.1        0.5      0.4%        0.4%                      כחול לבן בראשות בני גנץ
+     0.9       1.4       0.5        0.8      0.6%        0.6%           "הציבור החרדי" בראשות מוטי לייטנר
+      -         -            -       -         -         0.8%                               מפלגות אחרות
+      -         -            -       -         -         4%                                      לא יודע/ת
+     120      120        120        120     100%        100%                                         סה"כ
+"""                                                                              # knesset_election88
+MAAGAR_SEATS = {"Yashar": 21, "Likud": 19, "Together": 14, "Otzma Yehudit": 8, "Shas": 8, "The Democrats": 9, "UTJ": 7,
+                "Yisrael Beiteinu": 7, "Joint List": 7, "Ra'am": 5, "Religious Zionism": 6, "Amcha Yisrael": 5,
+                "Reservists": 4}
+TATIKA = """\
+                  הסקר נערך בתאריכים ה 12/8-בשעה  10:00עד ה 13/8-בשעה ,13:00השיבו לו  500משיבים ,סטיית תקן 4.4%
+                    100%             500                                   סה"כ
+                                               אם הבחירות היו מתקיימות היום ,וכל
+                                           המפלגות הקיימות היו מתמודדות בנפרד,
+                                                               למי היית מצביע/ה?
+חלוקת מנדטים   אחוז משיבים   מספר משיבים
+          25       19.20%             96                ישר בראשות גדי אייזנקוט
+          21       16.00%             80                                   הליכוד
+          13       10.20%             51                ביחד בראשות נפתלי בנט
+          11        9.00%             45                             ישראל ביתנו
+           9        6.80%             34                               הדמוקרטים
+           8        6.40%             32                             יהדות התורה
+           8        6.40%             32                                     ש"ס
+           7        5.60%             28                            עוצמה יהודית
+           6        5.20%             26                        חד"ש תע"ל בל״ד
+                        6                     4.60%                        23                              הציונות הדתית
+                        6                     4.60%                        23                                        רע"ם
+                   לא עבר                     3.00%                        15       בית ציוני בהובלת יועז הנדל וחילי טרופר
+                   לא עבר                     2.00%                        10           כחול לבן בהובלת בני גנץ ודדי שמחי
+"""                                                                              # knesset_election16
+CH13_JULY = """\
+ אחוזים גולמיים לא   אחוזים גולמיים לא       תוצאות סקר נוכחי:             שם המפלגה
+  משוקללים  -מגזר     משוקללים  -מגזר                   מנדטים
+              ערבי                יהודי
+             0.57%                1.4%                       23                 כחול לבן
+             2.18%               10.7%                       23                    ליכוד
+             0.00%                7.8%                       13                     ש"ס
+             0.00%                4.4%                       10           הציונות הדתית
+             0.00%               15.1%                        9            יהדות התורה
+             2.03%                6.0%                        7             ישראל ביתנו
+            25.94%                0.0%                        8                    רע"מ
+            23.90%                0.0%                        9              חד"ש-תע"ל
+            12.58%                0.0%                        4                    בל"ד
+             0.00%                4.8%                        4            עוצמה יהודית
+             8.29%                5.4%                        5              הדמוקרטים
+                                                              5
+             0.21%                7.0%                                            ביחד
+             2.90%               12.7%                                              ישר
+             0.00%                2.3%                                     יסודות ישראל
+"""                                                                              # knesset_election1
+CH13 = """\
+                                                 15.9.2026בשעה  9:00עד  16.9.2026בשעה 9:00                  מועד איסוף נתונים
+                                                                                          8,097         גודל המדגם ההתחלתי
+ ( 1,023לחישוב המנדטים נכללו  886משיבים –  137משיבים חרדים ולא יהודים מהמדגם הכללי הוצאו
+                                                                                                        מספר המשיבים בפועל
+                                             כדי למנוע ספירה כפולה עם מדגם החרדים והערבים)
+                                                                                          3.1%          טעות הדגימה המקרית
+"""                                                                              # knesset_election75
+CH13_ROW = "              29.5%            0.0%              0.0%              0.2%                6                                 רע\"מ"
+AFKAR = """\
+                     אפקאר מחקר וידע בראשות ד"ר הישאם ג'ובראן                 עורך הסקר
+         מתאריך  27-8-2026שעה  15:30עד  1-9-2026שעה14:51 :             מועד איסוף נתונים
+         מדגם מייצג של כלל האוכלוסיה הערבית בישראל בגילאי +18           אוכלוסיית המדגם
+                                                              800      גודל מדגם התחלתי
+                          333( 815אינטרנטי ו 482 -תשאול טלפוני)      מספר משיבים בפועל
+                                                           +_3.4%   טעות הדגימה המקרית
+"""                                                                              # knesset_election55
+
+# Channel 13's sub-samples, each with its count of those asked and its own response rate, and the footnote that
+# starts with the label 'שיעור ההיענות' (knesset_election101); one sub-sample with no count (knesset_election86)
+CH13_SUBS = """\
+מדגם בוגרים יהודים -  4,478מתבקשים להשיב ,שיעור היענות  ,32.6%שיעור משיבים תקינים 13.5%
+                                                        ( 603שאלונים תקינים 23 ,השיבו חלקית)
+    מדגם צעירים -  1,642מתבקשים להשיב ,שיעור היענות  ,8.4%שיעור משיבים תקינים 60( 3.6%
+ מדגם חרדים -  3,135מתבקשים להשיב ,שיעור היענות  ,15.9%שיעור משיבים תקינים 500( 15.9%
+                                                                              שאלונים תקינים)      מספר המתבקשים להשתתף
+ מדגם ערבים -  439מתבקשים להשיב ,שיעור היענות  230( 52.4%משיבים) ,שיעור משיבים תקינים
+                                                                   100( 22.8%שאלונים מלאים)
+ שיעור ההיענות כולל את כל מי שניגש לשאלון :מי שהשיב בפועל ,מי שהתחיל וסונן ,מי שהתחיל ולא
+ סיים ,ומי שניסה להשיב לאחר סגירת המכסה או סיום האיסוף .שיעור המשיבים התקינים הוא מספר
+                                                                                        9,694           גודל המדגם ההתחלתי
+"""                                                                              # knesset_election101
+CH13_NO_COUNT = """\
+    מדגם חרדים אינטרנטי -  1,899מתבקשים להשיב ,שיעור היענות  ,15.4%שיעור משיבים
+                           תקינים  293( 15.4%שאלונים תקינים)
+                        מדגם חרדים טלפוני -  220משיבים תקינים
+ מדגם ערבים -  170מתבקשים להשיב ,שיעור היענות  ,58.8%שיעור משיבים תקינים ( 58.8%
+"""                                                                              # knesset_election86
+CH13_MODE = """\
+  תשאול משולב -  1,119נשאלים ,מהם  898מהאוכלוסייה היהודית בסקר אינטרנטי ו-
+                                        221מהאוכלוסייה הלא יהודית בתשאול טלפוני      שיטת איסוף הנתונים
+                                     דגימת שכבות עם דגימה אקראית בתוך השכבות               שיטת הדגימה
+"""                                                                              # knesset_election64
+# Next Data's labels wrapped over two or three lines in their column, the value on one of them
+NEXT_DATA = """\
+                                                                          מספר האנשים
+                                 14,970איש                                שהתבקשו להשתתף
+                                                                          בסקר
+                                                                           גודל המדגם
+                                 2,200איש
+                                                                          ההתחלתי
+    2,145נדגמים בוגרים (בני  ,)+18המהווים מדגם מייצג של אוכלוסיית אזרחי
+                                                                          מספר המשיבים
+                          ישראל הרשאים לבחור
+                                  14.7%                                   שיעור ההיענות לסקר
+                                                                           שיעור האנשים שלא
+                                  85.3%
+                                                                          השתתפו
+"""                                                                              # knesset_election91
+# Next Data's seat table, then the lists below the threshold in a table of their own
+NEXT_DATA_TABLE = """\
+        אחוז גולמי*              מנדטים                                                          רשימה
+               24%                     31                                    הליכוד בראשות בנימין נתניהו
+               17%                     22                                        ישר בראשות גדי איזנקוט
+                8%                     10                                         ש"ס בראשות אריה דרעי
+                6%                      8                     הציונות הדתית בראשות בצלאל סמוטריץ' וזהות
+                6%                      8                                    הדמוקרטים בראשות יאיר גולן
+                6%                      8                             עוצמה יהודית בראשות איתמר בן גביר
+                5%                      7                                                   יהדות התורה
+                5%                      7                                         יחד בראשות נפתלי בנט
+                5%                      7                             ישראל ביתנו בראשות אביגדור ליברמן
+                5%                      6                                      רע"מ בראשות מנסור עבאס
+                5%                      6                                              חד"ש-תע"ל-בל"ד
+               92%                   120                                                          סה"כ
+                3%                                                                           לא החליטו
+        * אינו לוקח בחשבון פיצוח מתלבטים וחישובי בדר-עופר; יתרת האחוזים מתחלקת בין המפלגות שמתחת
+                                                                                       לחסימה.
+                                                מפלגות שלא עברו את אחוז החסימה (מתחת ל)3.25%-
+              אחוז גולמי                                                                         רשימה
+                      2.1%                                                 עמך ישראל בראשות עופר וינטר
+                      1.6%                                    המילואימניקים והכלכלית בראשות הנדל וזליכה
+                      0.2%                                                       כחול לבן בראשות בני גנץ
+                      0.1%                                                                 הציבור החרדי
+                                              עמוד  2מתוך 4
+"""                                                                              # knesset_election66
+NEXT_DATA_WEIGHTED = """\
+                                                מפלגות שלא עברו את אחוז החסימה (מתחת ל)3.25%-
+           אחוז משוקלל                                                                           רשימה
+                      2.9%                                                 עמך ישראל בראשות עופר וינטר
+                      0.9%                                                 נועם לישראל בראשות אבי מעוז
+                                              עמוד  2מתוך 8
+"""                                                                              # knesset_election108
+
+
+def test_real():
+    print("1b. the real filings (excerpts)")
+    v, _ = B.find_field(KANTAR_FW.splitlines(), "fieldwork")
+    check(v and [d.isoformat() for d in v] == ["2026-09-02", "2026-09-03"],
+          f"Kantar: '2בספטמבר ( 3 – )15:40בספטמבר': a Hebrew month, the second day moved by the layout ({v})")
+    p = B.parse_filing(DIRECT)
+    check(B.house_of(p.get("pollster") or "") == "direct-polls" and (p.get("fieldwork_start"), p.get("fieldwork_end"))
+          == ("2026-09-17", "2026-09-17") and p.get("n") == 525 and p.get("n_initial") == 500 and p.get("moe") == 4.2,
+          f"Direct Polls: '17בספטמבר ,2026', '525נדגמים', 'מרווח טעות' ({p.get('fieldwork_end')}, {p.get('n')}, "
+          f"{p.get('moe')})")
+    check(p.get("seats_total") == 120 and p.get("seats", {}).get("Likud") == 27 and p.get("seats", {}).get("Yashar") == 21
+          and "Reservists" not in p.get("seats", {}) and p.get("pct", {}).get("Reservists") == 2.2,
+          "Direct Polls: no total row; 'ישר' alone is Yashar; '2.2%  2.2%' is one share below the threshold, no seats")
+    p = B.parse_filing(MAAGAR)
+    check(p.get("seats") == MAAGAR_SEATS and p.get("fieldwork_end") == "2026-09-29",
+          "Maagar Mochot: four weeks side by side, the seats of the week dated the fieldwork (29.9.26), a row's "
+          f"cells moved by the layout ('9  9  9  8') read in the header's order ({B.seat_diff(MAAGAR_SEATS, p.get('seats'))})")
+    check(p.get("pct", {}).get("Yashar") == 16 and p.get("pct", {}).get("Otzma Yehudit") == 7
+          and p.get("undecided_pct") == 4 and p.get("pct", {}).get("National Unity") == 0.4,
+          "Maagar Mochot: the raw share is the column 'גולמיים ללא שקלול', not that of those with an opinion; "
+          "'-' and fractions in the seats column are no seats")
+    check("seats" not in B.parse_filing(MAAGAR.split("\n", 1)[1]),
+          "Maagar Mochot: the same table with its fieldwork unknown is not read (which week is the poll's?)")
+    p = B.parse_filing(TATIKA)
+    check((p.get("fieldwork_start"), p.get("fieldwork_end")) == ("2026-08-12", "2026-08-13") and p.get("n") == 500
+          and p.get("moe") == 4.4, f"Tatika's running text: '12/8' to '13/8' (no year), '500משיבים', 'סטיית תקן 4.4%' "
+                                   f"({p.get('fieldwork_start')}..{p.get('fieldwork_end')}, {p.get('n')})")
+    check(p.get("seats_total") == 120 and p.get("seats", {}).get("Ra'am") == 6 and "Reservists" not in p.get("seats", {})
+          and p.get("pct", {}).get("Reservists") == 3.0,
+          "Tatika: seats, share and a count of respondents side by side, the last rows at another scale, 'לא עבר'")
+    check("seats" not in B.parse_filing(CH13_JULY),
+          "Channel 13's July layout: a seats figure alone on a line, the column out of step with the names: not read")
+    p = B.parse_filing(CH13)
+    check(p.get("n") == 1023 and p.get("moe") == 3.1 and p.get("n_initial") == 8097
+          and (p.get("fieldwork_start"), p.get("fieldwork_end")) == ("2026-09-15", "2026-09-16"),
+          f"Channel 13: 'מועד איסוף נתונים', 'מספר המשיבים בפועל' alone on its line, its value wrapped around it "
+          f"({p.get('n')}, {p.get('fieldwork_start')}..{p.get('fieldwork_end')})")
+    r = B.table_rows([CH13_ROW])[0]
+    check(B.resolve(r) == (6, None, False), "Channel 13: one seats figure beside four sub-samples' shares: the seats, "
+                                            "no share")
+    p = B.parse_filing(CH13_SUBS)
+    check(p.get("invited") == 9694 == p.get("n_initial") and "response_rate" not in p and p.get("subsamples") == 4,
+          f"Channel 13: those asked the sum of four sub-samples' 'מתבקשים להשיב'; each has its own response rate, so "
+          f"none of the whole ({p.get('invited')}, {p.get('response_rate')})")
+    check(B.find_field(CH13_SUBS.splitlines()[6:9], "response_rate") == (None, None),
+          "a footnote that starts with the label ('שיעור ההיענות כולל את כל מי...') is no label alone on its line: "
+          "the figure on the next line is not its value")
+    p = B.parse_filing(CH13_NO_COUNT)
+    check("invited" not in p and "response_rate" not in p and p.get("subsamples") == 3
+          and any("states no count" in n for n in p.get("notes", [])),
+          "Channel 13: a sub-sample with no count of those asked ('מדגם חרדים טלפוני - 220משיבים'): no total given")
+    p = B.parse_filing(CH13_MODE)
+    check(p.get("mode", "").startswith("תשאול משולב") and p["mode"].endswith("בתשאול טלפוני")
+          and p.get("sampling") == "דגימת שכבות עם דגימה אקראית בתוך השכבות",
+          f"a text value cut after 'ו-': its first half from the line above ({p.get('mode', '')[:30]}...)")
+    p = B.parse_filing(NEXT_DATA)
+    got = {k: p.get(k) for k in ("invited", "n_initial", "n", "response_rate", "refused_pct")}
+    check(got == {"invited": 14970, "n_initial": 2200, "n": 2145, "response_rate": 14.7, "refused_pct": 85.3},
+          f"Next Data: labels wrapped over two or three lines, the value on one of them ({got})")
+    p = B.parse_filing(NEXT_DATA_TABLE)
+    check(p.get("seats_total") == 120 and p.get("pct", {}).get("Amcha Yisrael") == 2.1
+          and p.get("pct", {}).get("Reservists") == 1.6 and p.get("wasted_pct") == 4.0 and len(p.get("below", [])) == 4
+          and p.get("pct_total") == 96.0 and p.get("undecided_pct") == 3,
+          f"Next Data: the lists below the threshold from their own table after the seat table ({p.get('wasted_pct')}, "
+          f"{p.get('pct_total')})")
+    kind, rows = B.below_table(NEXT_DATA_WEIGHTED.splitlines(), 0)
+    p = B.parse_filing(NEXT_DATA_TABLE.split("                                                מפלגות")[0]
+                       + NEXT_DATA_WEIGHTED)
+    check(kind == "weighted" and len(rows) == 2 and "below" not in p and p.get("wasted_pct") is None
+          and len(p.get("below_weighted", [])) == 2 and "Amcha Yisrael" not in p.get("pct", {}),
+          "... given in weighted shares ('אחוז משוקלל'): kept apart, not raw shares, the share below it unknown")
+    p = B.parse_filing("איסוף הנתונים :הנתונים נאספו בידי חברת  Next Dataבאמצעות מערכת דיגיטלית אינטרנטית לאיסוף "
+                       "נתונים.")                                                 # knesset_election21
+    check(B.house_of(p.get("pollster") or "") == "filber" and p.get("mode", "").endswith("לאיסוף נתונים."),
+          f"Next Data named in running text ('הנתונים נאספו בידי חברת Next Data'), no editor's label ({p.get('pollster')})")
+    p = B.parse_filing(AFKAR)
+    check(p.get("n") == 815 and p.get("n_initial") == 800 and p.get("moe") == 3.4 and B.house_of(p["pollster"]) == "afkar"
+          and (p.get("fieldwork_start"), p.get("fieldwork_end")) == ("2026-08-27", "2026-09-01")
+          and p.get("sector") == "האוכלוסיה הערבית",
+          f"Afkar: '333( 815... 482': the total its parts add up to; '27-8-2026'; a poll of the Arab public "
+          f"({p.get('n')}, {p.get('fieldwork_end')}, {p.get('sector')})")
+    houses = {"חברת  ,Next Dataהמנופים  ,1הרצליה                עורך הסקר": "filber",            # knesset_election68
+              "מכון  ,DRIבוסתנאי  ,43רמת השרון                                     עורך הסקר": "dri",  # knesset_election59
+              "     מרכז אקורד ,חוצות שפיים ,באמצעות חברת  iPanelבר כוכבא , 21בני       עורך הסקר ומענו": "accord"}
+    bad = {k[:20]: B.house_of(B.parse_filing(k).get("pollster") or "") for k, v in houses.items()
+           if B.house_of(B.parse_filing(k).get("pollster") or "") != v}
+    check(not bad, f"houses as the PDFs name them: 'Next Data' and 'DRI' glued to Hebrew, 'עורך הסקר ומענו' {bad}")
+    lines = {"                                                                   תאריך ביצוע הסקר4.8.2026–3 :":
+             ("2026-08-03", "2026-08-04"),                                       # knesset_election21
+             "                    25-26.8.26\n                 1400-2400 :25/7                      התאריכים והשעות "
+             "בהם בוצע הסקר\n                 0800-1300 :26/8": ("2026-08-25", "2026-08-26"),  # knesset_election38
+             "תאריך הביצוע 27 :ביולי  N = 656 | 2026משיבים מתוך  4982נמענים שאליהם נשלח הסקר המגדירים":
+             ("2026-07-27", "2026-07-27")}                                       # knesset_election26
+    bad = {k.strip()[:24]: (p.get("fieldwork_start"), p.get("fieldwork_end")) for k, v in lines.items()
+           for p in [B.parse_filing(k)] if (p.get("fieldwork_start"), p.get("fieldwork_end")) != v}
+    check(not bad, f"fieldwork: a range's first day moved after the date, the lines around a typo, '27 :ביולי' {bad}")
+    p = B.parse_filing("                 1600-2400 1/8\n                                                      התאריכים "
+                       "והשעות בהם בוצע הסקר\n                 0700-1500 2/9")   # knesset_election48
+    check(p.get("fieldwork_start") == "2026-08-01" and any("typo" in n for n in p.get("notes", [])),
+          "fieldwork '1/8' to '2/9' kept as written, with a note: over two weeks")
+    p = B.parse_filing("       משיבים 588 :נדגמים בוגרים (בני  )+18המהווים מדגם מייצג של האוכלוסייה הכללית של אזרחי "
+                       "ישראל.")                                                  # knesset_election21
+    check(p.get("n") == 588 and B.parse_filing(                                  # knesset_election26"סקר בוחרי הימין בישראל\nקבוצה  – 1בוחרי הליכוד 387 :משיבים ( 59%מהמדגם).\n"
+                                               "תאריך הביצוע 27 :ביולי  N = 656 | 2026משיבים מתוך  4982נמענים").get("n")
+          == 656, "respondents in running text: 'משיבים 588 :נדגמים'; 'N = 656' before a sub-group's count, never "
+                  "the year glued to the word ('2026משיבים')")
+    p = B.parse_filing("                                                        237( 21.4%שאלונים תקינים)       מספר "
+                       "המתבקשים")                                                # knesset_election64
+    check("invited" not in p, "a count glued to a bracket, a piece of a wrapped sentence ('237( 21.4%...'), is no count")
+    pops = {"מדגם ארצי מייצג של ליברלים ,בגילאי +18": "ליברלים", "מדגם ארצי מייצג של בני 18-22": "בני 18-22",
+            "אזרחי ישראל יהודים שאינם חרדים ,בגילאי ( 34–22חילונים ,מסורתיים": "שאינם חרדים",
+            "מדגם ארצי ומייצג של האוכלוסייה בישראל בגילאי +18 (יהודים וערבים)": None,
+            "מדגם מייצג של אזרחי ישראל מגיל  18ומעלה ,יהודים וערבים כאחד": None}
+    bad = {k[:30]: B.sector_of(k, []) for k, v in pops.items() if B.sector_of(k, []) != v}
+    check(not bad, f"a sector poll by its population (Dialog's, Accord's), not a national one (Kantar's, Lazar's) {bad}")
+    labels = {"רשימה ערבית משותפת של חדש תעל ובלד בראשות יוסף גאברין": "Joint List", "רעמ בראשות דר מנסור עבאס": "Ra'am",
+              "ישר": "Yashar", "ישראל ביתנו": "Yisrael Beiteinu", "מפלגת ימין חדשה בראשות עופר וינטר": "Amcha Yisrael"}
+    bad = {k: B.party_id(k) for k, v in labels.items() if B.party_id(k) != v}
+    check(not bad, f"Lazar's and Direct Polls' list names {bad}")
+    total = B.table_rows(["       1.1%          0                    כחול לבן בראשות בני גנץ",
+                          "     100.0%         120"])[-1]                       # knesset_election67
+    check(B.is_total(total["label"]) and not total.get("orphan"), "Lazar: a total row of numbers only ('100.0%  120')")
+    # Maagar Mochot's of 3.9.2026 (knesset_election48): what the lists below the threshold would win without it
+    res = [(20, 15.0, False), (19, 14.0, False), (18, 13.0, False), (10, 7.0, False), (9, 6.0, False), (9, 7.0, False),
+           (7, 5.0, False), (7, 5.0, False), (7, 5.0, False), (5, 4.0, False), (5, 4.0, False), (4, 3.0, False),
+           (3, 2.0, False), (None, None, False), (None, None, False), (1, 1.0, False), (1, 1.0, False),
+           (None, 1.0, False), (None, 4.0, False)]
+    out = B.below_threshold(res)
+    check(sum(x[0] or 0 for x in out) == 120 and out[12][0] == 0 and out[11][0] == 4,
+          "seats past 120 given to lists under 3.25% ('הבית הציוני  3  2%'): no seats")
+    check(B.below_threshold(res[:12] + [(3, 4.0, False)]) == res[:12] + [(3, 4.0, False)],
+          "but not to a list over the threshold: such a table is not read")
+
+
 # ---------------------------------------------------------------- 2. the PDF path
 def test_pdf(tmp):
     print("2. a PDF read with pdftotext")
@@ -348,6 +694,25 @@ def test_builder(tmp, pdf_path):
     out2 = os.path.join(tmp, "b", "out2.json")
     B.build(polls_path, ref_path, [fetched], out2)
     check(open(out1, "rb").read() == open(out2, "rb").read(), "the same input, the same output")
+    lab = doc["inputs"]["fetched"][0]
+    check(lab["source"].startswith("ops-reports:reports/fetch/") and tmp not in open(out1, encoding="utf-8").read()
+          and lab["listing_sha256"] == B.sha256(os.path.join(fetched, "listing.json")),
+          f"the fetch recorded as ops-reports names it, with its listing's SHA-256, no local path in the file ({lab})")
+    check(lab["source"] == "ops-reports:reports/fetch/poll_filings" and lab["started"] is None,
+          f"... a directory not named as fetch.yml names one (latest/, YYYYMMDD-HHMM/) and no summary.json: neither "
+          f"its local name nor its parent's taken ({lab['source']})")
+    stamp = os.path.join(tmp, "b", "20261017-0002")
+    shutil.copytree(fetched, stamp)
+    write(os.path.join(stamp, "summary.json"), {"fetcher": "poll_filings", "started": "2026-10-16T21:02:41+00:00"})
+    lab = B.fetch_label(stamp)
+    check(lab["source"] == "ops-reports:reports/fetch/poll_filings/20261017-0002"
+          and lab["started"] == "2026-10-16T21:02:41+00:00",
+          f"... its stamp directory, its fetcher and start from summary.json ({lab['source']})")
+    write(os.path.join(stamp, "summary.json"), {"fetcher": "/root/secret/dir", "started": {"x": "/home/user/leak"}})
+    lab = B.fetch_label(stamp)
+    check(lab["source"] == "ops-reports:reports/fetch/poll_filings/20261017-0002" and lab["started"] is None,
+          f"... a summary.json whose fetcher is a path and whose start is no timestamp: neither taken ({lab})")
+    test_rules(polls)
     if pdf_path:
         # the same fetch with the PDF itself and no text: read here with pdftotext
         fp = os.path.join(tmp, "b", "fetch_pdf")
@@ -371,6 +736,70 @@ def test_builder(tmp, pdf_path):
             B.build(polls_src, ref_path, [], out3)
             check(open(out3, "rb").read() == open(committed, "rb").read(),
                   "site/data/poll_filings_2026.json is the builder's output for the committed inputs")
+        text = open(committed, encoding="utf-8").read()
+        check(all(isinstance(x, dict) and x.get("source", "").startswith("ops-reports:") for x in built_from.get("fetched", []))
+              and not re.search(r'"(?:/tmp|/home|/root|[A-Z]:\\\\)', text),
+              "site/data/poll_filings_2026.json names its fetch as ops-reports does, and no local path")
+
+
+def filing_rec(item, house, fw, n, seats, sent, **kw):
+    """A filing as build() holds it (merged), its seats read from its PDF."""
+    return {"item": item, "house": house, "fieldwork_start": fw[0], "fieldwork_end": fw[1], "n": n, "seats": seats,
+            "src": {"seats": "cec_pdf", "n": "cec_pdf"}, "read": True, "url": f"https://x/{item}", "also": [],
+            "listing": {"date_transfer_to_cec": sent}, **kw}
+
+
+def test_rules(polls):
+    """The rules on the real cases of 16.10.2026, as the filings' numbers give them: the respondents over the
+    initial sample, the conflicts with polls_2026.json's links, the filings no poll has."""
+    rec = B.new_rec("knesset_election80")
+    rec["texts"] = [{"url": "u", "pollster": 'דיירקט פולס בע"מ', "n": 525, "n_initial": 500, "fieldwork_end": "2026-09-17",
+                     "seats_total": 120, "seats": {"Likud": 120}}]
+    rec["listing"] = {"editor": 'דיירקט פולס בע"מ'}
+    f = B.merged(rec)
+    check(not f["doubts"] and any("5.0% over the initial sample 500" in n for n in f.get("notes", [])),
+          f"525 respondents of an initial 500 (Direct Polls, 17.9): a panel's overshoot, said, not a doubt ({f['doubts']})")
+    rec["texts"][0].update(n=1210, n_initial=1000)
+    check(any("more than 10% over" in d for d in B.merged(rec)["doubts"]),
+          "1,210 of 1,000 (Direct Polls, 13.10): more than 10% over, a doubt")
+    rec["texts"][0].update(n=525, invited=500)
+    check(any("asked to take part" in d for d in B.merged(rec)["doubts"]), "more respondents than were asked: a doubt")
+    rec["texts"][0].update(invited=8550, fieldwork_start="2026-08-01", fieldwork_end="2026-09-02", fieldwork_typo=True)
+    check(any("span over two weeks" in d for d in B.merged(rec)["doubts"]),
+          "fieldwork dates over two weeks apart as written (Maagar Mochot's '1/8' for 1/9): a doubt, not verified")
+    s57 = {"Likud": 20, "Together": 13, "Yashar": 23, "The Democrats": 8, "Religious Zionism": 6, "Otzma Yehudit": 7,
+           "Amcha Yisrael": 4, "Yisrael Beiteinu": 7, "Shas": 7, "UTJ": 8, "Reservists": 4, "Joint List": 7, "Ra'am": 6}
+    s53 = dict(s57, Likud=21, Yashar=24, **{"The Democrats": 9, "Yisrael Beiteinu": 9, "Reservists": 0, "Ra'am": 5})
+    p = {"date": "2026-09-06", "house": "kantar", "seats": s57, "n": 555}
+    kan = filing_rec("knesset_election57", "kantar", ("2026-09-06", "2026-09-06"), 551, s57, "2026-09-07")
+    ih = filing_rec("knesset_election53", "kantar", ("2026-09-02", "2026-09-03"), 555, s53, "2026-09-06")
+    v, note = B.conflict(p, ih, kan)
+    check(v == "matched" and "n (555) is the linked filing's" in note,
+          f"Kantar 6.9: the matched filing has the poll's seats, the link is Israel Hayom's of 3.9 and gave its n ({v})")
+    again = filing_rec("knesset_election82", "kantar", ("2026-09-09", "2026-09-09"), 554, s57, "2026-09-24")
+    first = filing_rec("knesset_election60", "kantar", ("2026-09-09", "2026-09-09"), 554, s57, "2026-09-10")
+    v, note = B.conflict(dict(p, date="2026-09-09"), again, first)
+    check(v == "both" and "knesset_election82 (sent 2026-09-24) repeats knesset_election60" in note,
+          f"Kantar 9.9: one poll filed twice, either link right ({v})")
+    s64 = dict(s57, Yashar=22, **{"Amcha Yisrael": 3})
+    ch13 = filing_rec("knesset_election64", "ch13", ("2026-09-09", "2026-09-09"), 1119, s64, "2026-09-13")
+    ch12 = filing_rec("knesset_election69", "midgam", ("2026-09-09", "2026-09-09"), 504, s53, "2026-09-13")
+    v, note = B.conflict({"date": "2026-09-09", "house": "ch13", "seats": s57, "n": 504}, ch12, ch13)
+    check(v == "matched" and "nearest" in note and "Yashar 23 here, 22 filed" in note,
+          f"Channel 13 9.9: the matched filing, of the poll's house, the nearest; the link is Channel 12's ({v})")
+    filings = {f["item"]: f for f in (kan, ih, again, first)}
+    first_date = min(q["date"] for q in polls)
+    cls = {f["item"]: B.classify(f, filings, polls, first_date, {"knesset_election82"})[0] for f in (again, first, ih)}
+    check(cls == {"knesset_election82": "refiling", "knesset_election60": "duplicate", "knesset_election53": "before_polls"},
+          f"the filings no poll has: a re-filing, the first filing of a poll whose re-filing was taken, one before the "
+          f"poll table's first poll ({cls})")
+    sector = filing_rec("knesset_election85", "dialog", ("2026-09-22", "2026-09-23"), 500, {}, "2026-09-27",
+                        sector="ליברלים")
+    sector["src"] = {}
+    new = filing_rec("knesset_election110", "direct-polls", ("2026-10-13", "2026-10-13"), 1210, s57, "2026-10-14")
+    cls = {f["item"]: B.classify(f, {**filings, "s": sector, "n": new}, polls, first_date) for f in (sector, new)}
+    check(cls["knesset_election85"][0] == "sector" and cls["knesset_election110"][0] == "not_in_polls",
+          f"a sector poll; a national one polls_2026.json does not have ({[c[1][:50] for c in cls.values()]})")
 
 
 # ---------------------------------------------------------------- 4. the fetcher
@@ -536,6 +965,7 @@ def test_fetcher(tmp):
 def main():
     tmp = tempfile.mkdtemp(prefix="kalpi26-filings-")
     test_text()
+    test_real()
     pdf_path = test_pdf(tmp)
     test_builder(tmp, pdf_path)
     test_fetcher(tmp)
