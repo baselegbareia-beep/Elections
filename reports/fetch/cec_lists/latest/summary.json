@@ -1,564 +1,2421 @@
 {
  "fetcher": "cec_lists",
- "started": "2026-10-16T21:02:16+00:00",
- "finished": "2026-10-16T21:02:25+00:00",
+ "started": "2026-10-17T00:10:16+00:00",
+ "finished": "2026-10-17T00:12:13+00:00",
  "reference": "pipeline/reference/lists_2026.json",
  "reference_error": null,
- "content_api": "https://www.gov.il/ContentPageWebApi/api/content-pages",
- "client_id_found": false,
- "requests": 65,
- "answered": 12,
+ "content_api": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages",
+ "client_id_found": true,
+ "requests": 145,
+ "answered": 112,
+ "deadline_s": 1200,
+ "skipped_past_deadline": 0,
+ "polite_s": 1.0,
+ "archive_gap_s": 4.0,
+ "pdf_reader": "pdftotext",
  "stored": [
-  "files/0a510b97-www.bechirot.gov.il_index.html",
+  "files/04f516b1-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_3.json",
+  "files/075d60c4-www.gov.il_pr2_26_decision.pdf",
+  "files/0b59616b-www.bechirot.gov.il_index.html",
+  "files/0e0c1cba-openapi-gc.digital.gov.il_shama_culture_he.json",
+  "files/12012046-www.gov.il_client-config.js",
+  "files/125a5188-www.gov.il_pr1_26_decision.pdf",
+  "files/146a7942-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_9.json",
+  "files/1501ee86-openapi-gc.digital.gov.il_tzionutdatit-zehut_list31_culture_he.json",
+  "files/175c4a24-openapi-gc.digital.gov.il_gush-tanachi_list24_culture_he.json",
+  "files/18c54c49-openapi-gc.digital.gov.il_amcha-israel_list6_culture_he.json",
+  "files/19af3aee-www.gov.il_pr7_26.pdf",
   "files/1e7231ba-data.gov.il_full-cadidates-list-21.xlsx",
+  "files/1e9e5df1-www.gov.il_pm7_26.pdf",
+  "files/2c2eee16-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_2.json",
+  "files/2cdb03b3-openapi-gc.digital.gov.il_demokratura_list27_culture_he.json",
+  "files/3272dd5b-web.archive.org_cdx_url_www.gov.il_BlobFolder_guide_candidates-lists-26_matchType_prefix_o.json",
   "files/32e0171c-data.gov.il_full_candidates_list.xlsx",
+  "files/340d6ee0-openapi-gc.digital.gov.il_halikud-tikvahadasha_iist29_culture_he.json",
+  "files/408e1d7a-www.gov.il_pr6_26_Redacted.pdf",
+  "files/42bbc975-openapi-gc.digital.gov.il_betach_list25_culture_he.json",
+  "files/46fcafe3-www.gov.il_pr5_26_decision.pdf",
+  "files/4770fb61-openapi-gc.digital.gov.il_tikun_list23_culture_he.json",
+  "files/4992d35b-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_4.json",
+  "files/4a06c179-openapi-gc.digital.gov.il_tzomet-beit-israel_list33_culture_he.json",
+  "files/513c393d-openapi-gc.digital.gov.il_shachor_list28_culture_he.json",
+  "files/5180a35e-www.gov.il_pr8_26.pdf",
   "files/525f9260-data.gov.il_full_candidates_list-23.xlsx",
+  "files/539b8864-www.gov.il_logo.jpg",
+  "files/56dcba64-www.gov.il_pr9_26_annex_Redacted.pdf",
   "files/5752d885-data.gov.il_package_search_rows_50_q.json",
+  "files/5a126d1c-www.gov.il_pr1_26.pdf",
+  "files/5c5a0cde-openapi-gc.digital.gov.il_raam_list18_culture_he.json",
+  "files/5c5abeae-www.gov.il_pm6_26_Redacted.pdf",
+  "files/60465289-openapi-gc.digital.gov.il_chozrim-leshorashim_list32_culture_he.json",
+  "files/62570005-www.gov.il_pr9_26_decision.pdf",
+  "files/643e9dee-openapi-gc.digital.gov.il_shas_list19_culture_he.json",
+  "files/66e7e76b-openapi-gc.digital.gov.il_pirates_list_5_culture_he.json",
+  "files/6ad941fe-www.gov.il_pr4_26_decision.pdf",
+  "files/6b09ff58-www.gov.il_pr4_26_Redacted.pdf",
+  "files/6ef8a03d-www.bechirot.gov.il_EventDetails.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/7527d057-www.gov.il_pr_9_26_evdecision.pdf",
+  "files/755f987b-www.gov.il_pm4_26_decision.pdf",
+  "files/76d6284d-openapi-gc.digital.gov.il_sharshar_list3_culture_he.json",
+  "files/7c90c1b8-openapi-gc.digital.gov.il_seder-chadash_list15_culture_he.json",
+  "files/7d47dafb-openapi-gc.digital.gov.il_hareshima-hameshutefet_list35_culture_he.json",
+  "files/829f1208-openapi-gc.digital.gov.il_hademokratim_list17_culture_he.json",
   "files/83b3a2e3-data.gov.il_full-cadidates-list-22.xlsx",
+  "files/850776a7-www.bechirot.gov.il_ContentShow.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/858b3b83-www.bechirot.gov.il_Banner.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/865fe128-www.bechirot.gov.il_AncorTextHolder.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/87dbae5f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_7.json",
+  "files/8a5eea92-www.gov.il_pr2_26_Redacted.pdf",
+  "files/93e406c5-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_8.json",
+  "files/953e111f-openapi-gc.digital.gov.il_tekuma_list34_culture_he.json",
+  "files/9beb7875-www.gov.il_pm3_26_decision.pdf",
+  "files/9c76137a-www.gov.il_7a_decision.pdf",
+  "files/9c7783ac-openapi-gc.digital.gov.il_beyahad_list1_culture_he.json",
+  "files/9fa63715-openapi-gc.digital.gov.il_kol-ha-nashim_list9_culture_he.json",
+  "files/aacd78cf-openapi-gc.digital.gov.il_yehudit-meuhedet_list14_culture_he.json",
+  "files/ab230fb6-www.gov.il_pm6_26_decision.pdf",
+  "files/ae14c825-www.gov.il_pm8_26_decision.pdf",
+  "files/b175f6ec-openapi-gc.digital.gov.il_mishpat-tzedek_list12_culture_he.json",
+  "files/b1935336-web.archive.org_cdx_url_www.bechirot.gov.il_matchType_prefix_from_2025_output_json_fl_orig.json",
+  "files/b4f5263e-www.gov.il_pr7_26_decision.pdf",
+  "files/b51c114c-openapi-gc.digital.gov.il_yahadut-degel_list37_culture_he.json",
+  "files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf",
+  "files/bc57627a-www.bechirot.gov.il_Share.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/bd1cab72-openapi-gc.digital.gov.il_yashar_list_2_culture_he.json",
+  "files/c1254d8c-www.gov.il_pr6_26_decision.pdf",
   "files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx",
+  "files/cb4862eb-openapi-gc.digital.gov.il_israel-beitenu_list11_culture_he.json",
+  "files/ccf68be7-openapi-gc.digital.gov.il_machane-israel_list36_culture_he.json",
+  "files/cd059513-openapi-gc.digital.gov.il_noam_list38_culture_he.json",
+  "files/cd5c9180-openapi-gc.digital.gov.il_kachol-lavan_list30_culture_he.json",
+  "files/d24dae2b-www.gov.il_pm8_26.pdf",
+  "files/d4031397-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_5.json",
+  "files/d441e053-openapi-gc.digital.gov.il_orot_list26_culture_he.json",
+  "files/d4d8a0e2-openapi-gc.digital.gov.il_miflegat-am-israelit_list21_culture_he.json",
+  "files/d639a12d-www.gov.il_pr5_26_Redacted.pdf",
+  "files/d6c0b7a6-www.gov.il_pm3_26.pdf",
   "files/d89e6aaf-data.gov.il_full-candidates-lists-20.xlsx",
-  "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+  "files/d96c0178-www.gov.il_pr3_26_decision.pdf",
+  "files/dadb90f6-openapi-gc.digital.gov.il_tzibur-charedi_list20_culture_he.json",
+  "files/deb4b716-openapi-gc.digital.gov.il_hashutafut-lekulam_iist_culture_he.json",
+  "files/df2301c0-www.gov.il_pr8_26_decision.pdf",
+  "files/dfc601b9-www.gov.il_pr_9_26_evdecision2.pdf",
+  "files/e0310ce6-openapi-gc.digital.gov.il_brit-olam_list22_culture_he.json",
+  "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json",
+  "files/e8438bf2-openapi-gc.digital.gov.il_beyachad-natzliah_list10_culture_he.json",
+  "files/e9ec6371-www.gov.il_pr10_26.pdf",
+  "files/ec1d005e-www.bechirot.gov.il_Carousel.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/ec57e7fc-www.gov.il_pm7_26_decision.pdf",
+  "files/ece43d72-www.gov.il_pr9_26_Redacted.pdf",
+  "files/ef987a63-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_6.json",
+  "files/f23d8b19-www.gov.il_pr10_26_decision.pdf",
+  "files/f28f6eb4-www.bechirot.gov.il_Header.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/f36707d4-www.gov.il_pm4_26_Redacted.pdf",
+  "files/f402ba09-www.bechirot.gov.il_Footer.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+  "files/f6dee162-www.gov.il_pr11_26_decision.pdf",
+  "files/f94d5dbb-openapi-gc.digital.gov.il_hamiluimnikim-vehakalkalit_list16_culture_he.json",
+  "files/faf7ea86-openapi-gc.digital.gov.il_israel-tchila_list7_culture_he.json",
+  "files/ff5f371a-www.gov.il_pr11_26.pdf",
+  "files/ff89c02f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he.json",
+  "files/ffc094cc-openapi-gc.digital.gov.il_gan-eden_list_8_culture_he.json"
  ],
  "index": {
-  "roster_pages_linked": 0,
+  "roster_pages_linked": 37,
+  "source": "live page",
   "not_in_reference": [],
   "not_linked": []
+ },
+ "confirmation": {
+  "letters": [
+   {
+    "letters": "רק",
+    "id": "Together",
+    "name": "ביחד בראשות נפתלי בנט",
+    "cec_key": "beyahad_list1",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "רק | ביחד בראשות נפתלי בנט"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "דרך",
+    "id": "Yashar",
+    "name": "ישר! עם איזנקוט לראשות הממשלה מאחדים את ישראל",
+    "cec_key": "yashar_list_2",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "דרך | ישר! עם איזנקוט לראשות הממשלה מאחדים את ישראל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "צדק",
+    "id": null,
+    "name": "שרשר לאהבה ואחדות העם",
+    "cec_key": "sharshar_list3",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "צדק | שרשר לאהבה ואחדות העם"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ד",
+    "id": null,
+    "name": "השותפות לכולם",
+    "cec_key": "hashutafut-lekulam_iist",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ד | השותפות לכולם"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "צף",
+    "id": null,
+    "name": "הפיראטים – צפים לטוב",
+    "cec_key": "pirates_list_5",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "צף | הפיראטים – צפים לטוב"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ך",
+    "id": "Amcha Yisrael",
+    "name": "עמך ישראל בראשות עופר וינטר",
+    "cec_key": "amcha-israel_list6",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ך | עמך ישראל בראשות עופר וינטר"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "י",
+    "id": null,
+    "name": "ישראל תחילה בראשות שרן השכל",
+    "cec_key": "israel-tchila_list7",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "י | ישראל תחילה בראשות שרן השכל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ה",
+    "id": null,
+    "name": "גן עדן בראשות ישוע ישראל בן דוד",
+    "cec_key": "gan-eden_list_8",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ה | גן עדן בראשות ישוע ישראל בן דוד"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "קה",
+    "id": null,
+    "name": "קול הנשים",
+    "cec_key": "kol-ha-nashim_list9",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "קה | קול הנשים"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "בד",
+    "id": null,
+    "name": "מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד",
+    "cec_key": "beyachad-natzliah_list10",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "בד | מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ל",
+    "id": "Yisrael Beiteinu",
+    "name": "ישראל ביתנו בראשות אביגדור ליברמן",
+    "cec_key": "israel-beitenu_list11",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ל | ישראל ביתנו בראשות אביגדור ליברמן"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "קץ",
+    "id": null,
+    "name": "משפט צדק",
+    "cec_key": "mishpat-tzedek_list12",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "קץ | משפט צדק"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "נף",
+    "id": null,
+    "name": "שמע בראשות נפתלי גולדמן",
+    "cec_key": "shama",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "נף | שמע בראשות נפתלי גולדמן"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ב",
+    "id": "Otzma Yehudit",
+    "name": "עוצמה יהודית בראשות איתמר בן גביר",
+    "cec_key": "yehudit-meuhedet_list14",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ב | עוצמה יהודית בראשות איתמר בן גביר"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "קך",
+    "id": null,
+    "name": "סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות",
+    "cec_key": "seder-chadash_list15",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "קך | סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "די",
+    "id": "Reservists",
+    "name": "המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה",
+    "cec_key": "hamiluimnikim-vehakalkalit_list16",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "די | המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "אמת",
+    "id": "The Democrats",
+    "name": "הדמוקרטים בראשות יאיר גולן",
+    "cec_key": "hademokratim_list17",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "אמת | הדמוקרטים בראשות יאיר גולן"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "עם",
+    "id": "Ra'am",
+    "name": "רע\"ם – הרשימה הערבית המאוחדת",
+    "cec_key": "raam_list18",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "עם | רע\"ם – הרשימה הערבית המאוחדת"
+     },
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ע | הרשימה הערבית המאוחדת | עם | רע\"ם"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "שס",
+    "id": "Shas",
+    "name": "התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל",
+    "cec_key": "shas_list19",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "שס | התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל"
+     },
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ס | התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל | שס | התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "זך",
+    "id": "Haredi Public",
+    "name": "הציבור החרדי בראשות מוטי ליטנר",
+    "cec_key": "tzibur-charedi_list20",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "זך | הציבור החרדי בראשות מוטי ליטנר"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "פה",
+    "id": null,
+    "name": "אני ואתה מפלגת העם הישראלית",
+    "cec_key": "miflegat-am-israelit_list21",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "פה | אני ואתה מפלגת העם הישראלית"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "זץ",
+    "id": null,
+    "name": "ברית עולם לגאולת ישראל",
+    "cec_key": "brit-olam_list22",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "זץ | ברית עולם לגאולת ישראל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "נקי",
+    "id": null,
+    "name": "התיקון לשיטת הבחירות והממשל",
+    "cec_key": "tikun_list23",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "נקי | התיקון לשיטת הבחירות והממשל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "יק",
+    "id": null,
+    "name": "גה\"ת – גוש התנ\"כי",
+    "cec_key": "gush-tanachi_list24",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "יק | גה\"ת – גוש התנ\"כי"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ז",
+    "id": null,
+    "name": "בטח – בטחון חברתי בראשות סמיון גרפמן",
+    "cec_key": "betach_list25",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ז | בטח – בטחון חברתי בראשות סמיון גרפמן"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "בקר",
+    "id": null,
+    "name": "אורות השחר בראשות ניסים לוק",
+    "cec_key": "orot_list26",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "בקר | אורות השחר בראשות ניסים לוק"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "נץ",
+    "id": null,
+    "name": "ביטחון אישי",
+    "cec_key": "demokratura_list27",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "נץ | ביטחון אישי"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "נר",
+    "id": null,
+    "name": "צבע שחור – מגן עולם התורה",
+    "cec_key": "shachor_list28",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "נר | צבע שחור – מגן עולם התורה"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "מחל",
+    "id": "Likud",
+    "name": "הליכוד בהנהגת בנימין נתניהו לראשות הממשלה",
+    "cec_key": "halikud-tikvahadasha_iist29",
+    "status": "live",
+    "other_letters": [
+     "מ"
+    ],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "מחל | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה"
+     },
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ח | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה | מחל | הליכוד"
+     }
+    ],
+    "other": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "מ | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; מפלגת העבודה בראשות מרב מיכאלי | מחל; אמת | הליכוד; העבודה",
+      "letters": [
+       "מ"
+      ]
+     }
+    ]
+   },
+   {
+    "letters": "כן",
+    "id": "National Unity",
+    "name": "כחול לבן בראשות בני גנץ",
+    "cec_key": "kachol-lavan_list30",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "כן | כחול לבן בראשות בני גנץ"
+     },
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "כ | המחנה הממלכתי בהנהגת בני גנץ לראשות הממשלה | כן | כחול לבן – המחנה הממלכתי; הימין הממלכתי"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ט",
+    "id": "Religious Zionism",
+    "name": "הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין",
+    "cec_key": "tzionutdatit-zehut_list31",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ט | הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "צבי",
+    "id": null,
+    "name": "תנועת אחי תנועתו של הרב יורם אברג'ל זצ\"ל",
+    "cec_key": "chozrim-leshorashim_list32",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "צבי | תנועת אחי תנועתו של הרב יורם אברג'ל זצ\"ל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "בי",
+    "id": null,
+    "name": "צומת בית ישראל",
+    "cec_key": "tzomet-beit-israel_list33",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "בי | צומת בית ישראל"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ק",
+    "id": null,
+    "name": "תקומה",
+    "cec_key": "tekuma_list34",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ק | תקומה"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ודם",
+    "id": "Joint List",
+    "name": "הרשימה המשותפת",
+    "cec_key": "hareshima-hameshutefet_list35",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ודם | הרשימה המשותפת"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "רץ",
+    "id": null,
+    "name": "הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים",
+    "cec_key": "machane-israel_list36",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "רץ | הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ג",
+    "id": "UTJ",
+    "name": "יהדות התורה והשבת אגודת ישראל – דגל התורה",
+    "cec_key": "yahadut-degel_list37",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ג | יהדות התורה והשבת אגודת ישראל – דגל התורה"
+     },
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ג | יהדות התורה והשבת אגודת ישראל – דגל התורה | ג | אגודת ישראל; דגל התורה"
+     }
+    ],
+    "other": []
+   },
+   {
+    "letters": "ני",
+    "id": null,
+    "name": "נעם לישראל למען עתיד הילדים בראשות אבי מעוז",
+    "cec_key": "noam_list38",
+    "status": "live",
+    "other_letters": [],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
+      "kind": "live page",
+      "line": "ני | נעם לישראל למען עתיד הילדים בראשות אבי מעוז"
+     }
+    ],
+    "other": []
+   }
+  ],
+  "agreements": [
+   {
+    "lists": [
+     "מחל",
+     "ט"
+    ],
+    "ids": [
+     "Likud",
+     "Religious Zionism"
+    ],
+    "confirmed_by": [],
+    "status": "not confirmed"
+   },
+   {
+    "lists": [
+     "שס",
+     "ג"
+    ],
+    "ids": [
+     "Shas",
+     "UTJ"
+    ],
+    "confirmed_by": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ג .עליזה אוזן נציגת שס"
+     }
+    ],
+    "status": "live"
+   },
+   {
+    "lists": [
+     "דרך",
+     "אמת"
+    ],
+    "ids": [
+     "Yashar",
+     "The Democrats"
+    ],
+    "confirmed_by": [],
+    "status": "not confirmed"
+   },
+   {
+    "lists": [
+     "רק",
+     "ל"
+    ],
+    "ids": [
+     "Together",
+     "Yisrael Beiteinu"
+    ],
+    "confirmed_by": [],
+    "status": "not confirmed"
+   },
+   {
+    "lists": [
+     "עם",
+     "ודם"
+    ],
+    "ids": [
+     "Ra'am",
+     "Joint List"
+    ],
+    "confirmed_by": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פרוטוקול הדיון מיום 23 בספטמבר 2026 בפ\"מ 6/26 (לגבי מר עופר כסיף); בפ\"מ 8/26 (לגבי מר סאמי אבו שחאדה); בפ\"ר 1/26, בפ\"ר 5/26 ובפ\"ר 7/26 (לגבי רשימת רע\"ם); ובפ\"מ 6/26 ובפ\"ר 10/26 (לגבי הרשימה המשותפת ול"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "מיכאל בן ארי ואח׳ נ׳ רע״ם-בל״ד) ,ובקשות פסילה כנגד רשימת רע״מ כחלק מהרשימה המשותפת"
+     }
+    ],
+    "status": "live"
+   }
+  ],
+  "not_expected": [
+   {
+    "lists": [
+     "עם",
+     "ב"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "עם",
+     "מחל"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "בבחירות לכנסת ה( 21-ראו :פ״ר 21/4סיעת הליכוד ואחר נ׳ רשימת רע״ם-בל״ד; פ״ר 21/6ד״ר"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "אמת"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ודם",
+     "מחל"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "ט"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ט | הציונות הדתית בראשות בצלאל סמוטריץ' ועוצמה יהודית | ט | הציונות הדתית בראשות בצלאל סמוטריץ; עוצמה יהודית בראשות איתמר בן גביר; נעם - בראשות אבי מעוז"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ט .דוד בבלי נציג עוצמה יהודית"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ל"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ל | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; ישראל ביתנו בראשות אביגדור ליברמן | מחל; ל | הליכוד; ישראל ביתנו"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ל",
+     "ב"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf",
+      "kind": "live file",
+      "line": "שיקול דעתה)( \".ההדגשות שלי ל.ב)."
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ודם",
+     "ב"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "בכנסת ה( 22-ראו :פ״ר 22/2עוצמה יהודית – חזית יהודית לאומית נ׳ הרשימה המשותפת) ,זאת"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ד",
+     "ג"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "נ ג ד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ל",
+     "ז"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "זֹורם כָּל"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "שס"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ב .עו\"ד ארז מלול נציג שס"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "שס",
+     "ד"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ד .מר מנשה לוי נציג ש\"ס"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ה"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ה .עו\"ד אילן בומבך נציג הליכוד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ז"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ז .הגברת קמי רביב נציגת הליכוד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "י"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "י .איתיאל ניימן נציג עוצמה יהודית."
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ט",
+     "צבי"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "צבי ידידיה סוכות (הציונות הדתית)13.............................................................................. :"
+     }
+    ]
+   }
+  ],
+  "counts": {
+   "letters_live": 38,
+   "letters_archive": 0,
+   "letters_other": 1,
+   "letters_none": 0,
+   "agreements_live": 2,
+   "agreements_archive": 0,
+   "agreements_none": 3,
+   "agreements_not_expected": 16
+  }
+ },
+ "crawl": {
+  "home": 200,
+  "asked": [
+   {
+    "url": "https://www.bechirot.gov.il/robots.txt",
+    "what": "robots",
+    "why": "the site's robots.txt (its rules, its sitemaps)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/",
+    "what": "page",
+    "why": "the CEC site's home page"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/sitemap.xml",
+    "what": "sitemap",
+    "why": "the site's sitemap"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+    "what": "api",
+    "why": "the site's API (Banner) for Banner-4a89f3e4"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+    "what": "api",
+    "why": "the site's API (Banner) for Banner-4a89f3e4"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+    "what": "api",
+    "why": "the site's API (Banner) for Banner-4a89f3e4"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=5ecb69ff&currentpageid=22714&query=22578&textfilter=False&showfilters=False&type=Boxes",
+    "what": "api",
+    "why": "the site's API (ContentShow) for ContentShow-5ecb69ff"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=b7306c0e&title=%D7%A6%D7%99%D7%A8+%D7%94%D7%96%D7%9E%D7%9F+%D7%9C%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA+%D7%9C%D7%9B%D7%A0%D7%A1%D7%AA+%D7%94-26&query=176858&componetitemstoshow=0&currentpageid=22714&showshorttext=False&light=true&type=Links",
+    "what": "api",
+    "why": "the site's API (Carousel) for Carousel-b7306c0e"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllangattribute=he&search=0&siterooturl=%2F",
+    "what": "api",
+    "why": "the site's API (Header) for PageHeader"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdate=False&publicationdate=06%2F01%2F2025+13%3A06&updatedate=14%2F10%2F2026+16%3A30&sitesettingssocialmedia=1",
+    "what": "api",
+    "why": "the site's API (Footer) for PageFooter"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/footer/getFooter?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdate=False&publicationdate=06%2F01%2F2025+13%3A06&updatedate=14%2F10%2F2026+16%3A30&sitesettingssocialmedia=1",
+    "what": "api",
+    "why": "the site's API (Footer) for PageFooter"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714",
+    "what": "api",
+    "why": "the site's API (Share) for PageShare"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "what": "script",
+    "why": "a script of https://www.bechirot.gov.il/"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Banner/getBanner",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/footer/getFooter",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Header/getheader",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/Share/getShare",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia",
+    "what": "api",
+    "why": "in the archive's index of the site (an API address)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100",
+    "what": "api",
+    "why": "Umbraco's content listing (the Delivery API, where it is on)"
+   },
+   {
+    "url": "https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100",
+    "what": "api",
+    "why": "Umbraco's content listing (the Delivery API, where it is on)"
+   }
+  ],
+  "not_asked": [],
+  "not_asked_n": 0,
+  "not_followed": 0,
+  "elsewhere": [],
+  "api_found": [
+   {
+    "script": "https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/search/search/",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/Banner/getBanner",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/Header/getheader",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/footer/getFooter",
+    "params": []
+   },
+   {
+    "script": "https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+    "address": "https://www.bechirot.gov.il/umbraco/api/Share/getShare",
+    "params": []
+   }
+  ],
+  "sitemap_urls": 0,
+  "stopped": null,
+  "seeds": [],
+  "robots": null,
+  "count": {
+   "page": 22,
+   "file": 0,
+   "script": 8,
+   "api": 18,
+   "sitemap": 1
+  },
+  "limits": {
+   "pages": 60,
+   "api": 35,
+   "sitemaps": 5,
+   "files": 40,
+   "scripts": 12
+  },
+  "dead": null
+ },
+ "archive": {
+  "lookups": 0,
+  "snapshots": 1,
+  "limits": {
+   "lookups": 70,
+   "snapshots": 40
+  },
+  "stopped": "archive.org answered 429 (too many requests): nothing more asked of it",
+  "index": {
+   "www.bechirot.gov.il": {
+    "listed": 338,
+    "on_topic": 0,
+    "api": 7,
+    "status": 200
+   },
+   "lists page files": {
+    "listed": 4,
+    "status": 200
+   }
+  },
+  "rows": [
+   {
+    "address": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
+    "why": "in the archive's index of the lists page's files",
+    "live": 200,
+    "result": "in the archive's index: 20261009104234",
+    "timestamp": "20261009104234",
+    "snapshot": 429
+   }
+  ],
+  "not_looked_up": 5,
+  "not_looked_up_sample": [
+   "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_fdCassif.cleaned.pdf",
+   "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_fdList.pdf",
+   "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26_fdAbuShehadeh.cleaned.pdf",
+   "https://www.gov.il/he/pages/candidates-lists-26",
+   "https://www.gov.il/he/departments/guides/candidates-lists-26"
+  ]
  },
  "lists": [
   {
    "letters": "רק",
    "id": "Together",
    "cec_key": "beyahad_list1",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyahad_list1?culture=he",
+   "title": "ביחד בראשות נפתלי בנט",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "דרך",
    "id": "Yashar",
    "cec_key": "yashar_list_2",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yashar_list_2?culture=he",
+   "title": "ישר! עם איזנקוט לראשות הממשלה מאחדים את ישראל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "צדק",
    "id": null,
    "cec_key": "sharshar_list3",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/sharshar_list3?culture=he",
+   "title": "שרשר לאהבה ואחדות העם",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ד",
    "id": null,
    "cec_key": "hashutafut-lekulam_iist",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hashutafut-lekulam_iist?culture=he",
+   "title": "השותפות לכולם",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "צף",
    "id": null,
    "cec_key": "pirates_list_5",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/pirates_list_5?culture=he",
+   "title": "הפיראטים – צפים לטוב",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ך",
    "id": "Amcha Yisrael",
    "cec_key": "amcha-israel_list6",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/amcha-israel_list6?culture=he",
+   "title": "עמך ישראל בראשות עופר וינטר",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "י",
    "id": null,
    "cec_key": "israel-tchila_list7",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/israel-tchila_list7?culture=he",
+   "title": "ישראל תחילה בראשות שרן השכל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ה",
    "id": null,
    "cec_key": "gan-eden_list_8",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/gan-eden_list_8?culture=he",
+   "title": "גן עדן בראשות ישוע ישראל בן דוד",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "קה",
    "id": null,
    "cec_key": "kol-ha-nashim_list9",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kol-ha-nashim_list9?culture=he",
+   "title": "קול הנשים",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "בד",
    "id": null,
    "cec_key": "beyachad-natzliah_list10",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyachad-natzliah_list10?culture=he",
+   "title": "מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ל",
    "id": "Yisrael Beiteinu",
    "cec_key": "israel-beitenu_list11",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/israel-beitenu_list11?culture=he",
+   "title": "ישראל ביתנו בראשות אביגדור ליברמן",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "קץ",
    "id": null,
    "cec_key": "mishpat-tzedek_list12",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/mishpat-tzedek_list12?culture=he",
+   "title": "משפט צדק",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "נף",
    "id": null,
    "cec_key": "shama",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shama?culture=he",
+   "title": "שמע בראשות נפתלי גולדמן",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ב",
    "id": "Otzma Yehudit",
    "cec_key": "yehudit-meuhedet_list14",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yehudit-meuhedet_list14?culture=he",
+   "title": "עוצמה יהודית בראשות איתמר בן גביר",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "קך",
    "id": null,
    "cec_key": "seder-chadash_list15",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/seder-chadash_list15?culture=he",
+   "title": "סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "די",
    "id": "Reservists",
    "cec_key": "hamiluimnikim-vehakalkalit_list16",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hamiluimnikim-vehakalkalit_list16?culture=he",
+   "title": "המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "אמת",
    "id": "The Democrats",
    "cec_key": "hademokratim_list17",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hademokratim_list17?culture=he",
+   "title": "הדמוקרטים בראשות יאיר גולן",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "עם",
    "id": "Ra'am",
    "cec_key": "raam_list18",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/raam_list18?culture=he",
+   "title": "רע\"ם – הרשימה הערבית המאוחדת",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "שס",
    "id": "Shas",
    "cec_key": "shas_list19",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shas_list19?culture=he",
+   "title": "התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\"ל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "זך",
    "id": "Haredi Public",
    "cec_key": "tzibur-charedi_list20",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzibur-charedi_list20?culture=he",
+   "title": "הציבור החרדי בראשות מוטי ליטנר",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "פה",
    "id": null,
    "cec_key": "miflegat-am-israelit_list21",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/miflegat-am-israelit_list21?culture=he",
+   "title": "אני ואתה מפלגת העם הישראלית",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "זץ",
    "id": null,
    "cec_key": "brit-olam_list22",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/brit-olam_list22?culture=he",
+   "title": "ברית עולם לגאולת ישראל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "נקי",
    "id": null,
    "cec_key": "tikun_list23",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tikun_list23?culture=he",
+   "title": "התיקון לשיטת הבחירות והממשל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "יק",
    "id": null,
    "cec_key": "gush-tanachi_list24",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/gush-tanachi_list24?culture=he",
+   "title": "גה\"ת – גוש התנ\"כי",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ז",
    "id": null,
    "cec_key": "betach_list25",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/betach_list25?culture=he",
+   "title": "בטח – בטחון חברתי בראשות סמיון גרפמן",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "בקר",
    "id": null,
    "cec_key": "orot_list26",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/orot_list26?culture=he",
+   "title": "אורות השחר בראשות ניסים לוק",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "נץ",
    "id": null,
    "cec_key": "demokratura_list27",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/demokratura_list27?culture=he",
+   "title": "ביטחון אישי",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "נר",
    "id": null,
    "cec_key": "shachor_list28",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shachor_list28?culture=he",
+   "title": "צבע שחור – מגן עולם התורה",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "מחל",
    "id": "Likud",
    "cec_key": "halikud-tikvahadasha_iist29",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/halikud-tikvahadasha_iist29?culture=he",
+   "title": "הליכוד בהנהגת בנימין נתניהו לראשות הממשלה",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "כן",
    "id": "National Unity",
    "cec_key": "kachol-lavan_list30",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kachol-lavan_list30?culture=he",
+   "title": "כחול לבן בראשות בני גנץ",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ט",
    "id": "Religious Zionism",
    "cec_key": "tzionutdatit-zehut_list31",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzionutdatit-zehut_list31?culture=he",
+   "title": "הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "צבי",
    "id": null,
    "cec_key": "chozrim-leshorashim_list32",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/chozrim-leshorashim_list32?culture=he",
+   "title": "תנועת אחי תנועתו של הרב יורם אברג'ל זצ\"ל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "בי",
    "id": null,
    "cec_key": "tzomet-beit-israel_list33",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzomet-beit-israel_list33?culture=he",
+   "title": "צומת בית ישראל",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ק",
    "id": null,
    "cec_key": "tekuma_list34",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tekuma_list34?culture=he",
+   "title": "דרך חזון ותקומה",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ודם",
    "id": "Joint List",
    "cec_key": "hareshima-hameshutefet_list35",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hareshima-hameshutefet_list35?culture=he",
+   "title": "הרשימה המשותפת",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "רץ",
    "id": null,
    "cec_key": "machane-israel_list36",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/machane-israel_list36?culture=he",
+   "title": "הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ג",
    "id": "UTJ",
    "cec_key": "yahadut-degel_list37",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yahadut-degel_list37?culture=he",
+   "title": "יהדות התורה והשבת אגודת ישראל – דגל התורה",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   },
   {
    "letters": "ני",
    "id": null,
    "cec_key": "noam_list38",
-   "status": 403,
-   "error": "HTTP 403",
-   "title": "",
+   "status": 200,
+   "error": null,
+   "source": "live page",
+   "address": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/noam_list38?culture=he",
+   "title": "נעם לישראל למען עתיד הילדים בראשות אבי מעוז",
    "letters_on_page": [],
    "letters_match": null,
-   "name_on_page": null
+   "name_on_page": true
   }
  ],
  "agreements": {
-  "seen": [],
-  "expected_seen": [],
-  "expected_not_seen": [
-   [
-    "ודם",
-    "עם"
-   ],
+  "seen": [
+   {
+    "lists": [
+     "ודם",
+     "עם"
+    ],
+    "lines": [
+     "פרוטוקול הדיון מיום 23 בספטמבר 2026 בפ\"מ 6/26 (לגבי מר עופר כסיף); בפ\"מ 8/26 (לגבי מר סאמי אבו שחאדה); בפ\"ר 1/26, בפ\"ר 5/26 ובפ\"ר 7/26 (לגבי רשימת רע\"ם); ובפ\"מ 6/26 ובפ\"ר 10/26 (לגבי הרשימה המשותפת ול",
+     "מיכאל בן ארי ואח׳ נ׳ רע״ם-בל״ד) ,ובקשות פסילה כנגד רשימת רע״מ כחלק מהרשימה המשותפת",
+     "בשני המקרים נמצא כי אין עילה לפסול את רע\"ם-בל\"ד או את הרשימה המשותפת מלהתמודד בבחירות"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פרוטוקול הדיון מיום 23 בספטמבר 2026 בפ\"מ 6/26 (לגבי מר עופר כסיף); בפ\"מ 8/26 (לגבי מר סאמי אבו שחאדה); בפ\"ר 1/26, בפ\"ר 5/26 ובפ\"ר 7/26 (לגבי רשימת רע\"ם); ובפ\"מ 6/26 ובפ\"ר 10/26 (לגבי הרשימה המשותפת ול"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "מיכאל בן ארי ואח׳ נ׳ רע״ם-בל״ד) ,ובקשות פסילה כנגד רשימת רע״מ כחלק מהרשימה המשותפת"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "עם",
+     "ב"
+    ],
+    "lines": [
+     "פ\"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026",
+     "פ\"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026",
+     "pr1_26.pdf | application/pdf | 4471151 | pdf | פ\"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.p"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "עם",
+     "מחל"
+    ],
+    "lines": [
+     "פ\"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026",
+     "פ\"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026",
+     "pr5_26_Redacted.pdf | application/pdf | 3469849 | pdf | פ\"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026 | https://www.gov.il/BlobFolder/guide/candidates"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע\"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "בבחירות לכנסת ה( 21-ראו :פ״ר 21/4סיעת הליכוד ואחר נ׳ רשימת רע״ם-בל״ד; פ״ר 21/6ד״ר"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "אמת"
+    ],
+    "lines": [
+     "פ\"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026",
+     "פ\"ר 8/26 עוצמה יהודית נ' רשימת הדמוקרטים בראשות יאיר גולן, מ-14 בספטמבר 2026",
+     "פ\"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ודם",
+     "מחל"
+    ],
+    "lines": [
+     "פ\"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026",
+     "פ\"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026",
+     "pm6_26_Redacted.pdf | application/pdf | 4099331 | pdf | פ\"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/p"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+      "kind": "live page",
+      "line": "פ\"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "ט"
+    ],
+    "lines": [
+     "ט | הציונות הדתית בראשות בצלאל סמוטריץ' ועוצמה יהודית | ט | הציונות הדתית בראשות בצלאל סמוטריץ; עוצמה יהודית בראשות איתמר בן גביר; נעם - בראשות אבי מעוז",
+     "ט .דוד בבלי נציג עוצמה יהודית"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ט | הציונות הדתית בראשות בצלאל סמוטריץ' ועוצמה יהודית | ט | הציונות הדתית בראשות בצלאל סמוטריץ; עוצמה יהודית בראשות איתמר בן גביר; נעם - בראשות אבי מעוז"
+     },
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ט .דוד בבלי נציג עוצמה יהודית"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ל"
+    ],
+    "lines": [
+     "ל | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; ישראל ביתנו בראשות אביגדור ליברמן | מחל; ל | הליכוד; ישראל ביתנו"
+    ],
+    "urls": [
+     "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9"
+    ],
+    "sources": [
+     {
+      "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+      "kind": "live page",
+      "line": "ל | הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; ישראל ביתנו בראשות אביגדור ליברמן | מחל; ל | הליכוד; ישראל ביתנו"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ל",
+     "ב"
+    ],
+    "lines": [
+     "שיקול דעתה)( \".ההדגשות שלי ל.ב)."
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf",
+      "kind": "live file",
+      "line": "שיקול דעתה)( \".ההדגשות שלי ל.ב)."
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ודם",
+     "ב"
+    ],
+    "lines": [
+     "בכנסת ה( 22-ראו :פ״ר 22/2עוצמה יהודית – חזית יהודית לאומית נ׳ הרשימה המשותפת) ,זאת"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "בכנסת ה( 22-ראו :פ״ר 22/2עוצמה יהודית – חזית יהודית לאומית נ׳ הרשימה המשותפת) ,זאת"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ד",
+     "ג"
+    ],
+    "lines": [
+     "נ ג ד",
+     "8/1/26 | ד | ג | נ"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+      "kind": "live file",
+      "line": "נ ג ד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ל",
+     "ז"
+    ],
+    "lines": [
+     "זֹורם כָּל"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "זֹורם כָּל"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "שס"
+    ],
+    "lines": [
+     "ב .עו\"ד ארז מלול נציג שס"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ב .עו\"ד ארז מלול נציג שס"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "שס",
+     "ג"
+    ],
+    "lines": [
+     "ג .עליזה אוזן נציגת שס",
+     "שבשתיקה שזה יהיה של ש\"ס .גם אתם ביהדות התורה .למה? מי קבע שזה אמור להיות ככה? זה"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ג .עליזה אוזן נציגת שס"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "שס",
+     "ד"
+    ],
+    "lines": [
+     "ד .מר מנשה לוי נציג ש\"ס"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ד .מר מנשה לוי נציג ש\"ס"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ה"
+    ],
+    "lines": [
+     "ה .עו\"ד אילן בומבך נציג הליכוד"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ה .עו\"ד אילן בומבך נציג הליכוד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "מחל",
+     "ז"
+    ],
+    "lines": [
+     "ז .הגברת קמי רביב נציגת הליכוד"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "ז .הגברת קמי רביב נציגת הליכוד"
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ב",
+     "י"
+    ],
+    "lines": [
+     "י .איתיאל ניימן נציג עוצמה יהודית."
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "י .איתיאל ניימן נציג עוצמה יהודית."
+     }
+    ]
+   },
+   {
+    "lists": [
+     "ט",
+     "צבי"
+    ],
+    "lines": [
+     "צבי ידידיה סוכות (הציונות הדתית)13.............................................................................. :",
+     "צבי ידידיה סוכות (הציונות הדתית)240............................................................................ :",
+     "צבי ידידיה סוכות (הציונות הדתית):"
+    ],
+    "urls": [
+     "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf"
+    ],
+    "sources": [
+     {
+      "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+      "kind": "live file",
+      "line": "צבי ידידיה סוכות (הציונות הדתית)13.............................................................................. :"
+     }
+    ]
+   }
+  ],
+  "expected_seen": [
    [
     "ג",
     "שס"
    ],
    [
-    "ט",
-    "מחל"
+    "ודם",
+    "עם"
+   ]
+  ],
+  "expected_not_seen": [
+   [
+    "אמת",
+    "דרך"
    ],
    [
     "ל",
     "רק"
    ],
    [
-    "אמת",
-    "דרך"
+    "ט",
+    "מחל"
    ]
   ],
-  "not_expected": []
+  "not_expected": [
+   [
+    "עם",
+    "ב"
+   ],
+   [
+    "עם",
+    "מחל"
+   ],
+   [
+    "ב",
+    "אמת"
+   ],
+   [
+    "ודם",
+    "מחל"
+   ],
+   [
+    "ב",
+    "ט"
+   ],
+   [
+    "מחל",
+    "ל"
+   ],
+   [
+    "ל",
+    "ב"
+   ],
+   [
+    "ודם",
+    "ב"
+   ],
+   [
+    "ד",
+    "ג"
+   ],
+   [
+    "ל",
+    "ז"
+   ],
+   [
+    "ב",
+    "שס"
+   ],
+   [
+    "שס",
+    "ד"
+   ],
+   [
+    "מחל",
+    "ה"
+   ],
+   [
+    "מחל",
+    "ז"
+   ],
+   [
+    "ב",
+    "י"
+   ],
+   [
+    "ט",
+    "צבי"
+   ]
+  ]
  },
  "urls": [
   {
    "url": "https://www.gov.il/ContentpageWebApi/client-config.js",
    "why": "the content-pages API address and the site's public client id",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/javascript",
+   "last_modified": null,
+   "bytes": 255,
+   "sha256": "120120461249eed52ecce966d6b7846efd0b9718ffe187b68be620df80a3f9e3",
+   "head": "window['govilRunConfig'] = {\"contentPageWebApi\":\"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1\",\"HFD\":\"https://openapi-gc.digital.gov.il/p",
+   "saved": "files/12012046-www.gov.il_client-config.js",
+   "role": "config"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/candidates-lists-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he",
    "why": "the CEC's lists page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 10486,
+   "sha256": "ff89c02faff32d17e83c114eb3cf58da3aade030abd5fb3b0928c422fb028d1f",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/ff89c02f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he.json",
+   "role": "lists page",
+   "source": "live page",
+   "read": "json",
+   "lines": 129,
+   "k26": true,
+   "parent_k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-agreements-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-agreements-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-agreement-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-agreement-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-votes-agreements-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-votes-agreements-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-votes-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-votes-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/surplus-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/agreements-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/agreements-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/odafim-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/odafim-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/heskemei-odafim-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/heskemei-odafim-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/heskemey-odafim-26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/heskemey-odafim-26?culture=he",
    "why": "a likely name of the agreements page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 404,
+   "type": "",
+   "head": "",
+   "error": "HTTP 404",
+   "role": "agreement guess"
   },
   {
    "url": "https://www.gov.il/he/pages/candidates-lists-26",
@@ -566,39 +2423,18 @@
    "status": 403,
    "type": "text/html; charset=UTF-8",
    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "error": "HTTP 403",
+   "role": "lists page html"
   },
   {
    "url": "https://www.gov.il/he/departments/guides/candidates-lists-26",
    "why": "the page itself (a gov.il page is a shell without the API)",
+   "hops": 1,
    "status": 403,
    "type": "text/html; charset=UTF-8",
    "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
-  },
-  {
-   "url": "https://bechirot.gov.il/",
-   "why": "the page itself (a gov.il page is a shell without the API)",
-   "status": 200,
-   "type": "text/html; charset=utf-8",
-   "last_modified": null,
-   "redirected_to": "https://www.bechirot.gov.il/home/",
-   "bytes": 15484,
-   "sha256": "0a510b97c5dc8b8653d348fb0f346c9bbf9a932ad535a42588dd13f39223b028",
-   "head": " <!DOCTYPE HTML> <html lang=\"he\" dir=\"rtl\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no",
-   "saved": "files/0a510b97-www.bechirot.gov.il_index.html"
-  },
-  {
-   "url": "https://www.bechirot.gov.il/",
-   "why": "the page itself (a gov.il page is a shell without the API)",
-   "status": 200,
-   "type": "text/html; charset=utf-8",
-   "last_modified": null,
-   "redirected_to": "https://www.bechirot.gov.il/home/",
-   "bytes": 15484,
-   "sha256": "0a510b97c5dc8b8653d348fb0f346c9bbf9a932ad535a42588dd13f39223b028",
-   "head": " <!DOCTYPE HTML> <html lang=\"he\" dir=\"rtl\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no",
-   "saved": "files/0a510b97-www.bechirot.gov.il_index.html"
+   "error": "HTTP 403",
+   "role": "lists page html"
   },
   {
    "url": "https://votes26.bechirot.gov.il/",
@@ -606,319 +2442,1477 @@
    "status": 404,
    "type": "text/html",
    "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" /> <meta name=\"view",
-   "error": "HTTP 404"
+   "error": "HTTP 404",
+   "role": "lists page html"
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/beyahad_list1?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=2",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5301,
+   "sha256": "2c2eee168cf2103c8566fec7ae99cbe323acab5a8c176fb66cafaae1f30c8e63",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/2c2eee16-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_2.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 104,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yashar_list_2?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 52618,
+   "sha256": "04f516b11a2962a99857dd84236efde1d0a4d1a79b3b08134794c96ce896ecdb",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/04f516b1-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_3.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 763,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/sharshar_list3?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=4",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 13089,
+   "sha256": "4992d35b390cd243d4242ef7b66528ff2070da5f642e93c8a958d5b389ba9a13",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/4992d35b-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_4.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 175,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hashutafut-lekulam_iist?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=5",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 7748,
+   "sha256": "d40313974299d389da8250059cbf5c4efb185137379cde5b3443d8a688703d0b",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/d4031397-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_5.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 105,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/pirates_list_5?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=6",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4498,
+   "sha256": "ef987a63e5c55de869bf9e9abda75d6df4033e046c959871d96af5e26ca2c3ec",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/ef987a63-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_6.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 90,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/amcha-israel_list6?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=7",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 16108,
+   "sha256": "87dbae5f8a27434a70bb27643bfa658774ce49426d4822f12ace7bbfa436e619",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/87dbae5f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_7.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 138,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/israel-tchila_list7?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=8",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 10623,
+   "sha256": "93e406c5f3eb87f89f0f14d6e9e0fb906aa6a4c4d0db6d2c9e7f4f6b2d7696f4",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/93e406c5-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_8.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 156,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/gan-eden_list_8?culture=he",
-   "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9",
+   "why": "a chapter of the lists page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 8758,
+   "sha256": "146a7942345b5f407ea6357ea542c56dec16905ea23ce25de62d117b1ae21b1e",
+   "head": "{\"contentHead\":{\"title\":\"רשימות המועמדים לכנסת\",\"subTitle\":null,\"description\":\"במדריך זה ירוכז כל המידע על רשימות המועמדים שיתמודדו בבחירות לכנסת ה-26. \",\"bread",
+   "saved": "files/146a7942-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_9.json",
+   "role": "lists page chapter",
+   "source": "live page",
+   "read": "json",
+   "lines": 118,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/kol-ha-nashim_list9?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyahad_list1?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 18041,
+   "sha256": "9c7783ac8ab1f29c490d3dc25b1fadca3a3a3b61f0295a5b363a2b153cd16fb5",
+   "head": "{\"contentHead\":{\"title\":\"ביחד בראשות נפתלי בנט\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ביחד בראשות בנט מחזירים את התקווה ומטעם מפלגת יש ",
+   "saved": "files/9c7783ac-openapi-gc.digital.gov.il_beyahad_list1_culture_he.json",
+   "role": "roster",
+   "roster": "beyahad_list1",
+   "source": "live page",
+   "read": "json",
+   "lines": 229,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/beyachad-natzliah_list10?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yashar_list_2?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 16266,
+   "sha256": "bd1cab72eb14969194968489b0d6a4dcec62afe512fd9f1e7a114ced7fb651ac",
+   "head": "{\"contentHead\":{\"title\":\"ישר! עם איזנקוט לראשות הממשלה מאחדים את ישראל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ישר לישראל עם איזנקוט ומט",
+   "saved": "files/bd1cab72-openapi-gc.digital.gov.il_yashar_list_2_culture_he.json",
+   "role": "roster",
+   "roster": "yashar_list_2",
+   "source": "live page",
+   "read": "json",
+   "lines": 229,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/israel-beitenu_list11?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/sharshar_list3?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4316,
+   "sha256": "76d6284d30ed08bc78099db4a478672cf938f08669d4f0ce5bf4bef041e7f9e3",
+   "head": "{\"contentHead\":{\"title\":\"שרשר לאהבה ואחדות העם\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת שרשר לאהבה ואחדות העם\",\"breadcrumbsObject\":{\"brea",
+   "saved": "files/76d6284d-openapi-gc.digital.gov.il_sharshar_list3_culture_he.json",
+   "role": "roster",
+   "roster": "sharshar_list3",
+   "source": "live page",
+   "read": "json",
+   "lines": 81,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/mishpat-tzedek_list12?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hashutafut-lekulam_iist?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4173,
+   "sha256": "deb4b71600b5b8e319b583bfafb6a6d64307d80c125145e8cbaca8c223ffe5a0",
+   "head": "{\"contentHead\":{\"title\":\"השותפות לכולם\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת איחוד בני הברית - איתחאד אבנאא אלעהד- בראשות רב חובל בשאר",
+   "saved": "files/deb4b716-openapi-gc.digital.gov.il_hashutafut-lekulam_iist_culture_he.json",
+   "role": "roster",
+   "roster": "hashutafut-lekulam_iist",
+   "source": "live page",
+   "read": "json",
+   "lines": 76,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shama?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/pirates_list_5?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5561,
+   "sha256": "66e7e76b947eab341ac6c8286c20955a08480d7c7f806de14939ff61feafba3a",
+   "head": "{\"contentHead\":{\"title\":\"הפיראטים – צפים לטוב\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת הפיראטים\",\"breadcrumbsObject\":{\"breadcrumbsDescrip",
+   "saved": "files/66e7e76b-openapi-gc.digital.gov.il_pirates_list_5_culture_he.json",
+   "role": "roster",
+   "roster": "pirates_list_5",
+   "source": "live page",
+   "read": "json",
+   "lines": 94,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yehudit-meuhedet_list14?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/amcha-israel_list6?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4509,
+   "sha256": "18c54c4956c9af84f9504d2490d5ad7ee1147fbc5f02596c45987545bdbcc5e4",
+   "head": "{\"contentHead\":{\"title\":\"עמך ישראל בראשות עופר וינטר\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת עמי חי לעד\",\"breadcrumbsObject\":{\"breadcrum",
+   "saved": "files/18c54c49-openapi-gc.digital.gov.il_amcha-israel_list6_culture_he.json",
+   "role": "roster",
+   "roster": "amcha-israel_list6",
+   "source": "live page",
+   "read": "json",
+   "lines": 75,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/seder-chadash_list15?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/israel-tchila_list7?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4346,
+   "sha256": "faf7ea86a7ebd764be6f6b07a7c114c33c9f726a8dd67887c5f46ee078e3d560",
+   "head": "{\"contentHead\":{\"title\":\"ישראל תחילה בראשות שרן השכל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ישראל תחילה - ביטחון, כלכלה, אחדות בעם ישרא",
+   "saved": "files/faf7ea86-openapi-gc.digital.gov.il_israel-tchila_list7_culture_he.json",
+   "role": "roster",
+   "roster": "israel-tchila_list7",
+   "source": "live page",
+   "read": "json",
+   "lines": 73,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hamiluimnikim-vehakalkalit_list16?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/gan-eden_list_8?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4107,
+   "sha256": "ffc094ccd0ee17d631927f6f3479508ff02f5ef5981cae59e73b610ba79f5eed",
+   "head": "{\"contentHead\":{\"title\":\"גן עדן בראשות ישוע ישראל בן דוד\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת גן עדן\",\"breadcrumbsObject\":{\"breadcrum",
+   "saved": "files/ffc094cc-openapi-gc.digital.gov.il_gan-eden_list_8_culture_he.json",
+   "role": "roster",
+   "roster": "gan-eden_list_8",
+   "source": "live page",
+   "read": "json",
+   "lines": 72,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hademokratim_list17?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kol-ha-nashim_list9?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4193,
+   "sha256": "9fa63715234f62a031a322f1865361a4f91253ec5b0c5731e36ede30eef53521",
+   "head": "{\"contentHead\":{\"title\":\"קול הנשים\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת קול הנשים\",\"breadcrumbsObject\":{\"breadcrumbsDescription\":\"מיק",
+   "saved": "files/9fa63715-openapi-gc.digital.gov.il_kol-ha-nashim_list9_culture_he.json",
+   "role": "roster",
+   "roster": "kol-ha-nashim_list9",
+   "source": "live page",
+   "read": "json",
+   "lines": 74,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/raam_list18?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyachad-natzliah_list10?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4510,
+   "sha256": "e8438bf29cf451abe8bbf9f321ac7e968cc32aa3860b250bf6c948fe59adadfd",
+   "head": "{\"contentHead\":{\"title\":\"מפלגת ביחד נצליח – רשימה משותפת ערבית יהודית בראשות אבי שקד\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ביחד נצליח\"",
+   "saved": "files/e8438bf2-openapi-gc.digital.gov.il_beyachad-natzliah_list10_culture_he.json",
+   "role": "roster",
+   "roster": "beyachad-natzliah_list10",
+   "source": "live page",
+   "read": "json",
+   "lines": 72,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shas_list19?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/israel-beitenu_list11?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5359,
+   "sha256": "cb4862ebcfd6dedd33b995d39e3fd4caaee962e47d08b3fa6bf1c41b4196f140",
+   "head": "{\"contentHead\":{\"title\":\"ישראל ביתנו בראשות אביגדור ליברמן\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ישראל ביתנו\",\"breadcrumbsObject\":{\"br",
+   "saved": "files/cb4862eb-openapi-gc.digital.gov.il_israel-beitenu_list11_culture_he.json",
+   "role": "roster",
+   "roster": "israel-beitenu_list11",
+   "source": "live page",
+   "read": "json",
+   "lines": 81,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzibur-charedi_list20?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/mishpat-tzedek_list12?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4538,
+   "sha256": "b175f6ecee81f79053bac4e5147a8305d87de27c88825793085145f2690baf12",
+   "head": "{\"contentHead\":{\"title\":\"משפט צדק\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת משפט צדק\",\"breadcrumbsObject\":{\"breadcrumbsDescription\":\"מיקום",
+   "saved": "files/b175f6ec-openapi-gc.digital.gov.il_mishpat-tzedek_list12_culture_he.json",
+   "role": "roster",
+   "roster": "mishpat-tzedek_list12",
+   "source": "live page",
+   "read": "json",
+   "lines": 73,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/miflegat-am-israelit_list21?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shama?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 3720,
+   "sha256": "0e0c1cba131c2c121e224b1a8aa0b4fc075e360236c7d428131a3bb80d520c75",
+   "head": "{\"contentHead\":{\"title\":\"שמע בראשות נפתלי גולדמן\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת שמע\",\"breadcrumbsObject\":{\"breadcrumbsDescripti",
+   "saved": "files/0e0c1cba-openapi-gc.digital.gov.il_shama_culture_he.json",
+   "role": "roster",
+   "roster": "shama",
+   "source": "live page",
+   "read": "json",
+   "lines": 70,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/brit-olam_list22?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yehudit-meuhedet_list14?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 8720,
+   "sha256": "aacd78cfa0ecc79faa3e38fbb40ebfcd95180a3a9deffb948b4710e6c38d910a",
+   "head": "{\"contentHead\":{\"title\":\"עוצמה יהודית בראשות איתמר בן גביר\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת חזית יהודית לאומית ומטעם מפלגת ארץ יש",
+   "saved": "files/aacd78cf-openapi-gc.digital.gov.il_yehudit-meuhedet_list14_culture_he.json",
+   "role": "roster",
+   "roster": "yehudit-meuhedet_list14",
+   "source": "live page",
+   "read": "json",
+   "lines": 139,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tikun_list23?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/seder-chadash_list15?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 6413,
+   "sha256": "7c90c1b8f1aa34c451637dc977ac8efee4b9d1d139d9d776c00eec0ae1e9e168",
+   "head": "{\"contentHead\":{\"title\":\"סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת סדר חדש לשינוי שיטת ",
+   "saved": "files/7c90c1b8-openapi-gc.digital.gov.il_seder-chadash_list15_culture_he.json",
+   "role": "roster",
+   "roster": "seder-chadash_list15",
+   "source": "live page",
+   "read": "json",
+   "lines": 81,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/gush-tanachi_list24?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hamiluimnikim-vehakalkalit_list16?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 8500,
+   "sha256": "f94d5dbbc0dadd5d5ba66dd8d8563b4064dded7c4b76933055fe06a0a2d7ff2e",
+   "head": "{\"contentHead\":{\"title\":\"המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת המילואימניקים ומטעם",
+   "saved": "files/f94d5dbb-openapi-gc.digital.gov.il_hamiluimnikim-vehakalkalit_list16_culture_he.json",
+   "role": "roster",
+   "roster": "hamiluimnikim-vehakalkalit_list16",
+   "source": "live page",
+   "read": "json",
+   "lines": 120,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/betach_list25?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hademokratim_list17?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 22151,
+   "sha256": "829f120808e38cfa57f61e38a021cc652cb3626dc567864edd1de6f6a6bf0c77",
+   "head": "{\"contentHead\":{\"title\":\"הדמוקרטים בראשות יאיר גולן\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת הדמוקרטים מיסודה של תנועת העבודה ומטעם מפלגת",
+   "saved": "files/829f1208-openapi-gc.digital.gov.il_hademokratim_list17_culture_he.json",
+   "role": "roster",
+   "roster": "hademokratim_list17",
+   "source": "live page",
+   "read": "json",
+   "lines": 308,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/orot_list26?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/raam_list18?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 7414,
+   "sha256": "5c5a0cde071fa8c76e5d9bdf7e78bad3e998e9d8efa111fbe458560baa8423df",
+   "head": "{\"contentHead\":{\"title\":\"רע\\\"ם – הרשימה הערבית המאוחדת\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת רשימת האיחוד הערבי\",\"breadcrumbsObject\":{",
+   "saved": "files/5c5a0cde-openapi-gc.digital.gov.il_raam_list18_culture_he.json",
+   "role": "roster",
+   "roster": "raam_list18",
+   "source": "live page",
+   "read": "json",
+   "lines": 95,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/demokratura_list27?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shas_list19?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 9017,
+   "sha256": "643e9dee2cd038d43f37a08b2062be02c9acadbafe4e49a03dd7be540cac3525",
+   "head": "{\"contentHead\":{\"title\":\"התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ\\\"ל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ש\\\"ס - ה",
+   "saved": "files/643e9dee-openapi-gc.digital.gov.il_shas_list19_culture_he.json",
+   "role": "roster",
+   "roster": "shas_list19",
+   "source": "live page",
+   "read": "json",
+   "lines": 110,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/shachor_list28?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzibur-charedi_list20?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4307,
+   "sha256": "dadb90f60a87852ead0a6d08a94244249fcc3ca67687d34b67a29a43af299613",
+   "head": "{\"contentHead\":{\"title\":\"הציבור החרדי בראשות מוטי ליטנר\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת למען אחיי מפלגת כלל ישראל\",\"breadcrumbsO",
+   "saved": "files/dadb90f6-openapi-gc.digital.gov.il_tzibur-charedi_list20_culture_he.json",
+   "role": "roster",
+   "roster": "tzibur-charedi_list20",
+   "source": "live page",
+   "read": "json",
+   "lines": 73,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/halikud-tikvahadasha_iist29?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/miflegat-am-israelit_list21?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4187,
+   "sha256": "d4d8a0e2d9f119d633ed77e7e3f6555c8e682f467c793712c4223404804c480d",
+   "head": "{\"contentHead\":{\"title\":\"אני ואתה מפלגת העם הישראלית\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת אני ואתה- מפלגת העם הישראלית\",\"breadcrumbsO",
+   "saved": "files/d4d8a0e2-openapi-gc.digital.gov.il_miflegat-am-israelit_list21_culture_he.json",
+   "role": "roster",
+   "roster": "miflegat-am-israelit_list21",
+   "source": "live page",
+   "read": "json",
+   "lines": 72,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/kachol-lavan_list30?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/brit-olam_list22?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4142,
+   "sha256": "e0310ce6cde1f6d0c5a0e461a9a8c88f1ecb5858e56272682ffc29e9f5b7d1ad",
+   "head": "{\"contentHead\":{\"title\":\"ברית עולם לגאולת ישראל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת ברית עולם\",\"breadcrumbsObject\":{\"breadcrumbsDesc",
+   "saved": "files/e0310ce6-openapi-gc.digital.gov.il_brit-olam_list22_culture_he.json",
+   "role": "roster",
+   "roster": "brit-olam_list22",
+   "source": "live page",
+   "read": "json",
+   "lines": 73,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzionutdatit-zehut_list31?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tikun_list23?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4255,
+   "sha256": "4770fb613de35e41f91348cac5ebc02e2939da6ce25f95ab66d17ae46c19e8e8",
+   "head": "{\"contentHead\":{\"title\":\"התיקון לשיטת הבחירות והממשל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת התיקון\",\"breadcrumbsObject\":{\"breadcrumbsDe",
+   "saved": "files/4770fb61-openapi-gc.digital.gov.il_tikun_list23_culture_he.json",
+   "role": "roster",
+   "roster": "tikun_list23",
+   "source": "live page",
+   "read": "json",
+   "lines": 74,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/chozrim-leshorashim_list32?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/gush-tanachi_list24?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 3875,
+   "sha256": "175c4a24f22ce1e3c828a6cf7a54dd8d7768944b835dcc89089c5594360e9f8b",
+   "head": "{\"contentHead\":{\"title\":\"גה\\\"ת – גוש התנ\\\"כי\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת מפלגת גה\\\"ת - גוש התנ\\\"כי\",\"breadcrumbsObject\":{\"br",
+   "saved": "files/175c4a24-openapi-gc.digital.gov.il_gush-tanachi_list24_culture_he.json",
+   "role": "roster",
+   "roster": "gush-tanachi_list24",
+   "source": "live page",
+   "read": "json",
+   "lines": 71,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tzomet-beit-israel_list33?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/betach_list25?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 3983,
+   "sha256": "42bbc975141c48e4b8ece669301bd40fc0681ab616aafd8d205e1d80f0c4a31f",
+   "head": "{\"contentHead\":{\"title\":\"בטח – בטחון חברתי בראשות סמיון גרפמן\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת בט\\\"ח – בטחון חברתי\",\"breadcrumbsO",
+   "saved": "files/42bbc975-openapi-gc.digital.gov.il_betach_list25_culture_he.json",
+   "role": "roster",
+   "roster": "betach_list25",
+   "source": "live page",
+   "read": "json",
+   "lines": 70,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/tekuma_list34?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/orot_list26?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4285,
+   "sha256": "d441e053597d2d32f19dd05e2a03899ec533ed81fe1b5f6c353bf85b15164706",
+   "head": "{\"contentHead\":{\"title\":\"אורות השחר בראשות ניסים לוק\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת אורות השחר מפלגה של כולם\",\"breadcrumbsObjec",
+   "saved": "files/d441e053-openapi-gc.digital.gov.il_orot_list26_culture_he.json",
+   "role": "roster",
+   "roster": "orot_list26",
+   "source": "live page",
+   "read": "json",
+   "lines": 74,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/hareshima-hameshutefet_list35?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/demokratura_list27?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 3876,
+   "sha256": "2cdb03b395c6b52e1c83f77a690080b187a7c12e0d62466482d5a932e39ca095",
+   "head": "{\"contentHead\":{\"title\":\"ביטחון אישי\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת דמוקראטורה – מפלגה להגשמת הציונות וערכי הדמוקראטורה\",\"bread",
+   "saved": "files/2cdb03b3-openapi-gc.digital.gov.il_demokratura_list27_culture_he.json",
+   "role": "roster",
+   "roster": "demokratura_list27",
+   "source": "live page",
+   "read": "json",
+   "lines": 71,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/machane-israel_list36?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shachor_list28?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4433,
+   "sha256": "513c393d685dea43ee722bfd9c64b91ee63dd45d6a16d07922ff93ed47dd11b3",
+   "head": "{\"contentHead\":{\"title\":\"צבע שחור – מגן עולם התורה\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת תומכי יהדות בוכרה\",\"breadcrumbsObject\":{\"brea",
+   "saved": "files/513c393d-openapi-gc.digital.gov.il_shachor_list28_culture_he.json",
+   "role": "roster",
+   "roster": "shachor_list28",
+   "source": "live page",
+   "read": "json",
+   "lines": 75,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/yahadut-degel_list37?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/halikud-tikvahadasha_iist29?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 21237,
+   "sha256": "340d6ee044624af7371b48b7363101e593957d43004f3f7a968754f4eeaedd09",
+   "head": "{\"contentHead\":{\"title\":\"הליכוד בהנהגת בנימין נתניהו לראשות הממשלה\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת הליכוד, תנועה לאומית ליברלית ",
+   "saved": "files/340d6ee0-openapi-gc.digital.gov.il_halikud-tikvahadasha_iist29_culture_he.json",
+   "role": "roster",
+   "roster": "halikud-tikvahadasha_iist29",
+   "source": "live page",
+   "read": "json",
+   "lines": 309,
+   "k26": true
   },
   {
-   "url": "https://www.gov.il/ContentPageWebApi/api/content-pages/noam_list38?culture=he",
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kachol-lavan_list30?culture=he",
    "why": "the list's roster page",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5675,
+   "sha256": "cd5c918096597080257b0a0b08b2e6fffb9cc532347a6d45be10511c89b4c22b",
+   "head": "{\"contentHead\":{\"title\":\"כחול לבן בראשות בני גנץ\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת כחול לבן חוסן לישראל\",\"breadcrumbsObject\":{\"bre",
+   "saved": "files/cd5c9180-openapi-gc.digital.gov.il_kachol-lavan_list30_culture_he.json",
+   "role": "roster",
+   "roster": "kachol-lavan_list30",
+   "source": "live page",
+   "read": "json",
+   "lines": 84,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzionutdatit-zehut_list31?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 9513,
+   "sha256": "1501ee86389be0619bef7b7dd7f7b1bc89f8e7f63638e0eca223ea33317700ee",
+   "head": "{\"contentHead\":{\"title\":\"הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת האיחוד הלא",
+   "saved": "files/1501ee86-openapi-gc.digital.gov.il_tzionutdatit-zehut_list31_culture_he.json",
+   "role": "roster",
+   "roster": "tzionutdatit-zehut_list31",
+   "source": "live page",
+   "read": "json",
+   "lines": 136,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/chozrim-leshorashim_list32?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4330,
+   "sha256": "60465289b98b65f3a9f8149fa37f599f21539d10395355e98c7c942957d2c53f",
+   "head": "{\"contentHead\":{\"title\":\"תנועת אחי תנועתו של הרב יורם אברג'ל זצ\\\"ל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת חוזרים לשורשים\",\"breadcrumbsO",
+   "saved": "files/60465289-openapi-gc.digital.gov.il_chozrim-leshorashim_list32_culture_he.json",
+   "role": "roster",
+   "roster": "chozrim-leshorashim_list32",
+   "source": "live page",
+   "read": "json",
+   "lines": 73,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzomet-beit-israel_list33?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5442,
+   "sha256": "4a06c179d44bd4ed39a18f485adc64e7a293ce9cd0ad0fcf946262246bad872f",
+   "head": "{\"contentHead\":{\"title\":\"צומת בית ישראל\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת צומת - התנועה לציונות מתחדשת ומטעם מפלגת בית ימני חברתי ",
+   "saved": "files/4a06c179-openapi-gc.digital.gov.il_tzomet-beit-israel_list33_culture_he.json",
+   "role": "roster",
+   "roster": "tzomet-beit-israel_list33",
+   "source": "live page",
+   "read": "json",
+   "lines": 93,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tekuma_list34?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 3978,
+   "sha256": "953e111f89008c074a3197fc9c0dfafc2a3dc6a3803339989b727d254eea199e",
+   "head": "{\"contentHead\":{\"title\":\"דרך חזון ותקומה\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת תקומה\",\"breadcrumbsObject\":{\"breadcrumbsDescription\":\"מ",
+   "saved": "files/953e111f-openapi-gc.digital.gov.il_tekuma_list34_culture_he.json",
+   "role": "roster",
+   "roster": "tekuma_list34",
+   "source": "live page",
+   "read": "json",
+   "lines": 74,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hareshima-hameshutefet_list35?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 22346,
+   "sha256": "7d47dafbd422dd11545e073aabf4154178e364ebcbd65c3e4bb47dc5f6dcce00",
+   "head": "{\"contentHead\":{\"title\":\"הרשימה המשותפת\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם המפלגה הקומוניסטית הישראלית ומטעם מפלגת אלתג'מוע אלווטני אלדמו",
+   "saved": "files/7d47dafb-openapi-gc.digital.gov.il_hareshima-hameshutefet_list35_culture_he.json",
+   "role": "roster",
+   "roster": "hareshima-hameshutefet_list35",
+   "source": "live page",
+   "read": "json",
+   "lines": 309,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/machane-israel_list36?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 4652,
+   "sha256": "ccf68be7f8bf686784a6cf374800871508a64846a8790cf5c6323ddce46d8a45",
+   "head": "{\"contentHead\":{\"title\":\"הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפ",
+   "saved": "files/ccf68be7-openapi-gc.digital.gov.il_machane-israel_list36_culture_he.json",
+   "role": "roster",
+   "roster": "machane-israel_list36",
+   "source": "live page",
+   "read": "json",
+   "lines": 72,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yahadut-degel_list37?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 21621,
+   "sha256": "b51c114cdae76f1e66d0e162ce82bec07efe4ae5b6775239dab3dbfdf979dadc",
+   "head": "{\"contentHead\":{\"title\":\"יהדות התורה והשבת אגודת ישראל – דגל התורה\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת אגודת החרדים - דגל התורה ומטע",
+   "saved": "files/b51c114c-openapi-gc.digital.gov.il_yahadut-degel_list37_culture_he.json",
+   "role": "roster",
+   "roster": "yahadut-degel_list37",
+   "source": "live page",
+   "read": "json",
+   "lines": 307,
+   "k26": true
+  },
+  {
+   "url": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/noam_list38?culture=he",
+   "why": "the list's roster page",
+   "status": 200,
+   "type": "application/json; charset=utf-8",
+   "last_modified": null,
+   "bytes": 5707,
+   "sha256": "cd0595139719414aacd5cd66846d999101fd3f3a24a1982ba00cc99e5c28be06",
+   "head": "{\"contentHead\":{\"title\":\"נעם לישראל למען עתיד הילדים בראשות אבי מעוז\",\"subTitle\":null,\"description\":\"רשימת המועמדים הוגשה מטעם מפלגת לזוז ומטעם מפלגת אחריות לאו",
+   "saved": "files/cd059513-openapi-gc.digital.gov.il_noam_list38_culture_he.json",
+   "role": "roster",
+   "roster": "noam_list38",
+   "source": "live page",
+   "read": "json",
+   "lines": 101,
+   "k26": true
   },
   {
    "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
    "why": "the approved ballot slips",
-   "status": 403,
-   "type": "text/html; charset=UTF-8",
-   "head": "<!DOCTYPE html><html lang=\"en-US\"><head><title>Just a moment...</title><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"><meta http-equiv=\"X-UA",
-   "error": "HTTP 403"
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:25 GMT",
+   "bytes": 668247,
+   "sha256": "b97f7244052b31075172dd7cd57e5faf6a0e86967a08abe162650f50dd8b9834",
+   "head": "",
+   "saved": "files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf",
+   "role": "slips",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 148,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/unit/elections-26/he/logo.jpg",
+   "why": "linked: רשימות המועמדים לכנסת",
+   "status": 200,
+   "type": "image/jpeg",
+   "last_modified": "Tue, 06 Oct 2026 12:29:17 GMT",
+   "bytes": 13190,
+   "sha256": "539b88644a2af69354172f289035a1f08306a24be410ba55ada10fa7dd7ef5c6",
+   "head": "����\u0000\u0010JFIF\u0000\u0001\u0002\u0001\u0000H\u0000H\u0000\u0000��\u0000,Photoshop 3.0\u00008BIM\u0003�\u0000\u0000\u0000\u0000\u0000\u0010\u0000H\u0000\u0000\u0000\u0001\u0000\u0001\u0000H\u0000\u0000\u0000\u0001\u0000\u0001�� XICC_PROFILE\u0000\u0001\u0001\u0000\u0000 HLino\u0002\u0010\u0000\u0000mntrRGB XYZ \u0007�\u0000\u0002\u0000 \u0000\u0006\u00001\u0000\u0000acspMSFT\u0000\u0000\u0000\u0000IEC sRGB\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000\u0000��\u0000\u0001\u0000\u0000",
+   "saved": "files/539b8864-www.gov.il_logo.jpg",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live page",
+   "read": "html",
+   "lines": 1,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved Voting Slips.pdf",
+   "why": "linked: ",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:25 GMT",
+   "bytes": 668247,
+   "sha256": "b97f7244052b31075172dd7cd57e5faf6a0e86967a08abe162650f50dd8b9834",
+   "head": "",
+   "saved": "files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 148,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 4471151,
+   "sha256": "5a126d1cd3baf2c1a80b72d3bd33e14922b201d6de0987c1151c258219e871a7",
+   "head": "",
+   "saved": "files/5a126d1c-www.gov.il_pr1_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 4244,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:25 GMT",
+   "bytes": 223304,
+   "sha256": "125a5188e504dcba2d9c67fbe6aad36837287a1f047015c128e42ea0cd759d1c",
+   "head": "",
+   "saved": "files/125a5188-www.gov.il_pr1_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 30,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:25 GMT",
+   "bytes": 225968,
+   "sha256": "075d60c4b8f0c338b4ae891be3348e5f6f5c400cc14ce9eb8acace6dc56471bd",
+   "head": "",
+   "saved": "files/075d60c4-www.gov.il_pr2_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 46,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr3_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:32 GMT",
+   "error": "over 15 MB: not stored, not read",
+   "parent_k26": true,
+   "role": "linked"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:26 GMT",
+   "bytes": 2415032,
+   "sha256": "6b09ff5802f7e527d4c33908dae47a5d048cfea988e6195d4e9434dc3f14dfa7",
+   "head": "",
+   "saved": "files/6b09ff58-www.gov.il_pr4_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 3259,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_annex_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:43 GMT",
+   "error": "over 15 MB: not stored, not read",
+   "parent_k26": true,
+   "role": "linked"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:26 GMT",
+   "bytes": 222950,
+   "sha256": "46fcafe345e03566ad64817455aca6e695626af6ff3ba958c85cd64280812f9b",
+   "head": "",
+   "saved": "files/46fcafe3-www.gov.il_pr5_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 29,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 3469849,
+   "sha256": "d639a12d24f9d4e75a8fc7a45bf835fca5059729385b8343746af581a51b6c0d",
+   "head": "",
+   "saved": "files/d639a12d-www.gov.il_pr5_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 0,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_annex.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:41 GMT",
+   "error": "over 15 MB: not stored, not read",
+   "parent_k26": true,
+   "role": "linked"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:26 GMT",
+   "bytes": 228963,
+   "sha256": "6ad941fed4d08d2e9c4af18691fe03868a1406ed4b8ed6dc134100b9ecad9c96",
+   "head": "",
+   "saved": "files/6ad941fe-www.gov.il_pr4_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 51,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 918611,
+   "sha256": "8a5eea92263bddf75146f22ac2216252f84e6481405a8611d0cb3d9274c6a285",
+   "head": "",
+   "saved": "files/8a5eea92-www.gov.il_pr2_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 268,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:29 GMT",
+   "bytes": 7477916,
+   "sha256": "408e1d7a09236cf83712227041d86a6ff7ea6d7d1bd0ec73b2999f793e892a26",
+   "head": "",
+   "saved": "files/408e1d7a-www.gov.il_pr6_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 953,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 227140,
+   "sha256": "c1254d8c1b2f6e2dcc0ac70aebb79632e006e649ac342e07889bf2e097fa239f",
+   "head": "",
+   "saved": "files/c1254d8c-www.gov.il_pr6_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 45,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 5391262,
+   "sha256": "19af3aee3b1ff5b4936d31f5d0520c9558106daf44237c658737ac6426446559",
+   "head": "",
+   "saved": "files/19af3aee-www.gov.il_pr7_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 2769,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26_annex.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:51 GMT",
+   "error": "over 15 MB: not stored, not read",
+   "parent_k26": true,
+   "role": "linked"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 216518,
+   "sha256": "b4f5263e157faeaa402e6d8693e186f60b4afdc399bc6e9a1831495d7826fbd5",
+   "head": "",
+   "saved": "files/b4f5263e-www.gov.il_pr7_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 30,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 1408825,
+   "sha256": "5180a35ed2e81434fc6c96e6e17f47bbd304bba74f4ade7b289704b46c0c5543",
+   "head": "",
+   "saved": "files/5180a35e-www.gov.il_pr8_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 639,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 275714,
+   "sha256": "d6c0b7a6143309298ace43e25f1711556dd8dfe843098485d62ce35d14c0fae7",
+   "head": "",
+   "saved": "files/d6c0b7a6-www.gov.il_pm3_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 392,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 188820,
+   "sha256": "9beb7875c683472937c94788692873add307ec5908c4d3f7000ccbbe44ee3aa0",
+   "head": "",
+   "saved": "files/9beb7875-www.gov.il_pm3_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 27,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 124709,
+   "sha256": "f36707d4e99088b031dc958f3b1152cd60426d293302c3fe520b83dfb2298129",
+   "head": "",
+   "saved": "files/f36707d4-www.gov.il_pm4_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 137,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 800469,
+   "sha256": "ece43d72d001e263d102d4d15bd713d0f155e27356dab0c5f9e463d60dae9c6e",
+   "head": "",
+   "saved": "files/ece43d72-www.gov.il_pr9_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 1659,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_annex_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:30 GMT",
+   "bytes": 8894096,
+   "sha256": "56dcba641a574363b78918adee203124364994c396249f2f1f6d67cb242644f2",
+   "head": "",
+   "saved": "files/56dcba64-www.gov.il_pr9_26_annex_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 1393,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr3_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 217371,
+   "sha256": "d96c01780b5a875d913fc3f2733c45de0bbee6b943814815d00a7d34cf7657ec",
+   "head": "",
+   "saved": "files/d96c0178-www.gov.il_pr3_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 52,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 214694,
+   "sha256": "df2301c0843201a70351a9059e67f2bbc069cd55d1b7a0dec7a4c48c8a291961",
+   "head": "",
+   "saved": "files/df2301c0-www.gov.il_pr8_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 30,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:27 GMT",
+   "bytes": 201876,
+   "sha256": "755f987bf51547b2ab992ea54a7d81003a1e14055dd48678c3fd02c91c680047",
+   "head": "",
+   "saved": "files/755f987b-www.gov.il_pm4_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 34,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_Redacted.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:29 GMT",
+   "bytes": 4099331,
+   "sha256": "5c5abeae0090a0b1e8c9c4c80327fe004b692ea58d743a90e42a0e3a5923d323",
+   "head": "",
+   "saved": "files/5c5abeae-www.gov.il_pm6_26_Redacted.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 0,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_annex.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:40 GMT",
+   "error": "over 15 MB: not stored, not read",
+   "parent_k26": true,
+   "role": "linked"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 224482,
+   "sha256": "ab230fb6453b127b157cf8fad0e9b8ac99f073e72ab1fb42d91ce062e3681200",
+   "head": "",
+   "saved": "files/ab230fb6-www.gov.il_pm6_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 33,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 221584,
+   "sha256": "625700057be8de73edd037236a84ef414873f8c76ba4c210193466f9aa8cb383",
+   "head": "",
+   "saved": "files/62570005-www.gov.il_pr9_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 50,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 1034629,
+   "sha256": "e9ec6371edd9244371c30e9a054ad2f735a174e1623956a47362450438b7da89",
+   "head": "",
+   "saved": "files/e9ec6371-www.gov.il_pr10_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 112,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 3278833,
+   "sha256": "1e9e5df1fcfb48923fa7f5bc0097d3e05b31386fd71cc2e9724df0ad0ae82636",
+   "head": "",
+   "saved": "files/1e9e5df1-www.gov.il_pm7_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 11740,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:33 GMT",
+   "bytes": 14007592,
+   "sha256": "d24dae2b64e51bf65fae30648cb66c7c70e206fe4e5788c2138eb4a7ab0bc543",
+   "head": "",
+   "saved": "files/d24dae2b-www.gov.il_pm8_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 2001,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 217448,
+   "sha256": "ec57e7fc10baebe9291cad549e016c1aeb46580dde53203f61eaebb59beef5fd",
+   "head": "",
+   "saved": "files/ec57e7fc-www.gov.il_pm7_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 49,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 135286,
+   "sha256": "7527d05767e3afd454c4c86ab34c902e57e4fbb4ce0b0d10da014f4ecc65506b",
+   "head": "",
+   "saved": "files/7527d057-www.gov.il_pr_9_26_evdecision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 45,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 216770,
+   "sha256": "f23d8b19c3f60bd400692393b4c2699355223e5c622d95314e44145248491f83",
+   "head": "",
+   "saved": "files/f23d8b19-www.gov.il_pr10_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 32,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 218158,
+   "sha256": "ae14c8252631e2119496dcae1ed36c13aa9fc3595f28f7cbbc2099863a0f0359",
+   "head": "",
+   "saved": "files/ae14c825-www.gov.il_pm8_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 34,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/7a_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 356929,
+   "sha256": "9c76137a25100fcb02802d54041518f1659357c5c78185807ec74cef6aeff2d9",
+   "head": "",
+   "saved": "files/9c76137a-www.gov.il_7a_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 226,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 130114,
+   "sha256": "ff5f371a68dd3c370a57a80dc36fc433ac6dc4dfd93bc4abedfe6b46bad031bb",
+   "head": "",
+   "saved": "files/ff5f371a-www.gov.il_pr11_26.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 116,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision2.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 147547,
+   "sha256": "dfc601b9c6647bcc19a4be74f5d5013f3df33bbaad64eedeeebb6139c7bc3d33",
+   "head": "",
+   "saved": "files/dfc601b9-www.gov.il_pr_9_26_evdecision2.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 88,
+   "k26": true
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26_decision.pdf",
+   "why": "linked: קבצים מצורפים",
+   "status": 200,
+   "type": "application/pdf",
+   "last_modified": "Mon, 12 Oct 2026 09:44:28 GMT",
+   "bytes": 195230,
+   "sha256": "f6dee162671fee51878fecf1889f546c932430bb00f36f826a77e6c62f9a6f16",
+   "head": "",
+   "saved": "files/f6dee162-www.gov.il_pr11_26_decision.pdf",
+   "parent_k26": true,
+   "role": "linked",
+   "source": "live file",
+   "read": "pdftotext",
+   "lines": 26,
+   "k26": true
   },
   {
    "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A2%D7%95%D7%93%D7%A4%D7%99%D7%9D",
@@ -929,7 +3923,8 @@
    "bytes": 199,
    "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
    "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
-   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json",
+   "role": "data.gov.il catalogue"
   },
   {
    "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A8%D7%A9%D7%99%D7%9E%D7%95%D7%AA%20%D7%94%D7%9E%D7%95%D7%A2%D7%9E%D7%93%D7%99%D7%9D",
@@ -940,7 +3935,8 @@
    "bytes": 11986,
    "sha256": "5752d885a13e1c006ad430b9be30cab7be0b6cdab641b00f5ff5917dd7fa4c7f",
    "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 1, \"facets\": {}, \"results\": [{\"author\": null, \"a",
-   "saved": "files/5752d885-data.gov.il_package_search_rows_50_q.json"
+   "saved": "files/5752d885-data.gov.il_package_search_rows_50_q.json",
+   "role": "data.gov.il catalogue"
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/9162e35c-8834-422c-9202-ed42faf4a9f9/download/full-candidates-lists-19.xlsx",
@@ -951,7 +3947,12 @@
    "bytes": 112345,
    "sha256": "c69258e3c0e13e2282bb72dff9a862fbd3bf3f6301b7f94fb27aa3309d093cf0",
    "head": "",
-   "saved": "files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx"
+   "saved": "files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1636,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/7099b732-303e-4431-bbed-0e47e937b5e8/download/full-candidates-lists-20.xlsx",
@@ -962,7 +3963,12 @@
    "bytes": 79462,
    "sha256": "d89e6aaf5c9e3c1b931dc3049dedaeebe3ad6227fb3c704c36a5c037fd6133b9",
    "head": "",
-   "saved": "files/d89e6aaf-data.gov.il_full-candidates-lists-20.xlsx"
+   "saved": "files/d89e6aaf-data.gov.il_full-candidates-lists-20.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1308,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/597e0059-099e-4200-9131-b3ba645bc685/download/full-cadidates-list-21.xlsx",
@@ -973,7 +3979,12 @@
    "bytes": 104002,
    "sha256": "1e7231ba212430edfecdbcabbf456092d4cdc5198669ae0e2c2135eb4cd5db79",
    "head": "",
-   "saved": "files/1e7231ba-data.gov.il_full-cadidates-list-21.xlsx"
+   "saved": "files/1e7231ba-data.gov.il_full-cadidates-list-21.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1627,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/ae484c34-86a5-4dd7-8462-a22a366287cc/download/full-cadidates-list-22.xlsx",
@@ -984,7 +3995,12 @@
    "bytes": 87970,
    "sha256": "83b3a2e378236258981b94523c755beb1266f09667f643d21fb17c6e5800510e",
    "head": "",
-   "saved": "files/83b3a2e3-data.gov.il_full-cadidates-list-22.xlsx"
+   "saved": "files/83b3a2e3-data.gov.il_full-cadidates-list-22.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1216,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/83d16550-75af-4c47-9f2c-dfeba4394fb1/download/full_candidates_list-23.xlsx",
@@ -995,7 +4011,12 @@
    "bytes": 84398,
    "sha256": "525f9260cc04b734f70dfe8b19debd7dadc009d07d511cbd9f7c30614060eac7",
    "head": "",
-   "saved": "files/525f9260-data.gov.il_full_candidates_list-23.xlsx"
+   "saved": "files/525f9260-data.gov.il_full_candidates_list-23.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1106,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/0f07d5bf-5b8d-4c28-bf37-e69459ddb4ed/download/full_candidates_list.xlsx",
@@ -1006,7 +4027,12 @@
    "bytes": 103461,
    "sha256": "32e0171c9fd04f94062c264db320ee1a1dbb5f79019419ff479086cdad3405c6",
    "head": "",
-   "saved": "files/32e0171c-data.gov.il_full_candidates_list.xlsx"
+   "saved": "files/32e0171c-data.gov.il_full_candidates_list.xlsx",
+   "role": "data.gov.il",
+   "source": "live file",
+   "read": "xlsx",
+   "lines": 1438,
+   "k26": false
   },
   {
    "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26",
@@ -1017,7 +4043,8 @@
    "bytes": 199,
    "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
    "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
-   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json",
+   "role": "data.gov.il catalogue"
   },
   {
    "url": "https://data.gov.il/api/3/action/package_search?rows=50&q=knesset%2026",
@@ -1028,7 +4055,315 @@
    "bytes": 199,
    "sha256": "e17bd6abf5cb5d2df6d5d28e891af29aca291a10b8fe54696f62813ef53c4f98",
    "head": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_search\", \"success\": true, \"result\": {\"count\": 0, \"facets\": {}, \"results\": [], \"sort\": \"metadat",
-   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json"
+   "saved": "files/e17bd6ab-data.gov.il_package_search_rows_50_q.json",
+   "role": "data.gov.il catalogue"
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.bechirot.gov.il%2F&matchType=prefix&from=2025&output=json&fl=original%2Ctimestamp%2Cstatuscode%2Cmimetype&filter=statuscode%3A200&collapse=urlkey&limit=1500",
+   "why": "the archive's index of www.bechirot.gov.il (addresses for the crawl)",
+   "status": 200,
+   "type": "application/json",
+   "last_modified": null,
+   "bytes": 56354,
+   "sha256": "b1935336c86ad569bb2c93f20baba64ccd6df65dad95c4a6cb1f2ec7a7dfa736",
+   "head": "[[\"original\",\"timestamp\",\"statuscode\",\"mimetype\"], [\"https://www.bechirot.gov.il/ar/home/\",\"20250609111359\",\"200\",\"text/html\"], [\"https://www.bechirot.gov.il/ar",
+   "saved": "files/b1935336-web.archive.org_cdx_url_www.bechirot.gov.il_matchType_prefix_from_2025_output_json_fl_orig.json",
+   "role": "archive index"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/robots.txt",
+   "why": "the site's robots.txt (its rules, its sitemaps)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl robots"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/",
+   "why": "the CEC site's home page",
+   "hops": 1,
+   "status": 200,
+   "type": "text/html; charset=utf-8",
+   "last_modified": null,
+   "redirected_to": "https://www.bechirot.gov.il/home/",
+   "bytes": 15486,
+   "sha256": "0b59616b6b290c756ecae0938175758de4ed81bf1f71541dc49c01ab6484bf4a",
+   "head": " <!DOCTYPE HTML> <html lang=\"he\" dir=\"rtl\"> <head> <meta charset=\"utf-8\" /> <meta name=\"viewport\" content=\"width=device-width, initial-scale=1, shrink-to-fit=no",
+   "saved": "files/0b59616b-www.bechirot.gov.il_index.html",
+   "role": "crawl page",
+   "source": "live page",
+   "read": "html",
+   "lines": 3,
+   "k26": false
+  },
+  {
+   "url": "https://www.bechirot.gov.il/sitemap.xml",
+   "why": "the site's sitemap",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl sitemap"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:22 GMT",
+   "bytes": 429731,
+   "sha256": "858b3b83d435d88f650a1efc3a4ce7e3b4d8af78d48e96c803957758676fe439",
+   "head": "/*! For license information please see Banner.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={154(e,t,n){var r=this&&this.__awaiter||function(e,t,n,r){return",
+   "saved": "files/858b3b83-www.bechirot.gov.il_Banner.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+   "why": "the site's API (Banner) for Banner-4a89f3e4",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+   "why": "the site's API (Banner) for Banner-4a89f3e4",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=4a89f3e4&query=22569&currentpageid=22714&type=BannersWithLinks&nolooponsinglemovie=False",
+   "why": "the site's API (Banner) for Banner-4a89f3e4",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:22 GMT",
+   "bytes": 308811,
+   "sha256": "850776a7d07e71f198bdbf842a6f28e546e056fe83ad5fde7505969b873dd7ab",
+   "head": "/*! For license information please see ContentShow.bundle.js.LICENSE.txt */ (()=>{var e={154(e,t,n){\"use strict\";var r=this&&this.__awaiter||function(e,t,n,r){r",
+   "saved": "files/850776a7-www.bechirot.gov.il_ContentShow.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=5ecb69ff&currentpageid=22714&query=22578&textfilter=False&showfilters=False&type=Boxes",
+   "why": "the site's API (ContentShow) for ContentShow-5ecb69ff",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:24 GMT",
+   "bytes": 230681,
+   "sha256": "6ef8a03dbec898b1e9fdd12520eefb172d983b14524b1598d198be960d937e67",
+   "head": "/*! For license information please see EventDetails.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={961(e,t,n){!function e(){if(\"undefined\"!=typeof __REACT_D",
+   "saved": "files/6ef8a03d-www.bechirot.gov.il_EventDetails.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:22 GMT",
+   "bytes": 427784,
+   "sha256": "ec1d005efbece7cea69756d1d8646183f6871669c334e0b2faae3345c04cdd5a",
+   "head": "/*! For license information please see Carousel.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={20(e,t,n){Object.defineProperty(t,\"__esModule\",{value:!0});co",
+   "saved": "files/ec1d005e-www.bechirot.gov.il_Carousel.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=b7306c0e&title=%D7%A6%D7%99%D7%A8+%D7%94%D7%96%D7%9E%D7%9F+%D7%9C%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA+%D7%9C%D7%9B%D7%A0%D7%A1%D7%AA+%D7%94-26&query=176858&componetitemstoshow=0&currentpageid=22714&showshorttext=False&light=true&type=Links",
+   "why": "the site's API (Carousel) for Carousel-b7306c0e",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:24 GMT",
+   "bytes": 258476,
+   "sha256": "f28f6eb4f532132e5d056292fb1b6a0eb304c06d3db6fa54bedacdda1f53bd27",
+   "head": "/*! For license information please see Header.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={149(e,t,n){Object.defineProperty(t,\"__esModule\",{value:!0}),t.L",
+   "saved": "files/f28f6eb4-www.bechirot.gov.il_Header.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllangattribute=he&search=0&siterooturl=%2F",
+   "why": "the site's API (Header) for PageHeader",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:24 GMT",
+   "bytes": 224363,
+   "sha256": "f402ba099526376a1af46dfa8d6a02eb69505528edaef2a3690d7dce96ea4eaf",
+   "head": "/*! For license information please see Footer.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={154(e,t,n){var r=this&&this.__awaiter||function(e,t,n,r){return",
+   "saved": "files/f402ba09-www.bechirot.gov.il_Footer.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdate=False&publicationdate=06%2F01%2F2025+13%3A06&updatedate=14%2F10%2F2026+16%3A30&sitesettingssocialmedia=1",
+   "why": "the site's API (Footer) for PageFooter",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/footer/getFooter?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdate=False&publicationdate=06%2F01%2F2025+13%3A06&updatedate=14%2F10%2F2026+16%3A30&sitesettingssocialmedia=1",
+   "why": "the site's API (Footer) for PageFooter",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:24 GMT",
+   "bytes": 221056,
+   "sha256": "bc57627aee2b60fabbe321bfb679df9bc9c17940b0989b3523922d589cf2ef1b",
+   "head": "/*! For license information please see Share.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={87(e,t,n){Object.defineProperty(t,\"__esModule\",{value:!0});const",
+   "saved": "files/bc57627a-www.bechirot.gov.il_Share.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714",
+   "why": "the site's API (Share) for PageShare",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730",
+   "why": "a script of https://www.bechirot.gov.il/",
+   "status": 200,
+   "type": "text/javascript",
+   "last_modified": "Mon, 07 Sep 2026 08:52:22 GMT",
+   "bytes": 190665,
+   "sha256": "865fe128a50ceddbf6598ac2da942d3f20ebd3a23db87605c5c237479f13f919",
+   "head": "/*! For license information please see AncorTextHolder.bundle.js.LICENSE.txt */ (()=>{\"use strict\";var e={961(e,t,n){!function e(){if(\"undefined\"!=typeof __REAC",
+   "saved": "files/865fe128-www.bechirot.gov.il_AncorTextHolder.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js",
+   "role": "crawl script"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Banner/getBanner",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/footer/getFooter",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Header/getheader",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/Share/getShare",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia",
+   "why": "in the archive's index of the site (an API address)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100",
+   "why": "Umbraco's content listing (the Delivery API, where it is on)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100",
+   "why": "Umbraco's content listing (the Delivery API, where it is on)",
+   "status": 302,
+   "error": "redirect (302) to https://maintenance.gov.il/ not followed: not the same site",
+   "redirect_refused": "https://maintenance.gov.il/",
+   "role": "crawl api"
+  },
+  {
+   "url": "https://web.archive.org/cdx/search/cdx?url=www.gov.il%2FBlobFolder%2Fguide%2Fcandidates-lists-26%2F&matchType=prefix&output=json&fl=original%2Ctimestamp%2Cstatuscode%2Cmimetype&filter=statuscode%3A200&limit=300",
+   "why": "the archive's index of the lists page's files",
+   "status": 200,
+   "type": "application/json",
+   "last_modified": null,
+   "bytes": 580,
+   "sha256": "3272dd5b42acb0444e62d3c6389b842b113c87196d1981fabe4bc4ea8ecbcbe0",
+   "head": "[[\"original\",\"timestamp\",\"statuscode\",\"mimetype\"], [\"https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf\",\"20261009104234\",",
+   "saved": "files/3272dd5b-web.archive.org_cdx_url_www.gov.il_BlobFolder_guide_candidates-lists-26_matchType_prefix_o.json",
+   "role": "archive index"
+  },
+  {
+   "url": "https://web.archive.org/web/20261009104234id_/https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
+   "why": "archive snapshot 20261009104234 of https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf",
+   "status": 429,
+   "type": "text/html",
+   "head": "Your request is being blocked because our system has flagged it as suspected abusive bot traffic that is degrading the performance of the Wayback Machine. <p> W",
+   "error": "HTTP 429",
+   "role": "archive snapshot"
   }
  ]
 }
