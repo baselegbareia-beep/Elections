@@ -591,7 +591,7 @@ function drawLiveAccuracy(el, F) {
 }
 
 /* ---------- election day: turnout ---------- */
-const ELIGIBLE_2026 = 7340000;   // approximate register size (CEC); the live feed carries the official figure
+const ELIGIBLE_2026 = 7331981;   // the register size the CEC reported (21.10); the live feed carries the figure in live_config.json
 const DAY_HOURS = ['10:00', '12:00', '14:00', '16:00', '18:00', '20:00', '22:00'];
 const hourNum = h => +h.slice(0, 2) + (+h.slice(3, 5)) / 60;
 const PAST = ['K21', 'K22', 'K23', 'K24', 'K25'];
