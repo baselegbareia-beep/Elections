@@ -51,8 +51,9 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      daily job split (polls-data.js read without a token; the poll-table check on good and broken tables),
      the daily rebuild request retried and red when it keeps failing, build_polls.py reading polls-data.js as
      data only (WF-1), official-data.yml's split (no write token where polls-data.js is read), live.yml's
-     year, minutes and drill guard, its reset going red when not published, and the push filters (site/live/**
-     starts no workflow);
+     year, minutes and drill guard, its reset going red when not published, the push filters (site/live/**
+     starts no workflow), and the job environment cleared first (below) covering what the jobs that run this file
+     hand their steps;
  11b. the operator's requests on the ops-control branch (ops/request.json, the stand-in for Run workflow and
      Cancel run): the request step of live.yml, discover.yml, net-check.yml, daily.yml and fetch.yml run on sample
      requests (each goes on only for its own, its fields checked as the dispatch inputs; a bad request is red; a fetch
@@ -102,7 +103,9 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      on the committed table and on the ones a daily update may build (links fixed upstream, no filings file).
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
-push to ops-control started has the request itself checked out. Runtime about four minutes."""
+push to ops-control started has the request itself checked out. In a workflow job the job's environment is cleared
+first (JOB_ENV: its env, its $GITHUB_ENV, GitHub's GITHUB_*), so the tests simulate only what they set: on a runner
+they see what they see on a laptop. Runtime about four minutes."""
 import collections
 import contextlib
 import datetime as dt
@@ -422,15 +425,38 @@ def path_filter(patterns, path):
     return hit
 
 
+# The environment a workflow job hands the step that runs this file (live.yml's drill smoke test, daily.yml's health
+# check): the job's env, what its earlier steps wrote to $GITHUB_ENV, and GitHub's own GITHUB_* variables. live_fetch
+# reads some of them (PUBLISH_MODE and PAGES_SOURCE: the unpublished pass's heartbeat_s and mode; GH_TOKEN,
+# GITHUB_REPOSITORY, GITHUB_API_URL, LIVE_BUILD_WAIT, GITHUB_ACTIONS) and the workflow blocks run here read others (the
+# restart check: DRILL_BAN_S, DRILL_BACK_S, OPS_SEEN; the clocks' stand-ins NOW_S and NOW_IL). Each test sets what it
+# simulates, so main() clears these first: on a runner the tests then see what they see on a laptop. 11 checks that
+# the list names everything live.yml and daily.yml hand the steps that run this file.
+JOB_ENV = ("DRILL", "RESET", "MINUTES", "DEFAULT_BRANCH", "INPUT_REF", "GH_TOKEN", "LIVE_BUILD_WAIT",   # live.yml, feed job
+           "DRILL_BAN_S", "DRILL_BACK_S", "OPS_SEEN", "PAGES_SOURCE", "PUBLISH_MODE", "PUB_ARGS",         # its $GITHUB_ENV
+           "BRANCH",                                                                                    # daily.yml, commit job
+           "NOW_S", "NOW_IL")
+
+
+def isolate_env():
+    """Clear the job's environment (JOB_ENV and GITHUB_*, GITHUB_TOKEN among them) from this process, and so from
+    every block run_block runs and every pass of live_fetch.main. Returns the names cleared."""
+    gone = sorted(k for k in os.environ if k in JOB_ENV or k.startswith("GITHUB_"))
+    for k in gone:
+        del os.environ[k]
+    return gone
+
+
 def run_block(script, env, cwd):
     """A workflow run: block under bash -e with the given environment (GITHUB_OUTPUT and friends set, in the
-    scratch folder: cwd may be the repository)."""
+    scratch folder: cwd may be the repository); a value None leaves that name unset."""
     out_file = os.path.join(TMP, "gh_output")
     open(out_file, "w").close()
     env_file = os.path.join(TMP, "gh_env")
     open(env_file, "w").close()
     full = {**os.environ, "GITHUB_OUTPUT": out_file, "GITHUB_STEP_SUMMARY": os.path.join(TMP, "gh_summary"),
             "GITHUB_ENV": env_file, **env}
+    full = {k: v for k, v in full.items() if v is not None}
     r = subprocess.run(["bash", "-e", "-c", script], cwd=cwd, env=full, capture_output=True, text=True)
     outputs = dict(ln.split("=", 1) for ln in (open(out_file).read() + open(env_file).read()).splitlines() if "=" in ln)
     return r.returncode, outputs, r.stdout + r.stderr
@@ -964,10 +990,13 @@ def ops_control(docs, wtmp):
           f"live.yml: the guard hands its drill rule (the poll ban) to the loop's restart check: {drill_env}")
 
     def restart(seen, cwd=run_dir, now=EVENING, env=None):
+        """restart_requested as the loop runs it: the guard's drill rule (drill_env, or env) handed on, nothing else;
+        env={}: not handed on (DRILL_BAN_S and DRILL_BACK_S unset)."""
         rc_, outs_, log_ = run_block((m.group(0) if m else "restart_requested() { return 1; }\n")
                                      + 'if restart_requested; then echo "restart=yes"; else echo "restart=no"; fi\n'
                                      + 'echo "seen=$OPS_SEEN" >> "$GITHUB_OUTPUT"\n',
-                                     {"OPS_SEEN": seen, "NOW_S": str(int(now.timestamp())), **(drill_env if env is None else env)}, cwd)
+                                     {"OPS_SEEN": seen, "NOW_S": str(int(now.timestamp())), "DRILL_BAN_S": None,
+                                      "DRILL_BACK_S": None, **(drill_env if env is None else env)}, cwd)
         return rc_ == 0 and "restart=yes" in log_, outs_.get("seen"), log_
 
     def taken(body, now):
@@ -2350,6 +2379,9 @@ def day_station_whole():
 # ---------------------------------------------------------------- tests
 def main():
     t0 = time.time()
+    cleared = isolate_env()                      # a workflow job's environment is not the tests' (JOB_ENV)
+    if cleared:
+        print(f"(the job's environment cleared, each test sets what it simulates: {', '.join(cleared)})")
     for v in ("no_proxy", "NO_PROXY"):           # the test server is local
         os.environ[v] = "127.0.0.1,localhost"
     k25_30 = subset_k25()
@@ -2773,7 +2805,8 @@ def main():
     api_srv = http.server.HTTPServer(("127.0.0.1", 0), Api)
     threading.Thread(target=api_srv.serve_forever, daemon=True).start()
     Api.origin = origin
-    saved_env = {k: os.environ.get(k) for k in ("GH_TOKEN", "GITHUB_TOKEN", "GITHUB_REPOSITORY", "GITHUB_API_URL", "LIVE_BUILD_WAIT")}
+    saved_env = {k: os.environ.get(k) for k in ("GH_TOKEN", "GITHUB_TOKEN", "GITHUB_REPOSITORY", "GITHUB_API_URL", "LIVE_BUILD_WAIT",
+                                                "PUBLISH_MODE", "PAGES_SOURCE")}
     os.environ.update({"GH_TOKEN": "test-token", "GITHUB_REPOSITORY": "o/r", "LIVE_BUILD_WAIT": "0",
                        "GITHUB_API_URL": f"http://127.0.0.1:{api_srv.server_address[1]}"})
     os.environ.pop("GITHUB_TOKEN", None)
@@ -3280,6 +3313,26 @@ def main():
         check(live_perm.get("pages") == "write" and live_perm.get("contents") == "write", f"live.yml permissions: {live_perm}")
         feed_env = ((docs["live.yml"].get("jobs") or {}).get("feed") or {}).get("env") or {}
         check("vars.LIVE_BUILD_WAIT" in str(feed_env.get("LIVE_BUILD_WAIT")), f"live.yml: LIVE_BUILD_WAIT from a repository variable: {feed_env.get('LIVE_BUILD_WAIT')}")
+        # what main() clears (JOB_ENV, GITHUB_*) covers what a job that runs this file hands its steps: the workflow's
+        # and the job's env, and every name a step of the job writes to $GITHUB_ENV (echo "NAME=...", printf 'NAME=%s\n...')
+        handed = {}
+        for name, doc in docs.items():
+            for jname, job in (doc.get("jobs") or {}).items():
+                jsteps = job.get("steps") or []
+                if not any(re.search(r"^\s*python3 pipeline/test_live\.py\b", s_.get("run") or "", re.M) for s_ in jsteps):
+                    continue
+                names = set(doc.get("env") or {}) | set(job.get("env") or {})
+                for s_ in jsteps:
+                    blk = s_.get("run") or ""
+                    if "GITHUB_ENV" in blk:
+                        names |= set(re.findall(r"""\b(?:echo|printf)\s+["']([A-Z][A-Z0-9_]*)=""", blk))
+                        names |= set(re.findall(r"\\n([A-Z][A-Z0-9_]*)=", blk))
+                handed[f"{name}/{jname}"] = sorted(names)
+        uncleared = sorted({n for v in handed.values() for n in v if n not in JOB_ENV and not n.startswith("GITHUB_")})
+        check({"live.yml/feed", "daily.yml/commit"} <= set(handed) and {"PUBLISH_MODE", "DRILL_BAN_S", "OPS_SEEN"} <= set(handed["live.yml/feed"])
+              and not uncleared,
+              f"the job environment main() clears (JOB_ENV) covers what the jobs that run this file hand their steps: "
+              f"{handed}; not cleared: {uncleared}")
 
         # daily.yml: the third-party polls-data.js is read in a job with nothing to steal; the job that writes never reads it
         jobs = daily.get("jobs") or {}
