@@ -1,6 +1,6 @@
-# CEC lists and surplus agreements (2026-10-17 00:10 UTC)
+# CEC lists and surplus agreements (2026-10-21 08:03 UTC)
 
-145 requests, 112 answered with 200, 104 files stored under files/. Content-pages API: `https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages` (client id found: True). PDFs read with: pdftotext.
+139 requests, 111 answered with 200, 103 files stored under files/. Content-pages API: `https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages` (client id found: True). PDFs read with: pdftotext.
 
 lists_2026.json is read, never written here: what is confirmed below is for the lead to apply.
 
@@ -49,38 +49,22 @@ Letters: **38 of 38 confirmed by a live official page or file**; 0 more only by 
 | ג | UTJ | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | ג / יהדות התורה והשבת אגודת ישראל – דגל התורה |
 | ני | נעם לישראל למען עתיד הילדים בראשות אבי מ | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ני / נעם לישראל למען עתיד הילדים בראשות אבי מעוז |
 
-Agreements: **2 of 5 confirmed by a live official page or file** (שס+ג, עם+ודם); only by an archive snapshot: none; not confirmed: מחל+ט, דרך+אמת, רק+ל; **pairs named on such a page that lists_2026.json lacks: 16**.
+Agreements: **0 of 5 confirmed by a live official page or file** (none); only by an archive snapshot: none; not confirmed: מחל+ט, שס+ג, דרך+אמת, רק+ל, עם+ודם; **pairs named on such a page that lists_2026.json lacks: 0**.
 
 | agreement | lists | confirmed by | where (kind) | the line |
 |---|---|---|---|---|
 | מחל + ט | Likud + Religious Zionism | not confirmed |  |  |
-| שס + ג | Shas + UTJ | **live page or file** | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ג .עליזה אוזן נציגת שס |
+| שס + ג | Shas + UTJ | not confirmed |  |  |
 | דרך + אמת | Yashar + The Democrats | not confirmed |  |  |
 | רק + ל | Together + Yisrael Beiteinu | not confirmed |  |  |
-| עם + ודם | Ra'am + Joint List | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3; live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | פרוטוקול הדיון מיום 23 בספטמבר 2026 בפ"מ 6/26 (לגבי מר עופר כסיף); בפ"מ 8/26 (לגבי מר סאמי אבו שחאדה |
-| עם + ב | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3 | פ"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026 |
-| עם + מחל | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3; live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | פ"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026 |
-| ב + אמת | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3 | פ"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026 |
-| ודם + מחל | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=3 | פ"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026 |
-| ב + ט | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9; live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ט / הציונות הדתית בראשות בצלאל סמוטריץ' ועוצמה יהודית / ט / הציונות הדתית בראשות בצלאל סמוטריץ; עוצמ |
-| מחל + ל | **not in lists_2026.json** | seen | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | ל / הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; ישראל ביתנו בראשות אביגדור ליברמן / מחל; ל / הליכוד;  |
-| ל + ב | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf | שיקול דעתה)( ".ההדגשות שלי ל.ב). |
-| ודם + ב | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | בכנסת ה( 22-ראו :פ״ר 22/2עוצמה יהודית – חזית יהודית לאומית נ׳ הרשימה המשותפת) ,זאת |
-| ד + ג | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | נ ג ד |
-| ל + ז | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | זֹורם כָּל |
-| ב + שס | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ב .עו"ד ארז מלול נציג שס |
-| שס + ד | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ד .מר מנשה לוי נציג ש"ס |
-| מחל + ה | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ה .עו"ד אילן בומבך נציג הליכוד |
-| מחל + ז | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | ז .הגברת קמי רביב נציגת הליכוד |
-| ב + י | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | י .איתיאל ניימן נציג עוצמה יהודית. |
-| ט + צבי | **not in lists_2026.json** | seen | live file: https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | צבי ידידיה סוכות (הציונות הדתית)13.................................................................. |
+| עם + ודם | Ra'am + Joint List | not confirmed |  |  |
 
 ## www.bechirot.gov.il (the crawl)
 
-Home page: 200. Asked: 22 pages of 60 (the site's API: 18 of 35; sitemaps: 1 of 5), 0 files of 40, 8 scripts of 12, each redirect counted; one request every 1.0 s, redirects followed on this site only.
+Home page: 200. Asked: 15 pages of 60 (the site's API: 11 of 35; sitemaps: 1 of 5), 0 files of 40, 8 scripts of 12, each redirect counted; one request every 1.0 s, redirects followed on this site only.
 
 API addresses its scripts call: https://www.bechirot.gov.il/umbraco/api/search/search/ (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Banner/getBanner (no parameters seen); https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Header/getheader (no parameters seen); https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia (no parameters seen); https://www.bechirot.gov.il/umbraco/api/footer/getFooter (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Share/getShare (no parameters seen).
-robots.txt: none; its sitemaps list 0 addresses; the archive's index of the site: 338 addresses (0 on topic, 7 api), HTTP 200; seeds in lists_2026.json: 0.
+robots.txt: none; its sitemaps list 0 addresses; the archive's index of the site: 0 addresses (0 on topic, 0 api), HTTP TimeoutError: The read operation timed out; seeds in lists_2026.json: 0.
 Not asked: 0 (); links not followed (about none of the topics, or an earlier Knesset): 0; links elsewhere (not fetched): 0 .
 
 | address | what | HTTP | read | lines | why |
@@ -89,14 +73,14 @@ Not asked: 0 (); links not followed (about none of the topics, or an earlier Kne
 | https://www.bechirot.gov.il/ | page | 200 (after 1 redirects) | html | 3 | the CEC site's home page |
 | https://www.bechirot.gov.il/sitemap.xml | sitemap | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's sitemap |
 | https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=4a89f3e4&query=22569&currentpageid=22714&type=Banners | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-4a89f3e4 |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=4a89f3e4&query=22569&currentpageid=22714&type=B | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-4a89f3e4 |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=4a89f3e4&query=22569&currentpageid=22714&type=Banne | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-4a89f3e4 |
+| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=e535731d&query=22569&currentpageid=22714&type=Banners | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=e535731d&query=22569&currentpageid=22714&type=B | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
+| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=e535731d&query=22569&currentpageid=22714&type=Banne | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
 | https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=5ecb69ff&currentpageid=22714&query=22578 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (ContentShow) for ContentShow-5ecb69ff |
+| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=6c0aaefe&currentpageid=22714&query=22578 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (ContentShow) for ContentShow-6c0aaefe |
 | https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
 | https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=b7306c0e&title=ציר+הזמן+לבחירות+לכנסת+ה-26&quer | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Carousel) for Carousel-b7306c0e |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=823a7515&title=ציר+הזמן+לבחירות+לכנסת+ה-26&quer | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Carousel) for Carousel-823a7515 |
 | https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
 | https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllanga | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Header) for PageHeader |
 | https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
@@ -105,23 +89,16 @@ Not asked: 0 (); links not followed (about none of the topics, or an earlier Kne
 | https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
 | https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Share) for PageShare |
 | https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/footer/getFooter | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/Header/getheader | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/Share/getShare | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
-| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | in the archive's index of the site (an API address) |
 | https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | Umbraco's content listing (the Delivery API, where it is on) |
 | https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | Umbraco's content listing (the Delivery API, where it is on) |
 
 ## Wayback Machine (the gov.il addresses that answered 403)
 
-0 lookups of 70, 1 snapshots of 40, one request every 4.0 s; **stopped: archive.org answered 429 (too many requests): nothing more asked of it**; not looked up: 5. The lists page's files in the archive's index: 4 addresses, HTTP 200. A snapshot is read as the page it copies and marked "archive snapshot <timestamp>": the live page answered 403.
+1 lookups of 70, 1 snapshots of 40, one request every 4.0 s; **stopped: archive.org answered 429 (too many requests): nothing more asked of it**; not looked up: 1. The lists page's files in the archive's index: 0 addresses, HTTP TimeoutError: The read operation timed out. A snapshot is read as the page it copies and marked "archive snapshot <timestamp>": the live page answered 403.
 
 | address | live | the archive | snapshot | read | lines |
 |---|---|---|---|---|---|
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf | 200 | in the archive's index: 20261009104234 | 429 |  |  |
+| https://www.gov.il/he/pages/candidates-lists-26 | 403 | closest snapshot 20260908210824 | 429 |  |  |
 
 ## Lists (the roster pages on gov.il)
 
@@ -149,26 +126,9 @@ Roster pages read: 38 of 38 live, 0 from archive snapshots; letters stated on th
 
 ## Surplus-vote agreements (every line naming two lists on a page about them)
 
-Expected (lists_2026.json) and seen on a CEC page: 2; expected, not seen: 3; seen, not expected: **16**.
+Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; seen, not expected: **0**.
 
-- ודם + עם: פרוטוקול הדיון מיום 23 בספטמבר 2026 בפ"מ 6/26 (לגבי מר עופר כסיף); בפ"מ 8/26 (לגבי מר סאמי אבו שחאדה); בפ"ר 1/26, בפ"ר 5 (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- עם + ב: פ"ר 1/26 רשימת עוצמה יהודית נ' רשימת רע"ם – הרשימה הערבית המאוחדת, מ-9 בספטמבר 2026 (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- עם + מחל: פ"ר 5/26 הליכוד – תנועה לאומית ליברלית נ' רשימת רע"ם – הרשימה הערבית המאוחדת, מ-14 בספטמבר 2026 (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- ב + אמת: פ"ר 6/26 מפלגת הדמוקרטים מיסודה של תנועת העבודה נ' רשימת עוצמה יהודית, מ-14 בספטמבר 2026 (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- ודם + מחל: פ"מ 6/26 הליכוד – מפלגה לאומית ליברלית נ' רשימת הרשימה המשותפת, מ-15 בספטמבר 2026 (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- ב + ט: ט / הציונות הדתית בראשות בצלאל סמוטריץ' ועוצמה יהודית / ט / הציונות הדתית בראשות בצלאל סמוטריץ; עוצמה יהודית בראשות איתמ (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- מחל + ל: ל / הליכוד בהנהגת בנימין נתניהו לראשות הממשלה; ישראל ביתנו בראשות אביגדור ליברמן / מחל; ל / הליכוד; ישראל ביתנו (https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha, live page)
-- ל + ב: שיקול דעתה)( ".ההדגשות שלי ל.ב). (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf, live file)
-- ודם + ב: בכנסת ה( 22-ראו :פ״ר 22/2עוצמה יהודית – חזית יהודית לאומית נ׳ הרשימה המשותפת) ,זאת (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf, live file)
-- ד + ג: נ ג ד (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf, live file)
-- ל + ז: זֹורם כָּל (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- ב + שס: ב .עו"ד ארז מלול נציג שס (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- שס + ג: ג .עליזה אוזן נציגת שס (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- שס + ד: ד .מר מנשה לוי נציג ש"ס (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- מחל + ה: ה .עו"ד אילן בומבך נציג הליכוד (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- מחל + ז: ז .הגברת קמי רביב נציגת הליכוד (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- ב + י: י .איתיאל ניימן נציג עוצמה יהודית. (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
-- ט + צבי: צבי ידידיה סוכות (הציונות הדתית)13.............................................................................. : (https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf, live file)
+- no CEC page read here names two lists in one line about agreements (the page may not be out, may be a PDF not read: read the stored files)
 
 ## Requests
 
@@ -287,19 +247,19 @@ Expected (lists_2026.json) and seen on a CEC page: 2; expected, not seen: 3; see
 | https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/0f07d5bf-5b8d-4c28-bf37-e69459ddb4ed/download/ | 200 | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | 103461 | xlsx | files/32e0171c-data.gov.il_full_candidates_list.xlsx |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26 | 200 | application/json | 199 |  | files/e17bd6ab-data.gov.il_package_search_rows_50_q.json |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=knesset%2026 | 200 | application/json | 199 |  | files/e17bd6ab-data.gov.il_package_search_rows_50_q.json |
-| https://web.archive.org/cdx/search/cdx?url=www.bechirot.gov.il%2F&matchType=prefix&from=2025&output=json&fl=original%2Ct | 200 | application/json | 56354 |  | files/b1935336-web.archive.org_cdx_url_www.bechirot.gov.il_matchType_prefix_from_2025_output_json_fl_orig.json |
+| https://web.archive.org/cdx/search/cdx?url=www.bechirot.gov.il%2F&matchType=prefix&from=2025&output=json&fl=original%2Ct |  |  |  |  | TimeoutError: The read operation timed out |
 | https://www.bechirot.gov.il/robots.txt | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/ | 200 | text/html | 15486 | html | files/0b59616b-www.bechirot.gov.il_index.html |
+| https://www.bechirot.gov.il/ | 200 | text/html | 15484 | html | files/7663d792-www.bechirot.gov.il_index.html |
 | https://www.bechirot.gov.il/sitemap.xml | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 429731 |  | files/858b3b83-www.bechirot.gov.il_Banner.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=4a89f3e4&query=22569&currentpageid=22714&type=Banners | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=4a89f3e4&query=22569&currentpageid=22714&type=B | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=4a89f3e4&query=22569&currentpageid=22714&type=Banne | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
+| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=e535731d&query=22569&currentpageid=22714&type=Banners | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=e535731d&query=22569&currentpageid=22714&type=B | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
+| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=e535731d&query=22569&currentpageid=22714&type=Banne | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 308811 |  | files/850776a7-www.bechirot.gov.il_ContentShow.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=5ecb69ff&currentpageid=22714&query=22578 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
+| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=6c0aaefe&currentpageid=22714&query=22578 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 230681 |  | files/6ef8a03d-www.bechirot.gov.il_EventDetails.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
 | https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 427784 |  | files/ec1d005e-www.bechirot.gov.il_Carousel.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=b7306c0e&title=%D7%A6%D7%99%D7%A8+%D7%94%D7%96% | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=823a7515&title=%D7%A6%D7%99%D7%A8+%D7%94%D7%96% | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 258476 |  | files/f28f6eb4-www.bechirot.gov.il_Header.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
 | https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllanga | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 224363 |  | files/f402ba09-www.bechirot.gov.il_Footer.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
@@ -308,16 +268,10 @@ Expected (lists_2026.json) and seen on a CEC page: 2; expected, not seen: 3; see
 | https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 221056 |  | files/bc57627a-www.bechirot.gov.il_Share.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
 | https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 190665 |  | files/865fe128-www.bechirot.gov.il_AncorTextHolder.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/footer/getFooter | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Header/getheader | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Share/getShare | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
 | https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://web.archive.org/cdx/search/cdx?url=www.gov.il%2FBlobFolder%2Fguide%2Fcandidates-lists-26%2F&matchType=prefix&out | 200 | application/json | 580 |  | files/3272dd5b-web.archive.org_cdx_url_www.gov.il_BlobFolder_guide_candidates-lists-26_matchType_prefix_o.json |
-| https://web.archive.org/web/20261009104234id_/https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voti | 429 | text/html |  |  | HTTP 429 |
+| https://web.archive.org/cdx/search/cdx?url=www.gov.il%2FBlobFolder%2Fguide%2Fcandidates-lists-26%2F&matchType=prefix&out |  |  |  |  | TimeoutError: The read operation timed out |
+| https://archive.org/wayback/available?url=https%3A%2F%2Fwww.gov.il%2Fhe%2Fpages%2Fcandidates-lists-26&timestamp=20261021 | 200 | application/json | 293 |  | files/204f9f3c-archive.org_available_url_https_www.gov.il_he_pages_candidates-lists-26_timestamp_20261021.json |
+| https://web.archive.org/web/20260908210824id_/https://www.gov.il/he/pages/candidates-lists-26 | 429 | text/html |  |  | HTTP 429 |
 
 Reading the text is best effort (a PDF: pdftotext -layout, else pypdf; XLS and DOC are not read). The files are the record.
