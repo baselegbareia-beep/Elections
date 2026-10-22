@@ -1,11 +1,11 @@
-## CEC file discovery, 21.10 13:34 Israel time (full, github-hosted)
+## CEC file discovery, 22.10 13:38 Israel time (full, github-hosted)
 
-507 URLs probed, 98 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+445 URLs probed, 381 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
-| results_url | https://media26.bechirot.gov.il/files/expb.csv | answers as error (404) | — |  |
-| results_url_localities | https://media26.bechirot.gov.il/files/expc.csv | answers as error (404) | — |  |
+| results_url | https://media26.bechirot.gov.il/files/expb.csv | answers as data-other (202) | — |  |
+| results_url_localities | https://media26.bechirot.gov.il/files/expc.csv | answers as data-other (202) | — |  |
 | station_turnout_url | — | not set | — |  |
 | national hourly (live_input/turnout.json) | — | none found | — |  |
 
@@ -13,41 +13,640 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-20T13:24:42+03:00: 0 new, 0 changed, 0 gone
+### Since 2026-10-21T13:34:54+03:00: 327 new, 2 changed, 0 gone
+
+|  | URL | class | what |
+|---|---|---|---|
+| new | https://votes26.bechirot.gov.il/ | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/ | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/?list-type=2 | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/?prefix=files/ | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/nationalresults | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/cityresults | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/ballotresults | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/robots.txt | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/sitemap.xml | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/robots.txt | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/sitemap.xml | data-other | was 404 |
+| new | https://bechirot.gov.il/robots.txt | data-other | was URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)> |
+| new | https://bechirot.gov.il/sitemap.xml | data-other | was URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failure (_ssl.c:1010)> |
+| new | https://media26.bechirot.gov.il/files/expb.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expc.csv | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/files/expb.csv | data-other | was 404 |
+| new | https://votes26.bechirot.gov.il/files/expc.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expa.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expd.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expe.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expf.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expg.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/exph.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expi.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expj.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expk.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expl.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expm.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expn.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expo.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expp.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expq.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expr.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/exps.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expt.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expu.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expv.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expw.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expx.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expy.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expz.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expb.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expb.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expb.zip | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expb.txt | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expc.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expc.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expc.zip | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/expc.txt | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpiot.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpiot.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpiot.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballot.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballot.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballot.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballots.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballots.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_ballots.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_station.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_station.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_station.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_stations.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_stations.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_stations.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_kalpi.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_kalpi.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_kalpi.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_ballot.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_ballot.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_by_ballot.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi_turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi_turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi_turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot_turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot_turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot_turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballot_turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballot_turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballot_turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots_turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots_turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots_turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/station_turnout.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/station_turnout.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/station_turnout.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percentage.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percentage.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percentage.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votingpercentage.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votingpercentage.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votingpercentage.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percent.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percent.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/voting_percent.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/vote_percent.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/vote_percent.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/vote_percent.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votes_percent.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votes_percent.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/votes_percent.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percentage.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percentage.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percentage.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent_kalpi.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent_kalpi.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/percent_kalpi.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz_hatzbaa.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz_hatzbaa.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz_hatzbaa.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/achuz.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hatzbaa.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hatzbaa.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hatzbaa.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/shiur_hatzbaa.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/shiur_hatzbaa.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/shiur_hatzbaa.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/participation.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/participation.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/participation.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hourly.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hourly.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hourly.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hours.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hours.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/hours.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpi.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/kalpiot.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/ballots.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/stations.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/stations.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/stations.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout26.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout26.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout26.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_26.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_26.json | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_26.xlsx | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_10.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1000.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_11.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1100.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_12.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1200.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_13.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1300.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_14.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1400.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_15.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1500.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_16.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1600.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_17.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1700.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_18.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1800.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_19.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_1900.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_20.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_2000.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_22.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_2200.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_10.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1000.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_11.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1100.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_12.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1200.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_13.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1300.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_14.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1400.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_15.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1500.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_16.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_1600.csv | data-other | was 404 |
+| new | https://media26.bechirot.gov.il/files/turnout_kalpi_17.csv | data-other | was 404 |
 
 ### Files and pages with data
 
 | class | URL | HTTP | bytes | last-modified | details |
 |---|---|---|---|---|---|
+| data-other | https://bechirot.gov.il/ | 202 | 0 |  |  |
+| data-other | https://bechirot.gov.il/robots.txt | 202 | 0 |  |  |
+| data-other | https://bechirot.gov.il/sitemap.xml | 202 | 0 |  |  |
 | data-other | https://data.gov.il/api/3/action/help_show?name=package_show | 200 | 595 |  |  |
 | data-other | https://data.gov.il/api/3/action/package_show?id=votes-knesset | 200 | 29919 |  | json 17 rows |
-| results-locality | https://media25.bechirot.gov.il/files/expc.csv | 200 | 154331 | Tue, 08 Nov 2022 15:03:31 GMT | csv 1216 rows; 1215 loc, 1215 counted; letters 2022 (a test file?); 1 double-envelope rows (סמל ישוב 9999); stored: files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
+| data-other | https://media26.bechirot.gov.il/ | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/?list-type=2 | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/?prefix=files/ | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/achuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/achuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ahuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ahuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballots.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballots_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/expb.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/expc.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/ | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/achuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/double_envelopes.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/envelopes.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/expa.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb.txt | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb.zip | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb_env.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expb_maatafot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/expc.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expc.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expc.txt | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expc.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expc.zip | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expd.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expe.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expf.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expg.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/exph.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expi.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expj.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expk.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expl.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expm.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expn.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expo.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expp.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expq.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expr.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/exps.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expt.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expu.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expv.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expw.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expx.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expy.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/expz.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hourly.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hourly.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hourly.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hours.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hours.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/hours.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_10.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_11.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1100.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_12.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_13.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1300.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_14.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1400.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_15.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1500.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_16.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1600.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_17.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1700.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_18.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1800.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_19.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1900.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_20.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_2000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_22.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_2200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kfulot.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/maatafot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/maatafot_kfulot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/participation.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/participation.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/participation.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/soldiers.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/stations.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/stations.json | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/stations.xlsx | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/files/turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_10.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_11.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1100.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_12.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_13.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1300.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_14.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1400.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_15.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1500.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_16.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1600.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_17.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1700.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_18.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1800.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_19.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1900.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_20.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_2000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_22.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_2200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_26.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_26.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_26.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballot.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballot.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballots.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballots.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_ballots.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_ballot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_ballot.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_ballot.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_kalpi.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_by_kalpi.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_10.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_11.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1100.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_12.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_13.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1300.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_14.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1400.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_15.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1500.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_16.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1600.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_17.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1700.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_18.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1800.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_19.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_1900.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_20.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_2000.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_22.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpi_2200.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpiot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpiot.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_kalpiot.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_station.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_station.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_station.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_stations.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_stations.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_stations.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/vote_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/vote_percent.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/vote_percent.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votes_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votes_percent.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votes_percent.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percent.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percent.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percentage.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/voting_percentage.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votingpercentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votingpercentage.json | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/votingpercentage.xlsx | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/hourly.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/hours.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/kalpi_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/kalpiot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/kalpiot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/participation.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/percent_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/percentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/robots.txt | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/shiur_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/sitemap.xml | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/station_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/stations.csv | 202 | 0 |  |  |
+| data-other | https://media26.bechirot.gov.il/turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout26.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_26.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_ballot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_ballots.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_by_ballot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_by_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_kalpiot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_station.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/turnout_stations.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/vote_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/votes_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/voting_percent.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/voting_percentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/votingpercentage.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/ | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/api | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/api/ballots | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/api/results | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/api/turnout | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/ballotresults | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/cityresults | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/data | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/ | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/achuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/achuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/ahuz.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/ballot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/ballots.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/ballots_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/expb.csv | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/expc.csv | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/hatzbaa.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/hourly.csv | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/hours.csv | 202 | 0 |  |  |
+| data-other | https://votes26.bechirot.gov.il/files/kalpi.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/kalpi_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/kalpiot.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://votes26.bechirot.gov.il/files/kalpiot_turnout.csv | 202 | 0 |  | stored: files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
 
-### Stored files (1; on the ops-reports branch under reports/, locally under the --out folder)
+### Stored files (246; on the ops-reports branch under reports/, locally under the --out folder)
 
 `git fetch origin ops-reports && git show origin/ops-reports:reports/<path> > <file>`; convert a turnout release with `python3 pipeline/discover.py --convert <file>` (docs/FILE_DISCOVERY.md §3).
 
 | class | URL | bytes | path |
 |---|---|---|---|
-| results-locality | https://media25.bechirot.gov.il/files/expc.csv | 154331 | files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
+| data-other | https://media26.bechirot.gov.il/achuz.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/achuz_hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ahuz.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ahuz_hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballot_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballots.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/ballots_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/achuz_hatzbaa.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ahuz_hatzbaa.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballot_turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/ballots_turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/double_envelopes.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/envelopes.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/expb_maatafot.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/hatzbaa.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_10.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1000.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_11.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1100.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_12.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1200.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_13.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1300.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_14.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1400.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_15.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1500.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_16.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1600.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_17.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1700.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_18.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1800.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_19.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_1900.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_20.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_2000.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_22.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpi_turnout_2200.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/kalpiot_turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/maatafot.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/maatafot_kfulot.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percent_kalpi.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/percentage.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/shiur_hatzbaa.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/station_turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.json | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout26.xlsx | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_10.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1000.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_11.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1100.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_12.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_1200.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
+| data-other | https://media26.bechirot.gov.il/files/turnout_13.csv | 0 | files/20261022-1338/e3b0c442-media26.bechirot.gov.il_achuz.csv |
 
 ### Hosts
 
 | host | IPs | probed | answered | status codes | hint |
 |---|---|---|---|---|---|
 | analytics.egov.gov.il | 147.237.12.35 | 1 | 0 | {"no answer": 1} | URLError |
-| aws-e.data.gov.il | 18.161.6.114, 18.161.6.120, 18.161.6.71 | 17 | 17 | {"200": 17} |  |
-| bechirot.gov.il | 147.237.12.28 | 34 | 23 | {"200": 23, "no answer": 11} | skipped; URLError |
+| aws-e.data.gov.il | 2600:9000:2858:2a00:17:f2b1:e000:93a1, 2600:9000:2858:3600:17:f2b1:e000:93a1, 2600:9000:2… | 17 | 17 | {"200": 17} |  |
+| bechirot.gov.il | 147.237.12.28 | 3 | 3 | {"202": 3} |  |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | skipped; URLError |
 | data.gov.il | 18.161.6.39, 18.161.6.61, 18.161.6.62 | 2 | 2 | {"200": 2} |  |
-| e.data.gov.il | 18.161.6.114, 18.161.6.120, 18.161.6.71 | 17 | 17 | {"200": 17} |  |
+| e.data.gov.il | 2600:9000:2858:2a00:17:f2b1:e000:93a1, 2600:9000:2858:3600:17:f2b1:e000:93a1, 2600:9000:2… | 17 | 17 | {"200": 17} |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} |  |
-| media26.bechirot.gov.il | 143.204.1.114, 143.204.1.117, 143.204.1.59 | 270 | 0 | {"404": 270} | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 143.204.1.114, 143.204.1.117, 143.204.1.59 | 270 | 270 | {"202": 270} |  |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} | URLError |
-| votes26.bechirot.gov.il | 2600:9000:2858:3a00:3:c455:d440:93a1, 2600:9000:2858:3c00:3:c455:d440:93a1, 2600:9000:285… | 55 | 0 | {"404": 55} | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 2600:9000:2858:3000:1e:5e2c:7e80:93a1, 2600:9000:2858:5c00:1e:5e2c:7e80:93a1, 2600:9000:2… | 32 | 23 | {"200": 23, "no answer": 9} | URLError; skipped |
+| votes26.bechirot.gov.il | 2600:9000:2858:5000:3:c455:d440:93a1, 2600:9000:2858:5600:3:c455:d440:93a1, 2600:9000:285… | 55 | 55 | {"202": 55} |  |
+| www.bechirot.gov.il | 2600:9000:2858:1400:1e:5e2c:7e80:93a1, 2600:9000:2858:3e00:1e:5e2c:7e80:93a1, 2600:9000:2… | 1 | 1 | {"202": 1} |  |
 | www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 17 | 15 | {"200": 15, "404": 2} | not found |
 
 ### Pages and scripts that answered
@@ -71,7 +670,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-… | 200 | כניסה - חשבונות Google |
 | https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-… | 200 | כניסה - חשבונות Google |
 | https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-… | 200 | כניסה - חשבונות Google |
-| https://bechirot.gov.il/ | 200 | ועדת הבחירות המרכזית- דף הבית |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-e819… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/22f3a195-3a79… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3b9e911a-2e90… | 200 | כניסה - חשבונות Google |
@@ -89,7 +687,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12… | 200 | כניסה - חשבונות Google |
-| https://www.bechirot.gov.il/ | 200 | ועדת הבחירות המרכזית- דף הבית |
 | https://www.gov.il/he/pages/chat-config.json | 200 |  |
 | https://www.gov.il/he/pages/chat.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/gaPush.js | 200 |  |
@@ -97,50 +694,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://www.gov.il/he/pages/gtm.js | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour-26 | 200 |  |
-| https://bechirot.gov.il/bootstrap/js/bootstrap.bundle.min.js | 200 |  |
-| https://bechirot.gov.il/dist/AncorTextHolder.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca1… | 200 |  |
-| https://bechirot.gov.il/dist/Banner.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/Carousel.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/ContentShow.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/EventDetails.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/Footer.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/Header.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/dist/Share.bundle.js | 200 |  |
-| https://bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js | 200 |  |
-| https://bechirot.gov.il/scripts/MiniSite/MiniSiteAccessibility.js | 200 |  |
-| https://bechirot.gov.il/scripts/MiniSite/MiniSiteAccessibility.js?v=248baca6-3b7a-4354-ad… | 200 |  |
-| https://bechirot.gov.il/scripts/MiniSite/MiniSiteCountUp.js | 200 |  |
-| https://bechirot.gov.il/scripts/MiniSite/MiniSiteCountUp.js?v=248baca6-3b7a-4354-ad40-211… | 200 |  |
-| https://www.bechirot.gov.il/bootstrap/js/bootstrap.bundle.min.js | 200 |  |
-| https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-2115… | 200 |  |
-| https://www.bechirot.gov.il/dist/Banner.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://www.bechirot.gov.il/dist/Carousel.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://www.bechirot.gov.il/dist/ContentShow.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca1… | 200 |  |
-| https://www.bechirot.gov.il/dist/EventDetails.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca… | 200 |  |
-| https://www.bechirot.gov.il/dist/Footer.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://www.bechirot.gov.il/dist/Header.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://www.bechirot.gov.il/dist/Share.bundle.js | 200 |  |
-| https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 |  |
-| https://www.bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js | 200 |  |
-| https://www.bechirot.gov.il/scripts/MiniSite/MiniSiteAccessibility.js | 200 |  |
-| https://www.bechirot.gov.il/scripts/MiniSite/MiniSiteAccessibility.js?v=248baca6-3b7a-435… | 200 |  |
-| https://www.bechirot.gov.il/scripts/MiniSite/MiniSiteCountUp.js | 200 |  |
-| https://www.bechirot.gov.il/scripts/MiniSite/MiniSiteCountUp.js?v=248baca6-3b7a-4354-ad40… | 200 |  |
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 |  |
 | https://www.gov.il/cdn-cgi/challenge-platform/scripts/jsd/main.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/cdn/chat.js | 200 |  |
@@ -178,274 +731,6 @@ Other candidates (in brackets: why not suggested, or what to check):
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/419be3b0-fd30-455a-afc0-034ec36be990/download/-24-.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/432d3185-545a-41d9-8c72-d10ee515919c/download/expbkalpi.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/498b48e9-5af6-474d-b7a4-5ac1e21d3a08/download/-16-2003.xls
-- https://bechirot.gov.il/dist/Banner.bundle.js: 6 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Banner/getBanner
-  - https://bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - https://bechirot.gov.il/umbraco/api/search/search/
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `,a.useState)(""),b=t(v),w={searchTerm:h,pageId:e.currentPageId,API_URL:"/umbraco/api/search/search/"},S=(0,i.default)(w,[h],[],!t(h)),x=S.data,E=v==h&&b&&!S.isLoadin`
-  - fragment: `,L=!!n\|\|!!h\|\|!!(null==b?void 0:b.url),_=m.matches&&t&&E\|\|!C,I={API_URL:"/umbraco/api/Carousel/GetCarousel",queryId:e.query,pageId:e.currentPageId},N=(0,d.default)(I,`
-  - fragment: `,query:T,hasAnimation:M}=t,P=t.bannerType\|\|d.CombinedBanner,L={API_URL:"/umbraco/api/Banner/getBanner",queryId:T,pageId:C},{data:_,error:I,isLoading:N}=(0,a.default)`
-- https://bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 6 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Banner/getBanner
-  - https://bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - https://bechirot.gov.il/umbraco/api/search/search/
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `,a.useState)(""),b=t(v),w={searchTerm:h,pageId:e.currentPageId,API_URL:"/umbraco/api/search/search/"},S=(0,i.default)(w,[h],[],!t(h)),x=S.data,E=v==h&&b&&!S.isLoadin`
-  - fragment: `,L=!!n\|\|!!h\|\|!!(null==b?void 0:b.url),_=m.matches&&t&&E\|\|!C,I={API_URL:"/umbraco/api/Carousel/GetCarousel",queryId:e.query,pageId:e.currentPageId},N=(0,d.default)(I,`
-  - fragment: `,query:T,hasAnimation:M}=t,P=t.bannerType\|\|d.CombinedBanner,L={API_URL:"/umbraco/api/Banner/getBanner",queryId:T,pageId:C},{data:_,error:I,isLoading:N}=(0,a.default)`
-- https://bechirot.gov.il/dist/Carousel.bundle.js: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `S_BY_DEVICE:()=>a,CAROUSEL_TYPES:()=>l,LINKS_VIEW_MODE:()=>i});const r="/umbraco/api/Carousel/GetCarousel",a={1:{Desktop:1,Laptop:1,Tablet:1,Mobile:1},2:{Desktop:2,L`
-- https://bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `S_BY_DEVICE:()=>a,CAROUSEL_TYPES:()=>l,LINKS_VIEW_MODE:()=>i});const r="/umbraco/api/Carousel/GetCarousel",a={1:{Desktop:1,Laptop:1,Tablet:1,Mobile:1},2:{Desktop:2,L`
-- https://bechirot.gov.il/dist/ContentShow.bundle.js: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/ContentShow/GetContentItems
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `t{Title:t,ComponentId:n,Query:d,CurrentPageId:f,ContentShowType:p}=e,m="/umbraco/api/ContentShow/GetContentItems",h=window.matchMedia("(min-width: 1200px)"),g=functi`
-- https://bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/ContentShow/GetContentItems
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `t{Title:t,ComponentId:n,Query:d,CurrentPageId:f,ContentShowType:p}=e,m="/umbraco/api/ContentShow/GetContentItems",h=window.matchMedia("(min-width: 1200px)"),g=functi`
-- https://bechirot.gov.il/dist/EventDetails.bundle.js: 3 links, 0 scripts
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-- https://bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 3 links, 0 scripts
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-- https://bechirot.gov.il/dist/Footer.bundle.js: 6 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia
-  - https://bechirot.gov.il/umbraco/api/footer/getFooter
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `id 0,void 0,function*(){try{const t=yield o.default.fetchData({API_URL:"/umbraco/api/SocialMedia/getSocialMedia",queryId:-2,pageId:e.currentPageId});f(!0),n(t)}catch`
-  - fragment: `dateDate:m}){const h=c.matches?6:5,[g,v]=(0,r.useState)(!1),b={API_URL:"/umbraco/api/footer/getFooter",queryId:-3,pageId:t},k=(0,s.default)(b,[],[]).data,w='mst-${f.`
-- https://bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 6 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia
-  - https://bechirot.gov.il/umbraco/api/footer/getFooter
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `id 0,void 0,function*(){try{const t=yield o.default.fetchData({API_URL:"/umbraco/api/SocialMedia/getSocialMedia",queryId:-2,pageId:e.currentPageId});f(!0),n(t)}catch`
-  - fragment: `dateDate:m}){const h=c.matches?6:5,[g,v]=(0,r.useState)(!1),b={API_URL:"/umbraco/api/footer/getFooter",queryId:-3,pageId:t},k=(0,s.default)(b,[],[]).data,w='mst-${f.`
-- https://bechirot.gov.il/dist/Header.bundle.js: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Header/getheader
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `f,search:p,siteRootUrl:m,langAttribute:h,currentPageId:g}=t,v={API_URL:"/umbraco/api/Header/getheader",queryId:-8,pageId:g},y=+g,[b,k]=(0,r.useState)(!1),[w,S]=(0,r.`
-- https://bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Header/getheader
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `f,search:p,siteRootUrl:m,langAttribute:h,currentPageId:g}=t,v={API_URL:"/umbraco/api/Header/getheader",queryId:-8,pageId:g},y=+g,[b,k]=(0,r.useState)(!1),[w,S]=(0,r.`
-- https://bechirot.gov.il/dist/Share.bundle.js: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Share/getShare
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `n})=>{var r,c;const{data:f,isLoading:d,error:p}=(0,u.default)({API_URL:"/umbraco/api/Share/getShare",queryId:-4,pageId:n},[],null),[h,m]=(0,t.useState)(!0),g=(null==`
-- https://bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://bechirot.gov.il/umbraco/api/Share/getShare
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `n})=>{var r,c;const{data:f,isLoading:d,error:p}=(0,u.default)({API_URL:"/umbraco/api/Share/getShare",queryId:-4,pageId:n},[],null),[h,m]=(0,t.useState)(!0),g=(null==`
-- https://www.bechirot.gov.il/dist/Banner.bundle.js: 6 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Banner/getBanner
-  - https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - https://www.bechirot.gov.il/umbraco/api/search/search/
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `,a.useState)(""),b=t(v),w={searchTerm:h,pageId:e.currentPageId,API_URL:"/umbraco/api/search/search/"},S=(0,i.default)(w,[h],[],!t(h)),x=S.data,E=v==h&&b&&!S.isLoadin`
-  - fragment: `,L=!!n\|\|!!h\|\|!!(null==b?void 0:b.url),_=m.matches&&t&&E\|\|!C,I={API_URL:"/umbraco/api/Carousel/GetCarousel",queryId:e.query,pageId:e.currentPageId},N=(0,d.default)(I,`
-  - fragment: `,query:T,hasAnimation:M}=t,P=t.bannerType\|\|d.CombinedBanner,L={API_URL:"/umbraco/api/Banner/getBanner",queryId:T,pageId:C},{data:_,error:I,isLoading:N}=(0,a.default)`
-- https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 6 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Banner/getBanner
-  - https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - https://www.bechirot.gov.il/umbraco/api/search/search/
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `,a.useState)(""),b=t(v),w={searchTerm:h,pageId:e.currentPageId,API_URL:"/umbraco/api/search/search/"},S=(0,i.default)(w,[h],[],!t(h)),x=S.data,E=v==h&&b&&!S.isLoadin`
-  - fragment: `,L=!!n\|\|!!h\|\|!!(null==b?void 0:b.url),_=m.matches&&t&&E\|\|!C,I={API_URL:"/umbraco/api/Carousel/GetCarousel",queryId:e.query,pageId:e.currentPageId},N=(0,d.default)(I,`
-  - fragment: `,query:T,hasAnimation:M}=t,P=t.bannerType\|\|d.CombinedBanner,L={API_URL:"/umbraco/api/Banner/getBanner",queryId:T,pageId:C},{data:_,error:I,isLoading:N}=(0,a.default)`
-- https://www.bechirot.gov.il/dist/Carousel.bundle.js: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `S_BY_DEVICE:()=>a,CAROUSEL_TYPES:()=>l,LINKS_VIEW_MODE:()=>i});const r="/umbraco/api/Carousel/GetCarousel",a={1:{Desktop:1,Laptop:1,Tablet:1,Mobile:1},2:{Desktop:2,L`
-- https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `S_BY_DEVICE:()=>a,CAROUSEL_TYPES:()=>l,LINKS_VIEW_MODE:()=>i});const r="/umbraco/api/Carousel/GetCarousel",a={1:{Desktop:1,Laptop:1,Tablet:1,Mobile:1},2:{Desktop:2,L`
-- https://www.bechirot.gov.il/dist/ContentShow.bundle.js: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `t{Title:t,ComponentId:n,Query:d,CurrentPageId:f,ContentShowType:p}=e,m="/umbraco/api/ContentShow/GetContentItems",h=window.matchMedia("(min-width: 1200px)"),g=functi`
-- https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `t{Title:t,ComponentId:n,Query:d,CurrentPageId:f,ContentShowType:p}=e,m="/umbraco/api/ContentShow/GetContentItems",h=window.matchMedia("(min-width: 1200px)"),g=functi`
-- https://www.bechirot.gov.il/dist/EventDetails.bundle.js: 3 links, 0 scripts
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-- https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 3 links, 0 scripts
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-- https://www.bechirot.gov.il/dist/Footer.bundle.js: 6 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia
-  - https://www.bechirot.gov.il/umbraco/api/footer/getFooter
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `id 0,void 0,function*(){try{const t=yield o.default.fetchData({API_URL:"/umbraco/api/SocialMedia/getSocialMedia",queryId:-2,pageId:e.currentPageId});f(!0),n(t)}catch`
-  - fragment: `dateDate:m}){const h=c.matches?6:5,[g,v]=(0,r.useState)(!1),b={API_URL:"/umbraco/api/footer/getFooter",queryId:-3,pageId:t},k=(0,s.default)(b,[],[]).data,w='mst-${f.`
-- https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 6 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia
-  - https://www.bechirot.gov.il/umbraco/api/footer/getFooter
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `id 0,void 0,function*(){try{const t=yield o.default.fetchData({API_URL:"/umbraco/api/SocialMedia/getSocialMedia",queryId:-2,pageId:e.currentPageId});f(!0),n(t)}catch`
-  - fragment: `dateDate:m}){const h=c.matches?6:5,[g,v]=(0,r.useState)(!1),b={API_URL:"/umbraco/api/footer/getFooter",queryId:-3,pageId:t},k=(0,s.default)(b,[],[]).data,w='mst-${f.`
-- https://www.bechirot.gov.il/dist/Header.bundle.js: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Header/getheader
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `f,search:p,siteRootUrl:m,langAttribute:h,currentPageId:g}=t,v={API_URL:"/umbraco/api/Header/getheader",queryId:-8,pageId:g},y=+g,[b,k]=(0,r.useState)(!1),[w,S]=(0,r.`
-- https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Header/getheader
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `f,search:p,siteRootUrl:m,langAttribute:h,currentPageId:g}=t,v={API_URL:"/umbraco/api/Header/getheader",queryId:-8,pageId:g},y=+g,[b,k]=(0,r.useState)(!1),[w,S]=(0,r.`
-- https://www.bechirot.gov.il/dist/Share.bundle.js: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Share/getShare
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `n})=>{var r,c;const{data:f,isLoading:d,error:p}=(0,u.default)({API_URL:"/umbraco/api/Share/getShare",queryId:-4,pageId:n},[],null),[h,m]=(0,t.useState)(!0),g=(null==`
-- https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730: 4 links, 0 scripts
-  - https://www.bechirot.gov.il/umbraco/api/Share/getShare
-  - fragment: `.csv`
-  - fragment: `.json`
-  - fragment: `.txt`
-  - fragment: `.xls`
-  - fragment: `.xlsx`
-  - fragment: `.zip`
-  - fragment: `n})=>{var r,c;const{data:f,isLoading:d,error:p}=(0,u.default)({API_URL:"/umbraco/api/Share/getShare",queryId:-4,pageId:n},[],null),[h,m]=(0,t.useState)(!0),g=(null==`
 - https://www.gov.il/govilCoreCloud/cdn/chat.js: 9 links, 1 scripts
   - https://www.gov.il/api/
   - https://www.gov.il/api/GetChatConfig
@@ -472,22 +757,11 @@ Other candidates (in brackets: why not suggested, or what to check):
   - fragment: `:e.contentPageWebApi,o=null==(a=window.govilRunConfig)?void 0:a.clientId,i='${l}/api/content-pages/${n}?culture=${A}'+(r.chapterIndex?'&chapterIndex=${r.chapterIndex`
   - fragment: `Options:n,shareLabel:r})=>{const[a,l,i]=d();if((0,o().useEffect)(()=>{e&&l('${e}/api/GetSharePageList?culture=he',!1,void 0,t)},[]),null==a\|\|!a.length\|\|i)return null`
 
-<details><summary>409 URLs that did not answer with data</summary>
+<details><summary>64 URLs that did not answer with data</summary>
 
 | URL | HTTP | why |
 |---|---|---|
 | https://analytics.egov.gov.il/analytics.js | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://bechirot.gov.il/_complete.js | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://bechirot.gov.il/robots.txt | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://bechirot.gov.il/sitemap.xml | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://bechirot.gov.il/umbraco/api/Banner/getBanner | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/Carousel/GetCarousel | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/Header/getheader | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/Share/getShare | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/footer/getFooter | 0 | skipped: the host did not answer 3 times in this run |
-| https://bechirot.gov.il/umbraco/api/search/search/ | 0 | skipped: the host did not answer 3 times in this run |
 | https://bechirot26.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx | 0 | URLError: <urlopen error [Errno -2] Name or service not known> |
 | https://cdn-votes26.bechirot.gov.il/ | 0 | URLError: <urlopen error timed out> |
 | https://cdn-votes26.bechirot.gov.il/api | 0 | skipped: the host did not answer 3 times in this run |
@@ -541,276 +815,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://cdn-votes26.bechirot.gov.il/turnout | 0 | skipped: the host did not answer 3 times in this run |
 | https://cdn-votes26.bechirot.gov.il/voting-percentage | 0 | skipped: the host did not answer 3 times in this run |
 | https://cdn-votes26.bechirot.gov.il/votingpercentage | 0 | skipped: the host did not answer 3 times in this run |
-| https://media26.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/?list-type=2 | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/?prefix=files/ | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/expb.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/expc.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/double_envelopes.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/envelopes.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.zip | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb_env.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb_maatafot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.zip | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expd.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expe.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expf.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expg.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/exph.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expj.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expk.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expl.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expm.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expn.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expo.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expp.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expq.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expr.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/exps.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expt.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expu.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expv.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expw.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expx.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expy.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kfulot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/maatafot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/maatafot_kfulot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/soldiers.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/robots.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetHeaderMoreData | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
@@ -819,70 +823,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://sm.gov.il/trends.json | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://votes26.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/ballots | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/results | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/turnout | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/ballotresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/cityresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/data | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/expb.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/expc.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/nationalresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/percent | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/robots.txt | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/turnout | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/voting-percentage | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/votingpercentage | 404 | CloudFront (Error from cloudfront) |
-| https://www.bechirot.gov.il/_complete.js | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/Header/getheader | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/Share/getShare | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/footer/getFooter | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://www.bechirot.gov.il/umbraco/api/search/search/ | 0 | skipped: the host did not answer 3 times in this run |
 | https://www.gov.il/api/ | 404 | not found |
 | https://www.gov.il/api/GetChatConfig | 404 | not found |
 
