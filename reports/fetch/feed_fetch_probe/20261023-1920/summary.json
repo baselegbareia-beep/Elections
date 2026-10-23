@@ -1,0 +1,436 @@
+{
+ "started": "2026-10-23T16:20:27+00:00",
+ "deadline_s": 1200,
+ "rounds": 6,
+ "wait": 60.0,
+ "requests": 14,
+ "not_asked_past_deadline": 0,
+ "install": [
+  {
+   "package": "numpy",
+   "command": "-m pip install -q numpy",
+   "rc": 0,
+   "seconds": 3.5,
+   "stderr": "[notice] A new release of pip is available: 26.2.1 -> 26.2.2\n[notice] To update, run: pip install --upgrade pip",
+   "present": true
+  },
+  {
+   "package": "playwright",
+   "command": "-m pip install -q playwright",
+   "rc": 0,
+   "seconds": 1.9,
+   "stderr": "[notice] A new release of pip is available: 26.2.1 -> 26.2.2\n[notice] To update, run: pip install --upgrade pip",
+   "present": true
+  }
+ ],
+ "records": [
+  {
+   "label": "round 1",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:20:33+00:00",
+   "s": 10.5,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "urllib",
+     "http": 202,
+     "waf": "challenge",
+     "bytes": 0,
+     "s": 0.15,
+     "waf_header": "challenge"
+    },
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 10.35
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 10.26
+  },
+  {
+   "label": "round 1",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:20:46+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "round 2",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:21:33+00:00",
+   "s": 0.83,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.83
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 0.71
+  },
+  {
+   "label": "round 2",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:21:36+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "round 3",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:22:33+00:00",
+   "s": 0.75,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.75
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 0.69
+  },
+  {
+   "label": "round 3",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:22:36+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "round 4",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:23:33+00:00",
+   "s": 0.8,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.8
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 0.7
+  },
+  {
+   "label": "round 4",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:23:36+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "round 5",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:24:33+00:00",
+   "s": 0.81,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.81
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 0.71
+  },
+  {
+   "label": "round 5",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:24:36+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "round 6",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "at": "2026-10-23T16:25:33+00:00",
+   "s": 0.75,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.75
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />",
+   "browser_start_s": 0.69
+  },
+  {
+   "label": "round 6",
+   "url": "https://media26.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:25:36+00:00",
+   "s": 0.01,
+   "outcome": {
+    "ok": false,
+    "text": "HTTPError: HTTP Error 404: Not Found (through the browser)"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "browser",
+     "http": 404,
+     "waf": "",
+     "bytes": 1376,
+     "s": 0.01
+    }
+   ],
+   "path": "browser",
+   "http": 404,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "content_type": "text/html",
+   "bytes": 1376,
+   "head": "<!DOCTYPE html> <html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\"> <head> <meta charset=\"UTF-8\"> <meta name=\"viewport\" content=\"width=device-width\" />"
+  },
+  {
+   "label": "control",
+   "url": "https://media25.bechirot.gov.il/files/expc.csv",
+   "at": "2026-10-23T16:25:36+00:00",
+   "s": 3.56,
+   "outcome": {
+    "ok": true,
+    "text": "data accepted: 154331 bytes"
+   },
+   "attempts": [
+    {
+     "method": "GET",
+     "path": "urllib",
+     "http": 200,
+     "waf": "",
+     "bytes": 154331,
+     "s": 3.56
+    }
+   ],
+   "path": "urllib",
+   "http": 200,
+   "waf": "",
+   "waf_header": "",
+   "x_cache": "",
+   "server": "",
+   "content_type": "application/octet-stream",
+   "bytes": 154331,
+   "head": "﻿סמל ועדה,שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,אמת,אצ,ב,ג,ד,ום,ז,זך,זנ,זץ,ט,י,יז,ינ,יץ,"
+  }
+ ],
+ "stage": "done",
+ "python": "3.12.15",
+ "rewritten": {},
+ "live_fetch": "imported from pipeline/live_fetch.py",
+ "chrome": "/opt/google/chrome/chrome",
+ "chrome_why": "",
+ "waf_recheck_s": 600,
+ "verdict": [
+  "yes",
+  "all 12 requests to media26 answered past the WAF (path: browser; HTTP 404): a 404 is the CEC's own answer, the 2026 files are not up yet"
+ ],
+ "browser": {
+  "version": "155.0.8059.39",
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "chrome": "/opt/google/chrome/chrome"
+ }
+}
