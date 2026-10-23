@@ -113,7 +113,12 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      only; live.yml's step that installs playwright and finds Chrome (a missing one a warning); a browser gone
      (a stand-in helper that answers "closed"): not sent, a new helper at once; sent, an error the page reads as the
      neutral note and a new helper at the next request;
-     pipeline/fetchers/feed_fetch_probe.py offline (--deadline 0, the verdict without a browser). Then, where a Python
+     pipeline/fetchers/feed_fetch_probe.py offline (--deadline 0, the verdict without a browser); discover.yml's and
+     net-check.yml's browser step the same as live.yml's; pipeline/discover.py behind the stand-in without a browser (no
+     Chrome; "fetch_via": "urllib"): every media26 answer (202 challenge, 405 captcha, CloudFront's bare 202) classed
+     waf-challenge, never data-other or stored, one urllib request a URL, the report's first lines (the WAF seen, the
+     browser not past it, why), a 22-23.10 report's empty 202s neither asked again nor "gone"; pipeline/cec_fetch.py
+     --compare (net-check.yml's step) with the browser unavailable. Then, where a Python
      with playwright (LIVE_BROWSER_PYTHON, else this one) and a Chromium (LIVE_TEST_CHROME, /opt/pw-browsers, else
      live_fetch.find_chrome) are at hand, else skipped with a note: the results through the browser (its own
      User-Agent, gzip, the bytes exact), one request a pass after a challenge and one browser per process, urllib again
@@ -121,7 +126,10 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      "browser", a 405 captcha and a bare 202, a browser challenged too, the probe before 22:00 (404 through the
      browser), a pass as live.yml runs it (a process of its own: the browser's cost), the laptop's --loop (one browser
      all night) with Chrome killed between two passes and during a request (a new Chrome each time, one request a
-     pass, nothing left running), and the probe's verdict "yes".
+     pass, nothing left running), discover.py through the browser (urllib challenged once, then every media26 URL once
+     through it from its worker threads, each read as what it is, the per-station release stored, one start per host
+     every --delay; the browser challenged too: waf-challenge; the WAF lifted: urllib only), --compare with the browser
+     past the WAF, and the probe's verdict "yes".
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. In a workflow job the job's environment is cleared
@@ -2408,7 +2416,8 @@ class FeedWafMock(http.server.BaseHTTPRequestHandler):
     headers and an empty body (mode "captcha": 405 + captcha; "bare": the 202 without the header; "wall": the browser
     too; "lifted": no WAF); the browser's own request gets the file (gzip when it asks for it) or CloudFront's 404 page;
     with stall (an Event) set, it is held stall_s seconds and dropped (Chrome is killed meanwhile).
-    /m25/ (2022) is never challenged. Every request is logged: method, path, User-Agent, Accept-Encoding, Cache-Control."""
+    /m25/ (2022) is never challenged. Every request is logged: method, path, User-Agent, Accept-Encoding, Cache-Control,
+    the port and the time it came in. pipeline/discover.py and cec_fetch.py --compare are tested against it too."""
     files, log, mode, stall, stall_s = {}, [], "challenge", None, 5
     WAF = (("Server", "CloudFront"), ("X-Cache", "Error from cloudfront"), ("Cache-Control", "no-store, max-age=0"),
            ("Content-Type", "text/html; charset=UTF-8"))
@@ -2431,7 +2440,7 @@ class FeedWafMock(http.server.BaseHTTPRequestHandler):
         browser = "HeadlessChrome" in ua
         FeedWafMock.log.append({"method": self.command, "path": self.path, "ua": ua, "browser": browser,
                                 "ae": self.headers.get("Accept-Encoding", ""), "cc": self.headers.get("Cache-Control", ""),
-                                "port": self.server.server_address[1]})
+                                "port": self.server.server_address[1], "t": time.time()})
         mode = FeedWafMock.mode
         hold = FeedWafMock.stall
         if hold is not None and browser and self.path.startswith("/m26/"):
@@ -2709,6 +2718,33 @@ def feed_browser_fetch(inputs, k25_30):
                   f"live.yml's step: the repository variable's Chrome exported as LIVE_CHROME ({outs.get('LIVE_CHROME')}); one "
                   f"that is not there skipped, then the usual places or a warning, exit 0 ({rc2}, {other})")
 
+            # discover.yml and net-check.yml: live.yml's step (the same commands: only the comments and the warnings'
+            # wording differ), before discover.py and before net-check's comparison of urllib and the browser
+            def browser_code(st_):
+                return "\n".join(re.sub(r"::warning::[^\"]*", "::warning::", ln) for ln in ((st_ or {}).get("run") or "").splitlines()
+                                 if not ln.strip().startswith("#"))
+            for wf, marker in (("discover.yml", "pipeline/discover.py --mode"), ("net-check.yml", "pipeline/cec_fetch.py --summary")):
+                wdoc = load_yaml(os.path.join(ROOT, ".github", "workflows", wf)) or {}
+                wsteps = [s_ for _, s_ in workflow_steps(wdoc)]
+                bi = next((i for i, s_ in enumerate(wsteps) if "browser path" in str(s_.get("name", ""))), None)
+                ui = next((i for i, s_ in enumerate(wsteps) if marker in (s_.get("run") or "")), None)
+                bst = wsteps[bi] if bi is not None else {}
+                check(bi is not None and ui is not None and bi < ui and browser_code(bst) == browser_code(step)
+                      and "vars.LIVE_CHROME" in str(bst.get("env")) and "::warning::" in (bst.get("run") or "")
+                      and "exit 1" not in browser_code(bst),
+                      f"{wf}: live.yml's browser step (playwright from pip, Chrome found and exported as LIVE_CHROME, a missing "
+                      f"piece a warning), before the step that asks the CEC ({bi}, {ui})")
+                if wf == "net-check.yml" and ui is not None:
+                    cmp_ = wsteps[ui]
+                    co_ = next((s_ for s_ in wsteps[:bi or 0] if (s_.get("with") or {}).get("sparse-checkout") == "pipeline"), {})
+                    check(cmp_.get("if") == "${{ !cancelled() && steps.request.outputs.run == 'true' }}"
+                          and '--summary "$GITHUB_STEP_SUMMARY" --compare' in cmp_["run"]
+                          and "https://media26.bechirot.gov.il/files/expb.csv" in cmp_["run"] and "https://votes26.bechirot.gov.il/" in cmp_["run"]
+                          and (co_.get("with") or {}).get("persist-credentials") is False
+                          and co_.get("if") == "steps.request.outputs.run == 'true'",
+                          "net-check.yml: urllib's answer and the browser's for media26 and votes26 in the summary (cec_fetch.py "
+                          "--compare), with pipeline/ checked out (no stored credentials), for a net-check request")
+
         # pipeline/fetchers/feed_fetch_probe.py offline, without a browser
         fp = os.path.join(ROOT, "pipeline", "fetchers", "feed_fetch_probe.py")
         import importlib.util
@@ -2751,6 +2787,11 @@ def feed_browser_fetch(inputs, k25_30):
               f"feed_fetch_probe.py without a browser: the verdict 'no' first, urllib's 202 on media26, the control 200, "
               f"{S.get('requests')} requests, nothing but its summaries written: {[(x.get('path'), x.get('http')) for x in recs]} "
               f"{r.stderr.strip()[-200:]}")
+
+        # pipeline/discover.py and cec_fetch.py --compare (net-check.yml) behind the stand-in WAF, without a browser
+        release = open(station_release(k25_30, 0.4, "k11k_release.csv"), "rb").read()
+        discover_behind_waf(A, B, k30, release, browser=False)
+        compare_offline(A, B, browser=False)
 
         # the browser path: a Python with playwright and a Chromium, else a note
         py = env0["LIVE_BROWSER_PYTHON"] or sys.executable
@@ -2897,6 +2938,10 @@ def feed_browser_fetch(inputs, k25_30):
         else:
             loop_with_chrome_killed(c_auto, inputs, env, k30)
 
+        # discover.py and cec_fetch.py --compare with the browser
+        discover_behind_waf(A, B, k30, release, browser=True)
+        compare_offline(A, B, browser=True)
+
         # the probe with the browser: "yes", 404s through it, urllib challenged once, the browser started once a round
         outy, n = os.path.join(TMP, "fprobe_browser"), len(FeedWafMock.log)
         FeedWafMock.files = {"m25/files/expc.csv": k30}    # media26's files not up yet; the control on media25: 2022's
@@ -3027,6 +3072,204 @@ def loop_with_chrome_killed(cfg, inputs, env, k30):
           f"then status.browser {P[3].get('browser') if len(P) > 3 else '-'}")
     check(rc == 0 and not left, f"Ctrl-C ends the loop (exit {rc}) and no Chrome is left running ({left}); "
                                 f"{time.time() - t:.1f} s")
+
+
+M26_REAL, M25_REAL = "https://media26.bechirot.gov.il", "https://media25.bechirot.gov.il"
+
+
+def discover_run(A, B, out, *extra, cfg=None, prev=None, env_extra=None):
+    """11k: pipeline/discover.py (mode quick, at 27.10 14:30) on media26 rewritten to FeedWafMock's /m26/ (the WAF) and
+    media25 to /m25/ (none): its seed /files/, expb.csv, a per-station release, a missing file and expc.csv (the config),
+    the control media25 expc.csv. Returns (exit code, the printed line, report.json, report.md, the stand-in's requests,
+    stderr)."""
+    cand = write(os.path.join(TMP, "disc_cand.json"), {
+        "seeds": [M26_REAL + "/files/"], "enumerate": False, "control": M25_REAL + "/files/expc.csv",
+        "probe": [M26_REAL + "/files/expb.csv", M26_REAL + "/files/turnout_kalpi.csv", M26_REAL + "/files/missing.csv"]})
+    cfg = cfg or cfg_file("c_disc.json", results_url=M26_REAL + "/files/expb.csv", results_url_localities=M26_REAL + "/files/expc.csv")
+    args = [sys.executable, os.path.join(ROOT, "pipeline", "discover.py"), "--out", out, "--mode", "quick", "--candidates", cand,
+            "--config", cfg, "--rewrite", f"{M26_REAL}={A}/m26", "--rewrite", f"{M25_REAL}={B}/m25", "--only-rewritten",
+            "--now", "2026-10-27T14:30", *extra]
+    if prev is not None:
+        args += ["--previous", write(os.path.join(TMP, "disc_prev.json"), prev)]
+    env = {k: v for k, v in os.environ.items() if k.lower() not in ("http_proxy", "https_proxy", "all_proxy")}
+    env.update(env_extra or {})
+    n = len(FeedWafMock.log)
+    r = subprocess.run(args, capture_output=True, text=True, timeout=300, env=env)
+    try:
+        line = json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception:
+        line = {}
+    md = open(os.path.join(out, "report.md"), encoding="utf-8").read() if os.path.exists(os.path.join(out, "report.md")) else ""
+    return r.returncode, line, load(out, "report.json") or {}, md, FeedWafMock.log[n:], r.stderr.strip()[-300:]
+
+
+def discover_behind_waf(A, B, k30, release, browser):
+    """11k: discover.py behind the stand-in WAF. Without a browser (no Chrome; "fetch_via": "urllib"): every media26 answer
+    is waf-challenge (the 202 challenge, a 405 captcha, CloudFront's bare 202), never data-other, never stored; the report's
+    first lines say the WAF was seen and the browser did not get past it, and why; one urllib request a URL; a report
+    from 22-23.10 (empty 202s read as data-other) neither re-asked nor "gone". With a browser: urllib challenged once,
+    then every media26 URL once through the browser (its own User-Agent), each read as what it is (results, the per-station
+    release stored, a 404), at most one request start per host every --delay seconds; the browser challenged too:
+    waf-challenge through the browser; the WAF lifted: urllib only, no browser."""
+    saved_files, saved_mode = FeedWafMock.files, FeedWafMock.mode
+    FeedWafMock.files = {"m26/files/expb.csv": k30, "m26/files/turnout_kalpi.csv": release, "m25/files/expc.csv": k30}
+    m26 = [M26_REAL + p for p in ("/files/", "/files/expb.csv", "/files/expc.csv", "/files/turnout_kalpi.csv", "/files/missing.csv")]
+    nochrome = os.path.join(TMP, "no-such-chrome")
+
+    def by_url(rep):
+        return {e["url"]: e for e in rep.get("urls") or []}
+
+    def stored(out):
+        return sorted(os.path.relpath(p_, out) for p_ in glob.glob(os.path.join(out, "files", "*", "*")))
+    try:
+        if not browser:
+            legacy = {"generated_at": "2026-10-23T13:30:00+03:00", "files_index": {}, "urls": [
+                {"url": M26_REAL + "/files/achuz.csv", "status": 202, "cls": "data-other", "bytes": 0, "source": ["enumerated"]},
+                {"url": M26_REAL + "/files/expc.csv", "status": 202, "cls": "data-other", "bytes": 0, "source": ["config"]}]}
+            for mode, code, act in (("challenge", 202, "challenge"), ("captcha", 405, "captcha"), ("bare", 202, "challenge")):
+                FeedWafMock.mode = mode
+                out = os.path.join(TMP, f"disc_nob_{mode}")
+                rc, line, rep, md, asked, err = discover_run(A, B, out, prev=legacy, env_extra={"LIVE_CHROME": nochrome})
+                U, F, top = by_url(rep), rep.get("fetch") or {}, md.splitlines()[2:4]
+                m = [U.get(u) or {} for u in m26]
+                ctl = U.get(M25_REAL + "/files/expc.csv") or {}
+                check(rc == 0 and all(e.get("cls") == "waf-challenge" and e.get("status") == code and e.get("fetch_path") == "urllib"
+                                      and e.get("waf") == act and "browser path is unavailable" in str(e.get("error"))
+                                      and not e.get("saved") for e in m)
+                      and not any(e.get("cls") == "data-other" for e in U.values()) and ctl.get("fetch_path") == "urllib"
+                      and str(ctl.get("cls")).startswith("results") and stored(out) == [f for f in stored(out) if "media25" in f]
+                      and F.get("waf_seen") is True and F.get("browser_past") == "no" and F.get("waf_hosts") == ["media26.bechirot.gov.il"]
+                      and "LIVE_CHROME=" in str(F.get("browser_error")) and line.get("waf") is True and line.get("browser_past") == "no",
+                      f"discover.py, {mode} ({code}), no Chrome: every media26 URL waf-challenge through urllib, none data-other or "
+                      f"stored, the control read: {[(e.get('cls'), e.get('status'), e.get('fetch_path')) for e in m]} "
+                      f"{F.get('browser_past')} {stored(out)} {err}")
+                check(len(top) == 2 and top[0].startswith("- **WAF: seen** on media26.bechirot.gov.il")
+                      and top[1].startswith("- **The browser path got past it: no**: 5 URLs are waf-challenge")
+                      and "the browser path is unavailable: LIVE_CHROME=" in top[1]
+                      and (rep.get("verdicts") or [{}])[0].get("state", "").startswith("WAF challenge (HTTP"),
+                      f"discover.py, {mode}: the report's first lines say the WAF was seen and the browser did not get past it, "
+                      f"and why; results_url's state says so: {top} {(rep.get('verdicts') or [{}])[0].get('state')}")
+                paths_ = sorted(x["path"].split("?")[0] for x in asked if x["path"].startswith("/m26/"))
+                d = rep.get("diff") or {}
+                check(not any(x["browser"] for x in asked) and paths_ == sorted("/m26" + u[len(M26_REAL):] for u in m26)
+                      and "/m26/files/achuz.csv" not in paths_ and d.get("gone") == []
+                      and [x["url"] for x in d.get("new") or []] == [M25_REAL + "/files/expc.csv"],
+                      f"discover.py, {mode}: one urllib request a media26 URL, no browser; the 22-23.10 report's empty 202s "
+                      f"(data-other) neither asked again nor 'gone': {paths_} new {d.get('new')} gone {d.get('gone')}")
+            FeedWafMock.mode = "challenge"
+            out = os.path.join(TMP, "disc_urllib")
+            rc, line, rep, md, asked, err = discover_run(A, B, out, cfg=cfg_file(
+                "c_disc_u.json", results_url=M26_REAL + "/files/expb.csv", results_url_localities=M26_REAL + "/files/expc.csv",
+                fetch_via="urllib"),
+                env_extra={"LIVE_CHROME": sys.executable})   # a Chrome that would be found: never started
+            U, F = by_url(rep), rep.get("fetch") or {}
+            check(rc == 0 and all((U.get(u) or {}).get("cls") == "waf-challenge" for u in m26) and F.get("via") == "urllib"
+                  and '"fetch_via": "urllib"' in F.get("why_not", "") and "browser" not in F and "browser_error" not in F
+                  and not any(x["browser"] for x in asked) and "the browser path is off" in md.splitlines()[3],
+                  f'discover.py with "fetch_via": "urllib" (live_config.json): waf-challenge, the browser never started, the '
+                  f"first lines say why: {F.get('why_not')} {err}")
+            return
+
+        # with a browser: the WAF's challenge once, then the browser; the pace per host on both paths
+        FeedWafMock.mode = "challenge"
+        out = os.path.join(TMP, "disc_browser")
+        rc, line, rep, md, asked, err = discover_run(A, B, out, "--delay", "0.5")
+        U, F, top = by_url(rep), rep.get("fetch") or {}, md.splitlines()[2:4]
+        m = {u[len(M26_REAL):]: U.get(u) or {} for u in m26}
+        tk = m["/files/turnout_kalpi.csv"]
+        first = next((e for e in m.values() if e.get("attempts")), {})
+        check(rc == 0 and m["/files/expb.csv"].get("cls") == "results-ballot" and tk.get("cls") == "turnout-station"
+              and str(tk.get("saved", "")).endswith("media26.bechirot.gov.il_turnout_kalpi.csv")
+              and m["/files/missing.csv"].get("status") == 404 and m["/files/expc.csv"].get("status") == 404
+              and all(e.get("fetch_path") == "browser" for e in m.values())
+              and [x.get("path") for x in first.get("attempts") or []] == ["urllib", "browser"] and first.get("waf") == "challenge"
+              and not any(e.get("cls") in ("waf-challenge", "data-other") for e in U.values()),
+              f"discover.py with a browser: each media26 URL read as what it is through the browser (results, the release "
+              f"stored, 404s), the first after urllib's challenge: {[(k, e.get('cls'), e.get('status'), e.get('fetch_path')) for k, e in m.items()]} "
+              f"{first.get('attempts')} {err}")
+        m26_asks = [x for x in asked if x["path"].startswith("/m26/")]
+        via_b = sorted(x["path"] for x in m26_asks if x["browser"])
+        n_url = sum(not x["browser"] for x in m26_asks)
+        ts = sorted(x["t"] for x in m26_asks)
+        span = ts[-1] - ts[0] if len(ts) > 1 else 0
+        check(via_b == sorted("/m26" + u[len(M26_REAL):] for u in m26) and 1 <= n_url <= 6
+              and all("HeadlessChrome" in x["ua"] and "kalpi26" not in x["ua"] for x in m26_asks if x["browser"])
+              and span >= 0.8 * 0.5 * (len(ts) - 1),
+              f"discover.py with a browser: every media26 URL once through it (Chrome's own User-Agent), urllib challenged "
+              f"{n_url} time(s) (at most once a worker, before the host is held); one start per host every --delay "
+              f"(0.5 s): {len(ts)} requests in {span:.2f} s")
+        check(len(top) == 2 and top[0].startswith("- **WAF: seen** on media26.bechirot.gov.il")
+              and "asked through the browser directly" in top[0]
+              and top[1].startswith("- **The browser path got past it: yes**: 5 URLs answered through Chrome")
+              and "HeadlessChrome/" in top[1] and F.get("browser_past") == "yes" and F.get("browser_status") == {"404": 3, "200": 2}
+              and (F.get("browser") or {}).get("starts") == 1 and line.get("browser_past") == "yes"
+              and (rep.get("hosts") or {}).get("media26.bechirot.gov.il", {}).get("paths") == {"browser": 5},
+              f"discover.py with a browser: the first lines say the WAF was seen and the browser got past it: {top} "
+              f"{F.get('browser_status')} {(F.get('browser') or {}).get('starts')}")
+
+        # the browser challenged too; the WAF lifted
+        FeedWafMock.mode = "wall"
+        out = os.path.join(TMP, "disc_wall")
+        rc, line, rep, md, asked, err = discover_run(A, B, out)
+        U, F = by_url(rep), rep.get("fetch") or {}
+        check(rc == 0 and all((U.get(u) or {}).get("cls") == "waf-challenge" and (U.get(u) or {}).get("fetch_path") == "browser"
+                              for u in m26) and F.get("browser_past") == "no" and "challenged too on 5" in F.get("why_not", "")
+              and md.splitlines()[3].startswith("- **The browser path got past it: no**")
+              and all("media25" in f for f in stored(out)),
+              f"discover.py, the browser challenged too: waf-challenge through the browser, nothing stored: {F.get('why_not')} {err}")
+        FeedWafMock.mode = "lifted"
+        out = os.path.join(TMP, "disc_lifted")
+        rc, line, rep, md, asked, err = discover_run(A, B, out)
+        U, F = by_url(rep), rep.get("fetch") or {}
+        check(rc == 0 and not any(x["browser"] for x in asked) and F.get("waf_seen") is False and "browser" not in F
+              and all((U.get(u) or {}).get("fetch_path") == "urllib" for u in m26)
+              and (U.get(M26_REAL + "/files/turnout_kalpi.csv") or {}).get("cls") == "turnout-station"
+              and md.splitlines()[2].startswith("- **WAF: not seen**"),
+              f"discover.py, the WAF lifted: urllib only, no browser started, 'WAF: not seen': {F} {err}")
+    finally:
+        FeedWafMock.files, FeedWafMock.mode = saved_files, saved_mode
+
+
+def compare_offline(A, B, browser):
+    """11k: pipeline/cec_fetch.py --compare (net-check.yml's step) against the stand-in: urllib's answer and the browser's
+    for each URL, the verdict lines in the summary; without a browser, the browser unavailable and said so."""
+    saved_files, saved_mode = FeedWafMock.files, FeedWafMock.mode
+    FeedWafMock.files, FeedWafMock.mode = {"m26/files/expb.csv": b"a,b\n1,2\n", "m25/files/expc.csv": b"a,b\n3,4\n"}, "challenge"
+    summ = os.path.join(TMP, f"compare_{'b' if browser else 'nob'}.md")
+    env = {k: v for k, v in os.environ.items() if k.lower() not in ("http_proxy", "https_proxy", "all_proxy")}
+    if not browser:
+        env["LIVE_CHROME"] = os.path.join(TMP, "no-such-chrome")
+    n = len(FeedWafMock.log)
+    try:
+        r = subprocess.run([sys.executable, os.path.join(ROOT, "pipeline", "cec_fetch.py"), "--summary", summ, "--gap", "0",
+                            "--compare", A + "/m26/files/expb.csv", B + "/m25/files/expc.csv"],
+                           capture_output=True, text=True, timeout=180, env=env)
+    finally:
+        FeedWafMock.files, FeedWafMock.mode = saved_files, saved_mode
+    try:
+        out = json.loads(r.stdout.strip().splitlines()[-1])
+    except Exception:
+        out = {}
+    md = open(summ, encoding="utf-8").read() if os.path.exists(summ) else ""
+    rec = out.get("records") or [{}, {}]
+    asked = [(x["path"], x["browser"], x["method"]) for x in FeedWafMock.log[n:]]
+    u0, b0 = rec[0].get("urllib") or {}, rec[0].get("browser") or {}
+    host = A.split("//")[1]
+    if not browser:
+        check(r.returncode == 0 and u0.get("http") == 202 and u0.get("waf") == "challenge" and not b0.get("http")
+              and "LIVE_CHROME=" in str(b0.get("error")) and out.get("waf_urllib") == [host] and out.get("browser_past") is None
+              and "**WAF on urllib: yes**" in md and "**the browser: unavailable**" in md
+              and asked == [("/m26/files/expb.csv", False, "GET"), ("/m25/files/expc.csv", False, "GET")],
+              f"cec_fetch.py --compare (net-check.yml) without a browser: urllib's 202, the browser unavailable, both in the "
+              f"summary: {u0} {b0} {asked} {r.stderr.strip()[-200:]}")
+        return
+    b1 = rec[1].get("browser") or {}
+    check(r.returncode == 0 and u0.get("http") == 202 and b0.get("http") == 200 and not b0.get("waf") and b1.get("http") == 200
+          and out.get("browser_past") is True and "HeadlessChrome" in str((out.get("browser") or {}).get("user_agent"))
+          and "**WAF on urllib: yes**" in md and "**the browser past it: yes**" in md
+          and [b for _, b, _ in asked] == [False, True, False, True],
+          f"cec_fetch.py --compare (net-check.yml) with a browser: urllib's 202 and the browser's 200 for media26, both for "
+          f"media25, the verdict in the summary: {u0} {b0} {asked} {r.stderr.strip()[-200:]}")
 
 
 class WafMock(http.server.BaseHTTPRequestHandler):

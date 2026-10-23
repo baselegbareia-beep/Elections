@@ -2,8 +2,10 @@
 # Runs daily 20–27.10 (08:17 Israel time until 24.10, 07:17 from 25.10) and on demand; the summary table
 # is in the run's summary page. On 9.10.2026 media26 (CloudFront) answered 404 to GitHub runners while
 # serving other networks, so if the 2026 files stay unreachable from here, the feed moves to a self-hosted
-# runner in Israel (docs/ELECTION_DAY.md). It can only read the repository (for the request below), so the yearly
-# repeat of its cron is harmless.
+# runner in Israel (docs/ELECTION_DAY.md). Since 22.10 the CEC's hosts answer plain requests (curl, urllib) with an
+# AWS WAF challenge (HTTP 202); the last step asks media26 and votes26 through urllib and through the browser the feed
+# uses (pipeline/cec_fetch.py --compare), so the summary shows whether the WAF is on and whether the browser gets past
+# it. It can only read the repository (the request below, the fetch code), so the yearly repeat of its cron is harmless.
 # Requests: the election-day operator (a Claude session) can push but cannot dispatch (403), so a push to the
 # ops-control branch with {"workflow": "net-check", "id": "…"} in ops/request.json stands in for Run workflow
 # (docs/ELECTION_DAY.md, "בקשות דרך ops-control"); a request for another workflow ends at the first steps.
@@ -18,7 +20,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read                # the request file (a push to ops-control); nothing is written
+  contents: read                # the request file (a push to ops-control) and pipeline/; nothing is written
 
 jobs:
   net-check:
@@ -45,6 +47,41 @@ jobs:
           # live.yml's loop runs the same check on a restart request (pipeline/test_live.py runs both).
           if [ "$GITHUB_EVENT_NAME" != push ]; then echo 'run=true' >> "$GITHUB_OUTPUT"; exit 0; fi
           python3 ops/check_request.py ops/request.json
+      - uses: actions/checkout@v6         # the CEC fetch code for the WAF check below (pipeline/cec_fetch.py, browser_fetch.py)
+        if: steps.request.outputs.run == 'true'
+        with:
+          sparse-checkout: pipeline
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        if: steps.request.outputs.run == 'true'
+        with:
+          python-version: '3.12'
+      - name: The browser path (playwright and this runner's Chrome) for the CEC's WAF
+        if: steps.request.outputs.run == 'true'
+        env:
+          CHROME_VAR: ${{ vars.LIVE_CHROME }}   # a self-hosted runner's Chrome, when it is not in the usual places
+        run: |
+          # Since 22.10 bechirot.gov.il answers urllib with an AWS WAF challenge (HTTP 202); the feed and discovery then
+          # ask through a headless Chrome with its own User-Agent, driven by playwright (pipeline/cec_fetch.py,
+          # pipeline/browser_fetch.py). live.yml's step (pipeline/test_live.py keeps the two the same): the package only,
+          # never `playwright install`, the hosted runner has Google Chrome. A missing piece is a warning, not a red run:
+          # the comparison below then shows the browser as unavailable
+          python3 -c 'import playwright.sync_api' 2>/dev/null || python3 -m pip install -q playwright > /dev/null 2>&1 \
+            || python3 -m pip install -q --user --break-system-packages playwright > /dev/null 2>&1 \
+            || echo "::warning::playwright not installed: this check cannot ask through the browser if the CEC's WAF challenges it"
+          chrome=''
+          for c in "${CHROME_VAR:-}" "${LIVE_CHROME:-}" /opt/google/chrome/chrome google-chrome google-chrome-stable chromium chromium-browser \
+                   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'; do
+            [ -n "$c" ] || continue
+            p=$(command -v "$c" 2>/dev/null) || continue
+            if [ -f "$p" ] && [ -x "$p" ]; then chrome=$p; break; fi
+          done
+          if [ -n "$chrome" ]; then
+            echo "LIVE_CHROME=$chrome" >> "$GITHUB_ENV"
+            echo "the browser path: $chrome, playwright $(python3 -c 'from importlib.metadata import version; print(version("playwright"))' 2>/dev/null || echo 'not installed')"
+          else
+            echo "::warning::no Chrome or Chromium on this runner (LIVE_CHROME, /opt/google/chrome/chrome, google-chrome, chromium): this check cannot ask through the browser if the CEC's WAF challenges it"
+          fi
       - name: Probe official hosts
         if: steps.request.outputs.run == 'true'
         run: |
@@ -89,3 +126,14 @@ jobs:
           for path in files/ files/expc.csv files/expb.csv index.html robots.txt; do
             printf '%s -> ' "$path"; curl -sS -o /dev/null -m 20 -A "$UA" -w 'http=%{http_code} bytes=%{size_download}\n' "https://media26.bechirot.gov.il/$path" || true
           done
+      - name: The CEC's WAF, urllib and the browser side by side (media26, votes26)
+        if: ${{ !cancelled() && steps.request.outputs.run == 'true' }}   # also when a curl probe above failed
+        run: |
+          # The curl answers above are what urllib gets too: since 22.10 the WAF's 202. The feed and discovery then ask
+          # through the browser (pipeline/cec_fetch.py). Here each URL once through urllib (the feed's User-Agent) and once
+          # through the browser (Chrome's own), a 4 KB Range GET each, 1 s apart, into the summary: whether the WAF is on
+          # for urllib, and whether the browser still gets past it, so a WAF switched on or off shows here
+          python3 pipeline/cec_fetch.py --summary "$GITHUB_STEP_SUMMARY" --compare \
+            https://media26.bechirot.gov.il/files/expb.csv https://media26.bechirot.gov.il/files/expc.csv \
+            https://votes26.bechirot.gov.il/ \
+            || echo "::warning::the urllib / browser comparison failed (pipeline/cec_fetch.py --compare)"

@@ -1,7 +1,7 @@
 # Rebuilds every data file from the official CEC ballot files (media2X.bechirot.gov.il),
 # which GitHub's runners can reach, and checks the result against the committed site/data.
 # The election-day files (live_config.json, live_fetch.py, live_model.py, test_live.py, arab_turnout.py,
-# discover.py) do not feed site/data, so editing them on election day does not start this 3–5-minute
+# discover.py, cec_fetch.py) do not feed site/data, so editing them on election day does not start this 3–5-minute
 # job; neither do the feed's commits to site/live/ or the daily poll update (outside pipeline/, and
 # pushed with GITHUB_TOKEN, which starts no workflow).
 # Two jobs (WF-1 of round 3): "rebuild" reads third-party files (the 2026 poll table polls-data.js among them;
@@ -21,6 +21,7 @@ on:
       - '!pipeline/test_live.py'
       - '!pipeline/arab_turnout.py'
       - '!pipeline/discover.py'
+      - '!pipeline/cec_fetch.py'
       - '.github/workflows/official-data.yml'
   workflow_dispatch:
 

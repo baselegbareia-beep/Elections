@@ -29,7 +29,20 @@ link to, and every URL that answered in the previous report.
 For each URL: HTTP status, content type, length, last-modified/etag, the first bytes decoded
 (utf-8-sig, else cp1255), the CSV / xlsx / JSON header and row count, a class (results-ballot,
 results-locality, turnout-station, turnout-locality, turnout-national, listing, data-other, html,
-error), the live_config.json key it fits and the column_aliases / ignore_columns the feed would need.
+waf-challenge, error), the live_config.json key it fits and the column_aliases / ignore_columns the feed would need,
+and which path answered (fetch_path).
+
+The CEC's WAF. From 22.10.2026 bechirot.gov.il and its hosts (CloudFront + AWS WAF) answer Python's urllib with a
+challenge: HTTP 202 with x-amzn-waf-action and an empty body, which is not a file. The CEC's hosts are therefore asked
+as the feed asks them (pipeline/cec_fetch.py, the feed's own code): urllib first; on the WAF's answer the same URL
+through a headless Chrome with its own User-Agent (playwright, pipeline/browser_fetch.py; discover.yml installs it and
+finds the runner's Chrome, as live.yml does), and that host through the browser directly from then on (urllib again
+every 10 minutes). One browser for the run, one request at a time; the pace per host holds on both paths. An answer
+that is still the WAF's (no browser here, "fetch_via": "urllib", or the browser challenged too) is classed
+waf-challenge: never data, never stored, never "gone". Each entry says which path answered (fetch_path), whether the
+WAF answered on the way (waf) and, when there were two, both attempts; the report's first lines say whether the WAF
+was seen and whether the browser path got past it. --fetch-via auto|urllib|browser (default: live_config.json's
+"fetch_via", else auto).
 
 Testing against a local server: --rewrite https://media26.bechirot.gov.il=http://127.0.0.1:8765/m26
 (repeatable) fetches from the mock and keeps the real URL in the report; --only-rewritten skips
@@ -46,6 +59,7 @@ import collections
 import concurrent.futures as cf
 import csv
 import datetime as dt
+import email.message
 import email.utils
 import hashlib
 import html
@@ -72,7 +86,13 @@ import zipfile
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, "pipeline"))
+import cec_fetch as CF  # noqa: E402 - the feed's requests to the CEC: urllib, and a headless Chrome behind the WAF
+
 UA = "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-discover"
+HEADERS = {"Accept": "*/*", "Cache-Control": "no-cache", "Accept-Language": "he-IL,he;q=0.9,en;q=0.5"}
+# the CEC's hosts (and every host under them): asked as the feed asks them (cec_fetch.request: urllib first, and on the
+# WAF's answer the same URL through the browser); every other host through urllib only
+CEC_HOSTS = ("bechirot.gov.il",)
 try:
     from zoneinfo import ZoneInfo
     IL = ZoneInfo("Asia/Jerusalem")
@@ -359,8 +379,22 @@ def network_error(exc):
                                         and not isinstance(exc, http.client.InvalidURL))
 
 
+def cec_host(url):
+    """A URL on one of the CEC's hosts (CEC_HOSTS), by its real address (not the test rewrite's)."""
+    h = host_of(url)
+    return any(h == d or h.endswith("." + d) for d in CEC_HOSTS)
+
+
+class Skipped(Exception):
+    """A request not sent: its host did not answer 3 times in this run."""
+
+
 class Net:
-    """GET with a per-host pace, a size cap, and the test-mode host rewrite."""
+    """GET with a per-host pace, a size cap, and the test-mode host rewrite. The CEC's hosts are asked as the feed asks
+    them (cec_fetch.request): urllib first; on the WAF's answer the same URL through a headless Chrome with its own
+    User-Agent, and that host through the browser directly from then on (urllib again every 10 minutes). One browser for
+    the run, one request at a time (the threads queue for it). The pace holds for every request started, on either
+    path: at most one start per host every `delay` seconds, as before the WAF."""
 
     def __init__(self, a):
         self.rewrite = [tuple(r.split("=", 1)) for r in a.rewrite]
@@ -379,6 +413,15 @@ class Net:
                 return src + url[len(dst):]
         return url
 
+    def pace(self, host):
+        """Before each request starts, whichever path sends it: the host's next slot; Skipped once it failed 3 times."""
+        if self.fails[host] >= 3:
+            raise Skipped("skipped: the host did not answer 3 times in this run")
+        with self.lock:                             # at most one request start per host every `delay` seconds
+            start = max(time.time(), self.slot.get(host, 0.0))
+            self.slot[host] = start + self.delay
+        time.sleep(max(0.0, start - time.time()))
+
     def get(self, url):
         target, host = self.target(url), host_of(url)
         if target is None:
@@ -386,34 +429,55 @@ class Net:
         target = enc_url(target)
         if not is_web(target) or not host:
             return {"status": 0, "local": True, "error": "bad URL, not sent: not an http(s) URL with a host"}
-        if self.fails[host] >= 3:
-            return {"status": 0, "error": "skipped: the host did not answer 3 times in this run"}
-        with self.lock:                             # at most one request start per host every `delay` seconds
-            start = max(time.time(), self.slot.get(host, 0.0))
-            self.slot[host] = start + self.delay
-        time.sleep(max(0.0, start - time.time()))
-        t0 = time.time()
+        trail, t0 = [], time.time()
         try:
-            req = urllib.request.Request(target, headers={"User-Agent": UA, "Accept": "*/*", "Cache-Control": "no-cache",
-                                                          "Accept-Language": "he-IL,he;q=0.9,en;q=0.5"})
-            with urllib.request.urlopen(req, timeout=self.timeout) as r:
-                body = r.read(self.max + 1)
-                out = {"status": r.status, "headers": r.headers, "final": r.geturl()}
-        except urllib.error.HTTPError as exc:
-            try:
-                body = exc.read(8192)
-            except Exception:
-                body = b""
-            out = {"status": exc.code, "headers": exc.headers, "final": exc.geturl() or target}
-        except Exception as exc:                    # DNS, refused, timeout, TLS: a finding, not a crash
-            if not network_error(exc):              # never sent: not held against the host
+            if cec_host(url):
+                a = CF.request(target, "GET", HEADERS, self.timeout, ua=UA, max_body=self.max, trail=trail,
+                               pace=lambda path: self.pace(host))
+            else:
+                self.pace(host)
+                t0 = time.time()
+                a = CF.urllib_answer(target, "GET", HEADERS, self.timeout, UA, self.max)
+        except Skipped as exc:
+            return {"status": 0, "error": str(exc)}
+        except Exception as exc:                    # DNS, refused, timeout, TLS, no browser behind the WAF: a finding
+            out = {"status": 0, "error": f"{exc.__class__.__name__}: {exc}"[:300], **paths(trail)}
+            waf = next((x for x in trail if x.get("waf")), None)
+            if waf:                                 # the WAF answered and no path got past it (WafError), or the
+                out.update(status=waf["http"], challenged=True)    # browser had no answer after it
+            elif not network_error(exc):            # never sent: not held against the host
                 return {"status": 0, "local": True, "error": f"bad URL, not sent: {exc.__class__.__name__}: {exc}"[:200]}
-            with self.lock:
-                self.fails[host] += 1
-            return {"status": 0, "error": f"{exc.__class__.__name__}: {exc}"[:200], "ms": round(1000 * (time.time() - t0))}
-        out.update(body=body[:self.max], truncated=len(body) > self.max, ms=round(1000 * (time.time() - t0)),
-                   final=self.logical(out["final"] or target))
+            if not isinstance(exc, CF.WafError):    # no answer at all on the last path: held against the host
+                with self.lock:
+                    self.fails[host] += 1
+            out["ms"] = round(1000 * (sum(x["s"] for x in trail) if trail else time.time() - t0))
+            return out
+        hdrs = email.message.Message()              # analyze() reads the headers by name, in any case
+        for k, v in a.headers.items():
+            hdrs[k] = v
+        body = a.body
+        out = {"status": a.status, "headers": hdrs, "body": body[:self.max], "truncated": len(body) > self.max,
+               "final": self.logical(a.url or target), "fetch_path": a.path,
+               "ms": round(1000 * (sum(x["s"] for x in trail) if trail else time.time() - t0)), **paths(trail)}
+        if a.waf:                                   # the WAF's answer on the last path too (or a host not the CEC's)
+            out.update(challenged=True, waf=a.waf)
         return out
+
+
+def paths(trail):
+    """What a request's attempts say about the WAF (cec_fetch's records): fetch_path, the path whose answer the entry
+    is (the last one with an HTTP answer, else the last asked); waf, the action the WAF answered with on the way (urllib
+    challenged), if it did; attempts, each one, when there were two."""
+    if not trail:
+        return {}
+    out = {"fetch_path": next((x["path"] for x in reversed(trail) if x.get("http")), trail[-1]["path"])}
+    waf = next((x["waf"] for x in trail if x.get("waf")), "")
+    if waf:
+        out["waf"] = waf
+    if len(trail) > 1:
+        out["attempts"] = [{k: x[k] for k in ("path", "http", "waf", "error", "s") if x.get(k) not in (None, "")}
+                           for x in trail]
+    return out
 
 
 # ------------------------------------------------------------------ reading a body
@@ -813,6 +877,8 @@ STORE_CLASSES = ("turnout-station", "turnout-locality", "results-ballot", "resul
 def candidate_file(e):
     """A file whose bytes are kept: anything classified as turnout or results, and an unreadable data file
     (xls, a broken xlsx, JSON, PDF …) whose address talks about turnout or results."""
+    if not e.get("bytes"):                          # nothing to convert (an empty 202 was the WAF's, 22-23.10)
+        return False
     if e.get("cls") in STORE_CLASSES:
         return True
     u = urllib.parse.unquote(e["url"])
@@ -825,6 +891,17 @@ def analyze(url, r, keep=None):
     e = {"url": url, "status": r.get("status", 0)}
     if "%" in url and urllib.parse.unquote(url) != url:
         e["url_decoded"] = urllib.parse.unquote(url)
+    for k in ("fetch_path", "waf", "attempts"):     # which path answered, and the CEC's WAF on the way (Net.get)
+        if r.get(k):
+            e[k] = r[k]
+    if r.get("challenged"):                         # the WAF's answer, not the CEC's: no path got past it
+        e.update(cls="waf-challenge", hint=f"WAF {r.get('waf') or 'challenge'} through {r.get('fetch_path') or 'urllib'}")
+        for k, n in (("type", "Content-Type"), ("server", "Server"), ("x_cache", "X-Cache")):
+            if r.get("headers") is not None and r["headers"].get(n):
+                e[k] = r["headers"].get(n)
+        if r.get("error"):
+            e["error"] = r["error"]
+        return e, None
     if r.get("error"):
         e.update(cls="error", error=r["error"])
         if r.get("local"):
@@ -1034,7 +1111,14 @@ def crawl(net, seeds, allow, pool, results, sources, max_pages=80, keep=None):
 
 # ------------------------------------------------------------------ verdicts, diff, report
 def answering(e):
-    return bool(e) and e.get("cls") not in (None, "error") and not e.get("spa")
+    return bool(e) and e.get("cls") not in (None, "error") and not e.get("spa") and not waf_entry(e)
+
+
+def waf_entry(e):
+    """The CEC's WAF answered, not the CEC: "waf-challenge", or, in a report from before this script knew the WAF
+    (22-23.10), the empty HTTP 202 it read as data-other. Neither answering, nor gone, nor asked again as answering."""
+    return bool(e) and (e.get("cls") == "waf-challenge"
+                        or (e.get("cls") == "data-other" and e.get("status") == 202 and not e.get("bytes")))
 
 
 def score(e):
@@ -1104,6 +1188,8 @@ def verdicts(entries, cfg, now, election_day, control=None):
         elif ce and ce.get("cls") == cls:
             state = ("test file" if test(ce) else "test file?" if cls == "turnout-station" and turnout_test(ce, now, election_day)
                      else "ok" if ok(ce) else "reader fails")
+        elif ce and waf_entry(ce):
+            state = f"WAF challenge (HTTP {ce.get('status')}), not read: no path got past it"
         elif ce:
             state = f"answers as {ce.get('cls')} ({ce.get('status') or ce.get('error', '')})"
         else:
@@ -1143,8 +1229,8 @@ def compare(prev, cur):
             if d:
                 changed.append({"url": u, "cls": e["cls"], "diff": d})
     for u, o in p.items():
-        if answering(o) and o.get("cls") not in ("html", "script") and not answering(cur.get(u)):
-            e = cur.get(u)
+        e = cur.get(u)
+        if answering(o) and o.get("cls") not in ("html", "script") and not answering(e) and not waf_entry(e):
             gone.append({"url": u, "cls": o["cls"], "now": (e.get("status") or e.get("error")) if e else "no longer linked"})
     return {"previous": prev.get("generated_at"), "new": new, "changed": changed, "gone": gone}
 
@@ -1194,8 +1280,78 @@ def short_hash(k, x):
     return x[:12] if k == "sha256" and isinstance(x, str) else x
 
 
+def fetch_report(entries):
+    """What the CEC's WAF did in this run, and whether the browser path got past it (rep["fetch"]; the report's first
+    lines): the hosts where the WAF answered, the URLs answered through the browser (by HTTP status), the URLs left as
+    waf-challenge (not read) and why, the browser (version, User-Agent) or why it was unavailable."""
+    cec = [e for e in entries if is_web(e["url"]) and cec_host(e["url"])]
+    seen = [e for e in entries if e.get("waf") or e.get("cls") == "waf-challenge"]
+    past = [e for e in cec if e.get("fetch_path") == "browser" and e.get("status") and not waf_entry(e)]
+    held = [e for e in entries if e.get("cls") == "waf-challenge"]
+    mute = [e for e in cec if e.get("fetch_path") == "browser" and not e.get("status")]
+    info, err = CF.BROWSER.info, CF.NET.get("browser_error")
+    f = {"via": CF.NET["via"], "waf_seen": bool(seen), "waf_hosts": sorted({host_of(e["url"]) for e in seen}),
+         "waf_answers": len(seen), "through_browser": len(past),
+         "browser_status": dict(collections.Counter(e["status"] for e in past).most_common()),
+         "not_read": len(held), "browser_no_answer": len(mute),
+         "paths": dict(collections.Counter(e["fetch_path"] for e in cec if e.get("fetch_path")))}
+    if info and CF.BROWSER.starts:
+        f["browser"] = {"version": info.get("version"), "user_agent": info.get("user_agent"), "starts": CF.BROWSER.starts,
+                        "start_s": CF.BROWSER.start_s}
+    if err:
+        f["browser_error"] = err[:300]
+    if CF.NET.get("browser_lost"):
+        f["browser_lost"] = CF.NET["browser_lost"][:5]
+    why = []
+    if held:
+        if f["via"] == "urllib":
+            why.append('the browser path is off ("fetch_via": "urllib")')
+        elif err:
+            why.append(f"the browser path is unavailable: {err[:200]}")
+        n = sum(e.get("fetch_path") == "browser" for e in held)
+        if n:
+            why.append(f"the browser was challenged too on {n}")
+        n = sum(e.get("fetch_path") == "urllib" and any(x["path"] == "browser" and x.get("error") for x in e.get("attempts") or [])
+                for e in held)
+        if n and not err:
+            why.append(f"the browser had no answer on {n}")
+        n = sum(not cec_host(e["url"]) for e in held)
+        if n:
+            why.append(f"{n} not on the CEC's hosts, asked through urllib only")
+    f["why_not"] = "; ".join(why)
+    f["browser_past"] = "not needed" if not seen else "yes" if past and not held else "partly" if past else "no"
+    return f
+
+
+def waf_lines(f):
+    """The report's first lines: was the CEC's WAF seen, and did the browser path get past it."""
+    if not f["waf_seen"]:
+        first = ('**WAF: not checked**: "fetch_via" is "browser", every request to the CEC\'s hosts went through the browser'
+                 if f["via"] == "browser" else "**WAF: not seen**: the CEC's hosts answered urllib themselves")
+    else:
+        n = f["waf_answers"]
+        first = (f"**WAF: seen** on {', '.join(f['waf_hosts'])}: its challenge instead of the CEC's answer on {n} "
+                 f"request{'s' * (n != 1)}" + ("; a challenged host is then asked through the browser directly (urllib "
+                                               "again every 10 minutes)" if f["through_browser"] else ""))
+    b = f.get("browser") or {}
+    ua = re.search(r"HeadlessChrome/[\d.]+|Chrome/[\d.]+", b.get("user_agent") or "")
+    who = f"Chrome {b.get('version')} (its own User-Agent, {ua.group(0) if ua else b.get('user_agent')})" if b else "the browser"
+    codes = ", ".join(f"{k} ×{v}" for k, v in f["browser_status"].items())
+    if f["browser_no_answer"]:
+        codes += f"; no answer through it on {f['browser_no_answer']}"
+    left = (f"{f['not_read']} URLs are waf-challenge: the WAF's answer, not the CEC's, nothing about those files is known"
+            + (f" ({f['why_not']})" if f["why_not"] else ""))
+    second = {"not needed": f"The browser path: not needed{f' ({codes} through it)' if codes else ''}",
+              "yes": f"**The browser path got past it: yes**: {f['through_browser']} URLs answered through {who}: HTTP {codes}",
+              "partly": f"**The browser path got past it: partly**: {f['through_browser']} URLs answered through {who}: "
+                        f"HTTP {codes}; {left}",
+              "no": f"**The browser path got past it: no**: {left}"}[f["browser_past"]]
+    return [f"- {first}.", f"- {second}."]
+
+
 def markdown(rep, short=False):
     L = [f"## CEC file discovery, {rep['generated_he']} Israel time ({rep['mode']}, {rep['runner']['where']})", "",
+         *waf_lines(rep["fetch"]), "",
          f"{rep['counts']['probed']} URLs probed, {rep['counts']['answered']} answered. Control (2022 file): "
          f"{rep['control']}. How to read this: docs/FILE_DISCOVERY.md.", "",
          table(rep["verdicts"], [("live_config key", lambda v: v["key"]), ("now", lambda v: v["current"] or "—"),
@@ -1245,7 +1401,8 @@ def markdown(rep, short=False):
     L += ["", "### Hosts", "", table(sorted(rep["hosts"].items()), [
         ("host", lambda h: h[0]), ("IPs", lambda h: ", ".join(h[1]["ips"][:3])), ("probed", lambda h: h[1]["probed"]),
         ("answered", lambda h: h[1]["answered"]), ("status codes", lambda h: json.dumps(h[1]["status"])),
-        ("hint", lambda h: "; ".join(h[1]["hints"][:2]))])]
+        ("through", lambda h: ", ".join(f"{k} {v}" for k, v in sorted(h[1].get("paths", {}).items()))),
+        ("WAF", lambda h: h[1].get("waf") or ""), ("hint", lambda h: "; ".join(h[1]["hints"][:2]))])]
     if short:
         return "\n".join(L) + "\n"
     pages = [e for e in rep["urls"] if answering(e) and e["cls"] in ("html", "script")]
@@ -1263,7 +1420,8 @@ def markdown(rep, short=False):
     errs = [e for e in rep["urls"] if not answering(e)]
     L += ["", f"<details><summary>{len(errs)} URLs that did not answer with data</summary>", "",
           table(errs, [("URL", lambda e: e["url"]), ("HTTP", lambda e: e["status"]),
-                       ("why", lambda e: e.get("error") or e.get("hint") or ("same page as the site root" if e.get("spa") else ""))]),
+                       ("why", lambda e: (e.get("hint") if waf_entry(e) else None) or e.get("error") or e.get("hint")
+                        or ("same page as the site root" if e.get("spa") else ""))]),
           "", "</details>"]
     return "\n".join(L) + "\n"
 
@@ -1274,9 +1432,13 @@ def host_table(entries, rewrite, only_rewritten):
         if not is_web(e["url"]):                    # the operator's copy in the repository
             continue
         h = host_of(e["url"])
-        d = hosts.setdefault(h, {"probed": 0, "answered": 0, "status": collections.Counter(), "hints": collections.Counter()})
+        d = hosts.setdefault(h, {"probed": 0, "answered": 0, "status": collections.Counter(), "hints": collections.Counter(),
+                                 "paths": collections.Counter(), "waf": 0})
         d["probed"] += 1
         d["answered"] += answering(e)
+        if e.get("fetch_path"):
+            d["paths"][e["fetch_path"]] += 1
+        d["waf"] += bool(e.get("waf"))
         d["status"][str(e.get("status") or ("bad URL" if e.get("local") else "no answer"))] += 1
         if e.get("hint") or e.get("error"):
             d["hints"][e.get("hint") or re.sub(r":.*", "", e.get("error", ""))] += 1
@@ -1287,7 +1449,7 @@ def host_table(entries, rewrite, only_rewritten):
             d["ips"] = sorted({a[4][0] for a in socket.getaddrinfo(real, 443, proto=socket.IPPROTO_TCP)})[:6] if real else ["skipped"]
         except Exception as exc:
             d["ips"] = [f"DNS: {exc.__class__.__name__}"]
-        d["status"], d["hints"] = dict(d["status"]), [k for k, _ in d["hints"].most_common(3)]
+        d["status"], d["hints"], d["paths"] = dict(d["status"]), [k for k, _ in d["hints"].most_common(3)], dict(d["paths"])
     return hosts
 
 
@@ -1562,6 +1724,9 @@ def main():
     ap.add_argument("--delay", type=float, default=0.25, help="seconds between request starts on one host")
     ap.add_argument("--timeout", type=float, default=20)
     ap.add_argument("--max-bytes", type=int, default=16_000_000)
+    ap.add_argument("--fetch-via", choices=CF.FETCH_VIA, help="the CEC's hosts: auto = urllib, and the browser behind the "
+                    "WAF; urllib = never the browser; browser = only the browser (default: live_config.json \"fetch_via\", "
+                    "else auto)")
     ap.add_argument("--summary", help="append a short Markdown summary here ($GITHUB_STEP_SUMMARY)")
     ap.add_argument("--push", action="store_true", help="commit the report to the ops-reports branch and push")
     ap.add_argument("--branch", default="ops-reports")
@@ -1584,6 +1749,7 @@ def main():
         print(f"config not read ({exc}); comparing with nothing", file=sys.stderr)
         cfg = {}
     election_day = dt.date.fromisoformat(cfg.get("election_day", "2026-10-27"))
+    CF.NET["via"] = a.fetch_via or CF.fetch_via(cfg)    # the CEC's hosts as the feed asks them (cec_fetch.request)
     over = json.load(open(a.candidates, encoding="utf-8")) if a.candidates else {}
     mode = auto_mode(now, election_day) if a.mode == "auto" else a.mode
     prev = None
@@ -1624,6 +1790,7 @@ def main():
         rest = list(dict.fromkeys(u for u in probe + linked if u not in results))
         for u, (e, _) in zip(rest, pool.map(lambda u: probe_one(net, u, kept), rest)):
             results[u] = e
+    CF.BROWSER.close()                            # the run's Chrome, if the WAF made one necessary
     for u in dict.fromkeys(repo_copies):
         try:
             with open(os.path.join(ROOT, u), "rb") as f:
@@ -1660,6 +1827,7 @@ def main():
                        f"FAILED ({(ce or {}).get('status') or (ce or {}).get('error', 'not probed')}): " +
                        ("other CEC hosts did answer" if any(answering(e) and "bechirot.gov.il" in e["url"] for e in entries)
                         else "this runner may not reach the CEC at all")),
+           "fetch": fetch_report(entries),
            "counts": {"probed": len(entries), "answered": sum(map(answering, entries)),
                       "by_class": dict(collections.Counter(e.get("cls") for e in entries))},
            "verdicts": verdicts(entries, cfg, now, election_day, control)}
@@ -1694,7 +1862,8 @@ def main():
     d = rep["diff"] or {"new": [], "changed": [], "gone": []}
     line = {"mode": mode, "probed": rep["counts"]["probed"], "answered": rep["counts"]["answered"],
             "new": len(d["new"]), "changed": len(d["changed"]), "gone": len(d["gone"]), "stored": sorted(stored),
-            "verdicts": {v["key"]: v["state"] for v in rep["verdicts"]}, "report": pm}
+            "verdicts": {v["key"]: v["state"] for v in rep["verdicts"]}, "report": pm,
+            "waf": rep["fetch"]["waf_seen"], "browser_past": rep["fetch"]["browser_past"]}
     if a.push:
         try:
             line["pushed"] = push_report({f"discover-{stamp}.json": pj, f"discover-{stamp}.md": pm, "latest.json": pj,
