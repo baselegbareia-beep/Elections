@@ -18,9 +18,11 @@ and through urllib again every WAF_RECHECK seconds (the challenge gone: back to 
 where it got one. NET["via"] ("fetch_via" in live_config.json): "auto" (the default) | "urllib" (never the browser) |
 "browser" (only the browser).
 
-Callers that ask from several threads (discover.py) share the one browser: Browser.request is serialized (a lock), and a
-caller's pace hook runs before every request it starts, on either path (for the browser inside that lock), so a caller's
-own limit on requests per host holds whichever path asks.
+A caller that asks from several threads (discover.py) replaces BROWSER with a BrowserPool: up to N helpers, each one
+request at a time, a new one started only while all are busy, so a slow CEC does not queue every thread behind one
+Chrome. A caller's pace hook runs before every request it starts, on either path (for the browser once that helper is
+up, inside its lock), so a caller's own limit on requests per host holds whichever path asks, and a browser that cannot
+start takes no slot (nor does a request skipped while the browser is known to be failing).
 """
 import argparse
 import atexit
@@ -164,9 +166,11 @@ def request(url, method="GET", headers=None, timeout=40, ua=None, max_body=None,
     challenge is gone the host goes back to urllib), so the CEC gets one request where it got one. "urllib" never starts
     the browser. A network error raises; an HTTP answer, of any status, is returned (Answer: its path and waf). Raises
     WafError when the WAF answered urllib and the browser cannot run.
-    ua: urllib's User-Agent (UA, the feed's); max_body: the body cap on both paths (MAX_BODY); clock: what "since"
-    is stamped with (now_il); trail: a list that gets this call's attempts (NET["log"]'s records); pace(path): called
-    before each attempt starts ("urllib", or "browser" inside the browser's lock): a caller's own pace per host."""
+    ua: urllib's User-Agent (UA, the feed's); max_body: the body cap on both paths (MAX_BODY; a longer body comes back
+    cut to max_body + 1 bytes from either path); clock: what "since" is stamped with (now_il); trail: a list that gets
+    this call's attempts (NET["log"]'s records); pace(path): called before each attempt starts ("urllib", or "browser"
+    once the browser is up, inside its lock): a caller's own pace per host. An exception from pace is raised as it is,
+    and that attempt, never sent, is not recorded."""
     headers = dict(headers or {})
     kw = dict(ua=ua, max_body=max_body, recheck=recheck, clock=clock, trail=trail, pace=pace)
     recheck = WAF_RECHECK if recheck is None else recheck
@@ -194,12 +198,17 @@ def request(url, method="GET", headers=None, timeout=40, ua=None, max_body=None,
                               "ts": time.time(), "action": first.waf}
         if via == "urllib":
             raise WafError(f'{waf_text(first)}; "fetch_via" is "urllib" in live_config.json: the browser path is off')
-    t = [time.time()]
+        if BROWSER.failing():                     # it failed to start BROWSER_RETRY_S ago: not asked, no pace slot taken
+            why = BROWSER.failed[1] if BROWSER.failed else "the browser failed to start"
+            NET["browser_error"] = why
+            _note(url, method, "browser", time.time(), error=why, trail=trail)
+            raise WafError(f"{waf_text(first)}; the browser path is unavailable: {why}")
+    t, sent = [time.time()], [False]
 
-    def before():                                 # holding the browser's lock: the caller's pace, then the clock
+    def before():                                 # the browser up, holding its lock: the caller's pace, then the clock
         if pace:
             pace("browser")
-        t[0] = time.time()                        # (the wait for other threads' requests is not this request's time)
+        t[0], sent[0] = time.time(), True         # (the start, and the wait for other threads, are not this request's time)
     try:
         a = BROWSER.request(url, method, headers, timeout, max_body, before=before)
     except BrowserUnavailable as exc:
@@ -210,7 +219,8 @@ def request(url, method="GET", headers=None, timeout=40, ua=None, max_body=None,
         why = waf_text(first) if first else '"fetch_via" is "browser" in live_config.json'
         raise WafError(f"{why}; the browser path is unavailable: {exc}")
     except Exception as exc:
-        _note(url, method, "browser", t[0], error=f"{exc.__class__.__name__}: {exc}", trail=trail)
+        if sent[0]:                               # not when the caller's pace raised (discover.py's deadline): unsent
+            _note(url, method, "browser", t[0], error=f"{exc.__class__.__name__}: {exc}", trail=trail)
         raise
     _note(url, method, "browser", t[0], a, trail=trail)
     return a
@@ -234,9 +244,9 @@ def find_chrome():
 class Browser:
     """The browser path of this process: one helper (pipeline/browser_fetch.py, run by $LIVE_BROWSER_PYTHON or this
     interpreter) holding one headless Chrome, started at the first request that needs it and kept until the process ends
-    (live.yml runs a process per pass: about a second to start; the laptop loop keeps one for the night; discover.py one
-    for its run). Its own stdout and stderr never reach the caller's: the feed's status line stays the last line. One
-    request at a time (a lock: discover.py asks from several threads). A request is bounded by its timeout (plus 20 s;
+    (live.yml runs a process per pass: about a second to start; the laptop loop keeps one for the night; discover.py a
+    BrowserPool of them for its run). Its own stdout and stderr never reach the caller's: the feed's status line stays
+    the last line. One request at a time (a lock). A request is bounded by its timeout (plus 20 s;
     then the helper is stopped); a failed start is not retried for BROWSER_RETRY_S. When Chrome or playwright's driver
     is gone (crashed, killed) the helper says so ("closed") and ends, and a new one is started: at once for the same
     request when it was not sent (Chrome was gone before it), else at the next request (it may have reached the CEC:
@@ -311,11 +321,14 @@ class Browser:
             self._atexit = True
 
     def request(self, url, method="GET", headers=None, timeout=40, max_body=None, before=None):
-        """One request through the browser -> Answer (path "browser"). BrowserUnavailable when it cannot start; IOError
-        when the request itself failed (a timeout, a refused connection, Chrome gone during it, a body over max_body):
-        "no HTTP answer" in its words, so the page's reader note is the neutral one (site/src/js/live.js feedNotes).
-        before(): called once, holding the lock, before anything is sent (a caller's pace; it may raise)."""
+        """One request through the browser -> Answer (path "browser"; a body over max_body cut to max_body + 1 bytes,
+        as urllib reads it). BrowserUnavailable when it cannot start (nothing sent, before() not called); IOError when
+        the request itself failed (a timeout, a refused connection, Chrome gone during it): "no HTTP answer" in its
+        words, so the page's reader note is the neutral one (site/src/js/live.js feedNotes). before(): called once,
+        holding the lock, once the browser is up and before anything is sent (a caller's pace; it may raise)."""
         with self._lock:
+            if self.proc is None or self.proc.poll() is not None:
+                self._start()                     # first: a browser that cannot start takes no slot of the caller's pace
             if before:
                 before()
             return self._request(url, method, headers, timeout, max_body or MAX_BODY)
@@ -370,6 +383,90 @@ class Browser:
                 p.wait(timeout=5)
             except Exception:
                 pass
+
+
+class BrowserPool:
+    """Up to `size` browser helpers (Browser) for a caller that asks from several threads, in place of BROWSER
+    (discover.py: CF.BROWSER = BrowserPool(n)). A request takes an idle helper and starts another only while all are
+    busy and fewer than `size` exist, so a slow CEC does not queue every thread behind one Chrome (with one, a full
+    discovery run lasted the sum of the CEC's answer times). Each helper still asks one request at a time, and the
+    caller's pace per host (before()) runs inside it once it is up: the CEC gets no more requests, nor faster, than the
+    caller's own pace lets urllib send. A helper that fails to start is dropped and no other is started for
+    BROWSER_RETRY_S; the request then waits for a running one, and is BrowserUnavailable only when none is left (nothing
+    was sent). The requests waiting for a helper get one in the order they came (a queue), so a thread is never
+    overtaken by the ones that keep coming back, and a caller's order (discover.py asks what matters first) holds.
+    info, starts, start_s, lost, failed and failing() read as Browser's, for the reports."""
+
+    def __init__(self, size=3):
+        self.size, self.members, self.idle, self.ever, self.failed = max(1, int(size)), [], [], [], None
+        self._cond, self._queue = threading.Condition(), collections.deque()
+
+    def _may_start(self):
+        return not (self.failed and time.time() - self.failed[0] < BROWSER_RETRY_S)
+
+    def failing(self):
+        with self._cond:
+            return not self.members and not self._may_start()
+
+    @property
+    def info(self):
+        return next((b.info for b in list(self.ever) if b.info), None)
+
+    @property
+    def start_s(self):
+        return next((b.start_s for b in list(self.ever) if b.start_s is not None), None)
+
+    @property
+    def starts(self):
+        return sum(b.starts for b in list(self.ever))
+
+    @property
+    def lost(self):
+        return sum(b.lost for b in list(self.ever))
+
+    def request(self, url, method="GET", headers=None, timeout=40, max_body=None, before=None):
+        while True:
+            with self._cond:
+                me = object()
+                self._queue.append(me)
+                try:
+                    while True:
+                        if self._queue[0] is me:  # first come, first served
+                            if self.idle:
+                                b = self.idle.pop()   # the one used last: a new Chrome only when all are busy
+                                break
+                            if len(self.members) < self.size and self._may_start():
+                                b = Browser()
+                                self.members.append(b)
+                                self.ever.append(b)
+                                break
+                            if not self.members:
+                                raise BrowserUnavailable(self.failed[1] if self.failed else "the browser failed to start")
+                        self._cond.wait()
+                finally:
+                    self._queue.remove(me)
+                    self._cond.notify_all()       # the next in the queue looks again
+            try:
+                return b.request(url, method, headers, timeout, max_body, before)
+            except BrowserUnavailable as exc:     # it did not start: nothing was sent
+                with self._cond:
+                    self.failed = (time.time(), str(exc))
+                    self.members.remove(b)
+                    b = None
+                    self._cond.notify_all()
+                    if not self.members:
+                        raise
+            finally:
+                if b is not None:
+                    with self._cond:
+                        self.idle.append(b)
+                        self._cond.notify_all()
+
+    def close(self):
+        with self._cond:
+            members, self.members, self.idle = list(self.members), [], []
+        for b in members:
+            b.close()
 
 
 BROWSER = Browser()

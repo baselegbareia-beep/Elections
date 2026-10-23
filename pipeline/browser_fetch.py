@@ -20,7 +20,8 @@ its timeout, its body capped (max_bytes); nothing is retried here.
 The protocol (live_fetch.Browser): first one line, {"ready": true, "version", "user_agent", "chrome", "start_s"} or
 {"ready": false, "error"}; then for each line {"method", "url", "headers", "timeout_ms", "max_bytes"} on stdin, one line
 {"status", "status_text", "url", "headers": [[name, value], ...], "body_b64", "bytes", "s"} or {"error"} on stdout. A
-body over max_bytes is not passed on (an error, with the status and headers). It ends at the end of its stdin, closing
+body over max_bytes is passed on cut to max_bytes + 1 bytes ("truncated": true; "bytes" its whole length), as urllib's
+read(max_bytes + 1) is: the feed rejects it, the discovery reports it over its limit. It ends at the end of its stdin, closing
 the browser, and also when Chrome or playwright's driver is gone (crashed, killed): that answer is
 {"error", "closed": true, "sent": false} when the request never left (Chrome was already gone: alive() before each
 request), "sent": true when it may have (gone during the request). live_fetch then starts a new helper, at once for the
@@ -88,10 +89,9 @@ def ask(ctx, req):
         body = b"" if method == "HEAD" else resp.body()
         cap = int(req.get("max_bytes") or 0)
         out.update(bytes=len(body), s=round(time.time() - t, 3))
-        if cap and len(body) > cap:
-            out["error"] = f"body over {cap} bytes ({len(body)})"
-        else:
-            out["body_b64"] = base64.b64encode(body).decode("ascii")
+        if cap and len(body) > cap:              # as urllib reads it (read(cap + 1)): the caller sees it is over the cap
+            body, out["truncated"] = body[:cap + 1], True
+        out["body_b64"] = base64.b64encode(body).decode("ascii")
         return out
     except Exception as exc:
         return {"error": first_line(exc), "s": round(time.time() - t, 3)}

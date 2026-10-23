@@ -37,12 +37,21 @@ challenge: HTTP 202 with x-amzn-waf-action and an empty body, which is not a fil
 as the feed asks them (pipeline/cec_fetch.py, the feed's own code): urllib first; on the WAF's answer the same URL
 through a headless Chrome with its own User-Agent (playwright, pipeline/browser_fetch.py; discover.yml installs it and
 finds the runner's Chrome, as live.yml does), and that host through the browser directly from then on (urllib again
-every 10 minutes). One browser for the run, one request at a time; the pace per host holds on both paths. An answer
-that is still the WAF's (no browser here, "fetch_via": "urllib", or the browser challenged too) is classed
-waf-challenge: never data, never stored, never "gone". Each entry says which path answered (fetch_path), whether the
-WAF answered on the way (waf) and, when there were two, both attempts; the report's first lines say whether the WAF
-was seen and whether the browser path got past it. --fetch-via auto|urllib|browser (default: live_config.json's
-"fetch_via", else auto).
+every 10 minutes). Up to --browsers (3) Chromes for the run, each one request at a time, a new one only while all are
+busy; the pace per host holds on both paths (at most one request start per host every --delay seconds, as before the
+WAF), and a browser that cannot start takes no slot of it. An answer that is still the WAF's (no browser here,
+"fetch_via": "urllib", or the browser challenged too) is classed waf-challenge: never data, never stored, never "gone".
+Each entry says which path answered (fetch_path), whether the WAF answered on the way (waf) and, when there were two,
+both attempts; the report's first lines say whether the WAF was seen and whether the browser path got past it.
+--fetch-via auto|urllib|browser (default: live_config.json's "fetch_via", else auto).
+
+The run's deadline. Through the browser a run takes longer as the CEC answers slower (a full run, about 390 URLs, with
+3 browsers, measured against a stand-in per host: 96 s at 0.35 s an answer, 208 s at 1.5 s, 407 s at 3 s; with one
+browser 160 s, 520 s and over 20 minutes; urllib before the WAF 90 s and 102 s). After --deadline seconds of probing (900; 0 = none) nothing more is sent, and the
+report is still written and pushed: the URLs left are "not asked" (unasked: neither missing nor gone; what one of them
+answered before is kept as last_answered, and the next run asks it again), and the report's first lines say so. The
+URLs after the crawl are asked configured, known and the operator's first, then what answered last time, then what
+the pages link to, then the guessed names.
 
 Testing against a local server: --rewrite https://media26.bechirot.gov.il=http://127.0.0.1:8765/m26
 (repeatable) fetches from the mock and keeps the real URL in the report; --only-rewritten skips
@@ -93,6 +102,11 @@ HEADERS = {"Accept": "*/*", "Cache-Control": "no-cache", "Accept-Language": "he-
 # the CEC's hosts (and every host under them): asked as the feed asks them (cec_fetch.request: urllib first, and on the
 # WAF's answer the same URL through the browser); every other host through urllib only
 CEC_HOSTS = ("bechirot.gov.il",)
+# a run's limits: seconds of probing (discover.yml: timeout-minutes 25, and on 27.10 a run every 20 minutes; the report
+# is written and pushed after it in under a minute), and headless Chromes at once behind the WAF (each one request at a
+# time: with one, a full run lasted the sum of the CEC's answer times)
+DEADLINE_S, BROWSERS = 900, 3
+PRIORITY = {"config": 0, "known": 0, "operator": 0, "previous": 1}   # priority(): what a run cut short has asked
 try:
     from zoneinfo import ZoneInfo
     IL = ZoneInfo("Asia/Jerusalem")
@@ -386,20 +400,34 @@ def cec_host(url):
 
 
 class Skipped(Exception):
-    """A request not sent: its host did not answer 3 times in this run."""
+    """A request not sent: its host did not answer 3 times in this run, or (unasked) the run's deadline had passed."""
+
+    def __init__(self, msg, unasked=False):
+        super().__init__(msg)
+        self.unasked = unasked
 
 
 class Net:
     """GET with a per-host pace, a size cap, and the test-mode host rewrite. The CEC's hosts are asked as the feed asks
     them (cec_fetch.request): urllib first; on the WAF's answer the same URL through a headless Chrome with its own
-    User-Agent, and that host through the browser directly from then on (urllib again every 10 minutes). One browser for
-    the run, one request at a time (the threads queue for it). The pace holds for every request started, on either
-    path: at most one start per host every `delay` seconds, as before the WAF."""
+    User-Agent, and that host through the browser directly from then on (urllib again every 10 minutes). Up to
+    --browsers helpers for the run (cec_fetch.BrowserPool), each one request at a time. The pace holds for every request
+    started, on either path: at most one start per host every `delay` seconds, as before the WAF. After `deadline`
+    seconds of probing (--deadline) nothing more is sent: the URLs left are "not asked" (unasked), and the run still
+    writes and pushes its report."""
 
     def __init__(self, a):
         self.rewrite = [tuple(r.split("=", 1)) for r in a.rewrite]
         self.only, self.max, self.timeout, self.delay = a.only_rewritten, a.max_bytes, a.timeout, a.delay
         self.lock, self.slot, self.fails = threading.Lock(), {}, collections.Counter()
+        self.t0, self.deadline_s = time.time(), a.deadline if a.deadline and a.deadline > 0 else None
+        self.deadline = self.t0 + self.deadline_s if self.deadline_s else None
+
+    def past_deadline(self, at=None):
+        return self.deadline is not None and (at or time.time()) >= self.deadline
+
+    def unasked(self):
+        return Skipped(f"not asked: the run's deadline ({self.deadline_s:g} s of probing) had passed", unasked=True)
 
     def target(self, url):
         for src, dst in self.rewrite:
@@ -419,6 +447,8 @@ class Net:
             raise Skipped("skipped: the host did not answer 3 times in this run")
         with self.lock:                             # at most one request start per host every `delay` seconds
             start = max(time.time(), self.slot.get(host, 0.0))
+            if self.past_deadline(start):           # its slot after the deadline: not sent, and the slot not taken
+                raise self.unasked()
             self.slot[host] = start + self.delay
         time.sleep(max(0.0, start - time.time()))
 
@@ -429,6 +459,8 @@ class Net:
         target = enc_url(target)
         if not is_web(target) or not host:
             return {"status": 0, "local": True, "error": "bad URL, not sent: not an http(s) URL with a host"}
+        if self.past_deadline():                    # nothing more is sent, nor a browser started for it
+            return {"status": 0, "error": str(self.unasked()), "unasked": True}
         trail, t0 = [], time.time()
         try:
             if cec_host(url):
@@ -438,8 +470,8 @@ class Net:
                 self.pace(host)
                 t0 = time.time()
                 a = CF.urllib_answer(target, "GET", HEADERS, self.timeout, UA, self.max)
-        except Skipped as exc:
-            return {"status": 0, "error": str(exc)}
+        except Skipped as exc:                      # not sent (urllib may have been challenged before the deadline)
+            return {"status": 0, "error": str(exc), **({"unasked": True, **paths(trail)} if exc.unasked else {})}
         except Exception as exc:                    # DNS, refused, timeout, TLS, no browser behind the WAF: a finding
             out = {"status": 0, "error": f"{exc.__class__.__name__}: {exc}"[:300], **paths(trail)}
             waf = next((x for x in trail if x.get("waf")), None)
@@ -891,8 +923,8 @@ def analyze(url, r, keep=None):
     e = {"url": url, "status": r.get("status", 0)}
     if "%" in url and urllib.parse.unquote(url) != url:
         e["url_decoded"] = urllib.parse.unquote(url)
-    for k in ("fetch_path", "waf", "attempts"):     # which path answered, and the CEC's WAF on the way (Net.get)
-        if r.get(k):
+    for k in ("fetch_path", "waf", "attempts", "unasked"):   # which path answered, the CEC's WAF on the way, a URL
+        if r.get(k):                                         # the run's deadline left unasked (Net.get)
             e[k] = r[k]
     if r.get("challenged"):                         # the WAF's answer, not the CEC's: no path got past it
         e.update(cls="waf-challenge", hint=f"WAF {r.get('waf') or 'challenge'} through {r.get('fetch_path') or 'urllib'}")
@@ -1114,6 +1146,14 @@ def answering(e):
     return bool(e) and e.get("cls") not in (None, "error") and not e.get("spa") and not waf_entry(e)
 
 
+def last(e):
+    """An entry as it last answered: itself, or for a URL the run's deadline left unasked, what it answered in an
+    earlier report (last_answered, carried from report to report until it is asked again)."""
+    if e and e.get("unasked") and e.get("last_answered"):
+        return {**e["last_answered"], "url": e["url"]}
+    return e
+
+
 def waf_entry(e):
     """The CEC's WAF answered, not the CEC: "waf-challenge", or, in a report from before this script knew the WAF
     (22-23.10), the empty HTTP 202 it read as data-other. Neither answering, nor gone, nor asked again as answering."""
@@ -1190,11 +1230,16 @@ def verdicts(entries, cfg, now, election_day, control=None):
                      else "ok" if ok(ce) else "reader fails")
         elif ce and waf_entry(ce):
             state = f"WAF challenge (HTTP {ce.get('status')}), not read: no path got past it"
+        elif ce and ce.get("unasked"):
+            la = ce.get("last_answered")
+            state = "not asked: the run's deadline" + (f" (it answered as {la.get('cls')} at {str(la.get('at'))[:16]})"
+                                                        if la else "")
         elif ce:
             state = f"answers as {ce.get('cls')} ({ce.get('status') or ce.get('error', '')})"
         else:
             state = "not set" if not cur else "not probed"
         switch = best if (best and best["url"] != (ce or {}).get("url", cur) and (not cur or is_web(cur))
+                          and not (ce or {}).get("unasked")     # not asked this run is not "does not answer"
                           and (not ce or ce.get("cls") != cls or score(best) > score(ce))) else None
         v = {"key": key, "current": cur, "state": state, "best": best and best["url"],
              "switch": switch and switch["url"], "aliases": (switch or ce or {}).get("aliases") or {},
@@ -1216,10 +1261,12 @@ FIELDS = ("status", "cls", "bytes", "last_modified", "etag", "sha256")    # the 
 def compare(prev, cur):
     if not prev:
         return None
-    p = {e["url"]: e for e in prev.get("urls", [])}
+    p = {e["url"]: last(e) for e in prev.get("urls", [])}
     new, changed, gone = [], [], []
     for u, e in cur.items():
         o = p.get(u)
+        if e.get("unasked"):                        # not asked this run (the deadline): neither new, changed nor gone
+            continue
         page = e.get("cls") in ("html", "script")
         if answering(e) and not answering(o) and not (page and o and o.get("spa")):   # a shell that changed is not news
             new.append({"url": u, "cls": e["cls"], "was": (o.get("status") or o.get("error")) if o else "not probed"})
@@ -1230,7 +1277,8 @@ def compare(prev, cur):
                 changed.append({"url": u, "cls": e["cls"], "diff": d})
     for u, o in p.items():
         e = cur.get(u)
-        if answering(o) and o.get("cls") not in ("html", "script") and not answering(e) and not waf_entry(e):
+        if (answering(o) and o.get("cls") not in ("html", "script") and not answering(e) and not waf_entry(e)
+                and not (e or {}).get("unasked")):
             gone.append({"url": u, "cls": o["cls"], "now": (e.get("status") or e.get("error")) if e else "no longer linked"})
     return {"previous": prev.get("generated_at"), "new": new, "changed": changed, "gone": gone}
 
@@ -1283,12 +1331,14 @@ def short_hash(k, x):
 def fetch_report(entries):
     """What the CEC's WAF did in this run, and whether the browser path got past it (rep["fetch"]; the report's first
     lines): the hosts where the WAF answered, the URLs answered through the browser (by HTTP status), the URLs left as
-    waf-challenge (not read) and why, the browser (version, User-Agent) or why it was unavailable."""
+    waf-challenge (not read) and why, the browser (version, User-Agent) or why it was unavailable. browser_past: "not
+    needed" (no WAF seen), "yes", "partly", "no"; with "fetch_via": "browser" (urllib never asked, so the WAF not
+    checked) "browser only" (answers through it) or "no answer" (none through it, why_not says why)."""
     cec = [e for e in entries if is_web(e["url"]) and cec_host(e["url"])]
     seen = [e for e in entries if e.get("waf") or e.get("cls") == "waf-challenge"]
     past = [e for e in cec if e.get("fetch_path") == "browser" and e.get("status") and not waf_entry(e)]
     held = [e for e in entries if e.get("cls") == "waf-challenge"]
-    mute = [e for e in cec if e.get("fetch_path") == "browser" and not e.get("status")]
+    mute = [e for e in cec if e.get("fetch_path") == "browser" and not e.get("status") and not e.get("unasked")]
     info, err = CF.BROWSER.info, CF.NET.get("browser_error")
     f = {"via": CF.NET["via"], "waf_seen": bool(seen), "waf_hosts": sorted({host_of(e["url"]) for e in seen}),
          "waf_answers": len(seen), "through_browser": len(past),
@@ -1318,16 +1368,22 @@ def fetch_report(entries):
         n = sum(not cec_host(e["url"]) for e in held)
         if n:
             why.append(f"{n} not on the CEC's hosts, asked through urllib only")
+    elif f["via"] == "browser" and not past:
+        why.append(f"the browser path is unavailable: {err[:200]}" if err else
+                   f"no answer through it on {len(mute)}" if mute else "no request to the CEC's hosts")
     f["why_not"] = "; ".join(why)
-    f["browser_past"] = "not needed" if not seen else "yes" if past and not held else "partly" if past else "no"
+    if not seen:
+        f["browser_past"] = ("not needed" if f["via"] != "browser" else "browser only" if past else "no answer")
+    else:
+        f["browser_past"] = "yes" if past and not held else "partly" if past else "no"
     return f
 
 
 def waf_lines(f):
     """The report's first lines: was the CEC's WAF seen, and did the browser path get past it."""
     if not f["waf_seen"]:
-        first = ('**WAF: not checked**: "fetch_via" is "browser", every request to the CEC\'s hosts went through the browser'
-                 if f["via"] == "browser" else "**WAF: not seen**: the CEC's hosts answered urllib themselves")
+        first = ('**WAF: not checked**: "fetch_via" is "browser": the CEC\'s hosts are asked through the browser only, '
+                 'never through urllib' if f["via"] == "browser" else "**WAF: not seen**: the CEC's hosts answered urllib themselves")
     else:
         n = f["waf_answers"]
         first = (f"**WAF: seen** on {', '.join(f['waf_hosts'])}: its challenge instead of the CEC's answer on {n} "
@@ -1342,6 +1398,10 @@ def waf_lines(f):
     left = (f"{f['not_read']} URLs are waf-challenge: the WAF's answer, not the CEC's, nothing about those files is known"
             + (f" ({f['why_not']})" if f["why_not"] else ""))
     second = {"not needed": f"The browser path: not needed{f' ({codes} through it)' if codes else ''}",
+              "browser only": f"**The browser path: every request** (\"fetch_via\": \"browser\"): {f['through_browser']} URLs "
+                              f"answered through {who}: HTTP {codes}",
+              "no answer": f"**The browser path: every request, no answer through it** (\"fetch_via\": \"browser\"): "
+                           f"{f['why_not']}",
               "yes": f"**The browser path got past it: yes**: {f['through_browser']} URLs answered through {who}: HTTP {codes}",
               "partly": f"**The browser path got past it: partly**: {f['through_browser']} URLs answered through {who}: "
                         f"HTTP {codes}; {left}",
@@ -1349,11 +1409,22 @@ def waf_lines(f):
     return [f"- {first}.", f"- {second}."]
 
 
+def deadline_lines(pr):
+    """The report's line after the WAF's when the run's deadline cut the probing short (else none)."""
+    if not pr.get("unasked"):
+        return []
+    return [f"- **Deadline: probing stopped after {pr['deadline_s']:g} s**: {pr['unasked']} URLs not asked (the guessed "
+            f"names are asked last, after the configured and known files); a partial report: \"not asked\" is neither "
+            f"missing nor gone, the next run asks them again."]
+
+
 def markdown(rep, short=False):
+    pr = rep.get("probing") or {}
     L = [f"## CEC file discovery, {rep['generated_he']} Israel time ({rep['mode']}, {rep['runner']['where']})", "",
-         *waf_lines(rep["fetch"]), "",
-         f"{rep['counts']['probed']} URLs probed, {rep['counts']['answered']} answered. Control (2022 file): "
-         f"{rep['control']}. How to read this: docs/FILE_DISCOVERY.md.", "",
+         *waf_lines(rep["fetch"]), *deadline_lines(pr), "",
+         f"{rep['counts']['probed']} URLs probed" + (f" in {pr['s']:.0f} s" if pr.get("s") is not None else "") +
+         f", {rep['counts']['answered']} answered. Control (2022 file): {rep['control']}. How to read this: "
+         f"docs/FILE_DISCOVERY.md.", "",
          table(rep["verdicts"], [("live_config key", lambda v: v["key"]), ("now", lambda v: v["current"] or "—"),
                                  ("state", lambda v: v["state"]), ("switch to", lambda v: v["switch"] or "—"),
                                  ("column_aliases", lambda v: json.dumps(v["aliases"], ensure_ascii=False) if v["aliases"] else "")])]
@@ -1439,7 +1510,7 @@ def host_table(entries, rewrite, only_rewritten):
         if e.get("fetch_path"):
             d["paths"][e["fetch_path"]] += 1
         d["waf"] += bool(e.get("waf"))
-        d["status"][str(e.get("status") or ("bad URL" if e.get("local") else "no answer"))] += 1
+        d["status"][str(e.get("status") or ("bad URL" if e.get("local") else "not asked" if e.get("unasked") else "no answer"))] += 1
         if e.get("hint") or e.get("error"):
             d["hints"][e.get("hint") or re.sub(r":.*", "", e.get("error", ""))] += 1
     for h, d in hosts.items():
@@ -1703,6 +1774,14 @@ def convert(src, dest, maps=(), blanks=()):
 
 
 # ------------------------------------------------------------------ main
+def priority(u, sources, found_on):
+    """The order the URLs left after the crawl are asked in, so a run the deadline cuts short has asked what matters:
+    the configured, known and operator's URLs, then what answered last time, then what the pages link to, then the
+    guessed names (enumerated)."""
+    r = min((PRIORITY.get(x, 3) for x in sources[u]), default=3)
+    return min(r, 2) if u in found_on else r
+
+
 def auto_mode(now, election_day):
     """Full everywhere except on election day, where the :07 run of each hour is full and the other two quick."""
     if now.date() == election_day and now.hour >= 6:
@@ -1724,6 +1803,11 @@ def main():
     ap.add_argument("--delay", type=float, default=0.25, help="seconds between request starts on one host")
     ap.add_argument("--timeout", type=float, default=20)
     ap.add_argument("--max-bytes", type=int, default=16_000_000)
+    ap.add_argument("--deadline", type=float, default=DEADLINE_S, help="seconds of probing; then nothing more is sent "
+                    "and the report (partial: the URLs left are 'not asked') is still written and pushed; 0 = none "
+                    f"(default {DEADLINE_S}: discover.yml's timeout-minutes 25 and the 20-minute cadence of 27.10)")
+    ap.add_argument("--browsers", type=int, default=BROWSERS, help="at most this many headless Chromes at once behind "
+                    f"the CEC's WAF (default {BROWSERS}; never more than --workers); the pace per host holds either way")
     ap.add_argument("--fetch-via", choices=CF.FETCH_VIA, help="the CEC's hosts: auto = urllib, and the browser behind the "
                     "WAF; urllib = never the browser; browser = only the browser (default: live_config.json \"fetch_via\", "
                     "else auto)")
@@ -1750,6 +1834,7 @@ def main():
         cfg = {}
     election_day = dt.date.fromisoformat(cfg.get("election_day", "2026-10-27"))
     CF.NET["via"] = a.fetch_via or CF.fetch_via(cfg)    # the CEC's hosts as the feed asks them (cec_fetch.request)
+    CF.BROWSER = CF.BrowserPool(min(max(1, a.browsers), max(1, a.workers)))    # the workers do not all queue for one
     over = json.load(open(a.candidates, encoding="utf-8")) if a.candidates else {}
     mode = auto_mode(now, election_day) if a.mode == "auto" else a.mode
     prev = None
@@ -1772,8 +1857,8 @@ def main():
     for u, src in ([(u, "known") for u in over.get("probe", KNOWN) + [control]] +
                    [(cfg.get(k), "config") for k in ("results_url", "results_url_localities", "station_turnout_url")] +
                    [(u, "enumerated") for u in (enumerated() if over.get("enumerate", mode == "full") else [])] +
-                   [(e["url"], "previous") for e in (prev or {}).get("urls", [])
-                    if answering(e) and (e["cls"] not in ("html", "script") or "seed" in e.get("source", []))]):
+                   [(e["url"], "previous") for e in (prev or {}).get("urls", []) if answering(last(e))
+                    and (last(e)["cls"] not in ("html", "script") or "seed" in e.get("source", []))]):
         if u and not is_web(u):                   # a repository path (live_input/stations.csv): read, never probed
             if src == "config":
                 repo_copies.append(u)
@@ -1787,10 +1872,17 @@ def main():
     with cf.ThreadPoolExecutor(max_workers=max(1, a.workers)) as pool:
         found_on, log = crawl(net, seeds, allow, pool, results, sources, keep=kept)
         linked = [u for u in sorted(found_on) if DATA.search(u)][:400] + [u for u in sorted(found_on) if not DATA.search(u)][:100]
-        rest = list(dict.fromkeys(u for u in probe + linked if u not in results))
+        rest = sorted(dict.fromkeys(u for u in probe + linked if u not in results), key=lambda u: priority(u, sources, found_on))
         for u, (e, _) in zip(rest, pool.map(lambda u: probe_one(net, u, kept), rest)):
             results[u] = e
-    CF.BROWSER.close()                            # the run's Chrome, if the WAF made one necessary
+    probing_s = round(time.time() - net.t0, 1)
+    CF.BROWSER.close()                            # the run's Chromes, if the WAF made them necessary
+    p_by = {e["url"]: last(e) for e in (prev or {}).get("urls", [])}
+    for u, e in results.items():                  # not asked (the deadline), but it answered before: carried until asked
+        o = p_by.get(u)
+        if e.get("unasked") and answering(o):
+            e["last_answered"] = {"at": o.get("at") or prev.get("generated_at"),
+                                  **{k: o[k] for k in FIELDS + ("spa",) if o.get(k) is not None}}
     for u in dict.fromkeys(repo_copies):
         try:
             with open(os.path.join(ROOT, u), "rb") as f:
@@ -1824,10 +1916,13 @@ def main():
                       "name": os.environ.get("RUNNER_NAME"), "os": platform.platform(terse=True),
                       "test_rewrite": a.rewrite or None},
            "control": (f"{ce['status']} ({ce['cls']}, {ce.get('bytes')} bytes)" if ce and answering(ce) else
+                       "not asked (the run's deadline)" if ce and ce.get("unasked") else
                        f"FAILED ({(ce or {}).get('status') or (ce or {}).get('error', 'not probed')}): " +
                        ("other CEC hosts did answer" if any(answering(e) and "bechirot.gov.il" in e["url"] for e in entries)
                         else "this runner may not reach the CEC at all")),
            "fetch": fetch_report(entries),
+           "probing": {"s": probing_s, "deadline_s": net.deadline_s, "unasked": sum(bool(e.get("unasked")) for e in entries),
+                       "browsers": CF.BROWSER.size, "browser_starts": CF.BROWSER.starts},
            "counts": {"probed": len(entries), "answered": sum(map(answering, entries)),
                       "by_class": dict(collections.Counter(e.get("cls") for e in entries))},
            "verdicts": verdicts(entries, cfg, now, election_day, control)}
@@ -1863,7 +1958,8 @@ def main():
     line = {"mode": mode, "probed": rep["counts"]["probed"], "answered": rep["counts"]["answered"],
             "new": len(d["new"]), "changed": len(d["changed"]), "gone": len(d["gone"]), "stored": sorted(stored),
             "verdicts": {v["key"]: v["state"] for v in rep["verdicts"]}, "report": pm,
-            "waf": rep["fetch"]["waf_seen"], "browser_past": rep["fetch"]["browser_past"]}
+            "waf": rep["fetch"]["waf_seen"], "browser_past": rep["fetch"]["browser_past"],
+            "probing_s": rep["probing"]["s"], "unasked": rep["probing"]["unasked"]}
     if a.push:
         try:
             line["pushed"] = push_report({f"discover-{stamp}.json": pj, f"discover-{stamp}.md": pm, "latest.json": pj,

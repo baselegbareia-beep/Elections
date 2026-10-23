@@ -94,6 +94,8 @@ jobs:
     # included, waits behind it. Delete DISCOVER_RUNNER, cancel the queued run (both the owner's), then dispatch or
     # request with runner=ubuntu-latest (docs/FILE_DISCOVERY.md, "כששרתי GitHub נחסמים").
     runs-on: ${{ needs.request.outputs.runner || github.event.inputs.runner || vars.DISCOVER_RUNNER || 'ubuntu-latest' }}
+    # discover.py stops probing after 15 minutes (--deadline, 900 s by default) and still writes and pushes its report
+    # (the URLs left "not asked"), so a slow CEC behind the WAF gives a partial report, not a run killed here with none
     timeout-minutes: 25
     concurrency:
       # one scan at a time, scheduled, manual or requested (one running, one pending). On the job, not the workflow:

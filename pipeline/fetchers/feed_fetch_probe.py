@@ -194,7 +194,7 @@ def render(S):
         out.append(f"- the browser: Chrome {B.get('version', '?')} at `{B.get('chrome', '?')}`, its own User-Agent "
                    f"`{B.get('user_agent', '?')}`; started {len(starts)} times (once a round, as live.yml once a pass): "
                    f"{min(starts) if starts else '-'}–{max(starts) if starts else '-'} s, median {median(starts)} s; "
-                   f"{len(br)} requests through it, median {median(bt)} s each (the first of a round includes the start)")
+                   f"{len(br)} requests through it, median {median(bt)} s each (the start not included)")
     elif S.get("browser_error"):
         out.append(f"- the browser: unavailable: {S['browser_error'][:300]}")
     ctrl = next((r for r in recs if r["url"] == CONTROL), None)
