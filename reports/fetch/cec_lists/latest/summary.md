@@ -1,12 +1,12 @@
-# CEC lists and surplus agreements (2026-10-21 08:03 UTC)
+# CEC lists and surplus agreements (2026-10-23 14:03 UTC)
 
-139 requests, 111 answered with 200, 103 files stored under files/. Content-pages API: `https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages` (client id found: True). PDFs read with: pdftotext.
+128 requests, 103 answered with 200, 108 files stored under files/. Content-pages API: `https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages` (client id found: True). PDFs read with: pypdf.
 
 lists_2026.json is read, never written here: what is confirmed below is for the lead to apply.
 
 ## Confirmed by the CEC's own pages and files
 
-Letters: **38 of 38 confirmed by a live official page or file**; 0 more only by an archive snapshot of one (the Wayback Machine's copy, not the live page); **1 with other letters** next to the list's name (read the line); 0 not confirmed by anything read here.
+Letters: **38 of 38 confirmed by a live official page or file**; 0 more only by an archive snapshot of one (the Wayback Machine's copy, not the live page); **5 with other letters** next to the list's name (read the line); 0 not confirmed by anything read here.
 
 | letters (reference) | list | confirmed by | where (kind) | the line |
 |---|---|---|---|---|
@@ -27,8 +27,8 @@ Letters: **38 of 38 confirmed by a live official page or file**; 0 more only by 
 | קך | סדר-חדש לכינון חוקה, להפרדת רשויות ולבחי | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | קך / סדר-חדש לכינון חוקה, להפרדת רשויות ולבחירות אישיות |
 | די | Reservists | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | די / המילואימניקים והכלכלית בראשות יועז הנדל וירון זליכה |
 | אמת | The Democrats | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | אמת / הדמוקרטים בראשות יאיר גולן |
-| עם | Ra'am | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | עם / רע"ם – הרשימה הערבית המאוחדת |
-| שס | Shas | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | שס / התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ"ל |
+| עם | Ra'am | **live page or file**; **OTHER LETTERS: ביש ה ראל שם** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | עם / רע"ם – הרשימה הערבית המאוחדת |
+| שס | Shas | **live page or file**; **OTHER LETTERS: היה לא** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | שס / התאחדות הספרדים שומרי תורה תנועתו של מרן הרב עובדיה יוסף זצ"ל |
 | זך | Haredi Public | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | זך / הציבור החרדי בראשות מוטי ליטנר |
 | פה | אני ואתה מפלגת העם הישראלית | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | פה / אני ואתה מפלגת העם הישראלית |
 | זץ | ברית עולם לגאולת ישראל | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | זץ / ברית עולם לגאולת ישראל |
@@ -38,13 +38,13 @@ Letters: **38 of 38 confirmed by a live official page or file**; 0 more only by 
 | בקר | אורות השחר בראשות ניסים לוק | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | בקר / אורות השחר בראשות ניסים לוק |
 | נץ | ביטחון אישי | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | נץ / ביטחון אישי |
 | נר | צבע שחור – מגן עולם התורה | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | נר / צבע שחור – מגן עולם התורה |
-| מחל | Likud | **live page or file**; **OTHER LETTERS: מ** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | מחל / הליכוד בהנהגת בנימין נתניהו לראשות הממשלה |
-| כן | National Unity | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | כן / כחול לבן בראשות בני גנץ |
-| ט | Religious Zionism | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ט / הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין |
+| מחל | Likud | **live page or file**; **OTHER LETTERS: אגב מ שם** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | מחל / הליכוד בהנהגת בנימין נתניהו לראשות הממשלה |
+| כן | National Unity | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | כן / כחול לבן בראשות בני גנץ – הרשימה אינה מתמודדת בבחירות לכנסת ה-26 |
+| ט | Religious Zionism | **live page or file**; **OTHER LETTERS: ה טעם כן לא מה** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ט / הציונות הדתית בראשות בצלאל סמוטריץ' וזהות בראשות משה פייגלין |
 | צבי | תנועת אחי תנועתו של הרב יורם אברג'ל זצ"ל | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | צבי / תנועת אחי תנועתו של הרב יורם אברג'ל זצ"ל |
 | בי | צומת בית ישראל | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | בי / צומת בית ישראל |
 | ק | תקומה | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ק / תקומה |
-| ודם | Joint List | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ודם / הרשימה המשותפת |
+| ודם | Joint List | **live page or file**; **OTHER LETTERS: ה** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ודם / הרשימה המשותפת |
 | רץ | הקהל – מפלגה כלל חרדית שנציגיה נבחרים על | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | רץ / הקהל – מפלגה כלל חרדית שנציגיה נבחרים על ידי הציבור בראשות הרב שלמה אלבוים |
 | ג | UTJ | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he; live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&chapterIndex=9 | ג / יהדות התורה והשבת אגודת ישראל – דגל התורה |
 | ני | נעם לישראל למען עתיד הילדים בראשות אבי מ | **live page or file** | live page: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | ני / נעם לישראל למען עתיד הילדים בראשות אבי מעוז |
@@ -61,44 +61,34 @@ Agreements: **0 of 5 confirmed by a live official page or file** (none); only by
 
 ## www.bechirot.gov.il (the crawl)
 
-Home page: 200. Asked: 15 pages of 60 (the site's API: 11 of 35; sitemaps: 1 of 5), 0 files of 40, 8 scripts of 12, each redirect counted; one request every 1.0 s, redirects followed on this site only.
+Home page: 202. Asked: 12 pages of 60 (the site's API: 9 of 35; sitemaps: 1 of 5), 0 files of 40, 0 scripts of 12, each redirect counted; one request every 1.0 s, redirects followed on this site only.
 
-API addresses its scripts call: https://www.bechirot.gov.il/umbraco/api/search/search/ (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Banner/getBanner (no parameters seen); https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Header/getheader (no parameters seen); https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia (no parameters seen); https://www.bechirot.gov.il/umbraco/api/footer/getFooter (no parameters seen); https://www.bechirot.gov.il/umbraco/api/Share/getShare (no parameters seen).
-robots.txt: none; its sitemaps list 0 addresses; the archive's index of the site: 0 addresses (0 on topic, 0 api), HTTP TimeoutError: The read operation timed out; seeds in lists_2026.json: 0.
+API addresses its scripts call: none found (read the stored *.bundle.js).
+robots.txt: 202; its sitemaps list 0 addresses; the archive's index of the site: 383 addresses (0 on topic, 7 api), HTTP 200; seeds in lists_2026.json: 0.
 Not asked: 0 (); links not followed (about none of the topics, or an earlier Knesset): 0; links elsewhere (not fetched): 0 .
 
 | address | what | HTTP | read | lines | why |
 |---|---|---|---|---|---|
-| https://www.bechirot.gov.il/robots.txt | robots | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's robots.txt (its rules, its sitemaps) |
-| https://www.bechirot.gov.il/ | page | 200 (after 1 redirects) | html | 3 | the CEC site's home page |
-| https://www.bechirot.gov.il/sitemap.xml | sitemap | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's sitemap |
-| https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=e535731d&query=22569&currentpageid=22714&type=Banners | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=e535731d&query=22569&currentpageid=22714&type=B | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=e535731d&query=22569&currentpageid=22714&type=Banne | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Banner) for Banner-e535731d |
-| https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=6c0aaefe&currentpageid=22714&query=22578 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (ContentShow) for ContentShow-6c0aaefe |
-| https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=823a7515&title=ציר+הזמן+לבחירות+לכנסת+ה-26&quer | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Carousel) for Carousel-823a7515 |
-| https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllanga | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Header) for PageHeader |
-| https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia?currentpageid=22714&sitesettingsfooter=1&pageshowpubl | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Footer) for PageFooter |
-| https://www.bechirot.gov.il/umbraco/api/footer/getFooter?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdat | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Footer) for PageFooter |
-| https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | the site's API (Share) for PageShare |
-| https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | script | 200 |  |  | a script of https://www.bechirot.gov.il/ |
-| https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | Umbraco's content listing (the Delivery API, where it is on) |
-| https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | api | 302 (to https://maintenance.gov.il/: not followed) |  |  | Umbraco's content listing (the Delivery API, where it is on) |
+| https://www.bechirot.gov.il/robots.txt | robots | 202 |  |  | the site's robots.txt (its rules, its sitemaps) |
+| https://www.bechirot.gov.il/ | page | 202 | html | 2 | the CEC site's home page |
+| https://www.bechirot.gov.il/sitemap.xml | sitemap | 202 |  |  | the site's sitemap |
+| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/footer/getFooter | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/Header/getheader | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/Share/getShare | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | api | 202 | html | 2 | in the archive's index of the site (an API address) |
+| https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | api | 202 | html | 2 | Umbraco's content listing (the Delivery API, where it is on) |
+| https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | api | 202 | html | 2 | Umbraco's content listing (the Delivery API, where it is on) |
 
 ## Wayback Machine (the gov.il addresses that answered 403)
 
-1 lookups of 70, 1 snapshots of 40, one request every 4.0 s; **stopped: archive.org answered 429 (too many requests): nothing more asked of it**; not looked up: 1. The lists page's files in the archive's index: 0 addresses, HTTP TimeoutError: The read operation timed out. A snapshot is read as the page it copies and marked "archive snapshot <timestamp>": the live page answered 403.
+0 lookups of 70, 1 snapshots of 40, one request every 4.0 s; **stopped: archive.org answered 429 (too many requests): nothing more asked of it**; not looked up: 5. The lists page's files in the archive's index: 4 addresses, HTTP 200. A snapshot is read as the page it copies and marked "archive snapshot <timestamp>": the live page answered 403.
 
 | address | live | the archive | snapshot | read | lines |
 |---|---|---|---|---|---|
-| https://www.gov.il/he/pages/candidates-lists-26 | 403 | closest snapshot 20260908210824 | 429 |  |  |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf | 200 | in the archive's index: 20261009104234 | 429 |  |  |
 
 ## Lists (the roster pages on gov.il)
 
@@ -135,7 +125,7 @@ Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; see
 | URL | HTTP | type | bytes | read | saved / error |
 |---|---|---|---|---|---|
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 | application/javascript | 255 |  | files/12012046-www.gov.il_client-config.js |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | 200 | application/json | 10486 | json | files/ff89c02f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he | 200 | application/json | 10559 | json | files/9bdd8b4e-openapi-gc.digital.gov.il_candidates-lists-26_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-agreements-26?culture=he | 404 |  |  |  | HTTP 404 |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-agreement-26?culture=he | 404 |  |  |  | HTTP 404 |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/surplus-votes-agreements-26?cultur | 404 |  |  |  | HTTP 404 |
@@ -147,21 +137,21 @@ Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; see
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/heskemey-odafim-26?culture=he | 404 |  |  |  | HTTP 404 |
 | https://www.gov.il/he/pages/candidates-lists-26 | 403 | text/html |  |  | HTTP 403 |
 | https://www.gov.il/he/departments/guides/candidates-lists-26 | 403 | text/html |  |  | HTTP 403 |
-| https://votes26.bechirot.gov.il/ | 404 | text/html |  |  | HTTP 404 |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 5301 | json | files/2c2eee16-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_2.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 52618 | json | files/04f516b1-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_3.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 13089 | json | files/4992d35b-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_4.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 7748 | json | files/d4031397-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_5.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 4498 | json | files/ef987a63-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_6.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 16108 | json | files/87dbae5f-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_7.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 10623 | json | files/93e406c5-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_8.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 8758 | json | files/146a7942-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_9.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyahad_list1?culture=he | 200 | application/json | 18041 | json | files/9c7783ac-openapi-gc.digital.gov.il_beyahad_list1_culture_he.json |
+| https://votes26.bechirot.gov.il/ | 202 | text/html | 2015 | html | files/f89d8099-votes26.bechirot.gov.il_index.html |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 5301 | json | files/6c088ce4-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_2.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 52618 | json | files/21c3181a-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_3.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 13089 | json | files/f250e8ae-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_4.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 7748 | json | files/a7b65147-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_5.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 6638 | json | files/9c9cb340-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_6.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 16108 | json | files/a7da910b-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_7.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 10623 | json | files/0cff8d59-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_8.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/candidates-lists-26?culture=he&cha | 200 | application/json | 8758 | json | files/9f1d3a27-openapi-gc.digital.gov.il_candidates-lists-26_culture_he_chapterIndex_9.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/beyahad_list1?culture=he | 200 | application/json | 18041 | json | files/08dd6626-openapi-gc.digital.gov.il_beyahad_list1_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yashar_list_2?culture=he | 200 | application/json | 16266 | json | files/bd1cab72-openapi-gc.digital.gov.il_yashar_list_2_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/sharshar_list3?culture=he | 200 | application/json | 4316 | json | files/76d6284d-openapi-gc.digital.gov.il_sharshar_list3_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/hashutafut-lekulam_iist?culture=he | 200 | application/json | 4173 | json | files/deb4b716-openapi-gc.digital.gov.il_hashutafut-lekulam_iist_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/pirates_list_5?culture=he | 200 | application/json | 5561 | json | files/66e7e76b-openapi-gc.digital.gov.il_pirates_list_5_culture_he.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/amcha-israel_list6?culture=he | 200 | application/json | 4509 | json | files/18c54c49-openapi-gc.digital.gov.il_amcha-israel_list6_culture_he.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/amcha-israel_list6?culture=he | 200 | application/json | 4746 | json | files/4eb40ecf-openapi-gc.digital.gov.il_amcha-israel_list6_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/israel-tchila_list7?culture=he | 200 | application/json | 4346 | json | files/faf7ea86-openapi-gc.digital.gov.il_israel-tchila_list7_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/gan-eden_list_8?culture=he | 200 | application/json | 4107 | json | files/ffc094cc-openapi-gc.digital.gov.il_gan-eden_list_8_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kol-ha-nashim_list9?culture=he | 200 | application/json | 4193 | json | files/9fa63715-openapi-gc.digital.gov.il_kol-ha-nashim_list9_culture_he.json |
@@ -183,9 +173,9 @@ Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; see
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/betach_list25?culture=he | 200 | application/json | 3983 | json | files/42bbc975-openapi-gc.digital.gov.il_betach_list25_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/orot_list26?culture=he | 200 | application/json | 4285 | json | files/d441e053-openapi-gc.digital.gov.il_orot_list26_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/demokratura_list27?culture=he | 200 | application/json | 3876 | json | files/2cdb03b3-openapi-gc.digital.gov.il_demokratura_list27_culture_he.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shachor_list28?culture=he | 200 | application/json | 4433 | json | files/513c393d-openapi-gc.digital.gov.il_shachor_list28_culture_he.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/shachor_list28?culture=he | 200 | application/json | 4668 | json | files/df477d94-openapi-gc.digital.gov.il_shachor_list28_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/halikud-tikvahadasha_iist29?cultur | 200 | application/json | 21237 | json | files/340d6ee0-openapi-gc.digital.gov.il_halikud-tikvahadasha_iist29_culture_he.json |
-| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kachol-lavan_list30?culture=he | 200 | application/json | 5675 | json | files/cd5c9180-openapi-gc.digital.gov.il_kachol-lavan_list30_culture_he.json |
+| https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/kachol-lavan_list30?culture=he | 200 | application/json | 5012 | json | files/3938d69a-openapi-gc.digital.gov.il_kachol-lavan_list30_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzionutdatit-zehut_list31?culture= | 200 | application/json | 9513 | json | files/1501ee86-openapi-gc.digital.gov.il_tzionutdatit-zehut_list31_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/chozrim-leshorashim_list32?culture | 200 | application/json | 4330 | json | files/60465289-openapi-gc.digital.gov.il_chozrim-leshorashim_list32_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/tzomet-beit-israel_list33?culture= | 200 | application/json | 5442 | json | files/4a06c179-openapi-gc.digital.gov.il_tzomet-beit-israel_list33_culture_he.json |
@@ -194,49 +184,49 @@ Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; see
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/machane-israel_list36?culture=he | 200 | application/json | 4652 | json | files/ccf68be7-openapi-gc.digital.gov.il_machane-israel_list36_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/yahadut-degel_list37?culture=he | 200 | application/json | 21621 | json | files/b51c114c-openapi-gc.digital.gov.il_yahadut-degel_list37_culture_he.json |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages/noam_list38?culture=he | 200 | application/json | 5707 | json | files/cd059513-openapi-gc.digital.gov.il_noam_list38_culture_he.json |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf | 200 | application/pdf | 668247 | pdftotext | files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voting%20Slips.pdf | 200 | application/pdf | 668247 | pypdf | files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf |
 | https://www.gov.il/BlobFolder/unit/elections-26/he/logo.jpg | 200 | image/jpeg | 13190 | html | files/539b8864-www.gov.il_logo.jpg |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved Voting Slips.pdf | 200 | application/pdf | 668247 | pdftotext | files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf | 200 | application/pdf | 4471151 | pdftotext | files/5a126d1c-www.gov.il_pr1_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26_decision.pdf | 200 | application/pdf | 223304 | pdftotext | files/125a5188-www.gov.il_pr1_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_decision.pdf | 200 | application/pdf | 225968 | pdftotext | files/075d60c4-www.gov.il_pr2_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved Voting Slips.pdf | 200 | application/pdf | 668247 | pypdf | files/b97f7244-www.gov.il_Approved_Voting_Slips.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26.pdf | 200 | application/pdf | 4471151 | pypdf | files/5a126d1c-www.gov.il_pr1_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr1_26_decision.pdf | 200 | application/pdf | 223304 | pypdf | files/125a5188-www.gov.il_pr1_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_decision.pdf | 200 | application/pdf | 225968 | pypdf | files/075d60c4-www.gov.il_pr2_26_decision.pdf |
 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr3_26_Redacted.pdf | 200 | application/pdf |  |  | over 15 MB: not stored, not read |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_Redacted.pdf | 200 | application/pdf | 2415032 | pdftotext | files/6b09ff58-www.gov.il_pr4_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_Redacted.pdf | 200 | application/pdf | 2415032 | pypdf | files/6b09ff58-www.gov.il_pr4_26_Redacted.pdf |
 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_annex_Redacted.pdf | 200 | application/pdf |  |  | over 15 MB: not stored, not read |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_decision.pdf | 200 | application/pdf | 222950 | pdftotext | files/46fcafe3-www.gov.il_pr5_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_Redacted.pdf | 200 | application/pdf | 3469849 | pdftotext | files/d639a12d-www.gov.il_pr5_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_decision.pdf | 200 | application/pdf | 222950 | pypdf | files/46fcafe3-www.gov.il_pr5_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_Redacted.pdf | 200 | application/pdf | 3469849 | pypdf | files/d639a12d-www.gov.il_pr5_26_Redacted.pdf |
 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr5_26_annex.pdf | 200 | application/pdf |  |  | over 15 MB: not stored, not read |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_decision.pdf | 200 | application/pdf | 228963 | pdftotext | files/6ad941fe-www.gov.il_pr4_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_Redacted.pdf | 200 | application/pdf | 918611 | pdftotext | files/8a5eea92-www.gov.il_pr2_26_Redacted.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_Redacted.pdf | 200 | application/pdf | 7477916 | pdftotext | files/408e1d7a-www.gov.il_pr6_26_Redacted.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_decision.pdf | 200 | application/pdf | 227140 | pdftotext | files/c1254d8c-www.gov.il_pr6_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | 200 | application/pdf | 5391262 | pdftotext | files/19af3aee-www.gov.il_pr7_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr4_26_decision.pdf | 200 | application/pdf | 228963 | pypdf | files/6ad941fe-www.gov.il_pr4_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr2_26_Redacted.pdf | 200 | application/pdf | 918611 | pypdf | files/8a5eea92-www.gov.il_pr2_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_Redacted.pdf | 200 | application/pdf | 7477916 | pypdf | files/408e1d7a-www.gov.il_pr6_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr6_26_decision.pdf | 200 | application/pdf | 227140 | pypdf | files/c1254d8c-www.gov.il_pr6_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26.pdf | 200 | application/pdf | 5391262 | pypdf | files/19af3aee-www.gov.il_pr7_26.pdf |
 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26_annex.pdf | 200 | application/pdf |  |  | over 15 MB: not stored, not read |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26_decision.pdf | 200 | application/pdf | 216518 | pdftotext | files/b4f5263e-www.gov.il_pr7_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26.pdf | 200 | application/pdf | 1408825 | pdftotext | files/5180a35e-www.gov.il_pr8_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26.pdf | 200 | application/pdf | 275714 | pdftotext | files/d6c0b7a6-www.gov.il_pm3_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26_decision.pdf | 200 | application/pdf | 188820 | pdftotext | files/9beb7875-www.gov.il_pm3_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_Redacted.pdf | 200 | application/pdf | 124709 | pdftotext | files/f36707d4-www.gov.il_pm4_26_Redacted.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_Redacted.pdf | 200 | application/pdf | 800469 | pdftotext | files/ece43d72-www.gov.il_pr9_26_Redacted.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_annex_Redacted.pdf | 200 | application/pdf | 8894096 | pdftotext | files/56dcba64-www.gov.il_pr9_26_annex_Redacted.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr3_26_decision.pdf | 200 | application/pdf | 217371 | pdftotext | files/d96c0178-www.gov.il_pr3_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26_decision.pdf | 200 | application/pdf | 214694 | pdftotext | files/df2301c0-www.gov.il_pr8_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_decision.pdf | 200 | application/pdf | 201876 | pdftotext | files/755f987b-www.gov.il_pm4_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_Redacted.pdf | 200 | application/pdf | 4099331 | pdftotext | files/5c5abeae-www.gov.il_pm6_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr7_26_decision.pdf | 200 | application/pdf | 216518 | pypdf | files/b4f5263e-www.gov.il_pr7_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26.pdf | 200 | application/pdf | 1408825 | pypdf | files/5180a35e-www.gov.il_pr8_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26.pdf | 200 | application/pdf | 275714 | pypdf | files/d6c0b7a6-www.gov.il_pm3_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm3_26_decision.pdf | 200 | application/pdf | 188820 | pypdf | files/9beb7875-www.gov.il_pm3_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_Redacted.pdf | 200 | application/pdf | 124709 | pypdf | files/f36707d4-www.gov.il_pm4_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_Redacted.pdf | 200 | application/pdf | 800469 | pypdf | files/ece43d72-www.gov.il_pr9_26_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_annex_Redacted.pdf | 200 | application/pdf | 8894096 | pypdf | files/56dcba64-www.gov.il_pr9_26_annex_Redacted.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr3_26_decision.pdf | 200 | application/pdf | 217371 | pypdf | files/d96c0178-www.gov.il_pr3_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr8_26_decision.pdf | 200 | application/pdf | 214694 | pypdf | files/df2301c0-www.gov.il_pr8_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm4_26_decision.pdf | 200 | application/pdf | 201876 | pypdf | files/755f987b-www.gov.il_pm4_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_Redacted.pdf | 200 | application/pdf | 4099331 | pypdf | files/5c5abeae-www.gov.il_pm6_26_Redacted.pdf |
 | https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_annex.pdf | 200 | application/pdf |  |  | over 15 MB: not stored, not read |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_decision.pdf | 200 | application/pdf | 224482 | pdftotext | files/ab230fb6-www.gov.il_pm6_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_decision.pdf | 200 | application/pdf | 221584 | pdftotext | files/62570005-www.gov.il_pr9_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26.pdf | 200 | application/pdf | 1034629 | pdftotext | files/e9ec6371-www.gov.il_pr10_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | 200 | application/pdf | 3278833 | pdftotext | files/1e9e5df1-www.gov.il_pm7_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26.pdf | 200 | application/pdf | 14007592 | pdftotext | files/d24dae2b-www.gov.il_pm8_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26_decision.pdf | 200 | application/pdf | 217448 | pdftotext | files/ec57e7fc-www.gov.il_pm7_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision.pdf | 200 | application/pdf | 135286 | pdftotext | files/7527d057-www.gov.il_pr_9_26_evdecision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26_decision.pdf | 200 | application/pdf | 216770 | pdftotext | files/f23d8b19-www.gov.il_pr10_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26_decision.pdf | 200 | application/pdf | 218158 | pdftotext | files/ae14c825-www.gov.il_pm8_26_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/7a_decision.pdf | 200 | application/pdf | 356929 | pdftotext | files/9c76137a-www.gov.il_7a_decision.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26.pdf | 200 | application/pdf | 130114 | pdftotext | files/ff5f371a-www.gov.il_pr11_26.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision2.pdf | 200 | application/pdf | 147547 | pdftotext | files/dfc601b9-www.gov.il_pr_9_26_evdecision2.pdf |
-| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26_decision.pdf | 200 | application/pdf | 195230 | pdftotext | files/f6dee162-www.gov.il_pr11_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm6_26_decision.pdf | 200 | application/pdf | 224482 | pypdf | files/ab230fb6-www.gov.il_pm6_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr9_26_decision.pdf | 200 | application/pdf | 221584 | pypdf | files/62570005-www.gov.il_pr9_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26.pdf | 200 | application/pdf | 1034629 | pypdf | files/e9ec6371-www.gov.il_pr10_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26.pdf | 200 | application/pdf | 3278833 | pypdf | files/1e9e5df1-www.gov.il_pm7_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26.pdf | 200 | application/pdf | 14007592 | pypdf | files/d24dae2b-www.gov.il_pm8_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm7_26_decision.pdf | 200 | application/pdf | 217448 | pypdf | files/ec57e7fc-www.gov.il_pm7_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision.pdf | 200 | application/pdf | 135286 | pypdf | files/7527d057-www.gov.il_pr_9_26_evdecision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr10_26_decision.pdf | 200 | application/pdf | 216770 | pypdf | files/f23d8b19-www.gov.il_pr10_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pm8_26_decision.pdf | 200 | application/pdf | 218158 | pypdf | files/ae14c825-www.gov.il_pm8_26_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/7a_decision.pdf | 200 | application/pdf | 356929 | pypdf | files/9c76137a-www.gov.il_7a_decision.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26.pdf | 200 | application/pdf | 130114 | pypdf | files/ff5f371a-www.gov.il_pr11_26.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr_9_26_evdecision2.pdf | 200 | application/pdf | 147547 | pypdf | files/dfc601b9-www.gov.il_pr_9_26_evdecision2.pdf |
+| https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/pr11_26_decision.pdf | 200 | application/pdf | 195230 | pypdf | files/f6dee162-www.gov.il_pr11_26_decision.pdf |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A2%D7%95%D7%93%D7%A4%D7%99%D7%9D | 200 | application/json | 199 |  | files/e17bd6ab-data.gov.il_package_search_rows_50_q.json |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%A8%D7%A9%D7%99%D7%9E%D7%95%D7%AA%20%D7%94%D7%9E%D7%95%D7%A | 200 | application/json | 11986 |  | files/5752d885-data.gov.il_package_search_rows_50_q.json |
 | https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/9162e35c-8834-422c-9202-ed42faf4a9f9/download/ | 200 | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | 112345 | xlsx | files/c69258e3-data.gov.il_full-candidates-lists-19.xlsx |
@@ -247,31 +237,20 @@ Expected (lists_2026.json) and seen on a CEC page: 0; expected, not seen: 5; see
 | https://data.gov.il/dataset/207f3773-11ba-49c8-a529-8ba2968fa631/resource/0f07d5bf-5b8d-4c28-bf37-e69459ddb4ed/download/ | 200 | application/vnd.openxmlformats-officedocument.spreadsheetml.sheet | 103461 | xlsx | files/32e0171c-data.gov.il_full_candidates_list.xlsx |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26 | 200 | application/json | 199 |  | files/e17bd6ab-data.gov.il_package_search_rows_50_q.json |
 | https://data.gov.il/api/3/action/package_search?rows=50&q=knesset%2026 | 200 | application/json | 199 |  | files/e17bd6ab-data.gov.il_package_search_rows_50_q.json |
-| https://web.archive.org/cdx/search/cdx?url=www.bechirot.gov.il%2F&matchType=prefix&from=2025&output=json&fl=original%2Ct |  |  |  |  | TimeoutError: The read operation timed out |
-| https://www.bechirot.gov.il/robots.txt | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/ | 200 | text/html | 15484 | html | files/7663d792-www.bechirot.gov.il_index.html |
-| https://www.bechirot.gov.il/sitemap.xml | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/Banner.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 429731 |  | files/858b3b83-www.bechirot.gov.il_Banner.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/search/search/?componentid=e535731d&query=22569&currentpageid=22714&type=Banners | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=e535731d&query=22569&currentpageid=22714&type=B | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner?componentid=e535731d&query=22569&currentpageid=22714&type=Banne | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/ContentShow.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 308811 |  | files/850776a7-www.bechirot.gov.il_ContentShow.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems?componentid=6c0aaefe&currentpageid=22714&query=22578 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/EventDetails.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 230681 |  | files/6ef8a03d-www.bechirot.gov.il_EventDetails.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/dist/Carousel.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 427784 |  | files/ec1d005e-www.bechirot.gov.il_Carousel.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel?componentid=823a7515&title=%D7%A6%D7%99%D7%A8+%D7%94%D7%96% | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/Header.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 258476 |  | files/f28f6eb4-www.bechirot.gov.il_Header.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/Header/getheader?navigation=2&logo=2&languagebar=1&currentpageid=22714&htmllanga | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/Footer.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 224363 |  | files/f402ba09-www.bechirot.gov.il_Footer.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia?currentpageid=22714&sitesettingsfooter=1&pageshowpubl | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/api/footer/getFooter?currentpageid=22714&sitesettingsfooter=1&pageshowpublicationdat | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/Share.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 221056 |  | files/bc57627a-www.bechirot.gov.il_Share.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/api/Share/getShare?currentpageid=22714 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/dist/AncorTextHolder.bundle.js?v=248baca6-3b7a-4354-ad40-21158ca11730 | 200 | text/javascript | 190665 |  | files/865fe128-www.bechirot.gov.il_AncorTextHolder.bundle.js_v_248baca6-3b7a-4354-ad40-21158ca11730.js |
-| https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | 302 |  |  |  | redirect (302) to https://maintenance.gov.il/ not followed: not the same site |
-| https://web.archive.org/cdx/search/cdx?url=www.gov.il%2FBlobFolder%2Fguide%2Fcandidates-lists-26%2F&matchType=prefix&out |  |  |  |  | TimeoutError: The read operation timed out |
-| https://archive.org/wayback/available?url=https%3A%2F%2Fwww.gov.il%2Fhe%2Fpages%2Fcandidates-lists-26&timestamp=20261021 | 200 | application/json | 293 |  | files/204f9f3c-archive.org_available_url_https_www.gov.il_he_pages_candidates-lists-26_timestamp_20261021.json |
-| https://web.archive.org/web/20260908210824id_/https://www.gov.il/he/pages/candidates-lists-26 | 429 | text/html |  |  | HTTP 429 |
+| https://web.archive.org/cdx/search/cdx?url=www.bechirot.gov.il%2F&matchType=prefix&from=2025&output=json&fl=original%2Ct | 200 | application/json | 64973 |  | files/42d87a4c-web.archive.org_cdx_url_www.bechirot.gov.il_matchType_prefix_from_2025_output_json_fl_orig.json |
+| https://www.bechirot.gov.il/robots.txt | 202 | text/html | 2015 |  | files/be590b8d-www.bechirot.gov.il_robots.txt |
+| https://www.bechirot.gov.il/ | 202 | text/html | 2015 | html | files/f93b34b0-www.bechirot.gov.il_index.html |
+| https://www.bechirot.gov.il/sitemap.xml | 202 | text/html | 2015 |  | files/fcd030d5-www.bechirot.gov.il_sitemap.xml |
+| https://www.bechirot.gov.il/umbraco/api/Banner/getBanner | 202 | text/html | 2015 | html | files/16adea05-www.bechirot.gov.il_getBanner.html |
+| https://www.bechirot.gov.il/umbraco/api/Carousel/GetCarousel | 202 | text/html | 2015 | html | files/1b7edcf4-www.bechirot.gov.il_GetCarousel.html |
+| https://www.bechirot.gov.il/umbraco/api/ContentShow/GetContentItems | 202 | text/html | 2015 | html | files/34327f4f-www.bechirot.gov.il_GetContentItems.html |
+| https://www.bechirot.gov.il/umbraco/api/footer/getFooter | 202 | text/html | 2015 | html | files/72c8dc0b-www.bechirot.gov.il_getFooter.html |
+| https://www.bechirot.gov.il/umbraco/api/Header/getheader | 202 | text/html | 2015 | html | files/7b3571f5-www.bechirot.gov.il_getheader.html |
+| https://www.bechirot.gov.il/umbraco/api/Share/getShare | 202 | text/html | 2015 | html | files/467726f4-www.bechirot.gov.il_getShare.html |
+| https://www.bechirot.gov.il/umbraco/api/SocialMedia/getSocialMedia | 202 | text/html | 2015 | html | files/b1be2d52-www.bechirot.gov.il_getSocialMedia.html |
+| https://www.bechirot.gov.il/umbraco/delivery/api/v2/content?take=100 | 202 | text/html | 2015 | html | files/5bc0654b-www.bechirot.gov.il_content_take_100.html |
+| https://www.bechirot.gov.il/umbraco/delivery/api/v1/content?take=100 | 202 | text/html | 2015 | html | files/dbcb0842-www.bechirot.gov.il_content_take_100.html |
+| https://web.archive.org/cdx/search/cdx?url=www.gov.il%2FBlobFolder%2Fguide%2Fcandidates-lists-26%2F&matchType=prefix&out | 200 | application/json | 580 |  | files/3272dd5b-web.archive.org_cdx_url_www.gov.il_BlobFolder_guide_candidates-lists-26_matchType_prefix_o.json |
+| https://web.archive.org/web/20261009104234id_/https://www.gov.il/BlobFolder/guide/candidates-lists-26/he/Approved%20Voti | 429 | text/html |  |  | HTTP 429 |
 
 Reading the text is best effort (a PDF: pdftotext -layout, else pypdf; XLS and DOC are not read). The files are the record.
