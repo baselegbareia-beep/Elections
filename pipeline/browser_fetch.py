@@ -21,7 +21,12 @@ The protocol (live_fetch.Browser): first one line, {"ready": true, "version", "u
 {"ready": false, "error"}; then for each line {"method", "url", "headers", "timeout_ms", "max_bytes"} on stdin, one line
 {"status", "status_text", "url", "headers": [[name, value], ...], "body_b64", "bytes", "s"} or {"error"} on stdout. A
 body over max_bytes is not passed on (an error, with the status and headers). It ends at the end of its stdin, closing
-the browser. Whatever else writes to stdout (a library, the browser) goes to stderr, so the protocol stays clean.
+the browser, and also when Chrome or playwright's driver is gone (crashed, killed): that answer is
+{"error", "closed": true, "sent": false} when the request never left (Chrome was already gone: alive() before each
+request), "sent": true when it may have (gone during the request). live_fetch then starts a new helper, at once for the
+same request when it was not sent, else at the next request; a helper that kept a dead browser would fail every later
+request of a laptop's night-long loop. Whatever else writes to stdout (a library, the browser) goes to stderr, so the
+protocol stays clean.
 Chrome: --chrome (live_fetch passes $LIVE_CHROME or the one it found), else playwright's own Chromium when one is
 installed (`playwright install chromium`, a laptop; never on the runner, which has Google Chrome).
 """
@@ -98,6 +103,20 @@ def ask(ctx, req):
                 pass
 
 
+def alive(browser, ctx):
+    """"" when Chrome and playwright's driver still answer, else why not: one call to the driver and Chrome's DevTools
+    (the context's cookies; nothing on the network), so a browser that died while the helper waited is known before a
+    request is sent (the sync API reads Chrome's "disconnected" only during a call)."""
+    try:
+        ctx.cookies()
+    except Exception as exc:
+        return first_line(exc)
+    try:
+        return "" if browser.is_connected() else "Chrome disconnected"
+    except Exception as exc:
+        return first_line(exc)
+
+
 def serve(chrome):
     proto = os.fdopen(os.dup(1), "w", encoding="utf-8")
     os.dup2(2, 1)                                # anything else written to stdout goes to stderr
@@ -121,7 +140,16 @@ def serve(chrome):
             except ValueError as exc:
                 send({"error": f"not a request: {first_line(exc)}"})
                 continue
-            send(ask(ctx, req))
+            gone = alive(browser, ctx)
+            if gone:                             # gone while we waited: nothing sent; a new helper sends it
+                send({"error": f"the browser is gone, the request was not sent ({gone})", "closed": True, "sent": False})
+                break
+            ans = ask(ctx, req)
+            if ans.get("error") and "status" not in ans and alive(browser, ctx):
+                ans.update(closed=True, sent=True)   # gone during the request: it may have reached the server
+            send(ans)
+            if ans.get("closed"):
+                break
     finally:
         for close in (ctx.close, browser.close, pw.stop):
             try:

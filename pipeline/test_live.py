@@ -105,14 +105,18 @@ Runs single passes into a temporary folder and checks the JSON contract with the
      media26 behind CloudFront + AWS WAF (urllib: 202 + x-amzn-waf-action; a headless Chrome's own request: the file):
      the WAF's answers read (202, 405 captcha, CloudFront's bare 202); "fetch_via": "urllib" never starts a browser; no
      Chrome and no playwright are clear errors in status.json, not a crash; a drill on media25 (no WAF) uses urllib
-     only; live.yml's step that installs playwright and finds Chrome (a missing one a warning);
+     only; live.yml's step that installs playwright and finds Chrome (a missing one a warning); a browser gone
+     (a stand-in helper that answers "closed"): not sent, a new helper at once; sent, an error the page reads as the
+     neutral note and a new helper at the next request;
      pipeline/fetchers/feed_fetch_probe.py offline (--deadline 0, the verdict without a browser). Then, where a Python
      with playwright (LIVE_BROWSER_PYTHON, else this one) and a Chromium (LIVE_TEST_CHROME, /opt/pw-browsers, else
      live_fetch.find_chrome) are at hand, else skipped with a note: the results through the browser (its own
      User-Agent, gzip, the bytes exact), one request a pass after a challenge and one browser per process, urllib again
      after WAF_RECHECK, the guards (header-only, shrink, HTML, size cap) through it, the WAF lifted, "fetch_via":
      "browser", a 405 captcha and a bare 202, a browser challenged too, the probe before 22:00 (404 through the
-     browser), a pass as live.yml runs it (a process of its own: the browser's cost), and the probe's verdict "yes".
+     browser), a pass as live.yml runs it (a process of its own: the browser's cost), the laptop's --loop (one browser
+     all night) with Chrome killed between two passes and during a request (a new Chrome each time, one request a
+     pass, nothing left running), and the probe's verdict "yes".
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. In a workflow job the job's environment is cleared
@@ -129,9 +133,11 @@ import http.server
 import io
 import json
 import os
+import queue
 import random
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import tempfile
@@ -2395,9 +2401,10 @@ class FeedWafMock(http.server.BaseHTTPRequestHandler):
     """11k: media26 behind CloudFront + AWS WAF as seen from GitHub's runners on 22-23.10. Under /m26/, a request whose
     User-Agent is not a headless Chrome's (urllib, the feed's own) gets 202 with x-amzn-waf-action: challenge, CloudFront's
     headers and an empty body (mode "captcha": 405 + captcha; "bare": the 202 without the header; "wall": the browser
-    too; "lifted": no WAF); the browser's own request gets the file (gzip when it asks for it) or CloudFront's 404 page.
+    too; "lifted": no WAF); the browser's own request gets the file (gzip when it asks for it) or CloudFront's 404 page;
+    with stall (an Event) set, it is held stall_s seconds and dropped (Chrome is killed meanwhile).
     /m25/ (2022) is never challenged. Every request is logged: method, path, User-Agent, Accept-Encoding, Cache-Control."""
-    files, log, mode = {}, [], "challenge"
+    files, log, mode, stall, stall_s = {}, [], "challenge", None, 5
     WAF = (("Server", "CloudFront"), ("X-Cache", "Error from cloudfront"), ("Cache-Control", "no-store, max-age=0"),
            ("Content-Type", "text/html; charset=UTF-8"))
     NOT_FOUND = b'<!DOCTYPE html>\n<html dir="rtl" lang="he-IL" class="no-js"><head><meta charset="UTF-8"></head><body>404</body></html>'
@@ -2421,6 +2428,12 @@ class FeedWafMock(http.server.BaseHTTPRequestHandler):
                                 "ae": self.headers.get("Accept-Encoding", ""), "cc": self.headers.get("Cache-Control", ""),
                                 "port": self.server.server_address[1]})
         mode = FeedWafMock.mode
+        hold = FeedWafMock.stall
+        if hold is not None and browser and self.path.startswith("/m26/"):
+            hold.set()                             # the test kills Chrome now; its request gets no answer
+            time.sleep(FeedWafMock.stall_s)
+            self.close_connection = True
+            return None
         if self.path.startswith("/m26/") and mode != "lifted" and (not browser or mode == "wall"):
             if mode == "captcha":
                 return self._send(405, b"", self.WAF + (("x-amzn-waf-action", "captcha"),), head)
@@ -2443,6 +2456,71 @@ class FeedWafMock(http.server.BaseHTTPRequestHandler):
 
     def do_HEAD(self):
         self._go(True)
+
+
+FAKE_HELPER = r'''import base64, json, os, sys
+# 11k: a stand-in for pipeline/browser_fetch.py whose browser goes away. FAKE_HELPER_PLAN: per start (";") its answers
+# (","): ok (a 200 with a small file), gone-unsent (the browser gone before the request), gone-sent (gone during it);
+# after a "gone" answer it ends, as the helper does. Each start and request is logged in FAKE_HELPER_LOG.
+log = os.environ["FAKE_HELPER_LOG"]
+with open(log, "a") as f:
+    f.write("start\n")
+n = sum(1 for ln in open(log) if ln == "start\n")
+plan = os.environ["FAKE_HELPER_PLAN"].split(";")
+mine = (plan[n - 1] if n <= len(plan) else "ok").split(",")
+print(json.dumps({"ready": True, "version": "0-stand-in", "user_agent": "HeadlessChrome/0 (stand-in)"}), flush=True)
+for i, line in enumerate(sys.stdin):
+    req, kind = json.loads(line), mine[min(i, len(mine) - 1)]
+    with open(log, "a") as f:
+        f.write(f"{kind} {req['method']}\n")
+    if kind == "ok":
+        body = b"a,b\n1,2\n"
+        print(json.dumps({"status": 200, "status_text": "OK", "url": req["url"], "headers": [["content-type", "text/csv"]],
+                          "body_b64": base64.b64encode(body).decode(), "bytes": len(body), "s": 0}), flush=True)
+        continue
+    print(json.dumps({"error": "TargetClosedError: Target page, context or browser has been closed", "closed": True,
+                      "sent": kind == "gone-sent"}), flush=True)
+    break
+'''
+
+
+def page_note(err):
+    """The reader note the page gives a "results:" error after 22:00 (site/src/js/live.js, feedNotes): "not published"
+    (a 404), "neutral" (the first results have not reached the page yet) or "unreadable" (the CEC's file empty or
+    unreadable), by the page's own regular expressions, read from its source."""
+    js = open(os.path.join(ROOT, "site", "src", "js", "live.js"), encoding="utf-8").read()
+    rx = re.findall(r"/((?:[^/\\\n]|\\.)+)/\.test\(resErr\)", js)
+    if len(rx) != 2 or rx[0] != r"\b404\b":
+        return f"live.js: its notes' expressions not found ({rx})"
+    return "not published" if re.search(rx[0], err) else "neutral" if re.search(rx[1], err) else "unreadable"
+
+
+def chrome_pids(pid):
+    """The main Chrome processes under pid (playwright's driver starts Chrome in a process group of its own), from /proc."""
+    kids = {}
+    for d in os.listdir("/proc"):
+        if not d.isdigit():
+            continue
+        try:
+            ppid = int(open(f"/proc/{d}/stat").read().rsplit(")", 1)[1].split()[1])
+            cmd = open(f"/proc/{d}/cmdline", "rb").read().decode("utf-8", "replace").split("\0")
+        except (OSError, IndexError, ValueError):
+            continue
+        kids.setdefault(ppid, []).append((int(d), cmd))
+    todo, found = [pid], []
+    while todo:
+        for k, cmd in kids.get(todo.pop(), []):
+            todo.append(k)
+            if "--remote-debugging-pipe" in cmd and not any(c.startswith("--type=") for c in cmd):
+                found.append(k)
+    return found
+
+
+def pid_running(pid):
+    try:
+        return open(f"/proc/{pid}/stat").read().rsplit(")", 1)[1].split()[0] != "Z"
+    except (OSError, IndexError):
+        return False
 
 
 def feed_browser_fetch(inputs, k25_30):
@@ -2481,7 +2559,7 @@ def feed_browser_fetch(inputs, k25_30):
         return next((e for e in st.get("errors") or [] if e.startswith("results:")), "")
 
     def net_reset(via="auto"):
-        LF.NET.update(via=via, hosts={}, log=[], browser_error="", last=None, browser_start_s=None)
+        LF.NET.update(via=via, hosts={}, log=[], browser_error="", last=None, browser_start_s=None, browser_lost=[])
 
     try:
         # "fetch_via": "urllib": the challenge reported, no browser started (even where one could start)
@@ -2537,6 +2615,44 @@ def feed_browser_fetch(inputs, k25_30):
         check(err.startswith("WafError") and "playwright is not installed for" in err and LF.BROWSER.proc is None
               and LF.BROWSER.starts == starts0 + 1,
               f"no playwright: {err[:220]}")
+        LF.BROWSER.failed = None
+
+        # the browser gone (Chrome or playwright's driver crashed, killed) while the helper lives on: the helper says so
+        # ("closed") and ends; live_fetch starts a new one, at once for a request that was not sent, else at the next
+        # request (the laptop's loop keeps one Browser all night: it must not keep a dead one); a stand-in helper
+        fake = write(os.path.join(TMP, "fake_helper.py"), FAKE_HELPER)
+        flog = os.path.join(TMP, "fake_helper.log")
+        stub = write(os.path.join(TMP, "fake-helper-python"), f'#!/bin/sh\nexec "{sys.executable}" -I "{fake}" "$@"\n')
+        os.chmod(stub, 0o755)
+        os.environ.update(LIVE_CHROME=sys.executable, LIVE_BROWSER_PYTHON=stub, FAKE_HELPER_LOG=flog,
+                          FAKE_HELPER_PLAN="ok,gone-unsent;ok,gone-sent;ok")
+        net_reset()
+        s0, l0, got, gone_proc = LF.BROWSER.starts, LF.BROWSER.lost, [], None
+        try:
+            for i in range(4):
+                try:
+                    a = LF.BROWSER.request(expb)
+                    got.append((a.status, a.path, a.body == b"a,b\n1,2\n", LF.BROWSER.starts - s0))
+                except Exception as exc:
+                    got.append(f"{exc.__class__.__name__}: {exc}")
+                    gone_proc = LF.BROWSER.proc
+        finally:
+            LF.BROWSER.close()
+            for k in ("FAKE_HELPER_LOG", "FAKE_HELPER_PLAN"):
+                os.environ.pop(k, None)
+        flines = open(flog).read().split() if os.path.exists(flog) else []
+        err = got[2] if len(got) > 2 and isinstance(got[2], str) else ""
+        check(got[:2] == [(200, "browser", True, 1), (200, "browser", True, 2)] and got[3:] == [(200, "browser", True, 3)]
+              and err.startswith("OSError: browser: no HTTP answer, the browser is gone (TargetClosedError")
+              and "a new one starts at the next request" in err and gone_proc is None
+              and flines == ["start", "ok", "GET", "gone-unsent", "GET", "start", "ok", "GET", "gone-sent", "GET", "start",
+                             "ok", "GET"]
+              and LF.BROWSER.lost == l0 + 2 and len(LF.NET["browser_lost"]) == 2,
+              f"the browser gone: not sent -> a new helper at once, the same request answered; sent -> no HTTP answer, the "
+              f"helper closed, a new one at the next request; one request a call: {got} {flines}")
+        check(page_note(err) == "neutral",
+              f"the page reads that error as the neutral note (the first results have not reached it yet), not 'the CEC's "
+              f"file is empty or unreadable': {page_note(err)}")
         LF.BROWSER.failed = None
         os.environ["LIVE_CHROME"] = nochrome
         if env0["LIVE_BROWSER_PYTHON"] is None:
@@ -2769,6 +2885,13 @@ def feed_browser_fetch(inputs, k25_30):
         print(f"  note: the browser path's cost in a pass of its own: {times['auto'] - times['urllib']:.2f} s more than urllib's "
               f"({times['auto']:.2f} s against {times['urllib']:.2f} s; the browser started in {times['auto_start']} s)")
 
+        # the laptop's loop (live_fetch.py --loop: one Browser all night), at the night's clock: Chrome killed between two
+        # passes, then during a request; a new Chrome each time, one request a pass, the reader note the neutral one
+        if not os.path.isdir("/proc/self/task"):
+            print("  note: no /proc here: the --loop run with Chrome killed not run")
+        else:
+            loop_with_chrome_killed(c_auto, inputs, env, k30)
+
         # the probe with the browser: "yes", 404s through it, urllib challenged once, the browser started once a round
         outy, n = os.path.join(TMP, "fprobe_browser"), len(FeedWafMock.log)
         FeedWafMock.files = {"m25/files/expc.csv": k30}    # media26's files not up yet; the control on media25: 2022's
@@ -2787,6 +2910,7 @@ def feed_browser_fetch(inputs, k25_30):
         check(live_after == live_before and sorted(os.listdir(outy)) == ["summary.json", "summary.md"],
               "feed_fetch_probe.py publishes nothing: site/live/ untouched, only its summaries in --out")
     finally:
+        FeedWafMock.stall = None
         LF.BROWSER.close()
         LF.BROWSER.failed = None
         LF.WAF_RECHECK, LF.MAX_BODY = saved
@@ -2799,6 +2923,105 @@ def feed_browser_fetch(inputs, k25_30):
         srv_a.shutdown()
         srv_b.shutdown()
         print(f"  (11k in {time.time() - t_11k:.1f} s)")
+
+
+def loop_with_chrome_killed(cfg, inputs, env, k30):
+    """11k: live_fetch.py --loop in a process of its own at the night's clock (the laptop fallback: one Browser all
+    night). Pass 1 through the browser; Chrome killed while the helper waits: pass 2 answered through a new Chrome (the
+    request was not sent: one request); Chrome killed during pass 3's request: no HTTP answer, the neutral reader note;
+    pass 4 through a new Chrome. Then Ctrl-C: the loop ends and no Chrome is left."""
+    wrap = write(os.path.join(TMP, "loop_at_night.py"),
+                 "import datetime as dt, sys, time\n"
+                 f"sys.path.insert(0, {os.path.join(ROOT, 'pipeline')!r})\n"
+                 "import live_fetch as LF\n"
+                 "night, t0 = dt.datetime.fromisoformat(sys.argv[1]), time.time()\n"
+                 "LF.now_il = lambda: night + dt.timedelta(seconds=time.time() - t0)   # the night's clock, running\n"
+                 "LF.main(sys.argv[2:])\n")
+    o = os.path.join(TMP, "o11k_loop")
+    FeedWafMock.mode, FeedWafMock.files["expb.csv"], FeedWafMock.stall = "challenge", k30, None
+    marks = [len(FeedWafMock.log)]
+    lp = subprocess.Popen([sys.executable, wrap, NIGHT.isoformat(), "--out", o, "--loop", "2", "--minutes", "10",
+                           "--config", cfg, "--as", "K25", "--inputs", inputs],
+                          stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
+    lines, tail = queue.Queue(), collections.deque(maxlen=12)
+
+    def pump(stream, put):
+        for ln in stream:
+            put(ln)
+    threading.Thread(target=pump, args=(lp.stdout, lines.put), daemon=True).start()
+    threading.Thread(target=pump, args=(lp.stderr, tail.append), daemon=True).start()
+
+    def next_pass():
+        try:
+            ln = lines.get(timeout=120)
+        except queue.Empty:
+            return {}
+        marks.append(len(FeedWafMock.log))
+        try:
+            return json.loads(ln)
+        except ValueError:
+            return {"raw": ln[:200]}
+
+    def asked(k):                                  # the stand-in CEC's requests in pass k (1-based)
+        return [(x["method"], x["browser"]) for x in FeedWafMock.log[marks[k - 1]:marks[k]]] if len(marks) > k else None
+
+    def kill(pids):
+        for p_ in pids:
+            try:
+                os.kill(p_, signal.SIGKILL)
+            except OSError:
+                pass
+    t, P, chromes = time.time(), [], []
+    try:
+        P.append(next_pass())
+        chromes.append(chrome_pids(lp.pid))
+        kill(chromes[-1])                          # between two passes: the helper is waiting for the next request
+        P.append(next_pass())
+        chromes.append(chrome_pids(lp.pid))
+        FeedWafMock.stall = threading.Event()      # pass 3's request is held; Chrome is killed while it waits
+        held = FeedWafMock.stall.wait(60)
+        killed = chrome_pids(lp.pid) if held else []
+        kill(killed)
+        FeedWafMock.stall = None
+        P.append(next_pass())
+        P.append(next_pass())
+        chromes.append(chrome_pids(lp.pid))
+        lp.send_signal(signal.SIGINT)              # Ctrl-C on the laptop: the loop ends, the browser is closed
+        try:
+            rc = lp.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            rc = None
+    finally:
+        FeedWafMock.stall = None
+        if lp.poll() is None:
+            lp.kill()
+            lp.wait()
+    every = [p_ for c_ in chromes for p_ in c_]
+    for _ in range(50):                            # Chrome ends with its pipe; give it a moment
+        if not any(pid_running(p_) for p_ in every):
+            break
+        time.sleep(0.2)
+    left = [p_ for p_ in every if pid_running(p_)]
+    kill(left)
+    err3 = next((e for e in P[2].get("errors") or [] if e.startswith("results:")), "") if len(P) > 2 else ""
+    paths = [[(f_["path"], f_["http"]) for f_ in x.get("fetches") or []] for x in P]
+    lost = [len(x.get("browser_lost") or []) for x in P]
+    started = [x.get("browser_start_s") is not None for x in P]
+    check(len(P) == 4 and [x.get("results_state") for x in P] == ["ok", "ok", "waiting", "ok"]
+          and paths == [[("urllib", 202), ("browser", 200)], [("browser", 200)], [("browser", 0)], [("browser", 200)]]
+          and [asked(k) for k in (1, 2, 3, 4)] == [[("GET", False), ("GET", True)], [("GET", True)], [("GET", True)], [("GET", True)]]
+          and lost == [0, 1, 1, 0] and started == [True, True, False, True] and "not sent" in str(P[1].get("browser_lost"))
+          and all(len(c_) == 1 for c_ in chromes) and killed and killed == chromes[1] and len(set(every)) == 3,
+          f"--loop, Chrome killed between passes and during a request: pass 2 through a new Chrome at once (the request "
+          f"was not sent), pass 3 no answer, pass 4 a new Chrome; one request to the CEC a pass: states "
+          f"{[x.get('results_state') for x in P]}, fetches {paths}, asked {[asked(k) for k in (1, 2, 3, 4)]}, lost {lost}, "
+          f"started {started}, Chromes {chromes} (killed {killed}); {list(tail)[-3:]}")
+    check("no HTTP answer, the browser is gone" in err3 and page_note(err3) == "neutral"
+          and P[2].get("fetch_path") == "browser" and (P[3].get("browser") or {}).get("state") == "ok",
+          f"while Chrome is gone: the error says so ({err3[:150]}), the page's note the neutral one ({page_note(err3)}); "
+          f"then status.browser {P[3].get('browser') if len(P) > 3 else '-'}")
+    check(rc == 0 and not left, f"Ctrl-C ends the loop (exit {rc}) and no Chrome is left running ({left}); "
+                                f"{time.time() - t:.1f} s")
 
 
 # ---------------------------------------------------------------- tests

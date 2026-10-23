@@ -424,7 +424,7 @@ jobs:
           s = json.load(sys.stdin)
           print("changed", s["changed"], "| published", s.get("published", "-"), s.get("next_publish_s", ""), "| build", s.get("build", "-"),
                 "| fetch", s.get("fetch_path", "-"), (s.get("waf") or {}).get("state", "-"), [(f.get("path"), f.get("http"), f.get("s")) for f in s.get("fetches") or []],
-                "| errors", s.get("errors"))
+                *(("| browser lost", s["browser_lost"]) if s.get("browser_lost") else ()), "| errors", s.get("errors"))
           bad = [e for e in s.get("errors") or [] if e.startswith("publish")]
           if str(s.get("published", "")).startswith("push failed") or "giving up" in str(s.get("build", "")) or bad:
               print("::warning::publishing:", s.get("published"), s.get("build"), bad)' 2>/dev/null); then

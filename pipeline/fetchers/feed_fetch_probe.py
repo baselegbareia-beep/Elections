@@ -120,7 +120,7 @@ def text_of(b, n):
 def one(LF, real, url, label):
     """live_fetch.fetch(url) once: its attempts (live_fetch.NET["log"]), the last answer, and the feed's outcome."""
     n0, starts0 = len(LF.NET["log"]), LF.BROWSER.starts
-    LF.NET["last"] = None
+    LF.NET["last"], LF.NET["browser_lost"] = None, []
     t = time.time()
     try:
         data = LF.fetch(url)
@@ -137,6 +137,8 @@ def one(LF, real, url, label):
                    bytes=len(last.body), head=" ".join(text_of(last.body, 160).split()))
     if LF.BROWSER.starts > starts0 and LF.BROWSER.start_s is not None:
         rec["browser_start_s"] = LF.BROWSER.start_s
+    if LF.NET.get("browser_lost"):                 # a Chrome gone during it (crashed): a new one started
+        rec["browser_lost"] = LF.NET["browser_lost"]
     return rec
 
 
@@ -285,7 +287,7 @@ def main(argv=None):
             return 0
         S["chrome"], S["chrome_why"] = LF.find_chrome()
         S["waf_recheck_s"] = LF.WAF_RECHECK
-        LF.NET.update(via="auto", hosts={}, log=[], browser_error="", last=None, browser_start_s=None)   # as a fresh feed, fetch_via "auto"
+        LF.NET.update(via="auto", hosts={}, log=[], browser_error="", last=None, browser_start_s=None, browser_lost=[])   # as a fresh feed, fetch_via "auto"
         S["stage"] = "asking"
         save()
         rnd_start = None

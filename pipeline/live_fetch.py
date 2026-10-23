@@ -196,8 +196,8 @@ def waf_text(a):
 
 # NET: this pass's fetching. via: live_config "fetch_via"; hosts: the hosts whose WAF challenged urllib ({netloc: {since,
 # ts, action}}, kept in state.json "waf_hosts" between passes); log: this pass's requests (the printed line's "fetches");
-# browser_error: why the browser path failed in this pass
-NET = {"via": "auto", "hosts": {}, "log": [], "browser_error": "", "last": None, "browser_start_s": None}
+# browser_error: why the browser path failed in this pass; browser_lost: why a Chrome was lost in it (Browser.request)
+NET = {"via": "auto", "hosts": {}, "log": [], "browser_error": "", "last": None, "browser_start_s": None, "browser_lost": []}
 
 
 def _note(url, method, path, t, a=None, error=""):
@@ -350,10 +350,13 @@ class Browser:
     interpreter) holding one headless Chrome, started at the first request that needs it and kept until the process ends
     (live.yml runs a process per pass: about a second to start; the laptop loop keeps one for the night). Its own
     stdout and stderr never reach the feed's: the status line stays the last line. A request is bounded by its timeout
-    (plus 20 s; then the helper is stopped); a failed start is not retried for BROWSER_RETRY_S."""
+    (plus 20 s; then the helper is stopped); a failed start is not retried for BROWSER_RETRY_S. When Chrome or
+    playwright's driver is gone (crashed, killed) the helper says so ("closed") and ends, and a new one is started: at
+    once for the same request when it was not sent (Chrome was gone before it), else at the next request (it may have
+    reached the CEC: one request a pass, as always); "lost" counts them."""
 
     def __init__(self):
-        self.proc, self.info, self.failed, self.starts, self.start_s = None, None, None, 0, None
+        self.proc, self.info, self.failed, self.starts, self.start_s, self.lost = None, None, None, 0, None, 0
         self._lines, self._err = None, collections.deque(maxlen=12)
         self._atexit = False
 
@@ -421,24 +424,37 @@ class Browser:
 
     def request(self, url, method="GET", headers=None, timeout=40):
         """One request through the browser -> Answer (path "browser"). BrowserUnavailable when it cannot start; IOError
-        when the request itself failed (a timeout, a refused connection, a body over MAX_BODY)."""
-        if self.proc is None or self.proc.poll() is not None:
-            self._start()
-        msg = {"method": method, "url": url, "headers": headers or {}, "timeout_ms": int(timeout * 1000), "max_bytes": MAX_BODY}
-        try:
-            self.proc.stdin.write(json.dumps(msg) + "\n")
-            self.proc.stdin.flush()
-        except (OSError, ValueError) as exc:
-            self.close()
-            raise IOError(f"browser: the helper is gone ({exc}){self._tail()}")
-        ans = self._read(timeout + 20)
-        if ans is None:
-            self.close()
-            raise IOError(f"browser: no answer within {timeout + 20:g} s{self._tail()}")
-        if ans.get("error"):
-            raise IOError(f"browser: {ans['error']}" + (f" (HTTP {ans['status']})" if ans.get("status") else ""))
-        body = base64.b64decode(ans.get("body_b64") or "")
-        return Answer(ans["status"], ans.get("headers") or [], body, ans.get("url") or url, "browser", ans.get("status_text", ""))
+        when the request itself failed (a timeout, a refused connection, Chrome gone during it, a body over MAX_BODY):
+        "no HTTP answer" in its words, so the page's reader note is the neutral one (site/src/js/live.js feedNotes)."""
+        for attempt in (1, 2):
+            if self.proc is None or self.proc.poll() is not None:
+                self._start()
+            msg = {"method": method, "url": url, "headers": headers or {}, "timeout_ms": int(timeout * 1000),
+                   "max_bytes": MAX_BODY}
+            try:
+                self.proc.stdin.write(json.dumps(msg) + "\n")
+                self.proc.stdin.flush()
+            except (OSError, ValueError) as exc:
+                self.close()
+                raise IOError(f"browser: no HTTP answer, the helper is gone ({exc}){self._tail()}")
+            ans = self._read(timeout + 20)
+            if ans is None:
+                self.close()
+                raise IOError(f"browser: no HTTP answer within {timeout + 20:g} s{self._tail()}")
+            if ans.get("closed"):                 # Chrome or the driver gone: the helper has ended; a new one next
+                self.close()
+                self.lost += 1
+                NET["browser_lost"].append(str(ans.get("error"))[:200])
+                if ans.get("sent") is False and attempt == 1:
+                    continue                      # it never left: the same request through a new Chrome, still one
+                raise IOError(f"browser: no HTTP answer, the browser is gone ({ans.get('error')}); a new one starts "
+                              f"at the next request")
+            if ans.get("error"):
+                raise IOError(f"browser: {ans['error']}" + (f" (HTTP {ans['status']})" if ans.get("status") else
+                                                            " (no HTTP answer)"))
+            body = base64.b64decode(ans.get("body_b64") or "")
+            return Answer(ans["status"], ans.get("headers") or [], body, ans.get("url") or url, "browser",
+                          ans.get("status_text", ""))
 
     def close(self):
         p, self.proc = self.proc, None
@@ -514,6 +530,8 @@ def fetch_status(state, status, line):
         line["fetches"] = log
     if NET.get("browser_start_s") is not None:      # the browser started in this pass: seconds
         line["browser_start_s"] = NET["browser_start_s"]
+    if NET.get("browser_lost"):                     # a Chrome gone in this pass (crashed, killed): a new one started
+        line["browser_lost"] = NET["browser_lost"]
 
 
 DRILL = False
@@ -1933,7 +1951,7 @@ def main(argv=None):
         # fetching: urllib, or the browser behind the CEC's WAF (request()); the challenged hosts carry over in state.json
         hosts = state.get("waf_hosts")
         NET.update(via=fetch_via(cfg, status["errors"]), hosts=dict(hosts) if isinstance(hosts, dict) else {}, log=[],
-                   browser_error="", last=None, browser_start_s=None)
+                   browser_error="", last=None, browser_start_s=None, browser_lost=[])
         every = publish_every(cfg, status["errors"])
         election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
         quiet = quiet_every(every, t, election_day)
