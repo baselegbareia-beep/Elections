@@ -101,6 +101,11 @@ Runs single passes into a temporary folder and checks the JSON contract with the
  11i. the daily poll-table check on the CEC filings build_polls.py attaches (official, corrected, filings): with them
      and without them a table passes; partial, off gov.il, unknown codes or fields, markup, a seat change do not;
      on the committed table and on the ones a daily update may build (links fixed upstream, no filings file).
+ 11j. pipeline/fetchers/waf_probe.py (the one-off probe of bechirot.gov.il's WAF, 22.10) offline: the feed's own request,
+     --deadline 0 (nothing asked, both summaries), part 1 against a stand-in for a CloudFront/WAF challenge (202 with
+     x-amzn-waf-action, the challenge page for Accept text/html, a refused host, a Set-Cookie kept as its name), the
+     verdicts on synthetic records; and, where a Chromium (WAF_PROBE_CHROME, /opt/pw-browsers) and playwright
+     (WAF_PROBE_PYTHON) are at hand, the browser through the challenge and its token in urllib requests.
 The drill in live.yml and the daily poll update run this first, with HEALTH_GATE=1: then the checks of the
 repository's own state (site/live/status.json and ops/request.json are main's placeholders) are skipped: a run that a
 push to ops-control started has the request itself checked out. In a workflow job the job's environment is cleared
@@ -2376,6 +2381,230 @@ def day_station_whole():
           f"of it ({ex}); error {T.get('station_error')}")
 
 
+class WafMock(http.server.BaseHTTPRequestHandler):
+    """11j: a stand-in for bechirot.gov.il behind an AWS WAF challenge. /www, /m26 and /v26 answer 202 with
+    x-amzn-waf-action: challenge (CloudFront's headers, as seen 22.10) unless the request carries a valid aws-waf-token
+    cookie: an empty body, or, for a request that accepts text/html, the challenge page, whose script
+    (/awswaf/challenge.js) sets the cookie and reloads. With the token: www's page (with an image, never to be fetched),
+    S3's AccessDenied for media26's root, the results files. /m25 is the control: never challenged, a Set-Cookie
+    whose value must never reach the probe's files."""
+    issued, log = {}, []
+    CSV = ("﻿סמל ועדה,שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,מחל,פה\n"
+           + "".join(f"{i},עיר {i},{1000 + i},{500 + i},{300 + i},2,{298 + i},{100 + i},198\n" for i in range(40)))
+    WAF = (("x-amzn-waf-action", "challenge"), ("Cache-Control", "no-store, max-age=0"), ("X-Cache", "Error from cloudfront"),
+           ("Server", "CloudFront"), ("X-Amz-Cf-Pop", "TLV50-C1"))
+    PAGE = ('<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><title></title><script>window.gokuProps = '
+            '{"key": "k", "iv": "i", "context": "c"};</script><script src="/awswaf/challenge.js"></script></head><body>'
+            '<div id="challenge-container"></div><noscript>JavaScript is disabled</noscript></body></html>')
+
+    def log_message(self, *a):
+        pass
+
+    def send(self, code, body=b"", ctype="text/html", extra=()):
+        self.send_response(code)
+        self.send_header("Content-Type", ctype)
+        self.send_header("Content-Length", str(len(body)))
+        for k, v in extra:
+            self.send_header(k, v)
+        self.end_headers()
+        self.wfile.write(body)
+
+    def do_GET(self):
+        path = self.path.split("?")[0]
+        jar = dict(c.strip().split("=", 1) for c in (self.headers.get("Cookie") or "").split(";") if "=" in c)
+        tok = jar.get("aws-waf-token")
+        valid = tok in WafMock.issued
+        WafMock.log.append({"path": path, "ua": self.headers.get("User-Agent", ""), "accept": self.headers.get("Accept", ""),
+                            "lang": self.headers.get("Accept-Language", ""), "cache": self.headers.get("Cache-Control", ""),
+                            "range": self.headers.get("Range"), "token": tok, "valid": valid})
+        if path == "/awswaf/challenge.js":
+            t = "tok" + os.urandom(12).hex()
+            WafMock.issued[t] = time.time()
+            js = f'setTimeout(function () {{ document.cookie = "aws-waf-token={t}; path=/"; window.location.reload(); }}, 150);'
+            return self.send(200, js.encode(), "application/javascript")
+        if path.startswith("/m25/"):
+            body = self.CSV.encode("utf-8")
+            if self.headers.get("Range") == "bytes=0-200":
+                return self.send(206, body[:201], "text/csv", [("Content-Range", f"bytes 0-200/{len(body)}"),
+                                                                ("Set-Cookie", "AWSALB=ctrl-secret-123; Path=/")])
+            return self.send(200, body, "text/csv")
+        if not valid:
+            req_id = [("x-amzn-RequestId", "req-" + os.urandom(4).hex())]
+            if "text/html" in self.headers.get("Accept", ""):
+                return self.send(202, self.PAGE.encode(), "text/html", self.WAF + tuple(req_id))
+            return self.send(202, b"", "text/html", self.WAF + tuple(req_id))
+        ok = (("X-Cache", "Miss from cloudfront"), ("Server", "CloudFront"))
+        if path == "/www/":
+            page = ('<html><head><title>ועדת הבחירות המרכזית לכנסת ה-26</title></head><body><h1>ברוכים הבאים</h1>'
+                    '<p>הבחירות לכנסת ה-26</p><img src="/www/logo.png" alt="logo"></body></html>')
+            return self.send(200, page.encode("utf-8"), "text/html; charset=utf-8", ok)
+        if path == "/www/logo.png":
+            return self.send(200, b"\x89PNG\r\n\x1a\n" + b"0" * 64, "image/png", ok)
+        if path == "/m26/":
+            xml = '<?xml version="1.0" encoding="UTF-8"?><Error><Code>AccessDenied</Code><Message>Access Denied</Message></Error>'
+            return self.send(403, xml.encode(), "application/xml", (("X-Cache", "Error from cloudfront"), ("Server", "AmazonS3")))
+        if path in ("/m26/files/expb.csv", "/m26/files/expc.csv"):
+            return self.send(200, self.CSV.encode("utf-8"), "text/csv", ok)
+        return self.send(404, b"not here", "text/plain", ok)
+
+
+def waf_probe_offline():
+    """11j. pipeline/fetchers/waf_probe.py, the one-off probe of bechirot.gov.il's WAF (no network): its clock and
+    request inside the fetch contract (the feed's own User-Agent and headers, --deadline 0 asks nothing and writes both
+    summaries); part 1 against WafMock (202 + x-amzn-waf-action, the challenge page for Accept text/html, a refused host,
+    the control's Set-Cookie kept as a name only); the verdicts on synthetic records; then, where this machine has a
+    Chromium (WAF_PROBE_CHROME, or Playwright's in /opt/pw-browsers) and an interpreter with playwright
+    (WAF_PROBE_PYTHON, else this one), part 2 whole: the browser passes the stand-in's challenge, its token opens
+    expb.csv to urllib, no image fetched, no token value written."""
+    print("11j. pipeline/fetchers/waf_probe.py offline: a stand-in WAF challenge, the deadline, the verdicts, the browser")
+    import importlib.util
+    import socket
+    t_11j = time.time()
+    path = os.path.join(ROOT, "pipeline", "fetchers", "waf_probe.py")
+    spec = importlib.util.spec_from_file_location("waf_probe_11j", path)
+    W = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(W)
+    m = re.search(r"timeout -k (\d+) (\d+) python3", open(os.path.join(ROOT, ".github", "workflows", "fetch.yml"), encoding="utf-8").read())
+    limit = int(m.group(2)) if m else 0
+    check(W.UA == LF.UA and W.PLAIN == {"User-Agent": LF.UA, "Cache-Control": "no-cache"} and W.DEADLINE == 1200
+          and limit and W.DEADLINE + W.GRACE + 180 <= limit and W.MAX_ASKS <= 25 and W.GAP >= 2,
+          f"waf_probe.py: the feed's own request (live_fetch.UA, Cache-Control: no-cache); its deadline ({W.DEADLINE} s, a body "
+          f"cut {W.GRACE} s on) at least 3 minutes inside fetch.yml's limit ({limit} s); at most {W.MAX_ASKS} requests, "
+          f"{W.GAP:g} s apart per host")
+    srv = http.server.ThreadingHTTPServer(("127.0.0.1", 0), WafMock)
+    threading.Thread(target=srv.serve_forever, daemon=True).start()
+    base = f"http://127.0.0.1:{srv.server_address[1]}"
+    s_ = socket.socket()
+    s_.bind(("127.0.0.1", 0))
+    dead = s_.getsockname()[1]
+    s_.close()
+    rw = ["--rewrite", f"https://www.bechirot.gov.il={base}/www", "--rewrite", f"https://media26.bechirot.gov.il={base}/m26",
+          "--rewrite", f"https://votes26.bechirot.gov.il=http://127.0.0.1:{dead}/v26",
+          "--rewrite", f"https://media25.bechirot.gov.il={base}/m25"]
+    env = {k: v for k, v in os.environ.items() if k.lower() not in ("http_proxy", "https_proxy", "all_proxy", "waf_probe_chrome")}
+    nochrome = os.path.join(TMP, "no-such-chrome")
+
+    def probe(out, *extra):
+        return subprocess.run([sys.executable, path, "--out", out, "--gap", "0", "--only-rewritten", "--no-install", *rw, *extra],
+                              capture_output=True, text=True, timeout=180, env=env)
+
+    def files_have(out, needles):
+        found = set()
+        for p in glob.glob(os.path.join(out, "**", "*"), recursive=True):
+            if os.path.isfile(p):
+                data = open(p, "rb").read()
+                found |= {n for n in needles if n.encode() in data}
+        return found
+
+    # --deadline 0: nothing asked, both summaries, exit 0
+    out0, n_log, t = os.path.join(TMP, "waf_deadline0"), len(WafMock.log), time.time()
+    r = probe(out0, "--deadline", "0", "--chrome", nochrome)
+    S0, md0 = load(out0, "summary.json") or {}, open(os.path.join(out0, "summary.md"), encoding="utf-8").read() \
+        if os.path.exists(os.path.join(out0, "summary.md")) else ""
+    check(r.returncode == 0 and len(WafMock.log) == n_log and S0.get("requests") == 0 and S0.get("not_asked_past_deadline", 0) >= 10
+          and all(x.get("error") == W.LATE for x in S0.get("part1") or [{}]) and len(S0.get("part1") or []) == 10
+          and "Stopped at the deadline" in md0 and "**WAF challenge: unclear**. nothing asked" in md0
+          and S0.get("stage") == "done" and time.time() - t < 60,
+          f"waf_probe.py --deadline 0: nothing asked, summary.json and summary.md written, exit {r.returncode} in "
+          f"{time.time() - t:.1f} s {r.stderr.strip()[-160:]}")
+
+    # part 1 against the stand-in, no browser (a Chrome that is not there): every answer recorded, the rest still written
+    outA, n_log = os.path.join(TMP, "waf_part1"), len(WafMock.log)
+    r = probe(outA, "--chrome", nochrome)
+    S, md = load(outA, "summary.json") or {}, open(os.path.join(outA, "summary.md"), encoding="utf-8").read() \
+        if os.path.exists(os.path.join(outA, "summary.md")) else ""
+    P1 = S.get("part1") or []
+    by = {(x.get("kind"), x["url"]): x for x in P1}
+    stopped = [by.get((k, u)) or {} for k in ("plain", "browser headers") for u in (W.WWW, W.M26 + "/", W.EXPB)]
+    top = md.splitlines()[2:5]
+    check(r.returncode == 0 and len(P1) == 10 and S.get("requests") == 10
+          and all(x.get("status") == 202 and W.hget(x, "x-amzn-waf-action") == "challenge" and W.hget(x, "x-cache") == "Error from cloudfront"
+                  for x in stopped)
+          and all(x.get("body_head") == "" and not x.get("markers") for x in stopped[:3])
+          and all({"challenge.js", "awswaf", "gokuProps"} <= set(x.get("markers") or []) for x in stopped[3:])
+          and all("refused" in str(by.get((k, W.V26 + "/"), {}).get("error")).lower() for k in ("plain", "browser headers")),
+          f"waf_probe.py part 1: 202 + x-amzn-waf-action: challenge on www, media26 and expb.csv, an empty body for the feed's "
+          f"request and the challenge page (challenge.js, awswaf, gokuProps) for a browser's headers; votes26 refused and "
+          f"recorded, the run going on: {[(x.get('kind'), x.get('status') or x.get('error', '')[:30]) for x in P1]}")
+    ctrl = [by.get((k, W.CONTROL)) or {} for k in ("plain", "browser headers")]
+    sent = [x for x in WafMock.log[n_log:] if x["path"] == "/www/"]
+    check(all(c.get("status") == 206 and c.get("body_head", "").startswith("﻿סמל ועדה") and c.get("set_cookie_names") == ["AWSALB"]
+              and ["Set-Cookie", "AWSALB=(value not kept)"] in c.get("headers", []) for c in ctrl)
+          and not files_have(outA, ["ctrl-secret-123"]) and len(sent) == 2 and sent[0]["ua"] == LF.UA and sent[0]["accept"] == ""
+          and sent[0]["cache"] == "no-cache" and "text/html" in sent[1]["accept"] and sent[1]["lang"].startswith("he")
+          and all(x["range"] == "bytes=0-200" for x in WafMock.log[n_log:] if x["path"].startswith("/m25/"))
+          and glob.glob(os.path.join(outA, "files", "part1", "*.head")),
+          f"waf_probe.py part 1: the control a Range GET (206 with data), its Set-Cookie kept as the name only (the value in no "
+          f"file); the feed's request as live_fetch sends it, then a browser's headers (Accept text/html, Accept-Language he): "
+          f"{[(x['ua'][-12:], x['accept'][:12], x['lang'][:5]) for x in sent]}")
+    check(top[:3] and top[0].startswith("- **WAF challenge: yes**") and top[1].startswith("- **a real browser passes: unclear**")
+          and "no-such-chrome" in top[1] and top[2].startswith("- **a browser token works for plain requests: unclear**")
+          and S.get("browser", {}).get("ran") is False and "| 1 | plain |" in md,
+          f"waf_probe.py summary.md: the three verdicts first, then the tables: {[ln[:70] for ln in top]}")
+
+    # the verdicts on synthetic records
+    def V(part1=(), browser=None, tokens=()):
+        return W.verdicts({"part1": list(part1), "browser": browser or {"ran": False}, "token_checks": list(tokens)})
+    ch = {"url": W.EXPB, "status": 202, "headers": [["x-amzn-waf-action", "challenge"], ["X-Cache", "Error from cloudfront"]], "body_head": ""}
+    unl = V([{"url": W.WWW, "status": 202, "headers": [["X-Cache", "Error from cloudfront"]], "body_head": ""}])["waf"]
+    cap = V([{"url": W.WWW, "status": 405, "headers": [["x-amzn-waf-action", "captcha"]], "body_head": ""}])["waf"]
+    no = V([{"url": W.WWW, "status": 200, "headers": [], "body_head": "<html>"}])["waf"]
+    tk = lambda kind, st, after, age: {"ua_kind": kind, "status": st, "after_s": after, "token_age_s": age,
+                                       "headers": ch["headers"] if st == 202 else []}
+    while_ = V([ch], tokens=[tk("browser", 200, 0, 5), tk("feed", 202, 2, 7), tk("browser", 200, 60, 65), tk("browser", 202, 240, 245)])["token"]
+    never = V([ch], tokens=[tk("browser", 202, 0, 5)])["token"]
+    still = V([ch], tokens=[tk("browser", 200, 0, 5), tk("browser", 200, 60, 65), tk("browser", 200, 240, 245)])["token"]
+    stuck = V([ch], {"ran": True, "pages": [{"url": W.WWW, "navigations": [ch, ch]}]})["browser"]
+    passed = V([ch], {"ran": True, "pages": [{"url": W.WWW, "navigations": [ch, {"status": 200, "headers": []}]},
+                                             {"url": W.M26 + "/", "navigations": [{"status": 403, "headers": [], "body_head": ""}]}],
+                      "cookies": [{"name": "aws-waf-token"}]})["browser"]
+    check(unl[0] == "unclear" and cap[0] == "yes" and "CAPTCHA" in cap[1] and no[0] == "no"
+          and while_[0] == "yes" and "for a while" in while_[1] and "1 min 00 s" in while_[1] and "4 min 00 s" in while_[1]
+          and "feed's own User-Agent: refused" in while_[1] and never[0] == "no" and still[0] == "yes" and "4 min 00 s" in still[1]
+          and stuck[0] == "no" and passed[0] == "yes" and "after the challenge" in passed[1] and "aws-waf-token set" in passed[1],
+          f"waf_probe.verdicts: a 202 without the header unclear, a CAPTCHA, a token that works for a while / not at all / still "
+          f"at 4 minutes, a browser stuck at the challenge / through it: {[unl[0], cap[0], no[0], while_[0], never[0], still[0], stuck[0], passed[0]]}")
+
+    # part 2 where this machine has a Chromium and playwright: the honest browser through the stand-in's challenge
+    chrome = os.environ.get("WAF_PROBE_CHROME") or (sorted(glob.glob("/opt/pw-browsers/chromium-*/chrome-linux/chrome")) or [""])[-1]
+    py = os.environ.get("WAF_PROBE_PYTHON") or sys.executable
+    has_pw = subprocess.run([py, "-c", "import playwright.sync_api"], capture_output=True).returncode == 0 if os.path.exists(py) else False
+    if not (chrome and os.path.exists(chrome) and has_pw):
+        print(f"  note: waf_probe.py's browser part not run here: {'no playwright for ' + py + ' (WAF_PROBE_PYTHON)' if not has_pw else ''}"
+              f"{' ' if not has_pw and not chrome else ''}{'' if chrome and os.path.exists(chrome) else 'no Chromium (WAF_PROBE_CHROME)'}")
+    else:
+        outB, n_log, issued0 = os.path.join(TMP, "waf_browser"), len(WafMock.log), set(WafMock.issued)
+        r = probe(outB, "--chrome", chrome, "--browser-python", py, "--token-waits", "1,2", "--visit", "15")
+        S, md = load(outB, "summary.json") or {}, open(os.path.join(outB, "summary.md"), encoding="utf-8").read() \
+            if os.path.exists(os.path.join(outB, "summary.md")) else ""
+        B, T = S.get("browser") or {}, S.get("token_checks") or []
+        pg = B.get("pages") or [{}, {}]
+        V_ = {k: x.get("answer") for k, x in (S.get("verdicts") or {}).items()}
+        chain = [[n.get("status") for n in p.get("navigations") or []] for p in pg]
+        log = WafMock.log[n_log:]
+        tokens = set(WafMock.issued) - issued0
+        check(r.returncode == 0 and B.get("ran") and chain[:2] == [[202, 200], [403]] and "ועדת הבחירות" in pg[0].get("title", "")
+              and "ברוכים הבאים" in pg[0].get("text", "") and "aws-waf-token" in pg[0].get("cookie_names", [])
+              and [(x.get("status"), x.get("body_head", "")[:9]) for x in B.get("files") or []] == [(200, "﻿סמל ועדה")] * 2
+              and V_.get("waf") == V_.get("browser") == V_.get("token") == "yes",
+              f"waf_probe.py part 2: Chromium headless through the challenge (www {chain[:1]}), media26 then without one, "
+              f"aws-waf-token set; expb.csv and expc.csv in the browser's context; verdicts {V_} {B.get('error', '')[:120]} "
+              f"{r.stderr.strip()[-200:]}")
+        mine = [x for x in log if x["path"] == "/m26/files/expb.csv" and x["token"]]
+        check([t.get("status") for t in T] == [200] * 4 and [t.get("ua_kind") for t in T] == ["browser", "feed", "browser", "browser"]
+              and [t.get("after_s") for t in T][2:] == [1, 2] and len(mine) == 5 and B.get("user_agent")
+              and [x["ua"] for x in mine[1:]] == [B["user_agent"], LF.UA, B["user_agent"], B["user_agent"]]
+              and all(x["valid"] for x in mine)
+              and not any(x["path"] == "/www/logo.png" for x in log) and B.get("aborted", 0) >= 1
+              and tokens and not files_have(outB, tokens) and "aws-waf-token" in md
+              and "cookies sent: aws-waf-token" in ((S.get("verdicts") or {}).get("token") or {}).get("why", ""),
+              f"waf_probe.py part 2: the browser's cookies in urllib GETs of expb.csv (its UA, the feed's, then 1 and 2 s on), "
+              f"all 200; the page's image never fetched ({B.get('aborted')} aborted); the token's value in no file "
+              f"({len(tokens)} issued): {[(t.get('ua_kind'), t.get('status'), t.get('after_s')) for t in T]}")
+    srv.shutdown()
+    check(time.time() - t_11j < 30, f"11j in {time.time() - t_11j:.1f} s (under 30)")
+
+
 # ---------------------------------------------------------------- tests
 def main():
     t0 = time.time()
@@ -3491,6 +3720,7 @@ def main():
     day_station_groups()
     mixed_area_class()
     day_station_whole()
+    waf_probe_offline()
 
     srv.shutdown()
     print(f"\n{len(failures)} failure(s) in {time.time() - t0:.0f} s; scratch in {TMP}")
