@@ -1,0 +1,1246 @@
+{
+ "fetcher": "waf_probe",
+ "started": "2026-10-23T14:40:47+00:00",
+ "deadline_s": 1200,
+ "gap_s": 2.0,
+ "token_waits_s": [
+  60.0,
+  240.0
+ ],
+ "feed_user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+ "python": "3.12.15",
+ "part1": [
+  {
+   "label": "plain",
+   "url": "https://www.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Cache-Control": "no-cache"
+   },
+   "at": "2026-10-23T14:40:47+00:00",
+   "status": 202,
+   "ms": 181,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:47 GMT"
+    ],
+    [
+     "Content-Length",
+     "0"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 b64454e3c1123ac098282f1036154740.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P3"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "_X7Chiu0E6jXdOIepIAGiKGkSvVn2ScfQ-tc_iFXkKnSm3ZIhzzMxQ=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 0,
+   "body_head": "",
+   "head_bytes": 0,
+   "markers": [],
+   "kind": "plain"
+  },
+  {
+   "label": "plain",
+   "url": "https://media26.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Cache-Control": "no-cache"
+   },
+   "at": "2026-10-23T14:40:47+00:00",
+   "status": 202,
+   "ms": 151,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:47 GMT"
+    ],
+    [
+     "Content-Length",
+     "0"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 5ceb9cec7debee0553fef552eba62cc4.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P10"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "q3Hlv0hGA4DnlkPvKsLCOQn8Ev6YpaltldjOrQ4c-PZYM59Kdk9Tbg=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 0,
+   "body_head": "",
+   "head_bytes": 0,
+   "markers": [],
+   "kind": "plain"
+  },
+  {
+   "label": "plain",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Cache-Control": "no-cache"
+   },
+   "at": "2026-10-23T14:40:49+00:00",
+   "status": 202,
+   "ms": 19,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:49 GMT"
+    ],
+    [
+     "Content-Length",
+     "0"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 0145ea6cf3813022e500cf46dfa7f256.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P10"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "HkqW_XM2a2_9zJqCcTRZfXayFwbT7Qvmi47j4AErXCoyQwruwM2X3w=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 0,
+   "body_head": "",
+   "head_bytes": 0,
+   "markers": [],
+   "kind": "plain"
+  },
+  {
+   "label": "plain",
+   "url": "https://votes26.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Cache-Control": "no-cache"
+   },
+   "at": "2026-10-23T14:40:49+00:00",
+   "status": 202,
+   "ms": 143,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:49 GMT"
+    ],
+    [
+     "Content-Length",
+     "0"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 bdfa5ff45a012f4d008a55b929c33ce2.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD89-P3"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "WGGJCjREYpWrqkuAYGt7-eb94pz_l2bEedfaO-lrStyE3CFvFRt_Ow=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 0,
+   "body_head": "",
+   "head_bytes": 0,
+   "markers": [],
+   "kind": "plain"
+  },
+  {
+   "label": "plain",
+   "url": "https://media25.bechirot.gov.il/files/expc.csv",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Cache-Control": "no-cache",
+    "Range": "bytes=0-200"
+   },
+   "at": "2026-10-23T14:40:49+00:00",
+   "status": 206,
+   "ms": 652,
+   "headers": [
+    [
+     "Cache-Control",
+     "max-age=60"
+    ],
+    [
+     "Content-Type",
+     "application/octet-stream"
+    ],
+    [
+     "Last-Modified",
+     "Tue, 08 Nov 2022 15:03:32 GMT"
+    ],
+    [
+     "Accept-Ranges",
+     "bytes"
+    ],
+    [
+     "ETag",
+     "\"fce3a34483f3d81:0\""
+    ],
+    [
+     "X-Frame-Options",
+     "SAMEORIGIN"
+    ],
+    [
+     "X-Content-Type-Options",
+     "nosniff"
+    ],
+    [
+     "X-XSS-Protection",
+     "1; mode=block"
+    ],
+    [
+     "Strict-Transport-Security",
+     "max-age=31536000; preload"
+    ],
+    [
+     "X-MS-InvokeApp",
+     "1;RequireReadOnly"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:50 GMT"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "Content-Length",
+     "201"
+    ],
+    [
+     "Content-Range",
+     "bytes 0-200/154331"
+    ],
+    [
+     "Set-Cookie",
+     "p_hosting=(value not kept)"
+    ],
+    [
+     "Set-Cookie",
+     "TS0101ef41=(value not kept)"
+    ],
+    [
+     "Set-Cookie",
+     "TS074b8af6027=(value not kept)"
+    ]
+   ],
+   "set_cookie_names": [
+    "p_hosting",
+    "TS0101ef41",
+    "TS074b8af6027"
+   ],
+   "body_read": 201,
+   "body_head": "﻿סמל ועדה,שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,אמת,אצ,ב,ג,ד,ום,ז,זך,זנ,זץ,ט,י,יז,ינ,יץ,יק,כן,ך,ל,מחל,מרצ,נז,ני,�",
+   "head_bytes": 201,
+   "markers": [],
+   "kind": "plain",
+   "saved": "files/part1/05-plain-media25.bechirot.gov.il_files_expc.csv.head"
+  },
+  {
+   "label": "browser headers",
+   "url": "https://www.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1"
+   },
+   "at": "2026-10-23T14:40:50+00:00",
+   "status": 202,
+   "ms": 18,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:50 GMT"
+    ],
+    [
+     "Content-Length",
+     "2015"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 dbd83e9e27cde36e1e56c6d1ae4f5a18.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P3"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "RfQX9fQWoscqek3oBy6gWhjmrj57xeqWE0GRclmohJMQ0-xEsSDACQ=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 2015,
+   "body_head": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title></title>\n    <style>\n        body {\n            font-family: \"Arial\";\n        }\n    </style>\n    <script type=\"text/javascript\">\n    window.awsWafCookieDomainList = [];\n    window.gokuProps = {\n\"key\":\"AQIDAHjcYu/GjX+QlghicBgQ/7bFaQZ+m5FKCMDnO+vTbNg96AGMNXqb+vVP2S5HDawg0LFAAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMw+dRS3o0mWTGKdplAgEQgDupJ44uBpsKm4akV3bM2Qp3g4Ce8qeUOqpDEONfL20/caZ70yIgmTrn7iw2LE+RQeNniwpzqxfVVX0TnQ==",
+   "head_bytes": 600,
+   "markers": [
+    "challenge.js",
+    "awswaf",
+    "AwsWafIntegration",
+    "gokuProps",
+    "token"
+   ],
+   "kind": "browser headers",
+   "saved": "files/part1/06-browser-www.bechirot.gov.il.head"
+  },
+  {
+   "label": "browser headers",
+   "url": "https://media26.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1"
+   },
+   "at": "2026-10-23T14:40:51+00:00",
+   "status": 202,
+   "ms": 18,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:51 GMT"
+    ],
+    [
+     "Content-Length",
+     "2015"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 dd02f81d770406d1d5f9d2e199b1cd1a.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P10"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "D_faQoEsjTWOQsGh3Jg1d3RQtHSSN2h9bBbyLcgEzD-5ylN_2nrRGA=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 2015,
+   "body_head": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title></title>\n    <style>\n        body {\n            font-family: \"Arial\";\n        }\n    </style>\n    <script type=\"text/javascript\">\n    window.awsWafCookieDomainList = [];\n    window.gokuProps = {\n\"key\":\"AQIDAHjcYu/GjX+QlghicBgQ/7bFaQZ+m5FKCMDnO+vTbNg96AGMNXqb+vVP2S5HDawg0LFAAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMw+dRS3o0mWTGKdplAgEQgDupJ44uBpsKm4akV3bM2Qp3g4Ce8qeUOqpDEONfL20/caZ70yIgmTrn7iw2LE+RQeNniwpzqxfVVX0TnQ==",
+   "head_bytes": 600,
+   "markers": [
+    "challenge.js",
+    "awswaf",
+    "AwsWafIntegration",
+    "gokuProps",
+    "token"
+   ],
+   "kind": "browser headers",
+   "saved": "files/part1/07-browser-media26.bechirot.gov.il.head"
+  },
+  {
+   "label": "browser headers",
+   "url": "https://media26.bechirot.gov.il/files/expb.csv",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1"
+   },
+   "at": "2026-10-23T14:40:53+00:00",
+   "status": 202,
+   "ms": 17,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:53 GMT"
+    ],
+    [
+     "Content-Length",
+     "2015"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 dd02f81d770406d1d5f9d2e199b1cd1a.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD55-P10"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "BE6_PMDa4_fXRNhW43_MBbG9zIY04thglDQVzCqVQl66DR4Ulxszng=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 2015,
+   "body_head": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title></title>\n    <style>\n        body {\n            font-family: \"Arial\";\n        }\n    </style>\n    <script type=\"text/javascript\">\n    window.awsWafCookieDomainList = [];\n    window.gokuProps = {\n\"key\":\"AQIDAHjcYu/GjX+QlghicBgQ/7bFaQZ+m5FKCMDnO+vTbNg96AGMNXqb+vVP2S5HDawg0LFAAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMw+dRS3o0mWTGKdplAgEQgDupJ44uBpsKm4akV3bM2Qp3g4Ce8qeUOqpDEONfL20/caZ70yIgmTrn7iw2LE+RQeNniwpzqxfVVX0TnQ==",
+   "head_bytes": 600,
+   "markers": [
+    "challenge.js",
+    "awswaf",
+    "AwsWafIntegration",
+    "gokuProps",
+    "token"
+   ],
+   "kind": "browser headers",
+   "saved": "files/part1/08-browser-media26.bechirot.gov.il_files_expb.csv.head"
+  },
+  {
+   "label": "browser headers",
+   "url": "https://votes26.bechirot.gov.il/",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1"
+   },
+   "at": "2026-10-23T14:40:53+00:00",
+   "status": 202,
+   "ms": 17,
+   "headers": [
+    [
+     "Server",
+     "CloudFront"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:53 GMT"
+    ],
+    [
+     "Content-Length",
+     "2015"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "x-amzn-waf-action",
+     "challenge"
+    ],
+    [
+     "Cache-Control",
+     "no-store, max-age=0"
+    ],
+    [
+     "Content-Type",
+     "text/html; charset=UTF-8"
+    ],
+    [
+     "Access-Control-Allow-Origin",
+     "*"
+    ],
+    [
+     "Access-Control-Max-Age",
+     "86400"
+    ],
+    [
+     "Access-Control-Allow-Methods",
+     "OPTIONS,GET,POST"
+    ],
+    [
+     "Access-Control-Expose-Headers",
+     "x-amzn-waf-action"
+    ],
+    [
+     "X-Cache",
+     "Error from cloudfront"
+    ],
+    [
+     "Via",
+     "1.1 199ce2cf78973c1314623ce9dcb5a03e.cloudfront.net (CloudFront)"
+    ],
+    [
+     "X-Amz-Cf-Pop",
+     "IAD89-P3"
+    ],
+    [
+     "X-Amz-Cf-Id",
+     "m54ZS5nnPRXA6DxLI6K2dEPJDJCI46lEb-XwkkO1t3O7mov_iHdRXA=="
+    ]
+   ],
+   "set_cookie_names": [],
+   "body_read": 2015,
+   "body_head": "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n    <meta charset=\"utf-8\">\n    <meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">\n    <title></title>\n    <style>\n        body {\n            font-family: \"Arial\";\n        }\n    </style>\n    <script type=\"text/javascript\">\n    window.awsWafCookieDomainList = [];\n    window.gokuProps = {\n\"key\":\"AQIDAHjcYu/GjX+QlghicBgQ/7bFaQZ+m5FKCMDnO+vTbNg96AG5ZUj4wUI4guVxsT4ewdAfAAAAfjB8BgkqhkiG9w0BBwagbzBtAgEAMGgGCSqGSIb3DQEHATAeBglghkgBZQMEAS4wEQQMeX/+hTrgUTBhxXSDAgEQgDtY5nzj5njAUjFCT9bxnyvw8+YVpTpso7OG1gsCAxRgjZJYrxt4h6Xy6+ORqgrrxc9jGPLWXfs7xw6VIA==",
+   "head_bytes": 600,
+   "markers": [
+    "challenge.js",
+    "awswaf",
+    "AwsWafIntegration",
+    "gokuProps",
+    "token"
+   ],
+   "kind": "browser headers",
+   "saved": "files/part1/09-browser-votes26.bechirot.gov.il.head"
+  },
+  {
+   "label": "browser headers",
+   "url": "https://media25.bechirot.gov.il/files/expc.csv",
+   "sent": {
+    "User-Agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0 Safari/537.36 kalpi26-live",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8",
+    "Accept-Language": "he-IL,he;q=0.9,en-US;q=0.8,en;q=0.7",
+    "Accept-Encoding": "gzip, deflate",
+    "Upgrade-Insecure-Requests": "1",
+    "Sec-Fetch-Dest": "document",
+    "Sec-Fetch-Mode": "navigate",
+    "Sec-Fetch-Site": "none",
+    "Sec-Fetch-User": "?1",
+    "Range": "bytes=0-200"
+   },
+   "at": "2026-10-23T14:40:53+00:00",
+   "status": 206,
+   "ms": 600,
+   "headers": [
+    [
+     "Cache-Control",
+     "max-age=60"
+    ],
+    [
+     "Content-Type",
+     "application/octet-stream"
+    ],
+    [
+     "Last-Modified",
+     "Tue, 08 Nov 2022 15:03:32 GMT"
+    ],
+    [
+     "Accept-Ranges",
+     "bytes"
+    ],
+    [
+     "ETag",
+     "\"fce3a34483f3d81:0\""
+    ],
+    [
+     "X-Frame-Options",
+     "SAMEORIGIN"
+    ],
+    [
+     "X-Content-Type-Options",
+     "nosniff"
+    ],
+    [
+     "X-XSS-Protection",
+     "1; mode=block"
+    ],
+    [
+     "Strict-Transport-Security",
+     "max-age=31536000; preload"
+    ],
+    [
+     "X-MS-InvokeApp",
+     "1;RequireReadOnly"
+    ],
+    [
+     "Date",
+     "Fri, 23 Oct 2026 14:40:54 GMT"
+    ],
+    [
+     "Connection",
+     "close"
+    ],
+    [
+     "Content-Length",
+     "201"
+    ],
+    [
+     "Content-Range",
+     "bytes 0-200/154331"
+    ],
+    [
+     "Set-Cookie",
+     "p_hosting=(value not kept)"
+    ],
+    [
+     "Set-Cookie",
+     "TS0101ef41=(value not kept)"
+    ],
+    [
+     "Set-Cookie",
+     "TS074b8af6027=(value not kept)"
+    ]
+   ],
+   "set_cookie_names": [
+    "p_hosting",
+    "TS0101ef41",
+    "TS074b8af6027"
+   ],
+   "body_read": 201,
+   "body_head": "﻿סמל ועדה,שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,אמת,אצ,ב,ג,ד,ום,ז,זך,זנ,זץ,ט,י,יז,ינ,יץ,יק,כן,ך,ל,מחל,מרצ,נז,ני,�",
+   "head_bytes": 201,
+   "markers": [],
+   "kind": "browser headers",
+   "saved": "files/part1/10-browser-media25.bechirot.gov.il_files_expc.csv.head"
+  }
+ ],
+ "browser": {
+  "ran": true,
+  "chrome": "/opt/google/chrome/chrome",
+  "install": {
+   "command": "python3 -m pip install -q playwright",
+   "rc": 0,
+   "seconds": 2,
+   "user": false
+  },
+  "playwright": "1.64.1",
+  "visit_s": 30,
+  "seconds": 18,
+  "browser_version": "155.0.8059.39",
+  "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
+  "webdriver": true,
+  "pages": [
+   {
+    "url": "https://www.bechirot.gov.il/",
+    "asked": true,
+    "network_idle": true,
+    "seconds": 2.8,
+    "navigations": [
+     {
+      "status": 404,
+      "url": "https://www.bechirot.gov.il/",
+      "headers": [
+       [
+        "age",
+        "18598"
+       ],
+       [
+        "content-encoding",
+        "gzip"
+       ],
+       [
+        "content-type",
+        "text/html"
+       ],
+       [
+        "date",
+        "Fri, 23 Oct 2026 09:31:06 GMT"
+       ],
+       [
+        "etag",
+        "W/\"c12244887df7032cb7079a3b8e46dcde\""
+       ],
+       [
+        "last-modified",
+        "Thu, 04 Apr 2024 13:53:01 GMT"
+       ],
+       [
+        "server",
+        "AmazonS3"
+       ],
+       [
+        "vary",
+        "Accept-Encoding"
+       ],
+       [
+        "via",
+        "1.1 b64454e3c1123ac098282f1036154740.cloudfront.net (CloudFront)"
+       ],
+       [
+        "x-amz-cf-id",
+        "WHgWqwoJyGYSB7e_1bNKtcPw88CCgJLVZ2o0LA72R7Jbfw-JVbl8zw=="
+       ],
+       [
+        "x-amz-cf-pop",
+        "IAD55-P3"
+       ],
+       [
+        "x-amz-server-side-encryption",
+        "AES256"
+       ],
+       [
+        "x-cache",
+        "Error from cloudfront"
+       ]
+      ],
+      "set_cookie_names": []
+     }
+    ],
+    "final_url": "https://www.bechirot.gov.il/",
+    "title": "שגיאה",
+    "text": "מצטערים, העמוד שחיפשת לא נמצא יתכן שהכתובת הוחלפה או הוזנה לא נכון (7)",
+    "html_bytes": 1342,
+    "markers": [],
+    "cookie_names": []
+   },
+   {
+    "url": "https://media26.bechirot.gov.il/",
+    "asked": true,
+    "network_idle": true,
+    "seconds": 1.9,
+    "navigations": [
+     {
+      "status": 404,
+      "url": "https://media26.bechirot.gov.il/",
+      "headers": [
+       [
+        "age",
+        "12445"
+       ],
+       [
+        "content-encoding",
+        "gzip"
+       ],
+       [
+        "content-type",
+        "text/html"
+       ],
+       [
+        "date",
+        "Fri, 23 Oct 2026 11:13:44 GMT"
+       ],
+       [
+        "etag",
+        "W/\"c12244887df7032cb7079a3b8e46dcde\""
+       ],
+       [
+        "last-modified",
+        "Thu, 04 Apr 2024 13:53:01 GMT"
+       ],
+       [
+        "server",
+        "AmazonS3"
+       ],
+       [
+        "vary",
+        "Accept-Encoding"
+       ],
+       [
+        "via",
+        "1.1 5ceb9cec7debee0553fef552eba62cc4.cloudfront.net (CloudFront)"
+       ],
+       [
+        "x-amz-cf-id",
+        "AAeqglc2nt-Ige8xJloE1l_UW-e3npYkKO9kwzkb9VmL9pe9-tuweQ=="
+       ],
+       [
+        "x-amz-cf-pop",
+        "IAD55-P10"
+       ],
+       [
+        "x-amz-server-side-encryption",
+        "AES256"
+       ],
+       [
+        "x-cache",
+        "Error from cloudfront"
+       ]
+      ],
+      "set_cookie_names": []
+     }
+    ],
+    "final_url": "https://media26.bechirot.gov.il/",
+    "title": "שגיאה",
+    "text": "מצטערים, העמוד שחיפשת לא נמצא יתכן שהכתובת הוחלפה או הוזנה לא נכון (7)",
+    "html_bytes": 1342,
+    "markers": [],
+    "cookie_names": []
+   }
+  ],
+  "files": [
+   {
+    "url": "https://media26.bechirot.gov.il/files/expb.csv",
+    "asked": true,
+    "status": 404,
+    "headers": [
+     [
+      "Content-Type",
+      "text/html"
+     ],
+     [
+      "Transfer-Encoding",
+      "chunked"
+     ],
+     [
+      "Connection",
+      "keep-alive"
+     ],
+     [
+      "Server",
+      "AmazonS3"
+     ],
+     [
+      "Last-Modified",
+      "Thu, 04 Apr 2024 13:53:01 GMT"
+     ],
+     [
+      "Content-Encoding",
+      "gzip"
+     ],
+     [
+      "x-amz-server-side-encryption",
+      "AES256"
+     ],
+     [
+      "Date",
+      "Fri, 23 Oct 2026 11:13:44 GMT"
+     ],
+     [
+      "ETag",
+      "W/\"c12244887df7032cb7079a3b8e46dcde\""
+     ],
+     [
+      "Vary",
+      "Accept-Encoding"
+     ],
+     [
+      "X-Cache",
+      "Error from cloudfront"
+     ],
+     [
+      "Via",
+      "1.1 dd02f81d770406d1d5f9d2e199b1cd1a.cloudfront.net (CloudFront)"
+     ],
+     [
+      "X-Amz-Cf-Pop",
+      "IAD55-P10"
+     ],
+     [
+      "X-Amz-Cf-Id",
+      "DQJPQ0rRT5wHcL2lw_w4v4wsBwgDwwvOyRbwcvvid0AXMWYfy1IdsQ=="
+     ],
+     [
+      "Age",
+      "12449"
+     ]
+    ],
+    "set_cookie_names": [],
+    "bytes": 1376,
+    "body_head": "<!DOCTYPE html>\r\n<html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\">\r\n    <head>\r\n\t\t<meta charset=\"UTF-8\">\r\n\t\t<meta name=\"viewport\" content=\"width=device-width\" />\r\n    \t<meta name=\"viewport\" content=\"initial-scale=1, maximum-scale=1, user-scalable=no\" />\r\n        <link rel=\"preconnect\" href=\"https://fonts.",
+    "markers": [],
+    "head_bytes": 300,
+    "ms": 39,
+    "saved": "files/browser/01-media26.bechirot.gov.il_files_expb.csv.head"
+   },
+   {
+    "url": "https://media26.bechirot.gov.il/files/expc.csv",
+    "asked": true,
+    "status": 404,
+    "headers": [
+     [
+      "Content-Type",
+      "text/html"
+     ],
+     [
+      "Transfer-Encoding",
+      "chunked"
+     ],
+     [
+      "Connection",
+      "keep-alive"
+     ],
+     [
+      "Server",
+      "AmazonS3"
+     ],
+     [
+      "Last-Modified",
+      "Thu, 04 Apr 2024 13:53:01 GMT"
+     ],
+     [
+      "Content-Encoding",
+      "gzip"
+     ],
+     [
+      "x-amz-server-side-encryption",
+      "AES256"
+     ],
+     [
+      "Date",
+      "Fri, 23 Oct 2026 11:13:44 GMT"
+     ],
+     [
+      "ETag",
+      "W/\"c12244887df7032cb7079a3b8e46dcde\""
+     ],
+     [
+      "Vary",
+      "Accept-Encoding"
+     ],
+     [
+      "X-Cache",
+      "Error from cloudfront"
+     ],
+     [
+      "Via",
+      "1.1 dd02f81d770406d1d5f9d2e199b1cd1a.cloudfront.net (CloudFront)"
+     ],
+     [
+      "X-Amz-Cf-Pop",
+      "IAD55-P10"
+     ],
+     [
+      "X-Amz-Cf-Id",
+      "B5pEhJl90Jk44sEPu13SX-SpqXF4o_1fjw4fo-3q2m4Tqk9KRW0GJw=="
+     ],
+     [
+      "Age",
+      "12451"
+     ]
+    ],
+    "set_cookie_names": [],
+    "bytes": 1376,
+    "body_head": "<!DOCTYPE html>\r\n<html dir=\"rtl\" lang=\"he-IL\" class=\"no-js\">\r\n    <head>\r\n\t\t<meta charset=\"UTF-8\">\r\n\t\t<meta name=\"viewport\" content=\"width=device-width\" />\r\n    \t<meta name=\"viewport\" content=\"initial-scale=1, maximum-scale=1, user-scalable=no\" />\r\n        <link rel=\"preconnect\" href=\"https://fonts.",
+    "markers": [],
+    "head_bytes": 300,
+    "ms": 15,
+    "saved": "files/browser/02-media26.bechirot.gov.il_files_expc.csv.head"
+   }
+  ],
+  "requests_by_host": {
+   "www.bechirot.gov.il": 1,
+   "fonts.googleapis.com": 2,
+   "maintenance.gov.il": 6,
+   "fonts.gstatic.com": 4,
+   "media26.bechirot.gov.il": 1
+  },
+  "aborted": 0,
+  "challenge_requests": [],
+  "cookies": []
+ },
+ "token_checks": [],
+ "stage": "done",
+ "written": "2026-10-23T14:41:14+00:00",
+ "finished": "2026-10-23T14:41:14+00:00",
+ "requests": 14,
+ "not_asked_past_deadline": 0,
+ "past_deadline": false,
+ "files_saved": 8,
+ "verdicts": {
+  "waf": {
+   "answer": "yes",
+   "why": "x-amzn-waf-action: challenge on 8 of 10 answers from the CEC's 2026 hosts (202 with a challenge page (AwsWafIntegration, awswaf, challenge.js, gokuProps); 202 with an empty body)"
+  },
+  "browser": {
+   "answer": "yes",
+   "why": "not challenged at all: www.bechirot.gov.il 404; media26.bechirot.gov.il 404; no aws-waf-token cookie"
+  },
+  "token": {
+   "answer": "unclear",
+   "why": "the browser brought no cookies"
+  },
+  "control": {
+   "answer": "206",
+   "why": "media25 (2022): answered HTTP 206 with data"
+  }
+ },
+ "token_skipped": "the browser brought no cookies"
+}
