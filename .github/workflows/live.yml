@@ -25,6 +25,9 @@
 # Switches: repository variable LIVE_RUNNER=self-hosted moves every run (scheduled ones too) to the
 # runner in Israel; LIVE_FEED_OFF=true stops scheduled runs (manual runs still work);
 # "github_feed": false in pipeline/live_config.json stops a running loop so a laptop can take over.
+# The CEC's WAF: since 22.10 bechirot.gov.il answers urllib with an AWS WAF challenge; live_fetch.py then asks through a
+# headless Chrome with its own User-Agent (playwright, installed below; the runner's Chrome, exported as LIVE_CHROME;
+# repository variable LIVE_CHROME for a self-hosted runner's), "fetch_via" in live_config.json (docs/ELECTION_DAY.md, WAF).
 # A running loop is replaced only when it ends: to switch at once, cancel the active run (the owner), or push a
 # request with "restart": true (below), which the loop sees at its next pass; it stops only for a request that the
 # requested run will carry out (the same request check, ops/check_request.py, and the guard's drill rule), and only
@@ -195,6 +198,33 @@ jobs:
           python-version: '3.12'
       - if: steps.guard.outputs.off != 'true'
         run: python3 -c 'import numpy' 2>/dev/null || python3 -m pip install -q numpy || python3 -m pip install -q --user --break-system-packages numpy
+      - name: The browser path (playwright and this runner's Chrome) for the CEC's WAF
+        if: steps.guard.outputs.off != 'true'
+        env:
+          CHROME_VAR: ${{ vars.LIVE_CHROME }}   # a self-hosted runner's Chrome, when it is not in the usual places
+        run: |
+          # Since 22.10 bechirot.gov.il answers urllib with an AWS WAF challenge (HTTP 202); live_fetch.py then asks the same
+          # URL through a headless Chrome with its own User-Agent, driven by playwright (pipeline/browser_fetch.py). The
+          # package only: never `playwright install`, the hosted runner has Google Chrome. A missing piece is a warning,
+          # not a red run: media25 drills and an unchallenged CEC need neither, and the feed reports the browser path in
+          # status.json (browser, errors). A self-hosted runner: its own Chrome (LIVE_CHROME, a repository variable or the
+          # runner's environment, else the usual places), or none
+          python3 -c 'import playwright.sync_api' 2>/dev/null || python3 -m pip install -q playwright > /dev/null 2>&1 \
+            || python3 -m pip install -q --user --break-system-packages playwright > /dev/null 2>&1 \
+            || echo "::warning::playwright not installed: the feed cannot ask through the browser if the CEC's WAF challenges it"
+          chrome=''
+          for c in "${CHROME_VAR:-}" "${LIVE_CHROME:-}" /opt/google/chrome/chrome google-chrome google-chrome-stable chromium chromium-browser \
+                   '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'; do
+            [ -n "$c" ] || continue
+            p=$(command -v "$c" 2>/dev/null) || continue
+            if [ -f "$p" ] && [ -x "$p" ]; then chrome=$p; break; fi
+          done
+          if [ -n "$chrome" ]; then
+            echo "LIVE_CHROME=$chrome" >> "$GITHUB_ENV"
+            echo "the browser path: $chrome, playwright $(python3 -c 'from importlib.metadata import version; print(version("playwright"))' 2>/dev/null || echo 'not installed')"
+          else
+            echo "::warning::no Chrome or Chromium on this runner (LIVE_CHROME, /opt/google/chrome/chrome, google-chrome, chromium): the feed cannot ask through the browser if the CEC's WAF challenges it"
+          fi
       - name: The publishing path
         if: steps.guard.outputs.off != 'true'
         run: |
@@ -257,7 +287,7 @@ jobs:
           out=$(python3 pipeline/live_fetch.py --out _probe --once 2>&1) || true
           printf '%s\n' "$out" | tail -n 4 | cut -c1-600
           printf '%s\n' "$out" | tail -n 1 \
-            | python3 -c 'import json,sys; s=json.load(sys.stdin); print("ok: results_state", s.get("results_state"), "probe", s.get("results_probe"), "publish_mode", s.get("publish_mode"), "errors", s.get("errors"))'
+            | python3 -c 'import json,sys; s=json.load(sys.stdin); print("ok: results_state", s.get("results_state"), "probe", s.get("results_probe"), "fetch_path", s.get("fetch_path"), "waf", s.get("waf"), "browser", s.get("browser"), "browser_start_s", s.get("browser_start_s"), "publish_mode", s.get("publish_mode"), "errors", s.get("errors"))'
       - name: Poll the elections committee and publish
         if: steps.guard.outputs.off != 'true'
         run: |
@@ -392,7 +422,9 @@ jobs:
             if line=$(printf '%s\n' "$last" | python3 -c '
           import json, sys
           s = json.load(sys.stdin)
-          print("changed", s["changed"], "| published", s.get("published", "-"), s.get("next_publish_s", ""), "| build", s.get("build", "-"), "| errors", s.get("errors"))
+          print("changed", s["changed"], "| published", s.get("published", "-"), s.get("next_publish_s", ""), "| build", s.get("build", "-"),
+                "| fetch", s.get("fetch_path", "-"), (s.get("waf") or {}).get("state", "-"), [(f.get("path"), f.get("http"), f.get("s")) for f in s.get("fetches") or []],
+                "| errors", s.get("errors"))
           bad = [e for e in s.get("errors") or [] if e.startswith("publish")]
           if str(s.get("published", "")).startswith("push failed") or "giving up" in str(s.get("build", "")) or bad:
               print("::warning::publishing:", s.get("published"), s.get("build"), bad)' 2>/dev/null); then

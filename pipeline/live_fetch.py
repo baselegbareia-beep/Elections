@@ -42,8 +42,17 @@ first results and the first exit polls at once), and a feed with nothing new but
 most every 30 minutes (60 from noon the day after the election); Actions mode commits them to the
 live-data branch and dispatches pages.yml.
 
+Fetching (request(): the results file, the per-station turnout file, the probe before 22:00, the drill's 2022 file):
+urllib first, as always. From 22.10.2026 bechirot.gov.il (CloudFront + AWS WAF) answers urllib with a challenge (HTTP
+202 and x-amzn-waf-action, or 405 for a CAPTCHA; an empty body), while a real browser is not challenged: on such an
+answer the same URL is asked through a headless Chrome (pipeline/browser_fetch.py: playwright's request context, Chrome's
+own User-Agent, nothing hidden or spoofed), one browser per feed process. The host is then asked through the browser
+directly, and through urllib again every WAF_RECHECK seconds, so the CEC still gets one request a pass. live_config.json
+"fetch_via": "auto" (the default) | "urllib" (never the browser) | "browser" (only the browser). status.json:
+fetch_path ("urllib" | "browser"), waf, browser (its version and User-Agent, or why it is unavailable).
+
 Every download is checked: an empty body, HTML or JSON instead of CSV (maintenance page, WAF,
-rate limit) is rejected, a file without the expected columns or without a single counted station
+rate limit) is rejected, a body over MAX_BODY is rejected, a file without the expected columns or without a single counted station
 is rejected, rows with more voters than eligible voters are dropped and counted, a file whose count
 of counted stations shrank by more than 2% is rejected (a smaller shrink is a CEC correction and is
 accepted), an unchanged file (same SHA-256) is skipped, and the SHA-256 of
@@ -51,23 +60,30 @@ each accepted file is recorded. Each pass prints one JSON line (the status plus 
 files written or removed, and what was published), which the workflow logs.
 """
 import argparse
+import atexit
+import base64
 import collections
 import csv
 import datetime as dt
+import email.message
 import glob
 import hashlib
 import io
 import json
 import os
+import queue
 import random
 import re
 import shutil
+import signal
 import statistics
 import subprocess
 import sys
 import tempfile
+import threading
 import time
 import urllib.error
+import urllib.parse
 import urllib.request
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
@@ -111,6 +127,17 @@ PLACEHOLDER_ELIGIBLE = 7340000   # the pre-election estimate in live_config.json
 REGISTER_SLACK = 0.99            # while the counted register exceeds the configured one, the share reads this, not "all counted"
 RESULTS_CACHE = ".results_last.csv"   # the last accepted CEC file, re-rendered when an operator switch changes (DOC-3)
 PAUSED_HE = "התחזית הושהתה על ידי המפעיל."   # frame.paused when pause_reason is empty
+# fetching (request(); docs/ELECTION_DAY.md, "WAF")
+MAX_BODY = 32 * 2 ** 20  # bytes: a bigger body is rejected (2022's expb.csv was 1.7 MB), by both paths
+FETCH_VIA = ("auto", "urllib", "browser")   # live_config.json "fetch_via"
+WAF_RECHECK = 600        # seconds: a host whose WAF challenged urllib is asked through the browser, and urllib again after this
+HELPER = os.path.join(os.path.dirname(os.path.abspath(__file__)), "browser_fetch.py")
+# the browser path's Chrome when $LIVE_CHROME is not set (live.yml sets it): Google Chrome's own binary first (the hosted
+# runner's), then the wrappers and Chromium, then macOS's (a self-hosted runner or a laptop)
+CHROMES = ("/opt/google/chrome/chrome", "google-chrome", "google-chrome-stable", "chromium", "chromium-browser",
+           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome")
+BROWSER_START_S = 60     # seconds for the helper's first line (playwright and Chrome started; about a second on a runner)
+BROWSER_RETRY_S = 300    # a browser that failed to start is tried again this much later (the laptop loop)
 
 
 def now_il():
@@ -125,13 +152,148 @@ def closing(election_day):
     return dt.datetime.combine(election_day, dt.time(22, 0), IL)
 
 
+# ------------------------------------------------------------------ fetching: urllib, and the browser behind the CEC's WAF
+class WafError(IOError):
+    """The CEC's WAF answered instead of the file, and no path got past it."""
+
+
+class BrowserUnavailable(IOError):
+    """The browser path cannot run here (no playwright, no Chrome, Chrome did not start)."""
+
+
+class Answer:
+    """One HTTP answer, from either path: status, headers (names in lower case), body, final url, path ("urllib" or
+    "browser"), waf (waf_kind: "" or the WAF's action), exc (urllib's own HTTPError for a status of 400 or more)."""
+
+    def __init__(self, status, headers, body, url, path, reason="", exc=None):
+        self.status, self.body, self.url, self.path, self.reason, self.exc = status, body or b"", url, path, reason, exc
+        self.headers = {}
+        for k, v in (headers.items() if hasattr(headers, "items") else headers or ()):
+            k = str(k).lower()
+            self.headers[k] = f"{self.headers[k]}, {v}" if k in self.headers else str(v)
+        self.waf = waf_kind(status, self.headers, self.body)
+
+
+def waf_kind(status, headers, body):
+    """The AWS WAF action when an answer is the WAF's instead of the file's, else "": x-amzn-waf-action on a 202
+    (challenge) or a 405 (captcha), or CloudFront's 202 with an empty body (the header not exposed), as bechirot.gov.il
+    has answered urllib since 22.10.2026."""
+    act = (headers.get("x-amzn-waf-action") or "").strip().lower()
+    if act and status in (202, 405):
+        return act
+    cdn = " ".join(headers.get(k, "") for k in ("server", "x-cache", "via")).lower()
+    if status == 202 and not (body or b"").strip() and "cloudfront" in cdn:
+        return "challenge"
+    return ""
+
+
+def waf_text(a):
+    """A WAF answer in words, for status.errors and the probe's note."""
+    act = a.headers.get("x-amzn-waf-action")
+    return (f"WAF {a.waf} from {urllib.parse.urlsplit(a.url).netloc} through {a.path}: HTTP {a.status}"
+            + (f", x-amzn-waf-action: {act}" if act else ", CloudFront, empty body"))
+
+
+# NET: this pass's fetching. via: live_config "fetch_via"; hosts: the hosts whose WAF challenged urllib ({netloc: {since,
+# ts, action}}, kept in state.json "waf_hosts" between passes); log: this pass's requests (the printed line's "fetches");
+# browser_error: why the browser path failed in this pass
+NET = {"via": "auto", "hosts": {}, "log": [], "browser_error": "", "last": None, "browser_start_s": None}
+
+
+def _note(url, method, path, t, a=None, error=""):
+    """A request in this pass's log (the printed line's "fetches"; the workflow's log, not status.json)."""
+    rec = {"url": url, "method": method, "path": path, "http": a.status if a else 0, "waf": a.waf if a else "",
+           "bytes": len(a.body) if a else 0, "s": round(time.time() - t, 2)}
+    if a is not None and a.headers.get("x-amzn-waf-action"):
+        rec["waf_header"] = a.headers["x-amzn-waf-action"]
+    if error:
+        rec["error"] = error[:200]
+    NET["log"].append(rec)
+    if a is not None:
+        NET["last"] = a                           # the last answer, whole (pipeline/fetchers/feed_fetch_probe.py)
+
+
+def _urllib(url, method, headers, timeout):
+    """One urllib request with the feed's User-Agent, as the feed has always asked; an HTTP error is an Answer too."""
+    req = urllib.request.Request(url, headers={"User-Agent": UA, **headers}, method=method)
+    try:
+        with urllib.request.urlopen(req, timeout=timeout) as r:
+            body = b"" if method == "HEAD" else r.read(MAX_BODY + 1)
+            return Answer(r.status, r.headers, body, r.geturl(), "urllib", getattr(r, "reason", ""))
+    except urllib.error.HTTPError as exc:
+        try:
+            body = exc.read(65536) or b""
+        except Exception:
+            body = b""
+        return Answer(exc.code, exc.headers or {}, body, url, "urllib", exc.reason, exc)
+
+
+def request(url, method="GET", headers=None, timeout=40):
+    """One request to a data URL (the CEC's files): urllib first, as always; when its answer is the WAF's (waf_kind), or
+    live_config "fetch_via" is "browser", the same request through the browser (Browser, one per feed process). A host
+    whose WAF challenged urllib is asked through the browser directly, and through urllib again every WAF_RECHECK
+    seconds (when the challenge is gone the host goes back to urllib), so the CEC gets one request where it got one.
+    "fetch_via": "urllib" never starts the browser. A network error raises, as before; an HTTP answer, of any status,
+    is returned (Answer: its path and waf). Raises WafError when the WAF answered urllib and the browser cannot run."""
+    headers = dict(headers or {})
+    host = urllib.parse.urlsplit(url).netloc
+    via = NET["via"]
+    held = NET["hosts"].get(host)
+    # a held host goes to the browser directly, unless the browser has just failed to start: urllib is all there is then
+    browser_first = via == "browser" or (via == "auto" and held and time.time() - held.get("ts", 0) < WAF_RECHECK
+                                         and not BROWSER.failing())
+    first = None
+    if not browser_first:
+        t = time.time()
+        try:
+            first = _urllib(url, method, headers, timeout)
+        except Exception as exc:
+            _note(url, method, "urllib", t, error=f"{exc.__class__.__name__}: {exc}")
+            raise
+        _note(url, method, "urllib", t, first)
+        if not first.waf:
+            NET["hosts"].pop(host, None)          # no challenge (any more): urllib it is
+            return first
+        NET["hosts"][host] = {"since": (held or {}).get("since") or now_il().isoformat(timespec="minutes"),
+                              "ts": time.time(), "action": first.waf}
+        if via == "urllib":
+            raise WafError(f'{waf_text(first)}; "fetch_via" is "urllib" in live_config.json: the browser path is off')
+    t = time.time()
+    try:
+        a = BROWSER.request(url, method, headers, timeout)
+    except BrowserUnavailable as exc:
+        NET["browser_error"] = str(exc)
+        _note(url, method, "browser", t, error=str(exc))
+        if first is None and via == "auto":       # a held host: ask urllib after all (the browser now counts as failing)
+            return request(url, method, headers, timeout)
+        why = waf_text(first) if first else '"fetch_via" is "browser" in live_config.json'
+        raise WafError(f"{why}; the browser path is unavailable: {exc}")
+    except Exception as exc:
+        _note(url, method, "browser", t, error=f"{exc.__class__.__name__}: {exc}")
+        raise
+    _note(url, method, "browser", t, a)
+    return a
+
+
 def fetch(url, timeout=40):
-    req = urllib.request.Request(url, headers={"User-Agent": UA, "Cache-Control": "no-cache"})
-    with urllib.request.urlopen(req, timeout=timeout) as r:
-        if "maintenance" in r.geturl():
-            raise IOError(f"redirected to {r.geturl()}")
-        data = r.read()
-    return check_body(data)
+    """A data file from a URL (the CEC's results, the per-station turnout, the drill's 2022 file) through request(),
+    then the checks the feed has always made: an HTTP error raises (urllib's own HTTPError; through the browser one
+    like it), a redirect to a maintenance page, a body over MAX_BODY, an empty, HTML or JSON body is rejected."""
+    a = request(url, "GET", {"Cache-Control": "no-cache"}, timeout)
+    if a.waf:
+        raise WafError(f"{waf_text(a)} (the browser was challenged too)")
+    if a.status >= 400:
+        if a.exc is not None:
+            raise a.exc
+        msg = email.message.Message()
+        for k, v in a.headers.items():
+            msg[k] = v
+        raise urllib.error.HTTPError(a.url, a.status, f"{a.reason or 'error'} (through the browser)", msg, None)
+    if "maintenance" in a.url:
+        raise IOError(f"redirected to {a.url}")
+    if len(a.body) > MAX_BODY:
+        raise IOError(f"body over {MAX_BODY // 2 ** 20} MB")
+    return check_body(a.body)
 
 
 def check_body(data):
@@ -154,19 +316,204 @@ def read_source(url):
 
 
 def probe(url, timeout=20):
-    """HTTP status of url without downloading it: HEAD, or a one-byte GET where HEAD is refused."""
+    """HTTP status of url without downloading it: HEAD, or a one-byte GET where HEAD is refused; through request(), so
+    the browser when the CEC's WAF challenges urllib. Returns (status, note, path); the note names an error, or a WAF
+    answer that no path got past."""
     for method, headers in (("HEAD", {}), ("GET", {"Range": "bytes=0-0"})):
-        req = urllib.request.Request(url, headers={"User-Agent": UA, **headers}, method=method)
         try:
-            with urllib.request.urlopen(req, timeout=timeout) as r:
-                return r.status, ""
-        except urllib.error.HTTPError as exc:
-            if method == "HEAD" and exc.code in (403, 405):
-                continue
-            return exc.code, ""
+            a = request(url, method, headers, timeout)
         except Exception as exc:
-            return 0, f"{exc.__class__.__name__}: {exc}"[:120]
-    return 0, ""
+            return 0, f"{exc.__class__.__name__}: {exc}"[:200], (NET["log"][-1]["path"] if NET["log"] else "")
+        if method == "HEAD" and a.status in (403, 405) and not a.waf:
+            continue
+        return a.status, (waf_text(a) if a.waf else ""), a.path
+    return 0, "", ""
+
+
+def find_chrome():
+    """(path, why not): $LIVE_CHROME (live.yml sets it to the runner's Chrome) or, when it is not set, Google Chrome or
+    Chromium in the usual places (CHROMES). (None, why) when there is none."""
+    env = os.environ.get("LIVE_CHROME", "").strip()
+    if env:
+        if os.path.isfile(env) and os.access(env, os.X_OK):
+            return env, ""
+        return None, f"LIVE_CHROME={env}: no such program"
+    for c in CHROMES:
+        p = c if os.path.isabs(c) else shutil.which(c)
+        if p and os.path.isfile(p) and os.access(p, os.X_OK):
+            return p, ""
+    return None, "no Chrome or Chromium found (LIVE_CHROME, /opt/google/chrome/chrome, google-chrome, chromium)"
+
+
+class Browser:
+    """The browser path of this feed process: one helper (pipeline/browser_fetch.py, run by $LIVE_BROWSER_PYTHON or this
+    interpreter) holding one headless Chrome, started at the first request that needs it and kept until the process ends
+    (live.yml runs a process per pass: about a second to start; the laptop loop keeps one for the night). Its own
+    stdout and stderr never reach the feed's: the status line stays the last line. A request is bounded by its timeout
+    (plus 20 s; then the helper is stopped); a failed start is not retried for BROWSER_RETRY_S."""
+
+    def __init__(self):
+        self.proc, self.info, self.failed, self.starts, self.start_s = None, None, None, 0, None
+        self._lines, self._err = None, collections.deque(maxlen=12)
+        self._atexit = False
+
+    def failing(self):
+        return bool(self.failed) and time.time() - self.failed[0] < BROWSER_RETRY_S
+
+    def _fail(self, why):
+        self.failed = (time.time(), why)
+        self.close()
+        raise BrowserUnavailable(why)
+
+    @staticmethod
+    def _pump(stream, q):
+        for line in stream:
+            q.put(line)
+        q.put(None)
+
+    def _drain(self, stream):
+        for line in stream:
+            if line.strip():
+                self._err.append(line.rstrip()[:300])
+
+    def _read(self, timeout):
+        try:
+            line = self._lines.get(timeout=timeout)
+        except queue.Empty:
+            return None
+        try:
+            return json.loads(line) if line else None
+        except ValueError:
+            return None
+
+    def _tail(self):
+        return f" (helper: {' | '.join(list(self._err)[-3:])})"[:400] if self._err else ""
+
+    def _start(self):
+        if self.failing():
+            raise BrowserUnavailable(self.failed[1])
+        chrome, why = find_chrome()
+        if os.environ.get("LIVE_CHROME", "").strip() and not chrome:
+            self._fail(why)
+        python = os.environ.get("LIVE_BROWSER_PYTHON", "").strip() or sys.executable
+        self.start_s = None
+        t = time.time()
+        try:
+            self.proc = subprocess.Popen([python, HELPER] + (["--chrome", chrome] if chrome else []),
+                                         stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                                         text=True, encoding="utf-8", bufsize=1, start_new_session=True)
+        except OSError as exc:
+            self._fail(f"cannot run the browser helper with {python}: {exc}")
+        self.starts += 1
+        self._lines = queue.Queue()
+        self._err.clear()
+        threading.Thread(target=self._pump, args=(self.proc.stdout, self._lines), daemon=True).start()
+        threading.Thread(target=self._drain, args=(self.proc.stderr,), daemon=True).start()
+        first = self._read(BROWSER_START_S)
+        if not first or not first.get("ready"):
+            err = (first or {}).get("error") or f"the browser helper did not start within {BROWSER_START_S} s{self._tail()}"
+            self._fail(f"{why}; {err}" if why else err)
+        self.info, self.start_s = first, round(time.time() - t, 2)
+        NET["browser_start_s"] = self.start_s
+        if not self._atexit:
+            atexit.register(self.close)
+            self._atexit = True
+
+    def request(self, url, method="GET", headers=None, timeout=40):
+        """One request through the browser -> Answer (path "browser"). BrowserUnavailable when it cannot start; IOError
+        when the request itself failed (a timeout, a refused connection, a body over MAX_BODY)."""
+        if self.proc is None or self.proc.poll() is not None:
+            self._start()
+        msg = {"method": method, "url": url, "headers": headers or {}, "timeout_ms": int(timeout * 1000), "max_bytes": MAX_BODY}
+        try:
+            self.proc.stdin.write(json.dumps(msg) + "\n")
+            self.proc.stdin.flush()
+        except (OSError, ValueError) as exc:
+            self.close()
+            raise IOError(f"browser: the helper is gone ({exc}){self._tail()}")
+        ans = self._read(timeout + 20)
+        if ans is None:
+            self.close()
+            raise IOError(f"browser: no answer within {timeout + 20:g} s{self._tail()}")
+        if ans.get("error"):
+            raise IOError(f"browser: {ans['error']}" + (f" (HTTP {ans['status']})" if ans.get("status") else ""))
+        body = base64.b64decode(ans.get("body_b64") or "")
+        return Answer(ans["status"], ans.get("headers") or [], body, ans.get("url") or url, "browser", ans.get("status_text", ""))
+
+    def close(self):
+        p, self.proc = self.proc, None
+        if p is None:
+            return
+        try:
+            p.stdin.close()                       # the helper closes Chrome at the end of its input
+        except Exception:
+            pass
+        try:
+            p.wait(timeout=10)
+        except subprocess.TimeoutExpired:
+            try:
+                os.killpg(p.pid, signal.SIGKILL)  # its own session: playwright's driver and Chrome go with it
+            except Exception:
+                p.kill()
+            try:
+                p.wait(timeout=5)
+            except Exception:
+                pass
+
+
+BROWSER = Browser()
+
+
+def fetch_via(cfg, errors=None):
+    """live_config.json "fetch_via": "auto" (default: urllib, the browser behind the WAF), "urllib" or "browser"."""
+    v = cfg.get("fetch_via")
+    if v in (None, ""):
+        return "auto"
+    if v in FETCH_VIA:
+        return v
+    if errors is not None:
+        errors.append(f'config: fetch_via {v!r} is not "auto", "urllib" or "browser"; using "auto"')
+    return "auto"
+
+
+def fetch_status(state, status, line):
+    """This pass's fetching into status.json, from what stays the same between passes (so a quiet feed does not
+    publish timings): fetch_path of the last request ("urllib" | "browser"), waf ({"state": "challenge" | "none",
+    "hosts": {host: since}}), browser (its version and User-Agent, or why it is unavailable) and fetch_via when not
+    "auto"; the browser path's failure also as an error. The printed line gets the requests and their times."""
+    log = NET["log"]
+    if NET["hosts"]:
+        state["waf_hosts"] = NET["hosts"]
+    else:
+        state.pop("waf_hosts", None)
+    answered = [r for r in log if r.get("http")]
+    if answered:                                  # the path of the last request that got an HTTP answer
+        state["fetch_path"] = answered[-1]["path"]
+    if any(r["path"] == "urllib" and r.get("http") for r in log):
+        state["urllib_answered"] = True
+    if state.get("fetch_path"):
+        status["fetch_path"] = state["fetch_path"]
+    if NET["hosts"]:
+        status["waf"] = {"state": "challenge", "hosts": {h: x.get("since") for h, x in sorted(NET["hosts"].items())}}
+    elif state.get("urllib_answered"):
+        status["waf"] = {"state": "none"}
+    if NET["via"] != "auto":
+        status["fetch_via"] = NET["via"]
+    # the browser: as last tried (it answered, or why it could not), shown while it is needed
+    if BROWSER.info and any(r["path"] == "browser" and r.get("http") for r in log):
+        state["browser"] = {"state": "ok", **{k: BROWSER.info.get(k) for k in ("version", "user_agent")}}
+    if NET["browser_error"]:
+        state["browser"] = {"state": "unavailable", "error": NET["browser_error"][:300]}
+    b = state.get("browser")
+    if isinstance(b, dict) and (NET["hosts"] or NET["via"] == "browser" or status.get("fetch_path") == "browser"):
+        status["browser"] = b
+        if b.get("state") == "unavailable":      # every pass while it is needed (the results line is cut at 200)
+            why = "fetch_via is browser" if NET["via"] == "browser" else "the CEC's WAF challenges urllib"
+            status["errors"].append(f"fetch: {why} and the browser path is unavailable: {b.get('error')}"[:400])
+    if log:
+        line["fetches"] = log
+    if NET.get("browser_start_s") is not None:      # the browser started in this pass: seconds
+        line["browser_start_s"] = NET["browser_start_s"]
 
 
 DRILL = False
@@ -656,8 +1003,10 @@ def switches_pass(E, cfg, out, history, state, status):
 def maybe_probe(url, state, status):
     last = state.get("probe") or {}
     if time.time() - last.get("ts", 0) >= PROBE_EVERY:
-        code, note = probe(url)
+        code, note, path = probe(url)
         last = {"http": code, "at_he": he_time(now_il()), "ts": time.time()}
+        if path:
+            last["path"] = path                   # urllib, or the browser behind the CEC's WAF
         if note:
             last["error"] = note
         state["probe"] = last
@@ -1581,6 +1930,10 @@ def main(argv=None):
             except Exception as exc:
                 status["errors"].append(f"refresh from origin/{a.ref}: {exc}"[:200])
         cfg = E.cfg = load_config(a.config, state, status["errors"])
+        # fetching: urllib, or the browser behind the CEC's WAF (request()); the challenged hosts carry over in state.json
+        hosts = state.get("waf_hosts")
+        NET.update(via=fetch_via(cfg, status["errors"]), hosts=dict(hosts) if isinstance(hosts, dict) else {}, log=[],
+                   browser_error="", last=None, browser_start_s=None)
         every = publish_every(cfg, status["errors"])
         election_day = dt.date.fromisoformat(cfg.get("election_day", DEFAULT_CFG["election_day"]))
         quiet = quiet_every(every, t, election_day)
@@ -1622,9 +1975,11 @@ def main(argv=None):
             status["errors"].append(f"exit polls: {exc}"[:200])
         status["phase"] = ("night" if status["has_results"] or t >= closing(election_day)
                            else "day" if t.date() == election_day else "pre")
+        extra = {}
+        fetch_status(state, status, extra)
         write_json(a.out, STATE, state)
         write_json(a.out, "status.json", status, heartbeat=HEARTBEAT)
-        line = {**status, "changed": list(CHANGED)}
+        line = {**status, "changed": list(CHANGED), **extra}
         if a.publish:                             # every pass: a held publish or a failed build request may be due
             try:
                 line.update(publish_step(a.out, mode, every, wt, branch, a.ref, a.repo, who=who, quiet_min=quiet))
