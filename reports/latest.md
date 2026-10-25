@@ -1,9 +1,9 @@
-## CEC file discovery, 24.10 12:47 Israel time (full, github-hosted)
+## CEC file discovery, 25.10 12:08 Israel time (full, github-hosted)
 
-- **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 7 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
-- **The browser path got past it: yes**: 329 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×329.
+- **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 4 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
+- **The browser path got past it: yes**: 322 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×322.
 
-453 URLs probed in 115 s, 55 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+447 URLs probed in 111 s, 53 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
@@ -16,7 +16,12 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-23T22:24:40+03:00: 0 new, 0 changed, 0 gone
+### Since 2026-10-24T12:47:15+03:00: 1 new, 1 changed, 0 gone
+
+|  | URL | class | what |
+|---|---|---|---|
+| new | https://www.gov.il/he/pages/_complete.js | html | was not probed |
+| changed | https://www.gov.il/ruxitagentjs_ICA1589NPRTUVXafhlqrtux_10347260902154543.js | script | cls: html → script |
 
 ### Files and pages with data
 
@@ -39,19 +44,19 @@ Other candidates (in brackets: why not suggested, or what to check):
 | host | IPs | probed | answered | status codes | through | WAF | hint |
 |---|---|---|---|---|---|---|---|
 | analytics.egov.gov.il | 147.237.12.35 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| aws-e.data.gov.il | 108.139.10.49, 108.139.10.57, 108.139.10.68 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| aws-e.data.gov.il | 18.165.98.102, 18.165.98.123, 18.165.98.28 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | bechirot.gov.il | 147.237.12.28 | 3 | 0 | {"404": 3} | browser 3 | 1 | CloudFront (Error from cloudfront) |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | urllib 3 |  | skipped; URLError |
-| data.gov.il | 65.8.180.30, 65.8.180.62, 65.8.180.87 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
-| e.data.gov.il | 108.139.10.49, 108.139.10.57, 108.139.10.68 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| data.gov.il | 3.171.76.10, 3.171.76.125, 3.171.76.28 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
+| e.data.gov.il | 18.165.98.102, 18.165.98.123, 18.165.98.28 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} | urllib 1 |  |  |
-| media26.bechirot.gov.il | 18.155.192.102, 18.155.192.121, 18.155.192.14 | 270 | 0 | {"404": 270} | browser 270 | 4 | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 2600:9000:215a:2400:1b:8951:5b80:93a1, 2600:9000:215a:2a00:1b:8951:5b80:93a1, 2600:9000:2… | 270 | 0 | {"404": 270} | browser 267, urllib 3 | 1 | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} | urllib 7 |  |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| votes26.bechirot.gov.il | 13.226.38.102, 13.226.38.41, 13.226.38.65 | 55 | 0 | {"404": 55} | browser 55 | 1 | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 18.244.214.127, 18.244.214.54, 18.244.214.65 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
-| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 25 | 18 | {"200": 18, "404": 7} | urllib 25 |  | not found |
+| votes26.bechirot.gov.il | 2600:9000:28a9:2c00:3:c455:d440:93a1, 2600:9000:28a9:4600:3:c455:d440:93a1, 2600:9000:28a… | 55 | 0 | {"404": 55} | browser 51, urllib 4 | 1 | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 18.165.83.108, 18.165.83.124, 18.165.83.78 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
+| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 19 | 16 | {"200": 16, "404": 2, "403": 1} | urllib 19 |  | not found |
 
 ### Pages and scripts that answered
 
@@ -91,24 +96,22 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12… | 200 | כניסה - חשבונות Google |
-| https://www.gov.il/he/pages/chat-config.json | 200 |  |
+| https://www.gov.il/he/pages/_complete.js | 200 |  |
 | https://www.gov.il/he/pages/chat.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/gaPush.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/hfGaEvents.js | 200 |  |
 | https://www.gov.il/he/pages/gtm.js | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour-26 | 200 |  |
-| https://www.gov.il/ruxitagentjs_ICA1589NPRTUVXafhlqrtux_10347260902154543.js | 200 | govil - אתר השירותים והמידע הממשלתי |
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 |  |
-| https://www.gov.il/HomepageWebApi/client-config.js | 200 |  |
 | https://www.gov.il/cdn-cgi/challenge-platform/scripts/jsd/main.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/cdn/chat.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/header-footer.js | 200 |  |
-| https://www.gov.il/govilCoreCloud/header-footer.js?hideSearch=true | 200 |  |
 | https://www.gov.il/pages/main.984b301a425b65f0.js | 200 |  |
 | https://www.gov.il/pages/polyfills.8bb0aa0801d9a987.js | 200 |  |
 | https://www.gov.il/pages/runtime.29beade9a2f4cb8f.js | 200 |  |
 | https://www.gov.il/pages/styles.6fd4737a39597cd8.js | 200 |  |
+| https://www.gov.il/ruxitagentjs_ICA1589NPRTUVXafhlqrtux_10347260902154543.js | 200 |  |
 
 ### Harvested from pages and scripts
 
@@ -163,27 +166,8 @@ Other candidates (in brackets: why not suggested, or what to check):
 - https://www.gov.il/pages/main.984b301a425b65f0.js: 1 links, 0 scripts
   - fragment: `:e.contentPageWebApi,o=null==(a=window.govilRunConfig)?void 0:a.clientId,i='${l}/api/content-pages/${n}?culture=${A}'+(r.chapterIndex?'&chapterIndex=${r.chapterIndex`
   - fragment: `Options:n,shareLabel:r})=>{const[a,l,i]=d();if((0,o().useEffect)(()=>{e&&l('${e}/api/GetSharePageList?culture=he',!1,void 0,t)},[]),null==a\|\|!a.length\|\|i)return null`
-- https://www.gov.il/HomepageWebApi/client-config.js: 2 links, 0 scripts
-  - https://www.gov.il/api/homepage/get
-  - fragment: `window['govilRunConfig'] = {"headerFooterUrl":"/","homePageUrl":"/api/homepage/get","homePageWebApi":"/HomepageWebApi/","showNewSearch":"True","assets`
-- https://www.gov.il/govilCoreCloud/header-footer.js?hideSearch=true: 22 links, 6 scripts
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetHeaderMoreData
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=ar
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=en
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=es
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=fr
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=he
-  - https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=ru
-  - https://sm.gov.il/trends.json
-  - fragment: `MoreDataUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetHeaderMoreData", "analyticsString": "https://analytics.egov.gov.il/an`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=he", "hasIcon": null, "title": "שירו`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=en", "hasIcon": null, "title": "Serv`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=ar", "hasIcon": null, "title": "خدما`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=ru", "hasIcon": null, "title": "Услу`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=es", "hasIcon": null, "title": "Serv`
-  - fragment: `navItemsUrl": "https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture=fr", "hasIcon": null, "title": "Serv`
 
-<details><summary>398 URLs that did not answer with data</summary>
+<details><summary>394 URLs that did not answer with data</summary>
 
 | URL | HTTP | why |
 |---|---|---|
@@ -580,10 +564,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://www.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
 | https://www.gov.il/api/ | 404 | not found |
 | https://www.gov.il/api/GetChatConfig | 404 | not found |
-| https://www.gov.il/api/homepage/get | 404 | not found |
-| https://www.gov.il/govil-home-page/main.d61bc6df1199ea1f.js | 404 | not found |
-| https://www.gov.il/govil-home-page/polyfills.8bb0aa0801d9a987.js | 404 | not found |
-| https://www.gov.il/govil-home-page/runtime.c59f98b8efd4db6a.js | 404 | not found |
-| https://www.gov.il/govil-home-page/styles.6fd4737a39597cd8.js | 404 | not found |
+| https://www.gov.il/he/pages/chat-config.json | 403 |  |
 
 </details>
