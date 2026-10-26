@@ -1,9 +1,9 @@
-## CEC file discovery, 25.10 12:08 Israel time (full, github-hosted)
+## CEC file discovery, 26.10 13:32 Israel time (full, github-hosted)
 
-- **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 4 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
-- **The browser path got past it: yes**: 322 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×322.
+- **WAF: seen** on bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 2 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
+- **The browser path got past it: yes**: 4 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×4.
 
-447 URLs probed in 111 s, 53 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+430 URLs probed in 114 s, 37 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
@@ -16,19 +16,20 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-24T12:47:15+03:00: 1 new, 1 changed, 0 gone
+### Since 2026-10-25T12:08:14+02:00: 2 new, 1 changed, 0 gone
 
 |  | URL | class | what |
 |---|---|---|---|
-| new | https://www.gov.il/he/pages/_complete.js | html | was not probed |
-| changed | https://www.gov.il/ruxitagentjs_ICA1589NPRTUVXafhlqrtux_10347260902154543.js | script | cls: html → script |
+| new | https://www.gov.il/cdn-cgi/challenge-platform/scripts/precursor/main.js | script | was not probed |
+| new | https://www.gov.il/he/pages/chat-config.json | html | was 403 |
+| changed | https://data.gov.il/api/3/action/package_show?id=votes-knesset | data-other | bytes: 29919 → 29495, sha256: 790bd24f1170 → ae348223d793 |
 
 ### Files and pages with data
 
 | class | URL | HTTP | bytes | last-modified | details |
 |---|---|---|---|---|---|
 | data-other | https://data.gov.il/api/3/action/help_show?name=package_show | 200 | 595 |  |  |
-| data-other | https://data.gov.il/api/3/action/package_show?id=votes-knesset | 200 | 29919 |  | json 17 rows |
+| data-other | https://data.gov.il/api/3/action/package_show?id=votes-knesset | 200 | 29495 |  | json 17 rows |
 | results-locality | https://media25.bechirot.gov.il/files/expc.csv | 200 | 154331 | Tue, 08 Nov 2022 15:03:31 GMT | csv 1216 rows; 1215 loc, 1215 counted; letters 2022 (a test file?); 1 double-envelope rows (סמל ישוב 9999); stored: files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
 
 ### Stored files (1; on the ops-reports branch under reports/, locally under the --out folder)
@@ -44,41 +45,23 @@ Other candidates (in brackets: why not suggested, or what to check):
 | host | IPs | probed | answered | status codes | through | WAF | hint |
 |---|---|---|---|---|---|---|---|
 | analytics.egov.gov.il | 147.237.12.35 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| aws-e.data.gov.il | 18.165.98.102, 18.165.98.123, 18.165.98.28 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | bechirot.gov.il | 147.237.12.28 | 3 | 0 | {"404": 3} | browser 3 | 1 | CloudFront (Error from cloudfront) |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | urllib 3 |  | skipped; URLError |
-| data.gov.il | 3.171.76.10, 3.171.76.125, 3.171.76.28 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
-| e.data.gov.il | 18.165.98.102, 18.165.98.123, 18.165.98.28 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| data.gov.il | 3.170.185.105, 3.170.185.24, 3.170.185.59 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
+| e.data.gov.il | 13.226.53.101, 13.226.53.120, 13.226.53.129 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} | urllib 1 |  |  |
-| media26.bechirot.gov.il | 2600:9000:215a:2400:1b:8951:5b80:93a1, 2600:9000:215a:2a00:1b:8951:5b80:93a1, 2600:9000:2… | 270 | 0 | {"404": 270} | browser 267, urllib 3 | 1 | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 18.172.122.24, 18.172.122.43, 18.172.122.65 | 270 | 0 | {"404": 270} | urllib 270 |  | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} | urllib 7 |  |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| votes26.bechirot.gov.il | 2600:9000:28a9:2c00:3:c455:d440:93a1, 2600:9000:28a9:4600:3:c455:d440:93a1, 2600:9000:28a… | 55 | 0 | {"404": 55} | browser 51, urllib 4 | 1 | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 18.165.83.108, 18.165.83.124, 18.165.83.78 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
-| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 19 | 16 | {"200": 16, "404": 2, "403": 1} | urllib 19 |  | not found |
+| votes26.bechirot.gov.il | 13.226.53.120, 13.226.53.62, 13.226.53.70 | 55 | 0 | {"404": 55} | urllib 55 |  | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 2600:9000:2137:2a00:1e:5e2c:7e80:93a1, 2600:9000:2137:3a00:1e:5e2c:7e80:93a1, 2600:9000:2… | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
+| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 19 | 17 | {"200": 17, "404": 2} | urllib 19 |  | not found |
 
 ### Pages and scripts that answered
 
 | URL | HTTP | title / notes |
 |---|---|---|
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/22f3a195-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3b9e911a-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3dc36e20-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/419be3b0-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/432d3185-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/498b48e9-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/70f8bc93-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/840edb33-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/929b50c6-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/9921a347-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/b392b8ee-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/bd22cd14-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c20cdcef-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-… | 200 | כניסה - חשבונות Google |
-| https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-e819… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/22f3a195-3a79… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3b9e911a-2e90… | 200 | כניסה - חשבונות Google |
@@ -97,6 +80,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12… | 200 | כניסה - חשבונות Google |
 | https://www.gov.il/he/pages/_complete.js | 200 |  |
+| https://www.gov.il/he/pages/chat-config.json | 200 |  |
 | https://www.gov.il/he/pages/chat.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/gaPush.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/hfGaEvents.js | 200 |  |
@@ -104,7 +88,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://www.gov.il/he/pages/voting-by-hour | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour-26 | 200 |  |
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 |  |
-| https://www.gov.il/cdn-cgi/challenge-platform/scripts/jsd/main.js | 200 |  |
+| https://www.gov.il/cdn-cgi/challenge-platform/scripts/precursor/main.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/cdn/chat.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/header-footer.js | 200 |  |
 | https://www.gov.il/pages/main.984b301a425b65f0.js | 200 |  |
@@ -115,24 +99,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 ### Harvested from pages and scripts
 
-- https://data.gov.il/api/3/action/package_show?id=votes-knesset: 36 links, 0 scripts
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-e819-4ba9-b159-d68e3566c58b/download/-21-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/22f3a195-3a79-436c-be23-cb606bc7b398/download/-22-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3b9e911a-2e90-4587-b209-84171664056b/download/-23-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/3dc36e20-25d6-4496-ba6a-71d9bc917349/download/-23-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/419be3b0-fd30-455a-afc0-034ec36be990/download/-24-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/432d3185-545a-41d9-8c72-d10ee515919c/download/expbkalpi.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/498b48e9-5af6-474d-b7a4-5ac1e21d3a08/download/-16-2003.xls
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/70f8bc93-8d98-4c20-ad7c-768af713f1c5/download/-17-.xls
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/840edb33-90ac-4176-8ad9-4cdcb8e5caa5/download/-18-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/929b50c6-f455-4be2-b438-ec6af01421f2/download/expc-5.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/9921a347-8466-4ef4-81f9-22523c5c4632/download/-24-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/b392b8ee-ba45-4ea0-bfed-f03a1a36e99c/download/-25-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/bd22cd14-138c-4917-931a-ef628c2a5a30/download/-22-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c20cdcef-4d42-4241-a41b-6ca7ae51002d/download/expcity.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d-45fc-b221-e7635e940c41/download/expbkal20.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc-485d-b160-62df92967c0a/download/-25-.csv
-  - https://aws-e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12-4b90-96cc-916f1b7c1c34/download/-21-.csv
+- https://data.gov.il/api/3/action/package_show?id=votes-knesset: 19 links, 0 scripts
   - https://data.gov.il/api/3/action/help_show?name=package_show
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-e819-4ba9-b159-d68e3566c58b/download/-21-.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/22f3a195-3a79-436c-be23-cb606bc7b398/download/-22-.csv
@@ -141,6 +108,16 @@ Other candidates (in brackets: why not suggested, or what to check):
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/419be3b0-fd30-455a-afc0-034ec36be990/download/-24-.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/432d3185-545a-41d9-8c72-d10ee515919c/download/expbkalpi.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/498b48e9-5af6-474d-b7a4-5ac1e21d3a08/download/-16-2003.xls
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/70f8bc93-8d98-4c20-ad7c-768af713f1c5/download/-17-.xls
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/840edb33-90ac-4176-8ad9-4cdcb8e5caa5/download/-18-.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/929b50c6-f455-4be2-b438-ec6af01421f2/download/expc-5.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/9921a347-8466-4ef4-81f9-22523c5c4632/download/-24-.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/b392b8ee-ba45-4ea0-bfed-f03a1a36e99c/download/-25-.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/bd22cd14-138c-4917-931a-ef628c2a5a30/download/-22-.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c20cdcef-4d42-4241-a41b-6ca7ae51002d/download/expcity.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d-45fc-b221-e7635e940c41/download/expbkal20.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc-485d-b160-62df92967c0a/download/-25-.csv
+  - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12-4b90-96cc-916f1b7c1c34/download/-21-.csv
 - https://www.gov.il/govilCoreCloud/cdn/chat.js: 9 links, 1 scripts
   - https://www.gov.il/api/
   - https://www.gov.il/api/GetChatConfig
@@ -167,7 +144,7 @@ Other candidates (in brackets: why not suggested, or what to check):
   - fragment: `:e.contentPageWebApi,o=null==(a=window.govilRunConfig)?void 0:a.clientId,i='${l}/api/content-pages/${n}?culture=${A}'+(r.chapterIndex?'&chapterIndex=${r.chapterIndex`
   - fragment: `Options:n,shareLabel:r})=>{const[a,l,i]=d();if((0,o().useEffect)(()=>{e&&l('${e}/api/GetSharePageList?culture=he',!1,void 0,t)},[]),null==a\|\|!a.length\|\|i)return null`
 
-<details><summary>394 URLs that did not answer with data</summary>
+<details><summary>393 URLs that did not answer with data</summary>
 
 | URL | HTTP | why |
 |---|---|---|
@@ -564,6 +541,5 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://www.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
 | https://www.gov.il/api/ | 404 | not found |
 | https://www.gov.il/api/GetChatConfig | 404 | not found |
-| https://www.gov.il/he/pages/chat-config.json | 403 |  |
 
 </details>
