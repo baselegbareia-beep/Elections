@@ -1,33 +1,33 @@
 {
- "as_of": "16:44",
+ "as_of": "18:43",
  "date": "27.10.2026",
  "total": {
-  "voters": 482396,
-  "elig": 1015740,
+  "voters": 632589,
+  "elig": 1019390,
   "with": 131,
   "n": 141,
-  "updated": "16:44",
-  "pct": 47.5
+  "updated": "18:43",
+  "pct": 62.1
  },
  "national": {
-  "hour": "16:00",
-  "pct": 55.72
+  "hour": "18:00",
+  "pct": 66.72
  },
  "categories": [
   {
    "name": "יישובים ערביים",
    "counted": true,
-   "pct": 47.7,
-   "voters": 310019,
-   "elig": 650599,
+   "pct": 63.5,
+   "voters": 413708,
+   "elig": 652019,
    "with": 49,
    "n": 50
   },
   {
    "name": "יישובי מיעוטים במועצות אזוריות",
    "counted": true,
-   "pct": 47.7,
-   "voters": 8793,
+   "pct": 63.3,
+   "voters": 11653,
    "elig": 18422,
    "with": 14,
    "n": 14
@@ -35,8 +35,8 @@
   {
    "name": "יישובים דרוזיים",
    "counted": true,
-   "pct": 35.2,
-   "voters": 39912,
+   "pct": 46.6,
+   "voters": 52820,
    "elig": 113228,
    "with": 13,
    "n": 13
@@ -44,8 +44,8 @@
   {
    "name": "יישובים צ'רקסיים",
    "counted": true,
-   "pct": 37.4,
-   "voters": 1415,
+   "pct": 51.5,
+   "voters": 1950,
    "elig": 3783,
    "with": 2,
    "n": 2
@@ -53,26 +53,26 @@
   {
    "name": "יישובים בדואיים בנגב",
    "counted": true,
-   "pct": 58.5,
-   "voters": 68968,
-   "elig": 117990,
+   "pct": 70.2,
+   "voters": 83397,
+   "elig": 118738,
    "with": 9,
    "n": 9
   },
   {
    "name": "יישובים בדואיים בצפון",
    "counted": true,
-   "pct": 48.9,
-   "voters": 26632,
-   "elig": 54509,
+   "pct": 63.3,
+   "voters": 34951,
+   "elig": 55226,
    "with": 19,
    "n": 19
   },
   {
    "name": "יישובים דרוזיים ברמת הגולן",
    "counted": true,
-   "pct": 23.3,
-   "voters": 1895,
+   "pct": 30.4,
+   "voters": 2480,
    "elig": 8148,
    "with": 4,
    "n": 4
@@ -80,8 +80,8 @@
   {
    "name": "יישובים ערביים נוספים (לא בנספח)",
    "counted": true,
-   "pct": 48.0,
-   "voters": 9306,
+   "pct": 63.3,
+   "voters": 12270,
    "elig": 19372,
    "with": 7,
    "n": 7
@@ -89,18 +89,18 @@
   {
    "name": "שבטים בדואיים",
    "counted": true,
-   "pct": 52.1,
-   "voters": 15456,
-   "elig": 29689,
+   "pct": 63.6,
+   "voters": 19360,
+   "elig": 30454,
    "with": 14,
    "n": 23
   },
   {
    "name": "ערים מעורבות",
    "counted": false,
-   "pct": 48.4,
-   "voters": 471786,
-   "elig": 974933,
+   "pct": 57.3,
+   "voters": 559166,
+   "elig": 975492,
    "with": 7,
    "n": 7
   }
