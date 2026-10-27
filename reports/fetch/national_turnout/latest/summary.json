@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:00 UTC",
+ "started": "2026-10-27 14:02 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 32
+   "items": 30
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -219,11 +219,6 @@
      "published": "2026-10-27T11:40:23+00:00",
      "published_il": "13:40",
      "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN"
-    },
-    "כאן 11": {
-     "published": "2026-10-27T04:44:14+00:00",
-     "published_il": "06:44",
-     "title": "ועדת הבחירות: אחוז ההצבעה עד 10:00 עומד על 16.68% - כאן 11"
     },
     "סרוגים": {
      "published": "2026-10-27T09:00:19+00:00",
@@ -518,20 +513,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T04:44:14+00:00",
-   "published_il": "06:44",
-   "title": "ועדת הבחירות: אחוז ההצבעה עד 10:00 עומד על 16.68% - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
-   "figures": [
-    [
-     "10:00",
-     16.68
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T13:29:30+00:00",
    "published_il": "15:29",
@@ -737,6 +718,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "ערוץ 7",
+   "published": "2026-10-27T04:57:00+00:00",
+   "published_il": "06:57",
+   "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7",
+   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55cmhJdDVJaWtGMjlvNUpfbk9zU3VJN0szaW0yUTlocGJPLTNsaS1WbTY4cDRmUzd3WmUxcmJxazdkcEFwWW13Rg?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
     ]
    ]
   },

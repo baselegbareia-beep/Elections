@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 13:49:52 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 14:01:00 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -70,12 +70,12 @@
       </media:content>
     </item>
     <item>
-      <title>עליות בפתיחה בוול סטריט; מניות השבבים ממשיכות לטפס</title>
+      <title>מגמה מעורבת בוול סטריט; מניות השבבים ממשיכות לטפס</title>
       <link>https://www.globes.co.il/news/article.aspx?did=1001560828#utm_source=RSS</link>
       <guid isPermaLink="false">1001560828</guid>
-      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.3% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; בורסת לונדון יורדת בכ-1%; HSBC עקף את רווחי השנה שעברה ב-32%, הכריז על רכישה עצמית של מניות, אך המניה יורדת &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
+      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.2% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; בורסת לונדון יורדת בכ-1%; HSBC עקף את רווחי השנה שעברה ב-32%, הכריז על רכישה עצמית של מניות, אך המניה יורדת &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
       <author>שירות גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 13:35:00 GMT</pubDate>
+      <pubDate>Tue, 27 Oct 2026 14:00:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בורסות_עולם.tag">בורסות עולם</category>
       <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
       <category domain="https://www.globes.co.il/news/בורסות_אירופה.tag">בורסות אירופה</category>
@@ -83,6 +83,22 @@
       <category domain="https://www.globes.co.il/news/נפט.tag">נפט</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1765899591/direct/AP22040486850744_oftjdv.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>וול סטריט / צילום: ap, Mary Altaffer</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ההוצאות מזנקות, הקניונים מתמלאים: כך הישראלים מבלים ביום הבחירות</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561001#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561001</guid>
+      <description>יום השבתון לרגל הבחירות לכנסת ה-26 מלווה בזינוק בהוצאות הישראלים, שהגיעו ליותר מ-731 מיליון שקל בכרטיסי חיוב בתוך שש שעות - עלייה של 37.5% לעומת הבחירות הקודמות &amp;#8226; בקניוני עזריאלי מדווחים על תנועת מבקרים הגבוהה פי שלושה מבימים רגילים, ובקניון גלילות נרשמו יותר מ-17 אלף כניסות &amp;#8226; מנגד, נתוני קאונטרייט מצביעים על ירידה של 20% בתנועת המבקרים לעומת הבחירות ב-2022</description>
+      <author>תומר פדובה וג'ניפר סילון</author>
+      <pubDate>Tue, 27 Oct 2026 13:59:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/התנהגות_צרכנים.tag">התנהגות צרכנים</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/צרכנות.tag">צרכנות</category>
+      <category domain="https://www.globes.co.il/news/צרכנים.tag">צרכנים</category>
+      <category domain="https://www.globes.co.il/news/קניונים.tag">קניונים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
       </media:content>
     </item>
     <item>
@@ -292,24 +308,6 @@
       <category domain="https://www.globes.co.il/news/אינסטגרם_Instagram.tag">אינסטגרם (Instagram)</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1633423435/direct/shutterstock_1135795634_vqxwlz.jpg" type="image/jpg" expression="full" width="1600" height="784">
         <media:description>אילוסטרציה: Shutterstock</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>מהפרגוד ועד התוצאות: המסע שעובר הפתק שלכם בבחירות</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560839#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560839</guid>
-      <description>הכנסתם פתק למעטפה, שלשלתם אותה לתיבה - ואז מה קורה? &amp;#8226; חזרנו עם ההסבר המלא על אופן ספירת הקולות, המעבר בין הוועדות וחלוקת המנדטים הסופית &amp;#8226; כל מה שצריך לדעת רגע אחרי שמצביעים &amp;#8226; המשרוקית של גלובס</description>
-      <author>אורי רוזן</author>
-      <pubDate>Tue, 27 Oct 2026 07:01:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <category domain="https://www.globes.co.il/news/קלפיות.tag">קלפיות</category>
-      <category domain="https://www.globes.co.il/news/ועדת_הבחירות_המרכזית.tag">ועדת הבחירות המרכזית</category>
-      <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
-      <category domain="https://www.globes.co.il/news/מנדטים.tag">מנדטים</category>
-      <category domain="https://www.globes.co.il/news/הכנסת.tag">הכנסת</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597469756/old/1104496.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>פתקיות בקלפי / צילום: איל יצהר</media:description>
       </media:content>
     </item>
   </channel>
