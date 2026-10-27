@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 18:32 UTC",
+ "started": "2026-10-27 18:35 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 68
+   "items": 70
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -235,9 +235,9 @@
      "title": "היישובים שבפסגה, ואלה שבתחתית: נתוני הביניים - ומפת הבחירות"
     },
     "סרוגים": {
-     "published": "2026-10-27T13:06:35+00:00",
-     "published_il": "15:06",
-     "title": "נתניהו בלחץ: \"אין חגיגות! אין עוגות! אין כלום!\". צפו"
+     "published": "2026-10-27T13:11:20+00:00",
+     "published_il": "15:11",
+     "title": "שיא בהוצאות: כמה הישראלים בזבזו ביום הבחירות בכרטיסי אשראי?"
     }
    },
    "68.1": {
@@ -245,13 +245,6 @@
      "published": "2026-10-27T14:06:14+00:00",
      "published_il": "16:06",
      "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום"
-    }
-   },
-   "6": {
-    "סרוגים": {
-     "published": "2026-10-27T13:06:35+00:00",
-     "published_il": "15:06",
-     "title": "נתניהו בלחץ: \"אין חגיגות! אין עוגות! אין כלום!\". צפו"
     }
    }
   },
@@ -676,6 +669,20 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "כאן 11",
+   "published": "2026-10-27T16:25:55+00:00",
+   "published_il": "18:25",
+   "title": "שיעור הצבעה היסטורי: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - כאן 11",
+   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T16:52:10+00:00",
    "published_il": "18:52",
@@ -713,20 +720,6 @@
     [
      "18:00",
      66.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T04:44:14+00:00",
-   "published_il": "06:44",
-   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
     ]
    ]
   },
@@ -941,24 +934,6 @@
     [
      "14:00",
      44.9
-    ]
-   ]
-  },
-  {
-   "feed": "סרוגים",
-   "outlet": "סרוגים",
-   "published": "2026-10-27T13:06:35+00:00",
-   "published_il": "15:06",
-   "title": "נתניהו בלחץ: \"אין חגיגות! אין עוגות! אין כלום!\". צפו",
-   "link": "https://www.srugim.co.il/101014527-נתניהו-בלחץ-אין-חגיגות-אין-עוגות-אין",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ],
-    [
-     "14:00",
-     6.0
     ]
    ]
   },
