@@ -84,25 +84,6 @@
           <guid isPermaLink="false">1382010</guid>
         </item>
         <item>
-          <title>עמית סגל עם בשורה מפתיעה לגוש השינוי</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1382007</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151822&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>צילום מסך ערוץ 12</Photographer>
-          <pubDate>Tue, 27 Oct 2026 15:44:52 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:44:52 GMT</UpdateDate>
-          <itemID>1382007</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1382007</guid>
-        </item>
-        <item>
           <title>בעקבות השטפונות - החסימה הוחמרה: כביש 90 חסום החל מים המלח</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382006</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -386,6 +367,25 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381962</guid>
+        </item>
+        <item>
+          <title>עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1381961</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151736&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>מרק ישראל סלם</Photographer>
+          <pubDate>Tue, 27 Oct 2026 13:01:38 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 13:01:38 GMT</UpdateDate>
+          <itemID>1381961</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1381961</guid>
         </item>
       </channel>
     </rss>
