@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 14:29:13 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 14:32:12 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -67,6 +67,20 @@
       <category domain="https://www.globes.co.il/news/אוניברסיטת_תל_אביב.tag">אוניברסיטת תל אביב</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597446532/old/1127001.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>מכון ויצמן רחובות / צילום: איל יצהר</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ברקע לבחירות: השקל מתחזק בחדות מול הדולר</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561005#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561005</guid>
+      <description>במקביל לשיעור ההצבעה הגבוה שנרשם מאז ומעולם בישראל, שער הדולר-שקל יורד בחדות ושובר מתחת לרף ה-3.03 שקלים &amp;#8226; אלו הסיבות האפשריות לכך</description>
+      <author>רם מורי</author>
+      <pubDate>Tue, 27 Oct 2026 14:28:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/דולר_שקל.tag">דולר שקל</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/שקל.tag">שקל</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1706459327/COT_Pic/800_sf055i.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>השקל / אילוסטרציה: טלי בוגדנובסקי (נוצר בעזרת adobe firefly)</media:description>
       </media:content>
     </item>
     <item>
@@ -281,25 +295,6 @@
       <category domain="https://www.globes.co.il/news/דמוקרטיה.tag">דמוקרטיה</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793089773/AP26300199760904_fwjkhp.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>מצביעה בקלפי, היום / צילום: ap, Ohad Zwigenberg</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>טעות לעולם חוזרת: הישראלים ברחו ממנו, ואז התחיל הראלי</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560874#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560874</guid>
-      <description>אחרי שפדיונות הענק ממדד S&amp;amp;P 500 הגיעו ל-33 מיליארד שקל בשנה החולפת, בחודשיים האחרונים הצבירה בו חזרה להיות חיובית &amp;#8226; בגופי הגמל מזהים בלימה בהסטת ההשקעות לישראל וזליגה מחודשת למדדים הזרים, אבל עדיין מסייגים: "מוקדם לקרוא לזה קאמבק"</description>
-      <author>נתנאל אריאל</author>
-      <pubDate>Tue, 27 Oct 2026 04:07:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/מדד_S&amp;P_500.tag">מדד S&amp;P 500</category>
-      <category domain="https://www.globes.co.il/news/חיסכון_פנסיוני.tag">חיסכון פנסיוני</category>
-      <category domain="https://www.globes.co.il/news/קופות_גמל.tag">קופות גמל</category>
-      <category domain="https://www.globes.co.il/news/קרנות_השתלמות.tag">קרנות השתלמות</category>
-      <category domain="https://www.globes.co.il/news/קרנות_פנסיה.tag">קרנות פנסיה</category>
-      <category domain="https://www.globes.co.il/news/פנסיה.tag">פנסיה</category>
-      <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
-      <category domain="https://www.globes.co.il/news/דולר_שקל.tag">דולר שקל</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1783514760/COT_Pic/shutterstock_2649003815_kp5rlq.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>מדד S&amp;P 500 / צילום: Shutterstock</media:description>
       </media:content>
     </item>
   </channel>
