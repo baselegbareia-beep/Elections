@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 18:35 UTC",
+ "started": "2026-10-27 18:37 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 70
+   "items": 72
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -87,10 +87,20 @@
      "published_il": "06:44",
      "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
     },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T15:34:30+00:00",
+     "published_il": "17:34",
+     "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية"
+    },
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
      "published_il": "17:02",
      "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב"
+    },
+    "רדיו דרום": {
+     "published": "2026-10-27T13:06:49+00:00",
+     "published_il": "15:06",
+     "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום"
     },
     "ynet": {
      "published": "2026-10-27T15:01:55+00:00",
@@ -219,6 +229,11 @@
      "published_il": "15:01",
      "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב"
     },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
+    },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
      "published_il": "15:06",
@@ -263,13 +278,6 @@
    }
   },
   "17:00": {
-   "41.5": {
-    "נתניה נט": {
-     "published": "2026-10-27T15:29:19+00:00",
-     "published_il": "17:29",
-     "title": "הפער מתרחב: רק 41.5% הצביעו בנתניה עד 17:00 - נתניה נט"
-    }
-   },
    "50": {
     "ישראל": {
      "published": "2026-10-27T16:59:15+00:00",
@@ -417,20 +425,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T11:10:00+00:00",
-   "published_il": "13:10",
-   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "JDN",
    "published": "2026-10-27T11:13:46+00:00",
    "published_il": "13:13",
@@ -440,6 +434,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "הידברות",
+   "published": "2026-10-27T11:10:00+00:00",
+   "published_il": "13:10",
+   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -473,6 +481,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T15:34:30+00:00",
+   "published_il": "17:34",
+   "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UN0RRSnBZRkF6ZU5scWlBckhubXUxMVFua0FQVXRIR2FoY3paVUhCdmIzZ0JvdDFYVTN1UHY5akw1SVpLcEgyMzA3eXVBSGFa?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T13:01:38+00:00",
    "published_il": "15:01",
@@ -496,6 +518,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -538,20 +574,6 @@
     [
      "12:00",
      31.5
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "נתניה נט",
-   "published": "2026-10-27T15:29:19+00:00",
-   "published_il": "17:29",
-   "title": "הפער מתרחב: רק 41.5% הצביעו בנתניה עד 17:00 - נתניה נט",
-   "link": "https://news.google.com/rss/articles/CBMi0AJBVV95cUxNbEdVdEdXRXJpZk5wOGlKQjN1VHdrYXczVS1KRmluSEFOQWZqcC03eGtITkk2eXFhWFlBV3ZSMWNtVG1ZNkdhdjVVZUpLRkN4ZVNfZUtiTnhEdERMM1k1c0hfOEVCT3dlWnNQX3RNdjd4c3hWd2Y0SENvcjRfMm41Q3hPenpzdjVjcGo0VUJpVEdOR1k4V1JKQ25jYkRjcmxxbEdseExMMEtVU0ktNVBuRU5YMW5QU0hWS0YyYWIxVmRfcERCRHBqd2pJWTUwcEVaZWJLaUpwLTc4NTlONjVUcVNkdGpBdUNRSHdidENrWTFyVDBmU1NNRmtUa293X2xnRElURlAxV3YwenpkZGhpX1J1Uk15QmdHMS1FUXJmWDF6SV9nWWNmeEo2cUs3WmwwZkNVRU1jSHAxWFJwRVJnaDVKYW16SmtNQUE5WkxnMFE?oc=5",
-   "figures": [
-    [
-     "17:00",
-     41.5
     ]
    ]
   },
@@ -668,12 +690,12 @@
    ]
   },
   {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T16:25:55+00:00",
-   "published_il": "18:25",
-   "title": "שיעור הצבעה היסטורי: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "רדיו דרום",
+   "published": "2026-10-27T13:06:49+00:00",
+   "published_il": "15:06",
+   "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום",
+   "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
    "figures": [
     [
      "16:00",
@@ -720,6 +742,20 @@
     [
      "18:00",
      66.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "כאן 11",
+   "published": "2026-10-27T04:44:14+00:00",
+   "published_il": "06:44",
+   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
+   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
