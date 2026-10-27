@@ -1,18 +1,18 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 15:03 UTC",
+ "started": "2026-10-27 15:06 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 86
+   "items": 95
   },
   {
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 36
+   "items": 35
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -41,8 +41,8 @@
   {
    "name": "N12",
    "url": "https://rcs.mako.co.il/rss/news-israel.xml",
-   "http": null,
-   "error": "TimeoutError: The read operation timed out"
+   "http": 200,
+   "items": 20
   },
   {
    "name": "ישראל היום",
@@ -108,6 +108,11 @@
      "published": "2026-10-27T11:56:05+00:00",
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
+    },
+    "אמס": {
+     "published": "2026-10-27T13:14:12+00:00",
+     "published_il": "15:14",
+     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
     },
     "אפוק": {
      "published": "2026-10-27T13:50:02+00:00",
@@ -260,7 +265,12 @@
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
      "published_il": "17:02",
-     "title": "נכון לשעה 16:00: 55.7% - האחוז ההצבעה הגדול בהיסטוריה של ישראל"
+     "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל"
+    },
+    "JDN": {
+     "published": "2026-10-27T15:05:10+00:00",
+     "published_il": "17:05",
+     "title": "שיא היסטורי חסר תקדים: 55.7% הצבעה נרשמו עד השעה 16:00"
     }
    }
   }
@@ -445,6 +455,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -660,6 +684,20 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T10:58:42+00:00",
    "published_il": "12:58",
@@ -803,7 +841,7 @@
    "outlet": "מעריב",
    "published": "2026-10-27T15:02:20+00:00",
    "published_il": "17:02",
-   "title": "נכון לשעה 16:00: 55.7% - האחוז ההצבעה הגדול בהיסטוריה של ישראל",
+   "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל",
    "link": "https://www.maariv.co.il/breaking-news/article-1381990",
    "figures": [
     [
@@ -961,6 +999,20 @@
     [
      "10:00",
      16.68
+    ]
+   ]
+  },
+  {
+   "feed": "JDN",
+   "outlet": "JDN",
+   "published": "2026-10-27T15:05:10+00:00",
+   "published_il": "17:05",
+   "title": "שיא היסטורי חסר תקדים: 55.7% הצבעה נרשמו עד השעה 16:00",
+   "link": "https://www.jdn.co.il/news/2755901/",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
