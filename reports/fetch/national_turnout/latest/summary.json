@@ -1,18 +1,18 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 15:13 UTC",
+ "started": "2026-10-27 15:16 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 88
+   "items": 90
   },
   {
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 37
+   "items": 36
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -94,15 +94,15 @@
      "published_il": "15:00",
      "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 14:00 עומד על 44.9%, הגבוה ביותר מאז בחירות 1973 - אתר החדשות דבר"
     },
-    "מעריב": {
-     "published": "2026-10-27T13:01:38+00:00",
-     "published_il": "15:01",
-     "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב"
-    },
     "רשת 13": {
      "published": "2026-10-27T13:57:05+00:00",
      "published_il": "15:57",
      "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
+    },
+    "מעריב": {
+     "published": "2026-10-27T13:01:38+00:00",
+     "published_il": "15:01",
+     "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב"
     },
     "חרדים10": {
      "published": "2026-10-27T11:56:05+00:00",
@@ -265,7 +265,7 @@
     "ynet": {
      "published": "2026-10-27T15:01:55+00:00",
      "published_il": "17:01",
-     "title": "55.7% הצביעו עד השעה 16:00"
+     "title": "55.7% הצביעו עד השעה 16:00: \"הכי גדול שהיה\""
     },
     "גלובס": {
      "published": "2026-10-27T15:02:00+00:00",
@@ -383,20 +383,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "מעריב",
-   "published": "2026-10-27T13:01:38+00:00",
-   "published_il": "15:01",
-   "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9sd29GdWM2aTN2WTFhMG9RZUx5V0RHYTFiZEY4Qk1zckdycFZkT1R4X29Cd2txTjY4WmVLYW00Qy1XbWstRmJ5YjNKQ0N5Q2RYM2lYSXd2cHBfY3ZuT1Zkb0EwNkg?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "JDN",
    "published": "2026-10-27T11:40:23+00:00",
    "published_il": "13:40",
@@ -430,6 +416,20 @@
    "published_il": "15:57",
    "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "מעריב",
+   "published": "2026-10-27T13:01:38+00:00",
+   "published_il": "15:01",
+   "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9sd29GdWM2aTN2WTFhMG9RZUx5V0RHYTFiZEY4Qk1zckdycFZkT1R4X29Cd2txTjY4WmVLYW00Qy1XbWstRmJ5YjNKQ0N5Q2RYM2lYSXd2cHBfY3ZuT1Zkb0EwNkg?oc=5",
    "figures": [
     [
      "14:00",
@@ -806,7 +806,7 @@
    "outlet": "ynet",
    "published": "2026-10-27T15:01:55+00:00",
    "published_il": "17:01",
-   "title": "55.7% הצביעו עד השעה 16:00",
+   "title": "55.7% הצביעו עד השעה 16:00: \"הכי גדול שהיה\"",
    "link": "https://www.ynet.co.il/news/article/sypynnr2zx",
    "figures": [
     [
