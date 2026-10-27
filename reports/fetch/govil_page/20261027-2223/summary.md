@@ -14,10 +14,10 @@
 
 | title | URL | HTTP | bytes | last-modified | saved |
 |---|---|---|---|---|---|
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 19:10:55 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 19:10:56 GMT |  |
 | קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 19:10:56 GMT |  |
 | קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx | 200 | 648119 | Tue, 27 Oct 2026 19:10:55 GMT |  |
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.xlsx | 200 | 695359 | Tue, 27 Oct 2026 19:10:56 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.xlsx | 200 | 695359 | Tue, 27 Oct 2026 19:10:55 GMT |  |
 | קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_20.Csv | 403 | 0 | None | HTTP 403 |
 
 ## Every link
