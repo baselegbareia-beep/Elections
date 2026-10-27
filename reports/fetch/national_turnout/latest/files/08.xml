@@ -12,7 +12,7 @@
         <atom:link href="https://api.srugim.news/v1/rss/articles/latest/rss2" rel="self" type="application/rss+xml"/>
         <atom:link href="https://api.srugim.news/v1/websub/rss-articles/latest" rel="hub"/>
         <item>
-            <title><![CDATA[בעיצומן של הבחירות: שלמה פילבר באמירה דרמטית ]]></title>
+            <title><![CDATA[בעיצומן של הבחירות: שלמה פילבר בהודעה דרמטית ]]></title>
             <link>https://www.srugim.co.il/101014530-בעיצומן-של-הבחירות-שלמה-פילבר-באמירה</link>
             <guid>https://www.srugim.co.il/101014530-בעיצומן-של-הבחירות-שלמה-פילבר-באמירה</guid>
             <pubDate>Tue, 27 Oct 2026 13:35:12 GMT</pubDate>

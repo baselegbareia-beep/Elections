@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 13:36:01 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 13:38:51 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -67,6 +67,22 @@
       <category domain="https://www.globes.co.il/news/אוניברסיטת_תל_אביב.tag">אוניברסיטת תל אביב</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597446532/old/1127001.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>מכון ויצמן רחובות / צילום: איל יצהר</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>עליות בפתיחה בוול סטריט; מניות השבבים ממשיכות לטפס</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560828#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560828</guid>
+      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.3% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; בורסת לונדון יורדת בכ-1%; HSBC עקף את רווחי השנה שעברה ב-32%, הכריז על רכישה עצמית של מניות, אך המניה יורדת &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
+      <author>שירות גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 13:35:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בורסות_עולם.tag">בורסות עולם</category>
+      <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
+      <category domain="https://www.globes.co.il/news/בורסות_אירופה.tag">בורסות אירופה</category>
+      <category domain="https://www.globes.co.il/news/בורסות_אסיה.tag">בורסות אסיה</category>
+      <category domain="https://www.globes.co.il/news/נפט.tag">נפט</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1765899591/direct/AP22040486850744_oftjdv.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>וול סטריט / צילום: ap, Mary Altaffer</media:description>
       </media:content>
     </item>
     <item>
@@ -294,29 +310,6 @@
       <category domain="https://www.globes.co.il/news/הכנסת.tag">הכנסת</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597469756/old/1104496.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>פתקיות בקלפי / צילום: איל יצהר</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>מנהל ההשקעות שמסמן מניה אחת שתזנק ב־50% "בחישוב שמרני"</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560870#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560870</guid>
-      <description>כשעמית רוזנצוויג, מנהל השקעות מתמיר פישמן, מסתכל על הבורסה המקומית, הוא מחפש הזדמנויות ספציפיות, "כי מניות בודדות סוחבות את המדדים הגדולים" &amp;#8226; הוא לא שותף לחששות מבועה בוול סטריט: "השוק לא יקר" &amp;#8226; ואוהב מאוד את מניית השבבים פריורטק</description>
-      <author>נתנאל אריאל</author>
-      <pubDate>Tue, 27 Oct 2026 04:06:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/המלצות_אנליסטים.tag">המלצות אנליסטים</category>
-      <category domain="https://www.globes.co.il/news/תחזיות_האנליסטים.tag">תחזיות האנליסטים</category>
-      <category domain="https://www.globes.co.il/news/תחזית_שווקים.tag">תחזית שווקים</category>
-      <category domain="https://www.globes.co.il/news/תמיר_פישמן.tag">תמיר פישמן</category>
-      <category domain="https://www.globes.co.il/news/פריורטק.tag">פריורטק</category>
-      <category domain="https://www.globes.co.il/news/מנהלי_השקעות.tag">מנהלי השקעות</category>
-      <category domain="https://www.globes.co.il/news/תיק_השקעות.tag">תיק השקעות</category>
-      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
-      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
-      <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
-      <category domain="https://www.globes.co.il/news/שוק_ההון.tag">שוק ההון</category>
-      <category domain="https://www.globes.co.il/news/המומלצות.tag">המומלצות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793017848/%D7%AA%D7%99%D7%A7_%D7%94%D7%A9%D7%A7%D7%A2%D7%95%D7%AA_800_ocinsx.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>עמית רוזנצוויג, מנהל השקעות בבית ההשקעות תמיר פישמן / צילום: באדיבות תמיר פישמן</media:description>
       </media:content>
     </item>
   </channel>
