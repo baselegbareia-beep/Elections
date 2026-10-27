@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 20:30:21 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 20:33:20 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -31,6 +31,20 @@
       <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1785421326/800_oexleg.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>בנימין נתניהו וגדי איזנקוט / צילום: נועם מושקוביץ-דוברות הכנסת, תמר מצפי</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>המפלגה שקרסה וההפתעה הגדולה: מה למדנו ממדגמי הטלוויזיה?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561026#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561026</guid>
+      <description>המדגמים של כלי התקשורת מציגים את תמונת המנדטים הראשונה אחרי סגירת הקלפיות &amp;#8226; מי מוביל, היכן נרשמו הפערים הגדולים בין הערוצים ואילו מפלגות עדיין מתנדנדות סביב אחוז החסימה?</description>
+      <author>יובל אינהורן וצוות המשרוקית של גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 20:29:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/סקר_הסקרים.tag">סקר הסקרים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>
+        </media:description>
       </media:content>
     </item>
     <item>
@@ -63,6 +77,22 @@
       <category domain="https://www.globes.co.il/news/שקל.tag">שקל</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1706459327/COT_Pic/800_sf055i.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>השקל / אילוסטרציה: טלי בוגדנובסקי (נוצר בעזרת adobe firefly)</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>מהפך בפולימרקט: המומנטום של איזנקוט נחלש, נתניהו מתחזק</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561029#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561029</guid>
+      <description>לאחר חודשים שבהם הוביל יו"ר ישר! בפער ניכר, שוק ההימורים הבינלאומי פולימרקט מציג צמצום פערים וזינוק בסיכוייו של ראש הממשלה נתניהו להמשיך בתפקידו &amp;#8226; על רקע זה, הערכות כי המו"מ הקואליציוני והיעדר הכרעה בין הגושים הם שיכריעו את הזהות של ראש הממשלה הבא</description>
+      <author>תומר שמאי</author>
+      <pubDate>Tue, 27 Oct 2026 20:30:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/פולימרקט.tag">פולימרקט</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/גדי_איזנקוט.tag">גדי איזנקוט</category>
+      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
+      <category domain="https://www.globes.co.il/news/קואליציה.tag">קואליציה</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792593315/shutterstock_2804301013_obmnnl.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>פלטפורמת פולימרקט / צילום: Shutterstock</media:description>
       </media:content>
     </item>
     <item>
@@ -259,43 +289,6 @@
       <category domain="https://www.globes.co.il/news/ירדן.tag">ירדן</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1781534853/direct/2-3-800_hih9km.png" type="image/png" expression="full" width="800" height="392">
         <media:description>נשיא ארה''ב דונלד טראמפ ומוג'תבא חמינאי, המנהיג העליון של איראן / צילום: AP</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>אנבידיה תשקיע 3 מיליארד דולר במטא. מה מתכננות שתי הענקיות?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560955#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560955</guid>
-      <description>ענקית השבבים אנבידיה הודיעה על השקעה במטא, שמקדמת גיוס הון של 97.5 מיליארד דולר למימון תשתיות בינה מלאכותית &amp;#8226; שיתוף-הפעולה בין החברות יתמקד בשיפור ביצועי מודלי Muse על גבי תשתיות אנבידיה ובפיתוח סוכני AI אישיים למיליארדי משתמשים</description>
-      <author>ליאם ריזמן</author>
-      <pubDate>Tue, 27 Oct 2026 12:02:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/אנבידיה.tag">אנבידיה</category>
-      <category domain="https://www.globes.co.il/news/מטא_META.tag">מטא (META)</category>
-      <category domain="https://www.globes.co.il/news/פייסבוק.tag">פייסבוק</category>
-      <category domain="https://www.globes.co.il/news/טכנולוגיה_גיוסים_והשקעות.tag">טכנולוגיה: גיוסים והשקעות</category>
-      <category domain="https://www.globes.co.il/news/טכנולוגיה_בינה_מלאכותית.tag">טכנולוגיה: בינה מלאכותית</category>
-      <category domain="https://www.globes.co.il/news/סוכני_AI.tag">סוכני AI</category>
-      <category domain="https://www.globes.co.il/news/טכנולוגיה_ענקיות_הטכנולוגיה.tag">טכנולוגיה: ענקיות הטכנולוגיה</category>
-      <category domain="https://www.globes.co.il/news/גיוס_הון.tag">גיוס הון</category>
-      <category domain="https://www.globes.co.il/news/גנסן_הואנג.tag">ג'נסן הואנג</category>
-      <category domain="https://www.globes.co.il/news/מארק_צוקרברג.tag">מארק צוקרברג</category>
-      <category domain="https://www.globes.co.il/news/טכנולוגיה_שבבים.tag">טכנולוגיה: שבבים</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793104524/70f26f50-00c5-433a-8d45-1fe95eb80dcd.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>מארק צוקרברג, מנכ''ל מטא, וג'נסן הואנג, מנכ''ל אנבידיה / צילום: Nvidia</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>מיליארדי שקלים ממתינים ברשות המסים: כך תממשו את זכאותכם עד סוף השנה</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560852#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560852</guid>
-      <description>ב־1 בינואר תתיישן שנת המס 2020 ואיתה הזכות לדרוש החזרים &amp;#8226; ברשות המסים מדווחים כי כ־90% מהבקשות מסתיימות בהחזר כספי בפועל, בתוספת ריבית והצמדה כחוק &amp;#8226; מי עשוי להיות זכאי, ממה מומלץ להיזהר, ואיך בודקים את הזכאות בבטחה לפני הגשת הדוח?</description>
-      <author>אלה לוי־וינריב</author>
-      <pubDate>Tue, 27 Oct 2026 10:25:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/החזרי_מס.tag">החזרי מס</category>
-      <category domain="https://www.globes.co.il/news/רשות_המסים.tag">רשות המסים</category>
-      <category domain="https://www.globes.co.il/news/מס_הכנסה.tag">מס הכנסה</category>
-      <category domain="https://www.globes.co.il/news/גלובס_עושה_סדר.tag">גלובס עושה סדר</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1727693061/direct/124A4751_hops0x.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>שי אהרונוביץ', מנכ''ל רשות המסים / צילום: יוסי זמיר</media:description>
       </media:content>
     </item>
   </channel>
