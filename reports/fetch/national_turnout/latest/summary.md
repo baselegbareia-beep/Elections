@@ -1,4 +1,4 @@
-# National turnout as the news reports it (2026-10-27 19:53 UTC)
+# National turnout as the news reports it (2026-10-27 19:55 UTC)
 
 | source | HTTP | items | error |
 |---|---|---|---|
