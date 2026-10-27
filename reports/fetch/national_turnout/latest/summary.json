@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 21:41 UTC",
+ "started": "2026-10-27 21:44 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 78
+   "items": 84
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -131,11 +131,6 @@
      "published": "2026-10-27T18:54:51+00:00",
      "published_il": "20:54",
      "title": "שעה לסגירת הקלפיות: נתוני ההצבעה נחשפים"
-    },
-    "JDN": {
-     "published": "2026-10-27T19:07:10+00:00",
-     "published_il": "21:07",
-     "title": "זינוק היסטורי בהצבעה בבחירות: סולברג הכריע שעות ההצבעה לא יאורכו"
     }
    }
   },
@@ -175,9 +170,14 @@
      "published_il": "23:12",
      "title": "77.7% הצביעו עד השעה 22:00 - 5,695,682 איש"
     },
+    "JDN": {
+     "published": "2026-10-27T21:41:06+00:00",
+     "published_il": "23:41",
+     "title": "שיא חדש בהשתתפות בבחירות: 77.7% הצביעו עד סגירת הקלפיות ב-22:00"
+    },
     "גלובס": {
-     "published": "2026-10-27T21:10:00+00:00",
-     "published_il": "23:10",
+     "published": "2026-10-27T21:41:00+00:00",
+     "published_il": "23:41",
      "title": "שיעור ההצבעה עומד על 77.7% - הגבוה ביותר מאז 2001"
     }
    }
@@ -341,20 +341,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T19:10:37+00:00",
-   "published_il": "21:10",
-   "title": "שיעור ההצבעה מזנק: 74.3% הצביעו עד השעה 20:00 - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PS0tRUlAwZ2dIM0VzY2hkcjdvZzZQNk5XNXc0RkF2aGdJU0FWcDhNNzlCSUw0UmhmQWxhU0ZfNm1vWFFuRUs2TERTeWlTcXI5ZERN?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "כאן 11",
    "published": "2026-10-27T15:01:24+00:00",
    "published_il": "17:01",
@@ -378,6 +364,20 @@
     [
      "22:00",
      77.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "הידברות",
+   "published": "2026-10-27T19:10:37+00:00",
+   "published_il": "21:10",
+   "title": "שיעור ההצבעה מזנק: 74.3% הצביעו עד השעה 20:00 - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PS0tRUlAwZ2dIM0VzY2hkcjdvZzZQNk5XNXc0RkF2aGdJU0FWcDhNNzlCSUw0UmhmQWxhU0ZfNm1vWFFuRUs2TERTeWlTcXI5ZERN?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -677,20 +677,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T04:38:00+00:00",
-   "published_il": "06:38",
-   "title": "74.3% הצביעו עד 20:00 - הכי גבוה מאז 1988; שעת ההצבעה לא תוארך - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5UUVgyRzY5ZTc1Ym1KdFZEZzFMMGhYT09lUUV4UWU3UFBrZWJvbmEwMTA0Q21RTU5pSnBBM1lfNnY4MXNlbDJJT2FsS1VkeDRUbUlGb0FfVFZBd3NUSjlYUXJB?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T15:02:20+00:00",
    "published_il": "17:02",
@@ -700,6 +686,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "YNET",
+   "published": "2026-10-27T04:38:00+00:00",
+   "published_il": "06:38",
+   "title": "74.3% הצביעו עד 20:00 - הכי גבוה מאז 1988; שעת ההצבעה לא תוארך - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5UUVgyRzY5ZTc1Ym1KdFZEZzFMMGhYT09lUUV4UWU3UFBrZWJvbmEwMTA0Q21RTU5pSnBBM1lfNnY4MXNlbDJJT2FsS1VkeDRUbUlGb0FfVFZBd3NUSjlYUXJB?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -958,22 +958,22 @@
   {
    "feed": "JDN",
    "outlet": "JDN",
-   "published": "2026-10-27T19:07:10+00:00",
-   "published_il": "21:07",
-   "title": "זינוק היסטורי בהצבעה בבחירות: סולברג הכריע שעות ההצבעה לא יאורכו",
-   "link": "https://www.jdn.co.il/news/2756000/",
+   "published": "2026-10-27T21:41:06+00:00",
+   "published_il": "23:41",
+   "title": "שיא חדש בהשתתפות בבחירות: 77.7% הצביעו עד סגירת הקלפיות ב-22:00",
+   "link": "https://www.jdn.co.il/news/2756067/",
    "figures": [
     [
-     "20:00",
-     74.3
+     "22:00",
+     77.7
     ]
    ]
   },
   {
    "feed": "גלובס",
    "outlet": "גלובס",
-   "published": "2026-10-27T21:10:00+00:00",
-   "published_il": "23:10",
+   "published": "2026-10-27T21:41:00+00:00",
+   "published_il": "23:41",
    "title": "שיעור ההצבעה עומד על 77.7% - הגבוה ביותר מאז 2001",
    "link": "https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS",
    "figures": [

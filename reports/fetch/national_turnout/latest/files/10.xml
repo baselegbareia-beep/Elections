@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 21:41:01 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 21:43:41 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -36,7 +36,7 @@
       <guid isPermaLink="false">1001560922</guid>
       <description>ערוצי הטלוויזיה פרסמו את המדגמים שלהם ולפיהם מסתמן כי אין לא התקבלה הכרעה: למפלגות הקואליציה הנוכחית בין 50 ל-60 מנדטים, ולגוש השינוי ללא המפלגות הערביות, בין 43 ל-53 &amp;#8226; המפלגות הערביות עם נתון נדיר של 17-18 &amp;#8226; 5.69 מיליון ישראלים הצביעו עד השעה 22:00, כ-77.7% הצבעה &amp;#8226; עדכונים שוטפים</description>
       <author>שירות גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 21:10:00 GMT</pubDate>
+      <pubDate>Tue, 27 Oct 2026 21:41:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
       <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
       <category domain="https://www.globes.co.il/news/קלפיות.tag">קלפיות</category>
@@ -48,21 +48,17 @@
       </media:content>
     </item>
     <item>
-      <title>ההיסטוריה מלמדת: איך מגיבה הבורסה בבוקר שאחרי הבחירות?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560669#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560669</guid>
-      <description>מחקר חדש של הבורסה לניירות ערך בחן את התנהגות מדדי ת"א-35 ות"א-125 בעשר מערכות הבחירות האחרונות &amp;#8226; הממצאים חושפים דפוס מפתיע: אופטימיות ראשונית, ירידות בשבוע הראשון, ועליות בממוצע של 1.7% בתום חודש &amp;#8226; וגם: למה התנודתיות מזנקת בעד 45%, ומה ההמלצה למשקיעים לטווח ארוך?</description>
-      <author>חזי שטרנליכט</author>
-      <pubDate>Tue, 27 Oct 2026 08:10:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
-      <category domain="https://www.globes.co.il/news/מדד_תא_35.tag">מדד ת"א 35</category>
-      <category domain="https://www.globes.co.il/news/מדד_תא_125.tag">מדד ת"א 125</category>
+      <title>אינדיקציה ראשונה: כך מגיבים השווקים לתוצאות המדגמים</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561039#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561039</guid>
+      <description>קרנות סל הנסחרות בוול סטריט ועוקבות אחר מניות ישראליות מספקות אינדיקציות ראשונות לתגובת המשקיעים &amp;bull; לאחר ירידה ראשונית, קרן הסל של בלקרוק התאוששה ונסחרה כמעט ללא שינוי במסחר המאוחר &amp;bull; המבחן האמיתי יגיע כאשר הבורסה המקומית תיפתח בבוקר יום רביעי</description>
+      <author>תומר פדובה</author>
+      <pubDate>Tue, 27 Oct 2026 21:40:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
-      <category domain="https://www.globes.co.il/news/מחקר.tag">מחקר</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1786038581/%D7%9C%D7%90%D7%AA%D7%A8-800_ydlpep.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>אפקט הבחירות בבורסה / אילוסטרציה: שלומי יוסף</media:description>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/שוק_ההון.tag">שוק ההון</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1622707938/direct/shutterstock_1873888054_ifpt7s.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>הבורסה בתל אביב / צילום: Shutterstock</media:description>
       </media:content>
     </item>
     <item>
@@ -77,6 +73,19 @@
       <category domain="https://www.globes.co.il/news/החברה_הערבית.tag">החברה הערבית</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793014824/1782703_rtmxhd.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>מנסור עבאס ויוסף ג'בארין / צילום: כדיה לוי, דוברות הכנסת</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>חכו עם המסקנות: מתי יהיו תוצאות סופיות?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561034#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561034</guid>
+      <description>הקלפיות נסגרו, אבל המרוץ עוד לא הוכרע: מאות אלפי המעטפות שעשויות לשנות את תמונת המנדטים &amp;#8226; המשרוקית של גלובס</description>
+      <author>אורי רוזן וצוות המשרוקית של גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 21:17:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/הכנסת.tag">הכנסת</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793135788/AP26300361959344_ypmhim.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>מצביע בבחירות / צילום: ap, David Goldman</media:description>
       </media:content>
     </item>
     <item>
@@ -96,19 +105,6 @@
       <category domain="https://www.globes.co.il/news/תאגיד_השידור_כאן.tag">תאגיד השידור "כאן"</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793131771/Screenshot_2026-10-27_220845_wyqdxu.png" type="image/png" expression="full" width="800" height="392">
         <media:description>שידורי המדגם בחדשות 12, אמש</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>חכו עם המסקנות: מתי יהיו תוצאות סופיות?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561034#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561034</guid>
-      <description>הקלפיות נסגרו, אבל המרוץ עוד לא הוכרע: מאות אלפי המעטפות שעשויות לשנות את תמונת המנדטים &amp;#8226; המשרוקית של גלובס</description>
-      <author>אורי רוזן וצוות המשרוקית של גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 21:17:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/הכנסת.tag">הכנסת</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793135788/AP26300361959344_ypmhim.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>מצביע בבחירות / צילום: ap, David Goldman</media:description>
       </media:content>
     </item>
     <item>
@@ -171,6 +167,24 @@
       <category domain="https://www.globes.co.il/news/קואליציה.tag">קואליציה</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792593315/shutterstock_2804301013_obmnnl.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>פלטפורמת פולימרקט / צילום: Shutterstock</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ההיסטוריה מלמדת: איך מגיבה הבורסה בבוקר שאחרי הבחירות?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560669#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560669</guid>
+      <description>מחקר חדש של הבורסה לניירות ערך בחן את התנהגות מדדי ת"א-35 ות"א-125 בעשר מערכות הבחירות האחרונות &amp;#8226; הממצאים חושפים דפוס מפתיע: אופטימיות ראשונית, ירידות בשבוע הראשון, ועליות בממוצע של 1.7% בתום חודש &amp;#8226; וגם: למה התנודתיות מזנקת בעד 45%, ומה ההמלצה למשקיעים לטווח ארוך?</description>
+      <author>חזי שטרנליכט</author>
+      <pubDate>Tue, 27 Oct 2026 08:10:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_35.tag">מדד ת"א 35</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_125.tag">מדד ת"א 125</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
+      <category domain="https://www.globes.co.il/news/מחקר.tag">מחקר</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1786038581/%D7%9C%D7%90%D7%AA%D7%A8-800_ydlpep.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>אפקט הבחירות בבורסה / אילוסטרציה: שלומי יוסף</media:description>
       </media:content>
     </item>
     <item>
@@ -240,25 +254,6 @@
       <category domain="https://www.globes.co.il/news/מחקר_ופיתוח_מופ.tag">מחקר ופיתוח (מו"פ)</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1669038942/direct/0M4A2396f_bmabjp.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>ניר מינרבי, אמיר נוה ויהודה נוה. מייסדי חברת קלאסיק / צילום: אייל טואג</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>ההוצאות מזנקות, הקניונים מתמלאים: כך הישראלים מבלים ביום הבחירות</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561001#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561001</guid>
-      <description>יום השבתון לרגל הבחירות הביא לזינוק של 37.5% בהוצאות באשראי לעומת הבחירות הקודמות &amp;#8226; נתוני ישראכרט חושפים כי הרכישות בבתי הקפה, במסעדות ובחנויות האופנה זינקו, בעוד הקניות באונליין ירדו ב-44% &amp;#8226; בביג מדווחים על יותר מחצי מיליון מבקרים ברחבי הארץ, ובקניוני עופר נרשמה עלייה של 30% בתנועת הקהל לעומת הבחירות הקודמות</description>
-      <author>תומר שמאי וג'ניפר סילון</author>
-      <pubDate>Tue, 27 Oct 2026 17:38:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/קניות.tag">קניות</category>
-      <category domain="https://www.globes.co.il/news/קניונים.tag">קניונים</category>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <category domain="https://www.globes.co.il/news/כרטיסי_אשראי.tag">כרטיסי אשראי</category>
-      <category domain="https://www.globes.co.il/news/שבא.tag">שב"א</category>
-      <category domain="https://www.globes.co.il/news/קניון_עזריאלי.tag">קניון עזריאלי</category>
-      <category domain="https://www.globes.co.il/news/קמעונאות.tag">קמעונאות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
       </media:content>
     </item>
   </channel>
