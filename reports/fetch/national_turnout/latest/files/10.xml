@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 14:50:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 14:53:21 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -116,6 +116,30 @@
       <category domain="https://www.globes.co.il/news/קמעונאות.tag">קמעונאות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>מהפכת השקיפות בנתוני ההצבעה בישראל</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560977#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560977</guid>
+      <description>ועדת הבחירות הציגה לראשונה נתוני הצבעה בזמן אמת עד לרמת השכונה והקלפי &amp;#8226; סמינר הקיבוצים מקימה פקולטה חדשה למקצועות הטיפול, שגריר יפן בישראל ביקר במטה טאואר על רקע הרחבת פעילותה במדינה, וגם: המנהלים הישראלים שיצאו למסע אתגרי בעקבות המדליסטים האולימפיים &amp;#8226; אירועים ומינויים</description>
+      <author>גלית חתן</author>
+      <pubDate>Tue, 27 Oct 2026 14:52:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/אירועים_ומינויים.tag">אירועים ומינויים</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/ועדת_הבחירות_המרכזית.tag">ועדת הבחירות המרכזית</category>
+      <category domain="https://www.globes.co.il/news/אחוזי_הצבעה.tag">אחוזי הצבעה</category>
+      <category domain="https://www.globes.co.il/news/Priority.tag">Priority</category>
+      <category domain="https://www.globes.co.il/news/יפן.tag">יפן</category>
+      <category domain="https://www.globes.co.il/news/שגריר.tag">שגריר</category>
+      <category domain="https://www.globes.co.il/news/שגרירות.tag">שגרירות</category>
+      <category domain="https://www.globes.co.il/news/אורן_סמדגה.tag">אורן סמדג'ה</category>
+      <category domain="https://www.globes.co.il/news/פיטר_פלציק.tag">פיטר פלצ'יק</category>
+      <category domain="https://www.globes.co.il/news/טאואר.tag">טאואר</category>
+      <category domain="https://www.globes.co.il/news/בריאות_הנפש.tag">בריאות הנפש</category>
+      <category domain="https://www.globes.co.il/news/סמינר_הקיבוצים.tag">סמינר הקיבוצים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/l_COT_Pic:minuim_d9ex5z/c_scale,fl_relative,w_0.25/fl_layer_apply,fl_no_overflow,g_north_east/v1793110650/DSC00445_ou2ggy.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>דין ליבנה, ממלא מקום מנכ''ל ועדת הבחירות / צילום: רועי ידובסקי, ועדת הבחירות המרכזית</media:description>
       </media:content>
     </item>
     <item>
@@ -273,29 +297,6 @@
       <category domain="https://www.globes.co.il/news/מימושים.tag">מימושים</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792484927/WhatsApp_Image_2026-10-20_at_11.26.23_1_tezxra.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>אוטובוסים חשמליים של חברת דן / צילום: דן תחבורה</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>באירופה מדברים על דמוקרטיה, בעולם הערבי לא מצפים לשינוי</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560938#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560938</guid>
-      <description>כותרות העיתונים בעולם: בעוד בתקשורת האירופית ממסגרים את הקלפיות כמשאל עם על אופייה של המדינה וטבח ה-7 באוקטובר, בארה"ב מנתחים את ההשלכות הכלכליות של המלחמה, ובעיתונות הערבית משוכנעים שזהות רה"מ לא תביא שום תפנית בסוגיה הפלסטינית &amp;bull; גלובס מגיש מדי יום סקירה קצרה של ידיעות מעניינות מהתקשורת העולמית על ישראל  </description>
-      <author>תומר שמאי</author>
-      <pubDate>Tue, 27 Oct 2026 08:37:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/כותרות_העיתונים_בעולם.tag">כותרות העיתונים בעולם</category>
-      <category domain="https://www.globes.co.il/news/תקשורת_זרה.tag">תקשורת זרה</category>
-      <category domain="https://www.globes.co.il/news/סיקור_תקשורתי.tag">סיקור תקשורתי</category>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/ישראל_במלחמה.tag">ישראל במלחמה</category>
-      <category domain="https://www.globes.co.il/news/אירופה.tag">אירופה</category>
-      <category domain="https://www.globes.co.il/news/ארהב.tag">ארה"ב</category>
-      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
-      <category domain="https://www.globes.co.il/news/גדי_איזנקוט.tag">גדי איזנקוט</category>
-      <category domain="https://www.globes.co.il/news/איראן.tag">איראן</category>
-      <category domain="https://www.globes.co.il/news/פלסטינים.tag">פלסטינים</category>
-      <category domain="https://www.globes.co.il/news/דמוקרטיה.tag">דמוקרטיה</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793089773/AP26300199760904_fwjkhp.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>מצביעה בקלפי, היום / צילום: ap, Ohad Zwigenberg</media:description>
       </media:content>
     </item>
   </channel>
