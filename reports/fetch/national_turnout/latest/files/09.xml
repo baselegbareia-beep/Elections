@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 20:03:15 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 20:06:08 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -49,7 +49,7 @@
 			<slash:comments>0</slash:comments>
 		
 		
-		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/WhatsApp-Image-2026-10-27-at-21.59.37.jpeg" medium="image"></media:content>
+		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/צילום-מסך-2026-10-27-220533.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2756006</post-id>	</item>
 		<item>
 		<title>חכמי וגדולי ישראל הספרדים בהצבעה לתנועת ש&#034;ס</title>
@@ -320,10 +320,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 78/105 objects using Memcached
+Object Caching 78/116 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 44/66 queries in 0.102 seconds using Memcached
+Database Caching 40/70 queries in 0.204 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 22:04:18 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 22:08:23 by W3 Total Cache
 -->
