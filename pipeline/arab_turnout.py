@@ -113,6 +113,7 @@ STATIONS_2026 = os.path.join(ROOT, "pipeline", "reference", "cbs_stations_2026.j
 OPEN_H = 7.0             # polls open; the curve starts from 0 here
 CLOSE_H = 22.0           # polls close; a later release time is read as 22:00
 PROJECT_FROM = 10.0      # earlier releases are not projected: too little of the day has passed
+PROJECT_OFF = False      # live_config "arab_projection": false: no end-of-day range (live_fetch sets it each pass)
 ELIG_SPREAD = 1.5        # a matched station whose register changed more than this (either way) is another station
 MAX_PACE = 2.0           # a station group above this is a renumbered or merged station, not a turnout (and a
                          # whole locality without eligible counts, which cannot be checked against its register)
@@ -419,7 +420,7 @@ def curve_at(curve, h):
 
 def project(turnout, h, curve, basis="turnout"):
     """Projected final turnout {lo, mid, hi} from turnout so far at hour h, or None before PROJECT_FROM."""
-    if turnout is None or h is None or h < PROJECT_FROM:
+    if PROJECT_OFF or turnout is None or h is None or h < PROJECT_FROM:
         return None
     _, f, s = curve_at(curve, h)
     if f <= 0:

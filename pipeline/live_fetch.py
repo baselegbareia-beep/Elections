@@ -812,6 +812,9 @@ def turnout_pass(E, cfg, out, state, status, inputs):
                 if lean_ok:
                     doc["lean"] = st["lean"]
             # the national turnout of the same rows under the same rule (blank = not reported), see station_turnout
+            # "arab_projection": false turns the section's end-of-day range off (27.10: the 2022 hour curve did not
+            # fit a day on which Arab voters voted far earlier, and it gave 100%); the same-hour 2022 comparison stays
+            AT.PROJECT_OFF = cfg.get("arab_projection") is False
             arab_pass(rows, st["national"], released, sha, doc, old, state, status["errors"],
                       area_class=bool(cfg.get("mixed_area_class")))
         except Exception as exc:
