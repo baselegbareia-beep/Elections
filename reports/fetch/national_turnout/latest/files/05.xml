@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>בחירות ישראל 2026: אחוז ההצבעה נכון לשעה 18:00 הינו 66.7%</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382033</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151781&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>יונתן זינדל, פלאש 90</Photographer>
+          <pubDate>Tue, 27 Oct 2026 16:59:56 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 16:59:56 GMT</UpdateDate>
+          <itemID>1382033</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382033</guid>
+        </item>
+        <item>
           <title>השייח&apos; מופק טריף בקריאה לבני העדה הדרוזית: &quot;הימנעות מהצבעה תוביל לחרטה&quot;</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382032</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -127,7 +146,7 @@
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151781&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
           <Photographer>יונתן זינדל, פלאש 90</Photographer>
           <pubDate>Tue, 27 Oct 2026 15:38:27 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 16:33:16 GMT</UpdateDate>
+          <UpdateDate>Tue, 27 Oct 2026 16:59:15 GMT</UpdateDate>
           <itemID>1382005</itemID>
           <isPremium>N</isPremium>
           <isVideo>false</isVideo>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381965</guid>
-        </item>
-        <item>
-          <title>טרגדיה בקלפי באילת: נקבע מותו של גבר בן 66 שהתמוטט</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381962</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/923107&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>יהודה בן יתח</Photographer>
-          <pubDate>Tue, 27 Oct 2026 13:04:31 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 13:04:31 GMT</UpdateDate>
-          <itemID>1381962</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381962</guid>
         </item>
       </channel>
     </rss>

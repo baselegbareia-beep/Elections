@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 16:59 UTC",
+ "started": "2026-10-27 17:01 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 50
+   "items": 53
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -88,9 +88,9 @@
      "title": "\"הכי גבוה שהיה\": 55.7% הצביעו עד השעה 16:00, מספר המצביעים זינק ב-17.2% - YNET"
     },
     "כאן 11": {
-     "published": "2026-10-27T15:01:24+00:00",
-     "published_il": "17:01",
-     "title": "עד השעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
+     "published": "2026-10-27T04:44:14+00:00",
+     "published_il": "06:44",
+     "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
     },
     "רשת 13": {
      "published": "2026-10-27T16:15:57+00:00",
@@ -113,8 +113,8 @@
      "title": "דרמה של הרגע האחרון: הליכוד וש\"ס מנסות להאריך את שעות ההצבעה"
     },
     "גלובס": {
-     "published": "2026-10-27T16:42:00+00:00",
-     "published_il": "18:42",
+     "published": "2026-10-27T17:00:00+00:00",
+     "published_il": "19:00",
      "title": "55.7% הצביעו. ומי היישוב המוביל בישראל?"
     }
    },
@@ -140,11 +140,6 @@
      "published_il": "15:00",
      "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 14:00 עומד על 44.9%, הגבוה ביותר מאז בחירות 1973 - אתר החדשות דבר"
     },
-    "כאן 11": {
-     "published": "2026-10-27T04:44:14+00:00",
-     "published_il": "06:44",
-     "title": "הגבוה ביותר מאז 1973: שיעור ההצבעה עד לשעה 14:00 - 44.9% - כאן 11"
-    },
     "הידברות": {
      "published": "2026-10-27T11:10:00+00:00",
      "published_il": "13:10",
@@ -164,6 +159,11 @@
      "published": "2026-10-27T13:57:05+00:00",
      "published_il": "15:57",
      "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
+    },
+    "כאן 11": {
+     "published": "2026-10-27T13:06:26+00:00",
+     "published_il": "15:06",
+     "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד השעה 14:00: 44.9% - כאן 11"
     },
     "אפוק": {
      "published": "2026-10-27T13:50:02+00:00",
@@ -287,6 +287,15 @@
      "title": "בעיצומן של הבחירות: שלמה פילבר בהודעה דרמטית"
     }
    }
+  },
+  "18:00": {
+   "66.7": {
+    "מעריב": {
+     "published": "2026-10-27T16:59:56+00:00",
+     "published_il": "18:59",
+     "title": "בחירות ישראל 2026: אחוז ההצבעה נכון לשעה 18:00 הינו 66.7%"
+    }
+   }
   }
  },
  "items": [
@@ -365,12 +374,12 @@
    "outlet": "כאן 11",
    "published": "2026-10-27T04:44:14+00:00",
    "published_il": "06:44",
-   "title": "הגבוה ביותר מאז 1973: שיעור ההצבעה עד לשעה 14:00 - 44.9% - כאן 11",
+   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
    "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
    "figures": [
     [
-     "14:00",
-     44.9
+     "16:00",
+     55.7
     ]
    ]
   },
@@ -502,20 +511,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T13:57:05+00:00",
-   "published_il": "15:57",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "וואלה",
    "published": "2026-10-27T11:01:59+00:00",
    "published_il": "13:01",
@@ -525,6 +520,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T13:57:05+00:00",
+   "published_il": "15:57",
+   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -642,20 +651,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "אפוק",
-   "published": "2026-10-27T13:50:02+00:00",
-   "published_il": "15:50",
-   "title": "אחוז ההצבעה עד 14:00 – 44.9% - אפוק",
-   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5DSkxhOUQxR0dlZG1GTm80NFRnSU82blAtXzFqMi1uX0ZubWZiZDZGUkVnaUtiZHBYT0ZFOEdTYUo2SGVTdVNRZw?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T15:02:20+00:00",
    "published_il": "17:02",
@@ -665,6 +660,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "אפוק",
+   "published": "2026-10-27T13:50:02+00:00",
+   "published_il": "15:50",
+   "title": "אחוז ההצבעה עד 14:00 – 44.9% - אפוק",
+   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE5DSkxhOUQxR0dlZG1GTm80NFRnSU82blAtXzFqMi1uX0ZubWZiZDZGUkVnaUtiZHBYT0ZFOEdTYUo2SGVTdVNRZw?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -881,6 +890,20 @@
   {
    "feed": "מעריב מבזקים",
    "outlet": "מעריב",
+   "published": "2026-10-27T16:59:56+00:00",
+   "published_il": "18:59",
+   "title": "בחירות ישראל 2026: אחוז ההצבעה נכון לשעה 18:00 הינו 66.7%",
+   "link": "https://www.maariv.co.il/breaking-news/article-1382033",
+   "figures": [
+    [
+     "18:00",
+     66.7
+    ]
+   ]
+  },
+  {
+   "feed": "מעריב מבזקים",
+   "outlet": "מעריב",
    "published": "2026-10-27T15:02:20+00:00",
    "published_il": "17:02",
    "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל",
@@ -1047,8 +1070,8 @@
   {
    "feed": "גלובס",
    "outlet": "גלובס",
-   "published": "2026-10-27T16:42:00+00:00",
-   "published_il": "18:42",
+   "published": "2026-10-27T17:00:00+00:00",
+   "published_il": "19:00",
    "title": "55.7% הצביעו. ומי היישוב המוביל בישראל?",
    "link": "https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS",
    "figures": [
