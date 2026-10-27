@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>איתמר בן גביר: &quot;אנחנו גאים בדרך שלנו, ברפורמות שהבטחנו לציבור - וקיימנו אותן&quot;</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382097</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151586&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>אורן בן חקון פלאש 90</Photographer>
+          <pubDate>Tue, 27 Oct 2026 21:59:50 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 21:59:50 GMT</UpdateDate>
+          <itemID>1382097</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382097</guid>
+        </item>
+        <item>
           <title>יאיר גולן הכריז במטה מפלגת &quot;הדמוקרטים&quot;: &quot;הציבור הישראלי פיטר היום את נתניהו ואת הליכוד&quot;</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382095</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151902&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1382062</guid>
-        </item>
-        <item>
-          <title>בחירות 2026: אלו תוצאות המדגם של חדשות 12</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1382061</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151858&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>צילום מסך חדשות 12</Photographer>
-          <pubDate>Tue, 27 Oct 2026 20:01:41 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 20:08:49 GMT</UpdateDate>
-          <itemID>1382061</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1382061</guid>
         </item>
       </channel>
     </rss>
