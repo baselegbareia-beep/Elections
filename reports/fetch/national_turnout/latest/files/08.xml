@@ -4,13 +4,23 @@
         <title>חדשות סרוגים</title>
         <link>https://www.srugim.co.il/</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 27 Oct 2026 22:12:29 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 27 Oct 2026 22:19:21 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>he</language>
         <copyright>כל הזכויות שמורות</copyright>
         <atom:link href="https://api.srugim.news/v1/rss/articles/latest/rss2" rel="self" type="application/rss+xml"/>
         <atom:link href="https://api.srugim.news/v1/websub/rss-articles/latest" rel="hub"/>
+        <item>
+            <title><![CDATA[״באלי לבכות, לא בשביל זה שוחררתי מעזה״]]></title>
+            <link>https://www.srugim.co.il/101014627-באלי-לבכות-לא-בשביל-זה-שוחררתי-מעזה</link>
+            <guid>https://www.srugim.co.il/101014627-באלי-לבכות-לא-בשביל-זה-שוחררתי-מעזה</guid>
+            <pubDate>Tue, 27 Oct 2026 22:19:21 GMT</pubDate>
+            <description><![CDATA[שורד השבי רום ברסלבסקי, התייחס הערב להישג האדיר של המפלגות הערביות ולהפסד הצורם של בן גביר ואמר: ״באלי לבכות״]]></description>
+            <content:encoded><![CDATA[‏‏שורד השבי רום ברסלבסקי, התייחס כעת (שלישי) לתוצאות המדגמים והבעיה אכזבה עמוקה מהתחזקות המפלגות הערביות.
+״17 מנדטים לערבים, 6 לבן גביר. באלי לבכות, לא בשביל זה שוחררתי מעזה״, כתב בכאב רום. מאז שחזר מהשבי, רום הצהיר שוב ושוב כי הוא איש ימין מובהק  לא חשף למי הוא מצביע בבחירות. נזכיר כי על פי נתוני ועדת הבחירות המרכזית, אחוז ההצבעה במגזר הערבי עמד על 80% ולראשונה בהיסטוריה היה גבוה יותר מאחוז ההצבעה במגזר היהודי.]]></content:encoded>
+            <enclosure url="https://images.srugim.co.il/2026/01/28/d1e3f700-5316-11f1-a5e3-63c7c4313518__h1707_w2560.jpg" length="0" type="image/jpg"/>
+        </item>
         <item>
             <title><![CDATA[דרמה במדגם ערוץ 14: גוש נתניהו על 62 מנדטים]]></title>
             <link>https://www.srugim.co.il/101014626-דרמה-במדגם-ערוץ-14-גוש-נתניהו-על-62</link>
@@ -674,18 +684,6 @@
 מטעם המפלגה הועברו לוועדת הבחירות המרכזית 775 תלונות מסודרות על התנהלות קלוקלת ונסיונות לזיופים בקלפיות במגזר הערבי. 
 ‏שגיא קייזלר שמנהל את טוהר הבחירות מטעם הליכוד אומר ש"ועדת הבחירות מתעלמת ומעדיפה קצב הצבעה גבוה על פני הקפדה על מהלך הצבעה תקין לפי כל החוקים והנהלים".]]></content:encoded>
             <enclosure url="https://images.srugim.co.il/2023/12/25/8c34c980-4fe9-11f1-92f9-b582791213b5__h1041_w1600.jpg" length="0" type="image/jpg"/>
-        </item>
-        <item>
-            <title><![CDATA[הטמפ' צונחות; גשם, רעמים ושטפונות. תחזית מזג אוויר]]></title>
-            <link>https://www.srugim.co.il/101014573-הטמפ-צונחות-גשם-רעמים-ושטפונות-תחזית-מזג</link>
-            <guid>https://www.srugim.co.il/101014573-הטמפ-צונחות-גשם-רעמים-ושטפונות-תחזית-מזג</guid>
-            <pubDate>Tue, 27 Oct 2026 17:50:50 GMT</pubDate>
-            <description><![CDATA[מזג אוויר החורפי יימשך גם בימים הקרובים. תחול ירידה בטמפ' ויירדו גשמים מקומיים מלווים בסופות רעמים ושטפונות. תחזית מזג אוויר]]></description>
-            <content:encoded><![CDATA[מזג אוויר החורפי יימשך גם בימים הקרובים. תחול ירידה בטמפ' ויירדו גשמים מקומיים מלווים בסופות רעמים ושטפונות.
-יום רביעי: מעונן חלקית. הטמפרטורות יהיו ללא שינוי ניכר. עדיין ייתכנו גשמים מקומיים מלווים בסופות רעמים יחידות בעיקר בצפון הארץ ובמרכזה.
-יום חמישי: מעונן חלקית. תחול ירידה קלה בטמפרטורות. בצפון הארץ צפויים גשמים מקומיים. ינשבו רוחות ערות בעיקר בהרים. יום שישי: מעונן חלקית. תחול ירידה נוספת בטמפרטורות והן תהיינה נמוכות מהרגיל לעונה במרבית האזורים. גשמים מקומיים, ברובם קלים, צפויים לרדת בצפון הארץ ובמרכזה.
-יום שבת: מעונן חלקית. תחול עלייה קלה בטמפרטורות בעיקר בהרים ובפנים הארץ.]]></content:encoded>
-            <enclosure url="https://images.srugim.co.il/2026/01/15/f622c680-52d2-11f1-a5e3-63c7c4313518__h288_w460.jpg" length="0" type="image/jpg"/>
         </item>
     </channel>
 </rss>
