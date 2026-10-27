@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 16:04 UTC",
+ "started": "2026-10-27 16:07 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -225,10 +225,20 @@
      "published_il": "13:13",
      "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN"
     },
+    "מעריב": {
+     "published": "2026-10-27T10:58:59+00:00",
+     "published_il": "12:58",
+     "title": "שיעור ההצבעה נכון לשעה 12:00 - 31.5%, הגבוה ביותר משנת 77' - מעריב"
+    },
     "וואלה": {
      "published": "2026-10-27T11:01:59+00:00",
      "published_il": "13:01",
      "title": "שיעור ההצבעה בבחירות לכנסת הגיע ל-31.5% עד השעה 12:00 - וואלה"
+    },
+    "ערוץ 7": {
+     "published": "2026-10-27T04:57:00+00:00",
+     "published_il": "06:57",
+     "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7"
     },
     "היום": {
      "published": "2026-10-27T10:56:35+00:00",
@@ -475,6 +485,20 @@
   {
    "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
+   "published": "2026-10-27T10:58:59+00:00",
+   "published_il": "12:58",
+   "title": "שיעור ההצבעה נכון לשעה 12:00 - 31.5%, הגבוה ביותר משנת 77' - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5UUVIwb3l1UWdRZXAyVl84WHJicmQyN2hGM1AzMWVpekxaMFgxNTlFZVU4YXlSWDlMbG9jSk9oM2NsY2hoMS1BT1ZZd3l2d2dEcDNmVy1wTnpJcDRmUV9mR3NWbmg?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "מעריב",
    "published": "2026-10-27T13:01:38+00:00",
    "published_il": "15:01",
    "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב",
@@ -539,6 +563,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "ערוץ 7",
+   "published": "2026-10-27T04:57:00+00:00",
+   "published_il": "06:57",
+   "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7",
+   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55cmhJdDVJaWtGMjlvNUpfbk9zU3VJN0szaW0yUTlocGJPLTNsaS1WbTY4cDRmUzd3WmUxcmJxazdkcEFwWW13Rg?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
     ]
    ]
   },
@@ -796,20 +834,6 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "אמס",
-   "published": "2026-10-27T13:14:12+00:00",
-   "published_il": "15:14",
-   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
-   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T10:58:42+00:00",
    "published_il": "12:58",
@@ -838,11 +862,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T11:10:00+00:00",
-   "published_il": "13:10",
-   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
+   "outlet": "PassportNews",
+   "published": "2026-10-27T13:01:00+00:00",
+   "published_il": "15:01",
+   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
    "figures": [
     [
      "14:00",
@@ -852,11 +876,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "PassportNews",
-   "published": "2026-10-27T13:01:00+00:00",
-   "published_il": "15:01",
-   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
+   "outlet": "הידברות",
+   "published": "2026-10-27T11:10:00+00:00",
+   "published_il": "13:10",
+   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
    "figures": [
     [
      "14:00",

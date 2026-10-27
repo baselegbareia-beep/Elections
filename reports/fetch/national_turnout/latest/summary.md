@@ -1,4 +1,4 @@
-# National turnout as the news reports it (2026-10-27 16:04 UTC)
+# National turnout as the news reports it (2026-10-27 16:07 UTC)
 
 | source | HTTP | items | error |
 |---|---|---|---|
@@ -17,7 +17,7 @@
 ## Figures (hour: percent - outlets, earliest Israel time)
 
 - 10:00: 16.68% - YNET 11:01, JDN 13:40
-- 12:00: 31.5% - היום 12:56, YNET 12:58, סרוגים 12:59, וואלה 13:01, JDN 13:13
+- 12:00: 31.5% - ערוץ 7 06:57, היום 12:56, YNET 12:58, מעריב 12:58, סרוגים 12:59, וואלה 13:01, JDN 13:13
 - 12:00: 30% - סרוגים 14:40
 - 13:00: 23.8% - נתניה נט 14:26
 - 13:00: 50% - סרוגים 15:35
