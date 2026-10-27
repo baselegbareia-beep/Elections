@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 20:20 UTC",
+ "started": "2026-10-27 20:23 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 76
+   "items": 81
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -184,6 +184,11 @@
      "published_il": "17:44",
      "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
     },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T15:34:30+00:00",
+     "published_il": "17:34",
+     "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية"
+    },
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
      "published_il": "17:02",
@@ -226,11 +231,6 @@
      "published": "2026-10-27T11:01:59+00:00",
      "published_il": "13:01",
      "title": "שיעור ההצבעה בבחירות לכנסת הגיע ל-31.5% עד השעה 12:00 - וואלה"
-    },
-    "JDN": {
-     "published": "2026-10-27T11:13:46+00:00",
-     "published_il": "13:13",
-     "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN"
     }
    }
   },
@@ -250,6 +250,11 @@
      "published": "2026-10-27T15:28:35+00:00",
      "published_il": "17:28",
      "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
+    },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
@@ -512,6 +517,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T15:34:30+00:00",
+   "published_il": "17:34",
+   "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UN0RRSnBZRkF6ZU5scWlBckhubXUxMVFua0FQVXRIR2FoY3paVUhCdmIzZ0JvdDFYVTN1UHY5akw1SVpLcEgyMzA3eXVBSGFa?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "רשת 13",
    "published": "2026-10-27T15:28:35+00:00",
    "published_il": "17:28",
@@ -540,15 +559,15 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:13:46+00:00",
-   "published_il": "13:13",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
    "figures": [
     [
-     "12:00",
-     31.5
+     "14:00",
+     44.9
     ]
    ]
   },
