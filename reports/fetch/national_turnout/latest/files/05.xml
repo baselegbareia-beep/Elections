@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>&quot;אתה חרטטן&quot;: אורי גלר נטש בזעם את האולפן</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382049</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151845&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>צילום מסך i24News</Photographer>
+          <pubDate>Tue, 27 Oct 2026 18:30:29 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 18:30:29 GMT</UpdateDate>
+          <itemID>1382049</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382049</guid>
+        </item>
+        <item>
           <title>אורי גלר קם ועזב את האולפן - ואז ניב גלבוע התערב</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382048</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151850&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381992</guid>
-        </item>
-        <item>
-          <title>נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381990</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151781&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>יונתן זינדל, פלאש 90</Photographer>
-          <pubDate>Tue, 27 Oct 2026 15:02:20 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:05:49 GMT</UpdateDate>
-          <itemID>1381990</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381990</guid>
         </item>
       </channel>
     </rss>
