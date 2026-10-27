@@ -44,6 +44,8 @@ jobs:
           mkdir -p _site/live _site/site
           cp site/index.html _site/index.html
           cp -r site/data _site/data
+          # the operator's downloadable reports (pipeline/arab_report.py), when there are any
+          if [ -d site/reports ]; then cp -r site/reports _site/reports; fi
           # live/*.json: main's site/live/ (branch mode, or the placeholder), replaced by the live-data branch
           # (the feed's Actions path) when that one is newer
           cp site/live/*.json _site/live/

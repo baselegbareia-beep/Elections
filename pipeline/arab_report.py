@@ -11,7 +11,7 @@ figure (blank, '-' or 0 voters) has not reported. "עודכן" is the latest upd
 """
 import argparse
 import csv
-import datetime as dt
+import hashlib
 import html
 import io
 import json
@@ -27,13 +27,18 @@ COLS = {"code": ("סמל יישוב", "סמל ישוב", "קוד ישוב"), "el
 
 def read_stations(data):
     """bytes of a per-station CSV -> {code: [(eligible, voters, 'HH:MM' or '')]} of the stations that reported."""
+    text = None
     for enc in ("utf-8-sig", "cp1255"):
         try:
             text = data.decode(enc)
             break
         except UnicodeDecodeError:
             continue
-    rows = list(csv.reader(io.StringIO(text)))
+    if not text or not text.strip():
+        raise ValueError("the stations file is empty or neither UTF-8 nor cp1255")
+    first = text.splitlines()[0]
+    delim = max(",;\t|", key=first.count)          # the separators live_input/README.md allows
+    rows = list(csv.reader(io.StringIO(text), delimiter=delim))
     head = [h.strip() for h in rows[0]]
     at = {k: next((head.index(n) for n in names if n in head), None) for k, names in COLS.items()}
     if at["code"] is None or at["elig"] is None or at["voters"] is None:
@@ -161,24 +166,33 @@ def main(argv=None):
     ap.add_argument("--html", required=True)
     ap.add_argument("--json")
     ap.add_argument("--date", default="27.10.2026")
+    ap.add_argument("--as-of", help="HH:MM of the data when the stations file has no update-time column "
+                    "(default: sectors_time in --turnout)")
     a = ap.parse_args(argv)
     ref = json.load(open(REF, encoding="utf-8"))
     stations = read_stations(open(a.stations, "rb").read())
     nat = None
     try:
         t = json.load(open(a.turnout, encoding="utf-8"))
-        hours = sorted((t.get("national") or {}).items())
     except (OSError, ValueError):
-        hours = []
+        t = {}
+    hours = sorted((k, v) for k, v in (t.get("national") or {}).items()
+                   if isinstance(v, (int, float)) and not isinstance(v, bool) and len(k) == 5 and k[2] == ":")
     rep = build(stations, ref)
-    as_of = rep["total"]["updated"] or dt.datetime.now(dt.timezone(dt.timedelta(hours=2))).strftime("%H:%M")
+    # the data's own time: the latest station update; without that column, the release's time, never the clock
+    as_of = rep["total"]["updated"] or a.as_of or str(t.get("sectors_time") or "")[:5]
+    if not (len(as_of) == 5 and as_of[2] == ":"):
+        print("no time for the data: the stations file has no update-time column; pass --as-of HH:MM", file=sys.stderr)
+        return 1
     # the national figure of the stations' hour (the latest even hour up to the last station update), like with like
     same = [h for h in hours if h[0] <= as_of] or hours[:1]
     if same:
         nat = rep["national"] = {"hour": same[-1][0], "pct": float(same[-1][1])}
-    open(a.html, "w", encoding="utf-8").write(page(rep, a.date, as_of))
-    if a.json:
-        json.dump({"as_of": as_of, "date": a.date, "total": rep["total"], "national": nat,
+    doc = page(rep, a.date, as_of)
+    open(a.html, "w", encoding="utf-8").write(doc)
+    if a.json:   # version: the page's content, so a rebuild with the same time still reaches the readers' caches
+        json.dump({"as_of": as_of, "date": a.date, "version": hashlib.sha256(doc.encode()).hexdigest()[:12],
+                   "total": rep["total"], "national": nat,
                    "categories": [{k: c[k] for k in ("name", "counted", "pct", "voters", "elig", "with", "n")} for c in rep["categories"]]},
                   open(a.json, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
     print(json.dumps({"as_of": as_of, "pct": rep["total"]["pct"], "voters": rep["total"]["voters"],

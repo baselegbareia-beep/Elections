@@ -5105,12 +5105,12 @@ async function drawArabDay(el) {
     if (el.isConnected && !el.firstElementChild) el.innerHTML = `<p class="empty">${t('נתוני החברה הערבית לא נטענו. הדף ינסה שוב בעדכון הבא.')}</p>`;
     return;
   }
-  await adPdfMeta();
+  await Promise.race([adPdfMeta(), new Promise(r => setTimeout(r, 2500))]);   // the link is optional: never hold the section
   if (!el.isConnected) return;
   const D = adData();
   // redraw only when the data or a clock gate changed, so a refresh tick keeps the reader's sort, search and scroll
   const sig = JSON.stringify([D.mode, adRel(D.cur), D.cur && D.cur.released, D.cur && D.cur.total && D.cur.total.voters,
-    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed(), adAfter(), AD.pdf && AD.pdf.as_of]);
+    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed(), adAfter(), AD.pdf && (AD.pdf.version || AD.pdf.as_of)]);
   if (el.dataset.adSig === sig && el.querySelector('.ad-grid')) return;
   el.dataset.adSig = sig;
   AD.D = D;
@@ -5143,7 +5143,7 @@ function adPdfLink() {
   const m = AD.pdf;
   if (!m) return '';
   const tot = m.total || {};
-  return `<p class="ad-pdf"><a class="ad-pdf-btn" href="reports/arab_turnout.pdf?v=${encodeURIComponent(m.as_of)}" download="arab_turnout_${esc(m.as_of.replace(':', ''))}.pdf">${t('הורדת הדו״ח (PDF)')}</a>
+  return `<p class="ad-pdf"><a class="ad-pdf-btn" href="reports/arab_turnout.pdf?v=${encodeURIComponent(m.version || m.as_of)}" download="arab_turnout_${esc(m.as_of.replace(':', ''))}.pdf">${t('הורדת הדו״ח (PDF)')}</a>
     <span>${t('אחוזי ההצבעה בכל היישובים הערביים, הדרוזיים, הצ׳רקסיים והבדואיים, לפי חלוקת ועדת הבחירות. עדכון אחרון: {t}, {n} יישובים עם נתונים.', { t: `<span class="num">${esc(m.as_of)}</span>`, n: `<span class="num">${esc(`${tot.with}/${tot.n}`)}</span>` })}</span></p>`;
 }
 
