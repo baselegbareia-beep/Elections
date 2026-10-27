@@ -31,6 +31,7 @@ if sys.version_info < (3, 9):
 import base64  # noqa: E402
 import getpass  # noqa: E402
 import hashlib  # noqa: E402
+import http.client  # noqa: E402
 import importlib  # noqa: E402
 import io  # noqa: E402
 import json  # noqa: E402
@@ -40,6 +41,7 @@ import site  # noqa: E402
 import ssl  # noqa: E402
 import subprocess  # noqa: E402
 import time  # noqa: E402
+import traceback  # noqa: E402
 import urllib.error  # noqa: E402
 import urllib.parse  # noqa: E402
 import urllib.request  # noqa: E402
@@ -47,7 +49,7 @@ import warnings  # noqa: E402
 import zipfile  # noqa: E402
 from datetime import datetime, timedelta, timezone  # noqa: E402
 
-VERSION = "2026-10-27.1"
+VERSION = "2026-10-27.2"
 REPO = "baselegbareia-beep/Elections"
 BRANCH = "home-capture"            # the only branch this script ever writes to
 BASE = "main"                      # read once, to start home-capture from it when it does not exist yet
@@ -171,7 +173,7 @@ def ensure_playwright():
     if _have_playwright():
         say("playwright הותקן.")
         return True
-    say("ההתקנה של playwright נכשלה. אפשר לנסות ידנית:  " + os.path.basename(sys.executable) + " -m pip install --user playwright")
+    say("ERROR | ההתקנה של playwright נכשלה. אפשר לנסות ידנית:  " + os.path.basename(sys.executable) + " -m pip install --user playwright")
     return False
 
 
@@ -238,18 +240,30 @@ class GitHub:
             try:
                 with urllib.request.urlopen(req, timeout=timeout, context=self._ctx) as r:
                     raw = r.read()
-                    return r.status, (json.loads(raw) if raw.strip() else None)
+                    j = json.loads(raw) if raw.strip() else None
+                    if j is not None and not isinstance(j, dict):
+                        raise ValueError("not a JSON object")
+                    return r.status, j
             except urllib.error.HTTPError as e:
-                raw = e.read() or b""
+                try:
+                    raw = e.read() or b""
+                except (http.client.HTTPException, OSError):
+                    raw = b""
                 try:
                     j = json.loads(raw)
                 except ValueError:
+                    j = None
+                if not isinstance(j, dict):
                     j = {"message": raw[:200].decode("utf-8", "replace")}
                 return e.code, j
             except urllib.error.URLError as e:
                 if attempt == 1 and isinstance(e.reason, ssl.SSLError) and self._ctx is None and self._use_certifi():
                     continue                       # macOS python.org without its certificates: certifi's bundle
                 raise
+            except (http.client.HTTPException, ValueError) as e:
+                # a reply cut short (IncompleteRead, BadStatusLine...) or not GitHub's (a proxy's or Wi-Fi login page):
+                # the same as no connection, so every caller retries it as one
+                raise urllib.error.URLError("broken reply from GitHub (%s)" % e.__class__.__name__) from None
         raise urllib.error.URLError("unreachable")
 
     def _use_certifi(self):
@@ -353,17 +367,16 @@ def ask_token():
         if not token:
             say("לא הודבק טוקן.")
             continue
+        _SECRETS.append(token)
         gh = GitHub(token)
         try:
             gh.check()
-            _SECRETS.append(token)
-            say("הטוקן תקין: יש גישה למאגר " + REPO + ".")
+            say("TOKEN OK | הטוקן תקין: יש גישה למאגר " + REPO + ".")
             return gh
         except ApiError as err:
-            _SECRETS.append(token)
-            say(err)
-        except (urllib.error.URLError, OSError) as err:
-            say("אין חיבור ל-GitHub (" + err.__class__.__name__ + "). בדקו את החיבור לאינטרנט ונסו שוב.")
+            say("TOKEN REFUSED | " + str(err))
+        except Exception as err:  # noqa: BLE001 - no connection, a cut reply, a proxy's page: ask again
+            say("NO CONNECTION | אין חיבור תקין ל-GitHub (" + str(err)[:80] + "). בדקו את החיבור לאינטרנט ונסו שוב.")
     return None
 
 
@@ -541,7 +554,9 @@ def pack(rd, known):
     for p in order:
         b = rd["files"][p]
         sha = git_blob_sha(b)
-        if sha in known or sha in new or len(new) < MAX_BLOBS:
+        if sha in known or sha in new:                 # already in the repository / in this round: no new request
+            files[p] = b
+        elif len(new) < MAX_BLOBS:
             new.add(sha)
             files[p] = b
         else:
@@ -592,74 +607,78 @@ def run():
     from playwright.sync_api import sync_playwright
     stop = stop_time()
     if stop and israel_now() >= stop:
-        say("השעה כבר אחרי %s (שעון ישראל): אין מה לאסוף." % STOP)
+        say("AFTER %s | השעה כבר אחרי %s (שעון ישראל): אין מה לאסוף." % (STOP, STOP))
         return 0
     with sync_playwright() as pw:
         try:
             browser, bname = launch_browser(pw)
         except Exception as err:  # noqa: BLE001
-            say("הדפדפן לא נפתח: " + str(err).split("\n")[0][:300])
+            say("ERROR | הדפדפן לא נפתח: " + str(err).split("\n")[0][:300])
             return 1
-        say("הדפדפן מוכן: %s %s" % (bname if bname != CHROME_PATH else "Chrome", browser.version))
+        say("BROWSER OK | הדפדפן מוכן: %s %s" % (bname if bname != CHROME_PATH else "Chrome", browser.version))
         gh = ask_token()
         if gh is None:
-            say("לא התקבל טוקן תקין. סוגר. אפשר להפעיל שוב באותה פקודה.")
+            say("NO TOKEN | לא התקבל טוקן תקין. סוגר. אפשר להפעיל שוב באותה פקודה.")
             return 1
         try:
             gh.ensure_branch()
         except ApiError as err:
-            say(err)
+            say(("ERROR | " if err.fatal else "") + str(err))
             if err.fatal:
                 return 1
-        except (urllib.error.URLError, OSError) as err:
-            say("אין חיבור ל-GitHub כרגע (%s): ננסה שוב בסבב הראשון." % err.__class__.__name__)
+        except Exception as err:  # noqa: BLE001 - a dropped connection, a cut reply: the first round tries again
+            say("NO CONNECTION | אין חיבור תקין ל-GitHub כרגע (%s): ננסה שוב בסבב הראשון." % str(err)[:80])
         pending, seen_code, n, last_base = [], {}, 0, ""
         while True:
             now = israel_now()
             if stop and now >= stop:
-                say("השעה %s: מסיים." % STOP)
+                say("STOP %s | השעה %s: מסיים." % (STOP, STOP))
                 break
             n += 1
             t0 = time.monotonic()
             base = now.strftime("%Y%m%d-%H%M")
             stamp = base if base != last_base else "%s-r%d" % (base, n)     # two rounds in one minute (tests)
             last_base = base
-            say("סבב %d: פותח את המפה..." % n)
+            say("round %d: opening the map | סבב %d: פותח את המפה..." % (n, n))
             try:
                 if not browser.is_connected():
                     browser, bname = launch_browser(pw)
                 rd = capture_round(browser, n, stamp, seen_code)
             except Exception as err:  # noqa: BLE001 - never stop the loop
-                say("סבב %d נכשל: %s" % (n, str(err).split("\n")[0][:200]))
+                say("round %d: FAILED | סבב %d נכשל: %s" % (n, n, str(err).split("\n")[0][:200]))
                 rd = None
             if rd:
-                click = "; נלחץ: " + ", ".join("'%s'" % c["text"] for c in rd["clicked"]) if rd["clicked"] else ""
-                say("סבב %d: %d תשובות מהאתר, מתוכן %d תשובות נתונים (JSON/CSV/XML/GeoJSON/protobuf)%s."
-                    % (n, rd["answers"], rd["data"], click))
-                if not rd["text_len"] and not rd["data"]:
-                    say("  המפה לא הציגה כלום בסבב הזה. " + "; ".join(rd["notes"])[:200])
-                save_local(rd)
-                rd["files"] = pack(rd, gh.known)
-                pending.append(rd)
-                while sum(sum(len(b) for b in r["files"].values()) for r in pending) > MAX_PENDING and len(pending) > 1:
-                    pending.pop(0)
+                try:
+                    click = "; נלחץ: " + ", ".join("'%s'" % c["text"] for c in rd["clicked"]) if rd["clicked"] else ""
+                    say("round %d: %d answers, %d data | סבב %d: %d תשובות מהאתר, מתוכן %d תשובות נתונים "
+                        "(JSON/CSV/XML/GeoJSON/protobuf)%s." % (n, rd["answers"], rd["data"], n, rd["answers"], rd["data"], click))
+                    if not rd["text_len"] and not rd["data"]:
+                        say("EMPTY | המפה לא הציגה כלום בסבב הזה. " + "; ".join(rd["notes"])[:200])
+                    save_local(rd)
+                    rd["files"] = pack(rd, gh.known)
+                    pending.append(rd)
+                    while sum(sum(len(b) for b in r["files"].values()) for r in pending) > MAX_PENDING and len(pending) > 1:
+                        pending.pop(0)
+                except Exception as err:  # noqa: BLE001 - never stop the loop
+                    say("round %d: FAILED | סבב %d לא נשמר: %s" % (n, n, str(err).split("\n")[0][:200]))
             if pending:
                 try:
                     sha, nfiles, nbytes = gh.upload(pending)
-                    say("הועלה ל-GitHub (ענף %s): %s, %d קבצים, %s חדשים, קומיט %s."
-                        % (BRANCH, ", ".join("capture/" + r["stamp"] for r in pending), nfiles, human(nbytes), sha[:7]))
+                    say("UPLOADED %s | הועלה ל-GitHub (ענף %s): %s, %d קבצים, %s חדשים, קומיט %s."
+                        % (sha[:7], BRANCH, ", ".join("capture/" + r["stamp"] for r in pending), nfiles, human(nbytes), sha[:7]))
                     pending = []
                 except ApiError as err:
-                    say("לא הועלה: %s. נשמר במחשב (%s), ננסה שוב בסבב הבא." % (err, OUT))
+                    say("NOT UPLOADED | לא הועלה: %s. נשמר במחשב (%s), ננסה שוב בסבב הבא." % (err, OUT))
                     if err.fatal:
                         return 1
-                except (urllib.error.URLError, OSError, ValueError, KeyError) as err:
-                    say("לא הועלה (אין חיבור ל-GitHub: %s). נשמר במחשב, ננסה שוב בסבב הבא." % err.__class__.__name__)
+                except Exception as err:  # noqa: BLE001 - a dropped connection, a cut or garbled reply: next round
+                    say("NOT UPLOADED | לא הועלה (אין חיבור תקין ל-GitHub: %s). נשמר במחשב, ננסה שוב בסבב הבא."
+                        % str(err)[:80])
             if MAX_ROUNDS and n >= MAX_ROUNDS:
                 break
             nxt = t0 + INTERVAL
-            say("הסבב הבא בעוד %d דקות (%s)." % (round(INTERVAL / 60),
-                                                (israel_now() + timedelta(seconds=max(0, nxt - time.monotonic()))).strftime("%H:%M")))
+            at = (israel_now() + timedelta(seconds=max(0, nxt - time.monotonic()))).strftime("%H:%M")
+            say("next round %s | הסבב הבא בעוד %d דקות (%s)." % (at, round(INTERVAL / 60), at))
             while time.monotonic() < nxt and not (stop and israel_now() >= stop):
                 time.sleep(min(5.0, max(0.1, nxt - time.monotonic())))
         try:
@@ -667,17 +686,20 @@ def run():
         except Exception:  # noqa: BLE001
             pass
     if pending:
-        say("נשארו סבבים שלא הועלו; הם שמורים במחשב בתיקייה " + OUT)
-    say("הסתיים. תודה!")
+        say("NOT UPLOADED | נשארו סבבים שלא הועלו; הם שמורים במחשב בתיקייה " + OUT)
+    say("DONE | הסתיים. תודה!")
     return 0
 
 
 def main():
     try:
         return run()
+    except Exception:  # noqa: BLE001 - last resort: a readable message, then the details (the token blanked)
+        say("ERROR | תקלה לא צפויה, הסקריפט נעצר. אפשר להפעיל שוב באותה פקודה.\n" + traceback.format_exc()[-2000:])
+        return 1
     except KeyboardInterrupt:
         print()
-        say("נעצר (Ctrl+C). מה שהועלה נשאר בענף %s, ועותק נמצא בתיקייה %s." % (BRANCH, OUT))
+        say("STOPPED | נעצר (Ctrl+C). מה שהועלה נשאר בענף %s, ועותק נמצא בתיקייה %s." % (BRANCH, OUT))
         sys.stdout.flush()
         os._exit(0)
 

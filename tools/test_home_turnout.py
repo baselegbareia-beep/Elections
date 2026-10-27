@@ -8,6 +8,8 @@ token is refused in Hebrew and asked again; two rounds become two commits on hom
 second on top of the first), each with capture/<stamp>/manifest.json and the data answers (JSON, CSV, a POST answer,
 and the GeoJSON the turnout tab loads when clicked); nothing that logs in or submits is clicked; the app's script is
 kept once; main is only read, never written; the token appears in no output, no file and no uploaded content.
+A second run checks that broken replies from GitHub (a Wi-Fi login page instead of the API, a reply cut short, a
+garbled status line) never stop the script: those rounds wait and go up with the next one.
 """
 import base64
 import glob
@@ -15,6 +17,7 @@ import hashlib
 import importlib.util
 import json
 import os
+import re
 import subprocess
 import sys
 import tempfile
@@ -92,14 +95,39 @@ def blob_sha(b):
 
 
 class Api(BaseHTTPRequestHandler):
-    log, raw = [], []
-    refs = {"main": "c0"}
-    commits = {"c0": {"tree": "t0", "parents": [], "message": "main"}}
-    trees = {"t0": {"README.md": "b0"}}
-    blobs = {"b0": b"readme"}
+    @classmethod
+    def reset(cls, faults=None):
+        cls.log, cls.raw = [], []
+        cls.refs = {"main": "c0"}
+        cls.commits = {"c0": {"tree": "t0", "parents": [], "message": "main"}}
+        cls.trees = {"t0": {"README.md": "b0"}}
+        cls.blobs = {"b0": b"readme"}
+        cls.faults = dict(faults or {})        # (method, path after the repo) -> faults for the next such calls
 
     def log_message(self, *a):
         pass
+
+    def _fault(self, method):
+        todo = Api.faults.get((method, self.path[len("/repos/" + REPO):]))
+        kind = todo.pop(0) if todo else None
+        if kind == "html":                     # a Wi-Fi login / proxy page instead of GitHub's answer
+            body = b"<html><body>Please log in to the Wi-Fi</body></html>"
+            self.send_response(200)
+            self.send_header("Content-Type", "text/html")
+            self.send_header("Content-Length", str(len(body)))
+            self.end_headers()
+            self.wfile.write(body)
+        elif kind == "cut":                    # a reply cut short: IncompleteRead
+            self.send_response(200)
+            self.send_header("Content-Type", "application/json")
+            self.send_header("Content-Length", "500")
+            self.end_headers()
+            self.wfile.write(b'{"sha": "')
+        elif kind == "garbled":                # not HTTP at all: BadStatusLine
+            self.wfile.write(b"garbage\r\n\r\n")
+        if kind:
+            self.close_connection = True
+        return kind
 
     def _send(self, code, obj):
         body = json.dumps(obj).encode()
@@ -116,6 +144,8 @@ class Api(BaseHTTPRequestHandler):
         body = json.loads(raw) if raw else None
         Api.log.append({"method": method, "path": self.path, "body": body,
                         "auth": self.headers.get("Authorization") == "Bearer " + TOKEN})
+        if self._fault(method):
+            return
         if self.headers.get("Authorization") != "Bearer " + TOKEN:
             return self._send(401, {"message": "Bad credentials"})
         pre = "/repos/" + REPO
@@ -181,14 +211,75 @@ check.failed = 0
 
 
 def test_israel_clock():
-    spec = importlib.util.spec_from_file_location("home_turnout", SCRIPT)
-    m = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(m)
+    m = load_script()
     for when, off in ((datetime(2026, 10, 27, 9, 0, tzinfo=timezone.utc), 2), (datetime(2026, 7, 1, 9, 0, tzinfo=timezone.utc), 3),
                       (datetime(2026, 10, 24, 22, 59, tzinfo=timezone.utc), 3), (datetime(2026, 10, 24, 23, 0, tzinfo=timezone.utc), 2),
                       (datetime(2026, 3, 26, 23, 59, tzinfo=timezone.utc), 2), (datetime(2026, 3, 27, 0, 0, tzinfo=timezone.utc), 3)):
         got = m.israel_now(when, zoneinfo_ok=False).utcoffset().total_seconds() / 3600
         check(got == off, "Israel clock without a tz database: %s -> UTC+%d" % (when.isoformat(), got))
+
+
+def load_script():
+    spec = importlib.util.spec_from_file_location("home_turnout", SCRIPT)
+    m = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(m)
+    return m
+
+
+def test_pack():
+    m = load_script()
+    old = {"code/%03d.js" % i: b"old %d" % i for i in range(70)}
+    known = {m.git_blob_sha(b) for b in old.values()}
+    rd = {"files": dict(old, **{"data/%03d.json" % i: b"new %d" % i for i in range(5)}), "manifest": {}}
+    files = m.pack(rd, known)
+    check("extra.zip" not in files and len(files) == 76, "files already uploaded do not count toward the 60 new ones")
+    rd = {"files": dict(old, **{"data/%03d.json" % i: b"new %d" % i for i in range(65)}), "manifest": {}}
+    files = m.pack(rd, known)
+    check(len(rd["manifest"].get("in_extra_zip", [])) == 5 and all(p.startswith("code/") or p in ("extra.zip", "manifest.json")
+          or p.startswith("data/") for p in files), "only new files beyond 60 go into extra.zip (%d)" % len(rd["manifest"].get("in_extra_zip", [])))
+
+
+def run_script(py, env, tokens, work):
+    p = subprocess.run([py, SCRIPT], input="".join(t + "\n" for t in tokens), capture_output=True, text=True, env=env,
+                       cwd=work, timeout=600, start_new_session=True)     # no terminal: getpass reads stdin
+    out = p.stdout + p.stderr
+    print(out)
+    return p.returncode, out
+
+
+def leaks_of(out, work):
+    leaks = [r for r in Api.raw if TOKEN.encode() in r] + [k for k, v in Api.blobs.items() if TOKEN.encode() in v]
+    for root, _, fs in os.walk(work):
+        for f in fs:
+            with open(os.path.join(root, f), "rb") as fh:
+                if TOKEN.encode() in fh.read():
+                    leaks.append(os.path.join(root, f))
+    if TOKEN in out or TOKEN[:20] in out:
+        leaks.append("the output")
+    return leaks
+
+
+def uploaded(out):
+    return len(re.findall(r"(?<!NOT )UPLOADED [0-9a-f]{7} \|", out))
+
+
+def test_broken_replies(py, base_env, api_url):
+    """Wi-Fi login page at the token check, a cut reply at round 1's upload, a garbled one at round 2's: no crash."""
+    Api.reset({("GET", ""): ["html"], ("POST", "/git/trees"): ["cut"], ("POST", "/git/commits"): ["garbled"]})
+    work = tempfile.mkdtemp(prefix="home_turnout_test_b_")
+    rc, out = run_script(py, dict(base_env, HOME_TURNOUT_ROUNDS="3"), [TOKEN, TOKEN], work)
+    check(rc == 0 and "Traceback" not in out, "broken replies: the script ran to the end (exit %s)" % rc)
+    check(out.count("NO CONNECTION") == 1 and "TOKEN OK" in out, "broken replies: a login page at the token check asks again")
+    check(out.count("NOT UPLOADED |") == 2, "broken replies: rounds 1 and 2 reported as not uploaded")
+    check(uploaded(out) == 1, "broken replies: round 3 uploaded")
+    head = Api.refs.get("home-capture")
+    c = Api.commits.get(head, {})
+    tree = Api.trees.get(c.get("tree"), {})
+    stamps = sorted({k.split("/")[1] for k in tree if k.startswith("capture/") and k.endswith("/manifest.json")})
+    check(c.get("parents") == ["c0"] and len(stamps) == 3, "broken replies: one commit carries all three rounds: %s" % stamps)
+    check(Api.refs["main"] == "c0", "broken replies: main unchanged")
+    leaks = leaks_of(out, work)
+    check(not leaks, "broken replies: the token is in no output, file or upload %s" % leaks[:3])
 
 
 def main():
@@ -198,22 +289,20 @@ def main():
         print("skipped: %s has no playwright (HOME_TURNOUT_PYTHON)" % py)
         return 0
     test_israel_clock()
+    test_pack()
     site, site_url = serve(Site)
+    Api.reset({("GET", "/git/ref/heads/home-capture"): ["cut"]})     # a cut reply at start-up: carry on
     api, api_url = serve(Api)
     work = tempfile.mkdtemp(prefix="home_turnout_test_")
     env = dict(os.environ, HOME_TURNOUT_API=api_url, HOME_TURNOUT_URL=site_url + "/", HOME_TURNOUT_CHROME=chrome,
                HOME_TURNOUT_INTERVAL="3", HOME_TURNOUT_SETTLE="1", HOME_TURNOUT_ROUNDS="2", HOME_TURNOUT_STOP="off",
                PYTHONIOENCODING="utf-8")
-    p = subprocess.run([py, SCRIPT], input="wrong-token\n" + TOKEN + "\n", capture_output=True, text=True, env=env,
-                       cwd=work, timeout=600, start_new_session=True)     # no terminal: getpass reads stdin
-    out = p.stdout + p.stderr
-    print(out)
-    site.shutdown()
-    api.shutdown()
+    rc, out = run_script(py, env, ["wrong-token", TOKEN], work)
 
-    check(p.returncode == 0, "exit code 0 (got %s)" % p.returncode)
-    check("הטוקן שגוי" in out, "a wrong token is refused in Hebrew and asked again")
-    check(out.count("הועלה ל-GitHub") == 2, "two rounds reported as uploaded")
+    check(rc == 0, "exit code 0 (got %s)" % rc)
+    check("הטוקן שגוי" in out and "TOKEN REFUSED" in out, "a wrong token is refused in Hebrew and asked again")
+    check("NO CONNECTION" in out and "Traceback" not in out, "a cut reply at start-up does not stop the script")
+    check(out.count("הועלה ל-GitHub") == 2 and uploaded(out) == 2, "two rounds reported as uploaded")
     writes = [r for r in Api.log if r["method"] != "GET"]
     check(all(r["auth"] for r in Api.log[1:]), "every call after the wrong token carries the right one")
     check(not any("main" in r["path"] or "main" in str((r["body"] or {}).get("ref", "")) for r in writes), "no write addresses main")
@@ -245,15 +334,14 @@ def main():
     csvs = [Api.blobs[v] for k, v in tree.items() if k.endswith("stations.csv")]
     check(len(set(csvs)) == 2, "each round's own data")
     check(("POST", "/api/login") not in Site.hits, "nothing that logs in or submits was clicked")
-    leaks = [r for r in Api.raw if TOKEN.encode() in r] + [k for k, v in Api.blobs.items() if TOKEN.encode() in v]
-    for root, _, fs in os.walk(work):
-        for f in fs:
-            with open(os.path.join(root, f), "rb") as fh:
-                if TOKEN.encode() in fh.read():
-                    leaks.append(os.path.join(root, f))
     check(TOKEN not in out and TOKEN[:20] not in out, "the token is not in the output")
+    leaks = leaks_of(out, work)
     check(not leaks, "the token is in no file and no uploaded content %s" % leaks[:3])
     check(len(glob.glob(os.path.join(work, "home_turnout_capture", "*", "manifest.json"))) == 2, "a local copy of both rounds")
+
+    test_broken_replies(py, env, api_url)
+    site.shutdown()
+    api.shutdown()
     print("\n%s" % ("ALL PASSED" if not check.failed else "%d FAILED" % check.failed))
     return 1 if check.failed else 0
 
