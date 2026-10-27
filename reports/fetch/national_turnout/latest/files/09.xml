@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 17:12:23 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 17:17:27 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -37,8 +37,8 @@
 		<pubDate>Tue, 27 Oct 2026 17:12:23 +0000</pubDate>
 				<category><![CDATA[בארץ]]></category>
 		<category><![CDATA[חדשות]]></category>
-		<category><![CDATA[חדשות 24/6]]></category>
 		<category><![CDATA[פוליטי]]></category>
+		<category><![CDATA[בחירות 2026]]></category>
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2755943</guid>
 
 					<description><![CDATA[<p>מערכת הבחירות לכנסת ה-26 רושמת אחוזי הצבעה גבוהים באופן ניכר ממערכות הבחירות הקודמות. בוועדת הבחירות מזכירים כי הקלפיות פתוחות עד השעה 22:00</p>
@@ -46,7 +46,7 @@
 ]]></description>
 										<content:encoded><![CDATA[<p>זינוק משמעותי בשיעורי ההשתתפות ביום הבחירות לכנסת ה-26: </p>
 <p>על פי נתונים רשמיים שפרסם ממלא מקום מנכ&quot;ל ועדת הבחירות המרכזית, עו&quot;ד דין ליבנה, שיעור ההצבעה הארצי נכון לשעה 18:00 עומד על 66.7% מכלל בעלי זכות הבחירה. </p>
-<p>מדובר בעלייה חדשה של כ-9% בהשוואה לשעה המקבילה בבחירות הקודמות, אז עמד שיעור ההצבעה על 57.7%.</p>
+<p>מדובר בעלייה משמעותית ביותר של כ-9% בהשוואה לשעה המקבילה בבחירות הקודמות, אז עמד שיעור ההצבעה על 57.7%.</p>
 <p>במרכז השליטה של ועדת הבחירות בכנסת ציינו לטובה את ההתגייסות הנרחבת של הציבור לממש את זכותם האזרחית.</p>
 <p>חמשת היישובים המובילים בשיעורי ההצבעה בקלפיות הרגילות:</p>
 <p>יובל – 91.5%</p>
@@ -297,10 +297,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 78/108 objects using Memcached
+Object Caching 77/108 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 42/67 queries in 0.194 seconds using Memcached
+Database Caching 43/69 queries in 0.505 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 19:13:11 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 19:19:16 by W3 Total Cache
 -->
