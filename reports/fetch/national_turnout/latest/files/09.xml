@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 20:09:13 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 20:18:01 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -37,14 +37,28 @@
 		<pubDate>Tue, 27 Oct 2026 20:09:13 +0000</pubDate>
 				<category><![CDATA[בארץ]]></category>
 		<category><![CDATA[חדשות]]></category>
-		<category><![CDATA[חדשות 24/6]]></category>
 		<category><![CDATA[פוליטי]]></category>
+		<category><![CDATA[בחירות 2026]]></category>
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2756030</guid>
 
 					<description><![CDATA[<p>מדגמי הבחירות של ערוצי התקשורת השונים עם סגירת הקלפיות הרשמית בשעה 22:00</p>
 <p>הפוסט <a href="https://www.jdn.co.il/news/2756030/">2026 הבחירות הדרמטיות ביותר. אלו תוצאות המדגמים השונים</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
 ]]></description>
-										<content:encoded><![CDATA[<p>מדגם חדשות 12:</p>
+										<content:encoded><![CDATA[<p>דרמה עם תום יום ההצבעה: </p>
+<p>בשעה 22:00 נסגרו הקלפיות ברחבי הארץ והסתיימה ההצבעה במערכת הבחירות לכנסת ה-26. </p>
+<p>מיד עם סגירתן פורסמו נתוני המדגמים של גופי התקשורת השונים, המציגים פערים ושלל תרחישים לבניית הקואליציה הבאה.   </p>
+<p>עיקרי נתוני המדגמים הראשוניים: מדגם ערוץ 14: מציג יתרון משמעותי לגוש הימין בראשות בנימין נתניהו, המגיע ל-60 מנדטים, בעוד מפלגות האופוזיציה והגוש הנגדי משיגות מספר מנדטים נמוך יותר.  </p>
+<p>מדגמי הערוצים המקבילים (12, 13 ו-11): מציגים תמונה שקולה וצמודה בהרבה, שבה גוש האופוזיציה זוכה להובלה קלה או לשוויון, ללא יתרון מובהק שמבטיח הקמת ממשלה לאף אחד מהצדדים בשלב זה.</p>
+<p>במטות המפלגות מבהירים כי מדובר במדגמים המבוססים על מדגם קלפיות חלקי בלבד, וכי הלילה עוד ארוך עד לקבלת הנתונים הרשמיים. </p>
+<p>ספירת המעטפות הכפולות והספירה הארצית בראשות ועדת הבחירות המרכזית צפויות להימשך לתוך הלילה ומחר, עד לגיבוש תוצאות האמת הסופיות.</p>
+<p>סיכום הגושים:<br />
+11-    50 &#8211; 70<br />
+12-    50 &#8211; 70<br />
+13-    50 &#8211; 70<br />
+14-    60 &#8211; 60<br />
+15-    55 &#8211; 65<br />
+16-    53 &#8211; 67</p>
+<p>מדגם חדשות 12:</p>
 <p>ליכוד 24<br />
 ישר 22<br />
 בנט 12<br />
@@ -124,7 +138,7 @@
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261014YS06.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2756030</post-id>	</item>
 		<item>
-		<title>המדגמים פורסמו: תמונת המנדטים ומאזן הגושים בברומטר של חדשות JDN</title>
+		<title>המדגמים פורסמו: תמונת המנדטים המלאה ומאזן הגושים כעת בברומטר של חדשות JDN</title>
 		<link>https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.</link>
 					<comments>https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.#respond</comments>
 		
@@ -135,9 +149,9 @@
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2756006</guid>
 
 					<description><![CDATA[<p>עם סגירת הקלפיות בסיום יום הבחירות לכנסת ה-26, תוצאות כל המדגמים מתפרסמים כעת באתר הברומטר של חדשות JDN. היכנסו לצפות בחלוקת המנדטים ובתמונת הגושים הראשונית, לקראת פרסום תוצאות האמת וספירת הקולות</p>
-<p>הפוסט <a href="https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.">המדגמים פורסמו: תמונת המנדטים ומאזן הגושים בברומטר של חדשות JDN</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+<p>הפוסט <a href="https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.">המדגמים פורסמו: תמונת המנדטים המלאה ומאזן הגושים כעת בברומטר של חדשות JDN</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
 ]]></description>
-										<content:encoded><![CDATA[<p>הפוסט <a href="https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.">המדגמים פורסמו: תמונת המנדטים ומאזן הגושים בברומטר של חדשות JDN</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+										<content:encoded><![CDATA[<p>הפוסט <a href="https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk.">המדגמים פורסמו: תמונת המנדטים המלאה ומאזן הגושים כעת בברומטר של חדשות JDN</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
 ]]></content:encoded>
 					
 					<wfw:commentRss>https://elections.jdn.co.il/?_gl=1*1q4wykz*_ga*NDMyNDE3MTA5LjE3OTMwNzc3NDc.*_ga_YJT2MEDT6W*czE3OTMxMzA5OTMkbzEzJGcxJHQxNzkzMTMxMzczJGo1NyRsMCRoNjM5NjQ4ODk./feed/</wfw:commentRss>
@@ -362,10 +376,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 75/109 objects using Memcached
+Object Caching 78/110 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 44/72 queries in 5.404 seconds using Memcached
+Database Caching 45/69 queries in 0.152 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 22:10:30 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 22:18:38 by W3 Total Cache
 -->
