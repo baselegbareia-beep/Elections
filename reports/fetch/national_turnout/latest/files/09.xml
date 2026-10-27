@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 15:41:17 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 15:44:33 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -29,6 +29,36 @@
 	<height>32</height>
 </image> 
 	<item>
+		<title>המגיפה השקטה בגבעתיים: קשיש אותר ללא רוח חיים לאחר שבאו לקחת אותו לקלפי</title>
+		<link>https://www.jdn.co.il/news/2755916/</link>
+					<comments>https://www.jdn.co.il/news/2755916/#respond</comments>
+		
+		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
+		<pubDate>Tue, 27 Oct 2026 15:44:33 +0000</pubDate>
+				<category><![CDATA[בארץ]]></category>
+		<category><![CDATA[חדשות]]></category>
+		<category><![CDATA[זק"א]]></category>
+		<category><![CDATA[מגיפה]]></category>
+		<category><![CDATA[מוות]]></category>
+		<guid isPermaLink="false">https://www.jdn.co.il/?p=2755916</guid>
+
+					<description><![CDATA[<p>טרגדיה בגבעתיים: גבר כבן 88 אותר ללא רוח חיים בביתו זמן רב לאחר מותו, לאחר שידידה הגיעה לביתו כדי לקחת אותו להצביע בקלפי כמתוכנן. מתנדבי זק"א פועלים בזירה והגופה הועברה למכון לרפואה משפטית</p>
+<p>הפוסט <a href="https://www.jdn.co.il/news/2755916/">המגיפה השקטה בגבעתיים: קשיש אותר ללא רוח חיים לאחר שבאו לקחת אותו לקלפי</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+]]></description>
+										<content:encoded><![CDATA[<p data-path-to-node="1">אירוע מצער ומורכב התרחש ברחוב רמז בגבעתיים, בצל פעילות יום הבחירות: גבר כבן 88 אותר בביתו כשהוא ללא רוח חיים, זמן רב לאחר מותו.</p>
+<p data-path-to-node="2">נסיבות הגילוי קורעות לב: ידידה של המנוח שסיכמה עמו מראש לבוא ולקחת אותו לקלפי הסמוכה על מנוע ממנו לממש את זכות הצבעתו, הגיעה לדירתו ושם גילתה אותו כשהוא ללא רוח חיים במצב ריקבון מתקדם.</p>
+<p data-path-to-node="3">צוותי זק&quot;א (מוקד 1223), בראשות מנהל אגף הלוגיסטיקה שמואל קלמן והמתנדב ברוך טרופר, הוזעקו למקום ופועלים בזירה הקשה. ומתנדבים טיפלו בכבוד המת וסייעו לכוחות המשטרה באיסוף הממצאים. הגופה הועברה למכון הלאומי לרפואה משפטית לבדיקת נסיבות המוות.</p>
+<p data-path-to-node="5">
+<p>הפוסט <a href="https://www.jdn.co.il/news/2755916/">המגיפה השקטה בגבעתיים: קשיש אותר ללא רוח חיים לאחר שבאו לקחת אותו לקלפי</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://www.jdn.co.il/news/2755916/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3884_800x600.jpg" medium="image"></media:content>
+            <post-id xmlns="com-wordpress:feed-additions:1">2755916</post-id>	</item>
+		<item>
 		<title>עתירה דחופה לוועדת הבחירות: בנט נגד שידורי תעמולת הגיוועלד של נתניהו</title>
 		<link>https://www.jdn.co.il/news/2755912/</link>
 					<comments>https://www.jdn.co.il/news/2755912/#respond</comments>
@@ -150,7 +180,7 @@
 		<item>
 		<title>נתניהו זועק &#034;געוואלד&#034;: &#034;השמאל מטיסים מצביעים מחו&#034;ל &#8211; זו תהיה בכייה לדורות&#034;</title>
 		<link>https://www.jdn.co.il/news/2755898/</link>
-					<comments>https://www.jdn.co.il/news/2755898/#respond</comments>
+					<comments>https://www.jdn.co.il/news/2755898/#comments</comments>
 		
 		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
 		<pubDate>Tue, 27 Oct 2026 15:01:44 +0000</pubDate>
@@ -172,7 +202,7 @@
 ]]></content:encoded>
 					
 					<wfw:commentRss>https://www.jdn.co.il/news/2755898/feed/</wfw:commentRss>
-			<slash:comments>0</slash:comments>
+			<slash:comments>1</slash:comments>
 		
 		
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261027YS110.jpg" medium="image"></media:content>
@@ -239,45 +269,16 @@
 		
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F150422NS14-1.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2755890</post-id>	</item>
-		<item>
-		<title>הערכת מצב במשלט ועדת הבחירות: מנכ&#034;ל משרד הפנים נפגש עם ראשי הוועדה</title>
-		<link>https://www.jdn.co.il/news/2755886/</link>
-					<comments>https://www.jdn.co.il/news/2755886/#respond</comments>
-		
-		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
-		<pubDate>Tue, 27 Oct 2026 14:30:10 +0000</pubDate>
-				<category><![CDATA[חדשות]]></category>
-		<category><![CDATA[פוליטי]]></category>
-		<category><![CDATA[אוזן]]></category>
-		<category><![CDATA[בחירות]]></category>
-		<category><![CDATA[סולברג]]></category>
-		<guid isPermaLink="false">https://www.jdn.co.il/?p=2755886</guid>
-
-					<description><![CDATA[<p>מנכ"ל משרד הפנים ישראל אוזן מקיים הערכת מצב במטה ועדת הבחירות בכנסת יחד עם יו"ר הוועדה השופט נעם סולברג ומ"מ המנכ"ל עו"ד דין ליבנה, לסקירת ההצבעה והמענה לבוחרים</p>
-<p>הפוסט <a href="https://www.jdn.co.il/news/2755886/">הערכת מצב במשלט ועדת הבחירות: מנכ&quot;ל משרד הפנים נפגש עם ראשי הוועדה</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
-]]></description>
-										<content:encoded><![CDATA[<p data-path-to-node="1"><span class="">מנכ&quot;ל משרד הפנים,</span><span class=""> ישראל אוזן,</span> משתתף כעת בהערכת מצב תקופתית שנערכת במרכז השליטה המרכזי של ועדת הבחירות המרכזית בכנסת.</p>
-<p data-path-to-node="2">הפגישה נערכת בהשתתפות יו&quot;ר ועדת הבחירות המרכזית, שופט בית המשפט העליון נעם סולברג,<span class=""> וממלא מקום מנכ&quot;ל הוועדה,</span><span class=""> עו&quot;ד דין ליבנה.</span> במסגרת הערכת המצב נבחנת התנהלות יום הבחירות בשטח, זרימת הנתונים מהקלפיות ברחבי הארץ, הסדרי האבטחה והמענה הניתן לציבור הבוחרים.<img fetchpriority="high" decoding="async" class="alignnone size-medium wp-image-2755887" src="https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3643-768x1024.jpg" alt="" width="768" height="1024" / fetchpriority="high" loading="eager" srcset="https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3643-768x1024.jpg 768w, https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3643-1152x1536.jpg 1152w, https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3643.jpg 1200w" sizes="(max-width: 768px) 100vw, 768px" /></p>
-<p data-path-to-node="4">
-<p>הפוסט <a href="https://www.jdn.co.il/news/2755886/">הערכת מצב במשלט ועדת הבחירות: מנכ&quot;ל משרד הפנים נפגש עם ראשי הוועדה</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
-]]></content:encoded>
-					
-					<wfw:commentRss>https://www.jdn.co.il/news/2755886/feed/</wfw:commentRss>
-			<slash:comments>0</slash:comments>
-		
-		
-		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA3642.jpg" medium="image"></media:content>
-            <post-id xmlns="com-wordpress:feed-additions:1">2755886</post-id>	</item>
 	</channel>
 </rss>
 
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 77/116 objects using Memcached
+Object Caching 77/109 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 45/73 queries in 0.241 seconds using Memcached
+Database Caching 39/71 queries in 0.215 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 17:43:42 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 17:45:46 by W3 Total Cache
 -->
