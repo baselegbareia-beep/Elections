@@ -1,9 +1,9 @@
-## CEC file discovery, 26.10 13:32 Israel time (full, github-hosted)
+## CEC file discovery, 27.10 10:47 Israel time (quick, github-hosted)
 
-- **WAF: seen** on bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 2 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
-- **The browser path got past it: yes**: 4 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×4.
+- **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 9 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
+- **The browser path got past it: yes**: 15 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×15.
 
-430 URLs probed in 114 s, 37 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+91 URLs probed in 33 s, 42 answered. Control (2022 file): FAILED (URLError: <urlopen error [Errno 104] Connection reset by peer>): other CEC hosts did answer. How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
@@ -12,17 +12,17 @@
 | station_turnout_url | — | not set | — |  |
 | national hourly (live_input/turnout.json) | — | none found | — |  |
 
-Other candidates (in brackets: why not suggested, or what to check):
-
-- results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
-
-### Since 2026-10-25T12:08:14+02:00: 2 new, 1 changed, 0 gone
+### Since 2026-10-26T13:32:32+02:00: 6 new, 0 changed, 1 gone
 
 |  | URL | class | what |
 |---|---|---|---|
-| new | https://www.gov.il/cdn-cgi/challenge-platform/scripts/precursor/main.js | script | was not probed |
-| new | https://www.gov.il/he/pages/chat-config.json | html | was 403 |
-| changed | https://data.gov.il/api/3/action/package_show?id=votes-knesset | data-other | bytes: 29919 → 29495, sha256: 790bd24f1170 → ae348223d793 |
+| new | https://votes26.bechirot.gov.il/ | html | was 404 |
+| new | https://votes26.bechirot.gov.il/nationalresults | html | was 404 |
+| new | https://votes26.bechirot.gov.il/cityresults | html | was 404 |
+| new | https://votes26.bechirot.gov.il/ballotresults | html | was 404 |
+| new | https://elections.govmap.gov.il/ | html | was not probed |
+| new | https://www.gov.il/he/pages/statement-of-accessibility-result-site | html | was not probed |
+| gone | https://media25.bechirot.gov.il/files/expc.csv | results-locality | now URLError: <urlopen error [Errno 104] Connection reset by peer> |
 
 ### Files and pages with data
 
@@ -30,15 +30,6 @@ Other candidates (in brackets: why not suggested, or what to check):
 |---|---|---|---|---|---|
 | data-other | https://data.gov.il/api/3/action/help_show?name=package_show | 200 | 595 |  |  |
 | data-other | https://data.gov.il/api/3/action/package_show?id=votes-knesset | 200 | 29495 |  | json 17 rows |
-| results-locality | https://media25.bechirot.gov.il/files/expc.csv | 200 | 154331 | Tue, 08 Nov 2022 15:03:31 GMT | csv 1216 rows; 1215 loc, 1215 counted; letters 2022 (a test file?); 1 double-envelope rows (סמל ישוב 9999); stored: files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
-
-### Stored files (1; on the ops-reports branch under reports/, locally under the --out folder)
-
-`git fetch origin ops-reports && git show origin/ops-reports:reports/<path> > <file>`; convert a turnout release with `python3 pipeline/discover.py --convert <file>` (docs/FILE_DISCOVERY.md §3).
-
-| class | URL | bytes | path |
-|---|---|---|---|
-| results-locality | https://media25.bechirot.gov.il/files/expc.csv | 154331 | files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
 
 ### Hosts
 
@@ -47,16 +38,17 @@ Other candidates (in brackets: why not suggested, or what to check):
 | analytics.egov.gov.il | 147.237.12.35 | 1 | 0 | {"no answer": 1} |  |  | URLError |
 | bechirot.gov.il | 147.237.12.28 | 3 | 0 | {"404": 3} | browser 3 | 1 | CloudFront (Error from cloudfront) |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
-| cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | urllib 3 |  | skipped; URLError |
+| cdn-votes26.bechirot.gov.il | 147.237.2.202 | 5 | 0 | {"no answer": 5} | urllib 3 |  | URLError; skipped |
 | data.gov.il | 3.170.185.105, 3.170.185.24, 3.170.185.59 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
-| e.data.gov.il | 13.226.53.101, 13.226.53.120, 13.226.53.129 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
-| media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} | urllib 1 |  |  |
-| media26.bechirot.gov.il | 18.172.122.24, 18.172.122.43, 18.172.122.65 | 270 | 0 | {"404": 270} | urllib 270 |  | CloudFront (Error from cloudfront) |
+| e.data.gov.il | 13.227.87.13, 13.227.87.51, 13.227.87.63 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| elections.govmap.gov.il | 18.154.110.12, 18.154.110.126, 18.154.110.82 | 9 | 1 | {"200": 9} | urllib 9 |  |  |
+| media25.bechirot.gov.il | 147.237.3.207 | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
+| media26.bechirot.gov.il | 18.172.122.24, 18.172.122.43, 18.172.122.65 | 10 | 0 | {"404": 10} | browser 4, urllib 6 | 2 | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} | urllib 7 |  |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| votes26.bechirot.gov.il | 13.226.53.120, 13.226.53.62, 13.226.53.70 | 55 | 0 | {"404": 55} | urllib 55 |  | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 2600:9000:2137:2a00:1e:5e2c:7e80:93a1, 2600:9000:2137:3a00:1e:5e2c:7e80:93a1, 2600:9000:2… | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
-| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 19 | 17 | {"200": 17, "404": 2} | urllib 19 |  | not found |
+| votes26.bechirot.gov.il | 2600:9000:2137:2000:3:c455:d440:93a1, 2600:9000:2137:4000:3:c455:d440:93a1, 2600:9000:213… | 13 | 4 | {"200": 4, "404": 9} | browser 7, urllib 6 | 5 | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 2600:9000:2137:5200:1e:5e2c:7e80:93a1, 2600:9000:2137:6800:1e:5e2c:7e80:93a1, 2600:9000:2… | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
+| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 20 | 18 | {"200": 18, "404": 2} | urllib 20 |  | not found |
 
 ### Pages and scripts that answered
 
@@ -79,12 +71,18 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc… | 200 | כניסה - חשבונות Google |
 | https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12… | 200 | כניסה - חשבונות Google |
+| https://elections.govmap.gov.il/ | 200 | Govmap מפות ישראל |
+| https://votes26.bechirot.gov.il/ | 200 | ועדת הבחירות המרכזית לכנסת ה-26 \| תוצאות ארציות |
+| https://votes26.bechirot.gov.il/ballotresults | 200 | ועדת הבחירות המרכזית לכנסת ה-26 \| תוצאות ארציות |
+| https://votes26.bechirot.gov.il/cityresults | 200 | ועדת הבחירות המרכזית לכנסת ה-26 \| תוצאות ארציות |
+| https://votes26.bechirot.gov.il/nationalresults | 200 | ועדת הבחירות המרכזית לכנסת ה-26 \| תוצאות ארציות |
 | https://www.gov.il/he/pages/_complete.js | 200 |  |
 | https://www.gov.il/he/pages/chat-config.json | 200 |  |
 | https://www.gov.il/he/pages/chat.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/gaPush.js | 200 |  |
 | https://www.gov.il/he/pages/govilCoreCloud/cdn/hfGaEvents.js | 200 |  |
 | https://www.gov.il/he/pages/gtm.js | 200 |  |
+| https://www.gov.il/he/pages/statement-of-accessibility-result-site | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour-26 | 200 |  |
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 |  |
@@ -99,6 +97,38 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 ### Harvested from pages and scripts
 
+- https://votes26.bechirot.gov.il/: 8 links, 2 scripts
+  - https://elections.govmap.gov.il/
+  - https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,
+  - https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,
+  - https://votes26.bechirot.gov.il/ballotresults?lang=he
+  - https://votes26.bechirot.gov.il/cityresults?lang=he
+  - https://votes26.bechirot.gov.il/nationalresults?lang=he
+  - https://www.gov.il/he/pages/statement-of-accessibility-result-site
+- https://votes26.bechirot.gov.il/nationalresults: 8 links, 2 scripts
+  - https://elections.govmap.gov.il/
+  - https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,
+  - https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,
+  - https://votes26.bechirot.gov.il/ballotresults?lang=he
+  - https://votes26.bechirot.gov.il/cityresults?lang=he
+  - https://votes26.bechirot.gov.il/nationalresults?lang=he
+  - https://www.gov.il/he/pages/statement-of-accessibility-result-site
+- https://votes26.bechirot.gov.il/cityresults: 8 links, 2 scripts
+  - https://elections.govmap.gov.il/
+  - https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,
+  - https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,
+  - https://votes26.bechirot.gov.il/ballotresults?lang=he
+  - https://votes26.bechirot.gov.il/cityresults?lang=he
+  - https://votes26.bechirot.gov.il/nationalresults?lang=he
+  - https://www.gov.il/he/pages/statement-of-accessibility-result-site
+- https://votes26.bechirot.gov.il/ballotresults: 8 links, 2 scripts
+  - https://elections.govmap.gov.il/
+  - https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,
+  - https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,
+  - https://votes26.bechirot.gov.il/ballotresults?lang=he
+  - https://votes26.bechirot.gov.il/cityresults?lang=he
+  - https://votes26.bechirot.gov.il/nationalresults?lang=he
+  - https://www.gov.il/he/pages/statement-of-accessibility-result-site
 - https://data.gov.il/api/3/action/package_show?id=votes-knesset: 19 links, 0 scripts
   - https://data.gov.il/api/3/action/help_show?name=package_show
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/1a1c7b2b-e819-4ba9-b159-d68e3566c58b/download/-21-.csv
@@ -118,6 +148,8 @@ Other candidates (in brackets: why not suggested, or what to check):
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/c3db5581-f48d-45fc-b221-e7635e940c41/download/expbkal20.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/cc223336-07bc-485d-b160-62df92967c0a/download/-25-.csv
   - https://e.data.gov.il/dataset/26f9fa06-fcd7-4173-8df5-65797b63e857/resource/f79f9ba5-fe12-4b90-96cc-916f1b7c1c34/download/-21-.csv
+- https://elections.govmap.gov.il/: 2 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
 - https://www.gov.il/govilCoreCloud/cdn/chat.js: 9 links, 1 scripts
   - https://www.gov.il/api/
   - https://www.gov.il/api/GetChatConfig
@@ -143,8 +175,22 @@ Other candidates (in brackets: why not suggested, or what to check):
 - https://www.gov.il/pages/main.984b301a425b65f0.js: 1 links, 0 scripts
   - fragment: `:e.contentPageWebApi,o=null==(a=window.govilRunConfig)?void 0:a.clientId,i='${l}/api/content-pages/${n}?culture=${A}'+(r.chapterIndex?'&chapterIndex=${r.chapterIndex`
   - fragment: `Options:n,shareLabel:r})=>{const[a,l,i]=d();if((0,o().useEffect)(()=>{e&&l('${e}/api/GetSharePageList?culture=he',!1,void 0,t)},[]),null==a\|\|!a.length\|\|i)return null`
+- https://elections.govmap.gov.il/assets/index-9nN73Q-1.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/index-legacy-JkzIpvq9.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/polyfills-legacy-vUtxk7fV.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
+- https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js: 3 links, 7 scripts
+  - https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json
 
-<details><summary>393 URLs that did not answer with data</summary>
+<details><summary>49 URLs that did not answer with data</summary>
 
 | URL | HTTP | why |
 |---|---|---|
@@ -154,327 +200,21 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
 | https://bechirot26.bechirot.gov.il/election/about/Pages/Hours_section_turnout.aspx | 0 | URLError: <urlopen error [Errno -2] Name or service not known> |
 | https://cdn-votes26.bechirot.gov.il/ | 0 | URLError: <urlopen error timed out> |
-| https://cdn-votes26.bechirot.gov.il/api | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/api/ballots | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/api/results | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/api/turnout | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/data | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/achuz.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/achuz_hatzbaa.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ahuz.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ballot_turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ballots.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/ballots_turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
 | https://cdn-votes26.bechirot.gov.il/files/expb.csv | 0 | skipped: the host did not answer 3 times in this run |
 | https://cdn-votes26.bechirot.gov.il/files/expc.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/hatzbaa.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/hourly.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/hours.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/kalpi.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/kalpi_turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/kalpiot.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/kalpiot_turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/participation.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/percent.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/percent_kalpi.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/percentage.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/shiur_hatzbaa.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/station_turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/stations.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout26.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_26.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_ballot.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_ballots.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_by_ballot.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_by_kalpi.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_kalpi.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_kalpiot.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_station.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/turnout_stations.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/vote_percent.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/votes_percent.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/voting_percent.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/voting_percentage.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/files/votingpercentage.csv | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/percent | 0 | skipped: the host did not answer 3 times in this run |
 | https://cdn-votes26.bechirot.gov.il/robots.txt | 0 | URLError: <urlopen error timed out> |
 | https://cdn-votes26.bechirot.gov.il/sitemap.xml | 0 | URLError: <urlopen error timed out> |
-| https://cdn-votes26.bechirot.gov.il/turnout | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/voting-percentage | 0 | skipped: the host did not answer 3 times in this run |
-| https://cdn-votes26.bechirot.gov.il/votingpercentage | 0 | skipped: the host did not answer 3 times in this run |
+| https://media25.bechirot.gov.il/files/expc.csv | 0 | URLError: <urlopen error [Errno 104] Connection reset by peer> |
 | https://media26.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/?list-type=2 | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/?prefix=files/ | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/expb.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/expc.csv | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/files/ | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/achuz_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ahuz_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballot_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/ballots_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/double_envelopes.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/envelopes.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expa.csv | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/files/expb.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb.zip | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb_env.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expb_maatafot.csv | 404 | CloudFront (Error from cloudfront) |
+| https://media26.bechirot.gov.il/files/expb.csv?','name','height=100, | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/files/expc.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expc.zip | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expd.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expe.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expf.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expg.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/exph.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expj.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expk.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expl.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expm.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expn.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expo.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expp.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expq.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expr.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/exps.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expt.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expu.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expv.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expw.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expx.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expy.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/expz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hourly.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/hours.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpi_turnout_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kalpiot_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/kfulot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/maatafot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/maatafot_kfulot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/participation.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percent_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/percentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/shiur_hatzbaa.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/soldiers.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/station_turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/stations.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout26.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_26.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_ballots.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_ballot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_by_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_10.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_11.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1100.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_12.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_13.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1300.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_14.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1400.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_15.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1500.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_16.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1600.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_17.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1700.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_18.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1800.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_19.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_1900.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_20.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_2000.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_22.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpi_2200.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_kalpiot.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_station.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/turnout_stations.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/vote_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votes_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percent.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/voting_percentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.json | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/files/votingpercentage.xlsx | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/percentage.csv | 404 | CloudFront (Error from cloudfront) |
+| https://media26.bechirot.gov.il/files/expc.csv?','name','height=100, | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/robots.txt | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
 | https://media26.bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://media26.bechirot.gov.il/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetHeaderMoreData | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
@@ -483,63 +223,25 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1/api/GetServices?culture… | 500 |  |
 | https://sm.gov.il/trends.json | 0 | URLError: <urlopen error [SSL: SSLV3_ALERT_HANDSHAKE_FAILURE] sslv3 alert handshake failu… |
-| https://votes26.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/ballots | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/results | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/api/turnout | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/ballotresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/cityresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/data | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/achuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/achuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ahuz.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ahuz_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/ballots_turnout.csv | 404 | CloudFront (Error from cloudfront) |
+| https://votes26.bechirot.gov.il/ballotresults?lang=he | 404 | CloudFront (Error from cloudfront) |
+| https://votes26.bechirot.gov.il/cityresults?lang=he | 404 | CloudFront (Error from cloudfront) |
 | https://votes26.bechirot.gov.il/files/expb.csv | 404 | CloudFront (Error from cloudfront) |
 | https://votes26.bechirot.gov.il/files/expc.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hourly.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/hours.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpi_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/kalpiot_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/participation.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percent_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/shiur_hatzbaa.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/station_turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_26.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_ballots.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_by_ballot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_by_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_kalpi.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_kalpiot.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_station.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/turnout_stations.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/vote_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/votes_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/voting_percent.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/voting_percentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/files/votingpercentage.csv | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/nationalresults | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/percent | 404 | CloudFront (Error from cloudfront) |
+| https://votes26.bechirot.gov.il/functions/main.min.js | 404 | CloudFront (Error from cloudfront) |
+| https://votes26.bechirot.gov.il/nationalresults?lang=he | 404 | CloudFront (Error from cloudfront) |
 | https://votes26.bechirot.gov.il/robots.txt | 404 | CloudFront (Error from cloudfront) |
+| https://votes26.bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js | 404 | CloudFront (Error from cloudfront) |
 | https://votes26.bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/turnout | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/voting-percentage | 404 | CloudFront (Error from cloudfront) |
-| https://votes26.bechirot.gov.il/votingpercentage | 404 | CloudFront (Error from cloudfront) |
 | https://www.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
 | https://www.gov.il/api/ | 404 | not found |
 | https://www.gov.il/api/GetChatConfig | 404 | not found |
+| https://elections.govmap.gov.il/assets/index-9nN73Q-1.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/index-legacy-JkzIpvq9.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/polyfills-legacy-vUtxk7fV.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js | 200 | same page as the site root |
+| https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js | 200 | same page as the site root |
 
 </details>
