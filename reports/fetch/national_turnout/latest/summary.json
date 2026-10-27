@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 20:52 UTC",
+ "started": "2026-10-27 20:55 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 71
+   "items": 74
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -123,8 +123,8 @@
      "title": "זינוק היסטורי בהצבעה בבחירות: סולברג הכריע שעות ההצבעה לא יאורכו"
     },
     "גלובס": {
-     "published": "2026-10-27T20:44:00+00:00",
-     "published_il": "22:44",
+     "published": "2026-10-27T20:53:00+00:00",
+     "published_il": "22:53",
      "title": "מדגמי הטלוויזיה: תסבוכת פוליטית והפתעה אחת משמעותית"
     }
    }
@@ -236,6 +236,11 @@
      "published": "2026-10-27T13:06:26+00:00",
      "published_il": "15:06",
      "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד השעה 14:00: 44.9% - כאן 11"
+    },
+    "אמס": {
+     "published": "2026-10-27T13:14:12+00:00",
+     "published_il": "15:14",
+     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
     },
     "ynet": {
      "published": "2026-10-27T11:58:52+00:00",
@@ -726,20 +731,6 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T19:10:37+00:00",
-   "published_il": "21:10",
-   "title": "שיעור ההצבעה מזנק: 74.3% הצביעו עד השעה 20:00 - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PS0tRUlAwZ2dIM0VzY2hkcjdvZzZQNk5XNXc0RkF2aGdJU0FWcDhNNzlCSUw0UmhmQWxhU0ZfNm1vWFFuRUs2TERTeWlTcXI5ZERN?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "PassportNews",
    "published": "2026-10-27T19:00:00+00:00",
    "published_il": "21:00",
@@ -754,15 +745,29 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T10:58:42+00:00",
-   "published_il": "12:58",
-   "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMS2NuaW1wZlVpeGJoUHcydkNfb0ZLVkZlWGZtT2RmYnF4TG5jVUxfUUthZHhtanBhRmpvNk9VRHdfU2FHSEdhNkR3SXBYOENGWXFRRDcwckl1UQ?oc=5",
+   "outlet": "הידברות",
+   "published": "2026-10-27T19:10:37+00:00",
+   "published_il": "21:10",
+   "title": "שיעור ההצבעה מזנק: 74.3% הצביעו עד השעה 20:00 - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE1PS0tRUlAwZ2dIM0VzY2hkcjdvZzZQNk5XNXc0RkF2aGdJU0FWcDhNNzlCSUw0UmhmQWxhU0ZfNm1vWFFuRUs2TERTeWlTcXI5ZERN?oc=5",
    "figures": [
     [
-     "12:00",
-     31.5
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -909,8 +914,8 @@
   {
    "feed": "גלובס",
    "outlet": "גלובס",
-   "published": "2026-10-27T20:44:00+00:00",
-   "published_il": "22:44",
+   "published": "2026-10-27T20:53:00+00:00",
+   "published_il": "22:53",
    "title": "מדגמי הטלוויזיה: תסבוכת פוליטית והפתעה אחת משמעותית",
    "link": "https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS",
    "figures": [
