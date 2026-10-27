@@ -1,12 +1,12 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:20 UTC",
+ "started": "2026-10-27 14:23 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 85
+   "items": 90
   },
   {
    "name": "Google News: אחוז ההצבעה",
@@ -210,15 +210,15 @@
   },
   "10:00": {
    "16.68": {
-    "JDN": {
-     "published": "2026-10-27T11:40:23+00:00",
-     "published_il": "13:40",
-     "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN"
-    },
     "YNET": {
      "published": "2026-10-27T09:01:13+00:00",
      "published_il": "11:01",
      "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET"
+    },
+    "JDN": {
+     "published": "2026-10-27T11:40:23+00:00",
+     "published_il": "13:40",
+     "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN"
     },
     "סרוגים": {
      "published": "2026-10-27T09:00:19+00:00",
@@ -345,11 +345,11 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:40:23+00:00",
-   "published_il": "13:40",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9jbmNEaDlUenA5Y2p2cmpoczdha29rb2czdU1tWVA4R0xBLUlUTzFpSU9qa0tRZERkZHBnQVVxT2ZodkV2aDFYWEJKVQ?oc=5",
+   "outlet": "YNET",
+   "published": "2026-10-27T09:01:13+00:00",
+   "published_il": "11:01",
+   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
    "figures": [
     [
      "10:00",
@@ -374,6 +374,20 @@
   {
    "feed": "Google News: שיעור ההצבעה",
    "outlet": "JDN",
+   "published": "2026-10-27T11:40:23+00:00",
+   "published_il": "13:40",
+   "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9jbmNEaDlUenA5Y2p2cmpoczdha29rb2czdU1tWVA4R0xBLUlUTzFpSU9qa0tRZERkZHBnQVVxT2ZodkV2aDFYWEJKVQ?oc=5",
+   "figures": [
+    [
+     "10:00",
+     16.68
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "JDN",
    "published": "2026-10-27T11:08:38+00:00",
    "published_il": "13:08",
    "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
@@ -382,20 +396,6 @@
     [
      "12:00",
      31.5
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T09:01:13+00:00",
-   "published_il": "11:01",
-   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
-   "figures": [
-    [
-     "10:00",
-     16.68
     ]
    ]
   },

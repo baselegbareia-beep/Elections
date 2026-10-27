@@ -4,13 +4,24 @@
         <title>חדשות סרוגים</title>
         <link>https://www.srugim.co.il/</link>
         <description>undefined</description>
-        <lastBuildDate>Tue, 27 Oct 2026 14:17:10 GMT</lastBuildDate>
+        <lastBuildDate>Tue, 27 Oct 2026 14:21:14 GMT</lastBuildDate>
         <docs>https://validator.w3.org/feed/docs/rss2.html</docs>
         <generator>https://github.com/jpmonette/feed</generator>
         <language>he</language>
         <copyright>כל הזכויות שמורות</copyright>
         <atom:link href="https://api.srugim.news/v1/rss/articles/latest/rss2" rel="self" type="application/rss+xml"/>
         <atom:link href="https://api.srugim.news/v1/websub/rss-articles/latest" rel="hub"/>
+        <item>
+            <title><![CDATA[הפרשנית הבכירה: לפי הנתונים, אלו יהיו תוצאות הבחירות]]></title>
+            <link>https://www.srugim.co.il/101014537-הפרשנית-הבכירה-לפי-הנתונים-אלו-יהיו</link>
+            <guid>https://www.srugim.co.il/101014537-הפרשנית-הבכירה-לפי-הנתונים-אלו-יהיו</guid>
+            <pubDate>Tue, 27 Oct 2026 14:21:14 GMT</pubDate>
+            <description><![CDATA[הפרשנית הפוליטית - מדינית מתייחסת לנתוני ההצבעה הגבוהים ברחבי הארץ, ומעריכה: אלו יהיו תוצאות הבחירות]]></description>
+            <content:encoded><![CDATA[העיתונאית והפרשנית הפוליטית שירית אביטן כהן מצביעה על מגמה מובהקת העולה מנתוני ההצבעה בקלפיות ברחבי הארץ, ומזכירה כי התרחיש הנוכחי כבר נחזה בעבר על ידי ראש הממשלה.
+בציוץ שפרסמה הבהירה אביטן כהן כי הנתונים שזורמים מהשטח מצביעים על אחוזי הצבעה גבוהים במיוחד בקרב האוכלוסייה הערבית: "ב-2015 נתן נתניהו תחזית מדויקת לבחירות. הנתונים בקלפיות במגזר הערבי ובפרט בכפרים בנגב חריגים ביחס לשנים קודמות. זו עובדה". בהמשך דבריה ניתחה הפרשנית את ההשלכות הפוליטיות הדרמטיות של נתוני ההשתתפות הללו על מפת המנדטים והרכבת הממשלה הבאה: "ההשפעה תהיה גם על המפלגות הקטנות, אבל גם מרחיקה ממשלת שינוי, ללא המשותפת".
+את דבריה חתמה אביטן כהן בהתייחסות לסיכויי המחנה הלאומי להשיג את היעדים שהציב לעצמו: "לדבר על ממשלת ימין במספרים האלה זו כמובן הזיה".]]></content:encoded>
+            <enclosure url="https://images.srugim.co.il/2025/11/12/82dd14b0-5790-11f1-8b62-6d30868e686f__h483_w724.jpg" length="0" type="image/jpg"/>
+        </item>
         <item>
             <title><![CDATA[פאניקה אדירה בליכוד: ״אין אפילו סימן אחד מעודד״]]></title>
             <link>https://www.srugim.co.il/101014531-פאניקה-אדירה-בליכוד-אין-אפילו-סימן-אחד</link>
@@ -711,15 +722,6 @@
 במקביל תתבצע בדיקה נפרדת של המעטפות הכפולות, המשמשות בין היתר חיילים ובוחרים שהצביעו בקלפי שאינה הקלפי שבה הם רשומים. לפני ספירת הקולות הללו תיבדק זכאותם של המצביעים, כדי למנוע הצבעה כפולה.
 רק לאחר השלמת הספירה, בדיקת התוצאות וחלוקת המנדטים ייקבעו התוצאות הרשמיות של הבחירות לכנסת ה-26.]]></content:encoded>
             <enclosure url="https://images.srugim.co.il/2026/10/27/ce4a3570-d1bd-11f1-993a-6982042ffa88__h4185_w6277.JPG" length="0" type="image/JPG"/>
-        </item>
-        <item>
-            <title><![CDATA[דרמה לילית: חיל האוויר הירדני יצא למתקפה]]></title>
-            <link>https://www.srugim.co.il/101014486-דרמה-לילית-חיל-האוויר-הירדני-יצא-למתקפה</link>
-            <guid>https://www.srugim.co.il/101014486-דרמה-לילית-חיל-האוויר-הירדני-יצא-למתקפה</guid>
-            <pubDate>Mon, 26 Oct 2026 20:40:46 GMT</pubDate>
-            <description><![CDATA[חיל האוויר הירדני הכריז על יצאה לגל תקיפות נרחב, בעקבות פיגוע הירי במהלך סוף השבוע בכנסיית העיר כרכ במערב המדינה]]></description>
-            <content:encoded><![CDATA[חיל האוויר הירדני פתח בגל תקיפות בשטח סוריה, זאת לטענתו בעקבות פיגוע הירי הקטלני על כנסייה בעיר כרכ במערב ירדן, בה נהרגו 7 מתפללים ונפצעו עוד 40.]]></content:encoded>
-            <enclosure url="https://images.srugim.co.il/2026/10/26/9a623d50-d17e-11f1-85a3-cb4ff3b382db__h1244_w1920.jpg" length="0" type="image/jpg"/>
         </item>
     </channel>
 </rss>
