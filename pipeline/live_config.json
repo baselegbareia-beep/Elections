@@ -3,7 +3,7 @@
   "results_url": "https://media26.bechirot.gov.il/files/expb.csv",
   "results_url_localities": "https://media26.bechirot.gov.il/files/expc.csv",
   "drill_url": "https://media25.bechirot.gov.il/files/expb.csv",
-  "station_turnout_url": null,
+  "station_turnout_url": "live_input/stations.csv",
   "fetch_via": "auto",
   "eligible": 7331981,
   "github_feed": true,
