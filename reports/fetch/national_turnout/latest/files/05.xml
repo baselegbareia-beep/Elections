@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>שני רוכבי אופנוע נפגעו מרכב בדרך השלום בתל אביב; אחד במצב בינוני והשני קל</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1381978</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>AdobeStock</Photographer>
+          <pubDate>Tue, 27 Oct 2026 14:33:53 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 14:33:53 GMT</UpdateDate>
+          <itemID>1381978</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1381978</guid>
+        </item>
+        <item>
           <title>פועל בן 22 נפצע במהלך עבודתו בפרדס חנה - מצבו בינוני</title>
            <link>https://www.maariv.co.il/breaking-news/article-1381971</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381922</guid>
-        </item>
-        <item>
-          <title>יו&quot;ר הפרלמנט האיראני: &quot;מוג&apos;תבא חמינאי בריא לחלוטין, הוא רגוע ונחוש&quot;</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381917</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151753&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>רויטרס</Photographer>
-          <pubDate>Tue, 27 Oct 2026 11:01:25 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 12:07:37 GMT</UpdateDate>
-          <itemID>1381917</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>סוכנויות הידיעות</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381917</guid>
         </item>
       </channel>
     </rss>
