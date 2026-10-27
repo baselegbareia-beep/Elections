@@ -1,4 +1,4 @@
-# gov.il pages through the content-pages API (2026-10-27 14:10 UTC)
+# gov.il pages through the content-pages API (2026-10-27 14:15 UTC)
 
 - content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)
 - turnout_at_polling_stations chapter 0: HTTP 200 6538 bytes
@@ -14,7 +14,7 @@
 
 | title | URL | HTTP | bytes | last-modified | saved |
 |---|---|---|---|---|---|
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 13:41:02 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 13:41:01 GMT |  |
 | קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 13:41:02 GMT |  |
 
 ## Every link
