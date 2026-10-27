@@ -359,10 +359,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 76/110 objects using Memcached
+Object Caching 80/116 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 46/70 queries in 0.770 seconds using Memcached
+Database Caching 49/72 queries in 0.330 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 20:47:06 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 20:49:13 by W3 Total Cache
 -->
