@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 20:41:47 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 20:47:20 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -71,7 +71,7 @@
 			<slash:comments>0</slash:comments>
 		
 		
-		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261027YL0006.jpg" medium="image"></media:content>
+		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F221103OF01.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2756053</post-id>	</item>
 		<item>
 		<title>תמונת המנדטים והתרחישים הפוליטיים: ללא רוב מובהק לאף אחד מהגושים &#124; מתעדכן</title>
@@ -381,10 +381,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 74/111 objects using Memcached
+Object Caching 75/109 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 41/68 queries in 0.337 seconds using Memcached
+Database Caching 41/66 queries in 0.198 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 22:45:14 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 22:49:18 by W3 Total Cache
 -->
