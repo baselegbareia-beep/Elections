@@ -12,7 +12,7 @@
         <atom:link href="https://api.srugim.news/v1/rss/articles/latest/rss2" rel="self" type="application/rss+xml"/>
         <atom:link href="https://api.srugim.news/v1/websub/rss-articles/latest" rel="hub"/>
         <item>
-            <title><![CDATA[דיווח: זה מספר המנדטים שעופר וינטר קיבל]]></title>
+            <title><![CDATA[דיווח: זה מספר הקולות שעופר וינטר קיבל]]></title>
             <link>https://www.srugim.co.il/101014617-דיווח-זה-מספר-המנדטים-שעופר-וינטר-קיבל</link>
             <guid>https://www.srugim.co.il/101014617-דיווח-זה-מספר-המנדטים-שעופר-וינטר-קיבל</guid>
             <pubDate>Tue, 27 Oct 2026 21:31:58 GMT</pubDate>
