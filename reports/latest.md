@@ -1,9 +1,9 @@
-## CEC file discovery, 28.10 00:05 Israel time (full, github-hosted)
+## CEC file discovery, 28.10 01:51 Israel time (full, github-hosted)
 
 - **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 5 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
 - **The browser path got past it: yes**: 323 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×323.
 
-431 URLs probed in 115 s, 38 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+431 URLs probed in 118 s, 38 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
@@ -16,7 +16,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-27T22:14:59+02:00: 0 new, 0 changed, 0 gone
+### Since 2026-10-28T00:05:59+02:00: 0 new, 0 changed, 0 gone
 
 ### Files and pages with data
 
@@ -43,14 +43,14 @@ Other candidates (in brackets: why not suggested, or what to check):
 | bechirot.gov.il | 147.237.12.28 | 3 | 0 | {"404": 3} | browser 3 | 1 | CloudFront (Error from cloudfront) |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 52 | 0 | {"no answer": 52} | urllib 3 |  | skipped; URLError |
-| data.gov.il | 3.171.76.10, 3.171.76.125, 3.171.76.28 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
-| e.data.gov.il | 13.227.87.13, 13.227.87.51, 13.227.87.63 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| data.gov.il | 65.8.180.30, 65.8.180.62, 65.8.180.87 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
+| e.data.gov.il | 108.139.10.49, 108.139.10.57, 108.139.10.68 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} | urllib 1 |  |  |
-| media26.bechirot.gov.il | 2600:9000:24bd:0:1b:8951:5b80:93a1, 2600:9000:24bd:3400:1b:8951:5b80:93a1, 2600:9000:24bd… | 270 | 0 | {"404": 270} | browser 264, urllib 6 | 2 | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 18.155.192.102, 18.155.192.121, 18.155.192.14 | 270 | 0 | {"404": 270} | browser 264, urllib 6 | 2 | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} | urllib 7 |  |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| votes26.bechirot.gov.il | 2600:9000:2137:2600:3:c455:d440:93a1, 2600:9000:2137:2800:3:c455:d440:93a1, 2600:9000:213… | 55 | 0 | {"404": 55} | browser 55 | 1 | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 18.165.83.108, 18.165.83.124, 18.165.83.78 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
+| votes26.bechirot.gov.il | 13.226.38.102, 13.226.38.41, 13.226.38.65 | 55 | 0 | {"404": 55} | browser 55 | 1 | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 18.244.214.127, 18.244.214.54, 18.244.214.65 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
 | www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 19 | 17 | {"200": 17, "404": 2} | urllib 19 |  | not found |
 
 ### Pages and scripts that answered
