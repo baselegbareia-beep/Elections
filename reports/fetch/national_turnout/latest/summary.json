@@ -1,12 +1,12 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:04 UTC",
+ "started": "2026-10-27 14:06 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 91
+   "items": 88
   },
   {
    "name": "Google News: אחוז ההצבעה",
@@ -71,13 +71,6 @@
  ],
  "figures": {
   "14:00": {
-   "15.4": {
-    "YNET": {
-     "published": "2026-10-27T13:29:30+00:00",
-     "published_il": "15:29",
-     "title": "\"חצינו את כל השיאים\": עד 14:00 הצביעו 15.4% יותר מבבחירות הקודמות - YNET"
-    }
-   },
    "44.9": {
     "כלכליסט": {
      "published": "2026-10-27T13:04:00+00:00",
@@ -99,15 +92,15 @@
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
     },
-    "PassportNews": {
-     "published": "2026-10-27T13:01:00+00:00",
-     "published_il": "15:01",
-     "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews"
-    },
     "JDN": {
      "published": "2026-10-27T13:09:00+00:00",
      "published_il": "15:09",
      "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN"
+    },
+    "PassportNews": {
+     "published": "2026-10-27T13:01:00+00:00",
+     "published_il": "15:01",
+     "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews"
     },
     "ynet": {
      "published": "2026-10-27T13:02:17+00:00",
@@ -123,6 +116,13 @@
      "published": "2026-10-27T13:46:00+00:00",
      "published_il": "15:46",
      "title": "\"חצינו את כל השיאים\": שיעור ההצבעה עד כה - 44.9%"
+    }
+   },
+   "15.4": {
+    "YNET": {
+     "published": "2026-10-27T13:29:30+00:00",
+     "published_il": "15:29",
+     "title": "\"חצינו את כל השיאים\": עד 14:00 הצביעו 15.4% יותר מבבחירות הקודמות - YNET"
     }
    },
    "68": {
@@ -261,20 +261,6 @@
  "items": [
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T13:29:30+00:00",
-   "published_il": "15:29",
-   "title": "\"חצינו את כל השיאים\": עד 14:00 הצביעו 15.4% יותר מבבחירות הקודמות - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5UUVgyRzY5ZTc1Ym1KdFZEZzFMMGhYT09lUUV4UWU3UFBrZWJvbmEwMTA0Q21RTU5pSnBBM1lfNnY4MXNlbDJJT2FsS1VkeDRUbUlGb0FfVFZBd3NUSjlYUXJB?oc=5",
-   "figures": [
-    [
-     "14:00",
-     15.4
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "כלכליסט",
    "published": "2026-10-27T13:04:00+00:00",
    "published_il": "15:04",
@@ -284,6 +270,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "YNET",
+   "published": "2026-10-27T13:29:30+00:00",
+   "published_il": "15:29",
+   "title": "\"חצינו את כל השיאים\": עד 14:00 הצביעו 15.4% יותר מבבחירות הקודמות - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiYkFVX3lxTE5UUVgyRzY5ZTc1Ym1KdFZEZzFMMGhYT09lUUV4UWU3UFBrZWJvbmEwMTA0Q21RTU5pSnBBM1lfNnY4MXNlbDJJT2FsS1VkeDRUbUlGb0FfVFZBd3NUSjlYUXJB?oc=5",
+   "figures": [
+    [
+     "14:00",
+     15.4
     ]
    ]
   },
@@ -667,11 +667,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "PassportNews",
-   "published": "2026-10-27T13:01:00+00:00",
-   "published_il": "15:01",
-   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
+   "outlet": "JDN",
+   "published": "2026-10-27T13:09:00+00:00",
+   "published_il": "15:09",
+   "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0waWxLRFJ3NGxLQzBoLWU4anJERFRpZ1FZSDBZTmpTT1AzY0Flc0Y4MUZVR2tNOXVaQkhQNktrZFJOVFF6b0FsV1JZZw?oc=5",
    "figures": [
     [
      "14:00",
@@ -681,11 +681,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T13:09:00+00:00",
-   "published_il": "15:09",
-   "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0waWxLRFJ3NGxLQzBoLWU4anJERFRpZ1FZSDBZTmpTT1AzY0Flc0Y4MUZVR2tNOXVaQkhQNktrZFJOVFF6b0FsV1JZZw?oc=5",
+   "outlet": "PassportNews",
+   "published": "2026-10-27T13:01:00+00:00",
+   "published_il": "15:01",
+   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
    "figures": [
     [
      "14:00",

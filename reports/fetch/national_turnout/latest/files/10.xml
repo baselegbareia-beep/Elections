@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 14:03:31 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 14:06:40 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -96,6 +96,7 @@
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
       <category domain="https://www.globes.co.il/news/צרכנות.tag">צרכנות</category>
       <category domain="https://www.globes.co.il/news/צרכנים.tag">צרכנים</category>
+      <category domain="https://www.globes.co.il/news/קניון_עזריאלי.tag">קניון עזריאלי</category>
       <category domain="https://www.globes.co.il/news/קניונים.tag">קניונים</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
