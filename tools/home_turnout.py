@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Election day, from a computer in Israel: record what the CEC's turnout map loads and upload it to GitHub.
 
-The CEC's map (https://elections.govmap.gov.il) does not load from GitHub's runners, so its per-station turnout can
+The CEC's turnout map (https://mapvotes.bechirot.gov.il; also elections.govmap.gov.il) does not load from GitHub's runners, so its per-station turnout can
 only be read from a computer in Israel. This script runs there until 22:15 Israel time. Every 10 minutes (and once at
 start) it opens the map in the computer's own Google Chrome, headless (Chrome's own User-Agent, no stealth: what any
 visitor's browser does), waits for the network to settle and 25 s more, clicks a visible turnout tab or layer if there
@@ -56,7 +56,7 @@ BASE = "main"                      # read once, to start home-capture from it wh
 assert BRANCH not in ("main", "master", BASE)
 
 API = (os.environ.get("HOME_TURNOUT_API") or "https://api.github.com").rstrip("/")
-PAGE = os.environ.get("HOME_TURNOUT_URL") or "https://elections.govmap.gov.il/"
+PAGE = os.environ.get("HOME_TURNOUT_URL") or "https://mapvotes.bechirot.gov.il/?c=215846.52,595399.34&z=2"
 INTERVAL = float(os.environ.get("HOME_TURNOUT_INTERVAL") or 600)
 SETTLE = float(os.environ.get("HOME_TURNOUT_SETTLE") or 25)
 MAX_ROUNDS = int(os.environ.get("HOME_TURNOUT_ROUNDS") or 0)
@@ -75,7 +75,7 @@ DATA_EXT = re.compile(r"\.(json|geojson|topojson|csv|xml|pbf|pb|proto|mvt)(\?|$)
 NOT_DATA = re.compile(r"html|javascript|css|image/|font/|video/|audio/|event-stream", re.I)
 SKIP_HOSTS = re.compile(r"google-analytics|googletagmanager|doubleclick|googlesyndication|clarity\.ms|hotjar|"
                         r"facebook|sentry|newrelic|nr-data|onetrust|cookielaw", re.I)
-APP_HOST = re.compile(r"(^|\.)govmap\.gov\.il$|^" + re.escape(urllib.parse.urlsplit(PAGE).hostname or "-") + "$", re.I)
+APP_HOST = re.compile(r"(^|\.)govmap\.gov\.il$|(^|\.)bechirot\.gov\.il$|^" + re.escape(urllib.parse.urlsplit(PAGE).hostname or "-") + "$", re.I)
 
 _SECRETS = []                      # the token, to blank out of anything printed (defence in depth)
 
