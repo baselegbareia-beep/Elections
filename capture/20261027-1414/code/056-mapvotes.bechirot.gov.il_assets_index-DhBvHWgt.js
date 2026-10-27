@@ -1,0 +1,1 @@
+import{hg as a}from"./index-nYucXbS4.js";import{c as u}from"./index-Dui_jdSk.js";function c(i,n={}){let e=0,r=0,t=0;return u(i,function(o){e+=o[0],r+=o[1],t++},!0),a([e/t,r/t],n.properties)}var f=c;export{c,f as i};

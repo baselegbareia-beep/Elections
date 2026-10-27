@@ -1,0 +1,1 @@
+import{r as t}from"./vendor-core-DP7zTeuK.js";const a=t.createContext({}),c=()=>t.useContext(a),r=()=>{const e=t.useContext(a),s=t.useMemo(()=>{var o;return(o=e.map)==null?void 0:o.getView()},[e.map]);return t.useMemo(()=>({...e,view:s}),[{...e},s])};export{a as O,c as a,r as u};

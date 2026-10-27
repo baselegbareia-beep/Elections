@@ -1,0 +1,1 @@
+import{r as t}from"./vendor-core-DP7zTeuK.js";const r=e=>t.createElement("svg",{width:10,height:16,viewBox:"0 0 10 16",fill:"none",xmlns:"http://www.w3.org/2000/svg",...e},t.createElement("path",{d:"M1.625 14.25L8.375 7.5L1.625 0.75",fill:"none",stroke:"#454545",strokeWidth:1.5,strokeLinecap:"round"}));export{r as S};

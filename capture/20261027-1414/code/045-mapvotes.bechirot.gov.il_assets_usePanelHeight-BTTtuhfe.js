@@ -1,0 +1,1 @@
+import{O as i,r as o}from"./vendor-core-DP7zTeuK.js";import{ds as u}from"./index-nYucXbS4.js";const g=(t,s=[])=>{const r=i();o.useEffect(()=>{if(t!=null&&t.current){const{height:c}=t.current.getBoundingClientRect();r(u(c))}},[t,...s])};export{g as u};

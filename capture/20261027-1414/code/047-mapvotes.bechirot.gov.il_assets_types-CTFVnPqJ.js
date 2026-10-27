@@ -1,0 +1,1 @@
+var i=(r=>(r.Ready="ready",r.InProgress="inProgress",r.Done="done",r.Calculating="calculating",r.Error="error",r))(i||{}),n=(r=>(r.VerticalDistance="verticalDistance",r.PolylineDistance="polylineDistance",r.HorizontalDistance="horizontalDistance",r.Volume3D="volume3d",r))(n||{});export{n as M,i as T};
