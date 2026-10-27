@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>הסתיימה ההצבעה בבתי הכלא בארץ - עם שיעור הצבעה של 88.7%</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382045</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1131709&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>אורן כהן, פלאש 90</Photographer>
+          <pubDate>Tue, 27 Oct 2026 18:20:35 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 18:20:35 GMT</UpdateDate>
+          <itemID>1382045</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382045</guid>
+        </item>
+        <item>
           <title>ועדת הבחירות החליטה: שעת סגירת הקלפיות לא תוארך</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382044</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151832&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381981</guid>
-        </item>
-        <item>
-          <title>המשטרה מעדכנת: גם כביש 12 מאילת ועד צומת סמדר נחסם</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381980</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>AdobeStock</Photographer>
-          <pubDate>Tue, 27 Oct 2026 14:36:53 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 14:36:53 GMT</UpdateDate>
-          <itemID>1381980</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>רמי שני</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381980</guid>
         </item>
       </channel>
     </rss>
