@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 21:07 UTC",
+ "started": "2026-10-27 21:09 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,13 +12,13 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 77
+   "items": 75
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%D7%95%D7%A2%D7%93%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%94%D7%A6%D7%91%D7%A2%D7%94%20when%3A1d",
    "http": 200,
-   "items": 100
+   "items": 99
   },
   {
    "name": "ynet מבזקים",
@@ -78,9 +78,9 @@
      "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט"
     },
     "כאן 11": {
-     "published": "2026-10-27T19:02:16+00:00",
-     "published_il": "21:02",
-     "title": "נכון לשעה 20:00: שיעור ההצבעה עומד על 74.3% - יותר מאחוז ההצבעה הסופי של בחירות 2022 - כאן 11"
+     "published": "2026-10-27T04:44:14+00:00",
+     "published_il": "06:44",
+     "title": "עד לשעה 20:00: 74.3% מהבוחרים הצביעו - כאן 11"
     },
     "רשת 13": {
      "published": "2026-10-27T20:50:14+00:00",
@@ -97,10 +97,10 @@
      "published_il": "06:38",
      "title": "74.3% הצביעו עד 20:00 - הכי גבוה מאז 1988; שעת ההצבעה לא תוארך - YNET"
     },
-    "היום": {
-     "published": "2026-10-27T18:59:17+00:00",
-     "published_il": "20:59",
-     "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום"
+    "רדיו דרום": {
+     "published": "2026-10-27T20:06:00+00:00",
+     "published_il": "22:06",
+     "title": "שיעורי ההצבעה הארציים נכון לשעה 20:00 74.3% בבאר שבע 63% - רדיו דרום"
     },
     "מעריב": {
      "published": "2026-10-27T18:57:46+00:00",
@@ -186,11 +186,6 @@
      "published": "2026-10-27T15:02:20+00:00",
      "published_il": "17:02",
      "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב"
-    },
-    "רדיו דרום": {
-     "published": "2026-10-27T13:06:49+00:00",
-     "published_il": "15:06",
-     "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום"
     }
    }
   },
@@ -210,11 +205,6 @@
      "published": "2026-10-27T11:01:59+00:00",
      "published_il": "13:01",
      "title": "שיעור ההצבעה בבחירות לכנסת הגיע ל-31.5% עד השעה 12:00 - וואלה"
-    },
-    "JDN": {
-     "published": "2026-10-27T11:13:46+00:00",
-     "published_il": "13:13",
-     "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN"
     }
    }
   },
@@ -440,6 +430,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "כאן 11",
+   "published": "2026-10-27T04:44:14+00:00",
+   "published_il": "06:44",
+   "title": "עד לשעה 20:00: 74.3% מהבוחרים הצביעו - כאן 11",
+   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "הידברות",
    "published": "2026-10-27T11:10:00+00:00",
    "published_il": "13:10",
@@ -482,20 +486,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T18:59:17+00:00",
-   "published_il": "20:59",
-   "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום",
-   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5DQVhPdXNRdU05S29qNUpCekhBbkpMakYzLXR6NVVpa1ZzUFMxbmxsSGN5TllZVllGWHNVMGJUOG1PanJOdkM1ZGwtd2FGalBsUmlLck05NUpGaWxTemFCdGVhYVlMdFnSAW9BVV95cUxQaWltcDJKOUJ5U3pQTWdFaXVSa1pEeW1MV01XNmxhZTZGVVRERzVTZ05BLUhPNE5CQVVXVG5YUDAwS0k0RllwN2ZFODA0ZzZkUTQ5VURxNHdJNU11TFZ3T2kwUi1RRGljaGFUVjUyZkU?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T10:58:59+00:00",
    "published_il": "12:58",
@@ -505,6 +495,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רדיו דרום",
+   "published": "2026-10-27T20:06:00+00:00",
+   "published_il": "22:06",
+   "title": "שיעורי ההצבעה הארציים נכון לשעה 20:00 74.3% בבאר שבע 63% - רדיו דרום",
+   "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -547,20 +551,6 @@
     [
      "14:00",
      44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:13:46+00:00",
-   "published_il": "13:13",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
-   "figures": [
-    [
-     "12:00",
-     31.5
     ]
    ]
   },
@@ -697,20 +687,6 @@
    "published_il": "17:44",
    "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
    "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
-   "outlet": "רדיו דרום",
-   "published": "2026-10-27T13:06:49+00:00",
-   "published_il": "15:06",
-   "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום",
-   "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
    "figures": [
     [
      "16:00",
