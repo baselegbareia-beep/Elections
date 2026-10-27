@@ -1,9 +1,9 @@
-# National turnout as the news reports it (2026-10-27 13:55 UTC)
+# National turnout as the news reports it (2026-10-27 13:57 UTC)
 
 | source | HTTP | items | error |
 |---|---|---|---|
-| Google News: שיעור ההצבעה | 200 | 88 |  |
-| Google News: אחוז ההצבעה | 200 | 31 |  |
+| Google News: שיעור ההצבעה | 200 | 91 |  |
+| Google News: אחוז ההצבעה | 200 | 30 |  |
 | Google News: ועדת הבחירות הצבעה | 200 | 100 |  |
 | ynet מבזקים | 200 | 30 |  |
 | ynet חדשות | 200 | 30 |  |
