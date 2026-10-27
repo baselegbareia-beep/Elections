@@ -1,18 +1,18 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:23 UTC",
+ "started": "2026-10-27 14:25 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 90
+   "items": 86
   },
   {
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 30
+   "items": 32
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -98,6 +98,11 @@
      "published": "2026-10-27T11:56:05+00:00",
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
+    },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "JDN": {
      "published": "2026-10-27T13:09:00+00:00",
@@ -345,20 +350,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T09:01:13+00:00",
-   "published_il": "11:01",
-   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
-   "figures": [
-    [
-     "10:00",
-     16.68
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T13:01:38+00:00",
    "published_il": "15:01",
@@ -368,6 +359,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "YNET",
+   "published": "2026-10-27T09:01:13+00:00",
+   "published_il": "11:01",
+   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
+   "figures": [
+    [
+     "10:00",
+     16.68
     ]
    ]
   },
@@ -424,6 +429,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -536,6 +555,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "כלכליסט",
+   "published": "2026-10-27T13:04:00+00:00",
+   "published_il": "15:04",
+   "title": "נכון ל-14:00: שיעור ההצבעה הוא הגבוה מאז 1973 - 44.9% - כלכליסט",
+   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
