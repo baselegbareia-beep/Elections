@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 17:19:30 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 17:21:11 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -92,7 +92,7 @@
       <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
       <category domain="https://www.globes.co.il/news/קלפיות.tag">קלפיות</category>
       <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/v1793103316/WhatsApp_Image_2026-10-27_at_12.18.51_ukok6b.jpg" type="image/jpg" expression="full" width="800" height="392">
+      <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/l_COT_Pic:hamashrokit-sagol_b5hjlt/c_scale,fl_relative,h_0.49,w_0.33/fl_layer_apply,fl_no_overflow,g_south_west,x_-28,y_-12/v1793103316/WhatsApp_Image_2026-10-27_at_12.18.51_ukok6b.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>קלפי בחירות 2026 / צילום: ארן הרשלג</media:description>
       </media:content>
     </item>
