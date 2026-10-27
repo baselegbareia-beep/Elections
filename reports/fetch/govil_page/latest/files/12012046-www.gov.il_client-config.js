@@ -1,1 +1,0 @@
-window['govilRunConfig'] = {"contentPageWebApi":"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1","HFD":"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1","clientId":"9KFgciHHGDyNiqz5MdQS0eK2ApeJYMc6YnElUICpN1atirZc"};
