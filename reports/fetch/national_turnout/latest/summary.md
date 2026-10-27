@@ -1,9 +1,9 @@
-# National turnout as the news reports it (2026-10-27 16:21 UTC)
+# National turnout as the news reports it (2026-10-27 16:23 UTC)
 
 | source | HTTP | items | error |
 |---|---|---|---|
 | Google News: שיעור ההצבעה | 200 | 100 |  |
-| Google News: אחוז ההצבעה | 200 | 48 |  |
+| Google News: אחוז ההצבעה | 200 | 49 |  |
 | Google News: ועדת הבחירות הצבעה | 200 | 100 |  |
 | ynet מבזקים | 200 | 30 |  |
 | ynet חדשות | 200 | 30 |  |
@@ -17,7 +17,7 @@
 ## Figures (hour: percent - outlets, earliest Israel time)
 
 - 10:00: 16.68% - YNET 11:01, JDN 13:40
-- 12:00: 31.5% - היום 12:56, YNET 12:58, סרוגים 12:59, וואלה 13:01, JDN 13:13
+- 12:00: 31.5% - ערוץ 7 06:57, היום 12:56, YNET 12:58, מעריב 12:58, סרוגים 12:59, וואלה 13:01, JDN 13:13
 - 12:00: 30% - סרוגים 14:40
 - 13:00: 23.8% - נתניה נט 14:26
 - 13:00: 50% - סרוגים 15:35
