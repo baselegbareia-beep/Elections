@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 22:38 UTC",
+ "started": "2026-10-27 22:40 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 80
+   "items": 78
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -72,11 +72,6 @@
  "figures": {
   "20:00": {
    "74.3": {
-    "כלכליסט": {
-     "published": "2026-10-27T19:03:00+00:00",
-     "published_il": "21:03",
-     "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט"
-    },
     "כאן 11": {
      "published": "2026-10-27T04:44:14+00:00",
      "published_il": "06:44",
@@ -97,6 +92,11 @@
      "published_il": "22:06",
      "title": "שיעורי ההצבעה הארציים נכון לשעה 20:00 74.3% בבאר שבע 63% - רדיו דרום"
     },
+    "כלכליסט": {
+     "published": "2026-10-27T19:03:00+00:00",
+     "published_il": "21:03",
+     "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט"
+    },
     "מעריב": {
      "published": "2026-10-27T18:57:46+00:00",
      "published_il": "20:57",
@@ -106,11 +106,6 @@
      "published": "2026-10-27T09:15:47+00:00",
      "published_il": "11:15",
      "title": "20:15 · 74.3 אחוז עד 20:00: כבר יותר מההצבעה הסופית ב-2022 - המקום הכי חם בגיהנום"
-    },
-    "רשת 13": {
-     "published": "2026-10-27T19:07:08+00:00",
-     "published_il": "21:07",
-     "title": "אחוז ההצבעה עד 20:00 - 74.3%: \"חצינו את כל השיאים\" - רשת 13"
     },
     "PassportNews": {
      "published": "2026-10-27T19:00:00+00:00",
@@ -124,27 +119,13 @@
     }
    }
   },
-  "16:00": {
-   "55.7": {
-    "כאן 11": {
-     "published": "2026-10-27T15:01:24+00:00",
-     "published_il": "17:01",
-     "title": "עד השעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
-    },
-    "רשת 13": {
-     "published": "2026-10-27T15:44:15+00:00",
-     "published_il": "17:44",
-     "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
-    },
-    "מעריב": {
-     "published": "2026-10-27T15:02:20+00:00",
-     "published_il": "17:02",
-     "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב"
-    }
-   }
-  },
   "22:00": {
    "77.7": {
+    "רשת 13": {
+     "published": "2026-10-27T22:13:18+00:00",
+     "published_il": "00:13",
+     "title": "אחוז ההצבעה עד 22:00: 77.7% - הגבוה מאז 1999 - רשת 13"
+    },
     "מעריב": {
      "published": "2026-10-27T21:10:44+00:00",
      "published_il": "23:10",
@@ -169,6 +150,25 @@
      "published": "2026-10-27T22:09:00+00:00",
      "published_il": "00:09",
      "title": "שיעור ההצבעה עומד על 77.7% - הגבוה ביותר מאז 1999"
+    }
+   }
+  },
+  "16:00": {
+   "55.7": {
+    "כאן 11": {
+     "published": "2026-10-27T15:01:24+00:00",
+     "published_il": "17:01",
+     "title": "עד השעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
+    },
+    "רשת 13": {
+     "published": "2026-10-27T15:44:15+00:00",
+     "published_il": "17:44",
+     "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
+    },
+    "מעריב": {
+     "published": "2026-10-27T15:02:20+00:00",
+     "published_il": "17:02",
+     "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב"
     }
    }
   },
@@ -202,11 +202,6 @@
      "published": "2026-10-27T11:10:00+00:00",
      "published_il": "13:10",
      "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות"
-    },
-    "רשת 13": {
-     "published": "2026-10-27T15:28:35+00:00",
-     "published_il": "17:28",
-     "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
     },
     "כאן 11": {
      "published": "2026-10-27T13:05:22+00:00",
@@ -268,20 +263,6 @@
  "items": [
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "כלכליסט",
-   "published": "2026-10-27T19:03:00+00:00",
-   "published_il": "21:03",
-   "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט",
-   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "כאן 11",
    "published": "2026-10-27T19:01:02+00:00",
    "published_il": "21:01",
@@ -291,6 +272,20 @@
     [
      "20:00",
      74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T22:13:18+00:00",
+   "published_il": "00:13",
+   "title": "אחוז ההצבעה עד 22:00: 77.7% - הגבוה מאז 1999 - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
+   "figures": [
+    [
+     "22:00",
+     77.7
     ]
    ]
   },
@@ -450,20 +445,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T15:44:15+00:00",
-   "published_il": "17:44",
-   "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "בלינקר",
    "published": "2026-10-27T21:16:55+00:00",
    "published_il": "23:16",
@@ -473,6 +454,20 @@
     [
      "22:00",
      77.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T15:44:15+00:00",
+   "published_il": "17:44",
+   "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
@@ -506,20 +501,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T15:28:35+00:00",
-   "published_il": "17:28",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNaVBiRG9VQ0dqd19KZFRncVFjUGUzQUU5WkdUamVnLTNsQmdOVk1Bb3libU1mRnBob0d5aUh3azhIeXJicVZiNHZ5UVpkYkVLemhYUG1uT3JOUDZvMERVUlljSlYxbGN3ZlZCbmFtR25heFVtRHd3LWVqUG1jVTFFNHk4WlZwNDF0dHZhVw?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "וואלה",
    "published": "2026-10-27T11:01:59+00:00",
    "published_il": "13:01",
@@ -529,6 +510,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T22:13:18+00:00",
+   "published_il": "00:13",
+   "title": "אחוז ההצבעה עד 22:00: 77.7% - הגבוה מאז 1999 - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
+   "figures": [
+    [
+     "22:00",
+     77.7
     ]
    ]
   },
@@ -674,15 +669,15 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כלכליסט",
-   "published": "2026-10-27T19:03:00+00:00",
-   "published_il": "21:03",
-   "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט",
-   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T22:13:18+00:00",
+   "published_il": "00:13",
+   "title": "אחוז ההצבעה עד 22:00: 77.7% - הגבוה מאז 1999 - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
    "figures": [
     [
-     "20:00",
-     74.3
+     "22:00",
+     77.7
     ]
    ]
   },
@@ -703,14 +698,14 @@
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "רשת 13",
-   "published": "2026-10-27T19:07:08+00:00",
-   "published_il": "21:07",
-   "title": "אחוז ההצבעה עד 20:00 - 74.3%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
+   "published": "2026-10-27T15:44:15+00:00",
+   "published_il": "17:44",
+   "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
    "figures": [
     [
-     "20:00",
-     74.3
+     "16:00",
+     55.7
     ]
    ]
   },
