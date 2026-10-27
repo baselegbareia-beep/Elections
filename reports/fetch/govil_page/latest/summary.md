@@ -15,7 +15,7 @@
 | title | URL | HTTP | bytes | last-modified | saved |
 |---|---|---|---|---|---|
 | קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 13:41:02 GMT |  |
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 13:41:02 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 13:41:01 GMT |  |
 
 ## Every link
 
