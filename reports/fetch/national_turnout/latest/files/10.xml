@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 21:39:21 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 21:41:01 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -109,6 +109,21 @@
       <category domain="https://www.globes.co.il/news/הכנסת.tag">הכנסת</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793135788/AP26300361959344_ypmhim.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>מצביע בבחירות / צילום: ap, David Goldman</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>לפי תוצאות המדגמים: גם סמוטריץ' סבל מ"קללת שר האוצר"</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561035#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561035</guid>
+      <description>ממוצע המדגמים מעניק לציונות הדתית חמישה מנדטים בלבד - ירידה לעומת 2022 &amp;#8226; בכך, מצטרף בצלאל סמוטריץ' ליאיר לפיד, משה כחלון ואביגדור ליברמן, שמפלגותיהם איבדו מכוחן לאחר שעמדו בראש משרד האוצר &amp;#8226; המשרוקית של גלובס </description>
+      <author>אוריה בר-מאיר</author>
+      <pubDate>Tue, 27 Oct 2026 21:10:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בצלאל_סמוטריץ.tag">בצלאל סמוטריץ'</category>
+      <category domain="https://www.globes.co.il/news/משרד_האוצר.tag">משרד האוצר</category>
+      <category domain="https://www.globes.co.il/news/שר_האוצר.tag">שר האוצר</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1771322069/direct/_OAM2905_kxxaer_ab1199.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>שר האוצר בצלאל סמוטריץ' / צילום: נועם מושקוביץ, דוברות הכנסת</media:description>
       </media:content>
     </item>
     <item>
@@ -244,21 +259,6 @@
       <category domain="https://www.globes.co.il/news/קמעונאות.tag">קמעונאות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>לפי תוצאות המדגמים: גם סמוטריץ' סבל מ"קללת שר האוצר"</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561035#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561035</guid>
-      <description>ממוצע המדגמים מעניק לציונות הדתית חמישה מנדטים בלבד - ירידה לעומת 2022 &amp;#8226; בכך, מצטרף בצלאל סמוטריץ' ליאיר לפיד, משה כחלון ואביגדור ליברמן, שמפלגותיהם איבדו מכוחן לאחר שעמדו בראש משרד האוצר &amp;#8226; המשרוקית של גלובס </description>
-      <author>אוריה בר-מאיר</author>
-      <pubDate>Tue, 27 Oct 2026 21:10:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בצלאל_סמוטריץ.tag">בצלאל סמוטריץ'</category>
-      <category domain="https://www.globes.co.il/news/משרד_האוצר.tag">משרד האוצר</category>
-      <category domain="https://www.globes.co.il/news/שר_האוצר.tag">שר האוצר</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1771322069/direct/_OAM2905_kxxaer_ab1199.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>שר האוצר בצלאל סמוטריץ' / צילום: נועם מושקוביץ, דוברות הכנסת</media:description>
       </media:content>
     </item>
   </channel>
