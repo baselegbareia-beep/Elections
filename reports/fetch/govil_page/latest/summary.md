@@ -1,4 +1,4 @@
-# gov.il pages through the content-pages API (2026-10-27 20:50 UTC)
+# gov.il pages through the content-pages API (2026-10-27 20:51 UTC)
 
 - content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)
 - turnout_at_polling_stations chapter 0: HTTP 200 8463 bytes
