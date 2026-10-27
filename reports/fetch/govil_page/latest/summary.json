@@ -1,16 +1,16 @@
 {
  "fetcher": "govil_page",
- "started": "2026-10-27 17:35 UTC",
+ "started": "2026-10-27 17:38 UTC",
  "pages": [
   "turnout_at_polling_stations",
   "voting-by-hour-26"
  ],
  "notes": [
   "content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)",
-  "turnout_at_polling_stations chapter 0: HTTP 200 7801 bytes",
-  "turnout_at_polling_stations chapter 1: HTTP 200 7801 bytes",
-  "turnout_at_polling_stations chapter 2: HTTP 200 7801 bytes",
-  "turnout_at_polling_stations chapter 3: HTTP 200 7801 bytes",
+  "turnout_at_polling_stations chapter 0: HTTP 200 7862 bytes",
+  "turnout_at_polling_stations chapter 1: HTTP 200 7862 bytes",
+  "turnout_at_polling_stations chapter 2: HTTP 200 7862 bytes",
+  "turnout_at_polling_stations chapter 3: HTTP 200 7862 bytes",
   "voting-by-hour-26 chapter 0: HTTP 404 0 bytes HTTP 404",
   "voting-by-hour-26 chapter 1: HTTP 404 0 bytes HTTP 404",
   "voting-by-hour-26 chapter 2: HTTP 404 0 bytes HTTP 404",
@@ -50,7 +50,7 @@
    "title": "קבצים מצורפים"
   },
   {
-   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.Csv",
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.xlsx",
    "title": "קבצים מצורפים"
   }
  ],
@@ -60,7 +60,7 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 436079,
-   "last_modified": "Tue, 27 Oct 2026 17:17:31 GMT",
+   "last_modified": "Tue, 27 Oct 2026 17:36:48 GMT",
    "saved": null,
    "error": null
   },
@@ -69,7 +69,7 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 442222,
-   "last_modified": "Tue, 27 Oct 2026 17:17:31 GMT",
+   "last_modified": "Tue, 27 Oct 2026 17:36:48 GMT",
    "saved": null,
    "error": null
   },
@@ -78,18 +78,18 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 648119,
-   "last_modified": "Tue, 27 Oct 2026 17:17:31 GMT",
+   "last_modified": "Tue, 27 Oct 2026 17:36:48 GMT",
    "saved": null,
    "error": null
   },
   {
-   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.Csv",
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_18.xlsx",
    "title": "קבצים מצורפים",
-   "http": 403,
-   "bytes": 0,
-   "last_modified": null,
+   "http": 200,
+   "bytes": 695359,
+   "last_modified": "Tue, 27 Oct 2026 17:36:47 GMT",
    "saved": null,
-   "error": "HTTP 403"
+   "error": null
   }
  ]
 }
