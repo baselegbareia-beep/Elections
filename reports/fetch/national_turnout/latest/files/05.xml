@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>חגיגות במטה הרשימה המשותפת: קריאות &quot;ביבי הביתה&quot;</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382072</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151877&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>בתיה גלעדי</Photographer>
+          <pubDate>Tue, 27 Oct 2026 20:28:49 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 20:28:49 GMT</UpdateDate>
+          <itemID>1382072</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>true</isVideo>
+          <Author>בתיה גלעדי</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382072</guid>
+        </item>
+        <item>
           <title>הערכה גוברת במערכת: איזנקוט צפוי לקבל ראשון את המנדט מהנשיא</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382070</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1149067&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1382013</guid>
-        </item>
-        <item>
-          <title>מפלגת ישר! מתנגדת להארכת שעות ההצבעה: &quot;לא התרחש כל אירוע חריג&quot;</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1382011</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>AdobeStock</Photographer>
-          <pubDate>Tue, 27 Oct 2026 15:53:12 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:53:50 GMT</UpdateDate>
-          <itemID>1382011</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>אנה ברסקי</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1382011</guid>
         </item>
       </channel>
     </rss>
