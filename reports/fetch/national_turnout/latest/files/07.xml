@@ -6,7 +6,17 @@
     <link>https://www.israelhayom.co.il</link>
     <atom:link href="https://www.israelhayom.co.il/rss/rss.xml" rel="self" type="application/rss+xml"/>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 22:15:27 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 22:30:29 GMT</lastBuildDate>
+    <item>
+      <title>אימאן ח'טיב מרע"ם: "לא שכחנו את פלסטין"</title>
+      <link>https://www.israelhayom.co.il/news/politics/article/21722171</link>
+      <guid isPermaLink="false">https://www.israelhayom.co.il/news/politics/article/21722171</guid>
+      <pubDate>Tue, 27 Oct 2026 22:29:58 GMT</pubDate>
+      <description>חברת הכנסת מרע"ם מגיבה לתוצאות המדגמים ומבהירה כי למרות התמיכה בהקמת מדינה פלסטינית, הטיפול באלימות בחברה הערבית קודם לכל. בראיון היא חושפת תקרית גזענית שעברה בקלפי ביישוב מגוריה, כשאזרח סירב לדבר איתה בטענה שהיא "אויבת" והיא לא נשארה חייבת</description>
+      <category>פוליטי</category>
+      <category>חדשות</category>
+      <dc:creator>מישל מכול</dc:creator>
+    </item>
     <item>
       <title>שוות כ-14 מנדטים: מהן המעטפות הכפולות?</title>
       <link>https://www.israelhayom.co.il/news/politics/article/21721868</link>
@@ -1009,16 +1019,6 @@
       <category>משם</category>
       <category>ForReal</category>
       <dc:creator>ברק אברגיל</dc:creator>
-    </item>
-    <item>
-      <title>הישראלים פתחו את הארנק ביום הבחירות: זינוק של 37.5% בהוצאות</title>
-      <link>https://www.israelhayom.co.il/news/local/article/21717830</link>
-      <guid isPermaLink="false">https://www.israelhayom.co.il/news/local/article/21717830</guid>
-      <pubDate>Tue, 27 Oct 2026 13:04:18 GMT</pubDate>
-      <description>מנתוני חברת שבא עולה כי בין השעות 8:00 ל-14:00 הוציא הציבור הישראלי יותר מ-731 מיליון שקלים בכרטיסי חיוב • מדובר בעלייה של 37.5% לעומת הבחירות לכנסת ב-2022 ושל 5.1% לעומת הבחירות לרשויות המקומיות ב-2024 </description>
-      <category>בארץ</category>
-      <category>חדשות</category>
-      <dc:creator>היאלי יעקבי-הנדלסמן</dc:creator>
     </item>
   </channel>
 </rss>
