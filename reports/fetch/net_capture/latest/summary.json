@@ -1,9 +1,10 @@
 {
  "fetcher": "net_capture",
- "started": "2026-10-27 08:52 UTC",
- "finished": "2026-10-27T08:54:08Z",
+ "started": "2026-10-27 08:56 UTC",
+ "finished": "2026-10-27T08:58:35Z",
  "pages": [
   "https://elections.govmap.gov.il/",
+  "https://www.gov.il/he/pages/voting-by-hour-26",
   "https://votes26.bechirot.gov.il/",
   "https://votes26.bechirot.gov.il/ballotresults",
   "https://votes26.bechirot.gov.il/cityresults",
@@ -13,15 +14,23 @@
   "pip install playwright: rc 0",
   "Chrome 155.0.8059.39 at /opt/google/chrome/chrome",
   "https://elections.govmap.gov.il/: HTTP 200, title 'Govmap מפות ישראל'",
-  "https://elections.govmap.gov.il/: 17 responses in 21 s",
+  "https://elections.govmap.gov.il/: visible text: ''",
+  "https://elections.govmap.gov.il/: 17 responses in 24 s",
+  "https://www.gov.il/he/pages/voting-by-hour-26: HTTP 403, title 'Attention Required! | Cloudflare'",
+  "https://www.gov.il/he/pages/voting-by-hour-26: visible text: 'Sorry, you have been blocked\\nYou are unable to access www.gov.il\\nWhy have I been blocked?\\n\\nThis website is using a security service to protect itself from online attacks. The action you just performed triggered the security solution. There are several actions that could trigger this block including submitting a certain word or phrase, a SQL command or malformed data.\\n\\nWhat can I do to resolve this?\\n\\nYou can email the site owner to let them know you were blocked. Please include what you were doing when this page came up and the Cloudflare Ray ID found at the bottom of this page.\\n\\nCloudflare Ray'",
+  "https://www.gov.il/he/pages/voting-by-hour-26: 7 responses in 23 s",
   "https://votes26.bechirot.gov.il/: HTTP 404, title 'שגיאה'",
-  "https://votes26.bechirot.gov.il/: 7 responses in 25 s",
+  "https://votes26.bechirot.gov.il/: visible text: 'מצטערים, העמוד שחיפשת לא נמצא\\nיתכן שהכתובת הוחלפה או הוזנה לא נכון\\n(7)'",
+  "https://votes26.bechirot.gov.il/: 7 responses in 23 s",
   "https://votes26.bechirot.gov.il/ballotresults: HTTP 404, title 'שגיאה'",
+  "https://votes26.bechirot.gov.il/ballotresults: visible text: 'מצטערים, העמוד שחיפשת לא נמצא\\nיתכן שהכתובת הוחלפה או הוזנה לא נכון\\n(7)'",
   "https://votes26.bechirot.gov.il/ballotresults: 7 responses in 23 s",
   "https://votes26.bechirot.gov.il/cityresults: HTTP 404, title 'שגיאה'",
-  "https://votes26.bechirot.gov.il/cityresults: 7 responses in 26 s",
+  "https://votes26.bechirot.gov.il/cityresults: visible text: 'מצטערים, העמוד שחיפשת לא נמצא\\nיתכן שהכתובת הוחלפה או הוזנה לא נכון\\n(7)'",
+  "https://votes26.bechirot.gov.il/cityresults: 7 responses in 25 s",
   "https://votes26.bechirot.gov.il/nationalresults: HTTP 404, title 'שגיאה'",
-  "https://votes26.bechirot.gov.il/nationalresults: 7 responses in 23 s"
+  "https://votes26.bechirot.gov.il/nationalresults: visible text: 'מצטערים, העמוד שחיפשת לא נמצא\\nיתכן שהכתובת הוחלפה או הוזנה לא נכון\\n(7)'",
+  "https://votes26.bechirot.gov.il/nationalresults: 7 responses in 24 s"
  ],
  "responses": [
   {
@@ -36,7 +45,7 @@
   },
   {
    "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/vendor-ol-BtPuoxOl.css",
+   "url": "https://elections.govmap.gov.il/assets/index-Ch4XEYZC.css",
    "method": "GET",
    "status": 200,
    "kind": "stylesheet",
@@ -46,7 +55,7 @@
   },
   {
    "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/index-Ch4XEYZC.css",
+   "url": "https://elections.govmap.gov.il/assets/vendor-ol-BtPuoxOl.css",
    "method": "GET",
    "status": 200,
    "kind": "stylesheet",
@@ -76,13 +85,93 @@
   },
   {
    "page": "https://elections.govmap.gov.il/",
-   "url": "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+   "url": "https://elections.govmap.gov.il/assets/index-9nN73Q-1.js",
    "method": "GET",
    "status": 200,
-   "kind": "stylesheet",
-   "type": "text/css; charset=utf-8",
+   "kind": "script",
+   "type": "text/html",
    "bytes": null,
-   "saved": null
+   "saved": null,
+   "strings": [
+    "/assets/ElectionsLogo-Dl3jUjg1.svg",
+    "/assets/manifest-Dyvq5gYI.json",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
+    "https://fonts.gstatic.com"
+   ]
+  },
+  {
+   "page": "https://elections.govmap.gov.il/",
+   "url": "https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null,
+   "strings": [
+    "/assets/ElectionsLogo-Dl3jUjg1.svg",
+    "/assets/manifest-Dyvq5gYI.json",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
+    "https://fonts.gstatic.com"
+   ]
+  },
+  {
+   "page": "https://elections.govmap.gov.il/",
+   "url": "https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null,
+   "strings": [
+    "/assets/ElectionsLogo-Dl3jUjg1.svg",
+    "/assets/manifest-Dyvq5gYI.json",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
+    "https://fonts.gstatic.com"
+   ]
+  },
+  {
+   "page": "https://elections.govmap.gov.il/",
+   "url": "https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null,
+   "strings": [
+    "/assets/ElectionsLogo-Dl3jUjg1.svg",
+    "/assets/manifest-Dyvq5gYI.json",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
+    "https://fonts.gstatic.com"
+   ]
+  },
+  {
+   "page": "https://elections.govmap.gov.il/",
+   "url": "https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null,
+   "strings": [
+    "/assets/ElectionsLogo-Dl3jUjg1.svg",
+    "/assets/manifest-Dyvq5gYI.json",
+    "https://fonts.googleapis.com",
+    "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
+    "https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap",
+    "https://fonts.gstatic.com"
+   ]
   },
   {
    "page": "https://elections.govmap.gov.il/",
@@ -96,51 +185,11 @@
   },
   {
    "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/index-9nN73Q-1.js",
+   "url": "https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap",
    "method": "GET",
    "status": 200,
-   "kind": "script",
-   "type": "text/html",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js",
-   "method": "GET",
-   "status": 200,
-   "kind": "script",
-   "type": "text/html",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js",
-   "method": "GET",
-   "status": 200,
-   "kind": "script",
-   "type": "text/html",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js",
-   "method": "GET",
-   "status": 200,
-   "kind": "script",
-   "type": "text/html",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://elections.govmap.gov.il/",
-   "url": "https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js",
-   "method": "GET",
-   "status": 200,
-   "kind": "script",
-   "type": "text/html",
+   "kind": "stylesheet",
+   "type": "text/css; charset=utf-8",
    "bytes": null,
    "saved": null
   },
@@ -195,6 +244,77 @@
    "saved": null
   },
   {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "method": "GET",
+   "status": 403,
+   "kind": "document",
+   "type": "text/html; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/styles/cf.errors.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/images/browser-bar.png?1376755637",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/images/cf-no-screenshot-error.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/challenge-platform/scripts/precursor/main.js",
+   "method": "GET",
+   "status": 302,
+   "kind": "script",
+   "type": "",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/challenge-platform/h/b/scripts/precursor/d2d3316b729e/main.js?",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://www.gov.il/he/pages/voting-by-hour-26",
+   "url": "https://www.gov.il/cdn-cgi/challenge-platform/h/b/precursor/d2d3316b729e/0.702024651449672:1793088923:MS2bUOb8A-3f_at50N02_Fh4POChrFqDmyo78cDJwx8/a5107d097c36cb94",
+   "method": "POST",
+   "status": 200,
+   "kind": "xhr",
+   "type": "application/json; charset=UTF-8",
+   "bytes": 18,
+   "saved": "files/04f494be-_0.702024651449672_1793088923_MS2bUOb8A-3f_at50N02_Fh4POChrFqDmyo78cDJwx8_a5107d097c36cb94",
+   "first": "{\"i\":60,\"n\":false}"
+  },
+  {
    "page": "https://votes26.bechirot.gov.il/",
    "url": "https://votes26.bechirot.gov.il/",
    "method": "GET",
@@ -216,21 +336,21 @@
   },
   {
    "page": "https://votes26.bechirot.gov.il/",
-   "url": "https://maintenance.gov.il/css/style.css",
-   "method": "GET",
-   "status": 200,
-   "kind": "stylesheet",
-   "type": "text/css",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://votes26.bechirot.gov.il/",
    "url": "https://maintenance.gov.il/img/National-digital-logo.png",
    "method": "GET",
    "status": 200,
    "kind": "image",
    "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://maintenance.gov.il/css/style.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
    "bytes": null,
    "saved": null
   },
@@ -286,21 +406,21 @@
   },
   {
    "page": "https://votes26.bechirot.gov.il/ballotresults",
-   "url": "https://maintenance.gov.il/img/National-digital-logo.png",
-   "method": "GET",
-   "status": 200,
-   "kind": "image",
-   "type": "image/png",
-   "bytes": null,
-   "saved": null
-  },
-  {
-   "page": "https://votes26.bechirot.gov.il/ballotresults",
    "url": "https://maintenance.gov.il/css/style.css",
    "method": "GET",
    "status": 200,
    "kind": "stylesheet",
    "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/ballotresults",
+   "url": "https://maintenance.gov.il/img/National-digital-logo.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
    "bytes": null,
    "saved": null
   },
