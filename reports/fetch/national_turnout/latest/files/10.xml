@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 21:43:41 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 21:46:49 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -17,17 +17,17 @@
       <title>עמוד הבית - גלובס</title>
     </image>
     <item>
-      <title>המפלגה שקרסה וההפתעה הגדולה: מה למדנו ממדגמי הטלוויזיה?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561026#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561026</guid>
-      <description>המדגמים של כלי התקשורת מציגים את תמונת המנדטים הראשונה אחרי סגירת הקלפיות &amp;#8226; מי מוביל, היכן נרשמו הפערים הגדולים בין הערוצים ואילו מפלגות עדיין מתנדנדות סביב אחוז החסימה?</description>
-      <author>יובל אינהורן וצוות המשרוקית של גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 21:37:00 GMT</pubDate>
+      <title>אינדיקציה ראשונה: כך מגיבים השווקים לתוצאות המדגמים</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561039#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561039</guid>
+      <description>קרנות סל הנסחרות בוול סטריט ועוקבות אחר מניות ישראליות מספקות אינדיקציות ראשונות לתגובת המשקיעים &amp;bull; לאחר ירידה ראשונית, קרן הסל של בלקרוק התאוששה ונסחרה כמעט ללא שינוי במסחר המאוחר &amp;bull; המבחן האמיתי יגיע כאשר הבורסה המקומית תיפתח בבוקר יום רביעי</description>
+      <author>תומר פדובה</author>
+      <pubDate>Tue, 27 Oct 2026 21:40:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/סקר_הסקרים.tag">סקר הסקרים</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>
-        </media:description>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/שוק_ההון.tag">שוק ההון</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1622707938/direct/shutterstock_1873888054_ifpt7s.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>הבורסה בתל אביב / צילום: Shutterstock</media:description>
       </media:content>
     </item>
     <item>
@@ -48,17 +48,17 @@
       </media:content>
     </item>
     <item>
-      <title>אינדיקציה ראשונה: כך מגיבים השווקים לתוצאות המדגמים</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561039#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561039</guid>
-      <description>קרנות סל הנסחרות בוול סטריט ועוקבות אחר מניות ישראליות מספקות אינדיקציות ראשונות לתגובת המשקיעים &amp;bull; לאחר ירידה ראשונית, קרן הסל של בלקרוק התאוששה ונסחרה כמעט ללא שינוי במסחר המאוחר &amp;bull; המבחן האמיתי יגיע כאשר הבורסה המקומית תיפתח בבוקר יום רביעי</description>
-      <author>תומר פדובה</author>
-      <pubDate>Tue, 27 Oct 2026 21:40:00 GMT</pubDate>
+      <title>המפלגה שקרסה וההפתעה הגדולה: מה למדנו ממדגמי הטלוויזיה?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561026#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561026</guid>
+      <description>המדגמים של כלי התקשורת מציגים את תמונת המנדטים הראשונה אחרי סגירת הקלפיות &amp;#8226; מי מוביל, היכן נרשמו הפערים הגדולים בין הערוצים ואילו מפלגות עדיין מתנדנדות סביב אחוז החסימה?</description>
+      <author>יובל אינהורן וצוות המשרוקית של גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 21:37:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
-      <category domain="https://www.globes.co.il/news/שוק_ההון.tag">שוק ההון</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1622707938/direct/shutterstock_1873888054_ifpt7s.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>הבורסה בתל אביב / צילום: Shutterstock</media:description>
+      <category domain="https://www.globes.co.il/news/סקר_הסקרים.tag">סקר הסקרים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>
+        </media:description>
       </media:content>
     </item>
     <item>
