@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:media="http://search.yahoo.com/mrss/">
+  <channel>
+    <title>עמוד הבית - גלובס</title>
+    <link>https://www.globes.co.il/news/home.aspx?fid=2#utm_source=RSS</link>
+    <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
+    <copyright>גלובס</copyright>
+    <language>he</language>
+    <lastBuildDate>Tue, 27 Oct 2026 16:31:57 GMT</lastBuildDate>
+    <managingEditor>feedback@globes.co.il</managingEditor>
+    <ttl>10</ttl>
+    <image>
+      <height>70</height>
+      <width>144</width>
+      <url>https://images.globes.co.il/rss/Globes_logo_RSS_HEB.png</url>
+      <link>https://www.globes.co.il/news/home.aspx?fid=2#utm_source=RSS</link>
+      <title>עמוד הבית - גלובס</title>
+    </image>
+    <item>
+      <title>55.7% הצביעו. ומי היישוב המוביל בישראל?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560922</guid>
+      <description>יום הבחירות לכנסת ה-26: 4.85 מיליון ישראלים הצביעו ברחבי הארץ עד השעה 16:00, כ-55.7 אחוזי הצבעה &amp;#8226; ועדת הבחירות הפיצה הנחיות להקלה על העומסים בקלפיות &amp;#8226; השקל מתחזק מול הדולר בניגוד למגמה בעולם &amp;#8226; 35 מפלגות מתמודדות על קולותיהם של 7.3 מיליון בעלי זכות בחירה &amp;#8226; כ-12,018 קלפיות פרוסות ברחבי הארץ ופועלות בין השעות 7:00-22:00 &amp;#8226; עדכונים שוטפים</description>
+      <author>שירות גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 16:31:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/קלפיות.tag">קלפיות</category>
+      <category domain="https://www.globes.co.il/news/אחוזי_הצבעה.tag">אחוזי הצבעה</category>
+      <category domain="https://www.globes.co.il/news/ועדת_הבחירות_המרכזית.tag">ועדת הבחירות המרכזית</category>
+      <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793110616/2026-10-27T090216Z_1312754175_RC2KBOANZDFN_RTRMADP_3_ISRAEL-ELECTION_awaikd.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>קלפי בבני ברק / צילום: Reuters, Nir Elias</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ההיסטוריה מלמדת: איך מגיבה הבורסה בבוקר שאחרי הבחירות?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560669#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560669</guid>
+      <description>מחקר חדש של הבורסה לניירות ערך בחן את התנהגות מדדי ת"א-35 ות"א-125 בעשר מערכות הבחירות האחרונות &amp;#8226; הממצאים חושפים דפוס מפתיע: אופטימיות ראשונית, ירידות בשבוע הראשון, ועליות בממוצע של 1.7% בתום חודש &amp;#8226; וגם: למה התנודתיות מזנקת בעד 45%, ומה ההמלצה למשקיעים לטווח ארוך?</description>
+      <author>חזי שטרנליכט</author>
+      <pubDate>Tue, 27 Oct 2026 08:10:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_35.tag">מדד ת"א 35</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_125.tag">מדד ת"א 125</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
+      <category domain="https://www.globes.co.il/news/מחקר.tag">מחקר</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1786038581/%D7%9C%D7%90%D7%AA%D7%A8-800_ydlpep.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>אפקט הבחירות בבורסה / אילוסטרציה: שלומי יוסף</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>רוצים לדעת מי יזכה בבחירות? תסתכלו על הערים הללו</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560878#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560878</guid>
+      <description>בכל מערכות הבחירות בשנים האחרונות, רחובות, פתח תקווה וחיפה מציגות תוצאות כמעט זהות למפה הפוליטית הארצית &amp;#8226; מומחים מסבירים איך מעבר של צעירים מתל אביב ופסיפס של שכונות שונות לגמרי מייצרים יחד את "הבוחר הממוצע" &amp;#8226; וגם: מדוע פוליטיקאים שבאים לחפש בהן קולות צפים מפספסים את המציאות?</description>
+      <author>עידן ארץ</author>
+      <pubDate>Tue, 27 Oct 2026 03:56:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/רחובות.tag">רחובות</category>
+      <category domain="https://www.globes.co.il/news/פתח_תקווה.tag">פתח תקווה</category>
+      <category domain="https://www.globes.co.il/news/חיפה.tag">חיפה</category>
+      <category domain="https://www.globes.co.il/news/דמוגרפיה.tag">דמוגרפיה</category>
+      <category domain="https://www.globes.co.il/news/אוניברסיטת_תל_אביב.tag">אוניברסיטת תל אביב</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597446532/old/1127001.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>מכון ויצמן רחובות / צילום: איל יצהר</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>המשקיעים מתמחרים הכרעה בבחירות? הדולר נחלש בחדות מול השקל</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561005#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561005</guid>
+      <description>במקביל לשיעור ההצבעה הגבוה שנרשם מאז ומעולם בישראל, שער הדולר-שקל יורד בחדות ושובר מתחת לרף ה-3.03 שקלים &amp;#8226; אלו הסיבות האפשריות לכך</description>
+      <author>רם מורי</author>
+      <pubDate>Tue, 27 Oct 2026 14:28:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/דולר_שקל.tag">דולר שקל</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/שקל.tag">שקל</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1706459327/COT_Pic/800_sf055i.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>השקל / אילוסטרציה: טלי בוגדנובסקי (נוצר בעזרת adobe firefly)</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>הנאסד"ק קופץ במעל 1%; מניות השבבים ממשיכות לטפס</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560828#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560828</guid>
+      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.7% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; מחירי הנפט רושמים ירידות &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
+      <author>שירות גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 16:03:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בורסות_עולם.tag">בורסות עולם</category>
+      <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
+      <category domain="https://www.globes.co.il/news/בורסות_אירופה.tag">בורסות אירופה</category>
+      <category domain="https://www.globes.co.il/news/בורסות_אסיה.tag">בורסות אסיה</category>
+      <category domain="https://www.globes.co.il/news/נפט.tag">נפט</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1765899591/direct/AP22040486850744_oftjdv.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>וול סטריט / צילום: ap, Mary Altaffer</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>אינטל פתחה את התיאבון: ישראל משיקה תוכנית לאומית חדשה בתחום הקוונטום</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560995#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560995</guid>
+      <description>לאחר רכישת הענק של חברת המחשוב הקוונטי הישראלית קלאסיק על ידי אינטל, ברשות החדשנות מאיצים את התוכנית הממשלתית הלאומית בתחום בהיקף של 1.5 מיליארד שקל &amp;#8226; המהלך כולל השקעות ענק דרך מטה ה־AI הלאומי והכרזה קרובה על מכרז המחשוב הקוונטי</description>
+      <author>אסף גלעד</author>
+      <pubDate>Tue, 27 Oct 2026 15:25:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/מחשוב_קוונטי.tag">מחשוב קוונטי</category>
+      <category domain="https://www.globes.co.il/news/Classiq.tag">Classiq</category>
+      <category domain="https://www.globes.co.il/news/אינטל.tag">אינטל</category>
+      <category domain="https://www.globes.co.il/news/רשות_החדשנות.tag">רשות החדשנות</category>
+      <category domain="https://www.globes.co.il/news/משרד_הביטחון.tag">משרד הביטחון</category>
+      <category domain="https://www.globes.co.il/news/אוניברסיטאות.tag">אוניברסיטאות</category>
+      <category domain="https://www.globes.co.il/news/יבמ.tag">יבמ</category>
+      <category domain="https://www.globes.co.il/news/מחקר_ופיתוח_מופ.tag">מחקר ופיתוח (מו"פ)</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1669038942/direct/0M4A2396f_bmabjp.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>ניר מינרבי, אמיר נוה ויהודה נוה. מייסדי חברת קלאסיק / צילום: אייל טואג</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ההוצאות מזנקות, הקניונים מתמלאים: כך הישראלים מבלים ביום הבחירות</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561001#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561001</guid>
+      <description>יום השבתון לרגל הבחירות לכנסת ה-26 מלווה בזינוק בהוצאות הישראלים, שהגיעו ליותר מ-731 מיליון שקל בכרטיסי אשראי בתוך שש שעות - עלייה של 37.5% לעומת הבחירות הקודמות &amp;#8226; בקניוני עזריאלי מדווחים על תנועת מבקרים הגבוהה פי שלושה מבימים רגילים, ובקניון ביג גלילות נרשמו יותר מ-17 אלף כניסות &amp;#8226; מנגד, נתוני קאונטרייט מצביעים על ירידה של 20% בתנועת המבקרים לעומת הבחירות ב-2022</description>
+      <author>תומר פדובה וג'ניפר סילון</author>
+      <pubDate>Tue, 27 Oct 2026 16:17:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/קניות.tag">קניות</category>
+      <category domain="https://www.globes.co.il/news/קניונים.tag">קניונים</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/כרטיסי_אשראי.tag">כרטיסי אשראי</category>
+      <category domain="https://www.globes.co.il/news/שבא.tag">שב"א</category>
+      <category domain="https://www.globes.co.il/news/קניון_עזריאלי.tag">קניון עזריאלי</category>
+      <category domain="https://www.globes.co.il/news/קמעונאות.tag">קמעונאות</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>מהפכת השקיפות בנתוני ההצבעה בישראל</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560977#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560977</guid>
+      <description>ועדת הבחירות הציגה לראשונה נתוני הצבעה בזמן אמת עד לרמת השכונה והקלפי &amp;#8226; סמינר הקיבוצים מקימה פקולטה חדשה למקצועות הטיפול, שגריר יפן בישראל ביקר במטה טאואר על רקע הרחבת פעילותה במדינה, וגם: המנהלים הישראלים שיצאו למסע אתגרי בעקבות המדליסטים האולימפיים &amp;#8226; אירועים ומינויים</description>
+      <author>גלית חתן</author>
+      <pubDate>Tue, 27 Oct 2026 14:52:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/אירועים_ומינויים.tag">אירועים ומינויים</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/ועדת_הבחירות_המרכזית.tag">ועדת הבחירות המרכזית</category>
+      <category domain="https://www.globes.co.il/news/אחוזי_הצבעה.tag">אחוזי הצבעה</category>
+      <category domain="https://www.globes.co.il/news/Priority.tag">Priority</category>
+      <category domain="https://www.globes.co.il/news/יפן.tag">יפן</category>
+      <category domain="https://www.globes.co.il/news/שגריר.tag">שגריר</category>
+      <category domain="https://www.globes.co.il/news/שגרירות.tag">שגרירות</category>
+      <category domain="https://www.globes.co.il/news/אורן_סמדגה.tag">אורן סמדג'ה</category>
+      <category domain="https://www.globes.co.il/news/פיטר_פלציק.tag">פיטר פלצ'יק</category>
+      <category domain="https://www.globes.co.il/news/טאואר.tag">טאואר</category>
+      <category domain="https://www.globes.co.il/news/בריאות_הנפש.tag">בריאות הנפש</category>
+      <category domain="https://www.globes.co.il/news/סמינר_הקיבוצים.tag">סמינר הקיבוצים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/l_COT_Pic:minuim_d9ex5z/c_scale,fl_relative,w_0.25/fl_layer_apply,fl_no_overflow,g_north_east/v1793110650/DSC00445_ou2ggy.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>דין ליבנה, ממלא מקום מנכ''ל ועדת הבחירות / צילום: רועי ידובסקי, ועדת הבחירות המרכזית</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>בשל מזג האוויר, כלל הדרכים המובילות לאילת וממנה חסומות</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561009#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561009</guid>
+      <description>במשטרה הודיעו כי בעקבות הצפות בכביש הערבה (90), נחסמו לתנועת כלי רכב צומת הערבה, הכניסה והיציאה הצפונית לעיר אילת, ובמקביל, נסגר לתנועה גם כביש 12</description>
+      <author>אילנית אדלר, N12</author>
+      <pubDate>Tue, 27 Oct 2026 14:27:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/מזג_האוויר.tag">מזג האוויר</category>
+      <category domain="https://www.globes.co.il/news/אילת.tag">אילת</category>
+      <category domain="https://www.globes.co.il/news/יישובי_הדרום.tag">יישובי הדרום</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1598137067/old/979898.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>שיטפונות בדרום הארץ (ארכיון) / צילום: אוריה תדמור</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>"השוק שלנו הוא הבטחה ענקית אבל לא לבעלי לב חלש": המנכ"ל שמכר חברה ב-2.2 מיליארד דולר מדבר</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560941#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560941</guid>
+      <description>ניר מינרבי, מנכ"ל ואחד ממייסדי חברת המחשוב הקוונטי קלאסיק, הודה כי החברה שקלה לצאת להנפקה בניו יורק או לעשות מיזוג ספאק - עד שהחלו הדיונים עם אינטל, שהסתיימו בעסקת רכישה בהיקף של 2.2 מיליארד דולר שנחתמה אתמול &amp;#8226; מינרבי ציין כי כלל העובדים בחברה יעברו כעת לאינטל, והכריז: "העסקה הזו היסטורית"</description>
+      <author>אסף גלעד</author>
+      <pubDate>Tue, 27 Oct 2026 08:58:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/Classiq.tag">Classiq</category>
+      <category domain="https://www.globes.co.il/news/אינטל.tag">אינטל</category>
+      <category domain="https://www.globes.co.il/news/מחשוב_קוונטי.tag">מחשוב קוונטי</category>
+      <category domain="https://www.globes.co.il/news/אקזיטים.tag">אקזיטים</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_מיזוגים_ורכישות.tag">טכנולוגיה: מיזוגים ורכישות</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_סטארט_אפים.tag">טכנולוגיה: סטארט-אפים</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_חברות_הייטק_ישראליות.tag">טכנולוגיה: חברות הייטק ישראליות</category>
+      <category domain="https://www.globes.co.il/news/הנפקה.tag">הנפקה</category>
+      <category domain="https://www.globes.co.il/news/מערכת_הפעלה.tag">מערכת הפעלה</category>
+      <category domain="https://www.globes.co.il/news/ליפ_בו_טאן.tag">ליפ-בו טאן</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793090979/Nir_Minerbi_Credit_Eyal_Touag_zdfccc.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>גיא מינרבי, מנכ''ל קלאסיק ואחד ממייסדי החברה / צילום: אייל טואג</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>טראמפ: הפסקת האש עם איראן הייתה "בזבוז זמן"</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560926#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560926</guid>
+      <description>נשיא ארה"ב טען בעצרת בחירות במיסיסיפי כי לאיראן יש טיל שיוכל בעתיד להגיע לאירופה ואף לפגוע בסן דייגו ובסן פרנסיסקו &amp;#8226; במשמרות המהפכה מאיימים: "טהרן ערוכה לפעול נגד אויביה. ברשותנו טילים שטרם נחשפו" &amp;#8226; יו"ר הפרלמנט של איראן: "מצבו הבריאותי של מוג'תבא חמינאי תקין לחלוטין" &amp;#8226; הערכה: אם נתניהו ירכיב את הממשלה הבאה, הרמטכ"ל זמיר לא ימשיך בתפקידו &amp;#8226; דיווחים שוטפים  </description>
+      <author>N12 ושירות גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 13:46:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/איראן.tag">איראן</category>
+      <category domain="https://www.globes.co.il/news/דונלד_טראמפ.tag">דונלד טראמפ</category>
+      <category domain="https://www.globes.co.il/news/ארהב.tag">ארה"ב</category>
+      <category domain="https://www.globes.co.il/news/משמרות_המהפכה.tag">משמרות המהפכה</category>
+      <category domain="https://www.globes.co.il/news/מוגתבא_חמינאי.tag">מוג'תבא חמינאי</category>
+      <category domain="https://www.globes.co.il/news/צהל.tag">צה"ל</category>
+      <category domain="https://www.globes.co.il/news/חמאס.tag">חמאס</category>
+      <category domain="https://www.globes.co.il/news/רצועת_עזה.tag">רצועת עזה</category>
+      <category domain="https://www.globes.co.il/news/חותים.tag">חות'ים</category>
+      <category domain="https://www.globes.co.il/news/ערב_הסעודית.tag">ערב הסעודית</category>
+      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
+      <category domain="https://www.globes.co.il/news/אייל_זמיר.tag">אייל זמיר</category>
+      <category domain="https://www.globes.co.il/news/מצר_הורמוז.tag">מצר הורמוז</category>
+      <category domain="https://www.globes.co.il/news/ישראל_במלחמה.tag">ישראל במלחמה</category>
+      <category domain="https://www.globes.co.il/news/הפסקת_אש.tag">הפסקת אש</category>
+      <category domain="https://www.globes.co.il/news/טילים.tag">טילים</category>
+      <category domain="https://www.globes.co.il/news/כטבמים.tag">כטב"מים</category>
+      <category domain="https://www.globes.co.il/news/סוריה.tag">סוריה</category>
+      <category domain="https://www.globes.co.il/news/ירדן.tag">ירדן</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1781534853/direct/2-3-800_hih9km.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>נשיא ארה''ב דונלד טראמפ ומוג'תבא חמינאי, המנהיג העליון של איראן / צילום: AP</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>אנבידיה תשקיע 3 מיליארד דולר במטא. מה מתכננות שתי הענקיות?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560955#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560955</guid>
+      <description>ענקית השבבים אנבידיה הודיעה על השקעה במטא, שמקדמת גיוס הון של 97.5 מיליארד דולר למימון תשתיות בינה מלאכותית &amp;#8226; שיתוף-הפעולה בין החברות יתמקד בשיפור ביצועי מודלי Muse על גבי תשתיות אנבידיה ובפיתוח סוכני AI אישיים למיליארדי משתמשים</description>
+      <author>ליאם ריזמן</author>
+      <pubDate>Tue, 27 Oct 2026 12:02:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/אנבידיה.tag">אנבידיה</category>
+      <category domain="https://www.globes.co.il/news/מטא_META.tag">מטא (META)</category>
+      <category domain="https://www.globes.co.il/news/פייסבוק.tag">פייסבוק</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_גיוסים_והשקעות.tag">טכנולוגיה: גיוסים והשקעות</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_בינה_מלאכותית.tag">טכנולוגיה: בינה מלאכותית</category>
+      <category domain="https://www.globes.co.il/news/סוכני_AI.tag">סוכני AI</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_ענקיות_הטכנולוגיה.tag">טכנולוגיה: ענקיות הטכנולוגיה</category>
+      <category domain="https://www.globes.co.il/news/גיוס_הון.tag">גיוס הון</category>
+      <category domain="https://www.globes.co.il/news/גנסן_הואנג.tag">ג'נסן הואנג</category>
+      <category domain="https://www.globes.co.il/news/מארק_צוקרברג.tag">מארק צוקרברג</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_שבבים.tag">טכנולוגיה: שבבים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793104524/70f26f50-00c5-433a-8d45-1fe95eb80dcd.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>מארק צוקרברג, מנכ''ל מטא, וג'נסן הואנג, מנכ''ל אנבידיה / צילום: Nvidia</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>מיליארדי שקלים ממתינים ברשות המסים: כך תממשו את זכאותכם עד סוף השנה</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560852#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560852</guid>
+      <description>ב־1 בינואר תתיישן שנת המס 2020 ואיתה הזכות לדרוש החזרים &amp;#8226; ברשות המסים מדווחים כי כ־90% מהבקשות מסתיימות בהחזר כספי בפועל, בתוספת ריבית והצמדה כחוק &amp;#8226; מי עשוי להיות זכאי, ממה מומלץ להיזהר, ואיך בודקים את הזכאות בבטחה לפני הגשת הדוח?</description>
+      <author>אלה לוי־וינריב</author>
+      <pubDate>Tue, 27 Oct 2026 10:25:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/החזרי_מס.tag">החזרי מס</category>
+      <category domain="https://www.globes.co.il/news/רשות_המסים.tag">רשות המסים</category>
+      <category domain="https://www.globes.co.il/news/מס_הכנסה.tag">מס הכנסה</category>
+      <category domain="https://www.globes.co.il/news/גלובס_עושה_סדר.tag">גלובס עושה סדר</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1727693061/direct/124A4751_hops0x.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>שי אהרונוביץ', מנכ''ל רשות המסים / צילום: יוסי זמיר</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>הבורסה אישרה: אופציות ליו"ר ולמנכ"ל והלוואת שימור של מיליונים</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560947#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560947</guid>
+      <description>האסיפה הכללית של הבורסה אישרה הענקת אופציות ליו"ר יוג'ין קנדל ולמנכ"ל איתי בן זאב &amp;#8226; בנוסף, אושרה לבן זאב הלוואת שימור של 3.5 מיליון שקל, שנועדה לעודד את הישארותו בתפקיד, אך תנאי ההחזר שלה לא פורטו בדיווח</description>
+      <author>בועז בן נון</author>
+      <pubDate>Tue, 27 Oct 2026 10:16:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/איתי_בן_זאב.tag">איתי בן זאב</category>
+      <category domain="https://www.globes.co.il/news/יוגין_קנדל.tag">יוג'ין קנדל</category>
+      <category domain="https://www.globes.co.il/news/אופציות_לעובדים.tag">אופציות לעובדים</category>
+      <category domain="https://www.globes.co.il/news/שכר_בכירים.tag">שכר בכירים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1736783113/direct/DSC04610-2_e8tuet_82cabb.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>איתי בן זאב, מנכ''ל הבורסה לניירות ערך / צילום: כדיה לוי</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>לא בטוחים אם הודעת הבחירות היא פייק או לא? הכלים שיעזרו לכם להימנע ממתקפות סייבר</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560946#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560946</guid>
+      <description>בתקופת הבחירות גוברים הסיכונים להפצת מידע כוזב ולניסיונות הונאה וגניבת פרטים אישיים &amp;#8226; כלים דיגיטליים מאפשרים לבדוק הודעות וקישורים חשודים לפני פתיחתם &amp;#8226; מומלץ להסתמך על מקורות רשמיים, להימנע מלחיצה על קישורים לא מוכרים ולא להפיץ מידע שלא אומת</description>
+      <author>נבו טרבלסי</author>
+      <pubDate>Tue, 27 Oct 2026 10:30:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/מתקפות_סייבר.tag">מתקפות סייבר</category>
+      <category domain="https://www.globes.co.il/news/טכנולוגיה_סייבר.tag">טכנולוגיה: סייבר</category>
+      <category domain="https://www.globes.co.il/news/פישינג.tag">פישינג</category>
+      <category domain="https://www.globes.co.il/news/דיפ_פייק.tag">דיפ פייק</category>
+      <category domain="https://www.globes.co.il/news/פייק_ניוז.tag">פייק ניוז</category>
+      <category domain="https://www.globes.co.il/news/WhatsApp_וואטסאפ.tag">WhatsApp (וואטסאפ)</category>
+      <category domain="https://www.globes.co.il/news/הונאות_אינטרנט.tag">הונאות אינטרנט</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793097129/shutterstock_2293562203_gydm1a.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>צילום: Shutterstock</media:description>
+      </media:content>
+    </item>
+  </channel>
+</rss>
