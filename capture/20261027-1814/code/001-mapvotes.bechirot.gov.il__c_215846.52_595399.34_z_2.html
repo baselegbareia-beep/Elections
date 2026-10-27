@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html translate="no" lang="en" style="overscroll-behavior: none;">
+
+<head>
+  <meta charset="utf-8" />
+  <title>Govmap מפות ישראל</title>
+  <meta name="theme-color" content="#448fff" />
+  <meta name="description"
+    content="אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כתובת, גוש/חלקה, צפייה בשכבות מידע במגוון נושאים, יכולות שיתוף מפה, יצירת שכבות מידע אישיות ועוד." />
+  <base href="/" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32.png" />
+  <link rel="icon" type="image/png" sizes="96x96" href="/favicon/favicon-96.png" />
+  <link rel="icon" type="image/png" sizes="180x180" href="/favicon/favicon-180.png" />
+  <link rel="icon" type="image/png" sizes="512x512" href="/favicon/favicon-512.png" />
+  <link rel="manifest" href="/assets/manifest-Dyvq5gYI.json">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="/favicon/favicon-192x192.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+Hebrew:wght@100;200;300;400;500;600;700;800;900&display=swap"
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap"
+    rel="stylesheet">
+  <!-- Native apps that embed the map in an Android WebView with DOM storage off get
+         localStorage/sessionStorage as null, and some blocked-storage browsers throw on access.
+         The app calls both directly, so swap in an in-memory Storage before the bundle runs. -->
+  <script>
+    (function () {
+      function memoryStorage() {
+        var data = Object.create(null);
+        return {
+          get length() { return Object.keys(data).length; },
+          key: function (i) { var k = Object.keys(data)[i]; return k === undefined ? null : k; },
+          getItem: function (k) { k = String(k); return k in data ? data[k] : null; },
+          setItem: function (k, v) { data[String(k)] = String(v); },
+          removeItem: function (k) { delete data[String(k)]; },
+          clear: function () { data = Object.create(null); }
+        };
+      }
+      ['localStorage', 'sessionStorage'].forEach(function (name) {
+        try {
+          window[name].getItem('');
+          return;
+        } catch (e) { }
+        try {
+          Object.defineProperty(window, name, { value: memoryStorage(), configurable: true, writable: true });
+        } catch (e) { }
+      });
+    })();
+  </script>
+  <!-- Shown until the bundle renders: the Knesset icon and the GovMap logo crossfade. -->
+  <style>
+    .splash {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      background: #fff;
+    }
+    .splash img {
+      grid-area: 1 / 1;
+      height: auto;
+      opacity: 0;
+      animation: splash-crossfade 4s ease-in-out infinite;
+    }
+    .splash img:first-child { width: 120px; }
+    .splash img:last-child { width: 180px; animation-delay: -2s; }
+    @keyframes splash-crossfade {
+      0% { opacity: 0; }
+      10%, 40% { opacity: 1; }
+      55%, 100% { opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .splash img { animation: none; }
+      .splash img:first-child { opacity: 1; }
+    }
+  </style>
+  <script type="module" crossorigin src="/assets/index-CUm2dDMQ.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/vendor-runtime-CgVnxAt7.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-core-DP7zTeuK.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-ol-Dan8d_2T.js">
+  <link rel="modulepreload" crossorigin href="/assets/vendor-mui-Bm3ArF4M.js">
+  <link rel="stylesheet" crossorigin href="/assets/vendor-ol-BtPuoxOl.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-nwNXhWQ-.css">
+  <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();window.__vite_is_modern_browser=true</script>
+  <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
+</head>
+
+<body style="overscroll-behavior: none; max-height: 100vh;">
+  <div id="root">
+    <div class="splash" aria-hidden="true">
+      <img src="/assets/ElectionsLogo-Dl3jUjg1.svg" alt="">
+      <img src="/assets/GovmapLogo-CzvLBNxN.svg" alt="">
+    </div>
+  </div>
+  <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+  <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy-vUtxk7fV.js"></script>
+  <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/index-legacy-BRJNf2ii.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
+</body>
+
+</html>
