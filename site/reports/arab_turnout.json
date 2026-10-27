@@ -1,0 +1,108 @@
+{
+ "as_of": "16:44",
+ "date": "27.10.2026",
+ "total": {
+  "voters": 482396,
+  "elig": 1015740,
+  "with": 131,
+  "n": 141,
+  "updated": "16:44",
+  "pct": 47.5
+ },
+ "national": {
+  "hour": "16:00",
+  "pct": 55.72
+ },
+ "categories": [
+  {
+   "name": "יישובים ערביים",
+   "counted": true,
+   "pct": 47.7,
+   "voters": 310019,
+   "elig": 650599,
+   "with": 49,
+   "n": 50
+  },
+  {
+   "name": "יישובי מיעוטים במועצות אזוריות",
+   "counted": true,
+   "pct": 47.7,
+   "voters": 8793,
+   "elig": 18422,
+   "with": 14,
+   "n": 14
+  },
+  {
+   "name": "יישובים דרוזיים",
+   "counted": true,
+   "pct": 35.2,
+   "voters": 39912,
+   "elig": 113228,
+   "with": 13,
+   "n": 13
+  },
+  {
+   "name": "יישובים צ'רקסיים",
+   "counted": true,
+   "pct": 37.4,
+   "voters": 1415,
+   "elig": 3783,
+   "with": 2,
+   "n": 2
+  },
+  {
+   "name": "יישובים בדואיים בנגב",
+   "counted": true,
+   "pct": 58.5,
+   "voters": 68968,
+   "elig": 117990,
+   "with": 9,
+   "n": 9
+  },
+  {
+   "name": "יישובים בדואיים בצפון",
+   "counted": true,
+   "pct": 48.9,
+   "voters": 26632,
+   "elig": 54509,
+   "with": 19,
+   "n": 19
+  },
+  {
+   "name": "יישובים דרוזיים ברמת הגולן",
+   "counted": true,
+   "pct": 23.3,
+   "voters": 1895,
+   "elig": 8148,
+   "with": 4,
+   "n": 4
+  },
+  {
+   "name": "יישובים ערביים נוספים (לא בנספח)",
+   "counted": true,
+   "pct": 48.0,
+   "voters": 9306,
+   "elig": 19372,
+   "with": 7,
+   "n": 7
+  },
+  {
+   "name": "שבטים בדואיים",
+   "counted": true,
+   "pct": 52.1,
+   "voters": 15456,
+   "elig": 29689,
+   "with": 14,
+   "n": 23
+  },
+  {
+   "name": "ערים מעורבות",
+   "counted": false,
+   "pct": 48.4,
+   "voters": 471786,
+   "elig": 974933,
+   "with": 7,
+   "n": 7
+  }
+ ]
+}

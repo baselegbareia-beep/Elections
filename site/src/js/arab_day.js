@@ -150,11 +150,12 @@ async function drawArabDay(el) {
     if (el.isConnected && !el.firstElementChild) el.innerHTML = `<p class="empty">${t('נתוני החברה הערבית לא נטענו. הדף ינסה שוב בעדכון הבא.')}</p>`;
     return;
   }
+  await adPdfMeta();
   if (!el.isConnected) return;
   const D = adData();
   // redraw only when the data or a clock gate changed, so a refresh tick keeps the reader's sort, search and scroll
   const sig = JSON.stringify([D.mode, adRel(D.cur), D.cur && D.cur.released, D.cur && D.cur.total && D.cur.total.voters,
-    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed(), adAfter()]);
+    D.hist.map(adRel), D.prev && adRel(D.prev), D.drill, adClosed(), adAfter(), AD.pdf && AD.pdf.as_of]);
   if (el.dataset.adSig === sig && el.querySelector('.ad-grid')) return;
   el.dataset.adSig = sig;
   AD.D = D;
@@ -170,6 +171,25 @@ async function drawArabDay(el) {
   adTableBody(el);
   adBind(el);
   if (caret != null) { const q = $('#ad-q', el); if (q) { q.focus(); try { q.setSelectionRange(caret, caret); } catch (e) { /* type=search */ } } }
+}
+
+// The downloadable report (pipeline/arab_report.py: every Arab, Druze, Circassian and Bedouin locality in the CEC's
+// division, from the latest per-station release), published by the operator as reports/arab_turnout.pdf with its
+// summary reports/arab_turnout.json. Only on the hosted site on election day: without the summary, no link.
+async function adPdfMeta() {
+  if (!/^https?:$/.test(location.protocol)) return;
+  try {
+    const r = await fetch(`reports/arab_turnout.json?v=${Math.floor(Date.now() / 30000)}`, { cache: 'no-store' });
+    const m = r.ok ? await r.json() : null;
+    AD.pdf = m && /^\d\d:\d\d$/.test(m.as_of || '') ? m : AD.pdf || null;
+  } catch (e) { /* no report yet, or offline: keep what was shown */ }
+}
+function adPdfLink() {
+  const m = AD.pdf;
+  if (!m) return '';
+  const tot = m.total || {};
+  return `<p class="ad-pdf"><a class="ad-pdf-btn" href="reports/arab_turnout.pdf?v=${encodeURIComponent(m.as_of)}" download="arab_turnout_${esc(m.as_of.replace(':', ''))}.pdf">${t('הורדת הדו״ח (PDF)')}</a>
+    <span>${t('אחוזי ההצבעה בכל היישובים הערביים, הדרוזיים, הצ׳רקסיים והבדואיים, לפי חלוקת ועדת הבחירות. עדכון אחרון: {t}, {n} יישובים עם נתונים.', { t: `<span class="num">${esc(m.as_of)}</span>`, n: `<span class="num">${esc(`${tot.with}/${tot.n}`)}</span>` })}</span></p>`;
 }
 
 /* ---------- markup ---------- */
@@ -208,7 +228,7 @@ function adMarkup(D) {
   }
   const head = `<h2 class="lv-h2">${t('החברה הערבית: ההצבעה יישוב אחר יישוב')}</h2>
     <p class="ad-lede">${t('שיעור ההצבעה הרשמי בכל יישוב ערבי ודרוזי ובקלפיות הערביות של הערים המעורבות, מכל פרסום של ועדת הבחירות לפי קלפי, מול אותן קלפיות ב-2022. רק השתתפות: הדף אינו מתרגם את הנתונים האלה לקולות, למנדטים או לסיכויים לעבור את אחוז החסימה.')}</p>
-    <div class="live-bar ad-bar ${live ? 'on' : 'demo'}">${bar}</div>`;
+    <div class="live-bar ad-bar ${live ? 'on' : 'demo'}">${bar}</div>${demo ? '' : adPdfLink()}`;
   if (wait || after) return head + `<div class="grid ad-grid">${wait && !adClosed() ? adWaitCard() : ''}${adTableCard(D, tag)}</div>`;
   const T = D.cur.total;
   return head + `<div class="grid ad-grid">
