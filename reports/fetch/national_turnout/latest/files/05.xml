@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>אורי גלר קם ועזב את האולפן - ואז ניב גלבוע התערב</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382048</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151850&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>צילום מסך i24News</Photographer>
+          <pubDate>Tue, 27 Oct 2026 18:28:52 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 18:29:28 GMT</UpdateDate>
+          <itemID>1382048</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382048</guid>
+        </item>
+        <item>
           <title>הסתיימה ההצבעה בבתי הכלא בארץ - עם שיעור הצבעה של 88.7%</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382045</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1131709&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381990</guid>
-        </item>
-        <item>
-          <title>חשש לנעדר בערבה: טרקטורון נסחף בשיטפונות, סריקות אחר הנהג</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381981</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151797&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>כב&quot;ה</Photographer>
-          <pubDate>Tue, 27 Oct 2026 14:39:32 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:08:20 GMT</UpdateDate>
-          <itemID>1381981</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381981</guid>
         </item>
       </channel>
     </rss>
