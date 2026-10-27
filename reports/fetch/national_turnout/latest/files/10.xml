@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 22:03:19 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 22:16:09 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -31,12 +31,12 @@
       </media:content>
     </item>
     <item>
-      <title>שיעור ההצבעה עומד על 77.7% - הגבוה ביותר מאז 2001</title>
+      <title>שיעור ההצבעה עומד על 77.7% - הגבוה ביותר מאז 1999</title>
       <link>https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS</link>
       <guid isPermaLink="false">1001560922</guid>
       <description>ערוצי הטלוויזיה פרסמו את המדגמים שלהם ולפיהם מסתמן כי אין לא התקבלה הכרעה: למפלגות הקואליציה הנוכחית בין 50 ל-60 מנדטים, ולגוש השינוי ללא המפלגות הערביות, בין 43 ל-53 &amp;#8226; המפלגות הערביות עם נתון נדיר של 17-18 &amp;#8226; 5.69 מיליון ישראלים הצביעו עד השעה 22:00, כ-77.7% הצבעה &amp;#8226; עדכונים שוטפים</description>
       <author>שירות גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 21:41:00 GMT</pubDate>
+      <pubDate>Tue, 27 Oct 2026 22:09:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
       <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
       <category domain="https://www.globes.co.il/news/קלפיות.tag">קלפיות</category>
@@ -59,6 +59,19 @@
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
         <media:description>
         </media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>שני היישובים עם 100%, והזינוק בחברה הערבית: פילוח ההצבעות</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561041#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561041</guid>
+      <description>היישובים הערביים בלטו עם ממוצע ארצי של כ-80%, לעומת שיעור הצבעה שעמד על 77.7% &amp;#8226; שני יישובים בערבה הציגו 100% הצבעה &amp;#8226; ומה קרה בערים הגדולות?</description>
+      <author>עידן ארץ</author>
+      <pubDate>Tue, 27 Oct 2026 22:13:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/אחוזי_הצבעה.tag">אחוזי הצבעה</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793139176/AP26300479411590_ophjlq.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>מצביעה בקלפי באום אל פחם / צילום: ap, Mahmoud Illean</media:description>
       </media:content>
     </item>
     <item>
@@ -233,25 +246,6 @@
       <category domain="https://www.globes.co.il/news/נפט.tag">נפט</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1765899591/direct/AP22040486850744_oftjdv.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>וול סטריט / צילום: ap, Mary Altaffer</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>המבחן הכלכלי החדש של וינטר, הנדל וזליכה</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560162#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560162</guid>
-      <description>הרשימות החדשות שהתמודדו בבחירות ולא עברו את אחוז החסימה, בהן של עופר וינטר, יועז הנדל וירון זליכה, נדרשו לגייס ערבויות במיליוני שקלים כדי לממן את המרוץ &amp;#8226; אלא שבניגוד למפלגות הוותיקות, מפלגות שקיבלו פחות מ־1% מהקולות - יידרשו להתמודד עם כאב ראש פיננסי לא קטן</description>
-      <author>ג'ניפר סילון</author>
-      <pubDate>Tue, 27 Oct 2026 20:39:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
-      <category domain="https://www.globes.co.il/news/ערבות.tag">ערבות</category>
-      <category domain="https://www.globes.co.il/news/חילוט_ערבויות.tag">חילוט ערבויות</category>
-      <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
-      <category domain="https://www.globes.co.il/news/ירון_זליכה.tag">ירון זליכה</category>
-      <category domain="https://www.globes.co.il/news/יועז_הנדל.tag">יועז הנדל</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792498974/800_yjua5u.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>ירון זליכה ויועז הנדל / צילום: נעם מושקוביץ-דוברות הכנסת, יועז הנדל</media:description>
       </media:content>
     </item>
   </channel>
