@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 18:58 UTC",
+ "started": "2026-10-27 19:01 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 72
+   "items": 71
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -92,6 +92,11 @@
      "published_il": "17:44",
      "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
     },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T15:34:30+00:00",
+     "published_il": "17:34",
+     "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية"
+    },
     "רדיו דרום": {
      "published": "2026-10-27T13:06:49+00:00",
      "published_il": "15:06",
@@ -161,8 +166,8 @@
      "title": "שיעור הצבעה גבוה במיוחד: 66.7% הצביעו עד השעה 18:00"
     },
     "גלובס": {
-     "published": "2026-10-27T18:30:00+00:00",
-     "published_il": "20:30",
+     "published": "2026-10-27T18:58:00+00:00",
+     "published_il": "20:58",
      "title": "ועדת הבחירות: \"אין הצדקה להארכת שעות ההצבעה\"; הקלפיות ייסגרו בשעה 22:00"
     }
    },
@@ -202,11 +207,6 @@
      "published": "2026-10-27T11:01:59+00:00",
      "published_il": "13:01",
      "title": "שיעור ההצבעה בבחירות לכנסת הגיע ל-31.5% עד השעה 12:00 - וואלה"
-    },
-    "היום": {
-     "published": "2026-10-27T10:56:35+00:00",
-     "published_il": "12:56",
-     "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום"
     }
    }
   },
@@ -221,6 +221,11 @@
      "published": "2026-10-27T11:10:00+00:00",
      "published_il": "13:10",
      "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות"
+    },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
@@ -274,15 +279,20 @@
   },
   "20:00": {
    "74.3": {
+    "מעריב": {
+     "published": "2026-10-27T18:57:46+00:00",
+     "published_il": "20:57",
+     "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3%"
+    },
     "ynet": {
      "published": "2026-10-27T18:56:24+00:00",
      "published_il": "20:56",
      "title": "74.3% הצביעו עד השעה 20:00"
     },
-    "מעריב": {
-     "published": "2026-10-27T18:57:46+00:00",
-     "published_il": "20:57",
-     "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3%"
+    "סרוגים": {
+     "published": "2026-10-27T18:54:51+00:00",
+     "published_il": "20:54",
+     "title": "שעתיים לסגירת הקלפיות: נתוני ההצבעה נחשפים"
     }
    }
   },
@@ -504,6 +514,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T15:34:30+00:00",
+   "published_il": "17:34",
+   "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UN0RRSnBZRkF6ZU5scWlBckhubXUxMVFua0FQVXRIR2FoY3paVUhCdmIzZ0JvdDFYVTN1UHY5akw1SVpLcEgyMzA3eXVBSGFa?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "וואלה",
    "published": "2026-10-27T11:01:59+00:00",
    "published_il": "13:01",
@@ -513,6 +537,20 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -555,20 +593,6 @@
     [
      "16:00",
      55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T10:56:35+00:00",
-   "published_il": "12:56",
-   "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום",
-   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBvS0M4M3ltSDg2THpoVUFwWWk3Y08ydXhLNGFLcnVaWW8tU2ZXMWRwa2RheUczblhyTlExem1KTWp2bm1YMm5tX3hUTENIQkJnaURzS29fUno1OW9BdFFQN2hWYVd3aDTSAW9BVV95cUxOMko3azlETVRZbV9SMm5SazNYOVBOaHFvZndfOVROcHJPSGFzZnhqOVdTR2lwWjA1T1d4NERjZURINEpxbDNXVzdVc0JOaDhZbjNfVmxaRER0T2hfdEl4NzBURXNzX2Z3NC1EcmM5X1E?oc=5",
-   "figures": [
-    [
-     "12:00",
-     31.5
     ]
    ]
   },
@@ -672,6 +696,20 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
+   "outlet": "מעריב",
+   "published": "2026-10-27T18:59:48+00:00",
+   "published_il": "20:59",
+   "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3% - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9LNmYzOWRSX3dRS0U2S3psbnBtXzRYbjVMbnVfZDR0c013XzdzUVEzSzdpT0d2eTNNc3ZWQTZsYWp3Yk95dEZvZ1ZZbV9hNFV4cFJQUF9idTBmUjVXWTJGQ0ZkOTA?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
    "outlet": "חרדים10",
    "published": "2026-10-27T11:56:05+00:00",
    "published_il": "13:56",
@@ -714,6 +752,20 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "כאן 11",
+   "published": "2026-10-27T04:44:14+00:00",
+   "published_il": "06:44",
+   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
+   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "רשת 13",
    "published": "2026-10-27T17:31:23+00:00",
    "published_il": "19:31",
@@ -737,20 +789,6 @@
     [
      "18:00",
      66.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T04:44:14+00:00",
-   "published_il": "06:44",
-   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
     ]
    ]
   },
@@ -897,6 +935,20 @@
   {
    "feed": "סרוגים",
    "outlet": "סרוגים",
+   "published": "2026-10-27T18:54:51+00:00",
+   "published_il": "20:54",
+   "title": "שעתיים לסגירת הקלפיות: נתוני ההצבעה נחשפים",
+   "link": "https://www.srugim.co.il/101014584-שעתיים-לסגירת-הקלפיות-נתוני-ההצבעה",
+   "figures": [
+    [
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "סרוגים",
+   "outlet": "סרוגים",
    "published": "2026-10-27T17:05:01+00:00",
    "published_il": "19:05",
    "title": "שעות בודדות לסגירת הקלפיות: נתון שיא באחוז ההצבעה",
@@ -1003,8 +1055,8 @@
   {
    "feed": "גלובס",
    "outlet": "גלובס",
-   "published": "2026-10-27T18:30:00+00:00",
-   "published_il": "20:30",
+   "published": "2026-10-27T18:58:00+00:00",
+   "published_il": "20:58",
    "title": "ועדת הבחירות: \"אין הצדקה להארכת שעות ההצבעה\"; הקלפיות ייסגרו בשעה 22:00",
    "link": "https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS",
    "figures": [
