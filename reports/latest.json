@@ -1,10 +1,10 @@
 {
- "generated_at": "2026-10-27T11:44:25+02:00",
- "generated_he": "27.10 11:44",
+ "generated_at": "2026-10-27T12:01:51+02:00",
+ "generated_he": "27.10 12:01",
  "mode": "quick",
  "runner": {
   "where": "github-hosted",
-  "name": "GitHub Actions 1000000472",
+  "name": "GitHub Actions 1000000481",
   "os": "Linux-6.17.0-1022-azure-x86_64-with-glibc2.39",
   "test_rewrite": null
  },
@@ -15,46 +15,48 @@
   "waf_hosts": [
    "bechirot.gov.il",
    "media26.bechirot.gov.il",
+   "votes26.bechirot.gov.il",
    "www.bechirot.gov.il"
   ],
-  "waf_answers": 4,
-  "through_browser": 8,
+  "waf_answers": 5,
+  "through_browser": 14,
   "browser_status": {
-   "404": 8
+   "404": 14
   },
   "not_read": 0,
   "browser_no_answer": 0,
   "paths": {
-   "urllib": 25,
-   "browser": 8
+   "urllib": 11,
+   "browser": 14
   },
   "browser": {
    "version": "155.0.8059.39",
    "user_agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/155.0.0.0 Safari/537.36",
    "starts": 3,
-   "start_s": 1.61
+   "start_s": 11.31
   },
   "why_not": "",
   "browser_past": "yes"
  },
  "probing": {
-  "s": 33.3,
+  "s": 42.3,
   "deadline_s": 900,
   "unasked": 0,
   "browsers": 3,
   "browser_starts": 3
  },
  "counts": {
-  "probed": 92,
-  "answered": 48,
+  "probed": 78,
+  "answered": 41,
   "by_class": {
    "data-other": 2,
-   "html": 42,
+   "html": 26,
    "results-locality": 1,
-   "script": 11,
-   "error": 36
+   "script": 9,
+   "turnout-station": 3,
+   "error": 37
   },
-  "stored": 0
+  "stored": 1
  },
  "verdicts": [
   {
@@ -79,12 +81,16 @@
   },
   {
    "key": "station_turnout_url",
-   "current": null,
-   "state": "not set",
-   "best": null,
+   "current": "live_input/stations.csv",
+   "state": "repo copy, ok",
+   "best": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv",
    "switch": null,
    "aliases": {},
-   "candidates": []
+   "candidates": [
+    "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv",
+    "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.csv",
+    "live_input/stations.csv (repo file)"
+   ]
   },
   {
    "key": "national hourly (live_input/turnout.json)",
@@ -98,32 +104,27 @@
  ],
  "suggested_config": null,
  "diff": {
-  "previous": "2026-10-27T10:49:40+02:00",
+  "previous": "2026-10-27T11:44:25+02:00",
   "new": [
    {
-    "url": "https://votes26.bechirot.gov.il/functions/main.min.js",
-    "cls": "script",
-    "was": 404
-   },
-   {
-    "url": "https://votes26.bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js",
-    "cls": "script",
-    "was": 404
-   },
-   {
-    "url": "https://votes26.bechirot.gov.il/ballotresults?lang=he",
+    "url": "https://www.gov.il/he/pages/turnout_at_polling_stations",
     "cls": "html",
-    "was": 404
+    "was": "not probed"
    },
    {
-    "url": "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "cls": "html",
-    "was": 404
+    "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv",
+    "cls": "turnout-station",
+    "was": "not probed"
    },
    {
-    "url": "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "cls": "html",
-    "was": 404
+    "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.csv",
+    "cls": "turnout-station",
+    "was": "not probed"
+   },
+   {
+    "url": "live_input/stations.csv",
+    "cls": "turnout-station",
+    "was": "not probed"
    }
   ],
   "changed": [],
@@ -142,10 +143,10 @@
    },
    "waf": 0,
    "ips": [
-    "18.238.132.34",
-    "18.238.132.47",
-    "18.238.132.63",
-    "18.238.132.86"
+    "3.170.185.105",
+    "3.170.185.24",
+    "3.170.185.59",
+    "3.170.185.78"
    ]
   },
   "e.data.gov.il": {
@@ -160,67 +161,26 @@
    },
    "waf": 0,
    "ips": [
-    "18.154.253.23",
-    "18.154.253.27",
-    "18.154.253.54",
-    "18.154.253.93",
-    "2600:9000:250f:0:17:f2b1:e000:93a1",
-    "2600:9000:250f:2000:17:f2b1:e000:93a1"
-   ]
-  },
-  "elections.govmap.gov.il": {
-   "probed": 9,
-   "answered": 1,
-   "status": {
-    "200": 9
-   },
-   "hints": [],
-   "paths": {
-    "urllib": 9
-   },
-   "waf": 0,
-   "ips": [
-    "52.84.199.22",
-    "52.84.199.26",
-    "52.84.199.36",
-    "52.84.199.82"
-   ]
-  },
-  "votes26.bechirot.gov.il": {
-   "probed": 14,
-   "answered": 9,
-   "status": {
-    "200": 9,
-    "404": 5
-   },
-   "hints": [
-    "CloudFront (Error from cloudfront)"
-   ],
-   "paths": {
-    "urllib": 14
-   },
-   "waf": 0,
-   "ips": [
-    "2600:9000:20d1:6600:3:c455:d440:93a1",
-    "2600:9000:20d1:7000:3:c455:d440:93a1",
-    "2600:9000:20d1:8e00:3:c455:d440:93a1",
-    "2600:9000:20d1:9a00:3:c455:d440:93a1",
-    "2600:9000:20d1:aa00:3:c455:d440:93a1",
-    "2600:9000:20d1:c000:3:c455:d440:93a1"
+    "13.227.87.13",
+    "13.227.87.51",
+    "13.227.87.63",
+    "13.227.87.92",
+    "2600:9000:207c:1c00:17:f2b1:e000:93a1",
+    "2600:9000:207c:2400:17:f2b1:e000:93a1"
    ]
   },
   "www.gov.il": {
-   "probed": 20,
-   "answered": 18,
+   "probed": 22,
+   "answered": 20,
    "status": {
-    "200": 18,
+    "200": 20,
     "404": 2
    },
    "hints": [
     "not found"
    ],
    "paths": {
-    "urllib": 20
+    "urllib": 22
    },
    "waf": 0,
    "ips": [
@@ -313,26 +273,26 @@
    ]
   },
   "media26.bechirot.gov.il": {
-   "probed": 10,
+   "probed": 8,
    "answered": 0,
    "status": {
-    "404": 10
+    "404": 8
    },
    "hints": [
     "CloudFront (Error from cloudfront)"
    ],
    "paths": {
     "urllib": 6,
-    "browser": 4
+    "browser": 2
    },
    "waf": 2,
    "ips": [
-    "2600:9000:26c8:1a00:1b:8951:5b80:93a1",
-    "2600:9000:26c8:2c00:1b:8951:5b80:93a1",
-    "2600:9000:26c8:4200:1b:8951:5b80:93a1",
-    "2600:9000:26c8:5400:1b:8951:5b80:93a1",
-    "2600:9000:26c8:6e00:1b:8951:5b80:93a1",
-    "2600:9000:26c8:8e00:1b:8951:5b80:93a1"
+    "18.172.122.24",
+    "18.172.122.43",
+    "18.172.122.65",
+    "18.172.122.92",
+    "2600:9000:24bd:2400:1b:8951:5b80:93a1",
+    "2600:9000:24bd:2600:1b:8951:5b80:93a1"
    ]
   },
   "openapi-gc.digital.gov.il": {
@@ -365,6 +325,28 @@
     "147.237.10.47"
    ]
   },
+  "votes26.bechirot.gov.il": {
+   "probed": 8,
+   "answered": 0,
+   "status": {
+    "404": 8
+   },
+   "hints": [
+    "CloudFront (Error from cloudfront)"
+   ],
+   "paths": {
+    "browser": 8
+   },
+   "waf": 1,
+   "ips": [
+    "2600:9000:2137:200:3:c455:d440:93a1",
+    "2600:9000:2137:6600:3:c455:d440:93a1",
+    "2600:9000:2137:8600:3:c455:d440:93a1",
+    "2600:9000:2137:8a00:3:c455:d440:93a1",
+    "2600:9000:2137:9000:3:c455:d440:93a1",
+    "2600:9000:2137:a000:3:c455:d440:93a1"
+   ]
+  },
   "www.bechirot.gov.il": {
    "probed": 1,
    "answered": 0,
@@ -379,72 +361,16 @@
    },
    "waf": 1,
    "ips": [
-    "18.245.124.14",
-    "18.245.124.40",
-    "18.245.124.59",
-    "18.245.124.73",
-    "2600:9000:26fe:1c00:1e:5e2c:7e80:93a1",
-    "2600:9000:26fe:2600:1e:5e2c:7e80:93a1"
+    "2600:9000:2137:2a00:1e:5e2c:7e80:93a1",
+    "2600:9000:2137:5800:1e:5e2c:7e80:93a1",
+    "2600:9000:2137:6e00:1e:5e2c:7e80:93a1",
+    "2600:9000:2137:7e00:1e:5e2c:7e80:93a1",
+    "2600:9000:2137:8000:1e:5e2c:7e80:93a1",
+    "2600:9000:2137:9000:1e:5e2c:7e80:93a1"
    ]
   }
  },
  "harvest": {
-  "https://votes26.bechirot.gov.il/": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/nationalresults": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/cityresults": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/ballotresults": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
   "https://www.gov.il/he/pages/voting-by-hour": {
    "links": 1,
    "scripts": 10,
@@ -482,71 +408,21 @@
    ],
    "fragments": []
   },
-  "https://votes26.bechirot.gov.il/functions/main.min.js": {
+  "https://www.gov.il/he/pages/turnout_at_polling_stations": {
+   "links": 1,
+   "scripts": 10,
+   "data_links": [],
+   "fragments": []
+  },
+  "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv": {
    "links": 0,
    "scripts": 0,
    "data_links": [],
    "fragments": []
   },
-  "https://votes26.bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js": {
+  "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.csv": {
    "links": 0,
-   "scripts": 1,
-   "data_links": [],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/": {
-   "links": 2,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/ballotresults?lang=he": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/cityresults?lang=he": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://votes26.bechirot.gov.il/nationalresults?lang=he": {
-   "links": 8,
-   "scripts": 2,
-   "data_links": [
-    "https://elections.govmap.gov.il/",
-    "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-    "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he",
-    "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-    "https://www.gov.il/he/pages/statement-of-accessibility-result-site"
-   ],
-   "fragments": []
-  },
-  "https://www.gov.il/he/pages/statement-of-accessibility-result-site": {
-   "links": 1,
-   "scripts": 10,
+   "scripts": 0,
    "data_links": [],
    "fragments": []
   },
@@ -631,62 +507,6 @@
    "data_links": [],
    "fragments": []
   },
-  "https://elections.govmap.gov.il/assets/index-9nN73Q-1.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/index-legacy-JkzIpvq9.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/polyfills-legacy-vUtxk7fV.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
-  "https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js": {
-   "links": 3,
-   "scripts": 7,
-   "data_links": [
-    "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json"
-   ],
-   "fragments": []
-  },
   "https://www.gov.il/he/pages/chat.js": {
    "links": 1,
    "scripts": 8,
@@ -732,6 +552,13 @@
    "cls": "data-other",
    "bytes": 0,
    "at": "2026-10-22T13:38:21+03:00"
+  },
+  "94fafe180d07b66068af7bed698e866b75b5035f7ed0ac831fdf056563668260": {
+   "path": "files/20261027-1201/94fafe18-www.gov.il_voter_turnout_09.Csv",
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv",
+   "cls": "turnout-station",
+   "bytes": 350625,
+   "at": "2026-10-27T12:01:51+02:00"
   }
  },
  "urls": [
@@ -745,7 +572,7 @@
    "x_cache": "Miss from cloudfront",
    "bytes": 595,
    "sha256": "16830c4da1e929c6122fa54e465181564b03923167bfea4f1bda663a0caf7845",
-   "ms": 360,
+   "ms": 271,
    "kind": "json",
    "encoding": "utf-8",
    "first": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=help_show\", \"success\": true, \"result\": \"Return the metadata of a dataset (package) and its resources.\\n\\n    :param id: the id or name of the dataset\\n    :type id: string\\n    :param use_default_schema: use default package schema instead of\\",
@@ -768,7 +595,7 @@
    "x_cache": "Miss from cloudfront",
    "bytes": 29495,
    "sha256": "ae348223d79335929c79c1dfd86e4d71f1d2714510c056af467dc82ac4d5d8bd",
-   "ms": 936,
+   "ms": 441,
    "kind": "json",
    "encoding": "utf-8",
    "first": "{\"help\": \"https://data.gov.il/api/3/action/help_show?name=package_show\", \"success\": true, \"result\": {\"author\": null, \"author_email\": \"bard@knesset.gov.il\", \"creator_user_id\": \"e01f2a18-b401-4758-9533-db0a713d1d6c\", \"id\": \"26f9fa06-fcd7-4173-8df5-65797b63e857\", \"isopen\": true, \"license_id\": \"other-op",
@@ -826,13 +653,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S103794387%3A1793094298572843&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=zRLEX0fj0Gv7eDpRvgnCbdbcPlxPulvOcQeNLjI6NMp5l9U4611TwN85oMj9ASMIxHOGB3dCGOYBmibqz3lwy9OIC17xM%2BvZ4UVMGfdGcn7Xoyq2vcErKscTYVGk91szcmuSWa1%2FiYK9PvYrc6RtTA9xMVTtzKei08GLlxFtUmEme%2Bz9jDLGuEDFMnk%2BcLDkOcR5k2gMXvKqbHudVhiuKYjS9BYBoEyyIw4467hyY%2BBuQeclJNi14PjU9Qm5dugKDNgjVoZkatcZR8%2FMM%2B2uD24xpqS%2Bfo8YaasW%2BWFuPsyROZx4MSRNrz%2F3ktw%2BT02fIi3CHohWwrWtw%2BSn9YYOyVRh%2FRMOxXhJEgl4f4JMq%2FBxTgfRoMC6A6m3c%2BcRmwcSxw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMhwN4o4WDUNubhOosuanZWIFP2jQvqFNHexuQIwo08nUTKNC_tkeXUxQg2RB0RpUkT5BNnxP-ZGFO24x3LKhutRNVkID4YVZR6HuqqpGwxnvyUDDcpYkJFvDQOq1AW263hxUzAqeT-Ytxr0j1aGyiGWYUsI6mD1k2JiYVKx2qclNmm0nETG490QXxb_2CEqi4Z3cs1fiskPOHsqbulw2Y9nMDmwrIBhqkml-ZwZZjUL6nn6Kzwnzw_RgEnVC-003U-TgxgHuhDOO3Mv8yoP14nja0YOK9D8Y-Nk64sHvl3GCND3LaG1Y04V7-4SBJl4zy8RcnTclcvUSzCqV02Jr9Aet39Vn5bopVJH0Ldr7tDwS6HWgZB_c5W3opJnrGFYvBimZWA8_VJLv_hfZG4OO2obRffbMKWoObbOi9z6r-n4PWR8HKv72zfSa6hD-Z4n2jdIbNzcJvXXxR2oUmNZvC7oXZAbQ%26flowName%3DGeneralOAuthFlow%26as%3DS103794387%253A1793094298572843%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcc5jyM0gme_AjZ2lUQhdbCLvZyVDWFWmhsggUiDGqSxjMUNpFMrN8MJvYblVKSFaNiFAuM6FQ-iDuKcj5YopsVDFQjWSUP_Mh7NqoVI_vxyy2o3ZUA",
-   "bytes": 1275135,
-   "sha256": "7c585ce4eb3f1f8e4beb3c27d3874392e104cf26fde174098ffc51b98d21c139",
-   "ms": 1273,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S238411452%3A1793095352831693&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=rc6NbsUrFSXtKpJn8wTKj235PWNel56oj6C2g%2Bp4hAzxGMJ7i8Fzy1Zlf5iEm6hcMWyhcJnBx%2BASlpGNy9O0%2BKW6lTAUKczrUCGSi0MvmGyfdbUy3dDiboKubgWe3bdF86wkkfdexqfAXDI7m3czorwyqI4aiBeDM5KE6Tpluw%2BrIXVRtITiVvNQVkWis2HtQOPnVaxyAL43ZbswoCSwuPIBcEo7qcqxOjVSD%2BD3zRzMnqTBm8%2Bgj9AizUodQPbivmwGNr%2FLgYJospkG8wsR9ZqRBi8QAcZRTHuAH6NirIiGNPQzu2aOpTzImFHMj5m4cMe%2B5fZYZP2kLESW%2F%2F%2B3lwPX9q8ux6BeuXHWgTd5FUtSBD61X1cZdtvkMh%2B%2B7s%2FxGA%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANAeapOAMfwY-cZnl-if04QMQgjsjHxUpHbqLxLMT4qexMpUeTeW0pe8CW0bUJX5x_nwRnLR2pmIfhbniTUOb3FUSz_pTBA-HXuDjptVHIzNe0pDQy1XX23VWtBJBcf2fbKrVJuGaiFgguC53XBQOxrwKr2nvGODMG8cSF-mIOAfePFQ_UV4sPM9ybw9TsIR-x4IDywcW0gCz74I7cXeu-zRClng0plLDpdfRoo5tlbhLAjgHLg0IeC-a9deOjzeSYk8-r3ejIL9gilrm1cWHyS4JUA32dMPciFtfm6MVWbNP2HRNgiVi1LoeT1-zc1noEw59O2XfMPcwQDP99JXOy1f_UUW33Uu0L7zRhBVXve2MYefTpgQzSBULMSKlQkjteDu5H-Dk8vJKxjvXE222fPWCgTgg1dTuw4aZpaAwhYX38Wx1N6cY55OoFQOwOWtNy79Hlp0H0-st7EiRmkX8VfOq-Vqg%26flowName%3DGeneralOAuthFlow%26as%3DS238411452%253A1793095352831693%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdgGUa6omMiMKwgcLZu3iEzEtKSyDRi-qDs5a_weJSOs-PEdKxUt9K7XEQReA8kYJPbMGj6_b6op--0OJGzd4qXajIFMY8SmZ98GRDM_oWzAelYLzs",
+   "bytes": 1275682,
+   "sha256": "14eb589c42dabceabd871c443a4f11740aceaeac5b2d458bb66858c1fae97cb7",
+   "ms": 1066,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"nRteZxjrPIVqS362mSJ_JA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"x1I-_qqj6atuyoMkBPBAEA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -849,13 +676,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-2127428170%3A1793094298680578&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=kKdMaP1u0111eJGGYbibTipuWeYeFOzw7wjI3GQfv3LfuANGMgZUUuhN%2FP1wHBf5dcKD9yAbUykOpAgQ13xO8%2FrqjD9K4dup0Nhej%2BvdR%2BnLBYnBSCZ0i7Dl8SFq8XydLrCp%2FKeBRguSZq1CyCalnP4MoAXa96AJnxNNEpnL2jVsn44jcWQyHKKIIK0dMyRp5g%2Fb9CKKqYHGb5Sm0o0%2FUojKRI%2BQgup4AfP1IGUCwDxLIycGmrwmO0pRLGnMe8Gk9hwFP7fPncqxNMlsTTAkHr27RJ6CRfNCHL54ggfHLT6XD%2Bdu%2F%2FrLvvAn5Rk21c%2F1YOgcdCVYMYfpjCLSBD2CXGKg3XXFfqyn7K%2FNWqukN9rAJimX5MuxObvgRhnv9r87Cw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANv0dD1ADwVtNBYvCE_6eO7rVCUgpu2ZOjetpu3JqDINI1NLcGyv1tdX0G4Qd7Q2cAo7mbyDftEYpkdufjzPsrJTqk-YJ6vX9u3LP6wwsVNDFUYPJ73cNvVO_hEAjDYjDYM3jS56_5Lo98303d3_YWGZ6HnF3i2qFfABOFMPy_Z-Ve_z1L1g-FiFzQgX6hmEBi2Q84KPerZMzncEjLanfE5w92MqTLHzB4ZmK7q5lJCmOmZ7FSxSEJxxLMO8as-rsSzo93yy1FQ7clebK55wQw3Wj76wvMG4O5dXwJrZsUmsJTmQRHe5gPgXKx2nr6ZaCoOsGFZHmrmINfQPjWiVy-oWFMX69M2I9xzH6q4WuWFn5Wt0veOg4ocU4a65DfGKg7c0LVO-F-dtUmNMVjpRodwdH2x1Z4g9xTpNrTQ0GxZQGS_T8L6zLuVMH9Kxua1MCJF9r9RpgXL3-uYGG2Lq4Pbu-y-KQ%26flowName%3DGeneralOAuthFlow%26as%3DS-2127428170%253A1793094298680578%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceOVhEBndwpROpsJeRs9HRKvPcXabYWOjYC8cbjFvPvNVcSnlAiGDVFr8bDE9yDwgopZ0GGcFrllizO1RMB2BdzSIU1qECM6ZlAvr-LwKOO5UFieHk",
-   "bytes": 1274396,
-   "sha256": "540ac1f638bd596d4ff976bc119810834effaaffd7dcc9c4196ae99e9b77407c",
-   "ms": 1150,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-752046972%3A1793095352981125&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=DOLIz1Bof%2FK8D3tUba8wjhdEXxMWXoRIF0WKLlyWYfojIY%2F418LB7sqra%2B32FBFgGqoWRVrVwqTzyEeO40zzuikO9n%2FR0Sd%2FJP2N2e34wBuaLA%2B8L9U9nw7aQpwXMqar%2Fk0VqItTtPEI3KYf%2F1XLH7GRdN6dsniNquCHrxjfrMnOci6LWqzZSWF0nP23xYbqxFbjPc87%2F%2ByfsS1ikQnSt81Rwhw08ZS2S7L8IfS%2FJ780CHDaDl2UAc6wfZgY%2BH3U8bB%2Bod8kYekqFgWx8QQRsUAkk1f8iDX0eMPifAIzeRNe1edOUNwt6pfKqqVkuIRXumzuAr%2Fs7N8zoqRov%2FkWj1s59qCXSyCizTj11hu0OeyXfRc04nJTP5qf6pF%2BNCH4Tw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPvCFoSscC6fM_vw27SLuNFBIYiv8in59tud-M2xbzoI9d_HJRnhwL8_BqqGK6zvn3dqHzd8tpJieGTyS0u1-mQWjjtukHDvuACmPVfbncdKQItfc5VbagQ11a7J3zFMC90geiKTZFq7jybe0lRkPEUSkUBwW0fX4OWjycg0tBAyTN-gWC9bZJtumtgT8ixX5pd9E5-Ipt3RoXVr_yFvCOa3VynKk8QIarmEBbRc4QmSGyCjWMlEJtHjJeF9GBu51PTsyrCwM_uB31mwyV1GHSa-lYdsyg593-UJ848eNIl2x6FG5rALsNP61LgXAlYiBDkosgViwx1OUzZUaECXnc1bv4nnSsEAJN8EAYcVCCOCkuAtPhw7HetRKDpmfWP44zjqG3RXWVr3CGBTffclBQWNpKLhHG1tPyZ0KpeQCvB_d_wUejhOGRlJakOrIVLojCVvnhqoSCv31SZzmnchcPKYHdOIg%26flowName%3DGeneralOAuthFlow%26as%3DS-752046972%253A1793095352981125%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcex5MTxPGhIk9B1Plix44694605SK-3nxcLrjN2_iY74LT2Wtthsx5p8W2cCBhaIGomfQHOzeJh-EX8wknhGS-ZuYYcTQM1uSvAil9QzpAwUtESXMs",
+   "bytes": 1274187,
+   "sha256": "4b08b81d92256c184903e471bf1053a784e7b6125c3b51439418ee87e9c0d993",
+   "ms": 936,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"N1ohmUfmuBVS6enhESuSyQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"B_iHakQowXBvsouSDV5OFA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -872,13 +699,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S118407389%3A1793094298830283&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=%2BHAdPLsXFErAQdXN6hiSYHlfMjG6I%2FhBI0xqIbRWFR53e5nAtnd%2FiQ5H8%2BB0B5XSod5XCckqjd5XDqBIbWajJw4L0zYW1VnsUa0H1GqpkPJCDwm72xVQCaXBXUBP56TmpCKtPXq%2Bsr8BDGs1gzitv2RB98Kqg9vefSjBidevUXeag99q2rGOQjy%2BsIfyivbhmwoqOcE8%2F0dpuaMPeVaBmanWZVTYO%2BGeqrqkhNpRFwhvMFAkepN89auNk%2F0vJ3T8RpBLqaFKdGFI83fwGXMQJl2svYQhvOhbHTtaUAnz9aBhTp0A78Bo4BHu87d93BxWRvfCVsp3SgjFKei2QPO5J4sqlA4KWyu7%2BapqNUDauP2vxvLTuy8jRBfOPt9QXB1vng%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOc07RJKbVgW65leroGiXa3t1APtgAGh6HKPFj3r4dJlBbCYacdaZg_xlcIStNdUdAuCHN6hcaQSeczA9lQBcPRTPT9KM43rd2-SEjPyAN4jAAsdTUUMYjWAFqM1yL9NKm0prWvq8pzFQDKRdVhjoONioITXkfuwK_EPdNCjxOsW4Fyxul5FeoeKyHG_j4wS2EMObnmroXWBuToYFdYY7fnoZqNLpfI4mE8PBfVuY5mXPtulElxX31baZ1pcs_8FdadhBY23TKt9y2TsD391znBW9ELEqUQTMMWVV65nM9uHHAbNLI2IOq77MQZK9SKxkGH0d8c9rFfkc-6CFsOLCU0CYGc2asmzj2lowaDJLA__UY8RkH1UTyfLaYHsZdghSP6LudN0L9PW09Ib9BUn3YgEszdCKiN7U3565icFFVe8qJJLl75WI02tZZnECiYSKgpaaGYaqMTYBn9vImWvTXeX--Cqg%26flowName%3DGeneralOAuthFlow%26as%3DS118407389%253A1793094298830283%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcfRs0Zh_PQCw320v1XT1dF2fVs2Gx4Q3T4ve7ugoqY4y_2O4U5MG1N7Zt4_BbXbvbo94KfXuDLVqtTfvRLX2Z1SyxGG12RQB35PH7_7f-fz2UhIZ4c",
-   "bytes": 1275221,
-   "sha256": "19ca40b3e56367859f205e5d539e7e5b1bd028b08224288ad7f8057f8de9fd2e",
-   "ms": 1061,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-335280103%3A1793095353119984&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=DUVPf6yeVDDbhHrsq9PGJeSfbDrsK2mpRkC54nhDKgs0TULIltgBmsgW5d76cA2Xc5T4XwSpl2ylhHmi%2BMdyHnDT3BUbSQmK4ii41F6ACr7A8x8%2BPqGFaDp4FRG67v7oeU%2FMouPGHm%2BRuHHcV2PjlTTUjPeMDNxGzgoVB%2FF1xf85t9qTeNRfoAwyojFSbnLooZhd2nYlJhgeJzBcW6FpGrzK%2FzYMmhz2n6a8qLgiVsS9V%2BxWix3H%2FxmD6iiYQDuCEUvLmp6LNQFG6bgY%2B5tH%2FeCDqkICWvdTEkLKZmGBzbkUnS2juD4t%2FpKRcrfFaC7nOchXTaddRpOysycS8IL%2B5S%2F9zP3b7r04m9cUE7CObB5P9cdzOEdwlMR%2B1MsqG8cpfw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMeD93z56Y6zqF22PVpuq4uceMnHbA1Vf0WBeX66SIYXfx3iL-tvZF9h8AnkTf9l_wyuFiTvIO2bUEWJKuVQ69Un75QIYx2ce5xeMteo1AEIDdG0ThqoklJOTz2vl0wFbdQkpSGiqpAWgtQPYhbCEgww5J1H1Bb9f33v8kSI4Yjzdd1MJk8-Cf2fS3In2RmUiwJV-vmyS6ziOlFk2ZSU4LpL1aSTPW4PyYgOS74dUT42tT7qlw56vwclZjmh_5JGkAkZuShpwPTBB1_Zz37GkaSohaG4XlcWQ40hvs-tiMoAT05hcUAJHDeF_DNzJwHKz5yCKVtqNRHa8OmcKO-oy_xpP5oRTogvgWvV0TnUsJVkz9PdtohGrJUgYIM8CeGvO1oLH3YTEz8VyTJDpr9UQgvSl6gkFc3XoYPIpS3mrMmv0VZLWT-GXSmtyvPCFaJqs7gPK_CD-0VyC_Ndj3geAMmOgwd_Q%26flowName%3DGeneralOAuthFlow%26as%3DS-335280103%253A1793095353119984%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcekngWzpkq9hZuvPRiywVyC0269VLQ0IiPdUDPmfZHv7Hg6AXZl1LyMBQWDbyCxq_nKUSD_pETXKYGJzw6Zo0D4mdBVfexUF7ik6V_5IaSBHBBITlM",
+   "bytes": 1274620,
+   "sha256": "431caf511ae8055e864d13584b981c6aaed335d04cfac4c2a385da6918a91742",
+   "ms": 824,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"Y_-O_2ieY1U4VCnSP2qxPQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"iIecjzL2A_XsQuMZPfOyDg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -895,13 +722,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-1137844823%3A1793094298844870&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=fGv%2BdVnd3UgLLaJOkqrjSVTkcUDl88b5KCPjfUUWDYykb2so80Eh6hNz0xZuzEgpEHCbwOQVZ2MSyIK75oLExYHKNwA%2FzASn6TBJ8uOYKPnC8PICLC0t1kwOzp1geZ%2BoG4XBQcLcIlejZMiyMOp5lCoIGg%2FO1S2G0FDiE2%2FpF83DWZKlr7xv1XQi4es1GKafVtfLzaWlqmELfVuKiHXR%2BaDzIKWx8qIBJ51e1nNUq0lZhuVElTKhFT3T07pZBvjiqeVOWFHQ9zbfYEu7fjtIZsd%2Biz67Zalrpf8ihrRxCG13B%2BA6XvtCW1dQpHDxw78K3QdRd5dpZtf9CM5VaPtZy5YtKGbSNewWdBC517GAAjrMkxSgw%2FlXpcYndBAlK7MY5A%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPT3H5lllMZUh9JV3KILuWBZiH6-xCIOlfz7xGNywpd18yQowdESOBdVkfkZZuk7vj_lGI_os_7z8utv2katcukIC0vNd3q2xmpYj8jrlsWjkDkTfyopa6g4gfczyDlU59uch9vdmfChNI-LCMcGSaOxkmxack00-UOoduXpmhaCBo2SR48hgYDfpBHbbzQLb62jOiwgUNorlfLgVZwAO6O0YvZsZs7SifVwPwO7LtvrcGtknJgkNvg1rYYZ-8o-TC4qrapF0waUcJRk3gMnl67_FzBeIRwi0h7yT9254U7I2QTEuSnEFfl0i612vxewLo33ziaPHLVx3U-nSeTnrvQZ83IKurtfCAGJ8UUrcu7iW7VgmXjHOdUGBCs3mN_77NPIWS6yuMnICw4JMi8MvHNIruhNL6OTHaNckTrzHFBrP9QXjxiybUmsSVFtsYu2yEye8SbmIfehlg7Q-EfbQu9RQOKxQ%26flowName%3DGeneralOAuthFlow%26as%3DS-1137844823%253A1793094298844870%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcccq4v4IIHqNUQKRoHLhKkZ9_t7Rg9f-cBS7QcaaZcDkx18qZMHsico2QQlp45SF8X7ngdWaHvRVIMMrqMIKNIoksDDzjVmdgjWpYpWJNETklw5HWY",
-   "bytes": 1274880,
-   "sha256": "134eb6ce37f9fc14cb1a0968065f2add6145f2fca4a156db06c199886db7ae99",
-   "ms": 851,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1295609179%3A1793095353219410&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=OQQ9YssHVeixI4Stsdtbxa0G8MJ79GzStHVhCJiLBZ4mKlmD1bXuC6ZW53kWW6ISRAgz3UOC8WMHDlinz3MCQONxDkhOv5HaPWEbFYK5b0dNK9Rn4qgVJHWKTHlcTqF1OCO6Yevb8tHss6ZZhVoGH9Gd0b%2B%2Fjs0%2BxpdakzQCwFW9pZcgiXzSIiCVni10QwIL05A%2Bu4dkznXLExVPCGCfw%2FwM5Z9J%2FMqArKxxjscMOe51rPlyumM95lxM0oWFUyXyvWtmz5j0KvUKk7ldeq%2BZ6IF79b5BdDcf1ykUO3U578g%2FX62JSgvS562rXfy%2BW74N1%2Fe2lPW0DuJpvkfajJ%2BpoyknNrZh6vJOXvGqNYnmbOmnPLhekiayS5aHJcCrolOQwg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPYw51jaRL8xGmYooZu1Uq6NN4MsroxvOM7U0ndYDDU-A3LuKl-q_6qdyH-vMRPPXn_ewkiqUrBK_8L97GQb0JIM-g8L2pnc1kvUx4RQ9dtYvFvZALux6NPaynzlgur03dg8O1NbhQHCZbOdFZ5ZovAvUz4Yz0Jbxdep3KuvozX9FHZjlO8W7KF1w218D0NWKRoyCGlmHmktAEMnIdZrem3Lih9fPRfzp8pILh0MHzDt5ZKe8MmINiwQcCAbhDfCB_vU3jpoD19jcb6iqW4TcrER2WKWaO5yOSI2M45PR26E8h6coXs3cDCDJHyBUTNeRC8E_NaaCyKIURBgAMiRREkbZCtcEEsvQUSB-X3qJUeCnyIPEJSmGbSov7KRHXPpKD5_rzJvLVLuXZXKbbGxnUOF17iEPEKeGNaV_m6VplWSzGi3gF8H_XX4YC1ThHOnqJS_h_bAZhfVb4odDvgYYtvN6qtVA%26flowName%3DGeneralOAuthFlow%26as%3DS1295609179%253A1793095353219410%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcfK4RZfCH4p-yfWjiPSfQijyuTLghlvr8U2DfXCCTY3aIaOcBRyC6OeX1LIxPgcyOyIZIUi8jiQ_7Tru1XVGPLTK8nOqScS1qN6vQ0GHyPYcNNCwpQ",
+   "bytes": 1274318,
+   "sha256": "ca0827db66ad0d5fef3f0e84fb72c7f2a9cbc6c2488a426c6e24afd4e58b9e1d",
+   "ms": 700,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"eXWAvMESL8rfBPNnA_BMgQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"BlcoODMN6t3SwV_dBzEDmA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -918,13 +745,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-1257661524%3A1793094299035399&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=cAN182hnDgmuPtDgfD%2BlEWKGq0GdSor98ClfMNuknW5dSue2ANVUc0oI54I3pt30tjPVdz5bJpDyfYd5re7OCmuaXsTd1tT%2BEhymuID5PtlRFMvKxdKO%2BMtFcTwR4yyZzSpP3Xg8oN2wmXYmU6UryLiVlVdoCj4ds76klgWEoOLtmY%2BypvzOpoodZbivm2bJIHykIjhkl%2FaKN8VL41jgRQuPByZBakEvfyrAhtO1TRfMqCDUsln1tc8CV%2F5K0qXaR0Ol3JAbd3l1f%2F6agO76DN75x5TIJFWU89Fu%2FCn8eqMfG1r%2BNl5TWoFf4JWhZ9KxSRO%2B2jLGCbAKpnyUE%2FRJbfzNpMDnKPQu6eO2Uo3szz4t89gVgbZVNJ1SS%2BPmYZKUUA%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMjkm_mvywovKvSwOi27J0K5U903su2pF3I2htBU6JPcZdSVRiAG-_TVsCgcZKdBXzz3_xXnM_JCuPwhov1qQ8mSm4ilttoiQ_-qXJpbO28teamTdyKx6p0oY2hVUYAmNYQoadOzitQ-_zUI7GmLPuUttB9_QhdiVFu5dxtM0FUAsZGzBEQcmtIu-fUN7bAs18k56zykvCUtHI_71SCkCr7-lPJ9XiAdg53IJAm33WEOF0idVxFsOLeJB9nlj7mNKqz-k_mLuIlT3AfifmYR2lNEwKiQeC66POsPvMbwQI37Gc3LDyA5GSPbYtL_Yc_Cz9DqIZOWQvnh00v16AWdSu5iqBOSl2eX2h8A9akd2iqqeSVqDCoMjgPrIWb3gMAyieUETyWJZ1_fWuCix7JBpGehFErDDqPQH7cvaSWiz-1GeWk8uoda9pXUlDtcJYC5Dj7mqphTz8Xixfb30b_LwCuGMgc5w%26flowName%3DGeneralOAuthFlow%26as%3DS-1257661524%253A1793094299035399%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccaAkcQ5LUCnouBEki9pDQB6PeFU8jQbqv-Z7UWrlt_IWTmo0Af1O0rxeL5udTyuvLGjteuxyPMU91oG4mjkjTUK8rGn9EP2rXQaaPyzA9C9TqMUrQ",
-   "bytes": 1274747,
-   "sha256": "5b1f95180b0601c493d32b1d3377c4d06700aad0d72d24fb57a914c2cd440a45",
-   "ms": 762,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-133615138%3A1793095353471013&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=bGKcM143fy9qHSxWq91KvsWM2MeuRjl6x5VLQAh871h7vUHAs%2BfDDITgHgcUFnP%2BD%2FesCpYGpUztEjWLGkPwAuS83V%2FDPLzn8EuLcGsRM0cNlcikpmIKwQnvfGVzFiOEuWIIhzJO0vBEYiX11PkUKcuAiM1JWeEPyYnsxsk5rZgepbdLM7iVMSb2XfywAVOLUcDgWbsEt2V0h5JN6JLZaMlT%2F3a8LAg%2BEH9RZx4Q9cFdGG02VpjzrBc%2FR3i5l2cCcPvkDcr2nuaS%2B5AHQGuq5QMEOImFHMIVDWELTyUiGRlPJ8Ehs%2F9sa%2FHRjzNhKykv9QUCs5hf%2FSIgD%2BpBja3D9bkxh6XcnhB8Nmr6ftRl4PBOajmUd7l9XhAlLB96Nx8WFQ%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMc6GQSf0xfH4Lpm-QH6FU_6ydnQSk7cl8IZmb8vTb7RTekxXANXmwhrMzjgTi42yi_AqUu6TCKLZszM9b4RxQbOU5dx0RBYbHsEtcchvrp-H7GUd6eBLaVf-85Oj7bZBu7Z-v4UF_Xc_mJ5hRKWvmk0EZhWLG-_A7kSMKjReSB2dWC95S3yij7LnbXg0ugo-Z_t5--iHHjL4K9lppjYMIqgY-zS8bHqY9A6w13_SucAWmojHrqlYVV-sio3Cfbd3BMeUO7xZucKa4tBowGO_QyN4dpcAeQVQ0m94iYV6LyXsK8huM4I3m_ANnUr3CzjzIpHyyOHPjApWmAMUl7bZd0eh6mrJM_OkVk6kIPUSFpcTYLUX-jvQAlzOD1Kzu8apufSIiHvMn6pPwd8AQbSUFg3IdkRbb63xeccgl4WJtOY0v-7Ra1zu_3xTcC1cS6Fr7YKqf96_Zao5xuDc9hkrQemHzUXw%26flowName%3DGeneralOAuthFlow%26as%3DS-133615138%253A1793095353471013%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdTFzsbvjVo53BW1K0Xcxs9DVBurAOn5PuPPtQFVFPSuUAipRe6oAxGF_n74YH7YlLlroj7EE6NNjBidIVJzwfjr-rzz1gJYxrV4oF8SSvBt5vR9G0",
+   "bytes": 1274356,
+   "sha256": "c20966a31e8481ca54b1126b94750a63bb8a5a7240ab1daaf2405ee01c2128ee",
+   "ms": 652,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"bc6EIpa78TdVO5tzYqZPeg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"e1nRv6c9PIs2Cp6Z8kyyMA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -941,13 +768,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S303516584%3A1793094299325139&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=ii3cCkC3t1BEGZNtOxdZzMFJZ1uiab7AwpCgIab793aMyf0atjOmy2I0PuI4pO4AeYUtI%2FwEFUlVPCIAoduCprNsIkUTaX3V2V%2FVeNQoCjNxx5ouyLOU2%2FtVR5oMOP9hECdWrkO8gDRdVmvsrbYRWSslWzb0QdH2TCX8tmR8R5NabyphjlkhFurJfesd6aq2Ftb%2BkQsuC9H0KFZB44fuqP6MFPMaT7WuYgfJI6VM4RGWq%2FLZKHH4q9ZUEga5SkL0q705XW%2BvSO0%2BHcfXRVr4ozeVmvOWnGysbAqvelxCyC7ehc0s8U3X%2B9oHbtMJdAGPkzp%2BpnsAxtZ%2FX0X0lLJFKYs%2BXs1Y23YZ5vh0lgx6MWOu5o83OBv54QiwQnM2GgPS8%2BOxUc6L&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPZGgAUxPNnFiArO20DANYxNxsyGgLZH5crXVFiSqJs6nT8gtWZjl3cQ4bqy8tK9J-i7OBGgkzsw8RyIdL4r8s5SD1nn49vQUDTlFDC95mbi7K1sAWecQGjKEUcplxgQQmgPh9Icu3UQpodqVP3Mg3ssNQtXoQTEw48gG6_BMIaS6kLZB5Cn4R6-Z6wLwRnExRnBd2cBvXhF8e9CbQhRoNOd-poVZHTVx1TqvZDz21KcC6jlYoyQO257ozYEvEbqUZ_CtOU2Cl7eKG1u_XNbC2FlbpGL6AHf-U3Xk9uoKnFzITS2ZDAQFhsln5TUYDMSmFVfCYXkFffOyK7ctLR-J6moUBWAa5yyMRwXFvkPTkvPkOXipInKFaxjodId4iXViite7izfFOYnU16ufGpWpv7Jh59EH3ZT96cPm0qyiCzP0iCEkDQ-IqSgxtQjrdmxevBUpyXkyFXbNH-ikryxluKYhRQyA%26flowName%3DGeneralOAuthFlow%26as%3DS303516584%253A1793094299325139%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccGodv5ZOQEWElCi7PkVDi9qn6Z8oAzMnBOa1J9CkuIjMOQFq2wJWksvHF4lQR1RM9DqXa_fj-oH7lZtYeKYkWlPB3jtvoU8-7NTRN_YUAMEk256qk",
-   "bytes": 1275979,
-   "sha256": "f31213c2379fb9604df74d49bb2f5e23f7b91eced6693ad203d51cdb739e5216",
-   "ms": 757,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-1608733024%3A1793095353735246&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=GMk6gjCg%2B7ueQJnWLKYg1bWjLwVUMhThDnpSyGUAxFbKRPAeQv%2BydTdU9D2eMIyO5L%2BcswelLfAFgpafwGgf2awPwES%2FiLI2qhnt0L%2BxplYTYEo2zU4S7H3yC0BWNkfaIDLKBLMnU438mC0hUtCxHIx2gafIVG5oresSaLjikQhLlR8uU1ms3ZWmrYYGLKWMaCQ1fap4vLa%2BLz4PuMIIIeF%2F74ww8%2F5Zq5bzWtcr0VtmWO8nRjzdVicNw1dhi%2F%2FYojyvLELk9jpWUs8QCQQLcOSPIwQ4jFzhW14iNcb%2Bcg2Uf3t0it9B0EeaOgJeALPhYI2QB6SkOAQF%2FQ3bLlza%2FxO7vx5yeoP0oZGHtbPBOXcn%2FvctrYrXRilE5u2aNZ2mzecP4HSk&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOTs7PGiiooJ27o0xha2Qr_S8k-tDDivdzHU2a7NLPMl1ODFIqflW_C9Id3UX4jVRKdLSA-jN-E4tDSUpIi88I-1OCrmC1jzoW8UHY0_Aw14vlpgole14r-uGJbhR_4tRFBFdi8YickRc4Ojo6wNkQZjXo7VwmHgk7HAlfZLnmCO5g7Xsk7meTLMBA76-w0E0XZlJv1yiCN_vieL6ziWYQblZz0G9QETsD-r8MElOQ_18jWhKGIE2tnlhaPdCpnpOUJEbX8kU1hMPZpqZfq2EsLux5RmeCY21G_EVPfdTrHv1dDg7WcZv-uJI5aOYVsh78D-_QwwCnZbUtMzTiwYCC_bsjHW7WaTtO_UesRghCCG2i2Ik1d9wgw5M-dE2sfcyRpvWacfvBZAb3wsbv9CryvPP7OCT-5CkuedBBAuuQrDd9J78yT8-hm7KmhI1AGTu4mM7gwQIdyW64bolFp5HyBmv76bA%26flowName%3DGeneralOAuthFlow%26as%3DS-1608733024%253A1793095353735246%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcfOdWUOayCMwp1uZtLkcMHlzTYZ1no9YraA97m4gLCN_JUaCSovfRs2UYyRGaI47mPVXJ8fw2CH86lWigz-bl44j7v20P3tS0OKCT03_GUqsp7fTEc",
+   "bytes": 1275000,
+   "sha256": "7776154cfa5d008fff555222217e8375e32ae28a7daa29f477209e9c19d85ddc",
+   "ms": 667,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"K_ZqIxSvijrep2VDTZ0vmw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"HPf1LbKvt8XkzwGyMlkLLA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -964,13 +791,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S303516584%3A1793094299581257&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=LQxq0byCsKZhjqi1493Di8W4G9lmSa6aP6k1aYei0uSisM%2F%2F9Lz2LQU%2F4%2Ba68Hj7o4U3DLocwoL%2BMhXMjUGq9X8h%2Ff5YWCqo8XeBhr4c69y1tuahx4YSqX84We42rDWJlxgfcLkJbs7ikJrGIganZ%2FXiBagbOAiE%2FSGAaZIvFveAVNiNlMYr8uX4D1%2BUZOKGMFGxlb8v6oNZqxjGURMWIxOhA%2B3r0xTZVEgcVjYlloo1L29P%2Fz0hqAcspIN0g07OUFdeWFUZ%2FBAa4vdGxgRtYt8qvkOLROfUb5aAbSyLKNYjLQokOcD7o8f4cGxYZ9R4%2FtrbjK6buOAPz%2BkfCzQWfZD7zhlbh%2FkEyvvAG1Q19yJpCCYm3VmZh8eFQ%2BUmDJpc8yECEtk%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANspZ1WFWYpzny081K2s1xSz0E9Vra9PU0UaYu-VbqKcUvD0fiKgX7t5uAD_zymeiq2XcAc_04bXgLR8bieys8awCn56KuwzGP-33eEbO4EF4PbmMGBL7m92s2T6oPe_3_x_jpbbWPJscz5Fu98Fp9y8R4LZSmKmOYVJXIthbjUHn_uOL6YQxxDuO4m01hcAnYYBhup7tyqXKzFkzW0tVvWVdcPvvbVJVCSs2qBGL54E70Gc_W-6t7EUwmrP2TZSStSQThFePeQYKLzXzdJLdIFtgOtKF6-vdiBSSSGdOSWn2ete8aWUFdFGgw6L_eFzUXNR0YtZ768ifvR5YLjhRGG7lYmns1Z4pY3aZU-QvnbGAwm-AjtQWjickf8z7NBg4zYu0F_Qw5LKvMFvgHmOibmJTJzCqPtNaELDRkfmxdhZo1-9UwqN48D7KSj-UktfNQ8om5b4Dtcn2iaEh3cSc8BsaCpxw%26flowName%3DGeneralOAuthFlow%26as%3DS303516584%253A1793094299581257%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcehdZakUFkOA52CaYMR9X-erK0TC5fUjdkL-QuL2vb4JfAPtb5DBkjilZcUM7yEeb8p58-N_Zk0YxWDVQm6qkw6O00bnHpUnlbL4hBhDqTz8mQNKEA",
-   "bytes": 1274733,
-   "sha256": "ec1f53a33762096cbb049d629f3f67ef13564af667d46f60e14f248fb43065f2",
-   "ms": 1179,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1409667632%3A1793095353975649&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=4egenKOwGYgGbxl8KFF6cPwrRNYz4k8v0XA21W%2BPM%2BN0YauR8Kny5TKZcgoihxcLdx63s1YrUIOy4ck3WhtGtAYufuTup2PIsdt2knd9I19aQV%2B%2BuTqDBoxw8dqrX%2BgnFgIrYNpXAsuhKuchX2iplMqLWQQO%2BYuJU423aWDeBzVdFs5zBhjewahqK%2Bmz4Yw6ckQChWbVmGr3cbzcWX3Uamfxa411b3W2GIG1dznIcu1z3fIo20DkvmGwnyPKZaNzxt9HiJXVK0TGOWYLRMA65O4jzXGfA8SWrHjX0%2BmFNTDd%2FJ7JwGEIhN9q38M9G132hL%2B94LT7gLKzpWIvwU5diWq9mqH7lRlIFV1oA7F9WUYAsA9AGBMtbQq2ns11pekN%2FEbPQWc%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAM1qOdoSkyPlkBd3m5Zr_W4VVHZqLXEqArmWOvORk8Xh5JkJsif-IWb3162du4keQoElE8kPk3yn0XasA6tFpgWGwZzIPoHb2LWd50oeCBsEtRpQ6pbQZBvO7VOBN5hAWnrZ1WDK_PWmydkto9gsZxj21QPuuNy7lEdcE1C-C1-afP1pEjGzWt1cAckd0dCZeVNf4E_PFPNAz0F1vBX5IegbHD52OZeKVygLH2gFyaSQ8ipYZjTjTINj0b5rpp4xAhD3-lsA8J0NkuPWfvhg2fxHxu8_UVF8uc0WqtetVegN1cNJeWzng59PSAmVc-19O8J8fZEEWQI6V-OqBskeRQf049QkKfW5lMRILzzrQ441pHERPLvGq6jj0-a2DGd9lC4Bk-dWfT7JkBPbMax8vr5x9xOFSbldPQKB3Xi2mQLx-UpUdcODV4T9TgiuKtQS5NjxrJZvT2gX6Puf3W85MffxMu48g%26flowName%3DGeneralOAuthFlow%26as%3DS1409667632%253A1793095353975649%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccNSR48ueVH8sZHkE---5a10DrvXSUwsY1et-_vPCXt-2YW9EkopVjDT8Nlx4a2FE8PTsTvbLQPkaWsfNerTu-s1qaDpabHexak9O9v-SqE_MPqe_w",
+   "bytes": 1274664,
+   "sha256": "4f16800fbb8b2cda58880ec3559ccd9ca1d67afe91fa49b44181180f88e82a34",
+   "ms": 615,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"bCOeSTxKfEViSPKxu9Y9BA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"ydOss_NcROpMGNUzJwkJuw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -987,13 +814,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S571753717%3A1793094299824874&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=dM9lsAEWCHYp8SGVGoUJWgp7B8EuChh7h7JIphaFqku%2BOAfnPyYIvDJfO%2BUljln4qXc3AY%2BWNv%2FplHeAbcs5LUdF%2Feb2s8B4kNlpAulMGMySzYzpzQPqfbIhlySpwJh5ZIfkYSr0XTHdZgg0r%2F6oTXQh7FY5ZCiRKoYf6EIaP2tKexeeTVDxnb%2FDhMp4O8LcDKghU3MLpDpNNsIc8qMoWieTFtQRrT462bw3ThgPNf5QrmkArb5Zlw6N2YNeU%2FI7fb7%2ByN2uvAyE0ZIQOs9JNODmAr7I18J06M1mUXiYEvcMBITyWM9noqDTv%2BE6oaJBObmHfEPcGn%2FGrqGv7ACP1TCTIQnfD2%2FG5jxxA9mq1eBMSN06KRwTxxKgQrlAEoVTEg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANnm2sg361-OuMnCXNRIilxsNhdR8lmvEIsXg0hZl9DHM-O4p4G9JMsfBly6qVQ1ElhHEN7bgF8gBG1YKMiDe-6mGb9_2ojKF-mI3XC4Iosm4py7DK7MrIoj5Q7mnhlf0IauLmnkH4sYgUWK0p9soe6DLZuqp8R8zCkLpdV2XNg_hUZwjx30v1SRA9iESA19iOdxLAymk6SKLgX_yHrIXr0RS7TUPjJ9yQR62be1_yaf7MBNy0wBbN7YP5IDlVH7mfJaFDZnwA8wXfES-qGU_gL9xK123IhF9eY0-YyJFrfFRlzHzYpLadTvflb5Mr5eWhb64iQcsf4iZ76xiX6Mh59CQ6PUb1cSy0JC6ZJZpxG-2ryJ0bZXA3sGmVJPYxFqfpjge_gCzDlF2LG8jo8FPytr0kdE4163IQf3u-I6CXqoJegdQQ5yiihDoYT1UnZq1_2xF-KtNiiBdMsqU1VqAmFQiUaJA%26flowName%3DGeneralOAuthFlow%26as%3DS571753717%253A1793094299824874%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcc8JWqp3K77oJOf36AIT0EnDYp7pyHIpwBlb0r-pVUkNau0-_luzk2O5CKNv44VFheWbae8FCBKG1H4N7CLjNVk252PMcJ2BYh3WAuUAEHNGjY_SHY",
-   "bytes": 1274846,
-   "sha256": "3edd94d76fa59a5b829bfc156ed4e96f1bebd1bdd7381c87ef3267202e780fa8",
-   "ms": 788,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-335280103%3A1793095354208577&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=TXYiPXxHjXgjnlGyyIDIfhai32405wOn0sY%2BkJSW5pbxNtTs9GIDHVOmfvxox4uL7xqeqaCQgh2VsfBnjZR31MsV7M45%2FWNnJNtFA%2FXdcblsXUvsdx2AAxq3vp8hhJmfU5ndeIbG6xQIMlPIlPTfBLGGJ0XWSekyrOQALqTav3E9Wh0DQ%2B7W0JpMMd6sldo9x3A9TYd4qCXq%2BgBjjKXh%2BrYvwVxYVrGrEW6pZLvWyNZC2lu7jDWf2MfpWgaU9imqYzQsnZ6GzolN9AACzIb3ijpsdONprxjiC9nFHMySEj5V11uzLpE8Q%2BZbGnCqKuwJiIUFXwKBTf%2FSo1pQWZcTRyp25NwPjh48ReRrIrqtdcPxsBtHNjEpaCvbGcl2jJNPWg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMrO6MkhX7lhpzZ9Su01h36JF9IXVWN8cPo-y6Dc1JSeJvI1Ii26VHeyM1OmCfSEaoc8g67qDULOe8u2ExjLmZrRPsBpIPQe-PwbPxCD7zczwFTcWHwS6QwEh7zN_JM0bwqUXkdBN-kD3xYJuQzvsfMqXEsO-fHEmkoYKjLpzetdV3-tkvqIxlUT6Dvn8RPpJyGnUAvb_J2pFAFz9z-xYaTxpGQO_V_p7uxtummmOwAsUYxC8ngYYPH_jiJm9t3LtOFVSYqd6X_STZNl5n9CIirG81UDD9MPaLaxtx0va_RF4x0zNfgXkvHs0kEC5slP7jCOcJB-XjEB16edm_HrCXCpoF8vVpCCyH84BYOj1jY_sPEuLK8Sr3p_0rFfqQhH5OM2tEQxJZmqWdJpoft499EGNqhktG0LCZzbonghcR6-t9mD1J3RphXrYkElGAoZasZZBtp6GayV5g8vpIxOsr3JwcASA%26flowName%3DGeneralOAuthFlow%26as%3DS-335280103%253A1793095354208577%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceNhY_plhCNdLnqiV5L4UZgSYULv09a4FgmnVsoZ8kjNq3zR2u3NhvpoRxm1fVpV81YM24UVZ5RYOehNRfAw29HqxBIB7vQbinxNxDR_1zE0TLRPPI",
+   "bytes": 1274837,
+   "sha256": "11c7dd97a78a35470f3e2297c23c065a25ef0d567b288ab264c23c5d730ea63b",
+   "ms": 651,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"uTpgc5OluEjSLmaevXIT9A\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"DRRA_9AJfv2_GH4pZnEsfw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1010,13 +837,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-469125374%3A1793094300076698&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=2YzjKAGKLWWt8uFsdn0HfZXcmIi7cQmbdi%2F3sqd11CxdOD4QL7G%2BXXuQYprIrYi%2FRPFosFaOZ46POO2sLxkU6prWDPWsxi1n92Md6elgK0Rut3V%2FR7%2F%2BeS7RBBWITTkM4TBhkOucx5JvZFN8XA6%2Fn5IswRDgNLcBQzIyScBBN2grYjq9oFB7kdl3rAaj3PHzx6WAtp5DMAFszIXzku0K3AIwGA8Kp62yvkkKXvmGhvUJC%2BMHYvUUa2xPCWjUulcHjYKh%2B%2F8kcsJQLKpgOXAmjNQYkgvnV6mMAWe1kHNcHFNBQnV7TDFn8FX7iMytqWvL4ORUsD74QvM1mnCXCb%2BiWvohVlYH7D6JqIKIvSIo44Lb66JZQTFHNv1vJk7mM6G1Ow%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPIbTGXbAX9Y_Don3RTMS1Jpz7knTBUjYraurGYonf9nPNB3rvMHhpgn6Lam7ck7x3LCyqH7SGeIGzfd5rzDDXbdeVVz0CnVKY2nhFvoE7V_OelYcDD2TtAupBco4DrgvrNeg91nKZNIaWuIX_r4AgSUy7sSlLuPNQozbKcd9wsyc4lkyJYvfYVUC8K9gC0NtiWTqMVZlkCcmCHRAyRGXb8Fba6ziNhxniWfwyN6ZSyH7-3OeyJjMN087oqavA1p9X-oai5XWxGPWyVd3LyOBm6fTguMZVqpe37GjKdS7Cjt7Hx9AfhdMFdeBM_ASODL--_Ckiure4cpntVCsAd_eDooadCRold2V6_LcNfCPGi-Vo4PPFJfUyjVd-2-KNQagLsAkqNz4Zne2HGLX8aOIju4OfC45QwwhcPThTLDAictw9sJurJKEUJZ9wJSDm3rnd32v-3KLjhe-Yhc46tMZ1pw87tYA%26flowName%3DGeneralOAuthFlow%26as%3DS-469125374%253A1793094300076698%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceNpZeiuJDE7us5f3ppDx6rOVUoEMfwWe9lOS_u1ulkOyUp5XyxRyxLSvKxNHaeX6t3_PAL2nKbnAZT3PqkIVQA-6tWP9XBe1Y-IMFtRKJAKi3QIPc",
-   "bytes": 1274761,
-   "sha256": "f6ee2795c7f3d9732a65f987afe974ec36f48b2e1f441a6ac84b8caea6e2f6f6",
-   "ms": 783,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-133615138%3A1793095354480881&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=DvR3pkEgbd78oMvIpPqpPWGIS0iPyrr2g3kgQQED3kl%2B9tvuX8sWDqWTGRDXrd7uouASytBQWcowPXf%2B9sweMks1pCvQvmf2LsLqOZUjC12qUkc%2F5sKy%2FxLJ1kSwQiPnFWR2GsT3vTiUtSuwEtxqEzpTDLlvsZbQDaj7U2iZHd4OEk5NIL6FytQzwXL%2BLgfQQNXHlbMg0VYmfR5pY4GZdJ78TTNkUseyrQw7THWSKlNuro5T7BZvMhWYa7eYkxDZ4x72PIkHDiqWO1ir1YdyWRLkpqsnZAZ2R0lh0AhCwR3lWnU7akWD%2F%2BuuAmRl7pkvQtQoqEbm6gcHKfkqDD5O62anflLLGkQsWkeUEu4RiKvhRJaqkq9J2UegIbAU14K%2BoA%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAM1Hk-l_eE2fSnti3oTJhTHzAtwX_S-3PhhPduHmcah8ID5wCnOascyl7WoLlH_ILcrFeJNzUNE_twh8FZQUqWUAQvFHWR2c023FTzf_47aJlM0k8kJRfpIa1uMN5-wLWLB0jTYfBTyv5u5vSsUxp7Sslco9uHmMvRwCab_yLun5vIVd3susSQpk4IJ7B4EsPEm0M9py-7_zwwR2ihP7ucldiIewEI5dsaJOQKp71u7IOZHwG4smsjFDhNglS88peexoUUR8Z9yX51P7kowPrZeIpxorGTzbhvHU2fB9mecATp7GsMq8TZFSszLs5mP5cM5frevtMqVHrvAv13l9WZhhwQppaMRIrXYnBDalIs6XNYr1e8oWJkwGids176HM3L4V1P3aAMOJTNCZvW0Ed1qJNV5YMOfXJgxu6tXYNstljL-a9_-sX96rEp31mpKkzmACsHcqITH_UgMmy_SjyRFgsKcsQ%26flowName%3DGeneralOAuthFlow%26as%3DS-133615138%253A1793095354480881%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcfaGO_lxJazshx43p8uHiXj3O-1J5LhOWe2Os5xRDXbFPUK4Qjae1uKgckRXxr1q0YTc5lPNFN6gC8FbrsNlPBMceAdFA9vbfGMgFh-Dk7tEmlnMjc",
+   "bytes": 1274375,
+   "sha256": "02de311e96bfd3499c468e679504c09fa12c0593069cfa3569d75615926804d9",
+   "ms": 666,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"cvknNKRwz4JIYy0k8hG9Pw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"vm31LlLLSNJWApldr0QBJg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1033,13 +860,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S303516584%3A1793094300351153&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=dn7vGCZEtZwaX1Aoofp1fdwvhxWMwN2w%2BjUxk7onD6pQwIaOvR%2FkWKneJ%2BdEuoQBztFE%2FkT2vfJvDpN0nJ3iDgsEMwAEEJ4Ppv%2BfF4ORjdkvhkDX%2BKBnOVaQThsPqVfe7TvuAxIj8gZJBJmGNIYc3lHbHjUXqgsg3dh4cqqL%2Fd9pmEA2Vl1y8s%2FoPZJLlYO5qhNJlfa3qrX%2F%2BMBpK7C4xMYng8ZSx2yDomkf1TORpdyKyyY1LsoBBasFDUV9%2Bm7IsVhWG4XGRH8hkxWd4kSvjmKZrGWC9s0Ror0bcmCT6riFDeADVow%2FKa2L%2BWd7NCQKGROAnpdsF6j%2B1nzy7jq8flLdVvT9IGVhAOiBBqdzZWKrIDsyf5ZxUg8gZVCBHnkr1avQ&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOcLLcXdRwmbubePKVyQqQk4ORkorNSifitT8kfP37i0C9SJRv19WVhZdNMCHttdWwk1VD0eCMDn01XG8Qv7e8cxmtvtaPutTHM-6ZwKpbh6px2a6uY7upxnDJrGPfUyNt5JxrwP7OYOlWJIEjNWLKFWOe_OmD4dXb2pwT8MoSYg-SsxD2xyzWduk3KX68oUEG_trN5CQVgC1J89kpv33JvfVZbZLZgEbv8BoE6Hzo5QdXUzw7kUYyJDO5DjTUun3O7iDlQ5F2TkWMQo7xTpvjBQv0Zbt-3UdB4AyTY7M5tFRS9iMxk1tiQoROlwe6i5y8r89ph981TAuXMHnd7RE4Xs0ANzEvbdlvV0Pq8Gsea1aEGlBi_qfvBfUUR8GEmjjJksIXo2dw6kYYHsMjgaQxEEBxTnL5imjdLWNx_13otpUu54hMRl9qx3CnEXiCPcLw05e-Q2aLe_HySI0VOQJEDTUOnfw%26flowName%3DGeneralOAuthFlow%26as%3DS303516584%253A1793094300351153%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcfHucdhLenLvyJsMQpEcT_r9C5Z9k1d_fWiqh3k2LjwyxzWjVrUrrrloj-GLorrx653VPfHzsvHWWLZrTmG7I9A2-bUEcCz1MMDTgKXtPHVitZgjaY",
-   "bytes": 1274927,
-   "sha256": "bcfceaa8fd9d3a80dae9782540fe8a7462c42bb4efbe8bfce5f460680c35169c",
-   "ms": 804,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-133615138%3A1793095354710333&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=ihyUzHB2uKQyyERkQ2wt9EdhU%2FvPwtNTuOr%2FNmQ4C7jJLbVFz%2FzQkPblwE%2Fdd62kpcXowfJ4TtQHLJlLZrMC6zkKGXzK%2B0OQOb6HpvfWXcXdR2poNL6c%2FHkXgV8Hv7dI90XDvlorsz9m79%2FkfQS5Wyvb8fCIbIuWtQjUqy5CgiplUWuX%2FZ76cyWQBgkMCJmwn1g5wRBQ94Oc6IjQk9eYJoEaGLVxJiXOKShIBLhES0KFuKL%2FTRe5Xf5C7Fa7MGEMWUi4qLA%2F%2FgzlXSnkm97cMlp4kPUyH7nhXNuqUd5uU3dag6Vs3x%2FFltI%2FUZHTYAd74PGYBR%2FcT6q6azOVbxwZevSSYf93oFIbVuclDz4ojoYiBNDs2Nai8yIX%2F0NT5ahZcJLg&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAO2y7vgLOKolVtS303iJTjEsPkpqbNd9abapr1xONAjrP3_QHE149sA3C9aOhP_WtqdCppeEseIRu8C1_G8V-bW9c25Ue5pwMnsGZWYXXEqxWh7o7hA1NEiHs6VayL84-Y9B4jr9dwwXURye7I3hqERfde7bkwVOMq1mhm3L9ogbWz59qsxbK9OuikskidZpH7X7VEWPtFj5YphPTMpqNFM7eaku_8tNKA8EOB8kEKblEkS9C5RkFWJukvoeVJ8UqkajApS6UOygOu5xdPruaOnHuO7KGb86ZPWlqxZPUqlM3UojetXhnRXpdvD4hDM5v05pshozfgKjOJCytO4JiNlBjdMj3DmWK3T9AA1gnk9JXLFDU40jFGIwfX4FF4cvsAs8oXnu7cxtM1BoLXW9ha-Bs8dswdz2_IaIF_Bs4mZru2Fk5ScQzh4Z7TjfhbyZ6ka9H3k0TugL2GRAVx2fkrmyuh-7w%26flowName%3DGeneralOAuthFlow%26as%3DS-133615138%253A1793095354710333%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcciASCPNiV-oN2usz4_v7QKWXuPm0D2XQHSmdyz3JOOjpZC46DCPJXhOHomD4fPGRikY5rHFXWeZKHz3kNZfV1ICtw8ORIyxpSAOiiiUVJt8p1b93A",
+   "bytes": 1274082,
+   "sha256": "448a7dd8126d2b52d85f9a5447b6415c90eb2e3c58840eaa981b898ff79034cb",
+   "ms": 628,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"GYX11_MCJAm9Hk7baW854g\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"zzDtmZMclVAev4MCa-MDtA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1056,13 +883,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-469125374%3A1793094300615895&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=Tq%2FEx6%2FN5bAj1KeqyZ7Rk4X62AcDn4Po67L5%2Fkj9buZrSlNMGhSjnN03z0XxammhWSpuTj%2BWsG7H2xQQEzD3Lxglpt7Cr41z1HBZbAbG0nNgNbY8ZBUwrug4UuxZemkR5M6egLuZeahlFX5fc1gGuHz9mZyNsxfXU97Ta4se859wMo5HSqwsBoc1REKtuh7TV%2F0%2BQf8efN9AdWiSl6aR3Q1v%2F45t95m2dZuPKOHf1FsqOz46qCVhHOKxUtc52hNLRVGZyxTpPT0jPN5Mo8RVDD2mvHW2oJoxuRiZngAWlftoCaZ82PCuPcbUx3GUU2jhT3arRLFrdgaAksa87M9GAgD9afX5pMPTtp5ZQ8tmcL2T5PKPqfBB856RHYYf8FJghg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOL-LgAIDaBrvI6q9lak4CdLjNRBRFc6LuZMOdOMGSFrpUL71s-I_3JKvEkZc343zVErK6n893VOA3DgBoe6-b98SQobUeAcXT77zyFsrTcXqTCEudbqPKzFKpjQiqBKlzf5rRbpanMxGSLtq97qCiYVsbfm4vnZ7FXWVkONerXsSpgDj1VmcBmz4ai5SkYc9kr0Vi3iF9ta3c_Eej2M5NmuOXeNiHaGnz2ZhNW0iIU7EdmU7BQJM0IqWWGdeK39p3DJ5Lkc4FY10TgbbdktUQ-SXo2KhwCMFnRLnd-ZlBIeivc1JMBhavxSOj6eVkUUlvlWMC8-_DTxcWlC1oSBSzIM-t0rca1BqAV2u0brv1KM6XbnLGtKsmmFLtImgLZAosfF97Gdka9rCU_NQfifJv8vC6mkQ-pKuSXP1WYg7WRZaqSd66weoHweeGe2rOrkHRAuQrUyRwqAsfTK5KvYhTJOszusw%26flowName%3DGeneralOAuthFlow%26as%3DS-469125374%253A1793094300615895%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccJMm7W69YlVFS2SCKts6GRyfyJaFK-iTAZTI0elFrqBOMwq3-XznT4oEuJZ4xQwYG0-LwGM_1zSpV5VX9w5TysVw2QfnQ0EyU4MymFled1ZvgUqdc",
-   "bytes": 1275031,
-   "sha256": "cae7d2a39f379140f26de67b69f2fe5f2863db73666ec5ec7aa9c91f72028ef9",
-   "ms": 796,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S739289509%3A1793095354965477&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=HlRl5UOo9nL8IRnk91bII6xLsowHABE9jJxTH%2FFciPcA7fPwOC6jJKZQEJmE1uV2dDIS2iYxJWMEKrN9tShlVRTIjb28fLWkqCT7FgtgXsMyN7ImseQi%2FuJqH6nJw7Tppa%2BNJ56jXTLuodfne6RRXb3LLuMvVsOkoQL6k1f60KUHwC29YubsZwPwcTsDo7zxIRsJl6YuyWXBb%2BP0RoMLU6RtudIKwMBs9s8n1czyxIekvsjJ9%2FAfd0%2BLJPBxtBuUocpYrl7PUNieRsQuJYssAPM9mDXnDnujaw%2FMRH2ASXEs7GvMC3FFRx5kGHvHN18PRfGbx%2B7ABjuuErZr93lpAgdvIKihk5B39HrSWOwil%2BGZZIxDbxPPuNM4L2k4ly%2BtDw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMqQmdzQhvylqXgKMDK-V1LNXF76GU-qTRO1n90fphhZGlcJ6g2ShLTvkTvQkuE5VOMk0X5bC57TOlWe1QIfeNPQ0i2NiV4na6pegqnVVCoDd_5-olhAeDCd8l10ZznvpnxXDnKJnPftB2xpJRHzPxjjvwWANEPg6DNZkjWGXKmeC9-OFgCbDQuwrqCx7fzrKW21mblH-EAWtGjwbsyg6gn6X1nhYhbBSDG0QzQTbrVEfh5ZL4v4WNVaDzhj1QG0Rs0HAo0UisJOyUZEO62OYHnOMIgufm5Wg5Z39v1oQ9ziQ3e4lJsqvZSLQ6-Q7x8Mzey02HZQFHDKol3i6GZUbAANEBQZ4vEc3991xI1an4Esno_xJz6CxL4blNhkYKaOHnmuOmOURDQLsipmMa58g_vdEU7-6cicn5yIPp_urQDIO5BliqrQOCbuA1LvzBwDZ0g38pCCcLARYBJX2Ta2S0-NsAj3A%26flowName%3DGeneralOAuthFlow%26as%3DS739289509%253A1793095354965477%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccPT-sDwMq-WddZRw62wWqm5lJ6mw6UCSJCxCds3641DMkGF5veJnR5wof9rz__5NGJCYkyy1YjjVvOq7Hf-AorapSlefu-rVN2d54OGkTdOnmYVbI",
+   "bytes": 1274406,
+   "sha256": "adc3e714e899a0867f5dbeec4efe8374cc55c39446df76c9173a347b88eefc8e",
+   "ms": 587,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"gujs4dSol3vdiwGwg9_jdg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"7Pv-QCv4rbLgW_XXWP-azQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1079,13 +906,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1511120234%3A1793094300834691&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=RU%2FlhbZyHeum%2BD7ucudR8xh9g91e4ah69pdHVJNmkmCYG68XLqmbKUu9AyagqqM9H9BVYPx7zAQ%2Fj8vJiZpPbldkf6JK%2FAG6g2QK0VGOrZ7eXspCZn3XlBXS8wcKlMyzwLlBDoOGzv4Z0J3mg2CQNVfxCZ5egsDXRAqHw1qpOOzrNJNgcyawjOemPvcuJhflcV8VyHNdynVAPoyWB64Hu9Gc7qXsMEALJj%2F9XiKCih73bx0GrY4JJKKrpRg%2FL82c9stF9NAbIkL8q6%2B4NbGA%2BllQv%2F%2B5NSqJD%2B%2BUK5GL3k9kRLRFcUwFJQNCCVUN%2Bw%2B3wslboNPNLXbHpzWYz7o6edOvGnR8o%2FZbidPg1L5y36OOinRtccARAkAvOjdP4a96tg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPsFFzljUaVHZHaqd2Cx4XyAEwParhUVyU-zwAC8kwqJwJB-XOHIW3wSPnY_Fd4MUrAYkvu0loccxW09Jh0NVkhUBhIVwWZZPrheo_nkMiudSxGrtcL7G_TbvprS1byQ0dZo1yfxyJ967uCFJHpLI8lfqH0kBNlw5YlDpgchGvnrD9BGXuI_9pYTxzm9FQzIe1kYWiFrazD2WnW0kEB2LSMyX4wJtELk9GzbZfullT7_S77kh9UFppBC5flF-iGt4Wf613-soMxC6N-pe0KUD96DWnCkQZ6KCG822THdb8dMAwdEPf5iy0Rzy6yxYSZw8z83vm-J9OSUsZFp7F-zu3e-61vwrxGFs9TPCWFhwYKK8fyb_3C9dfZ3d9VctjGuOg5K9ijwKV2hRvGodU9b-qmupkJQJ7mYuzKPEiG5x7Hg1WFj-DIhywBKVnZV4gXeZdXIFddX1QIXKamFEpjlcZCsPV-qw%26flowName%3DGeneralOAuthFlow%26as%3DS1511120234%253A1793094300834691%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdoj7epPQDnLGbqV7XldaViq2yjJ-FGNW_KBR1ebt9gbYou2xxxWRRIWRQFqUaVmnaVCXzOdx23jQqp0bwTzK8zBqMlU548SIobMA01oCOyrdSblAQ",
-   "bytes": 1275077,
-   "sha256": "5a9bb97db9c148da67108df15f11f5c7c6945a3bc42734046e3e9a41bcc4c793",
-   "ms": 751,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-684336627%3A1793095355214921&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=1vZup2PqtDbntH6xhFnv%2BKMbYNTeYlMIoXLtwk1R2aJDePODlMND71PfqzG5Kn8ELeWjieBfW1YPC4Nz8NNYTrneR%2Bck99pcFvT%2FxhkhTTjBWLfUgBBrMkmvNSWWMglWsCoLw%2F76GCOvANzblsu6Z75uYhmGXquXvdyCo3%2B%2BsNjcMeacokB7lmM%2B1S1xfVZ2Cewsh7%2FQq258tTioVUbEQ9i3SfnoYKXhbFYEj9NwQ7M8maWM36szG3XnzlTFO09D%2FoafKZqODTj5DH8SVj7viMvcJtfaCp8YdYjKvYsZoa2WE7ScUwqV55NNXfPQjp2nAShyq3wVKrCyKQ5gp9HGvADbKithZViwUwSu6GDsCx76FBO6xqMUBVULM0rV36deMg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMGigU_K8JpUNNzSWYedcVx721yDfqYRI0xK__67K8No2-dmdk_gSm_GqzJ5ax83jLYS9z7W3IQREWRGcr-VlP7RalT79AuU4W8aCJfCBFj3PddrunI7Ltl--eOrgI5NVFgKZBGtZ_YtRUepoMONbJyJuBGfG4_eFpn6nYc9OLVARSMIHepFk98fiUBjQaViRlAVlBgGLn-hnR0-MLoIrwrXHqEdEmDZqC2chH4V1VV18W4M5D_ktR7ugQjvpkBUClNLKZtWj0yR9fxELg7MOB0OSzrLVoa6Xk6qNJMM62ER7zknM44Oois_SSja1HveLYcW9J_OjR3dgbV4yzw4yJJscctZ9pgqg64FLeA5CfsZEgFmshDCojyEoQk3RkZYrbeFEXFuQY_-1Bg_HHgK99x3X499iS8USo4QLARl5wNvwpqsvz42TX_QceU1RjP4rKEQWkkI_zde0Ult5AJn8CQBe9z3Q%26flowName%3DGeneralOAuthFlow%26as%3DS-684336627%253A1793095355214921%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceCkZfa5HRi-0AS6E0Q-6nb4Ekcj2NXkExYwqfWgIpqBpA4bM7o8Lysgp_2iH-7CQlT5mEGAYISpKL_C2kXRc7m4cV_b1ZL6dFp9tJK6wwT8b79pWc",
+   "bytes": 1274345,
+   "sha256": "495a764434a3d04b66f303123faa5fcfe275f5b1a957268cb6977af492bee01e",
+   "ms": 656,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"NKAPEgOrdGq1xzMbGPob5g\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"PHd87A71OJTjmYcqvATDmw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1102,13 +929,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S103794387%3A1793094301099153&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=cM4oRKf1FNFcnKFhYBe73Gc3fhyhIi3IVikp66EMJd8PG2gb71sWg7QYRts3lOLHL5IapEg%2BVKocRf3ByN8VPNllIzsHqrrZZ8%2FcIrAXpdU2zzvQDXzrcTV8bcfSKkSItNiHzWUzgqLZbMtdBCaroJ9b2Avh%2Fw8FuCuONdw9UkldiUbA4pxSE2nPAqcIeoHl9%2FqzEuOEeadXVSj3qJVUM%2BuI3R1Pn6eCb4FWoqcyL7aCYj1NoWdoxfm7Vc0e9Q%2FIjoB%2BZbq4YqlsY4RWj6VGHRJLmpVrKzA7JSSNEXprnR7t3AIK9o5WBymulu52EUVmLWll5o6YpjWPCPMG2iKHqKgfYQovJu2Hh%2F%2FIOJv15x%2BxUjQ82cbRgANpES9gLl3BGQ%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAM3eRvNuOt53i9BxFqH6BYCGeL0WXos40OobtuCgo1wPHiNULngnA_n753Euc3z1QNP6BPzFW9_6yvruvc5zp4mr5OrtosozH7kBXF2vKtb-ilhO5-QUoY5AOhc8CAavN-mNPR3DKD4PYaGPNGVLfMWseIs6qO_io2I-Uj5zzT3EQ8n_CdbgSPbzNgOYLxvC-kGuVBzkm7tOYcxV62ZHIPQPDLEc8RYA5gNsGvouXcfvuGDGUGFWZNy6GvBaEeW8nPQ_NMixwPJ8KR5fh_JhLlA33ByJo8Y3Z3uAQ2pVZ1XRP51eXu3MMOjW-z9_urYzTB27gybCvhC40seuJBzOX6E71RpzkGkWguwVcKN-Wi36X9x4tPNV-LoU0eurCy5xAItptRRB95uHrnqgoZ1RANRFA6ZJ1dDU_YZbFBVjdoRctBIj66hyblLkWPEhOcMmx6kFgogyxIeS1oxAEJYdycjeZtBdQ%26flowName%3DGeneralOAuthFlow%26as%3DS103794387%253A1793094301099153%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcds7ax0HXfz4tDDo6Hpcc7qZ7VKjRfR2O471EAeND0wiSZdCqQamPXJgT5MvfGmZDHYK4sS26KjEWXjTo1yJ5ouKTbEYqKpEkCiXJO4aaA9WH9mqCw",
-   "bytes": 1275015,
-   "sha256": "12d984d7142e94bfbfb46fbb3f1710d6c3ca0d66357997d36e05a5327821a8ec",
-   "ms": 779,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1496707549%3A1793095355471945&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=wGzzJk9XqRBaKxM2XuRunM%2FWFesibggg2EO2Nx3VjoYJCpxaWUrwHw%2FLLAGqpm%2FlEbMN9qG6l2GgIf%2BuIhxtGjeDoReRNyUaifpW2C0b8Oj0NZ1aE%2FQ8vfxJnWKoDVFltUtkPAh8JmnJa5iUW8c2TLo8EmDup9ANXQRwJGcSraOdJNIr2oBn4nu3MTCG2uVPlhYa%2FicEUMWHjUN%2F17aqCJ8nCVlKM9%2FkHgv%2FY%2Fte6F8CWqMmIr%2FpciAehHx%2B1IUo0Da6As%2BwLQWzP703fKomPmMPCAGAnT0oZAUGlC7c0V%2Bky4Qmu2oIxstfcp8yCx3cHmh0aT8vGJaKQRmpz0PqebCRhJON0US83SMI3sS4C1AN%2B9CxSweCQUvZ%2BPh3i1CI9g%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOOXi-E5-24_DbMpQWQENy9_j7_859bcBTzAYmH2mVd7wMcSMpElVFGbQonz-5sM5SE5T6tbO5a5mfeOg7abJ2gAmv62OGtZLQ9cpS1c7UrKiGGFpmCuc_tawwu5djDikBNU6la-kya6WQiMgaV7Asn3QXjoz_XXGmynkmswvHyAhltoCvdz2ABFXswD6F_lhEkeX6H3SRGIDaopC7ULWKOgwkCImLRIF6IqnHlenQevEr7E0Jzx4HuvdhM-DVDffgUS3EfeUSUzRutFYwQ34WOTefEJDwfLCxf8sKI3AB4P2V_09uAN3-WBcoRprctClYv1vKwxJwa5_YdK1UB48VgQ0PIAKqNr6AV6F-QcN91hvy5t3vFxTEI8-p4OHBp5FXOCR6e0Can0PYNdtGinTtKfnjT79JfDXloN4M6-BDJQ26iLD8w2udqbzFTSoxP40lc_uYzFfo69c-8xCJoUTwzP6-L1Q%26flowName%3DGeneralOAuthFlow%26as%3DS1496707549%253A1793095355471945%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdmoKX4NkicK0NVeyB2Dt8QG9cUcyPg3T65Yuqrf6dMb9Eq-ZE2J8llYAedBmSDWwnP_hXPbby30nWXMpLrrFsRFIR81XQt5XRLh2idIVoi7zFqzpI",
+   "bytes": 1274414,
+   "sha256": "01f752184af28224f12c538fe7ef9d173e47b2fd5437621dcd62b5f71f5f347b",
+   "ms": 617,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"vMcHFgjg7DoB5CjR3jRVpw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"OTSu-P8WDJ8K2WM4jAUcJg\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1125,13 +952,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-469125374%3A1793094301337281&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=%2Fm9czpggqhKq7POHbNZvxcpIRkZnJ3QQokdE56M%2BjJHEB7XGU%2FlYTiHWrLrMFpRk5la8U%2BGow3Jz1DDQUARfrhzz7XNvg0EeqXqucCjP4cSAv%2FyhB%2FnTthPpqH5oTQIt5hZ42GGYhocSG%2BEiis8gYrK6XQeKby9bhFsGiIXcc7aWkexBMqks0ikkz7Ro%2BzUmfkdoQYhs5rtv0raQif95re0bnBGP%2BLawYtut9KRxUdbwNr6AKsyj4iZPY6IHZjdGcdlrF%2F2ri9uS8GvWqwa92zr7JpDnAm6A2tHhIXCfjr5lmIbNmWXak5FGVLmvJ0PxTTabkwEuZX%2FXgBJZFP%2F%2Fp6aDDC%2FbEvbG6O0fr7DLaEXxwsL%2FDS%2FgMnqhHcQrIy4UBt4mDg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANfPfWV29nFp42_P4mMuxAizVvP1kATsQLP_1AZkLeT48YmdJU5GpEUBjxllHMNKaJi1OEHzMogngR7sCbyABXhEQbqSiSLuoVlDQb94BiNZCZNQZ65IsMsRcPSAWuG8klFytbXpniuaLUp3d-_sZvjUtqhtnJMJO7uIIeh5hF6ywdZbHKIW3o6PHnp4UnxESIRGV9bmBPRZuQEvBjOsPvfQJ5MrJ-06QhS09VRqtoCr8OOsnalWJ4tnjbRDEbyDaRXrB3AsERk2e35AjmvyU9AaxWI9mBkGU-B0aJdukQsEWeNaE7bYWjcmFNxAmPCbS3vDle6RIHbUKMqBraTnVlm0xE0LArdzADpEpPfXA_AKXCYj2ZdIqxDGJh8jX6p_fnn5W3meSlI-QmuElOyg2ZsrmDR1AG_3YOO58_9LhRdADkxj7Vf0mtHvvEMaqSOJLBV3HENlJOCTdyBz1LRf2ZkC0iYIg%26flowName%3DGeneralOAuthFlow%26as%3DS-469125374%253A1793094301337281%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdVy-dlwv-LkJcJWfZGEJO57ho7oE_mCFlFoFbOG1v5k7_2wrkg6Kw7xrbmsRATOUiI8uXwweoIuzjvHJqy15xIIjZog40SHlp22-62Y1oGUeuSeJY",
-   "bytes": 1274937,
-   "sha256": "ec64651ecd3fdd4efc32a329791e57b21ff1e2bcf38a20d68446873aded33579",
-   "ms": 746,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1295609179%3A1793095355731354&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=ADB12IZlomkYMPnycpOvfokNXYhRt05wIm0HG9SkvH0Lf4A4z6PijiP7%2F0I4mWnoCy1ySkIWVDPJPPkSQMMp5veMoORhMT25LmPC8dOXGqVdagm4IEBLWs9PhVqyeNikCJxxGD%2BzfxJ5a%2FAVPTZIba6A83uvBqjdmEJy%2Bu9FDqs5FGj0AflZKUXX%2FyqgBXqyOWEl7gonGLs0nu8h4zeD7inV%2FTqLhHBnexqDog5hPN2g4%2BUDP%2BlHxv8ytLccJBQvSOZZCiwhfFBNvR0suRoGJMDfwjtgjZd%2FhbZ1VZO%2FvL5Sac2JmIE3e1ubWZRGEWvgA3evyuTDO3uDV04gYEKfqXg3JCLNMrDybckst4eClXF0MQqQjIpFQoao87rpoSoS3vztYg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANAbW3HMkVlsTr48w5mtzL9d9tAUb0DGt4kpjLwEU6X6JToVQ9ncC11ysjBaI_4HN16HHGT7RnZnxQ_Si8s5gq8k4IlJikTJLQcavyIwAvpe3TGlfTof0n-I9nYuwEcMbV26AtYYf2oLC3NgQi7p_5KavMIYy8NJXfVsutIK0WDqJlWli2_7R5KOZQP7PcK-aIyLbOvL327Ap6qTa2qpn7LgvG0POa7q7laYdtrklThS-Mbthr7Ezg1TL89WzRsUA-iM5811jOIKUU4-e0ShBGBiXYU2g01gWtRkHCq9H4HPEL2wWRyAPK1P_DgZyGx9NyQS2rXtU25T6wPFNgzrBI6gR7ot9jVQhFdQpsfKvu11F0nC_2cacx1v3PcHp5862HxlLMoia2Kg0egpZOGdvJ-J8KZg55HjLKlUhhvOyLk5di5YNIYQP7pRp-Y3kbzngX7jw5_oJgKGjm-NFNqFJYxzlnZUQ%26flowName%3DGeneralOAuthFlow%26as%3DS1295609179%253A1793095355731354%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceq6JRxVQYTEO0XeaHukYF3_cOMZAfELTvQOXogtMpSCTu_YrnosTQ2X94X4Cnw4PIcSbKXOeG3x31tzqaD0U-daYoogXYx5emcc3n2FKV6T6rUctY",
+   "bytes": 1274561,
+   "sha256": "6bb8bfa4787f03838625c55f227c9f60c66a62913258e2db150e1bdb8d87d607",
+   "ms": 600,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"Qy2nC3JbKHucTNWzmFKQPw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"_bVNus0nxUtsH1nhgZceBA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1148,13 +975,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S118407389%3A1793094301581810&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=gDUq3stCCat%2FBg%2Benqe14AqxrnDUjQvWUuuGsxVAnxRSeA7ANYPL05eTgAxntrvjubAkSOC7D6yfriMcn5HKzt1p%2F7s%2BI%2FtJ2xF18lKR0lH3QO7%2FeDpWSm5EDGbmJz%2FbTZoEWXFPvPmQza1R28Ouq38LHUW0h5wjhAtczUTucWJtkwnlh%2FjPZFs315v13mB%2FtFozBqzWBK5bh1BCBI%2FmGffgNwM0W9%2FjlscFliqPwZXZBRj2t2EEoBl9H3nxpXFMEndQaMYMzqJKKPc9j5mEhHKxVnGV%2FSJvoXBuN9xQzZJw%2FWA98YNKfVxpZJ%2B5fOc99ter1DomoFN3J6VtCt5GZfhJRQntsiN9EEd5N3Q%2FHORv54wwdrWu%2FBS4w1GPMOPyO4AqO3hj&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAOyErFVcyT9kJ3_2S0A8Ea73Ef0OUdDY6KHvYMEUg9EKv8jDJ197KBLEKBr38gzOb1SMreAacX1rZkrPiIwJDSTT9jRqWNNXH4MvVqqZGHibUswzvkb0YcQBjvTyhEER58GnMjFlGiPOK6DikCUFrRyn6_3B0qSigMl7E5m7IK71cwr4kExMezMK1MH3ZFhquNBWWncs6OQ_60ZmLCYGPSRFiUofohUPpznMxCRgNh2s3_iBmq-23cHjg8HLsQ8x8-pw5pqRyafU0ZUqXdP2p9-reGIyqAorvCqDflG-QZasqV1NfTUYwJer7wPxLvi4ud3JmBBCIT2xP6Q0W1QxTTCZpAb33y0t1CCgzUlCijGwavjDucravg2LVCI1PxobxpyIblLoWH4B8LDfMh_MCZCO-ZHf9H4kdta34kvInhR4-ISb-PshRab0YZtCIzJX9Nw3QrbZaI3ECAPUiR7NeJFST95ig%26flowName%3DGeneralOAuthFlow%26as%3DS118407389%253A1793094301581810%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdpKEDVkpKO4az-AGXwNjuRxGv9w28WS6qJff58OHT5wlfeHK9aP4EClGWzf9365qC4BXdqcIrcrj5qJG5uSmqYQOtoDj4KILRGiHCizSYXY1vJh1M",
-   "bytes": 1274768,
-   "sha256": "e09fee19aa73db820d977427e3292770d0cdce74e495ad1326a0d8863b9817f4",
-   "ms": 763,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1261910550%3A1793095355965833&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=i6%2FwUtlj%2F2LXbFCV45GjWlvIayY%2FpthRb0MeO8wJrIl4tdiRDrsElig0ifoRkYnJGL0T65HRoNwva8MQV9ibQrdVJFv9OvLGZbHkgH6FAD7W3VM5ZkVKHIcsVKZUkcXkDX2xbfDW4%2BzXtPY8XLKnfeq7WtUbSuZCZLYgVqgm%2FOgX5%2B%2FkLI3hvrYJoSX%2BPykjunrRcEjFeaNZfS0A%2FiTFXjGDZZJrXnfjEhtbADbm0UfiS1ZotnVuWxkzhentPmAvtHdZHppFz5xuV3yjrwOUGIzTGrRr%2BcAhSqzOBlGrPPhyi%2F2Q4PPgorJ9ZiPAmknA6Hpv0xvGRAKU3qqn85KFfZRENMWSEc1N%2FeDCE9FfLJiD%2FAIueTO2Rman955cEmjmQXG0FvhL&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hANboEPeFKiihLYp2cTfpGQmrxGX9Z_7fs2UZYTIuri0shOxwZ7ZXyiCrYOfN6Y_y7gIfvxP8NZ_hCdsj48rLpR0vaYZVUoWQMconaHMOrjcx4mCEiDd-pXbmov00l5H0hx3PdbnY43uzFocAWTLh2jehpV4vqicef2-3r7BYZVWEu_DQ62UngdTyoYNfWgJnetLcE2kzgxNS1ivo_Eq4yXn6NwQaS_wf-EdGuhtf93QbVwCSIk9JSIW8iFgwVesJcHPddjghIxinvAzkMx-abBeoQrtztMDC1CBRLsyt1Hn3MUTttTh16Msxj7H9zWR-sP5gm6_uAy99-QGyNsFU6shgzzRW_WQr93QjHzsxwrT6AMm0XLP0-khfQpsAx27VIEdPA3ryR-LXQQLUpdRFajlfyUpzHTHYfTL0w_6goJWoGHiYvJrZoLvs9UD6-I9QjgCgNi0LkBUm1AKlME69xi1hpG5Ag%26flowName%3DGeneralOAuthFlow%26as%3DS1261910550%253A1793095355965833%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceqfzYFb20ggVi-JGSpzlpJlT9iVPoNnB6gd2Ir7p78R2qFNwZ__SmV4-qrxRScGR-xvXdnDszF_zOW20M1m7l9bn5pDKCma9XvsKjEUp2RMXYIPtk",
+   "bytes": 1274507,
+   "sha256": "24d067d4af5583e8f9a786be960b19d092d9859c5cfd08ab1eba44f586f9d4c5",
+   "ms": 599,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"Yvl07xGpuc4AB9U3N6PYYw\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"O4Eom2-x9PWozynQNOjq8Q\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1171,13 +998,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-2076628834%3A1793094301827071&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=OxmbOI5EQuv3xozWSklccj6tAOJAXSJcimxN%2FhO4t7QMpDvFjeYItQ1ZV1gLuXjNTmDN4wIuFWMtSqnk71LWNoz%2BsvAziWD41%2F%2BROBzbRqiNzUSYslARMvjyiD6nKA7HBm7dQdGhHxLtF3FdOYsHuFBfQpYISNEHCMQffqHdlO86sbqkZ4cLP1lFtm%2Fihkj2mETPsH25gErSOIKF6EfKEOcxKIogzf4zuvlUabzQA6nUm103%2BxPEJSdgE0XI8eP%2Fl0Sm9f83U1PJI8kyIXYSUi4CqxW2xMnc7QplBpMxup86S%2B7PLNi8HWiXBY4HleWiO0T0XqJBWeBSSAZTk7Ys3ZMFoJwrf2%2FGXarYXMP1rOFAV3si6lQBmcabWsFKo6wY9Q%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAMZ2jzVYg5Towx5h5-uV9idjbURrRs2UJJsme9pEISLmRp-ohJ1AXODPSkEo-dkoIvxBGuAo4x1_-UhPECEFGlkb9lM6SEFpfyrp56zq1Ekl1svJlEDvXBPumasrJhxrFgSOWbY_H6gmsSIhDaG_p-q7FOafJ07L2Z5-_JogqcM8b6X56aSaz89b-BS8zn_iN6iRqIb3CSyP44ZDp_-gisNF_CIgn7ipreeU8WFWAJyqQTMCrfv9baqySs2PVYiuTM3EJ-VHclINF9COEZHFZUcZ1wW9AezZoQ7cW4_kCQCOJ9eOargn7KyLgmRJtLOHNzpahrsZGSED0Zu3ewLa_IDauaObz-WqGGACyhyorlfoQwGwxi9G2tyJ7V1nafR4QRY4ANik2u9lJ5YnN1VUpDWz2e9O1TrECVGWgZXeS-tIHbdQqLpS434bPfMZxC5qLdeM6eepZAP0YiOJeYoShVIiQ7GQw%26flowName%3DGeneralOAuthFlow%26as%3DS-2076628834%253A1793094301827071%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdyUONx49cpxgDFc5uMrzejznxTq-Ljkta_GRj88M678Y6js9jHAe3uroSQkyONBgN3LX_o3a-THyQ1vVExvjj0L71HuDaFGNgqmFuBxerCXRFZ8yM",
-   "bytes": 1275129,
-   "sha256": "5c620ba7c8dcdc875753726022902727f59351334d92beb86d74bd9628ef19a4",
-   "ms": 765,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-684336627%3A1793095356211370&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=Vxf3dSRjGlWHKvmyqVq0YuC47%2BzaVFtjg8CM2b7rf4GwWg1pRVS%2BXGcFzmXC9VICdd113g6C1SKcwQ%2FkLuxxZZYG25EddDi1ds4lyG4E3XZTJ5t0hTL3h5JH1M6hhir3wSC%2FfRuxekQj%2FUT7y%2BxYv4zauA2td3yCkMI6EGUxc3znORlGa6zE5aaXQe3KEPa1rALCQXu0VkkliWKU3vcTVmZbmuidvtmQri213YkQbFd9t7xiT%2Fw%2FTjvE1xZxgzZ0z6y4xDJY78swkwFbfTlnZz%2BmzGQrWGnmQvmDJhJh0IVFiZvi84YGz96G1Di0oLIeq29y0XU5BiqrFzzWKt9hVDSZwiV6CbGwEvNPkcrkMQSWwuI72JNrfIplqwkH4XKuxg%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPrg-NiXT--y60CclvO-0ks95rP7DNVQ5rNb9gi0gF7YFbnIsfhiLe7zqNfXKznR17u2tSYHAz7k2JfJNxitiJ9GQ0aNYN2V9ZG14Ax7X_kTaJZ7zHu7dSkGfN57LsWoeofI1QEeF8BdzZaGUBDX3GGbjJAbom1AOBOfOnDbTpfnGoFWvYuuF_cKhJFEReR5OPIE9VLp5veMuppmFb00sdgGs8zy_tnp9BAwoO2LstN62f_2fBAfDjkDOv2-6s8k5sf9bT2hg8LUYBA61WSQp9PLOFjA7z5TeM81LvHqbyNbu2B6I4hbIorqVsFi7GvG4qNqHY1LaxCwTW_P6uEN80Tk2l0_T20sOoZj6dy-9TY2M7szEoIKUqtH1781dPX4P6bR0hxcyhBhRJNqgKjeIpuMEJeulYQWqUlLB_aOqN5Kk2lxHxf-TkhzUA0ZWdYGm_loJw3xrvFaQjLzSNd5LO6fhA3uA%26flowName%3DGeneralOAuthFlow%26as%3DS-684336627%253A1793095356211370%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxceBiWveZ-a8_HixXzOXrt6hMrXP-VD28G1VSP6Gno3I9kHr1l1tajxgdjdG0ALwMjwAms3ALumXO5nGNKc6PRtFaxBVQGPWCpfQ6-RqyhDjSsFZ0Ok",
+   "bytes": 1274375,
+   "sha256": "273bc4372a6d8d01d3989c5929f7b6e7b0377877eed3efb74ce45c25c0921478",
+   "ms": 650,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"U1jy6Yz9wYhURSllgVw1lQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"gWFSAaCyhyHYaVX4-FRLqQ\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1194,13 +1021,13 @@
    "type": "text/html; charset=utf-8",
    "cache": "no-cache, no-store, max-age=0, must-revalidate",
    "server": "ESF",
-   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S-1693866632%3A1793094302092177&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=slhOCNaf0gRJrXIVfQ2HF%2Fh2FF1Z5QI6k0DISQMXsbzDEKxaWIi264H2qTnpmsIVH12ERuenzUQdU1rciFSrwsC1kgsbYgjzKoplz2f29Zm6CamH%2BoB%2BavCKZibPg541JF2qr%2BUIyyIDV%2BEZQBSgYNPNNefSyZNRmUf3XAviaO%2B7f9OOoh8mkn8ueVgmd2eIiVduRthaj6fH0l%2Bwk34X3yQpCBh37dUfUU7KqwhJFweyal7NtvKX4YWpRY7rj9RS9LtmZlvzFRuUoGsC%2FGp3IiqMTnekJboHuUaST%2Fxz4ZtWWR7OJgL6KqOK8GSggUGyp8rEskoQGJQoFECb72ruZPrAwA0HAPkNH05USdJbTDfvinEoa6bWut66rVfCUdUfrQ%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAPtoqnLAjc4J7GCY_S8wt-EAO3G_92Jkhx5c7G3tzRmkveXyATCwyW0pBeeG2uGZZLsazWoazMN4tAHVJUicK2wti1iYih0Rb1gjm48I_jquzMPdgnq7Ixw1MLUT7p1nBU1SSCeSSiPT461Bon84L1hW_rL15U8R5zeVTvSmYDHuWIDPrvmUDcYKXhUGuLI91fVoFF0MRSsXNQFGfANfiiM-HkQDC9KklvZjVKPT4VLVmj8Eqh4BaA0JAV1rRfnD6u6haoHO7vppoA4Fcuss2D_JC9A1D_6w_oe6cCD27ty2M8LgRC8Ftj6HXptjLHtXA6J_idMUiiKIB8dH4F-yGCJF6IuIAmXMOTzfRten1Wm7MbhTn2NKD23kv33GaPLnEf-BLB3yEIt7XeMcJ14U77sy0s_a3Xo8LaQfgVo06YpDv4OeoWJ_TotzOZnPiwe8WgMHMn0Ax86XGyf3Gne1pNqAddbZw%26flowName%3DGeneralOAuthFlow%26as%3DS-1693866632%253A1793094302092177%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxccAsOWM9pQJ_PIVYtFIDSbFvN_gX6kYXJN4ghK0WkSzclcgFutRnBNVyS0fmtjiAnS9-83bWOEXHOHqw-3RoqWvZbG5F2U9AFnWpOm-KFPKkGTthcw",
-   "bytes": 1274899,
-   "sha256": "e2eff5d716df93acb2b3cd26b8a4e6d3de39deb06628d045195bdccf469a5888",
-   "ms": 743,
+   "final_url": "https://accounts.google.com/v3/signin/identifier?opparams=%253F&dsh=S1295609179%3A1793095356481726&client_id=534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com&o2v=2&redirect_uri=https%3A%2F%2Fe.data.gov.il%2Foauth2%2Fidpresponse&response_type=code&scope=openid+email+profile&service=lso&state=XplQdP9ypTsL1lUySbgA0tKd2K5LeGp2k53akL6FUbjVMqcCIEqijVnB9fKhvqQ1V17kH7hKeKgxJ0FtOHbIlK4TYGl59EOOP37h0Vn88iXLH82vrGHTLWatsN1Z2%2BmurbAkCunrx0Y8pbTjTApk2iL3P8OjSTqBfUbEYM%2FkOXKOphp%2BlpgphzMLmegqHGET6%2B%2BFPcBvKBt2VbfIdf0oH6ZUzwvmvXaCRFWNGr8rNGg0Dq9RAIz%2Bj%2FyW3ioE7hy2SYNQStzN%2BD9Esj6HV%2FWvqzAEZIpDjXIVLm6aPC2155YGkRfRzOYua2tcRQe1M6iUdy0Ybo8sh84edi7%2B6V6mFJTRK2rXvsgh4580aV8ltcuVv%2BrAbVy9dCk4ar%2BVJH5Qvw%3D%3D&flowName=GeneralOAuthFlow&continue=https%3A%2F%2Faccounts.google.com%2Fsignin%2Foauth%2Fv3%2Fconsent%3Fauthuser%3Dunknown%26part%3DAJi8hAP6DYgy0OCwCHWgC3pvb4nmHAd7zAO_7ShGTyQxDAEJm0b7YuctbJcvi0ZWrGD6xNmfrOvWskSjudfdm3l53Zhv0l5HySCod4JDw_lIl7RfrTBqa-Voszd1fkVLHOgBIMQ6wqYZaWk_ZxnJFLdUjZDwPt4XGMtXyRLUaIBWiUExo7x0elVQ8D4CN40pBiD9SfS2CyEceQfEi6rpK5rOuUo6DaXmBYK15Dltrc1jE-_iDLym10NucYDutlsnIR-z4lBpFjIyuNlLGrQolvsmWV_6g3IGJ1OHf6WCd7hSBiFkfxKBU4WUKBTWLIFRow3cmvUOHknxabmKonUqSaRCsZPHG5JZt47bimBr-K3OVINIscki1C3Pv3wSieB64WF_dYLOmXX6Yxf5CmBKkBRhVzCE2VrZ7t7h95drZtGcvgoDNZV6xWPkhUddbholWe8USMo8LLVByEW1LqIj8zuU6DgfraLd5w%26flowName%3DGeneralOAuthFlow%26as%3DS1295609179%253A1793095356481726%26client_id%3D534789487289-mi28b0j1jeamk2mg9p9hk76bbciiv0t0.apps.googleusercontent.com%26requestPath%3D%252Fsignin%252Foauth%252Fv3%252Fconsent%23&app_domain=https%3A%2F%2Fe.data.gov.il&rart=ANgoxcdhwmcXGHVxnZlZWQYe-DNiy_KAeo7t62fZbnProamkCGd2HkuofB193n4DHTVxqreB1ZxoAq-cPiOIhd73l-qwNlRMRDxbrH05ZDeziCU3Wb6Znwg",
+   "bytes": 1274519,
+   "sha256": "5ad996458eb323942ff847dcc4039d10cf87956490887327946c9484ae01fa72",
+   "ms": 664,
    "kind": "html",
    "encoding": "utf-8",
-   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"2ZVag2nLrzEDqcXM8ioLJA\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
+   "first": "<!doctype html><html lang=\"iw\" dir=\"rtl\"><head><base href=\"https://accounts.google.com/v3/signin/\"><link rel=\"preconnect\" href=\"//www.gstatic.com\"><meta name=\"referrer\" content=\"origin\"><script data-id=\"_gd\" nonce=\"bkGia5YslOp1aFZj0HZ4_w\">window.WIZ_global_data = {\"AfY8Hf\":false,\"DndLYb\":\"\",\"DpimGf\"",
    "cls": "html",
    "title": "כניסה - חשבונות Google",
    "source": [
@@ -1208,222 +1035,6 @@
    ],
    "found_on": [
     "https://data.gov.il/api/3/action/package_show?id=votes-knesset"
-   ]
-  },
-  {
-   "url": "https://elections.govmap.gov.il/",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56930",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 163,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested",
-    "previous"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "23715",
-   "last_modified": "Tue, 27 Oct 2026 09:44:29 GMT",
-   "etag": "\"1793094270:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "x_cache": "Miss from cloudfront",
-   "bytes": 23715,
-   "sha256": "b157b588cf8f944539b9d33436cc25d35d1158e3eab985daffa2c3563cc91029",
-   "ms": 1010,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "previous",
-    "seed"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/ballotresults",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "26744",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "x_cache": "Miss from cloudfront",
-   "final_url": "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-   "bytes": 26744,
-   "sha256": "f0f61d1710aea51789ad4a60f37c8ed09686922bf0a603a81e306198c04a74b2",
-   "ms": 1260,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "previous",
-    "seed"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "26744",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "age": "22",
-   "x_cache": "Hit from cloudfront",
-   "bytes": 26744,
-   "sha256": "f0f61d1710aea51789ad4a60f37c8ed09686922bf0a603a81e306198c04a74b2",
-   "ms": 190,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/cityresults",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "25439",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "x_cache": "Miss from cloudfront",
-   "final_url": "https://votes26.bechirot.gov.il/cityresults?lang=he",
-   "bytes": 25439,
-   "sha256": "29c7677110251cd1537f113d1709517162de8073d2ea07d7fbed69703948040d",
-   "ms": 1270,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "previous",
-    "seed"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/cityresults?lang=he",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "25439",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "age": "22",
-   "x_cache": "Hit from cloudfront",
-   "bytes": 25439,
-   "sha256": "29c7677110251cd1537f113d1709517162de8073d2ea07d7fbed69703948040d",
-   "ms": 110,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/nationalresults",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "23724",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "x_cache": "Miss from cloudfront",
-   "final_url": "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-   "bytes": 23724,
-   "sha256": "ae42d25573d62ef09b01ac41f81a1fb231935497bf88d11034fd311dc3e7b1c5",
-   "ms": 1260,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "previous",
-    "seed"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/nationalresults?lang=he",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html; charset=utf-8",
-   "length": "23724",
-   "last_modified": "Tue, 27 Oct 2026 09:44:30 GMT",
-   "etag": "\"1793094271:dtagent10347260902154543jgcj\"",
-   "cache": "public, max-age=60",
-   "age": "22",
-   "x_cache": "Hit from cloudfront",
-   "bytes": 23724,
-   "sha256": "ae42d25573d62ef09b01ac41f81a1fb231935497bf88d11034fd311dc3e7b1c5",
-   "ms": 110,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "·\n·\n·\n·\n·\n<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">·\n<html id=\"htmlTag\" lang=\"he\" dir=\"rtl\">·\n·\n<head>·\n    <title>ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות</title>·\n    <meta charset=\"utf-8\" />·\n    <meta name=\"vi",
-   "cls": "html",
-   "title": "ועדת הבחירות המרכזית לכנסת ה-26 | תוצאות ארציות",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
    ]
   },
   {
@@ -1435,7 +1046,7 @@
    "server": "cloudflare",
    "bytes": 2130,
    "sha256": "8190a73af91175f05cf99d56a53647c1fddfc9aa425c4a81bc98deabcb41248d",
-   "ms": 247,
+   "ms": 225,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1451,9 +1062,9 @@
    "type": "text/html",
    "last_modified": "Sun, 11 Oct 2026 09:44:48 GMT",
    "server": "cloudflare",
-   "bytes": 3517,
-   "sha256": "114c86decb08d3bec81919c93fd2024fb65a5448571acd39d8b0d4ba5e650420",
-   "ms": 247,
+   "bytes": 3518,
+   "sha256": "378f985c0047cbd453577c982e92171de32dcf94759de949fc08de241871f56f",
+   "ms": 228,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1474,7 +1085,7 @@
    "server": "cloudflare",
    "bytes": 2130,
    "sha256": "8190a73af91175f05cf99d56a53647c1fddfc9aa425c4a81bc98deabcb41248d",
-   "ms": 240,
+   "ms": 237,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1492,7 +1103,7 @@
    "server": "cloudflare",
    "bytes": 2130,
    "sha256": "8190a73af91175f05cf99d56a53647c1fddfc9aa425c4a81bc98deabcb41248d",
-   "ms": 245,
+   "ms": 226,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1510,7 +1121,7 @@
    "server": "cloudflare",
    "bytes": 2130,
    "sha256": "8190a73af91175f05cf99d56a53647c1fddfc9aa425c4a81bc98deabcb41248d",
-   "ms": 244,
+   "ms": 218,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1528,7 +1139,7 @@
    "server": "cloudflare",
    "bytes": 2130,
    "sha256": "8190a73af91175f05cf99d56a53647c1fddfc9aa425c4a81bc98deabcb41248d",
-   "ms": 731,
+   "ms": 226,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1538,28 +1149,22 @@
    ]
   },
   {
-   "url": "https://www.gov.il/he/pages/statement-of-accessibility-result-site",
+   "url": "https://www.gov.il/he/pages/turnout_at_polling_stations",
    "status": 200,
    "fetch_path": "urllib",
    "type": "text/html",
    "last_modified": "Sun, 11 Oct 2026 09:44:48 GMT",
    "server": "cloudflare",
-   "bytes": 3517,
-   "sha256": "90b1959ac4aadaa46799e1cef295d45899cf4f9dcb0178541b6e5500af1f7390",
-   "ms": 251,
+   "bytes": 3519,
+   "sha256": "12d47956f68f36bdd2f5d8cfe567e4f3f786a7ae1f028eafb5e177b567d80dc1",
+   "ms": 231,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
    "cls": "html",
    "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
+    "operator",
+    "seed"
    ]
   },
   {
@@ -1569,9 +1174,9 @@
    "type": "text/html",
    "last_modified": "Sun, 11 Oct 2026 09:44:48 GMT",
    "server": "cloudflare",
-   "bytes": 3519,
-   "sha256": "1779cc9b394dad866ca2d9455e46d30e1a401ad687ac9a01cf9887755500448c",
-   "ms": 929,
+   "bytes": 3520,
+   "sha256": "e682d597f4b5c2e23324148e1cff619772982d25e072287ae7debd1a3522345c",
+   "ms": 290,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1588,9 +1193,9 @@
    "type": "text/html",
    "last_modified": "Sun, 11 Oct 2026 09:44:48 GMT",
    "server": "cloudflare",
-   "bytes": 3519,
-   "sha256": "7b52bad8fa2de84a86154251ae6e329153bc1b5c4ebafc870b547ac6177547e8",
-   "ms": 246,
+   "bytes": 3520,
+   "sha256": "7403c051bd27c97687bf98f556707d6af05461394165a19a2a53f953631fb36e",
+   "ms": 227,
    "kind": "html",
    "encoding": "utf-8",
    "first": "<!DOCTYPE html>\n<html lang=\"he\">\n  <head>\n    <!-- Sets <html lang> from the URL culture segment before first paint.\n         Must stay dependency-free: this runs before the bundle loads.\n         The culture list is duplicated in every app's index.html and in\n         libs/react-libs/main-search-bo",
@@ -1611,7 +1216,7 @@
    "cache": "max-age=60",
    "bytes": 154331,
    "sha256": "412785ed46af1281af9f812402bb86c45822ebdccef9131750e922d2375f6103",
-   "ms": 2210,
+   "ms": 1680,
    "kind": "text",
    "encoding": "utf-8-sig",
    "first": "סמל ועדה,שם ישוב,סמל ישוב,בזב,מצביעים,פסולים,כשרים,אמת,אצ,ב,ג,ד,ום,ז,זך,זנ,זץ,ט,י,יז,ינ,יץ,יק,כן,ך,ל,מחל,מרצ,נז,ני,נף,נץ,נק,נר,עם,פה,ף,צ,ץ,ק,קי,קך,קנ,קץ,רז,שס,ת·\n18,אבו גווייעד שבט,967,2279,549,9,540,1,0,0,0,4,38,0,0,1,0,0,0,0,0,0,0,5,0,0,12,0,0,0,1,0,1,0,468,1,0,1,0,0,0,0,0,0,0,4,3·\n2,אבו גוש,472,5",
@@ -1755,48 +1360,6 @@
    "saved": "files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv"
   },
   {
-   "url": "https://votes26.bechirot.gov.il/functions/main.min.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "application/javascript",
-   "length": "12345",
-   "last_modified": "Tue, 15 Sep 2026 06:30:20 GMT",
-   "etag": "\"02613aedb44dd1:0\"",
-   "cache": "max-age=60",
-   "x_cache": "RefreshHit from cloudfront",
-   "bytes": 12345,
-   "sha256": "ae38aa3e537821cc75d79dd076543df35a4c19740cceb4419f57dc5a51f9215b",
-   "ms": 630,
-   "kind": "js",
-   "encoding": "utf-8",
-   "first": "function fontsizeup(){active=getActiveStyleSheet();switch(active){case\"A--\":setActiveStyleSheet(\"A-\");break;case\"A-\":setActiveStyleSheet(\"A\");break;case\"A\":setActiveStyleSheet(\"A+\");break;case\"A+\":setActiveStyleSheet(\"A++\");break;case\"A++\":break;default:setActiveStyleSheet(\"A\")}}function fontsizedow",
-   "cls": "script",
-   "source": [
-    "harvested"
-   ]
-  },
-  {
-   "url": "https://votes26.bechirot.gov.il/ruxitagentjs_ICA15789NPRTUVXfqrux_10347260902154543.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/javascript; charset=utf-8",
-   "length": "390574",
-   "last_modified": "Wed, 03 Mar 2010 07:01:40 GMT",
-   "cache": "public, max-age=31536000, immutable",
-   "age": "11897",
-   "x_cache": "Hit from cloudfront",
-   "bytes": 390574,
-   "sha256": "db811ea36b3c1d52e0f13c7132669a6bead2a00c775689744d8a1b1e262e0b92",
-   "ms": 220,
-   "kind": "js",
-   "encoding": "utf-8",
-   "first": "/*\n Copyright and licenses see https://www.dynatrace.com/company/trust-center/customers/reports/ */\n(function(){function Va(){var xa;(xa=void 0===Sa.dialogArguments&&navigator.cookieEnabled)||(document.cookie=\"dTValidationCookie=1;SameSite=Lax\",xa=document.cookie.includes(\"dTValidationCookie\"),xa=(d",
-   "cls": "script",
-   "source": [
-    "harvested"
-   ]
-  },
-  {
    "url": "https://www.gov.il/ContentpageWebApi/client-config.js",
    "status": 200,
    "fetch_path": "urllib",
@@ -1804,7 +1367,7 @@
    "server": "cloudflare",
    "bytes": 255,
    "sha256": "120120461249eed52ecce966d6b7846efd0b9718ffe187b68be620df80a3f9e3",
-   "ms": 241,
+   "ms": 222,
    "kind": "js",
    "encoding": "utf-8",
    "first": "window['govilRunConfig'] = {\"contentPageWebApi\":\"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1\",\"HFD\":\"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1\",\"clientId\":\"9KFgciHHGDyNiqz5MdQS0eK2ApeJYMc6YnElUICpN1atirZc\"};",
@@ -1818,13 +1381,13 @@
    "status": 200,
    "fetch_path": "urllib",
    "type": "application/javascript; charset=UTF-8",
-   "length": "45243",
+   "length": "45215",
    "cache": "max-age=14400, stale-if-error=10800, stale-while-revalidate=10800, public",
    "server": "cloudflare",
    "final_url": "https://www.gov.il/cdn-cgi/challenge-platform/h/b/scripts/precursor/d2d3316b729e/main.js",
-   "bytes": 45243,
-   "sha256": "26502a737ba0716f3a331f3fe2b3ec82c2d649831ee34bf007c56a1555dec1b8",
-   "ms": 136,
+   "bytes": 45215,
+   "sha256": "b0503c1371914ec06efe6bd4c08cb70f4d16e7f5068fdf75f600b7c718b76486",
+   "ms": 73,
    "kind": "js",
    "encoding": "utf-8",
    "first": "(function(){(function(){var o=window._cf_chl_opt||{};window._cf_chl_opt=o.pi!==undefined?o:{};if(o.pi!==undefined){window._cf_chl_opt.pi=o.pi;}if(o.pp!==undefined){window._cf_chl_opt.pp=o.pp;}if(o.QhCr7!==undefined){window._cf_chl_opt.QhCr7=o.QhCr7;}if(o.SlQq4!==undefined){window._cf_chl_opt.SlQq4=o",
@@ -1844,7 +1407,7 @@
    "server": "cloudflare",
    "bytes": 239669,
    "sha256": "b435ced5f64c5f20a5af6c8bc88859a183df8317a63ac8e128d3fded3dc09e01",
-   "ms": 475,
+   "ms": 410,
    "kind": "js",
    "encoding": "utf-8",
    "first": "/*! For license information please see chat.js.LICENSE.txt */\n!function(e,t){\"object\"==typeof exports&&\"object\"==typeof module?module.exports=t():\"function\"==typeof define&&define.amd?define([],t):\"object\"==typeof exports?exports.GovilChat=t():e.GovilChat=t()}(self,()=>(()=>{var e={20:(e,t,n)=>{\"use",
@@ -1863,7 +1426,7 @@
    "server": "cloudflare",
    "bytes": 458797,
    "sha256": "592bd65e35d0aafb7899eae89aead5583eaab759d353fd20762bfb727978d11f",
-   "ms": 744,
+   "ms": 653,
    "kind": "js",
    "encoding": "utf-8",
    "first": "\n\n\n        window.govilHeaderFooterRunConfig = {\"BaseApiUrl\":\"https://openapi-gc.digital.gov.il/pub/cio/govil/rest/corecloud/v1\",\"BaseApiUrlToStaticFiles\":\"https://www.gov.il/govilCoreCloud\",\"clientId\":\"9KFgciHHGDyNiqz5MdQS0eK2ApeJYMc6YnElUICpN1atirZc\",\"HeaderFooterUrl\":\"/\",\"ShowNewSearch\":\"False\",\"",
@@ -1883,7 +1446,7 @@
    "server": "cloudflare",
    "bytes": 428968,
    "sha256": "56e2b9929bb2d2a693be1176c372606a8b27f2c042ce5ef131ee03cea1fa8c2a",
-   "ms": 719,
+   "ms": 639,
    "kind": "js",
    "encoding": "utf-8",
    "first": "(self.webpackChunk=self.webpackChunk||[]).push([[792],{236(e,t,A){\"use strict\";var n=A.cw(function(e,t){var A=o(),n=s();function r(e){for(var t=\"https://reactjs.org/docs/error-decoder.html?invariant=\"+e,A=1;A<arguments.length;A++)t+=\"&args[]=\"+encodeURIComponent(arguments[A]);return\"Minified React e",
@@ -1903,7 +1466,7 @@
    "server": "cloudflare",
    "bytes": 103480,
    "sha256": "bfcf3fb0255a796c24fd5a01c1feb48ced0240ddbe52af1f996a44677bf60bbf",
-   "ms": 441,
+   "ms": 411,
    "kind": "js",
    "encoding": "utf-8",
    "first": "\"use strict\";(self.webpackChunk=self.webpackChunk||[]).push([[461],{608(t,r,n){var e=n.cw(function(t,r){var n=Bt(),e=En(),o=TypeError;t.exports=function(t){if(n(t))return t;throw new o(e(t)+\" is not a function\")}}),o=n.cw(function(t,r){var n=Nt(),e=En(),o=TypeError;t.exports=function(t){if(n(t))retu",
@@ -1923,7 +1486,7 @@
    "server": "cloudflare",
    "bytes": 3055,
    "sha256": "bb929cb1c22218fee6b72c3cff025c954bc136ff99b66d8b1b0d02ba992ecd4b",
-   "ms": 243,
+   "ms": 280,
    "kind": "js",
    "encoding": "utf-8",
    "first": "(()=>{\"use strict\";var e={};const t={};function r(o){const n=t[o];if(void 0!==n)return n.exports;const i=t[o]={exports:{}};return e[o].call(i.exports,i,i.exports,r),i.exports}r.m=e,(()=>{const e=[];r.O=(t,o,n)=>{if(!o){for(var i=0;i<e.length;i++){let[o,n]=e[i],l=!0;for(var s=0;s<o.length;s++)Object.",
@@ -1943,7 +1506,7 @@
    "server": "cloudflare",
    "bytes": 91,
    "sha256": "4ba47a3a246223184b7ad674ad7c21f9a5bf2c4561f4a0c3ca3553ffb8503ba6",
-   "ms": 241,
+   "ms": 220,
    "kind": "js",
    "encoding": "utf-8",
    "first": "\"use strict\";(self.webpackChunk=self.webpackChunk||[]).push([[869],{401(){}},e=>{e(401)}]);",
@@ -1962,13 +1525,222 @@
    "server": "cloudflare",
    "bytes": 399753,
    "sha256": "fda28f4d7eb19aafe02ee838ef2d67f53afee8f95cd2a48ab83b6c60749e79c3",
-   "ms": 492,
+   "ms": 896,
    "kind": "js",
    "encoding": "utf-8",
    "first": "/*\n Copyright and licenses see https://www.dynatrace.com/company/trust-center/customers/reports/ */\n(function(){function Va(){var xa;(xa=void 0===Sa.dialogArguments&&navigator.cookieEnabled)||(document.cookie=\"dTValidationCookie=1;SameSite=Lax\",xa=document.cookie.includes(\"dTValidationCookie\"),xa=(d",
    "cls": "script",
    "source": [
     "harvested"
+   ]
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.Csv",
+   "status": 200,
+   "fetch_path": "urllib",
+   "type": "application/octet-stream",
+   "length": "350625",
+   "last_modified": "Tue, 27 Oct 2026 10:01:24 GMT",
+   "etag": "\"d880ef1ffa65dd1:0\"",
+   "server": "cloudflare",
+   "bytes": 350625,
+   "sha256": "94fafe180d07b66068af7bed698e866b75b5035f7ed0ac831fdf056563668260",
+   "ms": 888,
+   "kind": "text",
+   "encoding": "cp1255",
+   "first": "סמל יישוב,שם יישוב,מס.קלפי,ברזל,\"בז\"\"ב\",מצביעים,אחוז הצבעה,שעת עידכון·\n3000,ירושלים,576.1,1,609,69,11.30%,09:08·\n3000,ירושלים,576.2,2,609,89,14.60%,08:58·\n3000,ירושלים,576.3,3,609,82,13.50%,09:19·\n3000,ירושלים,576.4,4,606,81,13.40%,09:02·\n3000,ירושלים,572.1,5,671,125,18.60%,10:10·\n3000,ירושלים,572.2",
+   "notes": [],
+   "cls": "turnout-station",
+   "table": {
+    "format": "csv",
+    "delimiter": ",",
+    "header": [
+     "סמל יישוב",
+     "שם יישוב",
+     "מס.קלפי",
+     "ברזל",
+     "בז\"ב",
+     "מצביעים",
+     "אחוז הצבעה",
+     "שעת עידכון"
+    ],
+    "columns": 8,
+    "rows": 8221,
+    "roles": {
+     "code": "סמל יישוב",
+     "name": "שם יישוב",
+     "station": "מס.קלפי",
+     "meta": "ברזל",
+     "eligible": "בז\"ב",
+     "voters": "מצביעים",
+     "percent": "אחוז הצבעה"
+    },
+    "localities": 555,
+    "counted_rows": 8220,
+    "voters": 488480,
+    "eligible": 5116808,
+    "turnout": 0.0955,
+    "envelope_rows": 1,
+    "arab_localities": "131/155",
+    "match_2022": {
+     "exact": 0.437,
+     "by_number": 0.603
+    }
+   },
+   "aliases": {
+    "מס.קלפי": "קלפי"
+   },
+   "missing": [],
+   "fits": "station_turnout_url",
+   "reader": {
+    "ok": true,
+    "reader": "live_fetch.station_rows",
+    "rows": 8221,
+    "excluded": {},
+    "turnout": 0.1375
+   },
+   "release": {
+    "sectors_time": "09:00",
+    "source": "the file name",
+    "last_modified_il": "27.10 12:01"
+   },
+   "source": [
+    "operator",
+    "seed"
+   ],
+   "saved": "files/20261027-1201/94fafe18-www.gov.il_voter_turnout_09.Csv"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.csv",
+   "status": 200,
+   "fetch_path": "urllib",
+   "type": "application/octet-stream",
+   "length": "350625",
+   "last_modified": "Tue, 27 Oct 2026 10:01:24 GMT",
+   "etag": "\"d880ef1ffa65dd1:0\"",
+   "server": "cloudflare",
+   "bytes": 350625,
+   "sha256": "94fafe180d07b66068af7bed698e866b75b5035f7ed0ac831fdf056563668260",
+   "ms": 1898,
+   "kind": "text",
+   "encoding": "cp1255",
+   "first": "סמל יישוב,שם יישוב,מס.קלפי,ברזל,\"בז\"\"ב\",מצביעים,אחוז הצבעה,שעת עידכון·\n3000,ירושלים,576.1,1,609,69,11.30%,09:08·\n3000,ירושלים,576.2,2,609,89,14.60%,08:58·\n3000,ירושלים,576.3,3,609,82,13.50%,09:19·\n3000,ירושלים,576.4,4,606,81,13.40%,09:02·\n3000,ירושלים,572.1,5,671,125,18.60%,10:10·\n3000,ירושלים,572.2",
+   "notes": [],
+   "cls": "turnout-station",
+   "table": {
+    "format": "csv",
+    "delimiter": ",",
+    "header": [
+     "סמל יישוב",
+     "שם יישוב",
+     "מס.קלפי",
+     "ברזל",
+     "בז\"ב",
+     "מצביעים",
+     "אחוז הצבעה",
+     "שעת עידכון"
+    ],
+    "columns": 8,
+    "rows": 8221,
+    "roles": {
+     "code": "סמל יישוב",
+     "name": "שם יישוב",
+     "station": "מס.קלפי",
+     "meta": "ברזל",
+     "eligible": "בז\"ב",
+     "voters": "מצביעים",
+     "percent": "אחוז הצבעה"
+    },
+    "localities": 555,
+    "counted_rows": 8220,
+    "voters": 488480,
+    "eligible": 5116808,
+    "turnout": 0.0955,
+    "envelope_rows": 1,
+    "arab_localities": "131/155",
+    "match_2022": {
+     "exact": 0.437,
+     "by_number": 0.603
+    }
+   },
+   "aliases": {
+    "מס.קלפי": "קלפי"
+   },
+   "missing": [],
+   "fits": "station_turnout_url",
+   "reader": {
+    "ok": true,
+    "reader": "live_fetch.station_rows",
+    "rows": 8221,
+    "excluded": {},
+    "turnout": 0.1375
+   },
+   "release": {
+    "sectors_time": "09:00",
+    "source": "the file name",
+    "last_modified_il": "27.10 12:01"
+   },
+   "source": [
+    "operator",
+    "seed"
+   ],
+   "saved": "files/20261027-1201/94fafe18-www.gov.il_voter_turnout_09.Csv"
+  },
+  {
+   "url": "live_input/stations.csv",
+   "status": 200,
+   "bytes": 261005,
+   "sha256": "0bc73fd60784b57b3ffb99acf65b29ac96ec53b954ec2156f5616c853c1397aa",
+   "ms": 0,
+   "kind": "text",
+   "encoding": "utf-8",
+   "first": "סמל ישוב,שם ישוב,קלפי,בזב,מצביעים·\n3000,ירושלים,576.1,609,69·\n3000,ירושלים,576.2,609,89·\n3000,ירושלים,576.3,609,82·\n3000,ירושלים,576.4,606,81·\n3000,ירושלים,572.1,671,125·\n3000,ירושלים,572.2,671,62·\n3000,ירושלים,572.3,671,90·\n3000,ירושלים,572.4,671,72·\n3000,ירושלים,572.5,671,68·\n3000,ירושלים,572.6,67",
+   "notes": [],
+   "cls": "turnout-station",
+   "table": {
+    "format": "csv",
+    "delimiter": ",",
+    "header": [
+     "סמל ישוב",
+     "שם ישוב",
+     "קלפי",
+     "בזב",
+     "מצביעים"
+    ],
+    "columns": 5,
+    "rows": 8220,
+    "roles": {
+     "code": "סמל ישוב",
+     "name": "שם ישוב",
+     "station": "קלפי",
+     "eligible": "בזב",
+     "voters": "מצביעים"
+    },
+    "localities": 555,
+    "counted_rows": 8220,
+    "voters": 488480,
+    "eligible": 5116808,
+    "turnout": 0.0955,
+    "envelope_rows": 0,
+    "arab_localities": "131/155",
+    "match_2022": {
+     "exact": 0.437,
+     "by_number": 0.603
+    }
+   },
+   "aliases": {},
+   "missing": [],
+   "fits": "station_turnout_url",
+   "reader": {
+    "ok": true,
+    "reader": "live_fetch.station_rows",
+    "rows": 8220,
+    "excluded": {},
+    "turnout": 0.0955
+   },
+   "release": null,
+   "source": [
+    "config (repository file)"
    ]
   },
   {
@@ -1990,18 +1762,18 @@
      "path": "urllib",
      "http": 202,
      "waf": "challenge",
-     "s": 0.82
+     "s": 0.85
     },
     {
      "path": "browser",
      "http": 404,
-     "s": 0.92
+     "s": 0.75
     }
    ],
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "52370",
+   "age": "52026",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "final_url": "https://www.bechirot.gov.il/",
@@ -2019,7 +1791,7 @@
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "52370",
+   "age": "52027",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "final_url": "https://www.bechirot.gov.il/robots.txt",
@@ -2037,7 +1809,7 @@
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "52371",
+   "age": "52027",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "final_url": "https://www.bechirot.gov.il/sitemap.xml",
@@ -2114,7 +1886,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23189",
+   "age": "24234",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2132,7 +1904,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23189",
+   "age": "24234",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2150,7 +1922,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23189",
+   "age": "24235",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2168,7 +1940,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23189",
+   "age": "24234",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2188,18 +1960,18 @@
      "path": "urllib",
      "http": 202,
      "waf": "challenge",
-     "s": 0.06
+     "s": 0.05
     },
     {
      "path": "browser",
      "http": 404,
-     "s": 0.07
+     "s": 0.06
     }
    ],
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "66931",
+   "age": "67985",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2208,31 +1980,6 @@
    "source": [
     "config",
     "known"
-   ]
-  },
-  {
-   "url": "https://media26.bechirot.gov.il/files/expb.csv?','name','height=100,",
-   "status": 404,
-   "fetch_path": "browser",
-   "type": "text/html",
-   "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "66934",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "final_url": "https://media26.bechirot.gov.il/files/expb.csv?%27,%27name%27,%27height=100,",
-   "bytes": 1376,
-   "cls": "error",
-   "hint": "CloudFront (Error from cloudfront)",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
    ]
   },
   {
@@ -2245,18 +1992,18 @@
      "path": "urllib",
      "http": 202,
      "waf": "challenge",
-     "s": 0.06
+     "s": 0.04
     },
     {
      "path": "browser",
      "http": 404,
-     "s": 0.07
+     "s": 0.04
     }
    ],
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "66931",
+   "age": "67985",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2268,31 +2015,6 @@
    ]
   },
   {
-   "url": "https://media26.bechirot.gov.il/files/expc.csv?','name','height=100,",
-   "status": 404,
-   "fetch_path": "browser",
-   "type": "text/html",
-   "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "66934",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "final_url": "https://media26.bechirot.gov.il/files/expc.csv?%27,%27name%27,%27height=100,",
-   "bytes": 1376,
-   "cls": "error",
-   "hint": "CloudFront (Error from cloudfront)",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://votes26.bechirot.gov.il/",
-    "https://votes26.bechirot.gov.il/ballotresults",
-    "https://votes26.bechirot.gov.il/ballotresults?lang=he",
-    "https://votes26.bechirot.gov.il/cityresults",
-    "https://votes26.bechirot.gov.il/cityresults?lang=he"
-   ]
-  },
-  {
    "url": "https://media26.bechirot.gov.il/robots.txt",
    "status": 404,
    "fetch_path": "urllib",
@@ -2300,7 +2022,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23191",
+   "age": "24246",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2318,7 +2040,7 @@
    "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "23191",
+   "age": "24246",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2336,7 +2058,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 460,
+   "ms": 284,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2357,7 +2079,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 442,
+   "ms": 266,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2378,7 +2100,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 449,
+   "ms": 239,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2399,7 +2121,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 591,
+   "ms": 272,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2420,7 +2142,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 403,
+   "ms": 477,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2441,7 +2163,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 404,
+   "ms": 403,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2462,7 +2184,7 @@
    "length": "121",
    "bytes": 121,
    "sha256": "c3d26e0209dd3abf2ceeb6f405b91180c9dc4f2bcb18b47ce9e0f0c493699e4a",
-   "ms": 228,
+   "ms": 444,
    "kind": "json",
    "encoding": "utf-8",
    "first": " \n        {\n        \"code\": \"500\",\n        \"type\": \"General Error\",\n        \"message\": \"Global Error Message\"\n         }",
@@ -2488,32 +2210,81 @@
    ]
   },
   {
-   "url": "https://votes26.bechirot.gov.il/_complete.js",
+   "url": "https://votes26.bechirot.gov.il/",
    "status": 404,
-   "fetch_path": "urllib",
+   "fetch_path": "browser",
+   "waf": "challenge",
+   "attempts": [
+    {
+     "path": "urllib",
+     "http": 202,
+     "waf": "challenge",
+     "s": 0.19
+    },
+    {
+     "path": "browser",
+     "http": 404,
+     "s": 0.06
+    }
+   ],
    "type": "text/html",
-   "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "49884",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46237",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
    "cls": "error",
    "hint": "CloudFront (Error from cloudfront)",
    "source": [
-    "harvested"
+    "previous",
+    "seed"
+   ]
+  },
+  {
+   "url": "https://votes26.bechirot.gov.il/ballotresults",
+   "status": 404,
+   "fetch_path": "browser",
+   "type": "text/html",
+   "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46237",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "bytes": 1376,
+   "cls": "error",
+   "hint": "CloudFront (Error from cloudfront)",
+   "source": [
+    "previous",
+    "seed"
+   ]
+  },
+  {
+   "url": "https://votes26.bechirot.gov.il/cityresults",
+   "status": 404,
+   "fetch_path": "browser",
+   "type": "text/html",
+   "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46236",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "bytes": 1376,
+   "cls": "error",
+   "hint": "CloudFront (Error from cloudfront)",
+   "source": [
+    "previous",
+    "seed"
    ]
   },
   {
    "url": "https://votes26.bechirot.gov.il/files/expb.csv",
    "status": 404,
-   "fetch_path": "urllib",
+   "fetch_path": "browser",
    "type": "text/html",
-   "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "49886",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46262",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2526,12 +2297,11 @@
   {
    "url": "https://votes26.bechirot.gov.il/files/expc.csv",
    "status": 404,
-   "fetch_path": "urllib",
+   "fetch_path": "browser",
    "type": "text/html",
-   "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "49886",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46262",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2542,14 +2312,31 @@
    ]
   },
   {
+   "url": "https://votes26.bechirot.gov.il/nationalresults",
+   "status": 404,
+   "fetch_path": "browser",
+   "type": "text/html",
+   "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46237",
+   "x_cache": "Error from cloudfront",
+   "server": "AmazonS3",
+   "bytes": 1376,
+   "cls": "error",
+   "hint": "CloudFront (Error from cloudfront)",
+   "source": [
+    "previous",
+    "seed"
+   ]
+  },
+  {
    "url": "https://votes26.bechirot.gov.il/robots.txt",
    "status": 404,
-   "fetch_path": "urllib",
+   "fetch_path": "browser",
    "type": "text/html",
-   "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "49861",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46237",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2562,12 +2349,11 @@
   {
    "url": "https://votes26.bechirot.gov.il/sitemap.xml",
    "status": 404,
-   "fetch_path": "urllib",
+   "fetch_path": "browser",
    "type": "text/html",
-   "length": "1376",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
-   "etag": "\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "49861",
+   "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
+   "age": "46238",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2587,18 +2373,18 @@
      "path": "urllib",
      "http": 202,
      "waf": "challenge",
-     "s": 0.13
+     "s": 0.04
     },
     {
      "path": "browser",
      "http": 404,
-     "s": 0.13
+     "s": 0.05
     }
    ],
    "type": "text/html",
    "last_modified": "Thu, 04 Apr 2024 13:53:01 GMT",
    "etag": "W/\"c12244887df7032cb7079a3b8e46dcde\"",
-   "age": "52369",
+   "age": "52026",
    "x_cache": "Error from cloudfront",
    "server": "AmazonS3",
    "bytes": 1376,
@@ -2641,205 +2427,6 @@
    "found_on": [
     "https://www.gov.il/govilCoreCloud/cdn/chat.js"
    ]
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/index-9nN73Q-1.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56932",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 114,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/index-legacy-JkzIpvq9.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56933",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 115,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/manifest-Dyvq5gYI.json",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56938",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 109,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "found_on": [
-    "https://elections.govmap.gov.il/",
-    "https://elections.govmap.gov.il/assets/index-9nN73Q-1.js",
-    "https://elections.govmap.gov.il/assets/index-legacy-JkzIpvq9.js",
-    "https://elections.govmap.gov.il/assets/polyfills-legacy-vUtxk7fV.js",
-    "https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/polyfills-legacy-vUtxk7fV.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56933",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 62,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/vendor-core-DP7zTeuK.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56933",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 106,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/vendor-mui-Db_kORYv.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56933",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 65,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/vendor-ol-Dan8d_2T.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56934",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 114,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
-  },
-  {
-   "url": "https://elections.govmap.gov.il/assets/vendor-runtime-CgVnxAt7.js",
-   "status": 200,
-   "fetch_path": "urllib",
-   "type": "text/html",
-   "length": "5711",
-   "last_modified": "Sun, 25 Oct 2026 13:58:46 GMT",
-   "etag": "\"5eae4842ef271ee80fc3be0d756f8cb7\"",
-   "age": "56934",
-   "x_cache": "Error from cloudfront",
-   "server": "AmazonS3",
-   "bytes": 5711,
-   "sha256": "e20e4dc71f1788a98cce2765ef40d64ef14b818ea6a1aebe007326e37b89d33b",
-   "ms": 61,
-   "kind": "html",
-   "encoding": "utf-8",
-   "first": "<!DOCTYPE html>\n<html translate=\"no\" lang=\"en\" style=\"overscroll-behavior: none;\">\n\n<head>\n  <meta charset=\"utf-8\" />\n  <title>Govmap מפות ישראל</title>\n  <meta name=\"theme-color\" content=\"#448fff\" />\n  <meta name=\"description\"\n    content=\"אתר המפות הרשמי של מדינת ישראל. מאפשר: חיפושים שונים כגון כ",
-   "cls": "html",
-   "title": "Govmap מפות ישראל",
-   "source": [
-    "harvested"
-   ],
-   "spa": true
   }
  ]
 }
