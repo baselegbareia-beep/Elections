@@ -6,7 +6,17 @@
     <link>https://www.israelhayom.co.il</link>
     <atom:link href="https://www.israelhayom.co.il/rss/rss.xml" rel="self" type="application/rss+xml"/>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 19:15:26 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 19:30:27 GMT</lastBuildDate>
+    <item>
+      <title>אוהד ריאל מדריד: "שילמתי 2,800 יורו ובסוף צפיתי בקלאסיקו במונית"</title>
+      <link>https://www.israelhayom.co.il/sport/world-soccer/article/21720629</link>
+      <guid isPermaLink="false">https://www.israelhayom.co.il/sport/world-soccer/article/21720629</guid>
+      <pubDate>Tue, 27 Oct 2026 19:25:08 GMT</pubDate>
+      <description>פרנטישק ואוורק, שהגיע מסלובקיה עם בנו למשחק מול ברצלונה, הורחק מקאמפ נואו רק כי השניים חגגו שער של קיליאן אמבפה ביציע • השניים צפו בשאר המשחק במונית בדרך לדירה בה ישנו: "לא איימנו על איש, פשוט התחבקנו"</description>
+      <category>כדורגל עולמי</category>
+      <category>ספורט</category>
+      <dc:creator>מערכת ספורט היום</dc:creator>
+    </item>
     <item>
       <title>גשמים חזקים ושיטפונות בערבה: חשש ללכודים, צוותי חילוץ הוזעקו</title>
       <link>https://www.israelhayom.co.il/news/local/article/21720522</link>
@@ -18,7 +28,7 @@
       <dc:creator>רונית זילברשטיין</dc:creator>
     </item>
     <item>
-      <title>חי מהיורוליג: הכוכב האדום בלגרד - מכבי תל אביב 11:31</title>
+      <title>חי מהיורוליג: הכוכב האדום בלגרד - מכבי תל אביב 22:47</title>
       <link>https://www.israelhayom.co.il/sport/israeli-basketball/article/21720486</link>
       <guid isPermaLink="false">https://www.israelhayom.co.il/sport/israeli-basketball/article/21720486</guid>
       <pubDate>Tue, 27 Oct 2026 18:47:50 GMT</pubDate>
@@ -1005,17 +1015,6 @@
       <category>טלוויזיה</category>
       <category>תרבות</category>
       <dc:creator>ענבר כהן</dc:creator>
-    </item>
-    <item>
-      <title>חפשו את השכונה שלכם: מפת תוצאות האמת בבחירות - לפי ערים</title>
-      <link>https://www.israelhayom.co.il/news/geopolitics/article/21710869</link>
-      <guid isPermaLink="false">https://www.israelhayom.co.il/news/geopolitics/article/21710869</guid>
-      <pubDate>Tue, 27 Oct 2026 09:47:18 GMT</pubDate>
-      <description>היכנסו למפה האינטראקטיבית, חפשו את השכונה והיישוב שלכם – ובדקו מי המפלגה שהובילה בקלפי ליד הבית, מהם אחוזי ההצבעה ואיך השתנו המגמות מול הבחירות הקודמות לכנסת ה-24 וה-25
-</description>
-      <category>פוליטי-מדיני</category>
-      <category>חדשות</category>
-      <dc:creator>מערכת היום</dc:creator>
     </item>
   </channel>
 </rss>
