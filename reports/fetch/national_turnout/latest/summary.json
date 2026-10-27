@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 21:00 UTC",
+ "started": "2026-10-27 21:02 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 77
+   "items": 73
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -425,20 +425,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T11:10:00+00:00",
-   "published_il": "13:10",
-   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "רשת 13",
    "published": "2026-10-27T15:44:15+00:00",
    "published_il": "17:44",
@@ -448,6 +434,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "הידברות",
+   "published": "2026-10-27T11:10:00+00:00",
+   "published_il": "13:10",
+   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -607,20 +607,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "מעריב",
-   "published": "2026-10-27T15:02:20+00:00",
-   "published_il": "17:02",
-   "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE55U3pSTTlZcDVGQmZIZV9Ob1ZMV2F5VXpleTlOd0xaRml1UFFoYnlYcG0zd1dtMlFQV05MSi15Mkl2S3lYT1hPczh6aE03bnVuU3VYSk44b3R0WmNUZTBFUlVuNVQ?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T04:38:00+00:00",
    "published_il": "06:38",
@@ -630,6 +616,20 @@
     [
      "20:00",
      74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "מעריב",
+   "published": "2026-10-27T15:02:20+00:00",
+   "published_il": "17:02",
+   "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE55U3pSTTlZcDVGQmZIZV9Ob1ZMV2F5VXpleTlOd0xaRml1UFFoYnlYcG0zd1dtMlFQV05MSi15Mkl2S3lYT1hPczh6aE03bnVuU3VYSk44b3R0WmNUZTBFUlVuNVQ?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
