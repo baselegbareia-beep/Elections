@@ -1,18 +1,18 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:34 UTC",
+ "started": "2026-10-27 14:44 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 85
+   "items": 92
   },
   {
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 31
+   "items": 32
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -94,15 +94,15 @@
      "published_il": "15:01",
      "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב"
     },
+    "רשת 13": {
+     "published": "2026-10-27T13:57:05+00:00",
+     "published_il": "15:57",
+     "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
+    },
     "חרדים10": {
      "published": "2026-10-27T11:56:05+00:00",
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
-    },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T13:43:58+00:00",
-     "published_il": "15:43",
-     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "JDN": {
      "published": "2026-10-27T13:09:00+00:00",
@@ -157,30 +157,25 @@
      "published_il": "07:00",
      "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 12:00 עומד על 31.5%, הכי גבוה מאז בחירות 1977 - אתר החדשות דבר"
     },
-    "רשת 13": {
-     "published": "2026-10-27T10:59:22+00:00",
-     "published_il": "12:59",
-     "title": "שיעור ההצבעה עד 12:00: 31.5% - הכי גבוה מאז 1973 - רשת 13"
+    "JDN": {
+     "published": "2026-10-27T11:13:46+00:00",
+     "published_il": "13:13",
+     "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN"
     },
     "וואלה": {
      "published": "2026-10-27T11:01:59+00:00",
      "published_il": "13:01",
      "title": "שיעור ההצבעה בבחירות לכנסת הגיע ל-31.5% עד השעה 12:00 - וואלה"
     },
-    "JDN": {
-     "published": "2026-10-27T11:13:46+00:00",
-     "published_il": "13:13",
-     "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN"
+    "היום": {
+     "published": "2026-10-27T10:56:35+00:00",
+     "published_il": "12:56",
+     "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום"
     },
     "ערוץ 7": {
      "published": "2026-10-27T04:57:00+00:00",
      "published_il": "06:57",
      "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7"
-    },
-    "היום": {
-     "published": "2026-10-27T10:56:35+00:00",
-     "published_il": "12:56",
-     "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום"
     },
     "אפוק": {
      "published": "2026-10-27T11:41:19+00:00",
@@ -364,20 +359,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:40:23+00:00",
-   "published_il": "13:40",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9jbmNEaDlUenA5Y2p2cmpoczdha29rb2czdU1tWVA4R0xBLUlUTzFpSU9qa0tRZERkZHBnQVVxT2ZodkV2aDFYWEJKVQ?oc=5",
-   "figures": [
-    [
-     "10:00",
-     16.68
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T13:01:38+00:00",
    "published_il": "15:01",
@@ -392,25 +373,25 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "חרדים10",
-   "published": "2026-10-27T11:56:05+00:00",
-   "published_il": "13:56",
-   "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50MlhFODEyakNYVTJ4N2FFNGljdmNRUmp1cW9wb2FPVERLNWFPazdCZHUtTl91Vk9JMXlUdEZiZVotWkt0R2Ew?oc=5",
+   "outlet": "JDN",
+   "published": "2026-10-27T11:40:23+00:00",
+   "published_il": "13:40",
+   "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE9jbmNEaDlUenA5Y2p2cmpoczdha29rb2czdU1tWVA4R0xBLUlUTzFpSU9qa0tRZERkZHBnQVVxT2ZodkV2aDFYWEJKVQ?oc=5",
    "figures": [
     [
-     "14:00",
-     44.9
+     "10:00",
+     16.68
     ]
    ]
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T10:59:22+00:00",
-   "published_il": "12:59",
-   "title": "שיעור ההצבעה עד 12:00: 31.5% - הכי גבוה מאז 1973 - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "outlet": "JDN",
+   "published": "2026-10-27T11:13:46+00:00",
+   "published_il": "13:13",
+   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
    "figures": [
     [
      "12:00",
@@ -420,11 +401,11 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T13:43:58+00:00",
-   "published_il": "15:43",
-   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T13:57:05+00:00",
+   "published_il": "15:57",
+   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
    "figures": [
     [
      "14:00",
@@ -448,11 +429,25 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:13:46+00:00",
-   "published_il": "13:13",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
+   "outlet": "חרדים10",
+   "published": "2026-10-27T11:56:05+00:00",
+   "published_il": "13:56",
+   "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50MlhFODEyakNYVTJ4N2FFNGljdmNRUmp1cW9wb2FPVERLNWFPazdCZHUtTl91Vk9JMXlUdEZiZVotWkt0R2Ew?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "היום",
+   "published": "2026-10-27T10:56:35+00:00",
+   "published_il": "12:56",
+   "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBvS0M4M3ltSDg2THpoVUFwWWk3Y08ydXhLNGFLcnVaWW8tU2ZXMWRwa2RheUczblhyTlExem1KTWp2bm1YMm5tX3hUTENIQkJnaURzS29fUno1OW9BdFFQN2hWYVd3aDTSAW9BVV95cUxOMko3azlETVRZbV9SMm5SazNYOVBOaHFvZndfOVROcHJPSGFzZnhqOVdTR2lwWjA1T1d4NERjZURINEpxbDNXVzdVc0JOaDhZbjNfVmxaRER0T2hfdEl4NzBURXNzX2Z3NC1EcmM5X1E?oc=5",
    "figures": [
     [
      "12:00",
@@ -467,20 +462,6 @@
    "published_il": "06:57",
    "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7",
    "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55cmhJdDVJaWtGMjlvNUpfbk9zU3VJN0szaW0yUTlocGJPLTNsaS1WbTY4cDRmUzd3WmUxcmJxazdkcEFwWW13Rg?oc=5",
-   "figures": [
-    [
-     "12:00",
-     31.5
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T10:56:35+00:00",
-   "published_il": "12:56",
-   "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום",
-   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTFBvS0M4M3ltSDg2THpoVUFwWWk3Y08ydXhLNGFLcnVaWW8tU2ZXMWRwa2RheUczblhyTlExem1KTWp2bm1YMm5tX3hUTENIQkJnaURzS29fUno1OW9BdFFQN2hWYVd3aDTSAW9BVV95cUxOMko3azlETVRZbV9SMm5SazNYOVBOaHFvZndfOVROcHJPSGFzZnhqOVdTR2lwWjA1T1d4NERjZURINEpxbDNXVzdVc0JOaDhZbjNfVmxaRER0T2hfdEl4NzBURXNzX2Z3NC1EcmM5X1E?oc=5",
    "figures": [
     [
      "12:00",
@@ -644,6 +625,20 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T13:57:05+00:00",
+   "published_il": "15:57",
+   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T10:58:42+00:00",
    "published_il": "12:58",
@@ -695,6 +690,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "JDN",
+   "published": "2026-10-27T11:13:46+00:00",
+   "published_il": "13:13",
+   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
     ]
    ]
   },
@@ -779,6 +788,20 @@
     [
      "14:00",
      68.0
+    ]
+   ]
+  },
+  {
+   "feed": "סרוגים",
+   "outlet": "סרוגים",
+   "published": "2026-10-27T14:39:16+00:00",
+   "published_il": "16:39",
+   "title": "עמית סגל על הבחירות: \"לא ראיתי דבר כזה מעולם\"",
+   "link": "https://www.srugim.co.il/101014540-עמית-סגל-על-הבחירות-לא-ראיתי-דבר-כזה",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
