@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>נפתלי בנט עלה לנאום במטה מפלגת &quot;ביחד&quot;: &quot;ברית המשרתים ניצחה היום את ברית המשתמטים&quot;</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382106</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151446&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>שרון לייבל, פלאש 90</Photographer>
+          <pubDate>Tue, 27 Oct 2026 22:52:27 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 22:52:27 GMT</UpdateDate>
+          <itemID>1382106</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>נחום פרי</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382106</guid>
+        </item>
+        <item>
           <title>החרדים יצאו להפגין לאחר פרסום התוצאות - כביש 4 נחסם</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382105</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1382066</guid>
-        </item>
-        <item>
-          <title>ירון אברהם חושף את הדרמה שמתחוללת מאחורי הקלעים בליכוד</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1382065</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151852&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>צילום מסך ערוץ 12</Photographer>
-          <pubDate>Tue, 27 Oct 2026 20:13:33 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 20:13:33 GMT</UpdateDate>
-          <itemID>1382065</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1382065</guid>
         </item>
       </channel>
     </rss>
