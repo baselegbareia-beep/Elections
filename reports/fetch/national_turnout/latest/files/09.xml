@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 16:18:53 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 16:32:34 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -29,6 +29,35 @@
 	<height>32</height>
 </image> 
 	<item>
+		<title>במסירות נפש עילאית: האדמו&#034;ר מויז&#039;ניץ יצא להצביע במושב אורה</title>
+		<link>https://www.jdn.co.il/j_world/2755935/</link>
+					<comments>https://www.jdn.co.il/j_world/2755935/#respond</comments>
+		
+		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
+		<pubDate>Tue, 27 Oct 2026 16:32:34 +0000</pubDate>
+				<category><![CDATA[העולם החרדי]]></category>
+		<category><![CDATA[חדשות המגזר]]></category>
+		<category><![CDATA[אורה]]></category>
+		<category><![CDATA[בחירות]]></category>
+		<category><![CDATA[ויז'ניץ]]></category>
+		<guid isPermaLink="false">https://www.jdn.co.il/?p=2755935</guid>
+
+					<description><![CDATA[<p>ברקע מאמצי ההמרצה ברחוב החרדי, האדמו"ר מויז'ניץ יצא להצביע בקלפי במושב אורה כשהוא מלווה בח"כ יעקב טסלר. יציאתו נועדה לעודד את ההשתתפות בקרב תומכיו וחסידיו</p>
+<p>הפוסט <a href="https://www.jdn.co.il/j_world/2755935/">במסירות נפש עילאית: האדמו&quot;ר מויז&#039;ניץ יצא להצביע במושב אורה</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+]]></description>
+										<content:encoded><![CDATA[<p data-path-to-node="1">על אף חולשתו והתמודדותו הרפואית בתקופה האחרונה, מנהיג חסידות ויז'ניץ, מרן האדמו&quot;ר מויז'ניץ, הצביע בקלפי שהוצבה במושב אורה, שם הוא שוהה בשבועות האחרונים.</p>
+<p data-path-to-node="2">אל האדמו&quot;ר נלווה נציג החסידות בכנסת, ח&quot;כ יעקב טסלר (יהדות התורה). היציאה המיוחדת של המנהיג החסידי לקלפי נועדה לשמש מופת ודוגמה אישית לחסידיו ולציבור הרחב, כך שברקע חולשתו הרבה, עדיין לא ויתר והתעקש ולהראות דוגמא אישית, בפרט ברקע הדיווחים על אחוזי הצבעה נמוכים יחסית בריכוזים החרדיים והמאמצים במטות לגייס כל קול עד לסגירת הקלפיות.</p>
+<p data-path-to-node="4">
+<p>הפוסט <a href="https://www.jdn.co.il/j_world/2755935/">במסירות נפש עילאית: האדמו&quot;ר מויז&#039;ניץ יצא להצביע במושב אורה</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+]]></content:encoded>
+					
+					<wfw:commentRss>https://www.jdn.co.il/j_world/2755935/feed/</wfw:commentRss>
+			<slash:comments>0</slash:comments>
+		
+		
+		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/IMG-20261027-WA4369.jpg" medium="image"></media:content>
+            <post-id xmlns="com-wordpress:feed-additions:1">2755935</post-id>	</item>
+		<item>
 		<title>הגרמ&#034;צ ברגמן: קמו עלינו אנשים רשעים</title>
 		<link>https://www.jdn.co.il/video/2755920/</link>
 					<comments>https://www.jdn.co.il/video/2755920/#respond</comments>
@@ -166,7 +195,7 @@
 		<item>
 		<title>עתירה דחופה לוועדת הבחירות: בנט נגד שידורי תעמולת הגיוועלד של נתניהו</title>
 		<link>https://www.jdn.co.il/news/2755912/</link>
-					<comments>https://www.jdn.co.il/news/2755912/#respond</comments>
+					<comments>https://www.jdn.co.il/news/2755912/#comments</comments>
 		
 		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
 		<pubDate>Tue, 27 Oct 2026 15:41:17 +0000</pubDate>
@@ -187,7 +216,7 @@
 ]]></content:encoded>
 					
 					<wfw:commentRss>https://www.jdn.co.il/news/2755912/feed/</wfw:commentRss>
-			<slash:comments>0</slash:comments>
+			<slash:comments>1</slash:comments>
 		
 		
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261027TG13-1.jpg" medium="image"></media:content>
@@ -252,46 +281,16 @@
 		
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261027YS144.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2755904</post-id>	</item>
-		<item>
-		<title>שיא היסטורי חסר תקדים: 55.7% הצבעה נרשמו עד השעה 16:00</title>
-		<link>https://www.jdn.co.il/news/2755901/</link>
-					<comments>https://www.jdn.co.il/news/2755901/#respond</comments>
-		
-		<dc:creator><![CDATA[דודי גרליץ]]></dc:creator>
-		<pubDate>Tue, 27 Oct 2026 15:05:10 +0000</pubDate>
-				<category><![CDATA[חדשות]]></category>
-		<category><![CDATA[פוליטי]]></category>
-		<category><![CDATA[אחוזים]]></category>
-		<category><![CDATA[בחירות]]></category>
-		<category><![CDATA[הצבעה]]></category>
-		<guid isPermaLink="false">https://www.jdn.co.il/?p=2755901</guid>
-
-					<description><![CDATA[<p>ועדת הבחירות המרכזית הודיעה כי נכון לשעה 16:00 הצביעו 55.7% מבעלי זכות הבחירה (למעלה מ-4.08 מיליון מצביעים). מדובר בעלייה של 8.2% מהבחירות הקודמות ובנתון השיא הגבוה ביותר שנמדד בשעה זו</p>
-<p>הפוסט <a href="https://www.jdn.co.il/news/2755901/">שיא היסטורי חסר תקדים: 55.7% הצבעה נרשמו עד השעה 16:00</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
-]]></description>
-										<content:encoded><![CDATA[<p data-path-to-node="1">ועדת הבחירות המרכזית מעדכנת כי הזינוק בשיעורי ההשתתפות נמשך בעוצמה: נכון לשעה <b data-path-to-node="1" data-index-in-node="78">16:00</b>, שיעור ההצבעה הארצי בבחירות לכנסת ה-26 עומד על <b data-path-to-node="1" data-index-in-node="131">55.7%</b> מבעלי זכות הבחירה.</p>
-<p data-path-to-node="2">עד לשעה זו מימשו את זכותם והצביעו <b data-path-to-node="2" data-index-in-node="34">4,085,075 בוחרות ובוחרים</b>. מדובר בזינוק חריג של <b data-path-to-node="2" data-index-in-node="81">8.2 נקודות אחוז</b> לעומת השעה המקבילה בבחירות לכנסת ה-25 (אז עמד הנתון על 47.5%), והנתון הגבוה ביותר שנרשם בשעה זו מאז החלה ועדת הבחירות המרכזית למדוד אחוזים תקופתיים.</p>
-<p data-path-to-node="3">במסיבת עיתונאים שקיים במרכז השליטה בכנסת ממלא מקום מנכ&quot;ל הוועדה, עו&quot;ד דין ליבנה, הובעה שביעות רצון מההשתתפות הערה. ליבנה ציין כי אם קצב הגעת המצביעים לקלפיות יימשך באופן הזה, שיעור ההשתתפות הכללי בסוף היום עשוי לאתגר או לשבור את רף 80 האחוזים.</p>
-<p data-path-to-node="5">
-<p>הפוסט <a href="https://www.jdn.co.il/news/2755901/">שיא היסטורי חסר תקדים: 55.7% הצבעה נרשמו עד השעה 16:00</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
-]]></content:encoded>
-					
-					<wfw:commentRss>https://www.jdn.co.il/news/2755901/feed/</wfw:commentRss>
-			<slash:comments>0</slash:comments>
-		
-		
-		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F261027YS142.jpg" medium="image"></media:content>
-            <post-id xmlns="com-wordpress:feed-additions:1">2755901</post-id>	</item>
 	</channel>
 </rss>
 
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 77/102 objects using Memcached
+Object Caching 78/111 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 46/67 queries in 0.481 seconds using Memcached
+Database Caching 42/69 queries in 0.209 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 18:32:27 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 18:34:28 by W3 Total Cache
 -->
