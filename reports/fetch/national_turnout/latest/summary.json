@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 17:06 UTC",
+ "started": "2026-10-27 17:08 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 54
+   "items": 57
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -150,10 +150,10 @@
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
     },
-    "רשת 13": {
-     "published": "2026-10-27T13:57:05+00:00",
-     "published_il": "15:57",
-     "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13"
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
@@ -169,6 +169,11 @@
      "published": "2026-10-27T13:14:12+00:00",
      "published_il": "15:14",
      "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
+    },
+    "JDN": {
+     "published": "2026-10-27T13:10:01+00:00",
+     "published_il": "15:10",
+     "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN"
     },
     "ynet": {
      "published": "2026-10-27T11:58:52+00:00",
@@ -190,8 +195,8 @@
    },
    "68.1": {
     "היום": {
-     "published": "2026-10-27T14:45:12+00:00",
-     "published_il": "16:45",
+     "published": "2026-10-27T14:06:14+00:00",
+     "published_il": "16:06",
      "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום"
     }
    },
@@ -300,7 +305,7 @@
     "גלובס": {
      "published": "2026-10-27T17:00:00+00:00",
      "published_il": "19:00",
-     "title": "שיעור הצבעה שובר שיאים - 66.7% עד 18:00"
+     "title": "שיעור הצבעה שובר שיאים - 66.7% הצביעו עד 18:00"
     }
    }
   }
@@ -518,20 +523,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T13:57:05+00:00",
-   "published_il": "15:57",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "וואלה",
    "published": "2026-10-27T11:01:59+00:00",
    "published_il": "13:01",
@@ -541,6 +532,34 @@
     [
      "12:00",
      31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "היום",
+   "published": "2026-10-27T14:06:14+00:00",
+   "published_il": "16:06",
+   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9weEFCZlpFUjBJLVZ0aXQzWDMwYnV0dkpzRHctNWZwZ184NHBSenVMbzJYbWRpVjZ4VXpNR2Y1eFJRdHl5bXpKVUtSTDBtT3h3RS03RTFfeV8xbF9SWjlMT1hOUHlJVkXSAW9BVV95cUxOWVlFajI0dU1hR01DS3lNa2l5WklHdU5DNzFRYndib1g5ZWdDZ2paSVFoRW1wV2ZuSmVxc2p2V3R6WU5LYTBXOVpnaTVSVmw1SDNkWk1iRHhQMDRNRDNKOVBaMlBXRkIzYjdMajBrY1E?oc=5",
+   "figures": [
+    [
+     "14:00",
+     68.1
     ]
    ]
   },
@@ -583,20 +602,6 @@
     [
      "13:00",
      23.8
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T14:45:12+00:00",
-   "published_il": "16:45",
-   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
-   "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUdIBb0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUQ?oc=5",
-   "figures": [
-    [
-     "14:00",
-     68.1
     ]
    ]
   },
@@ -713,20 +718,6 @@
    ]
   },
   {
-   "feed": "Google News: אחוז ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T13:57:05+00:00",
-   "published_il": "15:57",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
    "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "כאן 11",
    "published": "2026-10-27T16:25:55+00:00",
@@ -812,39 +803,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T13:57:05+00:00",
-   "published_il": "15:57",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "אמס",
    "published": "2026-10-27T13:14:12+00:00",
    "published_il": "15:14",
    "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
    "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T14:55:10+00:00",
-   "published_il": "16:55",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNMWQxLXNsZ0ZYUkdxVjJvNXZtM1VVenZCWVhVN0MtbEZYNDFTMVEwLUg4THZ3b0hDREZUUWJ3U2E1eV83WVgwTnhUN1VZM0wzSjlxVEFpNW5QQjZNNUJON1MzcTRWUTViSUM1NUlZNnVJLWRfU1U4NnZEQnlyUlJTM0U2THh2UjI2TGMxRQ?oc=5",
    "figures": [
     [
      "14:00",
@@ -877,6 +840,34 @@
     [
      "10:00",
      16.68
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "הידברות",
+   "published": "2026-10-27T11:10:00+00:00",
+   "published_il": "13:10",
+   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "JDN",
+   "published": "2026-10-27T13:10:01+00:00",
+   "published_il": "15:10",
+   "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN",
+   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0waWxLRFJ3NGxLQzBoLWU4anJERFRpZ1FZSDBZTmpTT1AzY0Flc0Y4MUZVR2tNOXVaQkhQNktrZFJOVFF6b0FsV1JZZw?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -1135,7 +1126,7 @@
    "outlet": "גלובס",
    "published": "2026-10-27T17:00:00+00:00",
    "published_il": "19:00",
-   "title": "שיעור הצבעה שובר שיאים - 66.7% עד 18:00",
+   "title": "שיעור הצבעה שובר שיאים - 66.7% הצביעו עד 18:00",
    "link": "https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS",
    "figures": [
     [
