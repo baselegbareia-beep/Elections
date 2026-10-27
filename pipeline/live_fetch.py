@@ -833,7 +833,8 @@ STATION_KEYS = ("sectors", "stations_national", "sectors_time", "sectors_coverag
 # left out as above, or one whose register is not 2022's) and "implausible pace" (more than twice the group's 2022
 # voters, usually a renumbered station).
 EXCLUDED_KEYS = ("no figure", "zero voters", "unreadable", "more voters than eligible", "no 2022 match", "implausible pace")
-SECTORS_FIT = (10, 180)   # minutes: a sectors_time fits a release first seen up to 10 minutes before it to 3 hours after
+SECTORS_FIT = (10, 300)   # minutes: a sectors_time fits a release first seen up to 10 minutes before it to 5 hours after
+#   (27.10: the 09:00 release was read at 12:01 from a file the owner downloaded; a leftover time is caught by the bind)
 
 
 def _minutes(hhmm):
@@ -847,7 +848,7 @@ def release_time(manual, state, sha, election_day, errors):
     A new release (a new SHA-256) is stamped once, when first seen; one first seen after the polls close is
     stamped 22:00, the latest time its figures can refer to. The operator's sectors_time (live_input/turnout.json,
     the cutoff the CEC states) replaces the stamp, but only for the release it was set for: it binds to the
-    release it fits (first seen from 10 minutes before it to 3 hours after it) and never labels a later one.
+    release it fits (first seen from 10 minutes before it to 5 hours after it, SECTORS_FIT) and never labels a later one.
     A sectors_time left over from an earlier release is reported and the stamp is used; one that fits no release
     yet (typed ahead of its file) is reported, the current release keeps the time it had, and it binds when the
     file arrives. A new release of another day than the last one (a test file before election day) starts
@@ -882,7 +883,7 @@ def release_time(manual, state, sha, election_day, errors):
         state["sectors_bind"] = {"time": s, "sha": sha}      # a new time for this release (or a corrected one)
         return s
     errors.append(f"turnout: sectors_time {s} does not fit the per-station release first seen at {seen} (it can be up to "
-                  f"3 hours earlier, not later); it waits for the next release, this one stays {mine or seen}"[:200])
+                  f"{SECTORS_FIT[1] // 60} hours earlier, not later); it waits for the next release, this one stays {mine or seen}"[:200])
     return mine or seen
 
 
