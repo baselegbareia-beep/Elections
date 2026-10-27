@@ -1,12 +1,12 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 14:02 UTC",
+ "started": "2026-10-27 14:04 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 90
+   "items": 91
   },
   {
    "name": "Google News: אחוז ההצבעה",
@@ -718,20 +718,6 @@
     [
      "14:00",
      44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "ערוץ 7",
-   "published": "2026-10-27T04:57:00+00:00",
-   "published_il": "06:57",
-   "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - ערוץ 7",
-   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55cmhJdDVJaWtGMjlvNUpfbk9zU3VJN0szaW0yUTlocGJPLTNsaS1WbTY4cDRmUzd3WmUxcmJxazdkcEFwWW13Rg?oc=5",
-   "figures": [
-    [
-     "12:00",
-     31.5
     ]
    ]
   },
