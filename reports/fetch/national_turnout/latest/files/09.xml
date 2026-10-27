@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 21:06:41 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 21:11:50 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -110,7 +110,7 @@
 		<media:content url="https://www.jdn.co.il/wp-content/uploads/2026/10/F221103OF01.jpg" medium="image"></media:content>
             <post-id xmlns="com-wordpress:feed-additions:1">2756053</post-id>	</item>
 		<item>
-		<title>תמונת המנדטים והתרחישים הפוליטיים: ללא רוב מובהק לאף אחד מהגושים &#124; מתעדכן</title>
+		<title>תמונה כעת: ללא רוב מובהק לאף אחד מהגושים &#124; מתעדכן</title>
 		<link>https://www.jdn.co.il/news/2756042/</link>
 					<comments>https://www.jdn.co.il/news/2756042/#respond</comments>
 		
@@ -122,7 +122,7 @@
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2756042</guid>
 
 					<description><![CDATA[<p>נתוני המדגמים מלמדים כי נכון לשעה זו לאף אחד מהצדדים אין רוב מוחלט של 61 חברי כנסת להרכבת ממשלה. הערכות במערכת הפוליטית מצביעות על אפשרות להטלת המנדט על גדי איזנקוט</p>
-<p>הפוסט <a href="https://www.jdn.co.il/news/2756042/">תמונת המנדטים והתרחישים הפוליטיים: ללא רוב מובהק לאף אחד מהגושים | מתעדכן</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+<p>הפוסט <a href="https://www.jdn.co.il/news/2756042/">תמונה כעת: ללא רוב מובהק לאף אחד מהגושים | מתעדכן</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
 ]]></description>
 										<content:encoded><![CDATA[<p>בתום פרסום מדגמי הבחירות לכנסת ה-26, המערכת הפוליטית מצויה בערפול לגבי זהות הקואליציה העתידית. על פי הנתונים והדיווחים העדכניים, נכון לעכשיו לני אחד מהמחנות אין רוב דרוש להשבעת ממשלה.</p>
 <p>תרחישים מרכזיים שנבחנים במערכת הפוליטית:</p>
@@ -136,7 +136,7 @@
 <p>הקולות שנזרקו לפח בעיקר בגוש הימין: וינטר, זליכה והנדל, נעם, לייטנר (הערכה: 35.000 קולות), צבע שחור.</p>
 <p>עמית סגל בפרשנות: לנתניהו המפלגה הגדולה אבל לאייזנקוט יותר ממליצים, ולכן ההערכה שלאיינקוט שתי אפשרויות: קודם יפנה לנתניהו בהצעה לממשלת אחדות אך אני מעריך שהוא יסרב, ולכן אח&quot;כ יפנה ליתר המפלגות בגוש שלו ויציע להקים איתם ממשלנ, גם כאן ההערכה שהוא יתקל במכשולים ויתכן שאף הם (בנט, גולן) יתנגדו בכוונה ותקווה שאולי הנשיא יציע להם את ראשות הממשלה- בהשען על כמות ממליצים בגוש.</p>
 <p>כעת יתחילו השיחות הראשוניות של ראשי הגושים, בנימין נתניהו וגדי איזנקוט, מול מנהיגי המפלגות והסיעות השונות, לקראת שלב ההמלצות הרשמי בבית הנשיא עם סיום ספירת תוצאות האמת.</p>
-<p>הפוסט <a href="https://www.jdn.co.il/news/2756042/">תמונת המנדטים והתרחישים הפוליטיים: ללא רוב מובהק לאף אחד מהגושים | מתעדכן</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
+<p>הפוסט <a href="https://www.jdn.co.il/news/2756042/">תמונה כעת: ללא רוב מובהק לאף אחד מהגושים | מתעדכן</a> הופיע לראשונה ב-<a href="https://www.jdn.co.il">JDN</a>.</p>
 ]]></content:encoded>
 					
 					<wfw:commentRss>https://www.jdn.co.il/news/2756042/feed/</wfw:commentRss>
@@ -383,10 +383,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 79/101 objects using Memcached
+Object Caching 76/102 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 44/66 queries in 0.266 seconds using Memcached
+Database Caching 42/64 queries in 0.111 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-27 23:07:36 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-27 23:13:39 by W3 Total Cache
 -->

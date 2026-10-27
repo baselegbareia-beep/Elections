@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 21:12 UTC",
+ "started": "2026-10-27 21:14 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -260,6 +260,11 @@
   },
   "22:00": {
    "77.7": {
+    "ynet": {
+     "published": "2026-10-27T21:12:11+00:00",
+     "published_il": "23:12",
+     "title": "77.7% הצביעו עד השעה 22:00 - 5,695,682 איש"
+    },
     "מעריב": {
      "published": "2026-10-27T21:10:44+00:00",
      "published_il": "23:10",
@@ -793,6 +798,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "ynet מבזקים",
+   "outlet": "ynet",
+   "published": "2026-10-27T21:12:11+00:00",
+   "published_il": "23:12",
+   "title": "77.7% הצביעו עד השעה 22:00 - 5,695,682 איש",
+   "link": "https://www.ynet.co.il/news/article/r16l79cnfl",
+   "figures": [
+    [
+     "22:00",
+     77.7
     ]
    ]
   },
