@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>בשיאו של יום הבחירות: גשם כבד החל לרדם בירושלים</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1381995</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151816&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>בן טאטיקה</Photographer>
+          <pubDate>Tue, 27 Oct 2026 15:12:44 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 15:12:44 GMT</UpdateDate>
+          <itemID>1381995</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>true</isVideo>
+          <Author>בן טאטיקה</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1381995</guid>
+        </item>
+        <item>
           <title>תאונת דרכים קשה סמוך לשדרות: כוחות הצלה פועלים לחילוץ לכודה</title>
            <link>https://www.maariv.co.il/breaking-news/article-1381992</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381939</guid>
-        </item>
-        <item>
-          <title>ירי בטייבה ביום הבחירות: שני פצועים במקום, קשה ובינוני</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381936</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/784204&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>רויטרס</Photographer>
-          <pubDate>Tue, 27 Oct 2026 11:42:56 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 11:42:56 GMT</UpdateDate>
-          <itemID>1381936</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>אלון חכמון</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381936</guid>
         </item>
       </channel>
     </rss>
