@@ -1,6 +1,6 @@
 {
  "fetcher": "govil_page",
- "started": "2026-10-27 15:02 UTC",
+ "started": "2026-10-27 15:07 UTC",
  "pages": [
   "turnout_at_polling_stations",
   "voting-by-hour-26"
@@ -61,7 +61,7 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 442222,
-   "last_modified": "Tue, 27 Oct 2026 13:41:01 GMT",
+   "last_modified": "Tue, 27 Oct 2026 13:41:02 GMT",
    "saved": null,
    "error": null
   }
