@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 18:14 UTC",
+ "started": "2026-10-27 18:17 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 69
+   "items": 71
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -86,11 +86,6 @@
      "published": "2026-10-27T04:44:14+00:00",
      "published_il": "06:44",
      "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11"
-    },
-    "ערוץ 7": {
-     "published": "2026-10-27T04:57:00+00:00",
-     "published_il": "06:57",
-     "title": "שיא היסטורי בבחירות: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - ערוץ 7"
     },
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
@@ -191,13 +186,6 @@
      "published_il": "12:56",
      "title": "שיעור ההצבעה עד 12:00 עומד על 31.5% - הגבוה מאז 1977 - היום"
     }
-   },
-   "30": {
-    "סרוגים": {
-     "published": "2026-10-27T12:40:10+00:00",
-     "published_il": "14:40",
-     "title": "הדרך לכנסת: חמישה שלבים שישפיעו על התוצאות"
-    }
    }
   },
   "14:00": {
@@ -223,11 +211,6 @@
      "published": "2026-10-27T11:56:05+00:00",
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
-    },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T13:43:58+00:00",
-     "published_il": "15:43",
-     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
@@ -532,20 +515,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T13:43:58+00:00",
-   "published_il": "15:43",
-   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "היום",
    "published": "2026-10-27T14:06:14+00:00",
    "published_il": "16:06",
@@ -555,20 +524,6 @@
     [
      "14:00",
      68.1
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "ערוץ 7",
-   "published": "2026-10-27T04:57:00+00:00",
-   "published_il": "06:57",
-   "title": "שיא היסטורי בבחירות: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - ערוץ 7",
-   "link": "https://news.google.com/rss/articles/CBMiSEFVX3lxTE55cmhJdDVJaWtGMjlvNUpfbk9zU3VJN0szaW0yUTlocGJPLTNsaS1WbTY4cDRmUzd3WmUxcmJxazdkcEFwWW13Rg?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
     ]
    ]
   },
@@ -714,20 +669,6 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T16:25:55+00:00",
-   "published_il": "18:25",
-   "title": "שיעור הצבעה היסטורי: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T16:52:10+00:00",
    "published_il": "18:52",
@@ -765,6 +706,20 @@
     [
      "18:00",
      66.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "כאן 11",
+   "published": "2026-10-27T04:44:14+00:00",
+   "published_il": "06:44",
+   "title": "נכון לשעה 16:00: שיעור ההצבעה עומד על 55.7%, הגבוה ביותר מאז 1973 - כאן 11",
+   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
@@ -1057,20 +1012,6 @@
     [
      "14:00",
      6.0
-    ]
-   ]
-  },
-  {
-   "feed": "סרוגים",
-   "outlet": "סרוגים",
-   "published": "2026-10-27T12:40:10+00:00",
-   "published_il": "14:40",
-   "title": "הדרך לכנסת: חמישה שלבים שישפיעו על התוצאות",
-   "link": "https://www.srugim.co.il/101014524-הדרך-לכנסת-חמישה-שלבים-שישפיעו-על",
-   "figures": [
-    [
-     "12:00",
-     30.0
     ]
    ]
   },

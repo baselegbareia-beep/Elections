@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 18:13:40 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 18:17:02 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -132,6 +132,20 @@
       <category domain="https://www.globes.co.il/news/קמעונאות.tag">קמעונאות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793103655/IMG-20261027-WA0148_z6oldx.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>עופר הקניון הגדול, היום / צילום: רז גדעוני</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>אחרי ההפסד בבחירות: דיווחים שבולסונארו נמלט לארה"ב</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561023#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561023</guid>
+      <description>המשטרה הפדרלית מנסה לאתר את הסנאטור ואיש הימין שהפסיד בבחירות לנשיאות ללואיז אינסיו לולה דה סילבה &amp;#8226; לאחר שלא מסר את דרכונו בהתאם להוראת בית המשפט העליון, הרשויות ביטלו אותו &amp;#8226; בארגנטינה טוענים כי אין תיעוד לכניסתו למדינה, ואנשיו מסרבים לחשוף היכן הוא נמצא או אומרים שאינם יודעים</description>
+      <author>אסף רוזנצוייג, N12</author>
+      <pubDate>Tue, 27 Oct 2026 18:12:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/ברזיל.tag">ברזיל</category>
+      <category domain="https://www.globes.co.il/news/ארהב.tag">ארה"ב</category>
+      <category domain="https://www.globes.co.il/news/ימין_פוליטי.tag">ימין פוליטי</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793124647/AP26298419389118_ncfxel.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>פלאביו בולסונארו / צילום: ap, Silvia Izquierdo</media:description>
       </media:content>
     </item>
     <item>
@@ -282,22 +296,6 @@
       <category domain="https://www.globes.co.il/news/גלובס_עושה_סדר.tag">גלובס עושה סדר</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1727693061/direct/124A4751_hops0x.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>שי אהרונוביץ', מנכ''ל רשות המסים / צילום: יוסי זמיר</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>הבורסה אישרה: אופציות ליו"ר ולמנכ"ל והלוואת שימור של מיליונים</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560947#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560947</guid>
-      <description>האסיפה הכללית של הבורסה אישרה הענקת אופציות ליו"ר יוג'ין קנדל ולמנכ"ל איתי בן זאב &amp;#8226; בנוסף, אושרה לבן זאב הלוואת שימור של 3.5 מיליון שקל, שנועדה לעודד את הישארותו בתפקיד, אך תנאי ההחזר שלה לא פורטו בדיווח</description>
-      <author>בועז בן נון</author>
-      <pubDate>Tue, 27 Oct 2026 10:16:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
-      <category domain="https://www.globes.co.il/news/איתי_בן_זאב.tag">איתי בן זאב</category>
-      <category domain="https://www.globes.co.il/news/יוגין_קנדל.tag">יוג'ין קנדל</category>
-      <category domain="https://www.globes.co.il/news/אופציות_לעובדים.tag">אופציות לעובדים</category>
-      <category domain="https://www.globes.co.il/news/שכר_בכירים.tag">שכר בכירים</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1736783113/direct/DSC04610-2_e8tuet_82cabb.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>איתי בן זאב, מנכ''ל הבורסה לניירות ערך / צילום: כדיה לוי</media:description>
       </media:content>
     </item>
   </channel>
