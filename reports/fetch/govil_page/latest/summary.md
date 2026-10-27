@@ -1,10 +1,10 @@
 # gov.il pages through the content-pages API (2026-10-27 15:47 UTC)
 
 - content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)
-- turnout_at_polling_stations chapter 0: HTTP 200 7139 bytes
-- turnout_at_polling_stations chapter 1: HTTP 200 7139 bytes
-- turnout_at_polling_stations chapter 2: HTTP 200 7139 bytes
-- turnout_at_polling_stations chapter 3: HTTP 200 7139 bytes
+- turnout_at_polling_stations chapter 0: HTTP 200 7089 bytes
+- turnout_at_polling_stations chapter 1: HTTP 200 7089 bytes
+- turnout_at_polling_stations chapter 2: HTTP 200 7089 bytes
+- turnout_at_polling_stations chapter 3: HTTP 200 7089 bytes
 - voting-by-hour-26 chapter 0: HTTP 404 0 bytes HTTP 404
 - voting-by-hour-26 chapter 1: HTTP 404 0 bytes HTTP 404
 - voting-by-hour-26 chapter 2: HTTP 404 0 bytes HTTP 404
@@ -14,9 +14,9 @@
 
 | title | URL | HTTP | bytes | last-modified | saved |
 |---|---|---|---|---|---|
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 15:29:23 GMT |  |
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 15:29:23 GMT |  |
-| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.Csv | 403 | 0 | None | HTTP 403 |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx | 200 | 436079 | Tue, 27 Oct 2026 15:47:44 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx | 200 | 442222 | Tue, 27 Oct 2026 15:47:43 GMT |  |
+| קבצים מצורפים | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx | 200 | 648119 | Tue, 27 Oct 2026 15:47:43 GMT |  |
 
 ## Every link
 
@@ -27,4 +27,4 @@
 - שיעור ההצבעה בקלפיות: https://www.gov.il/BlobFolder/unit/elections-26/he/logo.jpg
 - קבצים מצורפים: https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx
 - קבצים מצורפים: https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx
-- קבצים מצורפים: https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.Csv
+- קבצים מצורפים: https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx

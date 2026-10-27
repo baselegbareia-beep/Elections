@@ -7,10 +7,10 @@
  ],
  "notes": [
   "content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)",
-  "turnout_at_polling_stations chapter 0: HTTP 200 7139 bytes",
-  "turnout_at_polling_stations chapter 1: HTTP 200 7139 bytes",
-  "turnout_at_polling_stations chapter 2: HTTP 200 7139 bytes",
-  "turnout_at_polling_stations chapter 3: HTTP 200 7139 bytes",
+  "turnout_at_polling_stations chapter 0: HTTP 200 7089 bytes",
+  "turnout_at_polling_stations chapter 1: HTTP 200 7089 bytes",
+  "turnout_at_polling_stations chapter 2: HTTP 200 7089 bytes",
+  "turnout_at_polling_stations chapter 3: HTTP 200 7089 bytes",
   "voting-by-hour-26 chapter 0: HTTP 404 0 bytes HTTP 404",
   "voting-by-hour-26 chapter 1: HTTP 404 0 bytes HTTP 404",
   "voting-by-hour-26 chapter 2: HTTP 404 0 bytes HTTP 404",
@@ -46,7 +46,7 @@
    "title": "קבצים מצורפים"
   },
   {
-   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.Csv",
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx",
    "title": "קבצים מצורפים"
   }
  ],
@@ -56,7 +56,7 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 436079,
-   "last_modified": "Tue, 27 Oct 2026 15:29:23 GMT",
+   "last_modified": "Tue, 27 Oct 2026 15:47:44 GMT",
    "saved": null,
    "error": null
   },
@@ -65,18 +65,18 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 442222,
-   "last_modified": "Tue, 27 Oct 2026 15:29:23 GMT",
+   "last_modified": "Tue, 27 Oct 2026 15:47:43 GMT",
    "saved": null,
    "error": null
   },
   {
-   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.Csv",
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx",
    "title": "קבצים מצורפים",
-   "http": 403,
-   "bytes": 0,
-   "last_modified": null,
+   "http": 200,
+   "bytes": 648119,
+   "last_modified": "Tue, 27 Oct 2026 15:47:43 GMT",
    "saved": null,
-   "error": "HTTP 403"
+   "error": null
   }
  ]
 }
