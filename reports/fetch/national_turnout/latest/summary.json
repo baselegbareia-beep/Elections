@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 19:14 UTC",
+ "started": "2026-10-27 19:18 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 69
+   "items": 75
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -139,6 +139,11 @@
      "published": "2026-10-27T18:56:24+00:00",
      "published_il": "20:56",
      "title": "74.3% הצביעו עד השעה 20:00"
+    },
+    "ישראל": {
+     "published": "2026-10-27T09:54:47+00:00",
+     "published_il": "11:54",
+     "title": "אחוזי ההצבעה הגבוהים ביותר מאז 1988 - אלו רשימת הערים המובילות | צפו"
     },
     "סרוגים": {
      "published": "2026-10-27T18:54:51+00:00",
@@ -589,11 +594,11 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T17:31:23+00:00",
-   "published_il": "19:31",
-   "title": "אחוז ההצבעה עד 18:00 - 66.7%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
+   "outlet": "אתר החדשות דבר",
+   "published": "2026-10-27T13:00:00+00:00",
+   "published_il": "15:00",
+   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 18:00 עומד על 66.7% - הגבוה ביותר שנמדד - אתר החדשות דבר",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
    "figures": [
     [
      "18:00",
@@ -603,11 +608,11 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "אתר החדשות דבר",
-   "published": "2026-10-27T13:00:00+00:00",
-   "published_il": "15:00",
-   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 18:00 עומד על 66.7% - הגבוה ביותר שנמדד - אתר החדשות דבר",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T17:31:23+00:00",
+   "published_il": "19:31",
+   "title": "אחוז ההצבעה עד 18:00 - 66.7%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
    "figures": [
     [
      "18:00",
@@ -660,20 +665,6 @@
   {
    "feed": "Google News: אחוז ההצבעה",
    "outlet": "מעריב",
-   "published": "2026-10-27T18:57:46+00:00",
-   "published_il": "20:57",
-   "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3% - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9LNmYzOWRSX3dRS0U2S3psbnBtXzRYbjVMbnVfZDR0c013XzdzUVEzSzdpT0d2eTNNc3ZWQTZsYWp3Yk95dEZvZ1ZZbV9hNFV4cFJQUF9idTBmUjVXWTJGQ0ZkOTA?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
-   "outlet": "מעריב",
    "published": "2026-10-27T15:02:20+00:00",
    "published_il": "17:02",
    "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב",
@@ -682,6 +673,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "מעריב",
+   "published": "2026-10-27T18:57:46+00:00",
+   "published_il": "20:57",
+   "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3% - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9LNmYzOWRSX3dRS0U2S3psbnBtXzRYbjVMbnVfZDR0c013XzdzUVEzSzdpT0d2eTNNc3ZWQTZsYWp3Yk95dEZvZ1ZZbV9hNFV4cFJQUF9idTBmUjVXWTJGQ0ZkOTA?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -906,6 +911,20 @@
     [
      "17:00",
      50.0
+    ]
+   ]
+  },
+  {
+   "feed": "ישראל היום",
+   "outlet": "ישראל",
+   "published": "2026-10-27T09:54:47+00:00",
+   "published_il": "11:54",
+   "title": "אחוזי ההצבעה הגבוהים ביותר מאז 1988 - אלו רשימת הערים המובילות | צפו",
+   "link": "https://www.israelhayom.co.il/news/politics/article/21716830",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
