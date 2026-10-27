@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 16:45:50 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 16:48:41 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -52,24 +52,6 @@
       </media:content>
     </item>
     <item>
-      <title>רוצים לדעת מי יזכה בבחירות? תסתכלו על הערים הללו</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560878#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560878</guid>
-      <description>בכל מערכות הבחירות בשנים האחרונות, רחובות, פתח תקווה וחיפה מציגות תוצאות כמעט זהות למפה הפוליטית הארצית &amp;#8226; מומחים מסבירים איך מעבר של צעירים מתל אביב ופסיפס של שכונות שונות לגמרי מייצרים יחד את "הבוחר הממוצע" &amp;#8226; וגם: מדוע פוליטיקאים שבאים לחפש בהן קולות צפים מפספסים את המציאות?</description>
-      <author>עידן ארץ</author>
-      <pubDate>Tue, 27 Oct 2026 03:56:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <category domain="https://www.globes.co.il/news/רחובות.tag">רחובות</category>
-      <category domain="https://www.globes.co.il/news/פתח_תקווה.tag">פתח תקווה</category>
-      <category domain="https://www.globes.co.il/news/חיפה.tag">חיפה</category>
-      <category domain="https://www.globes.co.il/news/דמוגרפיה.tag">דמוגרפיה</category>
-      <category domain="https://www.globes.co.il/news/אוניברסיטת_תל_אביב.tag">אוניברסיטת תל אביב</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1597446532/old/1127001.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>מכון ויצמן רחובות / צילום: איל יצהר</media:description>
-      </media:content>
-    </item>
-    <item>
       <title>המשקיעים מתמחרים הכרעה בבחירות? הדולר נחלש בחדות מול השקל</title>
       <link>https://www.globes.co.il/news/article.aspx?did=1001561005#utm_source=RSS</link>
       <guid isPermaLink="false">1001561005</guid>
@@ -87,9 +69,9 @@
       <title>הנאסד"ק קופץ במעל 1%; מניות השבבים ממשיכות לטפס</title>
       <link>https://www.globes.co.il/news/article.aspx?did=1001560828#utm_source=RSS</link>
       <guid isPermaLink="false">1001560828</guid>
-      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.7% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; מחירי הנפט רושמים ירידות &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
+      <description>ה-S&amp;amp;P 500 מתקדם בכ-0.7% &amp;#8226; מניות ה-AI ממשיכות במומנטום החיובי שלהן לאחר התשקיף של אנת'רופיק &amp;#8226; מחירי הנפט רושמים ירידות &amp;#8226; נעילה מעורבת באירופה &amp;#8226; מנכ"ל ברודקום התערב אישית כדי להשלים עסקת חוב של 63 מיליארד דולר לאנתרופיק &amp;#8226; וגם - הבום שמזכיר את בועת הנדל"ן: הניו יורק טיימס מזהיר מפני משבר פיננסי</description>
       <author>שירות גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 16:03:00 GMT</pubDate>
+      <pubDate>Tue, 27 Oct 2026 16:47:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בורסות_עולם.tag">בורסות עולם</category>
       <category domain="https://www.globes.co.il/news/וול_סטריט.tag">וול סטריט</category>
       <category domain="https://www.globes.co.il/news/בורסות_אירופה.tag">בורסות אירופה</category>
@@ -297,6 +279,25 @@
       <category domain="https://www.globes.co.il/news/הונאות_אינטרנט.tag">הונאות אינטרנט</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793097129/shutterstock_2293562203_gydm1a.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>צילום: Shutterstock</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>132 מיליון שקל על 5%: הושלם השלב השני ברכישת דן</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560953#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560953</guid>
+      <description>גרעין השליטה בדן נקנה ע"י קבוצה חדשה, הכוללת את כלל, לאומי פרטנרס ובנק מזרחי טפחות &amp;#8226; בעלי השליטה החדשים עלו כעת ל-57% מחברת התחבורה הציבורית</description>
+      <author>עידן ארץ</author>
+      <pubDate>Tue, 27 Oct 2026 11:33:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/דן.tag">דן</category>
+      <category domain="https://www.globes.co.il/news/מכירת_מניות.tag">מכירת מניות</category>
+      <category domain="https://www.globes.co.il/news/כלל_ביטוח.tag">כלל ביטוח</category>
+      <category domain="https://www.globes.co.il/news/לאומי_פרטנרס.tag">לאומי פרטנרס</category>
+      <category domain="https://www.globes.co.il/news/מזרחי_טפחות.tag">מזרחי טפחות</category>
+      <category domain="https://www.globes.co.il/news/תחבורה_ציבורית.tag">תחבורה ציבורית</category>
+      <category domain="https://www.globes.co.il/news/אוטובוסים.tag">אוטובוסים</category>
+      <category domain="https://www.globes.co.il/news/מימושים.tag">מימושים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792484927/WhatsApp_Image_2026-10-20_at_11.26.23_1_tezxra.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>אוטובוסים חשמליים של חברת דן / צילום: דן תחבורה</media:description>
       </media:content>
     </item>
   </channel>
