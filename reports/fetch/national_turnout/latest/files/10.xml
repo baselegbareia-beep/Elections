@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 17:53:20 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 17:59:00 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -29,8 +29,8 @@
       <category domain="https://www.globes.co.il/news/אחוזי_הצבעה.tag">אחוזי הצבעה</category>
       <category domain="https://www.globes.co.il/news/ועדת_הבחירות_המרכזית.tag">ועדת הבחירות המרכזית</category>
       <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793121093/2026-10-27T151808Z_1793114287_DPAAPIS261027X911X019336_RTRFIPP_4_ELECTIONS-POLITICS-GOVERNMENT_rbsbfa.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>פעילים עומדים מחוץ לקלפי בהרצליה / צילום: Reuters, Gil Cohen</media:description>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793110283/AP26300249033967_jefrnv.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>מצביעים בירושלים / צילום: ap, Ohad Zwigenberg</media:description>
       </media:content>
     </item>
     <item>
