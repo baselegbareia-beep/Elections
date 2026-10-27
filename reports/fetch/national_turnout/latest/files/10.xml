@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 20:33:20 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 20:36:15 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -16,6 +16,20 @@
       <link>https://www.globes.co.il/news/home.aspx?fid=2#utm_source=RSS</link>
       <title>עמוד הבית - גלובס</title>
     </image>
+    <item>
+      <title>המפלגה שקרסה וההפתעה הגדולה: מה למדנו ממדגמי הטלוויזיה?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561026#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561026</guid>
+      <description>המדגמים של כלי התקשורת מציגים את תמונת המנדטים הראשונה אחרי סגירת הקלפיות &amp;#8226; מי מוביל, היכן נרשמו הפערים הגדולים בין הערוצים ואילו מפלגות עדיין מתנדנדות סביב אחוז החסימה?</description>
+      <author>יובל אינהורן וצוות המשרוקית של גלובס</author>
+      <pubDate>Tue, 27 Oct 2026 20:29:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/סקר_הסקרים.tag">סקר הסקרים</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>
+        </media:description>
+      </media:content>
+    </item>
     <item>
       <title>מדגמי הטלוויזיה: תסבוכת פוליטית והפתעה אחת משמעותית</title>
       <link>https://www.globes.co.il/news/article.aspx?did=1001560922#utm_source=RSS</link>
@@ -31,20 +45,6 @@
       <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1785421326/800_oexleg.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>בנימין נתניהו וגדי איזנקוט / צילום: נועם מושקוביץ-דוברות הכנסת, תמר מצפי</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>המפלגה שקרסה וההפתעה הגדולה: מה למדנו ממדגמי הטלוויזיה?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561026#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561026</guid>
-      <description>המדגמים של כלי התקשורת מציגים את תמונת המנדטים הראשונה אחרי סגירת הקלפיות &amp;#8226; מי מוביל, היכן נרשמו הפערים הגדולים בין הערוצים ואילו מפלגות עדיין מתנדנדות סביב אחוז החסימה?</description>
-      <author>יובל אינהורן וצוות המשרוקית של גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 20:29:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/סקר_הסקרים.tag">סקר הסקרים</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792495932/800_evjr0k.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>
-        </media:description>
       </media:content>
     </item>
     <item>
@@ -124,6 +124,25 @@
       <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/l_COT_Pic:hamashrokit-sagol_b5hjlt/c_scale,fl_relative,h_0.49,w_0.33/fl_layer_apply,fl_no_overflow,g_south_west,x_-28,y_-12/v1793103316/WhatsApp_Image_2026-10-27_at_12.18.51_ukok6b.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>קלפי בחירות 2026 / צילום: ארן הרשלג</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>המבחן הכלכלי החדש של וינטר, הנדל וזליכה</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560162#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560162</guid>
+      <description>הרשימות החדשות שהתמודדו בבחירות ולא עברו את אחוז החסימה, בהן של עופר וינטר, יועז הנדל וירון זליכה, נדרשו לגייס ערבויות במיליוני שקלים כדי לממן את המרוץ &amp;#8226; אלא שבניגוד למפלגות הוותיקות, מפלגות שקיבלו פחות מ־1% מהקולות - יידרשו להתמודד עם כאב ראש פיננסי לא קטן</description>
+      <author>ג'ניפר סילון</author>
+      <pubDate>Tue, 20 Oct 2026 16:00:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
+      <category domain="https://www.globes.co.il/news/ערבות.tag">ערבות</category>
+      <category domain="https://www.globes.co.il/news/חילוט_ערבויות.tag">חילוט ערבויות</category>
+      <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
+      <category domain="https://www.globes.co.il/news/ירון_זליכה.tag">ירון זליכה</category>
+      <category domain="https://www.globes.co.il/news/יועז_הנדל.tag">יועז הנדל</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792498974/800_yjua5u.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>ירון זליכה ויועז הנדל / צילום: נעם מושקוביץ-דוברות הכנסת, יועז הנדל</media:description>
       </media:content>
     </item>
     <item>
@@ -259,36 +278,6 @@
       <category domain="https://www.globes.co.il/news/ליפ_בו_טאן.tag">ליפ-בו טאן</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793090979/Nir_Minerbi_Credit_Eyal_Touag_zdfccc.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>גיא מינרבי, מנכ''ל קלאסיק ואחד ממייסדי החברה / צילום: אייל טואג</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>טראמפ: הפסקת האש עם איראן הייתה "בזבוז זמן"</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560926#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560926</guid>
-      <description>נשיא ארה"ב טען בעצרת בחירות במיסיסיפי כי לאיראן יש טיל שיוכל בעתיד להגיע לאירופה ואף לפגוע בסן דייגו ובסן פרנסיסקו &amp;#8226; במשמרות המהפכה מאיימים: "טהרן ערוכה לפעול נגד אויביה. ברשותנו טילים שטרם נחשפו" &amp;#8226; יו"ר הפרלמנט של איראן: "מצבו הבריאותי של מוג'תבא חמינאי תקין לחלוטין" &amp;#8226; הערכה: אם נתניהו ירכיב את הממשלה הבאה, הרמטכ"ל זמיר לא ימשיך בתפקידו &amp;#8226; דיווחים שוטפים  </description>
-      <author>N12 ושירות גלובס</author>
-      <pubDate>Tue, 27 Oct 2026 13:46:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/איראן.tag">איראן</category>
-      <category domain="https://www.globes.co.il/news/דונלד_טראמפ.tag">דונלד טראמפ</category>
-      <category domain="https://www.globes.co.il/news/ארהב.tag">ארה"ב</category>
-      <category domain="https://www.globes.co.il/news/משמרות_המהפכה.tag">משמרות המהפכה</category>
-      <category domain="https://www.globes.co.il/news/מוגתבא_חמינאי.tag">מוג'תבא חמינאי</category>
-      <category domain="https://www.globes.co.il/news/צהל.tag">צה"ל</category>
-      <category domain="https://www.globes.co.il/news/חמאס.tag">חמאס</category>
-      <category domain="https://www.globes.co.il/news/רצועת_עזה.tag">רצועת עזה</category>
-      <category domain="https://www.globes.co.il/news/חותים.tag">חות'ים</category>
-      <category domain="https://www.globes.co.il/news/ערב_הסעודית.tag">ערב הסעודית</category>
-      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
-      <category domain="https://www.globes.co.il/news/אייל_זמיר.tag">אייל זמיר</category>
-      <category domain="https://www.globes.co.il/news/מצר_הורמוז.tag">מצר הורמוז</category>
-      <category domain="https://www.globes.co.il/news/ישראל_במלחמה.tag">ישראל במלחמה</category>
-      <category domain="https://www.globes.co.il/news/הפסקת_אש.tag">הפסקת אש</category>
-      <category domain="https://www.globes.co.il/news/טילים.tag">טילים</category>
-      <category domain="https://www.globes.co.il/news/כטבמים.tag">כטב"מים</category>
-      <category domain="https://www.globes.co.il/news/סוריה.tag">סוריה</category>
-      <category domain="https://www.globes.co.il/news/ירדן.tag">ירדן</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1781534853/direct/2-3-800_hih9km.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>נשיא ארה''ב דונלד טראמפ ומוג'תבא חמינאי, המנהיג העליון של איראן / צילום: AP</media:description>
       </media:content>
     </item>
   </channel>
