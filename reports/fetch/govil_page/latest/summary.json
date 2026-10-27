@@ -1,6 +1,6 @@
 {
  "fetcher": "govil_page",
- "started": "2026-10-27 21:03 UTC",
+ "started": "2026-10-27 21:04 UTC",
  "pages": [
   "turnout_at_polling_stations",
   "voting-by-hour-26"
@@ -62,18 +62,18 @@
   {
    "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx",
    "title": "קבצים מצורפים",
-   "http": 200,
-   "bytes": 436079,
-   "last_modified": "Tue, 27 Oct 2026 19:10:55 GMT",
+   "http": 522,
+   "bytes": 0,
+   "last_modified": null,
    "saved": null,
-   "error": null
+   "error": "HTTP 522"
   },
   {
    "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx",
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 442222,
-   "last_modified": "Tue, 27 Oct 2026 19:10:55 GMT",
+   "last_modified": "Tue, 27 Oct 2026 19:10:56 GMT",
    "saved": null,
    "error": null
   },
@@ -91,7 +91,7 @@
    "title": "קבצים מצורפים",
    "http": 200,
    "bytes": 695359,
-   "last_modified": "Tue, 27 Oct 2026 19:10:55 GMT",
+   "last_modified": "Tue, 27 Oct 2026 19:10:56 GMT",
    "saved": null,
    "error": null
   },
