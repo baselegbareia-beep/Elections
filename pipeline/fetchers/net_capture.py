@@ -23,7 +23,7 @@ import time
 import urllib.parse
 
 DEADLINE = 20 * 60
-PAGES = ["https://elections.govmap.gov.il/", "https://votes26.bechirot.gov.il/",
+PAGES = ["https://elections.govmap.gov.il/", "https://www.gov.il/he/pages/voting-by-hour-26", "https://votes26.bechirot.gov.il/",
          "https://votes26.bechirot.gov.il/ballotresults", "https://votes26.bechirot.gov.il/cityresults",
          "https://votes26.bechirot.gov.il/nationalresults"]
 KEEP_HOSTS = re.compile(os.environ.get("NET_CAPTURE_KEEP") or r"(^|\.)(bechirot\.gov\.il|govmap\.gov\.il|gov\.il)$")
@@ -79,6 +79,11 @@ def capture(urls, out, stop_at, notes):
                     rec = {"page": page_url, "url": r.url, "method": req.method, "status": r.status,
                            "kind": req.resource_type, "type": ctype[:60], "bytes": None, "saved": None}
                     data_like = DATA_TYPES.search(ctype) or re.search(r"\.(json|csv|xml|xlsx?)(\?|$)", r.url, re.I)
+                    if req.resource_type == "script" and host.endswith("govmap.gov.il") and r.status == 200:
+                        js = r.body().decode("utf-8", "replace")      # the app's own bundle: the addresses it may ask
+                        found = sorted(set(re.findall(r"https?://[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]{6,200}", js))
+                                       | set(re.findall(r"[\"'`](/[A-Za-z0-9._~/-]*(?:api|Api|API|data|Data|json|csv|turnout|vote|Vote|kalpi|ballot|Ballot|elect|Elect)[A-Za-z0-9._~/?=&-]*)[\"'`]", js)))
+                        rec["strings"] = found[:400]
                     if KEEP_HOSTS.search(host) and data_like and req.resource_type in ("xhr", "fetch", "document", "other"):
                         body = r.body()
                         rec["bytes"] = len(body)
@@ -98,6 +103,11 @@ def capture(urls, out, stop_at, notes):
             try:
                 resp = page.goto(url, wait_until="domcontentloaded", timeout=45000)
                 notes.append(f"{url}: HTTP {resp.status if resp else '-'}, title {page.title()[:80]!r}")
+                try:                              # what the page shows (labels, menus): the operator's map of it
+                    page.wait_for_timeout(3000)
+                    notes.append(f"{url}: visible text: {page.inner_text('body')[:600]!r}")
+                except Exception:  # noqa: BLE001
+                    pass
                 try:
                     page.wait_for_load_state("networkidle", timeout=30000)
                 except Exception:  # noqa: BLE001
@@ -125,6 +135,9 @@ def write(out, started, urls, rows, notes):
     for r in data:
         first = (r.get("first") or "").replace("|", "/").replace("\n", " ")[:120]
         md.append(f"| {r['page']} | {r['url'][:160]} | {r['method']} | {r['status']} | {r['type']} | {r['bytes']} | {r['saved']} | {first} |")
+    for r in rows:
+        if r.get("strings"):
+            md += ["", f"## Addresses and paths in {r['url']}", ""] + [f"- `{x}`" for x in r["strings"]]
     md += ["", "## Every request (address, kind, HTTP)", "", "| page | kind | HTTP | type | URL |", "|---|---|---|---|---|"]
     for r in rows:
         md.append(f"| {r.get('page')} | {r.get('kind', '')} | {r.get('status', r.get('error', ''))} | {r.get('type', '')} | {str(r.get('url'))[:180]} |")
