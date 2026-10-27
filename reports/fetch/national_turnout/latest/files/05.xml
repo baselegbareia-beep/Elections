@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>ביקורת בקואליציה על הקמפיין של בן גביר: אשם פעמיים במפלה</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382093</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151586&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>אורן בן חקון פלאש 90</Photographer>
+          <pubDate>Tue, 27 Oct 2026 21:29:52 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 21:29:52 GMT</UpdateDate>
+          <itemID>1382093</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>נחום פרי</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382093</guid>
+        </item>
+        <item>
           <title>מנסור עבאס בחדשות 12: בכיר בגוש הימין פנה אליי לפני כמה ימים לגבי שיתוף פעולה</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382092</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1130500&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1382056</guid>
-        </item>
-        <item>
-          <title>בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3%</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1382052</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>AdobeStock</Photographer>
-          <pubDate>Tue, 27 Oct 2026 18:57:46 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 18:57:46 GMT</UpdateDate>
-          <itemID>1382052</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>נחום פרי</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1382052</guid>
         </item>
       </channel>
     </rss>
