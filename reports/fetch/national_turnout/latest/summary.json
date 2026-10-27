@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 20:50 UTC",
+ "started": "2026-10-27 20:52 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 72
+   "items": 71
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -237,11 +237,6 @@
      "published_il": "15:06",
      "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד השעה 14:00: 44.9% - כאן 11"
     },
-    "אמס": {
-     "published": "2026-10-27T13:14:12+00:00",
-     "published_il": "15:14",
-     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
-    },
     "ynet": {
      "published": "2026-10-27T11:58:52+00:00",
      "published_il": "13:58",
@@ -423,20 +418,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T15:44:15+00:00",
-   "published_il": "17:44",
-   "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "הידברות",
    "published": "2026-10-27T11:10:00+00:00",
    "published_il": "13:10",
@@ -446,6 +427,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T15:44:15+00:00",
+   "published_il": "17:44",
+   "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
@@ -718,20 +713,6 @@
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "רשת 13",
-   "published": "2026-10-27T15:28:35+00:00",
-   "published_il": "17:28",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMijAFBVV95cUxNaVBiRG9VQ0dqd19KZFRncVFjUGUzQUU5WkdUamVnLTNsQmdOVk1Bb3libU1mRnBob0d5aUh3azhIeXJicVZiNHZ5UVpkYkVLemhYUG1uT3JOUDZvMERVUlljSlYxbGN3ZlZCbmFtR25heFVtRHd3LWVqUG1jVTFFNHk4WlZwNDF0dHZhVw?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "רשת 13",
    "published": "2026-10-27T15:44:15+00:00",
    "published_il": "17:44",
    "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
@@ -740,20 +721,6 @@
     [
      "16:00",
      55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "PassportNews",
-   "published": "2026-10-27T19:00:00+00:00",
-   "published_il": "21:00",
-   "title": "שיא כל הזמנים בהצבעה בבחירות: 74.3% עד 20:00 - PassportNews",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
     ]
    ]
   },
@@ -773,15 +740,29 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "אמס",
-   "published": "2026-10-27T13:14:12+00:00",
-   "published_il": "15:14",
-   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
-   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "outlet": "PassportNews",
+   "published": "2026-10-27T19:00:00+00:00",
+   "published_il": "21:00",
+   "title": "שיא כל הזמנים בהצבעה בבחירות: 74.3% עד 20:00 - PassportNews",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
    "figures": [
     [
-     "14:00",
-     44.9
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "YNET",
+   "published": "2026-10-27T10:58:42+00:00",
+   "published_il": "12:58",
+   "title": "הכי גבוה מאז 1973: שיעור ההצבעה עד 12:00 - 31.5% - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTFBMS2NuaW1wZlVpeGJoUHcydkNfb0ZLVkZlWGZtT2RmYnF4TG5jVUxfUUthZHhtanBhRmpvNk9VRHdfU2FHSEdhNkR3SXBYOENGWXFRRDcwckl1UQ?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
     ]
    ]
   },
