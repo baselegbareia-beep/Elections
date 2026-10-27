@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 15:25 UTC",
+ "started": "2026-10-27 15:26 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 40
+   "items": 39
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -138,11 +138,6 @@
      "published_il": "15:01",
      "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב"
     },
-    "אמס": {
-     "published": "2026-10-27T13:14:12+00:00",
-     "published_il": "15:14",
-     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
-    },
     "חרדים10": {
      "published": "2026-10-27T11:56:05+00:00",
      "published_il": "13:56",
@@ -152,6 +147,11 @@
      "published": "2026-10-27T13:43:58+00:00",
      "published_il": "15:43",
      "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
+    },
+    "אמס": {
+     "published": "2026-10-27T13:14:12+00:00",
+     "published_il": "15:14",
+     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
     },
     "אפוק": {
      "published": "2026-10-27T13:50:02+00:00",
@@ -232,6 +232,13 @@
      "title": "שיא של 53 שנה: עדכון נוסף על אחוז ההצבעה בבחירות"
     }
    },
+   "35.8": {
+    "נס ציונה נט": {
+     "published": "2026-10-27T11:32:12+00:00",
+     "published_il": "13:32",
+     "title": "הבחירות בנס ציונה: 35.8% הצביעו עד השעה 12:00 - נס ציונה נט"
+    }
+   },
    "30": {
     "סרוגים": {
      "published": "2026-10-27T12:40:10+00:00",
@@ -242,15 +249,15 @@
   },
   "10:00": {
    "16.68": {
-    "JDN": {
-     "published": "2026-10-27T11:40:23+00:00",
-     "published_il": "13:40",
-     "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN"
-    },
     "YNET": {
      "published": "2026-10-27T09:01:13+00:00",
      "published_il": "11:01",
      "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET"
+    },
+    "JDN": {
+     "published": "2026-10-27T11:40:23+00:00",
+     "published_il": "13:40",
+     "title": "שיעור ההצבעה הגבוה ביותר מאז 1981: 16.68% הצביעו עד 10:00 | נוהרים לקלפיות - JDN"
     },
     "סרוגים": {
      "published": "2026-10-27T09:00:19+00:00",
@@ -307,20 +314,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "אתר החדשות דבר",
-   "published": "2026-10-27T13:00:00+00:00",
-   "published_il": "15:00",
-   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 14:00 עומד על 44.9%, הגבוה ביותר מאז בחירות 1973 - אתר החדשות דבר",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "כאן 11",
    "published": "2026-10-27T04:44:14+00:00",
    "published_il": "06:44",
@@ -330,6 +323,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "אתר החדשות דבר",
+   "published": "2026-10-27T13:00:00+00:00",
+   "published_il": "15:00",
+   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 14:00 עומד על 44.9%, הגבוה ביותר מאז בחירות 1973 - אתר החדשות דבר",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
     ]
    ]
   },
@@ -377,29 +384,15 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "רשת 13",
-   "published": "2026-10-27T13:57:05+00:00",
-   "published_il": "15:57",
-   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
+   "outlet": "YNET",
+   "published": "2026-10-27T09:01:13+00:00",
+   "published_il": "11:01",
+   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
    "figures": [
     [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "מעריב",
-   "published": "2026-10-27T13:01:38+00:00",
-   "published_il": "15:01",
-   "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9sd29GdWM2aTN2WTFhMG9RZUx5V0RHYTFiZEY4Qk1zckdycFZkT1R4X29Cd2txTjY4WmVLYW00Qy1XbWstRmJ5YjNKQ0N5Q2RYM2lYSXd2cHBfY3ZuT1Zkb0EwNkg?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
+     "10:00",
+     16.68
     ]
    ]
   },
@@ -433,25 +426,25 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T09:01:13+00:00",
-   "published_il": "11:01",
-   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T13:57:05+00:00",
+   "published_il": "15:57",
+   "title": "עד 14:00 הצביעו 44.9%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTFBNc0pxbEhUb1ZyM1MyWi1BSm5ERTFrR1JPeGNyUlR6Q2ZUbWVvRXJVSXNtYUl2cVZlU1JFaDhPNlhZWlpvYWhpUDFrc2RxLVQwbmtiZjJhRHhJTlJiX3FXNTZlNTJvLWdwWVVITnZudkM?oc=5",
    "figures": [
     [
-     "10:00",
-     16.68
+     "14:00",
+     44.9
     ]
    ]
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "אמס",
-   "published": "2026-10-27T13:14:12+00:00",
-   "published_il": "15:14",
-   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
-   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "outlet": "מעריב",
+   "published": "2026-10-27T13:01:38+00:00",
+   "published_il": "15:01",
+   "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9sd29GdWM2aTN2WTFhMG9RZUx5V0RHYTFiZEY4Qk1zckdycFZkT1R4X29Cd2txTjY4WmVLYW00Qy1XbWstRmJ5YjNKQ0N5Q2RYM2lYSXd2cHBfY3ZuT1Zkb0EwNkg?oc=5",
    "figures": [
     [
      "14:00",
@@ -503,6 +496,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "ערוץ 7",
    "published": "2026-10-27T04:57:00+00:00",
    "published_il": "06:57",
@@ -540,6 +547,20 @@
     [
      "13:00",
      23.8
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "נס ציונה נט",
+   "published": "2026-10-27T11:32:12+00:00",
+   "published_il": "13:32",
+   "title": "הבחירות בנס ציונה: 35.8% הצביעו עד השעה 12:00 - נס ציונה נט",
+   "link": "https://news.google.com/rss/articles/CBMilgNBVV95cUxPa0wxUkFCVmU1NzJFNm5aVVNuRzktYzNGQUw5eDIzV0xWS2VYaUJhX2pIUTJxTHdETVJfZzRrUE9BZlJPX1RhdFFUUVVRdHlSdnpmbll2WHhwSEN1eGFGRDNXLW9VeWpWR0lPRTRqd1BNck8tc0pqbUUxX2FDcW5DLTFFRTNhY0NuTXowWHhhWUVOdC13TFhDSy1iOC1WelNVV2tkeWtJek83Y2tWblBKWjNzTEdtdTN5ekNRajhwZ2VDekdlQTNCa3U2emxHTy0tTlFGdS1LMW1TM041dWhvSm9NZXlxclBleEc3VDRpSkg0VnZleGhKelAyOWxiSVhFUVRHdmI3VW9ZVFF5SER3REhkcXNmVFhPREQ1NXQ1NkxmRUFEWXVpNUlhbXV2QXNrd0hWakdMbkhCMmRPVG1qYXA2ZGpqVzFZSzhfQUNOZGpkTjNkSVRHWUIxal9lMlNXU2hSdHNxNzRTN0prbDNKcUVZMXpEZzNJM0R4WXlHSDVocWt0WDloWGY5OFBIS3V1OWJvUkJB?oc=5",
+   "figures": [
+    [
+     "12:00",
+     35.8
     ]
    ]
   },
@@ -704,6 +725,20 @@
    "published_il": "15:04",
    "title": "נכון ל-14:00: שיעור ההצבעה הוא הגבוה מאז 1973 - 44.9% - כלכליסט",
    "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
    "figures": [
     [
      "14:00",
