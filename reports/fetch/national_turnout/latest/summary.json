@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 22:25 UTC",
+ "started": "2026-10-27 22:27 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 74
+   "items": 77
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -102,11 +102,6 @@
      "published_il": "17:46",
      "title": "שיעור ההצבעה מזנק: 74.3% הצביעו עד השעה 20:00 - הידברות"
     },
-    "היום": {
-     "published": "2026-10-27T18:59:17+00:00",
-     "published_il": "20:59",
-     "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום"
-    },
     "רדיו דרום": {
      "published": "2026-10-27T20:06:00+00:00",
      "published_il": "22:06",
@@ -145,11 +140,6 @@
      "published": "2026-10-27T15:44:15+00:00",
      "published_il": "17:44",
      "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
-    },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T15:34:30+00:00",
-     "published_il": "17:34",
-     "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية"
     },
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
@@ -516,20 +506,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T18:59:17+00:00",
-   "published_il": "20:59",
-   "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום",
-   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5DQVhPdXNRdU05S29qNUpCekhBbkpMakYzLXR6NVVpa1ZzUFMxbmxsSGN5TllZVllGWHNVMGJUOG1PanJOdkM1ZGwtd2FGalBsUmlLck05NUpGaWxTemFCdGVhYVlMdFnSAW9BVV95cUxQaWltcDJKOUJ5U3pQTWdFaXVSa1pEeW1MV01XNmxhZTZGVVRERzVTZ05BLUhPNE5CQVVXVG5YUDAwS0k0RllwN2ZFODA0ZzZkUTQ5VURxNHdJNU11TFZ3T2kwUi1RRGljaGFUVjUyZkU?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T10:58:59+00:00",
    "published_il": "12:58",
@@ -553,20 +529,6 @@
     [
      "20:00",
      74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T15:34:30+00:00",
-   "published_il": "17:34",
-   "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UN0RRSnBZRkF6ZU5scWlBckhubXUxMVFua0FQVXRIR2FoY3paVUhCdmIzZ0JvdDFYVTN1UHY5akw1SVpLcEgyMzA3eXVBSGFa?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
     ]
    ]
   },
