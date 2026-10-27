@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 21:37 UTC",
+ "started": "2026-10-27 21:39 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 84
+   "items": 78
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -102,20 +102,15 @@
      "published_il": "06:38",
      "title": "74.3% הצביעו עד 20:00 - הכי גבוה מאז 1988; שעת ההצבעה לא תוארך - YNET"
     },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T20:41:20+00:00",
-     "published_il": "22:41",
-     "title": "שיא בשיעור ההצבעה בבחירות לכנסת ה-26: 74.3% עד השעה 20:00 - - شبكة يافا الإخبارية"
+    "היום": {
+     "published": "2026-10-27T18:59:17+00:00",
+     "published_il": "20:59",
+     "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום"
     },
     "רדיו דרום": {
      "published": "2026-10-27T20:06:00+00:00",
      "published_il": "22:06",
      "title": "שיעורי ההצבעה הארציים נכון לשעה 20:00 74.3% בבאר שבע 63% - רדיו דרום"
-    },
-    "היום": {
-     "published": "2026-10-27T18:59:17+00:00",
-     "published_il": "20:59",
-     "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום"
     },
     "מעריב": {
      "published": "2026-10-27T18:57:46+00:00",
@@ -543,6 +538,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "היום",
+   "published": "2026-10-27T18:59:17+00:00",
+   "published_il": "20:59",
+   "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5DQVhPdXNRdU05S29qNUpCekhBbkpMakYzLXR6NVVpa1ZzUFMxbmxsSGN5TllZVllGWHNVMGJUOG1PanJOdkM1ZGwtd2FGalBsUmlLck05NUpGaWxTemFCdGVhYVlMdFnSAW9BVV95cUxQaWltcDJKOUJ5U3pQTWdFaXVSa1pEeW1MV01XNmxhZTZGVVRERzVTZ05BLUhPNE5CQVVXVG5YUDAwS0k0RllwN2ZFODA0ZzZkUTQ5VURxNHdJNU11TFZ3T2kwUi1RRGljaGFUVjUyZkU?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "מעריב",
    "published": "2026-10-27T10:58:59+00:00",
    "published_il": "12:58",
@@ -557,39 +566,11 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T20:41:20+00:00",
-   "published_il": "22:41",
-   "title": "שיא בשיעור ההצבעה בבחירות לכנסת ה-26: 74.3% עד השעה 20:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE9jcDBtU21EcG9ZTjN2cmpGVXV5Z25wUDdfMkRXcUEwaFJDdXR2SzE4RG9zakdTNjRJT1RQVjg1bzdVcGJLcVNZNzNxRXB2Y29i?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "רדיו דרום",
    "published": "2026-10-27T20:06:00+00:00",
    "published_il": "22:06",
    "title": "שיעורי ההצבעה הארציים נכון לשעה 20:00 74.3% בבאר שבע 63% - רדיו דרום",
    "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T18:59:17+00:00",
-   "published_il": "20:59",
-   "title": "שיא מאז 1988: שיעור ההצבעה עומד על 74.3% נכון לשעה 20:00 - היום",
-   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5DQVhPdXNRdU05S29qNUpCekhBbkpMakYzLXR6NVVpa1ZzUFMxbmxsSGN5TllZVllGWHNVMGJUOG1PanJOdkM1ZGwtd2FGalBsUmlLck05NUpGaWxTemFCdGVhYVlMdFnSAW9BVV95cUxQaWltcDJKOUJ5U3pQTWdFaXVSa1pEeW1MV01XNmxhZTZGVVRERzVTZ05BLUhPNE5CQVVXVG5YUDAwS0k0RllwN2ZFODA0ZzZkUTQ5VURxNHdJNU11TFZ3T2kwUi1RRGljaGFUVjUyZkU?oc=5",
    "figures": [
     [
      "20:00",
