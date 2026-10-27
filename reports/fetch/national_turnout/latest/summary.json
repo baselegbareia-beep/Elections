@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 19:21 UTC",
+ "started": "2026-10-27 19:24 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 70
+   "items": 76
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -92,20 +92,15 @@
      "published_il": "17:44",
      "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13"
     },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T15:34:30+00:00",
-     "published_il": "17:34",
-     "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية"
+    "רדיו דרום": {
+     "published": "2026-10-27T13:06:49+00:00",
+     "published_il": "15:06",
+     "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום"
     },
     "מעריב": {
      "published": "2026-10-27T15:02:20+00:00",
      "published_il": "17:02",
      "title": "נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל - מעריב"
-    },
-    "רדיו דרום": {
-     "published": "2026-10-27T13:06:49+00:00",
-     "published_il": "15:06",
-     "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום"
     },
     "ynet": {
      "published": "2026-10-27T15:01:55+00:00",
@@ -256,11 +251,6 @@
      "published_il": "13:10",
      "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות"
     },
-    "شبكة يافا الإخبارية": {
-     "published": "2026-10-27T13:43:58+00:00",
-     "published_il": "15:43",
-     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
-    },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
      "published_il": "15:06",
@@ -287,6 +277,13 @@
      "published": "2026-10-27T12:53:38+00:00",
      "published_il": "14:53",
      "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה בשב\"ס עומדים על כ-68 אחוזים - מעריב"
+    }
+   },
+   "68.1": {
+    "היום": {
+     "published": "2026-10-27T14:06:14+00:00",
+     "published_il": "16:06",
+     "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום"
     }
    }
   },
@@ -527,20 +524,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T15:34:30+00:00",
-   "published_il": "17:34",
-   "title": "הבחירות לכנסת: שיעור ההצבעה הגיע ל-55.7% עד השעה 16:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE1UN0RRSnBZRkF6ZU5scWlBckhubXUxMVFua0FQVXRIR2FoY3paVUhCdmIzZ0JvdDFYVTN1UHY5akw1SVpLcEgyMzA3eXVBSGFa?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "וואלה",
    "published": "2026-10-27T11:01:59+00:00",
    "published_il": "13:01",
@@ -555,20 +538,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "شبكة يافا الإخبارية",
-   "published": "2026-10-27T13:43:58+00:00",
-   "published_il": "15:43",
-   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
-   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "חרדים10",
    "published": "2026-10-27T11:56:05+00:00",
    "published_il": "13:56",
@@ -578,6 +547,34 @@
     [
      "18:00",
      66.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "היום",
+   "published": "2026-10-27T14:06:14+00:00",
+   "published_il": "16:06",
+   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9weEFCZlpFUjBJLVZ0aXQzWDMwYnV0dkpzRHctNWZwZ184NHBSenVMbzJYbWRpVjZ4VXpNR2Y1eFJRdHl5bXpKVUtSTDBtT3h3RS03RTFfeV8xbF9SWjlMT1hOUHlJVkXSAW9BVV95cUxOWVlFajI0dU1hR01DS3lNa2l5WklHdU5DNzFRYndib1g5ZWdDZ2paSVFoRW1wV2ZuSmVxc2p2V3R6WU5LYTBXOVpnaTVSVmw1SDNkWk1iRHhQMDRNRDNKOVBaMlBXRkIzYjdMajBrY1E?oc=5",
+   "figures": [
+    [
+     "14:00",
+     68.1
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "רדיו דרום",
+   "published": "2026-10-27T13:06:49+00:00",
+   "published_il": "15:06",
+   "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום",
+   "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
@@ -654,6 +651,20 @@
   {
    "feed": "Google News: אחוז ההצבעה",
    "outlet": "מעריב",
+   "published": "2026-10-27T18:57:46+00:00",
+   "published_il": "20:57",
+   "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3% - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9LNmYzOWRSX3dRS0U2S3psbnBtXzRYbjVMbnVfZDR0c013XzdzUVEzSzdpT0d2eTNNc3ZWQTZsYWp3Yk95dEZvZ1ZZbV9hNFV4cFJQUF9idTBmUjVXWTJGQ0ZkOTA?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "מעריב",
    "published": "2026-10-27T16:59:56+00:00",
    "published_il": "18:59",
    "title": "בחירות ישראל 2026: אחוז ההצבעה נכון לשעה 18:00 הינו 66.7% - מעריב",
@@ -681,20 +692,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "מעריב",
-   "published": "2026-10-27T18:57:46+00:00",
-   "published_il": "20:57",
-   "title": "בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3% - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9LNmYzOWRSX3dRS0U2S3psbnBtXzRYbjVMbnVfZDR0c013XzdzUVEzSzdpT0d2eTNNc3ZWQTZsYWp3Yk95dEZvZ1ZZbV9hNFV4cFJQUF9idTBmUjVXWTJGQ0ZkOTA?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "חרדים10",
    "published": "2026-10-27T11:56:05+00:00",
    "published_il": "13:56",
@@ -714,20 +711,6 @@
    "published_il": "15:06",
    "title": "שיעורי ההצבעה הארציים נכון לשעה 16:00: 55.7% - רדיו דרום",
    "link": "https://news.google.com/rss/articles/CBMiVEFVX3lxTE9wMmVOaGY4WUtzNGduRVJvazZMVWRWNUpYdlZDRnJnemk4eDVxSXRCMDZhX1NlNnl0WkxwdXlsWXdYMkNpeG1KeTBJb1pNODgySkpUaA?oc=5",
-   "figures": [
-    [
-     "16:00",
-     55.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "כאן 11",
-   "published": "2026-10-27T16:25:55+00:00",
-   "published_il": "18:25",
-   "title": "שיעור הצבעה היסטורי: 55.7% מבעלי זכות הבחירה הצביעו עד השעה 16:00 - כאן 11",
-   "link": "https://news.google.com/rss/articles/CBMibkFVX3lxTE9Gd1h1MGd1QS1SNUlMaE9reU9QTktZUEFUODdxbEQ4dVVNZi0xN0dUdEtBYnF1NGlhQVJ4b0xEQWdxY0NmdmhCVmhXZVFGanJxZnQ0RWVBaVMzSEMwRkpJbkVvQWUyVGNGaXJCeGF3?oc=5",
    "figures": [
     [
      "16:00",
@@ -793,20 +776,6 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "חרדים10",
-   "published": "2026-10-27T11:56:05+00:00",
-   "published_il": "13:56",
-   "title": "שיא היסטורי בבחירות: 66.7% הצביעו עד השעה 18:00 - עלייה של 9% • עדכונים שוטפים מהקלפיות - חרדים10",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50MlhFODEyakNYVTJ4N2FFNGljdmNRUmp1cW9wb2FPVERLNWFPazdCZHUtTl91Vk9JMXlUdEZiZVotWkt0R2Ew?oc=5",
-   "figures": [
-    [
-     "18:00",
-     66.7
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "אמס",
    "published": "2026-10-27T13:14:12+00:00",
    "published_il": "15:14",
@@ -816,6 +785,20 @@
     [
      "14:00",
      44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "חרדים10",
+   "published": "2026-10-27T11:56:05+00:00",
+   "published_il": "13:56",
+   "title": "שיא היסטורי בבחירות: 66.7% הצביעו עד השעה 18:00 - עלייה של 9% • עדכונים שוטפים מהקלפיות - חרדים10",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50MlhFODEyakNYVTJ4N2FFNGljdmNRUmp1cW9wb2FPVERLNWFPazdCZHUtTl91Vk9JMXlUdEZiZVotWkt0R2Ew?oc=5",
+   "figures": [
+    [
+     "18:00",
+     66.7
     ]
    ]
   },
