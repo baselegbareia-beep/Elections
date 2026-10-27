@@ -1,12 +1,12 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 13:42 UTC",
+ "started": "2026-10-27 13:44 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%A9%D7%99%D7%A2%D7%95%D7%A8%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 82
+   "items": 86
   },
   {
    "name": "Google News: אחוז ההצבעה",
@@ -135,6 +135,11 @@
      "published_il": "06:44",
      "title": "הגבוה ביותר מאז 1977: שיעור ההצבעה עד לשעה 12:00 - 31.5% - כאן 11"
     },
+    "אתר החדשות דבר": {
+     "published": "2026-10-27T05:00:00+00:00",
+     "published_il": "07:00",
+     "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 12:00 עומד על 31.5%, הכי גבוה מאז בחירות 1977 - אתר החדשות דבר"
+    },
     "YNET": {
      "published": "2026-10-27T04:38:00+00:00",
      "published_il": "06:38",
@@ -144,11 +149,6 @@
      "published": "2026-10-27T12:50:05+00:00",
      "published_il": "14:50",
      "title": "שיעור ההצבעה עד 12:00: 31.5% - הכי גבוה מאז 1973 - רשת 13"
-    },
-    "אתר החדשות דבר": {
-     "published": "2026-10-27T05:00:00+00:00",
-     "published_il": "07:00",
-     "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 12:00 עומד על 31.5%, הכי גבוה מאז בחירות 1977 - אתר החדשות דבר"
     },
     "JDN": {
      "published": "2026-10-27T11:08:38+00:00",
@@ -296,6 +296,20 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "אתר החדשות דבר",
+   "published": "2026-10-27T05:00:00+00:00",
+   "published_il": "07:00",
+   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 12:00 עומד על 31.5%, הכי גבוה מאז בחירות 1977 - אתר החדשות דבר",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
+   "figures": [
+    [
+     "12:00",
+     31.5
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T10:58:42+00:00",
    "published_il": "12:58",
@@ -338,15 +352,15 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "אתר החדשות דבר",
-   "published": "2026-10-27T05:00:00+00:00",
-   "published_il": "07:00",
-   "title": "עדכונים שוטפים / אחוז ההצבעה עד השעה 12:00 עומד על 31.5%, הכי גבוה מאז בחירות 1977 - אתר החדשות דבר",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE0tSVNqbjFTTDFpbktSZE1vN2QxbXFfa3VVVVNUSTYwVWZULVY1RFNqci1MOEQtQk45Y0pNM2htdmM3alEtOXVj?oc=5",
+   "outlet": "YNET",
+   "published": "2026-10-27T09:01:13+00:00",
+   "published_il": "11:01",
+   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
+   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
    "figures": [
     [
-     "12:00",
-     31.5
+     "10:00",
+     16.68
     ]
    ]
   },
@@ -361,20 +375,6 @@
     [
      "14:00",
      44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "YNET",
-   "published": "2026-10-27T09:01:13+00:00",
-   "published_il": "11:01",
-   "title": "הכי גבוה מאז 1981: שיעור ההצבעה עד 10:00 - 16.68% - YNET",
-   "link": "https://news.google.com/rss/articles/CBMiWkFVX3lxTE1qWk8zTkNXVUlOMmw5aTl3WWNrSnUwMDJXT01KdDBLWHd4TFN6bkJXUnVqOGZwMXRVZ2toZE5tcTJsU2xLNEhRM0VSUS1xc0s2cVd4NXRId24tQQ?oc=5",
-   "figures": [
-    [
-     "10:00",
-     16.68
     ]
    ]
   },
