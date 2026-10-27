@@ -13,7 +13,7 @@
 	<atom:link href="https://www.jdn.co.il/feed/" rel="self" type="application/rss+xml" />
 	<link>https://www.jdn.co.il/</link>
 	<description>חדשות, המגזר החרדי, כלכלה, דעות – עדכונים שוטפים מהארץ ומהעולם</description>
-	<lastBuildDate>Tue, 27 Oct 2026 22:39:59 +0000</lastBuildDate>
+	<lastBuildDate>Tue, 27 Oct 2026 22:52:58 +0000</lastBuildDate>
 	<language>he-IL</language>
 	<sy:updatePeriod>
 	hourly	</sy:updatePeriod>
@@ -36,6 +36,7 @@
 		<dc:creator><![CDATA[אהרן וסרמן]]></dc:creator>
 		<pubDate>Tue, 27 Oct 2026 22:39:59 +0000</pubDate>
 				<category><![CDATA[חדשות]]></category>
+		<category><![CDATA[חדשות 24/6]]></category>
 		<category><![CDATA[פוליטי]]></category>
 		<category><![CDATA[בחירות 2026]]></category>
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2756097</guid>
@@ -172,6 +173,7 @@
 		<pubDate>Tue, 27 Oct 2026 22:12:27 +0000</pubDate>
 				<category><![CDATA[בארץ]]></category>
 		<category><![CDATA[חדשות]]></category>
+		<category><![CDATA[חדשות 24/6]]></category>
 		<guid isPermaLink="false">https://www.jdn.co.il/?p=2756080</guid>
 
 					<description><![CDATA[<p>על רקע המדגמים שהצביעו על ירידה בכוחה של ש"ס, אולם שהוכן לכינוס פעילי התנועה נותר סגור ולא נפתח לקהל • יו"ר ש"ס הרב אריה דרעי נמנע מלשאת נאום והסתפק בהעברת מסר כתוב • לצד האופטימיות הזהירה, בלטה הימנעותו מהתחייבות לתמיכה בנתניהו: "נצטרך להמתין לתוצאות האמת"</p>
@@ -333,10 +335,10 @@
 <!--
 Performance optimized by W3 Total Cache. Learn more: https://www.boldgrid.com/w3-total-cache/?utm_source=w3tc&utm_medium=footer_comment&utm_campaign=free_plugin
 
-Object Caching 75/124 objects using Memcached
+Object Caching 79/98 objects using Memcached
 Page Caching using Memcached 
 Lazy Loading (feed)
-Database Caching 46/77 queries in 0.488 seconds using Memcached
+Database Caching 40/62 queries in 0.222 seconds using Memcached
 
-Served from: www.jdn.co.il @ 2026-10-28 00:50:58 by W3 Total Cache
+Served from: www.jdn.co.il @ 2026-10-28 00:55:05 by W3 Total Cache
 -->
