@@ -1,0 +1,291 @@
+{
+ "fetcher": "exit_polls",
+ "notes": [
+  "ynet מבזקים: HTTP 200, 30 items",
+  "ynet חדשות: HTTP 200, 30 items",
+  "מעריב מבזקים: HTTP 200, 20 items",
+  "N12: HTTP 200, 20 items",
+  "ישראל היום: HTTP 200, 100 items",
+  "סרוגים: HTTP 200, 50 items",
+  "JDN: HTTP 200, 8 items",
+  "גלובס: HTTP 200, 15 items",
+  "Google News: מדגם: HTTP 200, 24 items",
+  "Google News: exit poll: HTTP 200, 12 items",
+  "Times of Israel: HTTPError: HTTP Error 403: Forbidden",
+  "ynetnews: HTTP 200, 30 items"
+ ],
+ "items": [
+  {
+   "feed": "מעריב מבזקים",
+   "title": "בחירות 2026: אלו תוצאות המדגם של כאן חדשות",
+   "published": "2026-10-27T20:03:07+00:00",
+   "link": "https://www.maariv.co.il/breaking-news/article-1382064",
+   "outlet": null,
+   "text": " "
+  },
+  {
+   "feed": "מעריב מבזקים",
+   "title": "בחירות 2026: אלו תוצאות מדגם חדשות i24",
+   "published": "2026-10-27T20:02:53+00:00",
+   "link": "https://www.maariv.co.il/breaking-news/article-1382063",
+   "outlet": null,
+   "text": " "
+  },
+  {
+   "feed": "מעריב מבזקים",
+   "title": "בחירות 2026: אלו תוצאות מדגם חדשות 13",
+   "published": "2026-10-27T20:01:41+00:00",
+   "link": "https://www.maariv.co.il/breaking-news/article-1382062",
+   "outlet": null,
+   "text": " "
+  },
+  {
+   "feed": "מעריב מבזקים",
+   "title": "בחירות 2026: אלו תוצאות המדגם של חדשות 12",
+   "published": "2026-10-27T20:01:41+00:00",
+   "link": "https://www.maariv.co.il/breaking-news/article-1382061",
+   "outlet": null,
+   "text": " "
+  },
+  {
+   "feed": "ישראל היום",
+   "title": "\"ארבע שנים נאבקנו להגיע לרגע הזה\": הלחץ בקלפיות בתל אביב",
+   "published": "2026-10-27T15:07:09+00:00",
+   "link": "https://www.israelhayom.co.il/news/local/article/21718952",
+   "outlet": null,
+   "text": "בצפון הישן של תל אביב נרשמו תורים ארוכים, והמועמדים הגיעו לניסיון אחרון לשכנע את הבוחרים • \"מעולם לא נתקלתי בכזה אחוז הצבעה גבוה\", סיפרה מועמדת ישראל ביתנו, בזמן שיאיר גולן קרא לפעיליו להגביר מאמצים • בגוש השינוי חוששים מפני קמפיין המפלגה הגדולה, בעוד פעילי הליכוד משוכנעים שהתוצאה תהיה לטובתם: \"בעשר בלילה, אחרי המדגם, אנחנו אלה שנצחק\""
+  },
+  {
+   "feed": "ישראל היום",
+   "title": "מדגם פתיחת העונה: מכבי תל אביב מגרדת בקושי את אחוז החסימה",
+   "published": "2026-10-27T10:20:08+00:00",
+   "link": "https://www.israelhayom.co.il/sport/opinions-sport/article/21716828",
+   "outlet": null,
+   "text": "למרות שהתחזיות היו די אופטימיות, הצהובים חזרו על אותן טעויות כמו בעונה שעברה והם בדרך לבור שלא יוכלו לצאת ממנו • הקבוצה חייבת לצרף שני גארדים באופן מיידי, אבל עד שיפוץ הסגל היא צריכה לצאת מהשבוע הכפול עם 0:2"
+  },
+  {
+   "feed": "סרוגים",
+   "title": "מדגם ערוץ 12: נתניהו לא ראש הממשלה הבא",
+   "published": "2026-10-27T20:04:03+00:00",
+   "link": "https://www.srugim.co.il/101014590-מדגם-ערוץ-12-נתניהו-לא-ראש-הממשלה-הבא",
+   "outlet": null,
+   "text": "לאחר יום דרמטי מאוד ומורט עצבים בו כולם נלחמו על כל קול, ואחוזי הצבעה גבוהים מאוד בחברה הערבית: אלו תוצאות המדגם של חדשות 12 שנערך לאחר נעילת הקלפיות בחירות 2026. הקלפיות נסגרו ובשעה 22:00 מתפרסמים המדגמים. מדגם ערוץ 12 של הסוקר מנו גבע, מעלה כי כך יהיו תוצאות הבחירות. רשימת מפלגות: הליכוד - 24 ישר! - 22 ביחד - 12 הרשימה המשותפת - 11 עוצמה יהודית - 6 הדמוקרטים - 9 ישראל ביתנו - 9 ש\"ס - 8 יהדות התורה - 6 הציונות הדתית -6 רע\"ם -7 לא עוברות את אחוז החסימה: עמך ישראל המילואימניקים הציבור החרדי תמונת הגושים: גוש נתניהו עם 50 מנדטים, וגש השינוי עם 52 מנדטים, הערבים עם 18 מנדטים."
+  },
+  {
+   "feed": "סרוגים",
+   "title": "מדגם ערוץ 24: גוש הימין עם 55 מנדטים",
+   "published": "2026-10-27T20:02:55+00:00",
+   "link": "https://www.srugim.co.il/101014588-מדגם-ערוץ-24-גוש-הימין-עם-55-מנדטים",
+   "outlet": null,
+   "text": "בחירות 2026 הגיעו לסופן, הקלפיות האחרונות נסגרו וכעת מתפרסמים תוצאות המדגמים: הליכוד היא המפלגה הגדולה ביותר, אבל לאיזנקוט יש גוש חוסם עם 49 מנדטים ו-16 של המפלגות הערביות בחירות 2026, מגיעות לסיומן או אולי לתחילתן. מדגם ערוץ i24 בעריכת צוריאל שרון מדיירקט פולס מעלה כי כך ייראו תוצאות הבחירות. הליכוד היא המפלגה הגדולה ביותר עם 27 מנדטים. ישר עם 20 מנדטים. ביחד עם 15 מנדטים, הדמוקרטים עם 9 מנדטים, הרשימה המשותפת עם 9 מנדטים, ש\"ס עם 8 מנדטים. יהדות התורה עם 7 מנדטים, כמו עוצמה יהודית רע\"מ עם 7 מנדטים והציונות הדתית עם 6 מנדטים. ישראל ביתנו עם 5 מנדטים. וינטר והנדל-זליכה לא עוברים את אחוז החסימה."
+  },
+  {
+   "feed": "סרוגים",
+   "title": "מדגם כאן 11: הליכוד המפלגה הגדולה, יתרון לגוש השינוי",
+   "published": "2026-10-27T20:01:33+00:00",
+   "link": "https://www.srugim.co.il/101014586-מדגם-כאן-11-הליכוד-המפלגה-הגדולה-יתרון",
+   "outlet": null,
+   "text": "מדגם הבחירות של כאן חדשות מראה כי הליכוד המפלגה הגדולה עם 25 מנדטים - אך גוש נתניהו עומד על 50 מנדטים בלבד אל מול 53 לגוש השינוי. לאף צד אין ממשלה בלי המפלגות הערביות בחירות 2026: הקלפיות נסגרו בשעה 22:00, וכעת (שלישי) מתפרסמים המדגמים. מדגם כאן חדשות של הסוקר דודי חסיד מראה כי אלו יהיו תוצאות הבחירות: הליכוד - 25 ישר! - 21 ביחד - 14 הרשימה המשותפת - 10 הדמוקרטים - 10 ישראל ביתנו - 8 רע\"ם - 7 עוצמה יהודית - 7 ש\"ס - 6 יהדות התורה - 6 הציונות הדתית - 6 לא עוברים את אחוז החסימה: המילואימניקים (2.7%), עמך ישראל (2.2%) בחלוקה לגושים: גוש נתניהו עם 50 מנדטים, בעוד שגוש השמאל עם 53 מנדטים והמפלגות הערביות עם 17."
+  },
+  {
+   "feed": "סרוגים",
+   "title": "לפני המדגם: הסוקר הבכיר רומז על הפתעות דרמטיות",
+   "published": "2026-10-27T19:34:52+00:00",
+   "link": "https://www.srugim.co.il/101014591-לפני-המדגם-הסוקר-הבכיר-רומז-על-הפתעות",
+   "outlet": null,
+   "text": "כחצי שעה לפני פרסום מדגמי הבחירות, סוקר i24NEWS צוריאל שרון מחברת דיירקט פולס רומז על פערים משמעותיים בין הציפיות של המפלגות לתוצאות המסתמנות: \"יש ראשי מפלגות מכל קשת המפה הפוליטית שלא הולכים לאהוב את הלילה הזה\" לקראת פרסום מדגמי הבחירות לכנסת ה-26 הערב (שלישי), סוקר i24NEWS, צוריאל שרון מחברת \"דיירקט פולס\", סיפק הצהרה מסקרנת בנוגע לתוצאות המסתמנות, ורמז כי כמה מהמפלגות צפויות לקבל מספר מנדטים שונה משמעותית מכפי שציפו. \"הדבר היחיד שאנחנו יכולים לעדכן ומותר לנו לעדכן בשעה הזאת זה שאנחנו רואים מפלגות שיקבלו מספרים רחוקים ממה שהם דמיינו\", אמר שרון. לדבריו, ההפתעות אינן מוגבלות למחנה פוליטי מסוים, והן עשויות לגעת בראשי מפלגות משני צדי המפה הפוליטית. \"יש ראשי מפלגות מכל קשת המפה הפוליטית שלא הולכים לאהוב את הלילה הזה\", הוסיף הסוקר. בשלב זה לא פירט שרון לאילו מפלגות הוא מתייחס, מי מהן צפויה לקבל מספר מנדטים גבוה מהציפיות ומי עשויה להתאכזב מהתוצאה."
+  },
+  {
+   "feed": "סרוגים",
+   "title": "שלמה פילבר לקראת המדגם: \"מעולם לא ראינו מספרים כאלו\"",
+   "published": "2026-10-27T18:16:24+00:00",
+   "link": "https://www.srugim.co.il/101014578-שלמה-פילבר-לקראת-המדגם-מעולם-לא-ראינו",
+   "outlet": null,
+   "text": "הסוקר שלמה פילבר, התייחס למספרים ולנתונים לקראת המדגם בעוד פחות משעתיים ולתוצאות האמת, ואמר: \"זה עושה כאב ראש לא קטן למי שניסה לבנות מודלים\" הסוקר שלמה פיבלר, הגיע כעת (שלישי) לערוץ 14 לקראת תוצאות המדגם בשעה 22:00 בדיוק, ואמר: \"יש ממש קרב על כל קול, גם במגזר הערבי, החרדי ובשני הגושים\". פילבר ככל הנראה מכין את הימין להפסד, למרות התחזיות האופטימיות שלו בסקרים בכל תקופת הבחירות ואומר: \"זה עושה עבודה לא קטנה וכאב ראש לא קטן לכל מי שניסה לבנות מודלים\". עוד אמר פילבר: \"מעולם לא ראינו מספרים כאלו\". עוד אמר פילבר כי מפלגה שלא נחשבה בסכנה בשבועות האחרונים עלולה למצוא את עצמה מחוץ לכנסת: \"זה יכול מאוד להשפיע על ההרכב של כל אחד מהגושים\". מוקדם יותר אמר פילבר: \"התוצאות יהיו שונות בוודאות מהסקר האחרון שהצגנו\". נזכיר כי ועדת הבחירות המרכזית פרסמה את נתוני ההצבעה, ולכל אורך היום, נתוני ההצבעה גבוהים במיוחד, בעיקר במעוזי השמאל והמגזר הערבי."
+  },
+  {
+   "feed": "סרוגים",
+   "title": "הסוקרים בהלם: מפלגה אחת מציגה נתונים מפתיעים",
+   "published": "2026-10-27T18:05:42+00:00",
+   "link": "https://www.srugim.co.il/101014577-הסוקרים-בהלם-מפלגה-אחת-מציגה-נתונים",
+   "outlet": null,
+   "text": "העיתונאי רן בוקר מדווח על תנועה בלתי צפויה בסקרי העומק שלפני המדגמים: מפלגה מציגה נתונים שונים משמעותית מכל תחזיות הימים האחרונים דרמה מאחורי הקלעים בחברות החדשות והסוקרים לקראת פרסום המדגמים: העיתונאי רן בוקר מדווח על התפתחות מפתיעה בנתונים שנאספים בשעות האחרונות מחוץ לקלפיות המדגם. בדיווח ראשוני שפרסם כתב בוקר: \"שעתיים וחצי לפרסומי המדגמים: כאב ראש גדול מאוד לסוקרים לגבי מפלגה אחת לפחות שמציגה נתונים שונים בהשוואה לסקרים האחרונים. אגב, שלא גורמת לשינוי דרמטי בגושים, נכון לכתיבת הודעה זו\". בהמשך הדברים הבהיר בוקר את משמעות הנתונים והסביר מדוע המצב יוצר אתגר מקצועי עבור צוותי הסקרים. \"במידה והסוקרים מקבלים תוצאות שונות משמעותית ממה שהיה בסקרים האחרונים, הם יכולים לתת 'פקטור' לפי ההבנה שלהם את השטח ואת הסטטיסטיקה\", הסביר בוקר בתשובה לשאלות עוקביו. עם זאת, העריך העיתונאי כי במקרה הנוכחי הסוקרים נמנעים משינוי מלאכותי של הממצאים: \"במקרה הזה אני מתקשה להאמין, כי למרות שמדובר בהפתעה – המפלגה המדוברת נמצאת באותו מצב בדיוק בעוד מדגם אחד לפחות. ההפתעה הזאת, נכון לכתיבת שורות אלה, לא משפיעה על מפת הגושים במיוחד\"."
+  },
+  {
+   "feed": "JDN",
+   "title": "עם סגירת הקלפיות: הברומטר של JDN יציג את כל מדגמי החדשות",
+   "published": "2026-10-27T18:35:13+00:00",
+   "link": "https://www.jdn.co.il/news/2755990/",
+   "outlet": null,
+   "text": " הברומטר של חדשות JDN יציג בשעה 22:00 את מדגמי כל הערוצים ולאחר מכן יוצגו נתוני ספירת הקולות בזמן אמת | הצטרפו אלינו הפוסט עם סגירת הקלפיות: הברומטר של JDN יציג את כל מדגמי החדשות הופיע לראשונה ב- JDN . מסגירת הקלפיות לספירת הקולות עם סיום ההצבעה תחל בכל קלפי ספירה ידנית של הפתקים בידי ועדת הקלפי. התוצאות יתועדו בפרוטוקול ויועברו לקליטה ולבדיקה. המעטפות החיצוניות של המצביעים בהסדרים המיוחדים יעברו בדיקה למניעת כפל הצבעה. רק לאחר מכן יופרדו פרטי הבוחרים ממעטפות ההצבעה הפנימיות, תוך שמירה על חשאיות הבחירה. תוצאות האמת יפורסמו בהדרגה, בהתאם להתקדמות הספירה וקליטת הנתונים. בוועדה מדגישים כי במהלך התהליך מדובר בתוצאות חלקיות, שעשויות להשתנות ככל שייספרו קולות נוספים. כל המדגמים ותוצאות האמת באתר \" הברומטר \" של JDN עם פרסום המדגמים בשעה 22:00, ירכז \" הברומטר \" של חדשות JDN את מדגמי חמשת ערוצי החדשות במסך אחד, לצד המדגם המשוקלל של המערכת. בהמשך הלילה יוצגו תוצאות האמת המתעדכנות ישירות מנתוני ועדת הבחירות, בחלוקה למפלגות ולגושים. לאחר ספירת חצי מיליון קולות יחל לפעול גם אומדן הברומטר לתוצאה הסופית, שיוצג בנפרד מהנתונים הרשמיים ובצמוד לעדכוני החדשות השוטפים. הפוסט עם סגירת הקלפיות: הברומטר של JDN יציג את כל מדגמי החדשות הופיע לראשונה ב- JDN . "
+  },
+  {
+   "feed": "JDN",
+   "title": "העלייה בהצבעה: הזינוק ביישובים הערביים עשוי להשפיע על מאזן הגושים",
+   "published": "2026-10-27T18:21:02+00:00",
+   "link": "https://www.jdn.co.il/news/2755984/",
+   "outlet": null,
+   "text": " עד 18:00 הצביעו 66.7%, לעומת 57.7% בבחירות הקודמות. ניתוח הברומטר מצביע על התמתנות בעלייה, לצד השתתפות גבוהה במיוחד ביישובים הערביים. ביישובים החרדיים צפוי שיעור הצבעה דומה לבחירות הקודמות הפוסט העלייה בהצבעה: הזינוק ביישובים הערביים עשוי להשפיע על מאזן הגושים הופיע לראשונה ב- JDN . שיעור ההצבעה בבחירות לכנסת ה-26 הגיע בשעה 18:00 ל-66.7%, לעומת 57.7% בשעה המקבילה בבחירות 2022 – פער של תשע נקודות אחוז. עם זאת, לפי ניתוח נתוני ועדת הבחירות המרכזית לפי יישובים, בעדכון האחרון מסתמנת התמתנות במגמת העלייה. הערכת הברומטר של חדשות JDN היא ששיעור ההצבעה הסופי יעמוד על כ-78%, בטווח של 77%-80%. לשם השוואה, שיעור ההצבעה הסופי בבחירות 2022 עמד על 70.6%, ובבחירות 2020 על 71.5%. השינוי הבולט ביותר נרשם ביישובים הערביים והבדואיים, שבהם הגיע שיעור ההצבעה עד 18:00 לכ-67%. לפי הברומטר , נתון זה כבר גבוה משיעור ההצבעה הסופי שנרשם בהם בכל אחת ממערכות הבחירות מאז 2015. הגבוה מביניהן היה 66% בבחירות 2020, ואילו בבחירות 2022 הסתכם שיעור ההצבעה ב-54%. באום אל-פחם הצביעו עד 18:00 כ-61.7% מבעלי זכות הבחירה, לעומת 38.3% ביום הבחירות כולו ב-2022. ברהט נרשמו 76.5%, מול נתון סופי של 60.6% בבחירות הקודמות, ובנצרת 60.5%, לעומת 48.3%. התחזית שבניתוח היא ששיעור ההצבעה ביישובים הערביים והבדואיים יגיע בסיום היום ל-77%-82%. לפי החישוב, האזרחים הערבים מהווים כ-12.5% מבעלי זכות הבחירה, אך כ-30% מתוספת המצביעים ביחס לבחירות הקודמות. ביישובים היהודיים שאינם חרדיים צפויה, לפי הברומטר , עלייה של שש עד שמונה נקודות אחוז לעומת 2022. העלייה מתחלקת באופן כמעט שווה בין יישובים המזוהים עם הימין לבין יישובים המזוהים עם המרכז והשמאל, ולכן השפעתה המשוערת על המאזן ביניהם מוגבלת. ביישובים החרדיים הגיע שיעור ההצבעה עד 18:00 לכ-64%. ההערכה היא שבסיום היום הוא יעמוד על 75%-76%, בדומה לשיעור הרגיל בהם. אם התחזית תתממש, העלייה בהשתתפות בציבורים האחרים תקטין את משקלם היחסי של המצביעים החרדים בכלל הקולות, גם ללא ירידה בשיעור הצבעתם. מבחינת מאזן הגושים, התמונה תלויה בחלוקת הקולות בפועל. העלייה הדומה ביישובי הימין והמרכז-שמאל אינה מצביעה כשלעצמה על יתרון ברור לאחד הצדדים, ואילו הזינוק בהצבעה ביישובים הערביים עשוי להגדיל את משקל המפלגות שאליהן יופנו הקולות. אין בנתונים לפי יישוב כדי לקבוע כיצד הצביע כל בוחר או לתרגם את העלייה למנדטים. גורם נוסף בחישוב הוא כ-400 אלף מצביעים בקלפיות מיוחדות, ובהם חיילים, שאינם משויכים ליישוב מסוים. לפי הניתוח, בבחירות הקודמות כ-95% מקולותיהם ניתנו למפלגות יהודיות, ולכן הכללתם ממתנת במידת מה את השינוי במשקל היחסי הנובע מהעלייה בהצבעה ביישובים הערביים. החישוב המוצג כבר כולל אותם. הנתונים מלמדים על היקף ההשתתפות ועל השינויים הגאוגרפיים בה. את התוצאה הפוליטית תקבע ספירת הקולות. מסגירת הקלפיות לספירת הקולות עם סיום ההצבעה תחל בכל קלפי ספירה ידנית של הפתקים בידי ועדת הקלפי. התוצאות יתועדו בפרוטוקול ויועברו לקליטה ולבדיקה. המעטפות החיצוניות של המצביעים בהסדרים המיוחדים יעברו בדיקה למניעת כפל הצבעה. רק לאחר מכן יופרדו פרטי הבוחרים ממעטפות ההצבעה הפנימיות, תוך שמירה על חשאיות הבחירה. תוצאות האמת יפורסמו בהדרגה, בהתאם להתקדמות הספירה וקליטת הנתונים. בוועדה מדגישים כי במהלך התהליך מדובר בתוצאות חלקיות, שעשויות להשתנות ככל שייספרו קולות נוספים. כל המדגמים ותוצאות האמת באתר \" הברומטר \" של J"
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "מדגם ערוץ 24: גוש הימין עם 55 מנדטים - סרוגים",
+   "published": "2026-10-27T20:02:55+00:00",
+   "link": "https://news.google.com/rss/articles/CBMimgJBVV95cUxQZ2xHeGExdzJ3RXJkQmtmNzZxUGFGWnBaaFNpaW01M18zRUxmV1dRN19hLUF0YzZpczllM2JRb3JrTl9FUW9pQlA5cmRLZ084OFRtVWY1VGU2Nl90b09ySndVMHBVZlBFUjg0VG02SFRibHRYSDBsS0RDbGJnbkppUENxTGF6OFRpZ2RfRDJBSGtXS25TXy1lZGNXcWV3OW4wMVFHcnNjOFJyaGZoNjhWZG9maGNtYVl5bVhBVEN1RU9mbXYyZ2F6VTJxbDNPZTRrNnJxd19WM1RUWlExZnk2Q0NCUHhZVTVhN2U4ZkhTV2xLUUxXbWVDTXpLcmdTRW5zSzlyeTg3LVFpYzdYTDdwaFhndzhtYmMtRHc?oc=5",
+   "outlet": "סרוגים",
+   "text": " מדגם ערוץ 24: גוש הימין עם 55 מנדטים סרוגים "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "בחירות 2026: אלו תוצאות מדגם חדשות i24 - מעריב",
+   "published": "2026-10-27T20:02:53+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE5vNGdsbWY4eG4tZXhWQVlZVVJWMmJUcXhhbVgtc01sbHJfdlVYZzZ6Ni13ZnF1NFFQdmNST1BJQnV5anNGVlFKSVp3b2lBZVZNcDlXejJ0aDZadEdVZnN6a3VWa2Y?oc=5",
+   "outlet": "מעריב",
+   "text": " בחירות 2026: אלו תוצאות מדגם חדשות i24 מעריב "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "מדגם חדשות 14: הימין על 60 מנדטים, המפלגות הערביות מזנקות - C14",
+   "published": "2026-10-27T19:59:17+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1kSVBHSDVSMkRtM01FckZMSGxTYmlqUGlyQkpuN19vdzVLOHcyeXgzZ1J2blpvSUc3dGJ4a010Rmpodkc3bS1KRFlPSjRKUQ?oc=5",
+   "outlet": "C14",
+   "text": " מדגם חדשות 14: הימין על 60 מנדטים, המפלגות הערביות מזנקות C14 "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "פילבר בהערכה דרמטית: \"תוצאות המדגם יהיו שונות לחלוטין\" - המחדש",
+   "published": "2026-10-27T15:53:43+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiQ0FVX3lxTE5kRkkxR0RUUE1vaWgwYXlMYUswa211eUE3WFZqRTRLdU5VRm53Tlp5R29KeWw2cFJUeGJBUTI0X0dmSmc?oc=5",
+   "outlet": "המחדש",
+   "text": " פילבר בהערכה דרמטית: \"תוצאות המדגם יהיו שונות לחלוטין\" המחדש "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "מדגם i24news: ליכוד: 27, איזנקוט: 20 • ש\"ס בחלק מהמדגמים על 6 מנדטים - חרדים10",
+   "published": "2026-10-27T20:02:27+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE1FS0liYXdmdzZhb1FwWHlhTHVQZGVqN2RUSDNsRW5sYUtURkU3dnFIbWd5ajN0VDJwd3NWNU1pbjBzNVhKMlFn?oc=5",
+   "outlet": "חרדים10",
+   "text": " מדגם i24news: ליכוד: 27, איזנקוט: 20 • ש\"ס בחלק מהמדגמים על 6 מנדטים חרדים10 "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "מדגם כאן 11: הליכוד המפלגה הגדולה, יתרון לגוש השינוי - סרוגים",
+   "published": "2026-10-27T20:01:33+00:00",
+   "link": "https://news.google.com/rss/articles/CBMixgJBVV95cUxNQzZMYklKM0kyNlFhSl9SU3k4d1R1bHdNMXNtTDdZQ0pZUXVQSzFTeVh1emg4MXRLWXd1T0lIUExsMGtlOG5KQ1ZBY3poY2pJc1hpNWR1RnhIcEJhQURwNmdTQXNGT0pkZU1uZmxKNHRMaGNCTVoxdXpUNHRFcW5CWU1CR2hrVVV0YldzMzJobi16M3RvbTFHX0M4aW5zMGJCVDFKOEpWd3FjUzhRVlhUVjRHeUhLcDNHQ3paOWNGUmt4R1J6Ykp6RmJyQlJXTWpwelFEaUR4M0JmSUNfaXdiM29nQmJral9BX2ZlTVRaamhiRi04M25VYm1OSnBpeHVlMkpvMGw3RktKSnVPckFYTl9VYllyYlMzRWRkTzRobXE2S3Vabk9melJYSF9RS2l2SDZOVHhqeW1KSUpCeG9JdVpJa01LQQ?oc=5",
+   "outlet": "סרוגים",
+   "text": " מדגם כאן 11: הליכוד המפלגה הגדולה, יתרון לגוש השינוי סרוגים "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "קורין גדעון: \"חייבת מדגם בהול\" - ice (אייס)",
+   "published": "2026-10-27T09:38:01+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiXkFVX3lxTE1vRV9qVWJ5Uk9CeHp3dmt2MWRQLXh0OWlfZjFuQ2ladGNHNXZsbno1MjdwMXdoV2lNcDgwbnJwNVZuOUJuWVlMbXM5ejdBclpOWGFfOWxXa09USWJ0VkE?oc=5",
+   "outlet": "ice (אייס)",
+   "text": " קורין גדעון: \"חייבת מדגם בהול\" ice (אייס) "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "4 שעות למדגם: הסוקר שלמה פילבר מטיל פצצה באולפן - C14",
+   "published": "2026-10-27T13:03:14+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1xOEhKTTNaWGVXb0xZeExrMGMzdU5hS0xEenh3LXVWcGdjWjdiTzN5VWk3OTE0NWw4RzQ2MWRscDFvQmxjQmFFQkJvRWJNUQ?oc=5",
+   "outlet": "C14",
+   "text": " 4 שעות למדגם: הסוקר שלמה פילבר מטיל פצצה באולפן C14 "
+  },
+  {
+   "feed": "Google News: מדגם",
+   "title": "הסוקר של ערוץ 14, שלמה פילבר: 'אלה שסוף סוף נזכרו בי... נכנסנו לנוהל מדגם\" - חרדים10",
+   "published": "2026-10-26T21:47:52+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE5DR0FDb0piTndHTFJrYk1IdHRWc1BxLVFJVDhRVWlneXhhekZwV1F0aWljSWZrYWdGeVdjSHBJVi1ObUtudW9j?oc=5",
+   "outlet": "חרדים10",
+   "text": " הסוקר של ערוץ 14, שלמה פילבר: 'אלה שסוף סוף נזכרו בי... נכנסנו לנוהל מדגם\" חרדים10 "
+  },
+  {
+   "feed": "Google News: exit poll",
+   "title": "Israel Election Day 2026 LIVE: Watch exit polls, results and real-time analysis - The Jerusalem Post",
+   "published": "2026-10-27T19:00:04+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTE1xcHZfUjNrbTNFU3IzaVVjT0cyemRVS2EyV3R2VVlKYWVxOGhTS1BwbURTdmdrTkI4Ty1iaWFBNVdpbHdTejF2eDNCdjI2c0JLQUY3WFJmV1VwaDhyVVFpN240VzM0Njdy?oc=5",
+   "outlet": "The Jerusalem Post",
+   "text": " Israel Election Day 2026 LIVE: Watch exit polls, results and real-time analysis The Jerusalem Post "
+  },
+  {
+   "feed": "Google News: exit poll",
+   "title": "Channel 12 exit poll shows no clear victor: Netanyahu's Likud is largest party but his opponents have bigger bloc - The Times of Israel",
+   "published": "2026-10-27T20:04:27+00:00",
+   "link": "https://news.google.com/rss/articles/CBMi7gFBVV95cUxPcWZGV0FhYW05Smw1d2VEc0s5TmEtVkVnNmI5Q1NIQXZEdG9oSGNEREJyVEF4TlRCVW82TUN0Q0xiLTFrNFN2dTFZd0VRWTVwZGk1cy00VU9iNmdBRFpTendlRkgwWGtmRUJqZ21UMGEzckxYaVp6bTZqaW40U1llMWZ0MHIyTFF3QUJFcGFaSmZBZDM0ZGNjQVNQb0pJYVdzcVVUNmxtLVNSVHRoamJxUVAzdXZfMGc2dWFzTTIzX2had2ZnWHQ1eGcxcW9valcweVU4bHhNR3hxWjF3eTdNVmZMcTJ2dWtDV3RtTjlB?oc=5",
+   "outlet": "The Times of Israel",
+   "text": " Channel 12 exit poll shows no clear victor: Netanyahu's Likud is largest party but his opponents have bigger bloc The Times of Israel "
+  },
+  {
+   "feed": "Google News: exit poll",
+   "title": "Israel Election Result 2026 Winner Prediction: Who Is Likely to Win the Election? Check Exit Polls, Key Candidates, Major Parties, Expected Results Date & More - The Sunday Guardian",
+   "published": "2026-10-27T07:33:18+00:00",
+   "link": "https://news.google.com/rss/articles/CBMiowJBVV95cUxNYkVKcWk3clNIclgzNTlJYl9WOUFKemIxOTAtV2lseFZNM0wtMmZ5Z1RDY0FjWlNPdlc1c05PSDFGd0RxUElOQkpTT1VTM0tTWVRyalNXYjZxNVBrZVZHUXFSMkV5dUF3Y2FSMlN2R0hEWTR4dTB6TmxDYzRBUzRDQkgzblNhTDZzRlFySlBhOXZUUUphY3NOUFFNTXJqbVA4WkFMVDE3M2diNGU1V2hhTjc5eVNrUlUxa0c5aHNldGcyVl94dUdOWmVVZGhxRUZqNzN2dl9oU1lvcWkzcTN5SDN1eTdtYjRqb1J4SVllMFJVWW5lMkVZY3ZsclE0VFozc181SkhCUUlkazBTUWItbG1kSGRZWGhuZlZnRHY5OEVKTFXSAagCQVVfeXFMTmxlbFF0VjViNy1vMk8xTjdSSkEyU2RxeWlaaGpzanZJS21XUi1rUUlwam4yTUV6eHdTbFYwbTM2UW4tS2hfRWIzR1dmbjA4RFVCVm5yTjROckpjZVUzQ0dTWllNZm8tcmtxU1YwSG8tWkIzZjctSmNyclEwUjN0S3N3SzdJRUlUd3dpMlRseGdPSlhzUFhPUGE4SkYxdWE5T1JTZEhqNnpTMkw5TlNhTlFLa3BTNVlvcW1hV1M1anhkNkNrNnl5R3VPektlWVhQMTdyTTNxaDIxbmVyLXE5clV2UDVUNS13NGdCcE9pZS1JTG9WYVFLNEFablZxd3Jyd3JmQUxFZFNTeEoxaDJFOHRHZXFTRkRER284VXhDcVF6M1J6RTVoLTg?oc=5",
+   "outlet": "The Sunday Guardian",
+   "text": " Israel Election Result 2026 Winner Prediction: Who Is Likely to Win the Election? Check Exit Polls, Key Candidates, Major Parties, Expected Results Date & More The Sunday Guardian "
+  }
+ ],
+ "pages": [
+  {
+   "url": "https://www.maariv.co.il/breaking-news/article-1382064",
+   "http": 200,
+   "file": "page00.txt"
+  },
+  {
+   "url": "https://www.maariv.co.il/breaking-news/article-1382063",
+   "http": 200,
+   "file": "page01.txt"
+  },
+  {
+   "url": "https://www.maariv.co.il/breaking-news/article-1382062",
+   "http": 200,
+   "file": "page02.txt"
+  },
+  {
+   "url": "https://www.maariv.co.il/breaking-news/article-1382061",
+   "http": 200,
+   "file": "page03.txt"
+  },
+  {
+   "url": "https://www.israelhayom.co.il/news/local/article/21718952",
+   "error": "HTTPError: HTTP Error 403: Forbidden"
+  },
+  {
+   "url": "https://www.israelhayom.co.il/sport/opinions-sport/article/21716828",
+   "error": "HTTPError: HTTP Error 403: Forbidden"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014590-מדגם-ערוץ-12-נתניהו-לא-ראש-הממשלה-הבא",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014588-מדגם-ערוץ-24-גוש-הימין-עם-55-מנדטים",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014586-מדגם-כאן-11-הליכוד-המפלגה-הגדולה-יתרון",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014591-לפני-המדגם-הסוקר-הבכיר-רומז-על-הפתעות",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014578-שלמה-פילבר-לקראת-המדגם-מעולם-לא-ראינו",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-18: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.srugim.co.il/101014577-הסוקרים-בהלם-מפלגה-אחת-מציגה-נתונים",
+   "error": "UnicodeEncodeError: 'ascii' codec can't encode characters in position 15-21: ordinal not in range(128)"
+  },
+  {
+   "url": "https://www.jdn.co.il/news/2755990/",
+   "http": 200,
+   "file": "page12.txt"
+  },
+  {
+   "url": "https://www.jdn.co.il/news/2755984/",
+   "http": 200,
+   "file": "page13.txt"
+  }
+ ]
+}
