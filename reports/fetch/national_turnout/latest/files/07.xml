@@ -6,7 +6,26 @@
     <link>https://www.israelhayom.co.il</link>
     <atom:link href="https://www.israelhayom.co.il/rss/rss.xml" rel="self" type="application/rss+xml"/>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 18:00:18 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 18:15:19 GMT</lastBuildDate>
+    <item>
+      <title>"קינאתי": אלונה סער פנתה בבקשה מיוחדת ליאיר גולן</title>
+      <link>https://www.israelhayom.co.il/forreal/localy/article/21719930</link>
+      <guid isPermaLink="false">https://www.israelhayom.co.il/forreal/localy/article/21719930</guid>
+      <pubDate>Tue, 27 Oct 2026 18:08:12 GMT</pubDate>
+      <description>בתו של שר החוץ ומתמודד הליכוד גדעון סער, הפנתה בקשה מיוחדת ליו"ר הדמוקרטים לו היא מצביעה, ואפילו קיבלה מענה מהיר ומספק</description>
+      <category>מפה</category>
+      <category>ForReal</category>
+      <dc:creator>רינת נלקין</dc:creator>
+    </item>
+    <item>
+      <title>השווקים מאותתים על אופטימיות: הדולר נחלש, גם הנפט יורד</title>
+      <link>https://www.israelhayom.co.il/business/article/21720290</link>
+      <guid isPermaLink="false">https://www.israelhayom.co.il/business/article/21720290</guid>
+      <pubDate>Tue, 27 Oct 2026 18:03:22 GMT</pubDate>
+      <description>הדולר נסחר ברמה של 3.02 שקלים, האירו יורד ל-3.37 שקלים והפאונד ל-4.022 שקלים • העליות בוול סטריט תורמות להתחזקות המטבע הישראלי, לצד עודף בטוחות של גופים מוסדיים שעשוי להתגלגל לשוק המקומי • גם מחירי הנפט נחלשים, כשנפט אמריקני יורד ב-1.7% וברנט ב-0.7%</description>
+      <category>כלכלה</category>
+      <dc:creator>ניצן כהן</dc:creator>
+    </item>
     <item>
       <title>לא פיצה ולא שווארמה: המנה ששברה את שיאי ההזמנות ביום הבחירות</title>
       <link>https://www.israelhayom.co.il/food/food-news/article/21720182</link>
@@ -816,7 +835,7 @@
       <dc:creator>דין ברנדשטטר</dc:creator>
     </item>
     <item>
-      <title>רשת הדיסקאונט פתחה סניף חדש וראשון מסוגו - ומציעה מבצעים מיוחדים</title>
+      <title>צעד ראשון מסוגו: רשת השיווק פתחה סניף חדש - ומציעה מבצעים מיוחדים</title>
       <link>https://www.israelhayom.co.il/lifestyle/article/21716836</link>
       <guid isPermaLink="false">https://www.israelhayom.co.il/lifestyle/article/21716836</guid>
       <pubDate>Tue, 27 Oct 2026 10:42:08 GMT</pubDate>
@@ -997,27 +1016,6 @@
       <category>כדורגל עולמי</category>
       <category>ספורט</category>
       <dc:creator>אבי רויזמן</dc:creator>
-    </item>
-    <item>
-      <title>שניים הואשמו בעקבות תקרית בבסיס חיל האוויר הבריטי</title>
-      <link>https://www.israelhayom.co.il/news/world-news/europe/article/21716415</link>
-      <guid isPermaLink="false">https://www.israelhayom.co.il/news/world-news/europe/article/21716415</guid>
-      <pubDate>Tue, 27 Oct 2026 09:28:05 GMT</pubDate>
-      <description>מוחמד עבדולכרים ונומאן אסגיר, שניהם בני 24, הואשמו בעבירות לפי חוק הביטחון הלאומי הבריטי, בעקבות תקרית שאירעה בחודש שעבר בבסיס חיל האוויר המלכותי פיירפורד • החקירה מתנהלת בשיתוף היחידה ללוחמה בטרור • הדיון הראשון בפרשה צפוי להתקיים בבית משפט בלונדון</description>
-      <category>אירופה</category>
-      <category>העולם</category>
-      <category>חדשות</category>
-      <dc:creator>מערכת היום</dc:creator>
-    </item>
-    <item>
-      <title>אין שיר עם ריטה: 5 השירים המובילים של רמי קלינשטיין ביוטיוב</title>
-      <link>https://www.israelhayom.co.il/culture/music/article/21716238</link>
-      <guid isPermaLink="false">https://www.israelhayom.co.il/culture/music/article/21716238</guid>
-      <pubDate>Tue, 27 Oct 2026 09:25:23 GMT</pubDate>
-      <description>הפסנתרן והיוצר המוערך מחזיק ברפרטואר עשיר של קלאסיקות, אך הנתונים בפלטפורמה מספרים סיפור אחר • מדואטים מפתיעים ועד ללהיט הענק ששיגע את המדינה • אלו חמשת השירים המושמעים ביותר</description>
-      <category>מוזיקה</category>
-      <category>תרבות</category>
-      <dc:creator>מערכת תרבות היום</dc:creator>
     </item>
   </channel>
 </rss>
