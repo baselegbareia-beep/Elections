@@ -1,0 +1,82 @@
+{
+ "fetcher": "govil_page",
+ "started": "2026-10-27 15:50 UTC",
+ "pages": [
+  "turnout_at_polling_stations",
+  "voting-by-hour-26"
+ ],
+ "notes": [
+  "content-pages API: https://openapi-gc.digital.gov.il/pub/cio/govil/rest/contentpage/v1/api/content-pages (client id found: True)",
+  "turnout_at_polling_stations chapter 0: HTTP 200 7200 bytes",
+  "turnout_at_polling_stations chapter 1: HTTP 200 7200 bytes",
+  "turnout_at_polling_stations chapter 2: HTTP 200 7200 bytes",
+  "turnout_at_polling_stations chapter 3: HTTP 200 7200 bytes",
+  "voting-by-hour-26 chapter 0: HTTP 404 0 bytes HTTP 404",
+  "voting-by-hour-26 chapter 1: HTTP 404 0 bytes HTTP 404",
+  "voting-by-hour-26 chapter 2: HTTP 404 0 bytes HTTP 404",
+  "voting-by-hour-26 chapter 3: HTTP 404 0 bytes HTTP 404"
+ ],
+ "links": [
+  {
+   "url": "https://www.gov.il//he",
+   "title": "gov.il"
+  },
+  {
+   "url": "https://www.gov.il//he/departments/central-elections-committee",
+   "title": "ועדת הבחירות המרכזית לכנסת"
+  },
+  {
+   "url": "https://www.gov.il//he/departments/units/elections-26",
+   "title": "הבחירות לכנסת ה-26"
+  },
+  {
+   "url": "https://www.gov.il/he/departments/units/elections-26",
+   "title": "הבחירות לכנסת ה-26"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/unit/elections-26/he/logo.jpg",
+   "title": "שיעור ההצבעה בקלפיות"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx",
+   "title": "קבצים מצורפים"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx",
+   "title": "קבצים מצורפים"
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx",
+   "title": "קבצים מצורפים"
+  }
+ ],
+ "files": [
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09.xlsx",
+   "title": "קבצים מצורפים",
+   "http": 200,
+   "bytes": 436079,
+   "last_modified": "Tue, 27 Oct 2026 15:48:35 GMT",
+   "saved": null,
+   "error": null
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12.xlsx",
+   "title": "קבצים מצורפים",
+   "http": 200,
+   "bytes": 442222,
+   "last_modified": "Tue, 27 Oct 2026 15:48:36 GMT",
+   "saved": null,
+   "error": null
+  },
+  {
+   "url": "https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_16.xlsx",
+   "title": "קבצים מצורפים",
+   "http": 200,
+   "bytes": 648119,
+   "last_modified": "Tue, 27 Oct 2026 15:48:35 GMT",
+   "saved": null,
+   "error": null
+  }
+ ]
+}
