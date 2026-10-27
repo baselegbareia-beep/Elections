@@ -23,13 +23,12 @@ import time
 import urllib.parse
 
 DEADLINE = 20 * 60
-PAGES = ["https://elections.govmap.gov.il/", "https://www.gov.il/he/pages/voting-by-hour-26", "https://votes26.bechirot.gov.il/",
-         "https://votes26.bechirot.gov.il/ballotresults", "https://votes26.bechirot.gov.il/cityresults",
-         "https://votes26.bechirot.gov.il/nationalresults"]
+PAGES = ["https://mapvotes.bechirot.gov.il/?c=215846.52,595399.34&z=2", "https://mapvotes.bechirot.gov.il/", "https://elections.govmap.gov.il/",
+         "https://votes26.bechirot.gov.il/ballotresults"]
 KEEP_HOSTS = re.compile(os.environ.get("NET_CAPTURE_KEEP") or r"(^|\.)(bechirot\.gov\.il|govmap\.gov\.il|gov\.il)$")
 DATA_TYPES = re.compile(r"json|csv|xml|text/plain|octet-stream|excel|spreadsheet", re.I)
 MAX_SAVE = 5 * 1024 * 1024
-SETTLE_S = 20                                     # after network idle, for timers and lazy requests
+SETTLE_S = 30                                     # after network idle, for timers and lazy requests
 
 
 def find_chrome():
@@ -79,7 +78,7 @@ def capture(urls, out, stop_at, notes):
                     rec = {"page": page_url, "url": r.url, "method": req.method, "status": r.status,
                            "kind": req.resource_type, "type": ctype[:60], "bytes": None, "saved": None}
                     data_like = DATA_TYPES.search(ctype) or re.search(r"\.(json|csv|xml|xlsx?)(\?|$)", r.url, re.I)
-                    if req.resource_type == "script" and host.endswith("govmap.gov.il") and r.status == 200:
+                    if req.resource_type == "script" and (host.endswith("govmap.gov.il") or host.startswith("mapvotes.")) and r.status == 200:
                         js = r.body().decode("utf-8", "replace")      # the app's own bundle: the addresses it may ask
                         found = sorted(set(re.findall(r"https?://[A-Za-z0-9._~:/?#@!$&'()*+,;=%-]{6,200}", js))
                                        | set(re.findall(r"[\"'`](/[A-Za-z0-9._~/-]*(?:api|Api|API|data|Data|json|csv|turnout|vote|Vote|kalpi|ballot|Ballot|elect|Elect)[A-Za-z0-9._~/?=&-]*)[\"'`]", js)))
