@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>בעקבות השטפונות - החסימה הוחמרה: כביש 90 חסום החל מצומת הלידו</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382006</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>AdobeStock</Photographer>
+          <pubDate>Tue, 27 Oct 2026 15:43:19 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 15:43:19 GMT</UpdateDate>
+          <itemID>1382006</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>מעריב אונליין</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382006</guid>
+        </item>
+        <item>
           <title>בחירות 2026: היישוב עם אחוזי ההצבעה הגבוהים ביותר בישראל</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382005</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151781&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -27,12 +46,12 @@
           <guid isPermaLink="false">1382005</guid>
         </item>
         <item>
-          <title>אחרי הליכוד גם ש&quot;ס מצטרפת לדרישה להאריך את שעת ההצבעה</title>
+          <title>אחרי הליכוד: גם ש&quot;ס מצטרפת לדרישה להאריך את שעת ההצבעה</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382004</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151821&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
           <Photographer>יונתן סינדל, פלאש 90</Photographer>
           <pubDate>Tue, 27 Oct 2026 15:38:04 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:38:58 GMT</UpdateDate>
+          <UpdateDate>Tue, 27 Oct 2026 15:43:18 GMT</UpdateDate>
           <itemID>1382004</itemID>
           <isPremium>N</isPremium>
           <isVideo>false</isVideo>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381952</guid>
-        </item>
-        <item>
-          <title>הירי בטייבה: נקבע מותו של אחד הנפגעים - המשטרה חוקרת</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381951</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>AdobeStock</Photographer>
-          <pubDate>Tue, 27 Oct 2026 12:35:34 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 12:35:34 GMT</UpdateDate>
-          <itemID>1381951</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381951</guid>
         </item>
       </channel>
     </rss>
