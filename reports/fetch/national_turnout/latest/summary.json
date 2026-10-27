@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 20:38 UTC",
+ "started": "2026-10-27 20:40 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -150,11 +150,6 @@
      "published": "2026-10-27T17:00:54+00:00",
      "published_il": "19:00",
      "title": "66.7% הצביעו עד השעה 18:00 - יותר מבבחירות הקודמות בסגירות הקלפיות"
-    },
-    "JDN": {
-     "published": "2026-10-27T18:21:02+00:00",
-     "published_il": "20:21",
-     "title": "העלייה בהצבעה: הזינוק ביישובים הערביים עשוי להשפיע על מאזן הגושים"
     }
    },
    "9": {
@@ -162,13 +157,6 @@
      "published": "2026-10-27T17:05:01+00:00",
      "published_il": "19:05",
      "title": "שעות בודדות לסגירת הקלפיות: נתון שיא באחוז ההצבעה"
-    }
-   },
-   "61.7": {
-    "JDN": {
-     "published": "2026-10-27T18:21:02+00:00",
-     "published_il": "20:21",
-     "title": "העלייה בהצבעה: הזינוק ביישובים הערביים עשוי להשפיע על מאזן הגושים"
     }
    }
   },
@@ -540,20 +528,6 @@
   },
   {
    "feed": "Google News: אחוז ההצבעה",
-   "outlet": "כלכליסט",
-   "published": "2026-10-27T19:03:00+00:00",
-   "published_il": "21:03",
-   "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט",
-   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
    "outlet": "אתר החדשות דבר",
    "published": "2026-10-27T13:00:00+00:00",
    "published_il": "15:00",
@@ -563,6 +537,20 @@
     [
      "18:00",
      66.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "כלכליסט",
+   "published": "2026-10-27T19:03:00+00:00",
+   "published_il": "21:03",
+   "title": "ועדת הבחירות: 74.3% הצביעו עד 20:00 - עלייה של 8% מהבחירות הקודמות - כלכליסט",
+   "link": "https://news.google.com/rss/articles/CBMiaEFVX3lxTFBpZWNvemxnYmxSV1pvcDVCQTU1TjNFMDJuZzdsOTNyYTNsMGVEY2xnbGh4d3hHM3hmV2lIU1AtbTJGZFZicGdqaTFPVlFtM2c5SlZ2OTdTNl93WEpXVWo4TGpWdHk2MHpv?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -653,20 +641,6 @@
   {
    "feed": "Google News: אחוז ההצבעה",
    "outlet": "רשת 13",
-   "published": "2026-10-27T04:01:30+00:00",
-   "published_il": "06:01",
-   "title": "אחוז ההצבעה עד 20:00 - 74.3%: \"חצינו את כל השיאים\" - רשת 13",
-   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
-   "figures": [
-    [
-     "20:00",
-     74.3
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: אחוז ההצבעה",
-   "outlet": "רשת 13",
    "published": "2026-10-27T15:44:15+00:00",
    "published_il": "17:44",
    "title": "אחוז ההצבעה עד 16:00 - 55.7%: \"חצינו את כל השיאים\" - רשת 13",
@@ -675,6 +649,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: אחוז ההצבעה",
+   "outlet": "רשת 13",
+   "published": "2026-10-27T04:01:30+00:00",
+   "published_il": "06:01",
+   "title": "אחוז ההצבעה עד 20:00 - 74.3%: \"חצינו את כל השיאים\" - רשת 13",
+   "link": "https://news.google.com/rss/articles/CBMicEFVX3lxTE80ekxUekhpVVBkeXo2YThDV1M4ampyTUFoRGpHV2tqWVpOMGRiakYzOWJUSEhYZ2FkSlZsaGlVcjZsQjNIWEktZ3UzQXZVRjdBN2pvSDJSY0dER3NaQnZUWmdwclRFeHNVekJKaEphMGw?oc=5",
+   "figures": [
+    [
+     "20:00",
+     74.3
     ]
    ]
   },
@@ -955,24 +943,6 @@
     [
      "20:00",
      74.3
-    ]
-   ]
-  },
-  {
-   "feed": "JDN",
-   "outlet": "JDN",
-   "published": "2026-10-27T18:21:02+00:00",
-   "published_il": "20:21",
-   "title": "העלייה בהצבעה: הזינוק ביישובים הערביים עשוי להשפיע על מאזן הגושים",
-   "link": "https://www.jdn.co.il/news/2755984/",
-   "figures": [
-    [
-     "18:00",
-     66.7
-    ],
-    [
-     "18:00",
-     61.7
     ]
    ]
   },
