@@ -6,7 +6,7 @@
     <description>מידע עסקי מעודכן במגוון נושאים: הבורסה בתל אביב, וול סטריט ושוקי עולם, ביטוח ופיננסים, הייטק, צרכנות, משפט ועוד</description>
     <copyright>גלובס</copyright>
     <language>he</language>
-    <lastBuildDate>Tue, 27 Oct 2026 20:54:01 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 27 Oct 2026 20:54:02 GMT</lastBuildDate>
     <managingEditor>feedback@globes.co.il</managingEditor>
     <ttl>10</ttl>
     <image>
@@ -48,35 +48,19 @@
       </media:content>
     </item>
     <item>
-      <title>ההיסטוריה מלמדת: איך מגיבה הבורסה בבוקר שאחרי הבחירות?</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560669#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560669</guid>
-      <description>מחקר חדש של הבורסה לניירות ערך בחן את התנהגות מדדי ת"א-35 ות"א-125 בעשר מערכות הבחירות האחרונות &amp;#8226; הממצאים חושפים דפוס מפתיע: אופטימיות ראשונית, ירידות בשבוע הראשון, ועליות בממוצע של 1.7% בתום חודש &amp;#8226; וגם: למה התנודתיות מזנקת בעד 45%, ומה ההמלצה למשקיעים לטווח ארוך?</description>
-      <author>חזי שטרנליכט</author>
-      <pubDate>Tue, 27 Oct 2026 08:10:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
-      <category domain="https://www.globes.co.il/news/מדד_תא_35.tag">מדד ת"א 35</category>
-      <category domain="https://www.globes.co.il/news/מדד_תא_125.tag">מדד ת"א 125</category>
+      <title>מה קורה בפולימרקט? איזנקוט מוביל, אך המומנטום שלו נחלש</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561029#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561029</guid>
+      <description>לאחר חודשים שבהם הוביל יו"ר ישר! בפער ניכר, שוק ההימורים הבינלאומי פולימרקט מציג צמצום פערים: נתניהו מתחזק ל-30%, אך איזנקוט מוביל עם כ-50% &amp;#8226; על רקע זה, הערכות כי המו"מ הקואליציוני והיעדר הכרעה בין הגושים הם שיכריעו את הזהות של ראש הממשלה הבא</description>
+      <author>תומר שמאי</author>
+      <pubDate>Tue, 27 Oct 2026 20:30:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/פולימרקט.tag">פולימרקט</category>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
-      <category domain="https://www.globes.co.il/news/מחקר.tag">מחקר</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1786038581/%D7%9C%D7%90%D7%AA%D7%A8-800_ydlpep.png" type="image/png" expression="full" width="800" height="392">
-        <media:description>אפקט הבחירות בבורסה / אילוסטרציה: שלומי יוסף</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>הזרעים נטמנו בבחירות הקודמות? כך התארגנו המפלגות הערביות להישג היסטורי</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561030#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561030</guid>
-      <description>הפיצול בבחירות 2022 דווקא החזיר מצביעים לקלפיות, אך גם הותיר קולות רבים מחוץ לכנסת &amp;#8226; הפעם חד"ש, תע"ל ובל"ד התאחדו, רע"ם שמרה על עצמאותה - והתוצאה המסתמנת: כוח שיא למפלגות הערביות &amp;#8226; המשרוקית של גלובס </description>
-      <author>יובל אינהורן</author>
-      <pubDate>Tue, 27 Oct 2026 20:51:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/רעם.tag">רע"ם</category>
-      <category domain="https://www.globes.co.il/news/החברה_הערבית.tag">החברה הערבית</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793014824/1782703_rtmxhd.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>מנסור עבאס ויוסף ג'בארין / צילום: כדיה לוי, דוברות הכנסת</media:description>
+      <category domain="https://www.globes.co.il/news/גדי_איזנקוט.tag">גדי איזנקוט</category>
+      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
+      <category domain="https://www.globes.co.il/news/קואליציה.tag">קואליציה</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792593315/shutterstock_2804301013_obmnnl.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>פלטפורמת פולימרקט / צילום: Shutterstock</media:description>
       </media:content>
     </item>
     <item>
@@ -94,19 +78,40 @@
       </media:content>
     </item>
     <item>
-      <title>מה קורה בפולימרקט? איזנקוט מוביל, אך המומנטום שלו נחלש</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001561029#utm_source=RSS</link>
-      <guid isPermaLink="false">1001561029</guid>
-      <description>לאחר חודשים שבהם הוביל יו"ר ישר! בפער ניכר, שוק ההימורים הבינלאומי פולימרקט מציג צמצום פערים: נתניהו מתחזק ל-30%, אך איזנקוט מוביל עם כ-50% &amp;#8226; על רקע זה, הערכות כי המו"מ הקואליציוני והיעדר הכרעה בין הגושים הם שיכריעו את הזהות של ראש הממשלה הבא</description>
-      <author>תומר שמאי</author>
-      <pubDate>Tue, 27 Oct 2026 20:30:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/פולימרקט.tag">פולימרקט</category>
+      <title>המבחן הכלכלי החדש של וינטר, הנדל וזליכה</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560162#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560162</guid>
+      <description>הרשימות החדשות שהתמודדו בבחירות ולא עברו את אחוז החסימה, בהן של עופר וינטר, יועז הנדל וירון זליכה, נדרשו לגייס ערבויות במיליוני שקלים כדי לממן את המרוץ &amp;#8226; אלא שבניגוד למפלגות הוותיקות, מפלגות שקיבלו פחות מ־1% מהקולות - יידרשו להתמודד עם כאב ראש פיננסי לא קטן</description>
+      <author>ג'ניפר סילון</author>
+      <pubDate>Tue, 27 Oct 2026 20:39:00 GMT</pubDate>
       <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/גדי_איזנקוט.tag">גדי איזנקוט</category>
-      <category domain="https://www.globes.co.il/news/בנימין_נתניהו.tag">בנימין נתניהו</category>
-      <category domain="https://www.globes.co.il/news/קואליציה.tag">קואליציה</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792593315/shutterstock_2804301013_obmnnl.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>פלטפורמת פולימרקט / צילום: Shutterstock</media:description>
+      <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
+      <category domain="https://www.globes.co.il/news/ערבות.tag">ערבות</category>
+      <category domain="https://www.globes.co.il/news/חילוט_ערבויות.tag">חילוט ערבויות</category>
+      <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
+      <category domain="https://www.globes.co.il/news/ירון_זליכה.tag">ירון זליכה</category>
+      <category domain="https://www.globes.co.il/news/יועז_הנדל.tag">יועז הנדל</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792498974/800_yjua5u.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>ירון זליכה ויועז הנדל / צילום: נעם מושקוביץ-דוברות הכנסת, יועז הנדל</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>ההיסטוריה מלמדת: איך מגיבה הבורסה בבוקר שאחרי הבחירות?</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001560669#utm_source=RSS</link>
+      <guid isPermaLink="false">1001560669</guid>
+      <description>מחקר חדש של הבורסה לניירות ערך בחן את התנהגות מדדי ת"א-35 ות"א-125 בעשר מערכות הבחירות האחרונות &amp;#8226; הממצאים חושפים דפוס מפתיע: אופטימיות ראשונית, ירידות בשבוע הראשון, ועליות בממוצע של 1.7% בתום חודש &amp;#8226; וגם: למה התנודתיות מזנקת בעד 45%, ומה ההמלצה למשקיעים לטווח ארוך?</description>
+      <author>חזי שטרנליכט</author>
+      <pubDate>Tue, 27 Oct 2026 08:10:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/הבורסה_בתא.tag">הבורסה בת"א</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_35.tag">מדד ת"א 35</category>
+      <category domain="https://www.globes.co.il/news/מדד_תא_125.tag">מדד ת"א 125</category>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
+      <category domain="https://www.globes.co.il/news/השקעות.tag">השקעות</category>
+      <category domain="https://www.globes.co.il/news/מחקר.tag">מחקר</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1786038581/%D7%9C%D7%90%D7%AA%D7%A8-800_ydlpep.png" type="image/png" expression="full" width="800" height="392">
+        <media:description>אפקט הבחירות בבורסה / אילוסטרציה: שלומי יוסף</media:description>
       </media:content>
     </item>
     <item>
@@ -138,25 +143,6 @@
       <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/c_auto,h_392,w_800/l_COT_Pic:hamashrokit-sagol_b5hjlt/c_scale,fl_relative,h_0.49,w_0.33/fl_layer_apply,fl_no_overflow,g_south_west,x_-28,y_-12/v1793103316/WhatsApp_Image_2026-10-27_at_12.18.51_ukok6b.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>קלפי בחירות 2026 / צילום: ארן הרשלג</media:description>
-      </media:content>
-    </item>
-    <item>
-      <title>המבחן הכלכלי החדש של וינטר, הנדל וזליכה</title>
-      <link>https://www.globes.co.il/news/article.aspx?did=1001560162#utm_source=RSS</link>
-      <guid isPermaLink="false">1001560162</guid>
-      <description>הרשימות החדשות שהתמודדו בבחירות ולא עברו את אחוז החסימה, בהן של עופר וינטר, יועז הנדל וירון זליכה, נדרשו לגייס ערבויות במיליוני שקלים כדי לממן את המרוץ &amp;#8226; אלא שבניגוד למפלגות הוותיקות, מפלגות שקיבלו פחות מ־1% מהקולות - יידרשו להתמודד עם כאב ראש פיננסי לא קטן</description>
-      <author>ג'ניפר סילון</author>
-      <pubDate>Tue, 27 Oct 2026 20:39:00 GMT</pubDate>
-      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
-      <category domain="https://www.globes.co.il/news/מפלגות.tag">מפלגות</category>
-      <category domain="https://www.globes.co.il/news/ערבות.tag">ערבות</category>
-      <category domain="https://www.globes.co.il/news/חילוט_ערבויות.tag">חילוט ערבויות</category>
-      <category domain="https://www.globes.co.il/news/אחוז_החסימה.tag">אחוז החסימה</category>
-      <category domain="https://www.globes.co.il/news/ירון_זליכה.tag">ירון זליכה</category>
-      <category domain="https://www.globes.co.il/news/יועז_הנדל.tag">יועז הנדל</category>
-      <category domain="https://www.globes.co.il/news/בחירות.tag">בחירות</category>
-      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1792498974/800_yjua5u.jpg" type="image/jpg" expression="full" width="800" height="392">
-        <media:description>ירון זליכה ויועז הנדל / צילום: נעם מושקוביץ-דוברות הכנסת, יועז הנדל</media:description>
       </media:content>
     </item>
     <item>
@@ -209,6 +195,20 @@
       <category domain="https://www.globes.co.il/news/ימין_פוליטי.tag">ימין פוליטי</category>
       <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793124647/AP26298419389118_ncfxel.jpg" type="image/jpg" expression="full" width="800" height="392">
         <media:description>פלאביו בולסונארו / צילום: ap, Silvia Izquierdo</media:description>
+      </media:content>
+    </item>
+    <item>
+      <title>הזרעים נטמנו בבחירות הקודמות? כך התארגנו המפלגות הערביות להישג היסטורי</title>
+      <link>https://www.globes.co.il/news/article.aspx?did=1001561030#utm_source=RSS</link>
+      <guid isPermaLink="false">1001561030</guid>
+      <description>הפיצול בבחירות 2022 דווקא החזיר מצביעים לקלפיות, אך גם הותיר קולות רבים מחוץ לכנסת &amp;#8226; הפעם חד"ש, תע"ל ובל"ד התאחדו, רע"ם שמרה על עצמאותה - והתוצאה המסתמנת: כוח שיא למפלגות הערביות &amp;#8226; המשרוקית של גלובס </description>
+      <author>יובל אינהורן</author>
+      <pubDate>Tue, 27 Oct 2026 20:51:00 GMT</pubDate>
+      <category domain="https://www.globes.co.il/news/בחירות_2026.tag">בחירות 2026</category>
+      <category domain="https://www.globes.co.il/news/רעם.tag">רע"ם</category>
+      <category domain="https://www.globes.co.il/news/החברה_הערבית.tag">החברה הערבית</category>
+      <media:content url="https://res.cloudinary.com/globes/image/upload/t_800X392/v1793014824/1782703_rtmxhd.jpg" type="image/jpg" expression="full" width="800" height="392">
+        <media:description>מנסור עבאס ויוסף ג'בארין / צילום: כדיה לוי, דוברות הכנסת</media:description>
       </media:content>
     </item>
     <item>
