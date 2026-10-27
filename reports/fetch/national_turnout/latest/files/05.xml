@@ -8,6 +8,25 @@
           <generator>RSSFeeds</generator>    
     
         <item>
+          <title>אירוע האלימות סמוך לקלפי בחולון: בן 15 נחקר ושוחרר למעצר בית</title>
+           <link>https://www.maariv.co.il/breaking-news/article-1382056</link>
+          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151788&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
+          <Photographer>צילום מסך רשתות חברתיות לפי חוק 27א לזכויות יוצרים</Photographer>
+          <pubDate>Tue, 27 Oct 2026 19:36:08 GMT</pubDate>
+          <UpdateDate>Tue, 27 Oct 2026 19:36:08 GMT</UpdateDate>
+          <itemID>1382056</itemID>
+          <isPremium>N</isPremium>
+          <isVideo>false</isVideo>
+          <Author>אלון חכמון</Author>
+          <Sponsored>false</Sponsored>
+          <Tags></Tags>
+          <CategoryID>2</CategoryID>
+          <SubCategoryID>0</SubCategoryID>
+          <Gallery1ID>0</Gallery1ID>
+          
+          <guid isPermaLink="false">1382056</guid>
+        </item>
+        <item>
           <title>בחירות 2026: אחוז ההצבעה נכון לשעה 20:00 הינו - 74.3%</title>
            <link>https://www.maariv.co.il/breaking-news/article-1382052</link>
           <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/894192&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
@@ -367,25 +386,6 @@
           <Gallery1ID>0</Gallery1ID>
           
           <guid isPermaLink="false">1381992</guid>
-        </item>
-        <item>
-          <title>נכון לשעה 16:00: 55.7% - אחוז ההצבעה הגדול בהיסטוריה של ישראל</title>
-           <link>https://www.maariv.co.il/breaking-news/article-1381990</link>
-          <description>&lt;img height=&apos;80&apos; width=&apos;100&apos; align=&apos;right&apos; src=&apos;https://images.maariv.co.il/image/upload/f_auto,fl_lossy/c_fill,g_faces:center,h_438,w_778/1151781&apos; /&gt;&lt;br/&gt;&lt;br/&gt;</description>
-          <Photographer>יונתן זינדל, פלאש 90</Photographer>
-          <pubDate>Tue, 27 Oct 2026 15:02:20 GMT</pubDate>
-          <UpdateDate>Tue, 27 Oct 2026 15:05:49 GMT</UpdateDate>
-          <itemID>1381990</itemID>
-          <isPremium>N</isPremium>
-          <isVideo>false</isVideo>
-          <Author>מעריב אונליין</Author>
-          <Sponsored>false</Sponsored>
-          <Tags></Tags>
-          <CategoryID>2</CategoryID>
-          <SubCategoryID>0</SubCategoryID>
-          <Gallery1ID>0</Gallery1ID>
-          
-          <guid isPermaLink="false">1381990</guid>
         </item>
       </channel>
     </rss>
