@@ -1,9 +1,9 @@
-## CEC file discovery, 27.10 12:36 Israel time (quick, github-hosted)
+## CEC file discovery, 27.10 17:33 Israel time (quick, github-hosted)
 
 - **WAF: seen** on bechirot.gov.il, media26.bechirot.gov.il, votes26.bechirot.gov.il, www.bechirot.gov.il: its challenge instead of the CEC's answer on 6 requests; a challenged host is then asked through the browser directly (urllib again every 10 minutes).
 - **The browser path got past it: yes**: 14 URLs answered through Chrome 155.0.8059.39 (its own User-Agent, HeadlessChrome/155.0.0.0): HTTP 404 ×14.
 
-86 URLs probed in 41 s, 38 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
+76 URLs probed in 38 s, 39 answered. Control (2022 file): 200 (results-locality, 154331 bytes). How to read this: docs/FILE_DISCOVERY.md.
 
 | live_config key | now | state | switch to | column_aliases |
 |---|---|---|---|---|
@@ -16,12 +16,12 @@ Other candidates (in brackets: why not suggested, or what to check):
 
 - results_url_localities: https://media25.bechirot.gov.il/files/expc.csv (control, 2022/test)
 
-### Since 2026-10-27T12:01:51+02:00: 0 new, 0 changed, 2 gone
+### Since 2026-10-27T12:36:27+02:00: 1 new, 1 changed, 0 gone
 
 |  | URL | class | what |
 |---|---|---|---|
-| gone | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09… | turnout-station | now 404 |
-| gone | https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09… | turnout-station | now 404 |
+| new | https://www.gov.il/he/pages/voting-by-hour-26 | html | was 403 |
+| changed | live_input/stations.csv | turnout-station | bytes: 261005 → 221638, sha256: 0bc73fd60784 → e980a2ef5236 |
 
 ### Files and pages with data
 
@@ -30,7 +30,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | data-other | https://data.gov.il/api/3/action/help_show?name=package_show | 200 | 595 |  |  |
 | data-other | https://data.gov.il/api/3/action/package_show?id=votes-knesset | 200 | 29495 |  | json 17 rows |
 | results-locality | https://media25.bechirot.gov.il/files/expc.csv | 200 | 154331 | Tue, 08 Nov 2022 15:03:31 GMT | csv 1216 rows; 1215 loc, 1215 counted; letters 2022 (a test file?); 1 double-envelope rows (סמל ישוב 9999); stored: files/20261015-1201/412785ed-media25.bechirot.gov.il_expc.csv |
-| turnout-station | live_input/stations.csv | 200 | 261005 |  | csv 8220 rows; 555 loc, 8220 counted; 2022 stations 60%; reader ok |
+| turnout-station | live_input/stations.csv | 200 | 221638 |  | csv 11969 rows; 1218 loc, 11969 counted; 2022 stations 64%; reader ok |
 
 ### Stored files (1; on the ops-reports branch under reports/, locally under the --out folder)
 
@@ -48,15 +48,15 @@ Other candidates (in brackets: why not suggested, or what to check):
 | bechirot.gov.il | 147.237.12.28 | 3 | 0 | {"404": 3} | browser 3 | 1 | CloudFront (Error from cloudfront) |
 | bechirot26.bechirot.gov.il | DNS: gaierror | 1 | 0 | {"no answer": 1} | urllib 1 |  | URLError |
 | cdn-votes26.bechirot.gov.il | 147.237.2.202 | 5 | 0 | {"no answer": 5} | urllib 3 |  | URLError; skipped |
-| data.gov.il | 3.170.185.105, 3.170.185.24, 3.170.185.59 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
-| e.data.gov.il | 13.227.87.13, 13.227.87.51, 13.227.87.63 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
+| data.gov.il | 3.171.76.10, 3.171.76.125, 3.171.76.28 | 2 | 2 | {"200": 2} | urllib 2 |  |  |
+| e.data.gov.il | 18.165.98.102, 18.165.98.123, 18.165.98.28 | 17 | 17 | {"200": 17} | urllib 17 |  |  |
 | media25.bechirot.gov.il | 147.237.3.207 | 1 | 1 | {"200": 1} | urllib 1 |  |  |
-| media26.bechirot.gov.il | 18.172.122.24, 18.172.122.43, 18.172.122.65 | 8 | 0 | {"404": 8} | browser 2, urllib 6 | 2 | CloudFront (Error from cloudfront) |
+| media26.bechirot.gov.il | 2600:9000:215a:1600:1b:8951:5b80:93a1, 2600:9000:215a:2200:1b:8951:5b80:93a1, 2600:9000:2… | 8 | 0 | {"404": 8} | browser 2, urllib 6 | 2 | CloudFront (Error from cloudfront) |
 | openapi-gc.digital.gov.il | 34.8.107.129 | 7 | 0 | {"500": 7} | urllib 7 |  |  |
 | sm.gov.il | 147.237.10.47 | 1 | 0 | {"no answer": 1} |  |  | URLError |
-| votes26.bechirot.gov.il | 2600:9000:2137:2800:3:c455:d440:93a1, 2600:9000:2137:5600:3:c455:d440:93a1, 2600:9000:213… | 8 | 0 | {"404": 8} | browser 8 | 2 | CloudFront (Error from cloudfront) |
-| www.bechirot.gov.il | 2600:9000:2137:0:1e:5e2c:7e80:93a1, 2600:9000:2137:1e00:1e:5e2c:7e80:93a1, 2600:9000:2137… | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
-| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 30 | 17 | {"200": 17, "404": 11, "403": 2} | urllib 30 |  | not found |
+| votes26.bechirot.gov.il | 2600:9000:28a9:2a00:3:c455:d440:93a1, 2600:9000:28a9:5200:3:c455:d440:93a1, 2600:9000:28a… | 8 | 0 | {"404": 8} | browser 8 | 2 | CloudFront (Error from cloudfront) |
+| www.bechirot.gov.il | 18.239.6.129, 18.239.6.45, 18.239.6.68 | 1 | 0 | {"404": 1} | browser 1 | 1 | CloudFront (Error from cloudfront) |
+| www.gov.il | 104.18.36.14, 172.64.151.242, 2606:4700:4403::ac40:97f2 | 20 | 18 | {"200": 18, "404": 2} | urllib 20 |  | not found |
 
 ### Pages and scripts that answered
 
@@ -87,6 +87,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://www.gov.il/he/pages/gtm.js | 200 |  |
 | https://www.gov.il/he/pages/turnout_at_polling_stations | 200 |  |
 | https://www.gov.il/he/pages/voting-by-hour | 200 |  |
+| https://www.gov.il/he/pages/voting-by-hour-26 | 200 |  |
 | https://www.gov.il/ContentpageWebApi/client-config.js | 200 |  |
 | https://www.gov.il/cdn-cgi/challenge-platform/scripts/precursor/main.js | 200 |  |
 | https://www.gov.il/govilCoreCloud/cdn/chat.js | 200 |  |
@@ -144,7 +145,7 @@ Other candidates (in brackets: why not suggested, or what to check):
   - fragment: `:e.contentPageWebApi,o=null==(a=window.govilRunConfig)?void 0:a.clientId,i='${l}/api/content-pages/${n}?culture=${A}'+(r.chapterIndex?'&chapterIndex=${r.chapterIndex`
   - fragment: `Options:n,shareLabel:r})=>{const[a,l,i]=d();if((0,o().useEffect)(()=>{e&&l('${e}/api/GetSharePageList?culture=he',!1,void 0,t)},[]),null==a\|\|!a.length\|\|i)return null`
 
-<details><summary>48 URLs that did not answer with data</summary>
+<details><summary>37 URLs that did not answer with data</summary>
 
 | URL | HTTP | why |
 |---|---|---|
@@ -183,18 +184,7 @@ Other candidates (in brackets: why not suggested, or what to check):
 | https://votes26.bechirot.gov.il/robots.txt | 404 | CloudFront (Error from cloudfront) |
 | https://votes26.bechirot.gov.il/sitemap.xml | 404 | CloudFront (Error from cloudfront) |
 | https://www.bechirot.gov.il/ | 404 | CloudFront (Error from cloudfront) |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_09… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_10… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_10… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_11… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_11… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_12… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_13… | 404 | not found |
-| https://www.gov.il/BlobFolder/generalpage/turnout_at_polling_stations/he/voter_turnout_13… | 404 | not found |
 | https://www.gov.il/api/ | 404 | not found |
-| https://www.gov.il/api/GetChatConfig | 403 |  |
-| https://www.gov.il/he/pages/voting-by-hour-26 | 403 |  |
+| https://www.gov.il/api/GetChatConfig | 404 | not found |
 
 </details>
