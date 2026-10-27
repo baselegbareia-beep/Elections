@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 16:23 UTC",
+ "started": "2026-10-27 16:26 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 49
+   "items": 50
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -160,11 +160,6 @@
      "published_il": "15:43",
      "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
     },
-    "אמס": {
-     "published": "2026-10-27T13:14:12+00:00",
-     "published_il": "15:14",
-     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
-    },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
      "published_il": "15:06",
@@ -174,6 +169,11 @@
      "published": "2026-10-27T13:50:02+00:00",
      "published_il": "15:50",
      "title": "אחוז ההצבעה עד 14:00 – 44.9% - אפוק"
+    },
+    "אמס": {
+     "published": "2026-10-27T13:14:12+00:00",
+     "published_il": "15:14",
+     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
     },
     "PassportNews": {
      "published": "2026-10-27T13:01:00+00:00",
@@ -200,8 +200,8 @@
    },
    "68.1": {
     "היום": {
-     "published": "2026-10-27T14:45:12+00:00",
-     "published_il": "16:45",
+     "published": "2026-10-27T14:06:14+00:00",
+     "published_il": "16:06",
      "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום"
     }
    },
@@ -386,20 +386,6 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "מעריב",
-   "published": "2026-10-27T12:53:38+00:00",
-   "published_il": "14:53",
-   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה בשב\"ס עומדים על כ-68 אחוזים - מעריב",
-   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9zN1Ficko4R1I1dmJNNzZLU3A1T0ZDamw5Yk5jN2dheFZhM0FmSEpLQ3ozb29yYTJRS19KWmpSR0YxSHRpYlpfYTFRaXltQ3FYdTA3RGZ1aGlGTHoxQWIwNFczMkI?oc=5",
-   "figures": [
-    [
-     "14:00",
-     68.0
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
    "outlet": "רשת 13",
    "published": "2026-10-27T15:44:15+00:00",
    "published_il": "17:44",
@@ -409,6 +395,20 @@
     [
      "16:00",
      55.7
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "מעריב",
+   "published": "2026-10-27T12:53:38+00:00",
+   "published_il": "14:53",
+   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה בשב\"ס עומדים על כ-68 אחוזים - מעריב",
+   "link": "https://news.google.com/rss/articles/CBMiZEFVX3lxTE9zN1Ficko4R1I1dmJNNzZLU3A1T0ZDamw5Yk5jN2dheFZhM0FmSEpLQ3ozb29yYTJRS19KWmpSR0YxSHRpYlpfYTFRaXltQ3FYdTA3RGZ1aGlGTHoxQWIwNFczMkI?oc=5",
+   "figures": [
+    [
+     "14:00",
+     68.0
     ]
    ]
   },
@@ -554,15 +554,15 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
-   "outlet": "אמס",
-   "published": "2026-10-27T13:14:12+00:00",
-   "published_il": "15:14",
-   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
-   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "outlet": "היום",
+   "published": "2026-10-27T14:06:14+00:00",
+   "published_il": "16:06",
+   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9weEFCZlpFUjBJLVZ0aXQzWDMwYnV0dkpzRHctNWZwZ184NHBSenVMbzJYbWRpVjZ4VXpNR2Y1eFJRdHl5bXpKVUtSTDBtT3h3RS03RTFfeV8xbF9SWjlMT1hOUHlJVkXSAW9BVV95cUxOWVlFajI0dU1hR01DS3lNa2l5WklHdU5DNzFRYndib1g5ZWdDZ2paSVFoRW1wV2ZuSmVxc2p2V3R6WU5LYTBXOVpnaTVSVmw1SDNkWk1iRHhQMDRNRDNKOVBaMlBXRkIzYjdMajBrY1E?oc=5",
    "figures": [
     [
      "14:00",
-     44.9
+     68.1
     ]
    ]
   },
@@ -619,20 +619,6 @@
     [
      "13:00",
      23.8
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T14:45:12+00:00",
-   "published_il": "16:45",
-   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
-   "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUdIBb0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUQ?oc=5",
-   "figures": [
-    [
-     "14:00",
-     68.1
     ]
    ]
   },
@@ -903,20 +889,6 @@
    ]
   },
   {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T11:13:46+00:00",
-   "published_il": "13:13",
-   "title": "שיעור ההצבעה הגבוה ביותר מאז 1977: 31.5% הצביעו עד 12:00 | הנהירה נמשכת - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE5YQ1hHR3hMaVdtVTMtS0NPVXJ2LVVYVThaQVh2S3JIaTM2Z0NnWlRreGxONGZrUXRLd0QyamhRNEFJdEdZNDM5ZzFrTQ?oc=5",
-   "figures": [
-    [
-     "12:00",
-     31.5
-    ]
-   ]
-  },
-  {
    "feed": "ynet מבזקים",
    "outlet": "ynet",
    "published": "2026-10-27T15:01:55+00:00",
@@ -969,20 +941,6 @@
     [
      "16:00",
      55.7
-    ]
-   ]
-  },
-  {
-   "feed": "מעריב מבזקים",
-   "outlet": "מעריב",
-   "published": "2026-10-27T13:01:38+00:00",
-   "published_il": "15:01",
-   "title": "עד השעה 14:00 שיעור ההצבעה הוא: 44.9% - עליה של 6% מהבחירות הקודמות",
-   "link": "https://www.maariv.co.il/breaking-news/article-1381961",
-   "figures": [
-    [
-     "14:00",
-     44.9
     ]
    ]
   },
