@@ -1,6 +1,6 @@
 {
  "fetcher": "national_turnout",
- "started": "2026-10-27 15:57 UTC",
+ "started": "2026-10-27 15:59 UTC",
  "sources": [
   {
    "name": "Google News: שיעור ההצבעה",
@@ -12,7 +12,7 @@
    "name": "Google News: אחוז ההצבעה",
    "url": "https://news.google.com/rss/search?hl=iw&gl=IL&ceid=IL:he&q=%22%D7%90%D7%97%D7%95%D7%96%20%D7%94%D7%94%D7%A6%D7%91%D7%A2%D7%94%22%20when%3A1d",
    "http": 200,
-   "items": 48
+   "items": 49
   },
   {
    "name": "Google News: ועדת הבחירות הצבעה",
@@ -155,6 +155,16 @@
      "published_il": "13:56",
      "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10"
     },
+    "אמס": {
+     "published": "2026-10-27T13:14:12+00:00",
+     "published_il": "15:14",
+     "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס"
+    },
+    "شبكة يافا الإخبارية": {
+     "published": "2026-10-27T13:43:58+00:00",
+     "published_il": "15:43",
+     "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية"
+    },
     "כאן 11": {
      "published": "2026-10-27T13:06:26+00:00",
      "published_il": "15:06",
@@ -169,11 +179,6 @@
      "published": "2026-10-27T13:01:00+00:00",
      "published_il": "15:01",
      "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews"
-    },
-    "JDN": {
-     "published": "2026-10-27T13:09:00+00:00",
-     "published_il": "15:09",
-     "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN"
     },
     "ynet": {
      "published": "2026-10-27T11:58:52+00:00",
@@ -195,8 +200,8 @@
    },
    "68.1": {
     "היום": {
-     "published": "2026-10-27T14:45:12+00:00",
-     "published_il": "16:45",
+     "published": "2026-10-27T14:06:14+00:00",
+     "published_il": "16:06",
      "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום"
     }
    },
@@ -236,13 +241,6 @@
      "title": "שיא של 53 שנה: עדכון נוסף על אחוז ההצבעה בבחירות"
     }
    },
-   "35.8": {
-    "נס ציונה נט": {
-     "published": "2026-10-27T11:32:12+00:00",
-     "published_il": "13:32",
-     "title": "הבחירות בנס ציונה: 35.8% הצביעו עד השעה 12:00 - נס ציונה נט"
-    }
-   },
    "30": {
     "סרוגים": {
      "published": "2026-10-27T12:40:10+00:00",
@@ -267,13 +265,6 @@
      "published": "2026-10-27T09:00:19+00:00",
      "published_il": "11:00",
      "title": "אחרי 3 שעות: עדכון ראשון לאחוז ההצבעה בבחירות"
-    }
-   },
-   "12.2": {
-    "נס ציונה נט": {
-     "published": "2026-10-27T10:27:06+00:00",
-     "published_il": "12:27",
-     "title": "הבחירות בנס ציונה: 12.2% הצביעו עד השעה 10:00 - נס ציונה נט"
     }
    }
   },
@@ -530,6 +521,48 @@
   },
   {
    "feed": "Google News: שיעור ההצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "شبكة يافا الإخبارية",
+   "published": "2026-10-27T13:43:58+00:00",
+   "published_il": "15:43",
+   "title": "בחירות לכנסת: שיעור ההצבעה הגיע ל-44.9% עד השעה 14:00 - - شبكة يافا الإخبارية",
+   "link": "https://news.google.com/rss/articles/CBMiUEFVX3lxTE41UkgxWkZEWTVvVGVVc1B4R1VSWW9HWENDRWxQQV8zcjk1dW1ubXFsXzY4R2RWNGRhVkVlaEt4T3Z2NzJYRDRNbjh1MFZmOUtL?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
+   "outlet": "היום",
+   "published": "2026-10-27T14:06:14+00:00",
+   "published_il": "16:06",
+   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
+   "link": "https://news.google.com/rss/articles/CBMiZ0FVX3lxTE9weEFCZlpFUjBJLVZ0aXQzWDMwYnV0dkpzRHctNWZwZ184NHBSenVMbzJYbWRpVjZ4VXpNR2Y1eFJRdHl5bXpKVUtSTDBtT3h3RS03RTFfeV8xbF9SWjlMT1hOUHlJVkXSAW9BVV95cUxOWVlFajI0dU1hR01DS3lNa2l5WklHdU5DNzFRYndib1g5ZWdDZ2paSVFoRW1wV2ZuSmVxc2p2V3R6WU5LYTBXOVpnaTVSVmw1SDNkWk1iRHhQMDRNRDNKOVBaMlBXRkIzYjdMajBrY1E?oc=5",
+   "figures": [
+    [
+     "14:00",
+     68.1
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: שיעור ההצבעה",
    "outlet": "היום",
    "published": "2026-10-27T10:56:35+00:00",
    "published_il": "12:56",
@@ -567,48 +600,6 @@
     [
      "17:00",
      41.5
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "היום",
-   "published": "2026-10-27T14:45:12+00:00",
-   "published_il": "16:45",
-   "title": "נכון לשעה 14:00: שיעור ההצבעה במתקני הכליאה עומד על 68.1% - היום",
-   "link": "https://news.google.com/rss/articles/CBMib0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUdIBb0FVX3lxTE5ZWUVqMjR1TWFHTUNLeU1raXlaSUd1TkM3MVFid2JvWDllZ0NnalpJUWhFbXBXZm5KZXFzanZXdHpZTkthMFc5WmdpNVJWbDVIM2RaTWJEeFAwNE1EM0o5UFoyUFdGQjNiN0xqMGtjUQ?oc=5",
-   "figures": [
-    [
-     "14:00",
-     68.1
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "נס ציונה נט",
-   "published": "2026-10-27T11:32:12+00:00",
-   "published_il": "13:32",
-   "title": "הבחירות בנס ציונה: 35.8% הצביעו עד השעה 12:00 - נס ציונה נט",
-   "link": "https://news.google.com/rss/articles/CBMilgNBVV95cUxPa0wxUkFCVmU1NzJFNm5aVVNuRzktYzNGQUw5eDIzV0xWS2VYaUJhX2pIUTJxTHdETVJfZzRrUE9BZlJPX1RhdFFUUVVRdHlSdnpmbll2WHhwSEN1eGFGRDNXLW9VeWpWR0lPRTRqd1BNck8tc0pqbUUxX2FDcW5DLTFFRTNhY0NuTXowWHhhWUVOdC13TFhDSy1iOC1WelNVV2tkeWtJek83Y2tWblBKWjNzTEdtdTN5ekNRajhwZ2VDekdlQTNCa3U2emxHTy0tTlFGdS1LMW1TM041dWhvSm9NZXlxclBleEc3VDRpSkg0VnZleGhKelAyOWxiSVhFUVRHdmI3VW9ZVFF5SER3REhkcXNmVFhPREQ1NXQ1NkxmRUFEWXVpNUlhbXV2QXNrd0hWakdMbkhCMmRPVG1qYXA2ZGpqVzFZSzhfQUNOZGpkTjNkSVRHWUIxal9lMlNXU2hSdHNxNzRTN0prbDNKcUVZMXpEZzNJM0R4WXlHSDVocWt0WDloWGY5OFBIS3V1OWJvUkJB?oc=5",
-   "figures": [
-    [
-     "12:00",
-     35.8
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: שיעור ההצבעה",
-   "outlet": "נס ציונה נט",
-   "published": "2026-10-27T10:27:06+00:00",
-   "published_il": "12:27",
-   "title": "הבחירות בנס ציונה: 12.2% הצביעו עד השעה 10:00 - נס ציונה נט",
-   "link": "https://news.google.com/rss/articles/CBMinwNBVV95cUxQa09KR0oxZ3JYM3N0bUhQUXNSUktZVjhiQlp1QURfV3AwRDEyM3B0YjNrTjRyLV95TWtCME0tTWhrQ0JXYXhwbUlZUThXVGxJQnZlTXplRkgwN2hjRzQ4TFVTU2xCbjJkZTJCbmQxajYwek45bDk3alMtNFM5UFh0NmtLSWFFMThaQ19zeUJ2cnU1NEJ2QU1FTmRrZU9EcjNiMEFnd0VGemQ5cGtkcV9VS2NEZTU3U0FtUUt2dXFheFBxU3EwbWNjZUVhYmh2Z2xhaXVraWxxUEh2NGdxUW5zY2ZCd1BfWVUyMHY3aWlua0xYZXhlcXJRdGpobFhSZWtlMDN1dVpIc2dmbW9VT19saV9SQkRQSGpvc1BBNDVMM2YwSF9lVlgwR0kyZlZpQjAxbEV4aWhXLUFHakp3RWoyYWs3d2M1WGl2NXhTVWFlZERlNWl4c0F1aWNOTzlEOHBoQUtod3l5dEVja3llU3A5WTZYRUUxUGd2aU0xZ2xvMWMzMGpuVGlWcXhYN09GVHBHNU9DbDRfUXpua2puTHFJ?oc=5",
-   "figures": [
-    [
-     "10:00",
-     12.2
     ]
    ]
   },
@@ -810,6 +801,20 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
+   "outlet": "אמס",
+   "published": "2026-10-27T13:14:12+00:00",
+   "published_il": "15:14",
+   "title": "שיא של עשרות שנים: 44.9% כבר הצביעו עד השעה 14:00 - אמס",
+   "link": "https://news.google.com/rss/articles/CBMiTkFVX3lxTE1vNS1ObzVXMG5jVmtzTEdKWUdyd09yZWVGdnpBTU9JM1NXd0t6LXVWQ1Q1Q0l4aUFHdVlaTXJXeUxHTVVFMjNTVThHZlVTQQ?oc=5",
+   "figures": [
+    [
+     "14:00",
+     44.9
+    ]
+   ]
+  },
+  {
+   "feed": "Google News: ועדת הבחירות הצבעה",
    "outlet": "YNET",
    "published": "2026-10-27T10:58:42+00:00",
    "published_il": "12:58",
@@ -838,11 +843,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "PassportNews",
-   "published": "2026-10-27T13:01:00+00:00",
-   "published_il": "15:01",
-   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
+   "outlet": "הידברות",
+   "published": "2026-10-27T11:10:00+00:00",
+   "published_il": "13:10",
+   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
    "figures": [
     [
      "14:00",
@@ -852,11 +857,11 @@
   },
   {
    "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "הידברות",
-   "published": "2026-10-27T11:10:00+00:00",
-   "published_il": "13:10",
-   "title": "שיא מאז 1969: שיעור ההצבעה עד 14:00 - 44.9% - הידברות",
-   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE5EdGVaTUUxREtCZW54V2tsQWdjeDlrT0Y0aFB2aC1vVU1rVlY0TUpaemhsOEVQX0ZoREx1Z2k3enNzb3BUZlI3cG9uaWFuSUhaRW9Z?oc=5",
+   "outlet": "PassportNews",
+   "published": "2026-10-27T13:01:00+00:00",
+   "published_il": "15:01",
+   "title": "שיא כל הזמנים בהצבעה בבחירות: 44.9% עד 14:00 - PassportNews",
+   "link": "https://news.google.com/rss/articles/CBMiU0FVX3lxTE0wU2ZudFlBV0RqMTFoT284aTNUdlBzajN5eHk4VlVMOWMzUS12dzhPU3d3ekJRTzlWQjRtYTRxS3kzbWxXYjU4Y3BhT0pwVVBoLW5B?oc=5",
    "figures": [
     [
      "14:00",
@@ -875,34 +880,6 @@
     [
      "12:00",
      31.5
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "JDN",
-   "published": "2026-10-27T13:09:00+00:00",
-   "published_il": "15:09",
-   "title": "שיא הצבעה של עשורים: 44.9% הצביעו עד השעה 14:00 - JDN",
-   "link": "https://news.google.com/rss/articles/CBMiS0FVX3lxTE0waWxLRFJ3NGxLQzBoLWU4anJERFRpZ1FZSDBZTmpTT1AzY0Flc0Y4MUZVR2tNOXVaQkhQNktrZFJOVFF6b0FsV1JZZw?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
-    ]
-   ]
-  },
-  {
-   "feed": "Google News: ועדת הבחירות הצבעה",
-   "outlet": "חרדים10",
-   "published": "2026-10-27T11:56:05+00:00",
-   "published_il": "13:56",
-   "title": "הכי גבוה מאז שנת 1969: שיעור ההצבעה עד השעה 14:00 - 44.9% • עדכונים שוטפים מהקלפיות - חרדים10",
-   "link": "https://news.google.com/rss/articles/CBMiR0FVX3lxTE50MlhFODEyakNYVTJ4N2FFNGljdmNRUmp1cW9wb2FPVERLNWFPazdCZHUtTl91Vk9JMXlUdEZiZVotWkt0R2Ew?oc=5",
-   "figures": [
-    [
-     "14:00",
-     44.9
     ]
    ]
   },
@@ -1125,6 +1102,20 @@
     [
      "10:00",
      16.68
+    ]
+   ]
+  },
+  {
+   "feed": "JDN",
+   "outlet": "JDN",
+   "published": "2026-10-27T15:56:53+00:00",
+   "published_il": "17:56",
+   "title": "דרמה של הרגע האחרון: הליכוד וש\"ס מנסות להאריך את שעות ההצבעה",
+   "link": "https://www.jdn.co.il/news/2755922/",
+   "figures": [
+    [
+     "16:00",
+     55.7
     ]
    ]
   },
