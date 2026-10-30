@@ -1,0 +1,426 @@
+{
+ "fetcher": "net_capture",
+ "started": "2026-10-30 15:15 UTC",
+ "finished": "2026-10-30T15:16:21Z",
+ "pages": [
+  "https://elections.kaplanopensource.co.il/locality/",
+  "https://elections.kaplanopensource.co.il/"
+ ],
+ "notes": [
+  "pip install playwright: rc 0",
+  "Chrome 156.0.8078.47 at /opt/google/chrome/chrome",
+  "https://elections.kaplanopensource.co.il/locality/: HTTP 200, title 'תוצאות הבחירות לכנסת לפי יישוב'",
+  "https://elections.kaplanopensource.co.il/locality/: visible text: \"מפות הבחירות\\nEnglish العربية\\nתוצאות הבחירות לכנסת לפי יישוב\\n\\nלכל יישוב עמוד עם תוצאות הבחירות לכנסת מהכנסת ה-18 (2009) ואילך, לפי הנתונים הרשמיים של ועדת הבחירות המרכזית.\\n\\nאבו ג'ווייעד (שבט) 967\\nאבו גוש 472\\nאבו סנאן 473\\nאבו עבדון (שבט) 958\\nאבו קורינאת (שבט) 968\\nאבו קרינאת (יישוב) 1342\\nאבו רובייעה (שבט) 966\\nאבו רוקייק (שבט) 961\\nאבו תלול 1375\\nאבטין 652\\nאבטליון 1275\\nאביאל 679\\nאביבים 1115\\nאביגדור 819\\nאביגיל 3869\\nאביחיל 175\\nאביטל 2052\\nאביעזר 1070\\nאבירים 1220\\nאבן יהודה 182\\nאבן מנחם 1081\\nאבן ספיר 783\\nאבן שמואל 400\\nאבני איתן 4011\\nאבני חפץ 3793\\nאבשלום 1311\\nאדורה 3759\\nאדירים 113\\nאדמית 1068\\nאדרת 1123\\nאוב\"",
+  "https://elections.kaplanopensource.co.il/locality/: 10 responses in 33 s",
+  "https://elections.kaplanopensource.co.il/: HTTP 200, title 'מפת הבחירות של ישראל - הכנסת ה-26'",
+  "https://elections.kaplanopensource.co.il/: visible text: 'נבנה על ידי קפלן ייעוץ קוד פתוח\\nהבחירות לכנסת ה-26, תוצאות ארציות\\n00:06\\n· נספרו 100.0% מהקלפיות\\n הצביעו 77.97% מתוך 7,331,981 בעלי זכות בחירה\\nצפייה בתוצאות מערכות הבחירות לכנסת: 26, 25, 24, 23, 22, 21, 20, 19, 18\\n  \\nמפות ופיתוח מערכות GIS\\nEnglish\\nالعربية\\n\\u200fהצהרת נגישות'",
+  "https://elections.kaplanopensource.co.il/: 30 responses in 33 s"
+ ],
+ "responses": [
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/locality/",
+   "method": "GET",
+   "status": 200,
+   "kind": "document",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/locality/css/locality.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/img/cropped-orangeman-logo_roundorange.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/locality/js/strings.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/locality/js/locality.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://www.googletagmanager.com/gtag/js?id=G-4ZB404GXMQ",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-4ZB404GXMQ&gtm=45je6as1v887823901za208zd887823901xf1&_p=1793373314416&gcd=13l3l3l3l1l1&npa=0&dma=0&cid=649417741.1793373315&frm=0&ngs=1&pscdl=noapi&rcb=13&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115938465~115938468~118897920~118897930~120213116~120385423~120469145~120469153~121246026~121246034~123691370&sid=1793373314&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2Flocality%2F&dt=%D7%AA%D7%95%D7%A6%D7%90%D7%95%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9C%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%9C%D7%A4%D7%99%20%D7%99%D7%99%D7%A9%D7%95%D7%91&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=383",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://www.googletagmanager.com/gtag/js?id=G-6Z7Q4ZJZ8Z&cx=c&gtm=4e6as1",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://elections.kaplanopensource.co.il/img/cropped-orangeman-logo_roundorange.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "other",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/locality/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-6Z7Q4ZJZ8Z&gtm=45je6as1v887823902za20ozb887823901zd887823901xf1&_p=1793373314416&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAI&cid=649417741.1793373315&frm=0&ngs=1&pscdl=noapi&rcb=9&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115616985~115938465~115938469~118897920~118897930~120213116~120385422~120412527~120469145~120469153~121246026~121246034~123691370~123785234&sid=1793373314&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2Flocality%2F&dt=%D7%AA%D7%95%D7%A6%D7%90%D7%95%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%9C%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%9C%D7%A4%D7%99%20%D7%99%D7%99%D7%A9%D7%95%D7%91&en=page_view&_fv=1&_ss=1&tfd=498",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/",
+   "method": "GET",
+   "status": 200,
+   "kind": "document",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/lib/maplibre-gl-6.14.0/maplibre-gl.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/knesset/css/controls.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/lib/pmtiles-4.5.0/pmtiles.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/js/_2.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/js/_3.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/lib/chart.js-3.9.1/chart.min.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/lib/maplibre-gl-6.14.0/maplibre-gl.mjs",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/javascript; charset=utf-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/knesset/js/map.js",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/javascript",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/bare.v3.json",
+   "method": "GET",
+   "status": 200,
+   "kind": "fetch",
+   "type": "application/json",
+   "bytes": 4439,
+   "saved": "files/cf10f61a-elections.kaplanopensource.co.il_tiles_bare.v3.json",
+   "first": "{\n    \"version\": 8,\n    \"name\": \"Bare_v3\",\n    \"metadata\": {\n        \"mapbox:autocomposite\": true,\n        \"mapbox:type\": \"template\",\n        \"mapbox:sdk-support\": {\n            \"js\": \"1.6.0\",\n            \"android\": \"7.4.0\",\n            \"ios\": \"4.11.0\"\n        },\n        \"mapbox:groups\": {},\n       "
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.googletagmanager.com/gtag/js?id=G-4ZB404GXMQ",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+   "method": "GET",
+   "status": 206,
+   "kind": "fetch",
+   "type": "application/vnd.pmtiles",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/lib/maplibre-gl-6.14.0/maplibre-gl-worker.mjs?v=6.14.0",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "text/javascript; charset=utf-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+   "method": "GET",
+   "status": 206,
+   "kind": "fetch",
+   "type": "application/vnd.pmtiles",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+   "method": "GET",
+   "status": 206,
+   "kind": "fetch",
+   "type": "application/vnd.pmtiles",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+   "method": "GET",
+   "status": 206,
+   "kind": "fetch",
+   "type": "application/vnd.pmtiles",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+   "method": "GET",
+   "status": 206,
+   "kind": "fetch",
+   "type": "application/vnd.pmtiles",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-4ZB404GXMQ&gtm=45je6as1v887823901za208zd887823901xf1&_p=1793373347881&gcd=13l3l3l3l1l1&npa=0&dma=0&cid=226478793.1793373348&frm=0&ngs=1&pscdl=noapi&rcb=3&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120412527~120469145~120469153~121246026~121246034~123691370&sid=1793373348&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2F&dt=%D7%9E%D7%A4%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%A9%D7%9C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20-%20%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26&en=page_view&_fv=1&_nsi=1&_ss=1&_ee=1&tfd=540",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/fonts/Open%20Sans%20Regular,Arial%20Unicode%20MS%20Regular/1280-1535.pbf",
+   "method": "GET",
+   "status": 200,
+   "kind": "fetch",
+   "type": "binary/octet-stream",
+   "bytes": 54612,
+   "saved": "files/e98e8cba-ource.co.il_tiles_fonts_Open_20Sans_20Regular_Arial_20Unicode_20MS_20Regular_1280-1535.pbf",
+   "first": "\nЪ\u0003\n+Open Sans Regular, Arial Unicode MS Regular\u0012\t1280-1535\u001a�\u0003\b�\n\u0012�\u0003\u0000\u0000\u0000\u0000\u0000\u0000\n'AYkttto_I\u0000\u0000\u0000\u0000\u0000\u0000\u00154Rn�����vZ\u0000\u0000\u0000\u0000\u0000\u0000\u001a:Zz������c\u0000\u0000\u0000\u0000\u0000\u0000\u001a:Zz���Ĥ�d\u0000\u0000\u0000\u0000\u0000\u0000\u001a:Zz���Ĥ�d\u0000\u0000\u0000\f\u0014\u001b\":Zz���Ĥ�d\u0000\f\u001c*3:BGZz���Ĥ�d\u0013'8GRYagiz���Ĥ�d+@Tcqx�������Ĥ�dAXm���������Ĥ�dSn�����������Ĥ�da~�����������Ĥ�dn����ɺ������Ĥ�dz���ϲ����"
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/tiles/fonts/Open%20Sans%20Regular,Arial%20Unicode%20MS%20Regular/0-255.pbf",
+   "method": "GET",
+   "status": 200,
+   "kind": "fetch",
+   "type": "binary/octet-stream",
+   "bytes": 74722,
+   "saved": "files/b0ab9617-pensource.co.il_tiles_fonts_Open_20Sans_20Regular_Arial_20Unicode_20MS_20Regular_0-255.pbf",
+   "first": "\n��\u0004\n+Open Sans Regular, Arial Unicode MS Regular\u0012\u00050-255\u001a\f\b \u0018\u0000 \u0000(\u0000038\u0006\u001a�\u0001\b!\u0012�\u0001Qfrtttl[Cd�����pTo������|\\o���Լ�|\\m���ں�{[l���ٹ�yYj���׷�xXi���ֶ�vVg���Դ�tTe���ӳ�sSd���ѱ�qQb���а�pPa���ή�nN_��ͭ�mM^~��˫�kK\\|�����jJe~�����oTr���ɷ�}^v����¢�ct���ؿ��am������wZ]w����gLJ^oxzteR:\u0018\u0003 \u0011(\u00040\u00118\u0006\u001a�\u0001\b\""
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.googletagmanager.com/gtag/js?id=G-6Z7Q4ZJZ8Z&cx=c&gtm=4e6as1",
+   "method": "GET",
+   "status": 200,
+   "kind": "script",
+   "type": "application/javascript; charset=UTF-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/26/data/parties.json",
+   "method": "GET",
+   "status": 200,
+   "kind": "fetch",
+   "type": "application/json",
+   "bytes": 2045,
+   "saved": "files/007abead-elections.kaplanopensource.co.il_26_data_parties.json",
+   "first": "{\n \"knesset\": 26,\n \"date\": \"2026-10-27\",\n \"threshold\": 0.0325,\n \"lists\": {\n  \"מחל\": {\n   \"name\": \"הליכוד\",\n   \"name_en\": \"Likud\",\n   \"name_ar\": \"الليكود\",\n   \"color\": \"#1C5BAD\"\n  },\n  \"דרך\": {\n   \"name\": \"ישר\",\n   \"name_en\": \"Yashar\",\n   \"name_ar\": \"يشار\",\n   \"color\": \"#607"
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/26/data/national_results.json",
+   "method": "GET",
+   "status": 200,
+   "kind": "fetch",
+   "type": "application/json",
+   "bytes": 251,
+   "saved": "files/e70c5b3a-elections.kaplanopensource.co.il_26_data_national_results.json",
+   "first": "{\"r_מחל\": 1167458, \"r_דרך\": 913502, \"r_רק\": 531414, \"r_ודם\": 500147, \"r_אמת\": 366352, \"r_ל\": 337413, \"r_עם\": 337253, \"r_ב\": 326624, \"r_ג\": 312604, \"r_שס\": 299506, \"r_ט\": 290451, \"r_די\": 154950, \"r_ך\": 95663, \"r_אחר\": 57345}"
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/img/Clock.svg",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/svg+xml",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/img/Box.svg",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/svg+xml",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/26/data/results.pbf",
+   "method": "GET",
+   "status": 200,
+   "kind": "xhr",
+   "type": "application/x-protobuf",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-6Z7Q4ZJZ8Z&gtm=45je6as1v887823902za20ozb887823901zd887823901xf1&_p=1793373347881&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AAAI&cid=226478793.1793373348&frm=0&ngs=1&pscdl=noapi&rcb=14&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=1&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121246026~121246034~123636746~123691370~123814945&sid=1793373349&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2F&dt=%D7%9E%D7%A4%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%A9%D7%9C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20-%20%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26&en=page_view&_fv=1&_ss=1&tfd=1203",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://elections.kaplanopensource.co.il/img/cropped-orangeman-logo_roundorange.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "other",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-4ZB404GXMQ&gtm=45je6as1v887823901za200zd887823901xf1&_p=1793373347881&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AEAAAAQ&ae=a&cid=226478793.1793373348&frm=0&ngs=1&pscdl=noapi&rcb=3&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=2&tag_exp=115616986~115938466~115938468~118897920~118897930~120213116~120385423~120412527~120469145~120469153~121246026~121246034~123691370&sid=1793373348&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2F&dt=%D7%9E%D7%A4%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%A9%D7%9C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20-%20%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26&en=scroll&epn.percent_scrolled=90&_et=7&tfd=5548",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://elections.kaplanopensource.co.il/",
+   "url": "https://www.google-analytics.com/g/collect?v=2&tid=G-6Z7Q4ZJZ8Z&gtm=45je6as1v887823902za20gzb887823901zd887823901xf1&_p=1793373347881&gcd=13l3l3l3l1l1&npa=0&dma=0&_eu=AEAIAAQ&ae=a&cid=226478793.1793373348&frm=0&ngs=1&pscdl=noapi&rcb=14&sr=1280x720&uaa=x86&uab=64&uafvl=Not%253AA-Brand%3B8.0.0.0%7CChromium%3B156.0.8078.47%7CGoogle%2520Chrome%3B156.0.8078.47&uam=&uamb=0&uap=Linux&uapv=&uaw=0&ul=en-us&_s=2&tag_exp=115938466~115938469~118897920~118897930~120213116~120385422~120469145~120469153~121246026~121246034~123636746~123691370~123814945&sid=1793373349&sct=1&seg=0&dl=https%3A%2F%2Felections.kaplanopensource.co.il%2F&dt=%D7%9E%D7%A4%D7%AA%20%D7%94%D7%91%D7%97%D7%99%D7%A8%D7%95%D7%AA%20%D7%A9%D7%9C%20%D7%99%D7%A9%D7%A8%D7%90%D7%9C%20-%20%D7%94%D7%9B%D7%A0%D7%A1%D7%AA%20%D7%94-26&en=scroll&epn.percent_scrolled=90&_et=18&tfd=6222",
+   "method": "POST",
+   "status": 204,
+   "kind": "fetch",
+   "type": "text/plain",
+   "bytes": null,
+   "saved": null
+  }
+ ]
+}
