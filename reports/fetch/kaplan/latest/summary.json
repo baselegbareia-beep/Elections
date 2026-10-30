@@ -50,6 +50,12 @@
    "file": "26_data_national_results.json"
   },
   {
+   "url": "https://elections.kaplanopensource.co.il/26/data/results.pbf",
+   "http": 200,
+   "bytes": 271333,
+   "file": "26_data_results.pbf"
+  },
+  {
    "url": "https://elections.kaplanopensource.co.il/lib/pmtiles-4.5.0/pmtiles.js",
    "http": 200,
    "bytes": 20229,

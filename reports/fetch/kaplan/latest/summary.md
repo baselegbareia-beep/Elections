@@ -8,6 +8,7 @@
 - https://elections.kaplanopensource.co.il/js/_3.js 200 6748 js__3.js
 - https://elections.kaplanopensource.co.il/26/data/parties.json 200 2045 26_data_parties.json
 - https://elections.kaplanopensource.co.il/26/data/national_results.json 200 251 26_data_national_results.json
+- https://elections.kaplanopensource.co.il/26/data/results.pbf 200 271333 26_data_results.pbf
 - https://elections.kaplanopensource.co.il/lib/pmtiles-4.5.0/pmtiles.js 200 20229 lib_pmtiles-4.5.0_pmtiles.js
 - https://elections.kaplanopensource.co.il/lib/chart.js-3.9.1/chart.min.js 200 199560 lib_chart.js-3.9.1_chart.min.js
 - https://elections.kaplanopensource.co.il/knesset/js/map.js 200 64866 knesset_js_map.js
