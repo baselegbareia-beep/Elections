@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset='utf-8' />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-4ZB404GXMQ"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'G-4ZB404GXMQ');
+    </script>
+
+    <script>var KNESSET = 26;</script>
+    <title>מפת הבחירות של ישראל - הכנסת ה-26</title>
+    <link rel="canonical" href="https://elections.kaplanopensource.co.il/26/" />
+    <link rel="stylesheet" href="/lib/maplibre-gl-6.14.0/maplibre-gl.css" />
+    <script src="/lib/pmtiles-4.5.0/pmtiles.js"></script>
+
+    <link rel="icon" href="/img/cropped-orangeman-logo_roundorange.png" sizes="32x32">
+
+    <link rel="stylesheet" type="text/css" href="/knesset/css/controls.css">
+    <script src="/lib/chart.js-3.9.1/chart.min.js"></script>
+    <!-- geobuf and pbf, which read results.pbf (shared with the earlier maps) -->
+    <script src="/js/_2.js"></script>
+    <script src="/js/_3.js"></script>
+
+    <meta name="description" content="תוצאות הבחירות לכנסת ה-26 (27 באוקטובר 2026) בכל יישוב בישראל, על מפה אינטראקטיבית שמתעדכנת במהלך הספירה לפי הנתונים של ועדת הבחירות המרכזית." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="מפות הבחירות לכנסת" />
+    <meta property="og:locale" content="he_IL" />
+    <meta property="og:locale:alternate" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_AR" />
+    <meta property="og:url" content="https://elections.kaplanopensource.co.il/26/" />
+    <meta property="og:title" content="מפת הבחירות לכנסת ה-26" />
+    <meta property="og:description" content="תוצאות הבחירות לכנסת ה-26 (27 באוקטובר 2026) בכל יישוב בישראל, על מפה אינטראקטיבית שמתעדכנת במהלך הספירה לפי הנתונים של ועדת הבחירות המרכזית." />
+    <meta property="og:image" content="https://elections.kaplanopensource.co.il/img/og/knesset-26.jpg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="מפת הבחירות לכנסת ה-26 לפי יישוב" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Dataset","@id":"https://elections.kaplanopensource.co.il/26/#dataset","url":"https://elections.kaplanopensource.co.il/26/","name":"תוצאות הבחירות לכנסת ה-26 לפי יישוב","alternateName":["Results of the election to the 26th Knesset by locality","نتائج انتخابات الكنيست الـ26 حسب البلدة"],"description":"תוצאות הבחירות לכנסת ה-26 (27 באוקטובר 2026) בכל יישוב בישראל, על מפה אינטראקטיבית שמתעדכנת במהלך הספירה לפי הנתונים של ועדת הבחירות המרכזית.","inLanguage":["he","en","ar"],"isAccessibleForFree":true,"temporalCoverage":"2026-10-27","spatialCoverage":{"@type":"Country","name":"ישראל","alternateName":"Israel"},"keywords":["בחירות לכנסת","הכנסת ה-26","בחירות 2026","תוצאות הבחירות","מפת הבחירות","Israel election 2026 results"],"creator":{"@type":"Organization","name":"קפלן ייעוץ קוד פתוח","alternateName":"Kaplan Open Source Consulting","url":"https://kaplanopensource.co.il/"},"sourceOrganization":{"@type":"GovernmentOrganization","name":"ועדת הבחירות המרכזית לכנסת","alternateName":"Central Elections Committee","url":"https://www.bechirot.gov.il/"},"variableMeasured":["בעלי זכות בחירה","מצביעים","אחוז הצבעה","קולות לכל רשימה","אחוז הקלפיות שנספרו"]},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"מפות הבחירות","item":"https://elections.kaplanopensource.co.il/"},{"@type":"ListItem","position":2,"name":"מפת הבחירות לכנסת ה-26","item":"https://elections.kaplanopensource.co.il/26/"}]}]}</script>
+</head>
+<body>
+        <div id='map' ></div>
+        <noscript><main dir="rtl"><h1>מפת הבחירות לכנסת ה-26</h1><p>תוצאות הבחירות לכנסת ה-26 (27 באוקטובר 2026) בכל יישוב בישראל, על מפה אינטראקטיבית שמתעדכנת במהלך הספירה לפי הנתונים של ועדת הבחירות המרכזית.</p><p>המפה מציגה את התוצאות בכל יישוב כשהן מתפרסמות. <a href="/locality/">התוצאות בכל יישוב לאורך השנים</a> · <a href="/25/">הכנסת ה-25</a> · <a href="/24/">הכנסת ה-24</a> · <a href="/23/">הכנסת ה-23</a> · <a href="/22/">הכנסת ה-22</a> · <a href="/21/">הכנסת ה-21</a> · <a href="/20/">הכנסת ה-20</a> · <a href="/19/">הכנסת ה-19</a> · <a href="/18/">הכנסת ה-18</a></p><p lang="en" dir="ltr">Results of the election to the 26th Knesset (27 October 2026) in every locality in Israel, on an interactive map that updates during the count, from the Central Elections Committee. In English: https://elections.kaplanopensource.co.il/26/?lang=en</p><p lang="ar">نتائج انتخابات الكنيست الـ26 (27 أكتوبر 2026) في كل بلدة في إسرائيل، على خريطة تفاعلية تتحدّث خلال الفرز، من لجنة الانتخابات المركزية. بالعربية: https://elections.kaplanopensource.co.il/26/?lang=ar</p><p>מקור: ועדת הבחירות המרכזית.</p></main></noscript>
+        <!-- MapLibre 6 is published only as an ES module: load it, expose it as a global, then run map.js -->
+        <script type="module">
+            import * as maplibregl from '/lib/maplibre-gl-6.14.0/maplibre-gl.mjs';
+            window.maplibregl = maplibregl;
+            const mapScript = document.createElement('script');
+            mapScript.src = '/knesset/js/map.js';
+            document.body.appendChild(mapScript);
+        </script>
+</body>
+</html>

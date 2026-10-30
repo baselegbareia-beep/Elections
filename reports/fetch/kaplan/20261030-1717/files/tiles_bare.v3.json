@@ -1,0 +1,164 @@
+{
+    "version": 8,
+    "name": "Bare_v3",
+    "metadata": {
+        "mapbox:autocomposite": true,
+        "mapbox:type": "template",
+        "mapbox:sdk-support": {
+            "js": "1.6.0",
+            "android": "7.4.0",
+            "ios": "4.11.0"
+        },
+        "mapbox:groups": {},
+        "mapbox:uiParadigm": "layers"
+    },
+    "center": [
+        35.26171870139376,
+        31.7717776201154
+    ],
+    "zoom": 8.881898789823726,
+    "bearing": 0,
+    "pitch": 0,
+    "sources": {
+        "composite": {
+            "url": "pmtiles://https://elections.kaplanopensource.co.il/tiles/v3.pmtiles",
+            "type": "vector"
+        }
+    },
+    "glyphs": "https://elections.kaplanopensource.co.il/tiles/fonts/{fontstack}/{range}.pbf",
+    "layers": [
+        {
+            "id": "background",
+            "type": "background",
+            "paint": {
+                "background-color": "hsla(187, 9%, 81%, 0.75)"
+
+            }
+        },
+        {
+            "id": "countries-near",
+            "type": "fill",
+            "source": "composite",
+            "source-layer": "countries",
+            "minzoom": 7,
+            "layout": {},
+            "paint": {
+                "fill-color": "hsl(60, 10%, 96%)",
+                "fill-outline-color": "hsla(187, 9%, 81%, 0.5)"
+            }
+        },
+        {
+            "id": "lakes",
+            "type": "fill",
+            "source": "composite",
+            "source-layer": "lakes",
+            "minzoom": 7,
+            "layout": {},
+            "paint": {
+                "fill-color": "hsla(187, 9%, 81%, 1)",
+                "fill-outline-color": "hsla(187, 9%, 81%, 1)"
+            }
+        },
+        {
+            "id": "Centroids-far",
+            "type": "symbol",
+            "source": "composite",
+            "source-layer": "Centroids",
+            "minzoom": 7,
+            "maxzoom": 9,
+            "filter": [
+                "match",
+                [
+                    "get",
+                    "semel_yishuv"
+                ],
+                [
+                    2600,
+                    99,
+                    9000,
+                    4000,
+                    5000,
+                    3000,
+                    6700,
+                    70
+                ],
+                true,
+                false
+            ],
+            "layout": {
+                "text-field": [
+                    "to-string",
+                    [
+                        "get",
+                        "shem_yishuv"
+                    ]
+                ],
+                "text-letter-spacing": 0.01,
+                "text-size":15
+            },
+            "paint": {
+                "text-halo-color": "hsl(0, 0%, 100%)",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "Centroids-medium",
+            "type": "symbol",
+            "source": "composite",
+            "source-layer": "Centroids",
+            "minzoom": 9,
+            "maxzoom": 10,
+            "filter": [
+                ">",
+                [
+                    "get",
+                    "pop_total"
+                ],
+                30000
+            ],
+            "layout": {
+                "text-field": [
+                    "to-string",
+                    [
+                        "get",
+                        "shem_yishuv"
+                    ]
+                ],
+                "text-padding": 4,
+                "text-size": 15
+            },
+            "paint": {
+                "text-halo-color": "hsl(0, 1%, 100%)",
+                "text-halo-width": 2
+            }
+        },
+        {
+            "id": "Centroids-close",
+            "type": "symbol",
+            "source": "composite",
+            "source-layer": "Centroids",
+            "minzoom": 10,
+            "layout": {
+                "text-field": [
+                    "to-string",
+                    [
+                        "get",
+                        "shem_yishuv"
+                    ]
+                ],
+                "text-padding": 10,
+                "text-size": 20
+            },
+            "paint": {
+                "text-halo-width": 2,
+                "text-halo-color": "hsl(0, 0%, 100%)"
+            }
+        }
+    ],
+    "created": "2020-02-19T07:23:17.283Z",
+    "id": "ck6szpbwx0ecx1io6z0933z57",
+    "modified": "2020-02-19T07:45:28.028Z",
+    "owner": "kaplanopensource",
+    "visibility": "private",
+    "draft": false
+}

@@ -1,0 +1,89 @@
+{
+ "knesset": 26,
+ "date": "2026-10-27",
+ "threshold": 0.0325,
+ "lists": {
+  "מחל": {
+   "name": "הליכוד",
+   "name_en": "Likud",
+   "name_ar": "الليكود",
+   "color": "#1C5BAD"
+  },
+  "דרך": {
+   "name": "ישר",
+   "name_en": "Yashar",
+   "name_ar": "يشار",
+   "color": "#6079FC"
+  },
+  "רק": {
+   "name": "ביחד",
+   "name_en": "Together",
+   "name_ar": "بياحد",
+   "color": "#B51D78"
+  },
+  "אמת": {
+   "name": "הדמוקרטים",
+   "name_en": "The Democrats",
+   "name_ar": "الديمقراطيون",
+   "color": "#FC6B60"
+  },
+  "ודם": {
+   "name": "הרשימה המשותפת",
+   "name_en": "Joint List",
+   "name_ar": "القائمة المشتركة",
+   "color": "#58C879"
+  },
+  "ל": {
+   "name": "ישראל ביתנו",
+   "name_en": "Yisrael Beiteinu",
+   "name_ar": "اسرائيل بيتنا",
+   "color": "#69D1E5"
+  },
+  "ב": {
+   "name": "עוצמה יהודית",
+   "name_en": "Otzma Yehudit",
+   "name_ar": "عظمة يهودية",
+   "color": "#6E5A2E"
+  },
+  "שס": {
+   "name": "ש\"ס",
+   "name_en": "Shas",
+   "name_ar": "شاس",
+   "color": "#6C7CA5"
+  },
+  "ג": {
+   "name": "יהדות התורה",
+   "name_en": "United Torah Judaism",
+   "name_ar": "يهدوت هاتوراة",
+   "color": "#49536B"
+  },
+  "ט": {
+   "name": "הציונות הדתית וזהות",
+   "name_en": "Religious Zionist Party–Zehut",
+   "name_ar": "الصهيونية الدينية وزهوت",
+   "color": "#A88461"
+  },
+  "עם": {
+   "name": "רע\"מ",
+   "name_en": "Ra'am",
+   "name_ar": "القائمة العربية الموحدة",
+   "color": "#F7C94C"
+  },
+  "די": {
+   "name": "המילואימניקים והכלכלית",
+   "name_en": "The Reservists",
+   "name_ar": "الاحتياطيون والاقتصادية",
+   "color": "#2A9D8F"
+  },
+  "ך": {
+   "name": "עמך ישראל",
+   "name_en": "Amcha Yisrael",
+   "name_ar": "شعبك إسرائيل",
+   "color": "#8C3B4A"
+  }
+ },
+ "other": {
+  "name": "מפלגות אחרות",
+  "color": "#B8B8B8"
+ }
+}

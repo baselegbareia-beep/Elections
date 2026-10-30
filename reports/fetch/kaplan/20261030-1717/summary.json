@@ -1,0 +1,93 @@
+{
+ "fetcher": "kaplan",
+ "log": [
+  {
+   "url": "https://elections.kaplanopensource.co.il/locality/",
+   "http": 200,
+   "bytes": 184683,
+   "file": "locality.html"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/",
+   "http": 200,
+   "bytes": 6729,
+   "file": "index.html"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/locality/js/locality.js",
+   "http": 200,
+   "bytes": 20836,
+   "file": "locality_js_locality.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/locality/js/strings.js",
+   "http": 200,
+   "bytes": 11769,
+   "file": "locality_js_strings.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/js/_2.js",
+   "http": 200,
+   "bytes": 11034,
+   "file": "js__2.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/js/_3.js",
+   "http": 200,
+   "bytes": 6748,
+   "file": "js__3.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/26/data/parties.json",
+   "http": 200,
+   "bytes": 2045,
+   "file": "26_data_parties.json"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/26/data/national_results.json",
+   "http": 200,
+   "bytes": 251,
+   "file": "26_data_national_results.json"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/lib/pmtiles-4.5.0/pmtiles.js",
+   "http": 200,
+   "bytes": 20229,
+   "file": "lib_pmtiles-4.5.0_pmtiles.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/lib/chart.js-3.9.1/chart.min.js",
+   "http": 200,
+   "bytes": 199560,
+   "file": "lib_chart.js-3.9.1_chart.min.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/knesset/js/map.js",
+   "http": 200,
+   "bytes": 64866,
+   "file": "knesset_js_map.js"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/tiles/bare.v3.json",
+   "http": 200,
+   "bytes": 4439,
+   "file": "tiles_bare.v3.json"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/data/national_results.json",
+   "http": 200,
+   "bytes": 227,
+   "file": "data_national_results.json"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/data/parties.json",
+   "error": "HTTPError: HTTP Error 403: Forbidden"
+  },
+  {
+   "url": "https://elections.kaplanopensource.co.il/knesset/data/localities.json",
+   "http": 200,
+   "bytes": 48202,
+   "file": "knesset_data_localities.json"
+  }
+ ]
+}
