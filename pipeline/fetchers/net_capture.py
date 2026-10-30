@@ -23,9 +23,9 @@ import time
 import urllib.parse
 
 DEADLINE = 20 * 60
-# the results site (cdn-votes26: the CEC's results pages and their downloads)
-PAGES = ["https://cdn-votes26.bechirot.gov.il/", "https://votes26.bechirot.gov.il/"]
-KEEP_HOSTS = re.compile(os.environ.get("NET_CAPTURE_KEEP") or r"(^|\.)(bechirot\.gov\.il|govmap\.gov\.il|gov\.il)$")
+# the final results by locality as an open-source site serves them (the CEC's own site answers only from Israel)
+PAGES = ["https://elections.kaplanopensource.co.il/locality/", "https://elections.kaplanopensource.co.il/"]
+KEEP_HOSTS = re.compile(os.environ.get("NET_CAPTURE_KEEP") or r"(^|\.)(bechirot\.gov\.il|govmap\.gov\.il|gov\.il|kaplanopensource\.co\.il)$")
 DATA_TYPES = re.compile(r"json|csv|xml|text/plain|octet-stream|excel|spreadsheet", re.I)
 MAX_SAVE = 5 * 1024 * 1024
 SETTLE_S = 30                                     # after network idle, for timers and lazy requests
