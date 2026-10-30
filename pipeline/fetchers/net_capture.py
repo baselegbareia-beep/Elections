@@ -23,9 +23,8 @@ import time
 import urllib.parse
 
 DEADLINE = 20 * 60
-# election night: the results site first (mapvotes and govmap answer GitHub's runners with 403)
-PAGES = ["https://votes26.bechirot.gov.il/", "https://votes26.bechirot.gov.il/nationalresults",
-         "https://votes26.bechirot.gov.il/ballotresults", "https://www.bechirot.gov.il/"]
+# the results site (cdn-votes26: the CEC's results pages and their downloads)
+PAGES = ["https://cdn-votes26.bechirot.gov.il/", "https://votes26.bechirot.gov.il/"]
 KEEP_HOSTS = re.compile(os.environ.get("NET_CAPTURE_KEEP") or r"(^|\.)(bechirot\.gov\.il|govmap\.gov\.il|gov\.il)$")
 DATA_TYPES = re.compile(r"json|csv|xml|text/plain|octet-stream|excel|spreadsheet", re.I)
 MAX_SAVE = 5 * 1024 * 1024
