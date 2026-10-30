@@ -1,0 +1,90 @@
+{
+ "fetcher": "net_capture",
+ "started": "2026-10-30 15:04 UTC",
+ "finished": "2026-10-30T15:06:25Z",
+ "pages": [
+  "https://cdn-votes26.bechirot.gov.il/",
+  "https://votes26.bechirot.gov.il/"
+ ],
+ "notes": [
+  "pip install playwright: rc 0",
+  "Chrome 156.0.8078.47 at /opt/google/chrome/chrome",
+  "https://cdn-votes26.bechirot.gov.il/: TimeoutError: Page.goto: Timeout 45000ms exceeded.\nCall log:\n  - navigating to \"https://cdn-votes26.bechirot.gov.il/\", waiting until \"domcontentloaded\"\n",
+  "https://cdn-votes26.bechirot.gov.il/: 0 responses in 45 s",
+  "https://votes26.bechirot.gov.il/: HTTP 404, title 'שגיאה'",
+  "https://votes26.bechirot.gov.il/: visible text: 'מצטערים, העמוד שחיפשת לא נמצא\\nיתכן שהכתובת הוחלפה או הוזנה לא נכון\\n(7)'",
+  "https://votes26.bechirot.gov.il/: 7 responses in 33 s"
+ ],
+ "responses": [
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://votes26.bechirot.gov.il/",
+   "method": "GET",
+   "status": 404,
+   "kind": "document",
+   "type": "text/html",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://fonts.googleapis.com/css2?family=Rubik:wght@400;700&display=swap",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css; charset=utf-8",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://maintenance.gov.il/css/style.css",
+   "method": "GET",
+   "status": 200,
+   "kind": "stylesheet",
+   "type": "text/css",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://maintenance.gov.il/img/National-digital-logo.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://maintenance.gov.il/img/Bird-looking-and-standing-on-sign.png",
+   "method": "GET",
+   "status": 200,
+   "kind": "image",
+   "type": "image/png",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://fonts.gstatic.com/s/rubik/v31/iJWKBXyIfDnIV7nDrXyi0A.woff2",
+   "method": "GET",
+   "status": 200,
+   "kind": "font",
+   "type": "font/woff2",
+   "bytes": null,
+   "saved": null
+  },
+  {
+   "page": "https://votes26.bechirot.gov.il/",
+   "url": "https://fonts.gstatic.com/s/rubik/v31/iJWKBXyIfDnIV7nBrXw.woff2",
+   "method": "GET",
+   "status": 200,
+   "kind": "font",
+   "type": "font/woff2",
+   "bytes": null,
+   "saved": null
+  }
+ ]
+}
