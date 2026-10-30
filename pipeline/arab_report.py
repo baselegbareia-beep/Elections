@@ -71,10 +71,10 @@ def read_stations(data):
 def shares(rows):
     """The Joint List's and Ra'am's share of the valid votes of some rows (None without a results file)."""
     if not rows or any(r.get("valid") is None or r.get("joint") is None or r.get("raam") is None for r in rows):
-        return {"valid": None, "joint": None, "raam": None}
-    valid = sum(r["valid"] for r in rows)
-    return {"valid": valid, "joint": round(100 * sum(r["joint"] for r in rows) / valid, 1) if valid else None,
-            "raam": round(100 * sum(r["raam"] for r in rows) / valid, 1) if valid else None}
+        return {"valid": None, "joint": None, "raam": None, "joint_votes": None, "raam_votes": None}
+    valid, jv, rv = (sum(r[k] for r in rows) for k in ("valid", "joint", "raam"))
+    return {"valid": valid, "joint": round(100 * jv / valid, 1) if valid else None,
+            "raam": round(100 * rv / valid, 1) if valid else None, "joint_votes": jv, "raam_votes": rv}
 
 
 def build(stations, ref, national=None):
@@ -115,6 +115,15 @@ def fnum(x):
 
 def fpct(x):
     return "—" if x is None else f"{x:.1f}%"
+
+
+def fk(x):
+    """Votes in thousands: 11,532 -> '11.5K', 850 -> '0.9K', 123,456 -> '123K'."""
+    if x is None:
+        return "—"
+    if x == 0:
+        return "0"
+    return f"{x / 1000:.1f}K" if x < 99_950 else f"{x / 1000:.0f}K"
 
 
 FONTS = os.path.join(ROOT, "pipeline", "fonts")
@@ -178,7 +187,8 @@ def page(rep, date_he, as_of, final=False):
             rows = []
             for i, x in enumerate(col):
                 none = x["pct"] is None
-                tail = (f'<td class="s">{fpct(x["joint"])}</td><td class="s">{fpct(x["raam"])}</td>' if final
+                tail = (f'<td class="s">{fpct(x["joint"])}<small>{fk(x["joint_votes"])}</small></td>'
+                        f'<td class="s">{fpct(x["raam"])}<small>{fk(x["raam_votes"])}</small></td>' if final
                         else f'<td class="v">{fnum(x["voters"])}</td>')
                 rows.append(f'<tr class="{"none" if none else ""}"><td class="n">{ci * k + i + 1}</td><td class="nm">{e(x["name"])}</td>'
                             + ("" if final else f'<td class="v">{fnum(x["voters"])}</td>')
@@ -196,7 +206,8 @@ def page(rep, date_he, as_of, final=False):
         out.append(f'<section class="card {tone}{"" if c["counted"] else " apart"}"><div class="ch">'
                    f'<div class="ct"><h3>{e(c["name"])}</h3>{apart}<p><span class="num">{c["with"]}/{c["n"]}</span> יישובים עם נתונים · '
                    f'<span class="num">{fnum(c["voters"])}</span> מצביעים'
-                   + (f' · הרשימה המשותפת <b class="num">{fpct(c["joint"])}</b> · רע״ם <b class="num">{fpct(c["raam"])}</b> מהקולות הכשרים'
+                   + (f' · הרשימה המשותפת <b class="num">{fpct(c["joint"])}</b> (<span class="num">{fk(c["joint_votes"])}</span>)'
+                      f' · רע״ם <b class="num">{fpct(c["raam"])}</b> (<span class="num">{fk(c["raam_votes"])}</span>) מהקולות הכשרים'
                       if final and c["joint"] is not None else "") + '</p></div>'
                    f'<div class="cv"><span class="big num">{fpct(c["pct"])}</span>{gap}</div></div>'
                    f'<div class="cols">{"".join(body)}</div></section>')
@@ -204,7 +215,8 @@ def page(rep, date_he, as_of, final=False):
     nat_tile = (f'<div class="tile"><span class="l">שיעור ההצבעה הארצי</span><span class="v num">{fpct(npct)}</span>'
                 f'<span class="d">{nat_when}</span></div>') if nat else ""
     last_tile = (f'<div class="tile"><span class="l">מהקולות הכשרים ביישובים שברשימה</span><span class="pair">'
-                 f'<span><b class="num">{fpct(T.get("joint"))}</b>הרשימה המשותפת</span><span><b class="num">{fpct(T.get("raam"))}</b>רע״ם</span></span></div>'
+                 f'<span><b class="num">{fpct(T.get("joint"))}</b>הרשימה המשותפת <span class="num">{fk(T.get("joint_votes"))}</span></span>'
+                 f'<span><b class="num">{fpct(T.get("raam"))}</b>רע״ם <span class="num">{fk(T.get("raam_votes"))}</span></span></span></div>'
                  if final else f'<div class="tile"><span class="l">יישובים עם נתונים</span><span class="v num">{T["with"]}/{T["n"]}</span>'
                  f'<span class="d">ללא הערים המעורבות</span></div>')
     stamp = ('<span class="chip-final">תוצאות סופיות</span><span class="t">סופי</span>' if final
@@ -238,7 +250,8 @@ body {{ width:794px; padding:26px 22px 20px; font-size:10.5px; line-height:1.35;
 .tile .pair {{ display:flex; flex-direction:column; gap:4px; margin-top:2px; }}
 .tile .pair span {{ display:flex; align-items:baseline; gap:6px; font-size:10px; color:var(--ink-2); }}
 .tile .pair b {{ font:700 24px/.9 var(--font-display); color:var(--ink); min-width:62px; }}
-th.s, td.s {{ width:33px; text-align:end; }} td.s {{ color:var(--ink-2); font-size:9.5px; }}
+th.s, td.s {{ width:33px; text-align:end; }} td.s {{ color:var(--ink-2); font-size:9.5px; line-height:1.1; font-variant-numeric:tabular-nums; }}
+td.s small {{ display:block; color:var(--muted); font-size:8px; margin-top:1px; }}
 .ct p b {{ color:var(--ink); font-weight:600; }}
 .when .t {{ font:700 40px/.9 var(--font-display); display:block; margin-top:6px; }}
 .when .dt {{ color:var(--muted); font-size:10.5px; }}
@@ -296,7 +309,7 @@ footer .logo .k {{ background:var(--marker); padding:0 .12em; border-radius:2px;
 {last_tile}
 </div>
 <div class="key"><span><span class="bar"><i style="width:62%"></i><b style="inset-inline-start:{npct or 0:.1f}%"></b></span>שיעור ההצבעה ביישוב; הקו הדק: השיעור הארצי{f' ({fpct(npct)})' if npct is not None else ''}</span>
-{'<span>המשותפת ורע״ם: אחוז מהקולות הכשרים ביישוב</span>' if final else ''}
+{'<span>המשותפת ורע״ם: אחוז מהקולות הכשרים ביישוב, ומתחתיו מספר הקולות באלפים (11.5K = כ-11,500)</span>' if final else ''}
 <span>הקבוצות לפי נספח 2 להוראת מנכ"ל 4.57 של ועדת הבחירות; בכל קבוצה היישובים מהשיעור הגבוה לנמוך</span></div>
 {"".join(out)}
 <footer><div class="src">{FOOT_FINAL if final else FOOT_DAY} <span class="ltr">{SITE}</span></div>

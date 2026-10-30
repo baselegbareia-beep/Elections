@@ -2,7 +2,7 @@
  "as_of": "22:00",
  "final": true,
  "date": "27.10.2026",
- "version": "b4837aeef777",
+ "version": "33841cf231ab",
  "total": {
   "voters": 808933,
   "elig": 1032264,
@@ -12,7 +12,9 @@
   "pct": 78.4,
   "valid": 804578,
   "joint": 50.9,
-  "raam": 37.2
+  "raam": 37.2,
+  "joint_votes": 409145,
+  "raam_votes": 299534
  },
  "national": {
   "hour": "סופי",
