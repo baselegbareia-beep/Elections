@@ -1,109 +1,133 @@
 {
- "as_of": "20:41",
+ "as_of": "22:00",
+ "final": true,
  "date": "27.10.2026",
- "version": "6dbae4b11b82",
+ "version": "b4837aeef777",
  "total": {
-  "voters": 748181,
-  "elig": 1024392,
-  "with": 135,
+  "voters": 808933,
+  "elig": 1032264,
+  "with": 137,
   "n": 145,
-  "updated": "20:41",
-  "pct": 73.0
+  "updated": "",
+  "pct": 78.4,
+  "valid": 804578,
+  "joint": 50.9,
+  "raam": 37.2
  },
  "national": {
-  "hour": "20:00",
-  "pct": 74.32
+  "hour": "סופי",
+  "pct": 77.97
  },
  "categories": [
   {
    "name": "יישובים ערביים",
    "counted": true,
-   "pct": 75.0,
-   "voters": 488717,
-   "elig": 652019,
+   "pct": 80.3,
+   "voters": 525619,
+   "elig": 654162,
    "with": 49,
-   "n": 50
+   "n": 50,
+   "joint": 68.4,
+   "raam": 26.4
   },
   {
    "name": "יישובי מיעוטים במועצות אזוריות",
    "counted": true,
-   "pct": 75.1,
-   "voters": 14384,
+   "pct": 78.3,
+   "voters": 14998,
    "elig": 19147,
    "with": 15,
-   "n": 15
+   "n": 15,
+   "joint": 60.3,
+   "raam": 31.1
   },
   {
    "name": "יישובים דרוזיים",
    "counted": true,
-   "pct": 58.5,
-   "voters": 66250,
+   "pct": 65.0,
+   "voters": 73564,
    "elig": 113228,
    "with": 13,
-   "n": 13
+   "n": 13,
+   "joint": 16.2,
+   "raam": 7.6
   },
   {
    "name": "יישובים צ'רקסיים",
    "counted": true,
-   "pct": 60.9,
-   "voters": 2305,
+   "pct": 62.6,
+   "voters": 2369,
    "elig": 3783,
    "with": 2,
-   "n": 2
+   "n": 2,
+   "joint": 10.1,
+   "raam": 15.0
   },
   {
    "name": "יישובים בדואיים בנגב",
    "counted": true,
-   "pct": 78.3,
-   "voters": 94785,
-   "elig": 121097,
+   "pct": 83.8,
+   "voters": 105140,
+   "elig": 125476,
    "with": 9,
-   "n": 9
+   "n": 9,
+   "joint": 13.5,
+   "raam": 84.6
   },
   {
    "name": "יישובים בדואיים בצפון",
    "counted": true,
-   "pct": 74.2,
-   "voters": 40987,
+   "pct": 78.8,
+   "voters": 43516,
    "elig": 55226,
    "with": 19,
-   "n": 19
+   "n": 19,
+   "joint": 22.7,
+   "raam": 69.4
   },
   {
    "name": "יישובים דרוזיים ברמת הגולן",
    "counted": true,
-   "pct": 38.3,
-   "voters": 3121,
+   "pct": 44.0,
+   "voters": 3585,
    "elig": 8148,
    "with": 4,
-   "n": 4
+   "n": 4,
+   "joint": 1.8,
+   "raam": 0.5
   },
   {
    "name": "יישובים ערביים נוספים (לא בנספח)",
    "counted": true,
-   "pct": 76.1,
-   "voters": 15190,
+   "pct": 80.5,
+   "voters": 16052,
    "elig": 19951,
    "with": 8,
-   "n": 8
+   "n": 8,
+   "joint": 30.5,
+   "raam": 65.2
   },
   {
    "name": "שבטים בדואיים",
    "counted": true,
-   "pct": 70.6,
-   "voters": 22442,
-   "elig": 31793,
-   "with": 16,
-   "n": 25
+   "pct": 72.7,
+   "voters": 24090,
+   "elig": 33143,
+   "with": 18,
+   "n": 25,
+   "joint": 5.3,
+   "raam": 92.8
   },
   {
    "name": "ערים מעורבות",
    "counted": false,
-   "pct": 63.1,
-   "voters": 615209,
+   "pct": 65.3,
+   "voters": 636637,
    "elig": 975492,
    "with": 7,
-   "n": 7
+   "n": 7,
+   "joint": 9.0,
+   "raam": 2.6
   }
  ]
 }
