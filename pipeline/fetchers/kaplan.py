@@ -17,7 +17,7 @@ import urllib.request
 
 BASE = "https://elections.kaplanopensource.co.il/"
 START = ["locality/", "", "locality/js/locality.js", "locality/js/strings.js", "js/_2.js", "js/_3.js",
-         "26/data/parties.json", "26/data/national_results.json"]
+         "26/data/parties.json", "26/data/national_results.json", "26/data/results.pbf"]
 UA = "Kalpi26-dashboard/1.0 (+https://github.com/baselegbareia-beep/Elections)"
 DATA = re.compile(r"""["'`]([^"'`\s]*?\.(?:json|csv|js))(?:\?[^"'`\s]*)?["'`]""")
 MAX, DEADLINE = 40 * 1024 * 1024, 600
