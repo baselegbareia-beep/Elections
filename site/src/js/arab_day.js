@@ -188,8 +188,9 @@ function adPdfLink() {
   const m = AD.pdf;
   if (!m) return '';
   const tot = m.total || {};
-  return `<p class="ad-pdf"><a class="ad-pdf-btn" href="reports/arab_turnout.pdf?v=${encodeURIComponent(m.version || m.as_of)}" download="arab_turnout_${esc(m.as_of.replace(':', ''))}.pdf">${t('הורדת הדו״ח (PDF)')}</a>
-    <span>${t('אחוזי ההצבעה בכל היישובים הערביים, הדרוזיים, הצ׳רקסיים והבדואיים, לפי חלוקת ועדת הבחירות. עדכון אחרון: {t}, {n} יישובים עם נתונים.', { t: `<span class="num">${esc(m.as_of)}</span>`, n: `<span class="num">${esc(`${tot.with}/${tot.n}`)}</span>` })}</span></p>`;
+  return `<p class="ad-pdf"><a class="ad-pdf-btn" href="reports/arab_turnout.pdf?v=${encodeURIComponent(m.version || m.as_of)}" download="arab_turnout_${m.final ? 'final' : esc(m.as_of.replace(':', ''))}.pdf">${t('הורדת הדו״ח (PDF)')}</a>
+    <span>${m.final ? t('תוצאות סופיות: שיעור ההצבעה בכל היישובים הערביים, הדרוזיים, הצ׳רקסיים והבדואיים, לפי חלוקת ועדת הבחירות, ומה קיבלו בכל יישוב הרשימה המשותפת ורע״ם.')
+      : t('אחוזי ההצבעה בכל היישובים הערביים, הדרוזיים, הצ׳רקסיים והבדואיים, לפי חלוקת ועדת הבחירות. עדכון אחרון: {t}, {n} יישובים עם נתונים.', { t: `<span class="num">${esc(m.as_of)}</span>`, n: `<span class="num">${esc(`${tot.with}/${tot.n}`)}</span>` })}</span></p>`;
 }
 
 /* ---------- markup ---------- */

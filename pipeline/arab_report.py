@@ -23,11 +23,14 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 REF = os.path.join(ROOT, "pipeline", "reference", "arab_report_localities.json")
 SITE = "https://baselegbareia-beep.github.io/Elections/"
 COLS = {"code": ("סמל יישוב", "סמל ישוב", "קוד ישוב"), "elig": ('בז"ב', "בזב", "בעלי זכות בחירה"),
-        "voters": ("מצביעים", "הצביעו", "מספר מצביעים"), "time": ("שעת עידכון", "שעת עדכון", "עודכן")}
+        "voters": ("מצביעים", "הצביעו", "מספר מצביעים"), "time": ("שעת עידכון", "שעת עדכון", "עודכן"),
+        # a results file (the CEC's results by locality or by station): valid votes and the two Arab lists' votes
+        "valid": ("כשרים", "קולות כשרים"), "joint": ("ודם",), "raam": ("עם",)}
 
 
 def read_stations(data):
-    """bytes of a per-station CSV -> {code: [(eligible, voters, 'HH:MM' or '')]} of the stations that reported."""
+    """bytes of a per-station CSV (or the CEC's results by locality or by station) -> {code: [row]} of the rows that
+    reported, each {elig, voters, time ('HH:MM' or ''), valid, joint, raam} (the last three None in a turnout file)."""
     text = None
     for enc in ("utf-8-sig", "cp1255"):
         try:
@@ -54,8 +57,24 @@ def read_stations(data):
         if voters <= 0 or elig <= 0 or voters > elig * 1.02:
             continue
         t = (r[at["time"]].strip()[:5] if at["time"] is not None and at["time"] < len(r) else "")
-        out.setdefault(code, []).append((elig, voters, t if len(t) == 5 and t[2] == ":" else ""))
+
+        def num(k):
+            try:
+                return int(float(r[at[k]].replace(",", "") or 0)) if at[k] is not None and at[k] < len(r) else None
+            except ValueError:
+                return None
+        out.setdefault(code, []).append({"elig": elig, "voters": voters, "time": t if len(t) == 5 and t[2] == ":" else "",
+                                         "valid": num("valid"), "joint": num("joint"), "raam": num("raam")})
     return out
+
+
+def shares(rows):
+    """The Joint List's and Ra'am's share of the valid votes of some rows (None without a results file)."""
+    if not rows or any(r.get("valid") is None or r.get("joint") is None or r.get("raam") is None for r in rows):
+        return {"valid": None, "joint": None, "raam": None}
+    valid = sum(r["valid"] for r in rows)
+    return {"valid": valid, "joint": round(100 * sum(r["joint"] for r in rows) / valid, 1) if valid else None,
+            "raam": round(100 * sum(r["raam"] for r in rows) / valid, 1) if valid else None}
 
 
 def build(stations, ref, national=None):
@@ -65,13 +84,16 @@ def build(stations, ref, national=None):
         locs = []
         for l in c["localities"]:
             st = [s for code in l["codes"] for s in stations.get(code, [])]
-            v, e = sum(s[1] for s in st), sum(s[0] for s in st)
-            locs.append({"name": l["name"], "voters": v if st else None, "elig": e if st else None,
-                         "pct": round(100 * v / e, 1) if e else None, "updated": max((s[2] for s in st), default="")})
+            v, e = sum(s["voters"] for s in st), sum(s["elig"] for s in st)
+            locs.append({"name": l["name"], "voters": v if st else None, "elig": e if st else None, "rows": st,
+                         "pct": round(100 * v / e, 1) if e else None, "updated": max((s["time"] for s in st), default=""),
+                         **shares(st)})
         locs.sort(key=lambda x: (x["pct"] is None, -(x["pct"] or 0)))
         v, e = sum(x["voters"] or 0 for x in locs), sum(x["elig"] or 0 for x in locs)
+        rows = [s for x in locs for s in x["rows"]]
         cat = {"name": c["name"], "counted": c.get("counted", True), "localities": locs, "voters": v, "elig": e,
-               "pct": round(100 * v / e, 1) if e else None, "with": sum(x["pct"] is not None for x in locs), "n": len(locs)}
+               "pct": round(100 * v / e, 1) if e else None, "with": sum(x["pct"] is not None for x in locs), "n": len(locs),
+               "rows": rows, **shares(rows)}
         cats.append(cat)
         upd = max((x["updated"] for x in locs), default="")
         tot["updated"] = max(tot["updated"], upd)
@@ -79,6 +101,11 @@ def build(stations, ref, national=None):
             for k in ("voters", "elig", "with", "n"):
                 tot[k] += cat[k]
     tot["pct"] = round(100 * tot["voters"] / tot["elig"], 1) if tot["elig"] else None
+    tot.update(shares([s for c in cats if c["counted"] for s in c["rows"]]))
+    for c in cats:                                # the rows were only for the sums
+        c.pop("rows")
+        for x in c["localities"]:
+            x.pop("rows")
     return {"categories": cats, "total": tot, "national": national}
 
 
@@ -113,6 +140,15 @@ def font_faces():
     return "\n".join(out)
 
 
+FOOT_DAY = ('"עודכן": שעת העדכון האחרונה של קלפי ביישוב. מצביעים ובעלי זכות בחירה: בקלפיות שכבר דיווחו, ושיעור ההצבעה הוא היחס '
+            'ביניהם. הערים המעורבות מוצגות בנפרד ואינן נכללות באף סיכום. הנתונים לפי קלפי אינם כוללים מצביעים במעטפות חיצוניות '
+            '(חיילים, נציגויות, בתי חולים).<br>מקור: ועדת הבחירות המרכזית (מפת אחוזי ההצבעה וקבצי שיעור ההצבעה בקלפיות).')
+FOOT_FINAL = ('שיעור ההצבעה ביישוב: המצביעים בקלפיות שלו חלקי בעלי זכות הבחירה בהן, בלי המעטפות החיצוניות (חיילים, נציגויות, '
+              'בתי חולים), שנספרות ארצית; השיעור הארצי כולל אותן. הרשימה המשותפת ורע״ם: אחוז מהקולות הכשרים. הערים המעורבות '
+              'מוצגות בנפרד (כל העיר) ואינן נכללות באף סיכום.<br>מקור: ועדת הבחירות המרכזית, תוצאות הבחירות לכנסת ה-26 לפי '
+              'יישובים (cdn-votes26.bechirot.gov.il).')
+
+
 def gap_words(d, unit):
     """The distance from the national turnout in words: '4.7 נקודות מתחת לשיעור הארצי'."""
     if abs(d) < 0.05:
@@ -120,8 +156,9 @@ def gap_words(d, unit):
     return f'<span class="num">{abs(d):.1f}</span> {unit} ' + ("מעל השיעור הארצי" if d > 0 else "מתחת לשיעור הארצי")
 
 
-def page(rep, date_he, as_of):
-    """The report as one self-contained RTL page in the site's look (A4 width, as tall as its content)."""
+def page(rep, date_he, as_of, final=False):
+    """The report as one self-contained RTL page in the site's look (A4 width, as tall as its content). final: the CEC's
+    final results (no update times; the Joint List's and Ra'am's shares of the valid votes in their place)."""
     e = html.escape
     T, nat = rep["total"], rep["national"]
     npct = nat["pct"] if nat else None
@@ -141,11 +178,15 @@ def page(rep, date_he, as_of):
             rows = []
             for i, x in enumerate(col):
                 none = x["pct"] is None
+                tail = (f'<td class="s">{fpct(x["joint"])}</td><td class="s">{fpct(x["raam"])}</td>' if final
+                        else f'<td class="v">{fnum(x["voters"])}</td>')
                 rows.append(f'<tr class="{"none" if none else ""}"><td class="n">{ci * k + i + 1}</td><td class="nm">{e(x["name"])}</td>'
-                            f'<td class="v">{fnum(x["voters"])}</td><td class="b">{bar(x["pct"])}</td>'
-                            f'<td class="p">{fpct(x["pct"])}</td><td class="t">{x["updated"] or "—"}</td></tr>')
-            body.append('<table><thead><tr><th></th><th class="nm">יישוב</th><th class="v">מצביעים</th><th class="b"></th>'
-                        '<th class="p">הצבעה</th><th class="t">עודכן</th></tr></thead><tbody>' + "".join(rows) + "</tbody></table>")
+                            + ("" if final else f'<td class="v">{fnum(x["voters"])}</td>')
+                            + f'<td class="b">{bar(x["pct"])}</td><td class="p">{fpct(x["pct"])}</td>'
+                            + (tail if final else f'<td class="t">{x["updated"] or "—"}</td>') + '</tr>')
+            head = ('<th></th><th class="nm">יישוב</th><th class="b"></th><th class="p">הצבעה</th><th class="s">משותפת</th><th class="s">רע״ם</th>'
+                    if final else '<th></th><th class="nm">יישוב</th><th class="v">מצביעים</th><th class="b"></th><th class="p">הצבעה</th><th class="t">עודכן</th>')
+            body.append(f'<table><thead><tr>{head}</tr></thead><tbody>' + "".join(rows) + "</tbody></table>")
         tone = TONE.get(c["name"], "arab")
         apart = '<span class="chip">לא נכלל בסיכום</span>' if not c["counted"] else ""
         gap = ""
@@ -154,17 +195,26 @@ def page(rep, date_he, as_of):
             gap = f'<span class="gap">{gap_words(d, "נק׳")}</span>'
         out.append(f'<section class="card {tone}{"" if c["counted"] else " apart"}"><div class="ch">'
                    f'<div class="ct"><h3>{e(c["name"])}</h3>{apart}<p><span class="num">{c["with"]}/{c["n"]}</span> יישובים עם נתונים · '
-                   f'<span class="num">{fnum(c["voters"])}</span> מצביעים</p></div>'
+                   f'<span class="num">{fnum(c["voters"])}</span> מצביעים'
+                   + (f' · הרשימה המשותפת <b class="num">{fpct(c["joint"])}</b> · רע״ם <b class="num">{fpct(c["raam"])}</b> מהקולות הכשרים'
+                      if final and c["joint"] is not None else "") + '</p></div>'
                    f'<div class="cv"><span class="big num">{fpct(c["pct"])}</span>{gap}</div></div>'
                    f'<div class="cols">{"".join(body)}</div></section>')
+    nat_when = ("סופי, כולל המעטפות החיצוניות" if final else f'נכון ל-<span class="num">{e(nat["hour"])}</span>, לפי ועדת הבחירות') if nat else ""
     nat_tile = (f'<div class="tile"><span class="l">שיעור ההצבעה הארצי</span><span class="v num">{fpct(npct)}</span>'
-                f'<span class="d">נכון ל-<span class="num">{e(nat["hour"])}</span>, לפי ועדת הבחירות</span></div>') if nat else ""
+                f'<span class="d">{nat_when}</span></div>') if nat else ""
+    last_tile = (f'<div class="tile"><span class="l">מהקולות הכשרים ביישובים שברשימה</span><span class="pair">'
+                 f'<span><b class="num">{fpct(T.get("joint"))}</b>הרשימה המשותפת</span><span><b class="num">{fpct(T.get("raam"))}</b>רע״ם</span></span></div>'
+                 if final else f'<div class="tile"><span class="l">יישובים עם נתונים</span><span class="v num">{T["with"]}/{T["n"]}</span>'
+                 f'<span class="d">ללא הערים המעורבות</span></div>')
+    stamp = ('<span class="chip-final">תוצאות סופיות</span><span class="t">סופי</span>' if final
+             else f'<span class="chip-live">עדכון אחרון</span><span class="t num">{e(as_of)}</span>')
     gap_all = ""
     if T["pct"] is not None and npct is not None:
         d = T["pct"] - npct
         gap_all = f'<span class="d">{gap_words(d, "נקודות")}</span>'
     return f"""<!doctype html><html lang="he" dir="rtl"><head><meta charset="utf-8">
-<title>קלפי 26 · אחוזי הצבעה ביישובים הערביים, הדרוזיים והצ'רקסיים · {e(date_he)} {e(as_of)}</title>
+<title>קלפי 26 · אחוזי הצבעה ביישובים הערביים, הדרוזיים והצ'רקסיים · {e(date_he)} {"תוצאות סופיות" if final else e(as_of)}</title>
 <style>
 {font_faces()}
 :root {{ --bg:#f2f4f7; --surface:#fff; --surface-2:#f7f8fa; --ink:#0c1320; --ink-2:#3f4a5c; --muted:#6b7587; --rule:#dfe4eb;
@@ -184,6 +234,12 @@ body {{ width:794px; padding:26px 22px 20px; font-size:10.5px; line-height:1.35;
 .when {{ text-align:end; white-space:nowrap; }}
 .chip-live {{ display:inline-flex; align-items:center; gap:6px; background:var(--crit); color:#fff; font-weight:700; font-size:10.5px; padding:4px 10px; border-radius:99px; }}
 .chip-live::before {{ content:''; width:7px; height:7px; border-radius:50%; background:#fff; }}
+.chip-final {{ display:inline-flex; background:var(--ink); color:#fff; font-weight:700; font-size:10.5px; padding:4px 10px; border-radius:99px; }}
+.tile .pair {{ display:flex; flex-direction:column; gap:4px; margin-top:2px; }}
+.tile .pair span {{ display:flex; align-items:baseline; gap:6px; font-size:10px; color:var(--ink-2); }}
+.tile .pair b {{ font:700 24px/.9 var(--font-display); color:var(--ink); min-width:62px; }}
+th.s, td.s {{ width:33px; text-align:end; }} td.s {{ color:var(--ink-2); font-size:9.5px; }}
+.ct p b {{ color:var(--ink); font-weight:600; }}
 .when .t {{ font:700 40px/.9 var(--font-display); display:block; margin-top:6px; }}
 .when .dt {{ color:var(--muted); font-size:10.5px; }}
 .tiles {{ display:grid; grid-template-columns:1.25fr 1fr 1fr 1fr 1fr; gap:10px; margin:16px 0 14px; }}
@@ -230,22 +286,60 @@ footer .logo .k {{ background:var(--marker); padding:0 .12em; border-radius:2px;
 </style></head><body>
 <header class="mast"><div class="brand"><div class="logo">קלפי <span class="k">26</span></div>
 <div><h1>אחוזי הצבעה ביישובים הערביים, הדרוזיים והצ'רקסיים</h1>
-<div class="sub">יום הבחירות לכנסת ה-26 · כל יישוב לפי חלוקת ועדת הבחירות · מקור הנתונים: ועדת הבחירות המרכזית</div></div></div>
-<div class="when"><span class="chip-live">עדכון אחרון</span><span class="t num">{e(as_of)}</span><span class="dt">{e(date_he)}</span></div></header>
+<div class="sub">{"הבחירות לכנסת ה-26 · תוצאות סופיות" if final else "יום הבחירות לכנסת ה-26"} · כל יישוב לפי חלוקת ועדת הבחירות · מקור הנתונים: ועדת הבחירות המרכזית</div></div></div>
+<div class="when">{stamp}<span class="dt">{e(date_he)}</span></div></header>
 <div class="tiles">
 <div class="tile hero"><span class="l">שיעור ההצבעה ביישובים שברשימה</span><span class="v num">{fpct(T["pct"])}</span>{gap_all or '<span class="d">ללא הערים המעורבות</span>'}</div>
 {nat_tile}
-<div class="tile"><span class="l">מצביעים</span><span class="v num">{fnum(T["voters"])}</span><span class="d">בקלפיות שדיווחו</span></div>
-<div class="tile"><span class="l">בעלי זכות בחירה</span><span class="v num">{fnum(T["elig"])}</span><span class="d">בקלפיות שדיווחו</span></div>
-<div class="tile"><span class="l">יישובים עם נתונים</span><span class="v num">{T["with"]}/{T["n"]}</span><span class="d">ללא הערים המעורבות</span></div>
+<div class="tile"><span class="l">מצביעים</span><span class="v num">{fnum(T["voters"])}</span><span class="d">{"בקלפיות היישובים" if final else "בקלפיות שדיווחו"}</span></div>
+<div class="tile"><span class="l">בעלי זכות בחירה</span><span class="v num">{fnum(T["elig"])}</span><span class="d">{"בקלפיות היישובים" if final else "בקלפיות שדיווחו"}</span></div>
+{last_tile}
 </div>
 <div class="key"><span><span class="bar"><i style="width:62%"></i><b style="inset-inline-start:{npct or 0:.1f}%"></b></span>שיעור ההצבעה ביישוב; הקו הדק: השיעור הארצי{f' ({fpct(npct)})' if npct is not None else ''}</span>
+{'<span>המשותפת ורע״ם: אחוז מהקולות הכשרים ביישוב</span>' if final else ''}
 <span>הקבוצות לפי נספח 2 להוראת מנכ"ל 4.57 של ועדת הבחירות; בכל קבוצה היישובים מהשיעור הגבוה לנמוך</span></div>
 {"".join(out)}
-<footer><div class="src">"עודכן": שעת העדכון האחרונה של קלפי ביישוב. מצביעים ובעלי זכות בחירה: בקלפיות שכבר דיווחו, ושיעור ההצבעה הוא היחס ביניהם. הערים המעורבות מוצגות בנפרד ואינן נכללות באף סיכום. הנתונים לפי קלפי אינם כוללים מצביעים במעטפות חיצוניות (חיילים, נציגויות, בתי חולים).<br>
-מקור: ועדת הבחירות המרכזית (מפת אחוזי ההצבעה וקבצי שיעור ההצבעה בקלפיות). <span class="ltr">{SITE}</span></div>
+<footer><div class="src">{FOOT_FINAL if final else FOOT_DAY} <span class="ltr">{SITE}</span></div>
 <div class="logo">קלפי <span class="k">26</span></div></footer>
 </body></html>"""
+
+
+def file_turnout(data):
+    """The national turnout a results file states: all its voters (the external envelopes' row too) over all its
+    eligible voters, % (None when it has no such columns)."""
+    text = data.decode("utf-8-sig", "replace")
+    rows = list(csv.reader(io.StringIO(text), delimiter=max(",;\t|", key=text.splitlines()[0].count)))
+    head = [h.strip() for h in rows[0]]
+    vi = next((head.index(n) for n in COLS["voters"] if n in head), None)
+    ei = next((head.index(n) for n in COLS["elig"] if n in head), None)
+    if vi is None or ei is None:
+        return None
+    def n(r, i):
+        try:
+            return int(float(r[i].replace(",", "") or 0))
+        except (ValueError, IndexError):
+            return 0
+    v, e = sum(n(r, vi) for r in rows[1:]), sum(n(r, ei) for r in rows[1:])
+    return round(100 * v / e, 2) if e else None
+
+
+def main_final(a, ref, data, stations):
+    """The report of the CEC's final results."""
+    rep = build(stations, ref)
+    pct = a.national if a.national is not None else file_turnout(data)
+    nat = rep["national"] = {"hour": "סופי", "pct": pct} if pct else None
+    doc = page(rep, a.date, "22:00", final=True)
+    open(a.html, "w", encoding="utf-8").write(doc)
+    if a.json:
+        json.dump({"as_of": "22:00", "final": True, "date": a.date, "version": hashlib.sha256(doc.encode()).hexdigest()[:12],
+                   "total": rep["total"], "national": nat,
+                   "categories": [{k: c[k] for k in ("name", "counted", "pct", "voters", "elig", "with", "n", "joint", "raam")}
+                                  for c in rep["categories"]]},
+                  open(a.json, "w", encoding="utf-8"), ensure_ascii=False, indent=1)
+    T = rep["total"]
+    print(json.dumps({"final": True, "pct": T["pct"], "voters": T["voters"], "with": f'{T["with"]}/{T["n"]}',
+                      "joint": T.get("joint"), "raam": T.get("raam"), "national": pct}, ensure_ascii=False))
+    return 0
 
 
 def main(argv=None):
@@ -257,9 +351,15 @@ def main(argv=None):
     ap.add_argument("--date", default="27.10.2026")
     ap.add_argument("--as-of", help="HH:MM of the data when the stations file has no update-time column "
                     "(default: sectors_time in --turnout)")
+    ap.add_argument("--final", action="store_true", help="the file is the CEC's final results (by locality or station)")
+    ap.add_argument("--national", type=float, help="the final national turnout, %% (default with --final: the file's "
+                    "voters, the external envelopes' row included, over its eligible voters)")
     a = ap.parse_args(argv)
     ref = json.load(open(REF, encoding="utf-8"))
-    stations = read_stations(open(a.stations, "rb").read())
+    data = open(a.stations, "rb").read()
+    stations = read_stations(data)
+    if a.final:
+        return main_final(a, ref, data, stations)
     nat = None
     try:
         t = json.load(open(a.turnout, encoding="utf-8"))
